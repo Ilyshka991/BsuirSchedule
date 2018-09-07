@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.repository.entity.Group
+import com.pechuro.bsuirschedule.repository.entity.Employee
 import kotlinx.android.synthetic.main.list_item.view.*
 
-class RecyclerViewAdapter(private var items: List<Group>, private val context: Context)
+class RecyclerViewAdapter(private var items: List<Employee>, private val context: Context)
     : RecyclerView.Adapter<ViewHolder>() {
 
     override fun getItemCount() = items.size
@@ -21,7 +21,7 @@ class RecyclerViewAdapter(private var items: List<Group>, private val context: C
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
             holder.bindView(items[position])
 
-    fun setItems(items: List<Group>) {
+    fun setItems(items: List<Employee>) {
         this.items = items
         notifyDataSetChanged()
     }
@@ -30,7 +30,7 @@ class RecyclerViewAdapter(private var items: List<Group>, private val context: C
 class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val mName = view.name
 
-    fun bindView(group: Group) {
-        mName.text = group.name
+    fun bindView(group: Employee) {
+        mName.text = group.fio
     }
 }

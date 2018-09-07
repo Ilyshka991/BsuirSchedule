@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.pechuro.bsuirschedule.App
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.repository.entity.Group
+import com.pechuro.bsuirschedule.repository.entity.Employee
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -34,13 +34,14 @@ class ListFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        subscribe(groupRepository.getGroups()
+        subscribe(groupRepository.getEmployees()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .subscribe({
+                    println(it)
                     showData(it)
-                })
+                }, { print("pzdc") }))
     }
 
-    private fun showData(data: List<Group>) = mAdapter?.setItems(data)
+    private fun showData(data: List<Employee>) = mAdapter?.setItems(data)
 }
