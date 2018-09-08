@@ -7,11 +7,10 @@ import android.arch.persistence.room.PrimaryKey
 @Entity(tableName = "all_groups")
 data class Group(
         @PrimaryKey()
-        var name: String,
+        var number: String,
 
         @ColumnInfo(name = "faculty_id")
         var facultyId: String,
 
-        @ColumnInfo(name = "course")
         var course: Int?
 )

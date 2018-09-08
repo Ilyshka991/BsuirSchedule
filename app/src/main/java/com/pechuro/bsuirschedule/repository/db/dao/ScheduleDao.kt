@@ -10,7 +10,7 @@ import io.reactivex.Single
 @Dao
 interface ScheduleDao {
     @Query("SELECT * FROM all_schedules")
-    fun getSchedules(): Single<List<Schedule>>
+    fun get(): Single<List<Schedule>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg schedule: Schedule)

@@ -2,8 +2,12 @@ package com.pechuro.bsuirschedule.repository.api
 
 import com.pechuro.bsuirschedule.repository.entity.Employee
 import com.pechuro.bsuirschedule.repository.entity.Group
+import com.pechuro.bsuirschedule.repository.entity.complex.StudentClasses
+import com.pechuro.bsuirschedule.repository.entity.item.StudentClassItem
 import io.reactivex.Single
 import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface GroupApi {
 
@@ -16,8 +20,12 @@ interface EmployeeApi {
     fun getEmployees(): Single<List<Employee>>
 }
 
-interface ScheduleApi {
+interface StudentScheduleApi {
 
     @GET("v1/studentGroup/lastUpdateDate")
-    fun getLastUpdateDate(studentGroup: String): Single<String>
+    fun getLastUpdateDate(): Single<String>
+
+    @GET("v1/studentGroup/schedule")
+    fun getSchedule(@Query(value = "studentGroup") studentGroup: String): Single<List<StudentClassItem>>
+
 }

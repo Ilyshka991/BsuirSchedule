@@ -5,15 +5,20 @@ import android.arch.persistence.room.RoomDatabase
 import com.pechuro.bsuirschedule.repository.db.dao.EmployeeDao
 import com.pechuro.bsuirschedule.repository.db.dao.GroupDao
 import com.pechuro.bsuirschedule.repository.db.dao.ScheduleDao
+import com.pechuro.bsuirschedule.repository.db.dao.StudentScheduleDao
 import com.pechuro.bsuirschedule.repository.entity.Employee
 import com.pechuro.bsuirschedule.repository.entity.Group
+import com.pechuro.bsuirschedule.repository.entity.Schedule
+import com.pechuro.bsuirschedule.repository.entity.item.StudentClassItem
 
 
-@Database(entities = [Group::class, Employee::class], version = 1)
+@Database(entities = [Group::class, Employee::class, Schedule::class, StudentClassItem::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun groupDao(): GroupDao
 
     abstract fun employeeDao(): EmployeeDao
 
     abstract fun scheduleDao(): ScheduleDao
+
+    abstract fun studentScheduleDao(): StudentScheduleDao
 }

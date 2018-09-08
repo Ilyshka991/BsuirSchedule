@@ -5,17 +5,13 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 
 @Entity(tableName = "all_schedules")
-data class Schedule(
-        @ColumnInfo(name = "schedule_name")
-        var scheduleName: String,
+open class Schedule(val name: String,
 
-        @ColumnInfo(name = "schedule_type")
-        var scheduleType: Int,
+                    val type: Int,
 
-        @ColumnInfo(name = "last_update")
-        var lastUpdate: String
-) {
+                    @ColumnInfo(name = "last_update")
+                    val lastUpdate: String) {
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    var _id = 0
+    @ColumnInfo(name = "_id")
+    var id: Int = 0
 }
