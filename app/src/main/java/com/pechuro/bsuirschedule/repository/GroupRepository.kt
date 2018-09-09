@@ -8,16 +8,16 @@ import org.jetbrains.anko.doAsync
 
 class GroupRepository(private val api: GroupApi, private val dao: GroupDao) {
 
-    fun getGroups(): Single<List<Group>> =
-            getFromDb().onErrorResumeNext(getFromApi())
+    fun getGroups(): Single<List<Group>> = getFromCache().onErrorResumeNext { getFromApi() }
 
-
-    private fun getFromDb(): Single<List<Group>> =
+    private fun getFromCache(): Single<List<Group>> =
             dao.getGroups().filter { it.isNotEmpty() }.toSingle()
 
     private fun getFromApi(): Single<List<Group>> =
-            api.getGroups().doOnSuccess { storeInDb(it) }
+            api.getGroups().doOnSuccess { storeInCache(it) }
 
-    private fun storeInDb(groups: List<Group>) =
+    private fun storeInCache(groups: List<Group>) =
             doAsync { dao.insert(groups) }
+
+    private fun isCacheNotEmpty() = dao.isNotEmpty()
 }

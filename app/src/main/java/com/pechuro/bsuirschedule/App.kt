@@ -2,10 +2,8 @@ package com.pechuro.bsuirschedule
 
 import android.app.Application
 import android.arch.persistence.room.Room
-import com.pechuro.bsuirschedule.repository.EmployeeRepository
-import com.pechuro.bsuirschedule.repository.StudentScheduleRepository
-import com.pechuro.bsuirschedule.repository.api.EmployeeApi
-import com.pechuro.bsuirschedule.repository.api.StudentScheduleApi
+import com.pechuro.bsuirschedule.repository.ScheduleRepository
+import com.pechuro.bsuirschedule.repository.api.ScheduleApi
 import com.pechuro.bsuirschedule.repository.db.AppDatabase
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -18,7 +16,7 @@ class App : Application() {
     companion object {
         private lateinit var retrofit: Retrofit
         private lateinit var appDatabase: AppDatabase
-        private lateinit var repository: StudentScheduleRepository
+        private lateinit var repository: ScheduleRepository
 
         fun injectAppDatabase() = appDatabase
 
@@ -36,7 +34,7 @@ class App : Application() {
 
         appDatabase = Room.databaseBuilder(applicationContext,
                 AppDatabase::class.java, "database").build()
-        repository = StudentScheduleRepository(retrofit.create(StudentScheduleApi::class.java), appDatabase.studentScheduleDao())
+        repository = ScheduleRepository(retrofit.create(ScheduleApi::class.java), appDatabase.scheduleDao())
 
     }
 }

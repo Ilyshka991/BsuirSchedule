@@ -2,12 +2,8 @@ package com.pechuro.bsuirschedule
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.pechuro.bsuirschedule.repository.EmployeeRepository
-import com.pechuro.bsuirschedule.repository.entity.complex.StudentClasses
-import com.pechuro.bsuirschedule.repository.entity.item.StudentClassItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import org.jetbrains.anko.doAsync
 
 class MainActivity : AppCompatActivity() {
 

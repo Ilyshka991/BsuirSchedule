@@ -10,12 +10,15 @@ import io.reactivex.Single
 @Dao
 interface GroupDao {
 
-    @Query("SELECT * FROM all_groups")
-    fun getGroups(): Single<List<Group>>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg group: Group)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(groups: List<Group>)
+
+    @Query("SELECT * FROM all_groups")
+    fun getGroups(): Single<List<Group>>
+
+    @Query("SELECT EXISTS(SELECT 1 FROM all_groups)")
+    fun isNotEmpty(): Boolean
 }

@@ -3,18 +3,25 @@ package com.pechuro.bsuirschedule.repository.db.dao
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.Transaction
+import com.pechuro.bsuirschedule.repository.entity.Classes
 import com.pechuro.bsuirschedule.repository.entity.Schedule
-import io.reactivex.Single
+import com.pechuro.bsuirschedule.repository.entity.ScheduleItem
 
 @Dao
 interface ScheduleDao {
-    @Query("SELECT * FROM all_schedules")
-    fun get(): Single<List<Schedule>>
+
+    @Transaction
+    fun insertSchedule(schedules: Classes) {
+        val id: Int = insert(schedules).toInt()
+        schedules.classes.forEach { it.scheduleId = id }
+        insert(schedules.classes)
+    }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(vararg schedule: Schedule)
+    fun insert(values: Schedule): Long
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(schedules: List<Schedule>)
+    fun insert(values: List<ScheduleItem>)
 }
