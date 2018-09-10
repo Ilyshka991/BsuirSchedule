@@ -7,12 +7,15 @@ import com.pechuro.bsuirschedule.repository.entity.ScheduleItem
 
 data class Response(val employee: Employee?,
                     val studentGroup: Group?,
-                    val schedules: List<ScheduleResponse>?,
+                    @SerializedName("schedules")
+                    val schedule: List<ScheduleResponse>,
                     @SerializedName("examSchedules")
-                    val exams: List<ScheduleResponse>?)
+                    val exam: List<ScheduleResponse>?)
 
 data class ScheduleResponse(
         val weekDay: String,
         @SerializedName("schedule")
         val classes: List<ScheduleItem>
 )
+
+data class LastUpdateResponse(val lastUpdateDate: String)
