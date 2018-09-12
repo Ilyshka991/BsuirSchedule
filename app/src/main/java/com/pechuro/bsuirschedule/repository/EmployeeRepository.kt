@@ -11,13 +11,22 @@ class EmployeeRepository(private val api: EmployeeApi, private val dao: Employee
     fun getEmployees(): Single<List<Employee>> =
             getFromDb().onErrorResumeNext(getFromApi())
 
+    fun delete() = dao.delete()
+
+    fun getEmployeeByFio(fio: String) = dao.get(fio)
+
+    fun getNames() = dao.getNames()
+
+    fun getIdByFio(fio: String) = dao.getId(fio)
 
     private fun getFromDb(): Single<List<Employee>> =
-            dao.getEmployees().filter { it.isNotEmpty() }.toSingle()
+            dao.get().filter { it.isNotEmpty() }.toSingle()
 
     private fun getFromApi(): Single<List<Employee>> =
             api.getEmployees().doOnSuccess { storeInDb(it) }
 
     private fun storeInDb(groups: List<Employee>) =
             doAsync { dao.insert(groups) }
+
+    private fun isCacheNotEmpty() = dao.isNotEmpty()
 }

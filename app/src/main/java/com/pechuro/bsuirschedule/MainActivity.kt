@@ -10,13 +10,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        test("500336")
+        test("sd")
     }
 
     fun test(group: String) = App.injectRepository()
-            .getClasses(group, 2)
-            .observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
-            .subscribe({ println(it.schedule.toString()) }, { println(it.message) })
+            .getNotAddedGroups(0).observeOn(Schedulers.io()).subscribeOn(Schedulers.io()).subscribe({
+                println("SDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFf")
+                println(it.indexOf("750502"))
+            }, {})
 
 }
 

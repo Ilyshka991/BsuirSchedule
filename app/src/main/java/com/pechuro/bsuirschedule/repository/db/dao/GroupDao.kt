@@ -1,9 +1,6 @@
 package com.pechuro.bsuirschedule.repository.db.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import com.pechuro.bsuirschedule.repository.entity.Group
 import io.reactivex.Single
 
@@ -17,7 +14,10 @@ interface GroupDao {
     fun insert(groups: List<Group>)
 
     @Query("SELECT * FROM all_groups")
-    fun getGroups(): Single<List<Group>>
+    fun get(): Single<List<Group>>
+
+    @Query("DELETE FROM all_groups")
+    fun delete()
 
     @Query("SELECT EXISTS(SELECT 1 FROM all_groups)")
     fun isNotEmpty(): Boolean
