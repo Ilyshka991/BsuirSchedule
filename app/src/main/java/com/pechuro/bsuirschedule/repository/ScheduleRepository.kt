@@ -1,9 +1,10 @@
 package com.pechuro.bsuirschedule.repository
 
-import com.pechuro.bsuirschedule.repository.api.LastUpdateResponse
-import com.pechuro.bsuirschedule.repository.api.Response
-import com.pechuro.bsuirschedule.repository.api.ResponseError
-import com.pechuro.bsuirschedule.repository.api.ScheduleApi
+import com.pechuro.bsuirschedule.constant.ScheduleType.EMPLOYEE_CLASSES
+import com.pechuro.bsuirschedule.constant.ScheduleType.EMPLOYEE_EXAMS
+import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT_CLASSES
+import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT_EXAMS
+import com.pechuro.bsuirschedule.repository.api.*
 import com.pechuro.bsuirschedule.repository.db.dao.ScheduleDao
 import com.pechuro.bsuirschedule.repository.entity.ScheduleItem
 import com.pechuro.bsuirschedule.repository.entity.complex.Classes
@@ -12,33 +13,50 @@ import io.reactivex.Single
 class ScheduleRepository(private val api: ScheduleApi,
                          private val dao: ScheduleDao) {
 
-    fun loadClasses(group: String): Single<Classes> =
-            loadClassesFromCache(group).onErrorResumeNext { loadClassesFromApi(group) }
+    fun getClasses(name: String, type: Int): Single<Classes> =
+            getFromCache(name, type).onErrorResumeNext { getFromApi(name, type) }
 
-    private fun loadClassesFromApi(studentGroup: String): Single<Classes> {
-        val response = api.getStudentSchedule(studentGroup)
-                .onErrorReturn { ResponseError(it) }.blockingGet()
-        val lastUpdate = api.getLastUpdateDate(studentGroup)
-                .onErrorReturn { LastUpdateResponse("") }
+
+    private fun getFromApi(name: String, type: Int): Single<Classes> {
+        lateinit var response: Response
+
+        when (type) {
+            STUDENT_CLASSES, STUDENT_EXAMS ->
+                response = api.getStudentSchedule(name)
+                        .onErrorReturn { ResponseError(it) }.blockingGet()
+            EMPLOYEE_CLASSES, EMPLOYEE_EXAMS ->
+                response = api.getEmployeeSchedule(name)
+                        .onErrorReturn { ResponseError(it) }.blockingGet()
+        }
+
+        val lastUpdate = api.getLastUpdateDate(name)
+                .onErrorReturn { LastUpdateResponse(null) }
                 .blockingGet().lastUpdateDate
 
         if (response is ResponseError) {
             return Single.error { response.error }
         }
 
-        val studentClasses = Classes(studentGroup, 0, lastUpdate)
-        studentClasses.classes = getScheduleItems(response)
-        return Single.just(studentClasses)
+        val classes = Classes(name, type, lastUpdate)
+
+        when (type) {
+            STUDENT_CLASSES, EMPLOYEE_CLASSES ->
+                classes.schedule = getScheduleItems(response.schedule)
+            STUDENT_EXAMS, EMPLOYEE_EXAMS ->
+                classes.schedule = getScheduleItems(response.exam)
+        }
+
+        return Single.just(classes)
                 .doOnSuccess { storeInDb(it) }
     }
 
-    private fun loadClassesFromCache(group: String) = dao.get(group)
+    private fun getFromCache(name: String, type: Int) = dao.get(name, type)
 
-    private fun getScheduleItems(response: Response): List<ScheduleItem> {
+    private fun getScheduleItems(response: List<ScheduleResponse>?): List<ScheduleItem> {
         val schedule = ArrayList<ScheduleItem>()
 
         //Add weekDay to all scheduleItems
-        response.schedule?.forEach {
+        response?.forEach {
             for (item in it.classes) {
                 schedule.add(item)
                 schedule[schedule.size - 1].weekDay = it.weekDay

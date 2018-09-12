@@ -12,8 +12,8 @@ interface ScheduleDao {
     @Transaction
     fun insertSchedule(schedule: Classes) {
         val id: Int = insert(schedule).toInt()
-        schedule.classes.forEach { it.scheduleId = id }
-        insert(schedule.classes)
+        schedule.schedule.forEach { it.scheduleId = id }
+        insert(schedule.schedule)
     }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -23,6 +23,6 @@ interface ScheduleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(values: List<ScheduleItem>)
 
-    @Query("SELECT * FROM all_schedules WHERE name =:group")
-    fun get(group: String): Single<Classes>
+    @Query("SELECT * FROM all_schedules WHERE name = :name AND type = :type")
+    fun get(name: String, type: Int): Single<Classes>
 }

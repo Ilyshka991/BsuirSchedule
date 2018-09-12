@@ -28,6 +28,6 @@ interface ScheduleApi {
             : Single<Response>
 
     @GET("v1/portal/employeeSchedule")
-    fun getEmployeeSchedule(@Query(value = "employeeId") employeeId: Int)
+    fun getEmployeeSchedule(@Query(value = "employeeId") employeeId: String)
             : Single<Response>
 }
