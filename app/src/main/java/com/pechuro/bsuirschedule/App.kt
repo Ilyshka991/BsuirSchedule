@@ -2,9 +2,7 @@ package com.pechuro.bsuirschedule
 
 import android.app.Application
 import android.arch.persistence.room.Room
-import com.pechuro.bsuirschedule.repository.GroupRepository
 import com.pechuro.bsuirschedule.repository.ScheduleRepository
-import com.pechuro.bsuirschedule.repository.api.GroupApi
 import com.pechuro.bsuirschedule.repository.api.ScheduleApi
 import com.pechuro.bsuirschedule.repository.db.AppDatabase
 import retrofit2.Retrofit
@@ -18,14 +16,12 @@ class App : Application() {
     companion object {
         private lateinit var retrofit: Retrofit
         private lateinit var appDatabase: AppDatabase
-        private lateinit var repository: ScheduleRepository
-        private lateinit var repository1: GroupRepository
+        private lateinit var scheduleRepository: ScheduleRepository
 
         fun injectAppDatabase() = appDatabase
 
-        fun injectRepository() = repository
+        fun injectScheduleRepository() = scheduleRepository
 
-        fun injectRepository1() = repository1
     }
 
     override fun onCreate() {
@@ -38,8 +34,7 @@ class App : Application() {
 
         appDatabase = Room.databaseBuilder(applicationContext,
                 AppDatabase::class.java, "database").build()
-        repository = ScheduleRepository(retrofit.create(ScheduleApi::class.java), appDatabase.scheduleDao())
-        repository1 = GroupRepository(retrofit.create(GroupApi::class.java), appDatabase.groupDao())
+        scheduleRepository = ScheduleRepository(retrofit.create(ScheduleApi::class.java), appDatabase.scheduleDao())
     }
 }
 

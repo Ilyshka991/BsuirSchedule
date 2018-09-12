@@ -9,12 +9,13 @@ import retrofit2.http.Query
 interface GroupApi {
 
     @GET("v1/groups")
-    fun getGroups(): Single<List<Group>>
+    fun get(): Single<List<Group>>
 }
 
 interface EmployeeApi {
+
     @GET("v1/employees")
-    fun getEmployees(): Single<List<Employee>>
+    fun get(): Single<List<Employee>>
 }
 
 interface ScheduleApi {

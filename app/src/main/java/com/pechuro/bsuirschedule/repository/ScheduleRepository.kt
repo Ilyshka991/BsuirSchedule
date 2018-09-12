@@ -14,7 +14,7 @@ class ScheduleRepository(private val api: ScheduleApi,
                          private val dao: ScheduleDao) {
 
     fun getClasses(name: String, type: Int): Single<Classes> =
-            getFromCache(name, type).onErrorResumeNext { getFromApi(name, type) }
+            getFromCache(name, type).onErrorResumeNext(getFromApi(name, type))
 
     fun getNotAddedGroups(type: Int) = dao.getNotAddedGroups(type)
 
@@ -22,7 +22,7 @@ class ScheduleRepository(private val api: ScheduleApi,
 
     fun delete(name: String, type: Int) = dao.delete(name, type)
 
-    fun delete( type: Int) = dao.delete(type)
+    fun delete(type: Int) = dao.delete(type)
 
     private fun getFromApi(name: String, type: Int): Single<Classes> {
         lateinit var response: Response
@@ -41,7 +41,7 @@ class ScheduleRepository(private val api: ScheduleApi,
                 .blockingGet().lastUpdateDate
 
         if (response is ResponseError) {
-            return Single.error { response.error }
+            return Single.error(response.error)
         }
 
         val classes = Classes(name, type, lastUpdate)

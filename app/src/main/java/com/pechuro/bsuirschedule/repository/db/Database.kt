@@ -13,7 +13,7 @@ import com.pechuro.bsuirschedule.repository.entity.ScheduleItem
 
 
 @Database(entities = [Group::class, Employee::class, Schedule::class, ScheduleItem::class],
-        version = 1)
+        version = 6)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun groupDao(): GroupDao
 

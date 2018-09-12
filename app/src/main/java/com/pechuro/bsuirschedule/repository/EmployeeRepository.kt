@@ -4,16 +4,16 @@ import com.pechuro.bsuirschedule.repository.api.EmployeeApi
 import com.pechuro.bsuirschedule.repository.db.dao.EmployeeDao
 import com.pechuro.bsuirschedule.repository.entity.Employee
 import io.reactivex.Single
-import org.jetbrains.anko.doAsync
 
 class EmployeeRepository(private val api: EmployeeApi, private val dao: EmployeeDao) {
+    val isCacheNotEmpty get() = dao.isNotEmpty()
 
     fun getEmployees(): Single<List<Employee>> =
             getFromDb().onErrorResumeNext(getFromApi())
 
     fun delete() = dao.delete()
 
-    fun getEmployeeByFio(fio: String) = dao.get(fio)
+    fun getByFio(fio: String) = dao.get(fio)
 
     fun getNames() = dao.getNames()
 
@@ -23,10 +23,7 @@ class EmployeeRepository(private val api: EmployeeApi, private val dao: Employee
             dao.get().filter { it.isNotEmpty() }.toSingle()
 
     private fun getFromApi(): Single<List<Employee>> =
-            api.getEmployees().doOnSuccess { storeInDb(it) }
+            api.get().doOnSuccess { storeInDb(it) }
 
-    private fun storeInDb(groups: List<Employee>) =
-            doAsync { dao.insert(groups) }
-
-    private fun isCacheNotEmpty() = dao.isNotEmpty()
+    private fun storeInDb(groups: List<Employee>) = dao.insert(groups)
 }

@@ -16,11 +16,11 @@ interface EmployeeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(employees: List<Employee>)
 
-    @Query("SELECT EXISTS(SELECT 1 FROM all_employees)")
-    fun isNotEmpty(): Boolean
-
     @Query("DELETE FROM all_employees")
     fun delete()
+
+    @Query("SELECT EXISTS(SELECT 1 FROM all_employees)")
+    fun isNotEmpty(): Boolean
 
     @Query("SELECT * FROM all_employees")
     fun get(): Single<List<Employee>>
