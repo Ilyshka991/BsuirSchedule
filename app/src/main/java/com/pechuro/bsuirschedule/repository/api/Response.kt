@@ -5,17 +5,19 @@ import com.pechuro.bsuirschedule.repository.entity.Employee
 import com.pechuro.bsuirschedule.repository.entity.Group
 import com.pechuro.bsuirschedule.repository.entity.ScheduleItem
 
-data class Response(val employee: Employee?,
+open class Response(val employee: Employee?,
                     val studentGroup: Group?,
                     @SerializedName("schedules")
-                    val schedule: List<ScheduleResponse>,
+                    val schedule: List<ScheduleResponse>?,
                     @SerializedName("examSchedules")
                     val exam: List<ScheduleResponse>?)
 
-data class ScheduleResponse(
+class ResponseError(val error: Throwable) : Response(null, null, null, null)
+
+class ScheduleResponse(
         val weekDay: String,
         @SerializedName("schedule")
         val classes: List<ScheduleItem>
 )
 
-data class LastUpdateResponse(val lastUpdateDate: String)
+class LastUpdateResponse(val lastUpdateDate: String)

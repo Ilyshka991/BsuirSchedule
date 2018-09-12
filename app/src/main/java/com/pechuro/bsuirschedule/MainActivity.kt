@@ -10,6 +10,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        App.injectRepository().loadClasses("750502").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe { }
+        test("750505")
     }
+
+    fun test(group: String) = App.injectRepository()
+            .loadClasses(group)
+            .observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+            .subscribe({ println(it.classes.toString()) }, { println(it.message) })
+
 }
+

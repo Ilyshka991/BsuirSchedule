@@ -5,7 +5,7 @@ import com.pechuro.bsuirschedule.repository.entity.Schedule
 import com.pechuro.bsuirschedule.repository.entity.ScheduleItem
 
 
-class Classes(name: String, type: Int, lastUpdate: String) :
+class Classes(name: String, type: Int, lastUpdate: String?) :
         Schedule(name, type, lastUpdate) {
     @Relation(parentColumn = "_id", entityColumn = "schedule_id",
             entity = ScheduleItem::class)

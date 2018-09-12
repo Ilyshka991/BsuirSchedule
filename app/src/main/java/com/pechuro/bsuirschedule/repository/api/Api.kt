@@ -20,9 +20,14 @@ interface EmployeeApi {
 interface ScheduleApi {
 
     @GET("v1/studentGroup/lastUpdateDate")
-    fun getLastUpdateDate(@Query(value = "studentGroup") studentGroup: String): Single<LastUpdateResponse>
+    fun getLastUpdateDate(@Query(value = "studentGroup") studentGroup: String)
+            : Single<LastUpdateResponse>
 
     @GET("v1/studentGroup/schedule")
-    fun getSchedule(@Query(value = "studentGroup") studentGroup: String): Single<Response>
+    fun getStudentSchedule(@Query(value = "studentGroup") studentGroup: String)
+            : Single<Response>
 
+    @GET("v1/portal/employeeSchedule")
+    fun getEmployeeSchedule(@Query(value = "employeeId") employeeId: Int)
+            : Single<Response>
 }
