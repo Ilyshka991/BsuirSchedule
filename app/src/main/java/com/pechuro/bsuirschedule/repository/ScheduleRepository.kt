@@ -14,7 +14,7 @@ class ScheduleRepository(private val api: ScheduleApi,
                          private val dao: ScheduleDao) {
 
     fun getClasses(name: String, type: Int): Single<Classes> =
-            getFromCache(name, type).onErrorResumeNext(getFromApi(name, type))
+            getFromCache(name, type).onErrorResumeNext { getFromApi(name, type) }
 
     fun getNotAddedGroups(type: Int) = dao.getNotAddedGroups(type)
 

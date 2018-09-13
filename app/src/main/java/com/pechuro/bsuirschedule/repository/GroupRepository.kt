@@ -8,7 +8,7 @@ import io.reactivex.Single
 class GroupRepository(private val api: GroupApi, private val dao: GroupDao) {
     val isCacheNotEmpty get() = dao.isNotEmpty()
 
-    fun getGroups(): Single<List<Group>> = getFromCache().onErrorResumeNext(getFromApi())
+    fun getGroups(): Single<List<Group>> = getFromCache().onErrorResumeNext { getFromApi() }
 
     fun delete() = dao.delete()
 

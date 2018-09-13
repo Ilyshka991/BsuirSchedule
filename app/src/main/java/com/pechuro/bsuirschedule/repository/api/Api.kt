@@ -8,27 +8,27 @@ import retrofit2.http.Query
 
 interface GroupApi {
 
-    @GET("v1/groups")
+    @GET("groups")
     fun get(): Single<List<Group>>
 }
 
 interface EmployeeApi {
 
-    @GET("v1/employees")
+    @GET("employees")
     fun get(): Single<List<Employee>>
 }
 
 interface ScheduleApi {
 
-    @GET("v1/studentGroup/lastUpdateDate")
+    @GET("studentGroup/lastUpdateDate")
     fun getLastUpdateDate(@Query(value = "studentGroup") studentGroup: String)
             : Single<LastUpdateResponse>
 
-    @GET("v1/studentGroup/schedule")
+    @GET("studentGroup/schedule")
     fun getStudentSchedule(@Query(value = "studentGroup") studentGroup: String)
             : Single<Response>
 
-    @GET("v1/portal/employeeSchedule")
+    @GET("portal/employeeSchedule")
     fun getEmployeeSchedule(@Query(value = "employeeId") employeeId: String)
             : Single<Response>
 }

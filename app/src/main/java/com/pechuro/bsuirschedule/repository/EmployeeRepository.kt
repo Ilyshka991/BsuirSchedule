@@ -9,7 +9,7 @@ class EmployeeRepository(private val api: EmployeeApi, private val dao: Employee
     val isCacheNotEmpty get() = dao.isNotEmpty()
 
     fun getEmployees(): Single<List<Employee>> =
-            getFromDb().onErrorResumeNext(getFromApi())
+            getFromDb().onErrorResumeNext { getFromApi() }
 
     fun delete() = dao.delete()
 

@@ -1,14 +1,25 @@
 package com.pechuro.bsuirschedule.repository.entity
 
 import android.arch.persistence.room.*
+import com.google.gson.annotations.SerializedName
 import com.pechuro.bsuirschedule.repository.utils.Converters
 
 @Entity(tableName = "schedule_item")
 @TypeConverters(Converters::class)
 data class ScheduleItem(
         val subject: String,
-        val weekNumber: List<Int>
-) {
+        val weekNumber: List<Int>,
+        @SerializedName("numSubgroup")
+        val subgroupNumber: Int,
+        val lessonType: String,
+        val auditory: List<String>,
+        val note: String,
+        @SerializedName("startLessonTime")
+        val startTime: String,
+        @SerializedName("endLessonTime")
+        val endTime: String,
+        @Embedded
+        val employee: Employee) {
     @Transient
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id")

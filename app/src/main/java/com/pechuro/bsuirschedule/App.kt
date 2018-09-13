@@ -29,7 +29,7 @@ class App : Application() {
         retrofit = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .baseUrl("https://students.bsuir.by/api/")
+                .baseUrl("https://students.bsuir.by/api/v1/")
                 .build()
 
         appDatabase = Room.databaseBuilder(applicationContext,
