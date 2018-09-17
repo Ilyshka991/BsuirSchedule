@@ -1,7 +1,9 @@
-package com.pechuro.bsuirschedule
+package com.pechuro.bsuirschedule.ui
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.constant.ScheduleType
 import com.pechuro.bsuirschedule.data.ScheduleRepository
 import dagger.android.AndroidInjection
 import io.reactivex.schedulers.Schedulers
@@ -17,9 +19,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        scheduleRepository.getClasses("850502", 0)
+        scheduleRepository.getClasses("750502", ScheduleType.STUDENT_CLASSES)
                 .subscribeOn(Schedulers.io())
-                .subscribe({ println(it.schedule.toString()) }, { println(it.message) })
+                .subscribe({ }, { println(it.message) })
     }
 }
 

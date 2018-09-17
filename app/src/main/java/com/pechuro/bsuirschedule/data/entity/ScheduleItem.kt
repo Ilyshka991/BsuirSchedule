@@ -7,18 +7,18 @@ import com.pechuro.bsuirschedule.data.database.Converters
 @Entity(tableName = "schedule_item")
 @TypeConverters(Converters::class)
 data class ScheduleItem(
-        val subject: String,
-        val weekNumber: List<Int>,
+        val subject: String?,
+        val weekNumber: List<Int>?,
         @SerializedName("numSubgroup")
-        val subgroupNumber: Int,
-        val lessonType: String,
-        val auditory: List<String>,
-        val note: String,
+        val subgroupNumber: Int?,
+        val lessonType: String?,
+        val auditory: List<String>?,
+        val note: String?,
         @SerializedName("startLessonTime")
-        val startTime: String,
+        val startTime: String?,
         @SerializedName("endLessonTime")
-        val endTime: String,
-        val employee: List<Employee>) {
+        val endTime: String?,
+        val employee: List<Employee>?) {
     @Transient
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id")

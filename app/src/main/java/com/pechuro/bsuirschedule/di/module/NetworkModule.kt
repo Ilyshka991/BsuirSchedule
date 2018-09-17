@@ -1,12 +1,17 @@
 package com.pechuro.bsuirschedule.di.module
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.pechuro.bsuirschedule.BuildConfig
 import com.pechuro.bsuirschedule.data.network.EmployeeApi
 import com.pechuro.bsuirschedule.data.network.GroupApi
 import com.pechuro.bsuirschedule.data.network.ScheduleApi
 import dagger.Module
 import dagger.Provides
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -21,8 +26,10 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(gsonConverterFactory: GsonConverterFactory): Retrofit =
+    fun provideRetrofit(httpClient: OkHttpClient,
+                        gsonConverterFactory: GsonConverterFactory): Retrofit =
             Retrofit.Builder()
+                    .client(httpClient)
                     .addConverterFactory(gsonConverterFactory)
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .baseUrl(BASE_URL)
@@ -30,7 +37,23 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideGson(): Gson = GsonBuilder().create()
+    fun provideGson(): Gson = GsonBuilder().serializeNulls().create()
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
+            OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
+
+    @Provides
+    @Singleton
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
+        val interceptor = HttpLoggingInterceptor(
+                HttpLoggingInterceptor.Logger { Log.i("Retrofit ", it) })
+        if (BuildConfig.DEBUG) {
+            interceptor.level = BODY
+        }
+        return interceptor
+    }
 
     @Provides
     @Singleton
