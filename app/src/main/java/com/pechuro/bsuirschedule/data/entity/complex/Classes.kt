@@ -1,8 +1,8 @@
-package com.pechuro.bsuirschedule.repository.entity.complex
+package com.pechuro.bsuirschedule.data.entity.complex
 
 import android.arch.persistence.room.Relation
-import com.pechuro.bsuirschedule.repository.entity.Schedule
-import com.pechuro.bsuirschedule.repository.entity.ScheduleItem
+import com.pechuro.bsuirschedule.data.entity.Schedule
+import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 
 
 class Classes(name: String, type: Int, lastUpdate: String?) :

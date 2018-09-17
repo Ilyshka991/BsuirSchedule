@@ -1,11 +1,13 @@
-package com.pechuro.bsuirschedule.repository
+package com.pechuro.bsuirschedule.data
 
-import com.pechuro.bsuirschedule.repository.api.EmployeeApi
-import com.pechuro.bsuirschedule.repository.db.dao.EmployeeDao
-import com.pechuro.bsuirschedule.repository.entity.Employee
+import com.pechuro.bsuirschedule.data.database.dao.EmployeeDao
+import com.pechuro.bsuirschedule.data.entity.Employee
+import com.pechuro.bsuirschedule.data.network.EmployeeApi
 import io.reactivex.Single
+import javax.inject.Inject
 
-class EmployeeRepository(private val api: EmployeeApi, private val dao: EmployeeDao) {
+class EmployeeRepository @Inject constructor(private val api: EmployeeApi,
+                                             private val dao: EmployeeDao) {
     val isCacheNotEmpty get() = dao.isNotEmpty()
 
     fun getEmployees(): Single<List<Employee>> =

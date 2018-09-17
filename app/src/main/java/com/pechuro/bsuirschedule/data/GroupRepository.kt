@@ -1,11 +1,12 @@
-package com.pechuro.bsuirschedule.repository
+package com.pechuro.bsuirschedule.data
 
-import com.pechuro.bsuirschedule.repository.api.GroupApi
-import com.pechuro.bsuirschedule.repository.db.dao.GroupDao
-import com.pechuro.bsuirschedule.repository.entity.Group
+import com.pechuro.bsuirschedule.data.database.dao.GroupDao
+import com.pechuro.bsuirschedule.data.entity.Group
+import com.pechuro.bsuirschedule.data.network.GroupApi
 import io.reactivex.Single
+import javax.inject.Inject
 
-class GroupRepository(private val api: GroupApi, private val dao: GroupDao) {
+class GroupRepository @Inject constructor(private val api: GroupApi, private val dao: GroupDao) {
     val isCacheNotEmpty get() = dao.isNotEmpty()
 
     fun getGroups(): Single<List<Group>> = getFromCache().onErrorResumeNext { getFromApi() }

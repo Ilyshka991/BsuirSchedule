@@ -1,10 +1,10 @@
-package com.pechuro.bsuirschedule.repository.db.dao
+package com.pechuro.bsuirschedule.data.database.dao
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
-import com.pechuro.bsuirschedule.repository.entity.Employee
+import com.pechuro.bsuirschedule.data.entity.Employee
 import io.reactivex.Single
 
 @Dao

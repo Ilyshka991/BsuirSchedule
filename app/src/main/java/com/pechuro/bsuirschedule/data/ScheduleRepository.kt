@@ -1,17 +1,18 @@
-package com.pechuro.bsuirschedule.repository
+package com.pechuro.bsuirschedule.data
 
 import com.pechuro.bsuirschedule.constant.ScheduleType.EMPLOYEE_CLASSES
 import com.pechuro.bsuirschedule.constant.ScheduleType.EMPLOYEE_EXAMS
 import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT_CLASSES
 import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT_EXAMS
-import com.pechuro.bsuirschedule.repository.api.*
-import com.pechuro.bsuirschedule.repository.db.dao.ScheduleDao
-import com.pechuro.bsuirschedule.repository.entity.ScheduleItem
-import com.pechuro.bsuirschedule.repository.entity.complex.Classes
+import com.pechuro.bsuirschedule.data.database.dao.ScheduleDao
+import com.pechuro.bsuirschedule.data.entity.ScheduleItem
+import com.pechuro.bsuirschedule.data.entity.complex.Classes
+import com.pechuro.bsuirschedule.data.network.*
 import io.reactivex.Single
+import javax.inject.Inject
 
-class ScheduleRepository(private val api: ScheduleApi,
-                         private val dao: ScheduleDao) {
+class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
+                                             private val dao: ScheduleDao) {
 
     fun getClasses(name: String, type: Int): Single<Classes> =
             getFromCache(name, type).onErrorResumeNext { getFromApi(name, type) }
@@ -57,8 +58,6 @@ class ScheduleRepository(private val api: ScheduleApi,
                 .doOnSuccess { storeInCache(it) }
     }
 
-    private fun getFromCache(name: String, type: Int) = dao.get(name, type)
-
     private fun getScheduleItems(response: List<ScheduleResponse>?): List<ScheduleItem> {
         val schedule = ArrayList<ScheduleItem>()
 
@@ -71,6 +70,8 @@ class ScheduleRepository(private val api: ScheduleApi,
         }
         return schedule
     }
+
+    private fun getFromCache(name: String, type: Int) = dao.get(name, type)
 
     private fun storeInCache(schedule: Classes) =
             dao.insertSchedule(schedule)

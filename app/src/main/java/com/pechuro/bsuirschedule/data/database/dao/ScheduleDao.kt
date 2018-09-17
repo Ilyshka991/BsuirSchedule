@@ -1,9 +1,9 @@
-package com.pechuro.bsuirschedule.repository.db.dao
+package com.pechuro.bsuirschedule.data.database.dao
 
 import android.arch.persistence.room.*
-import com.pechuro.bsuirschedule.repository.entity.Schedule
-import com.pechuro.bsuirschedule.repository.entity.ScheduleItem
-import com.pechuro.bsuirschedule.repository.entity.complex.Classes
+import com.pechuro.bsuirschedule.data.entity.Schedule
+import com.pechuro.bsuirschedule.data.entity.ScheduleItem
+import com.pechuro.bsuirschedule.data.entity.complex.Classes
 import io.reactivex.Single
 
 @Dao
