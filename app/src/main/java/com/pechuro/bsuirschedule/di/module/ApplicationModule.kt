@@ -5,8 +5,9 @@ import com.pechuro.bsuirschedule.App
 import dagger.Module
 import dagger.Provides
 
-@Module
-class AppModule(private val app: App) {
+
+@Module()
+class ApplicationModule {
     @Provides
-    fun provideContext(): Context = app
+    fun provideContext(app: App): Context = app.applicationContext
 }
