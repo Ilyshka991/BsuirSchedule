@@ -1,6 +1,6 @@
 package com.pechuro.bsuirschedule.data.database.dao
 
-import android.arch.persistence.room.Dao
+import androidx.room.Dao
 
 @Dao
 interface ScheduleItemDao

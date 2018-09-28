@@ -1,6 +1,6 @@
 package com.pechuro.bsuirschedule.data.entity
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import com.google.gson.annotations.SerializedName
 import com.pechuro.bsuirschedule.data.database.Converters
 

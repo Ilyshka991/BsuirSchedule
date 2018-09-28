@@ -1,6 +1,6 @@
 package com.pechuro.bsuirschedule.data.database.dao
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import com.pechuro.bsuirschedule.data.entity.Schedule
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 import com.pechuro.bsuirschedule.data.entity.complex.Classes
@@ -28,6 +28,7 @@ interface ScheduleDao {
     @Query("DELETE FROM all_schedules WHERE type = :type")
     fun delete(type: Int)
 
+    @Transaction
     @Query("SELECT * FROM all_schedules WHERE name = :name AND type = :type")
     fun get(name: String, type: Int): Single<Classes>
 

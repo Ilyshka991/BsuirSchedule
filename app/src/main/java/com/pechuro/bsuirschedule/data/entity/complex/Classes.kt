@@ -1,6 +1,6 @@
 package com.pechuro.bsuirschedule.data.entity.complex
 
-import android.arch.persistence.room.Relation
+import androidx.room.Relation
 import com.pechuro.bsuirschedule.data.entity.Schedule
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 

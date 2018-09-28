@@ -15,13 +15,14 @@ import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-
 
 @Module
 class NetworkModule {
     companion object {
         private const val BASE_URL = "https://students.bsuir.by/api/v1/"
+        private const val CONNECT_TIMEOUT = 60L
     }
 
     @Provides
@@ -42,7 +43,11 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
-            OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
+            OkHttpClient.Builder()
+                    .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+                    .writeTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+                    .addInterceptor(loggingInterceptor)
+                    .build()
 
     @Provides
     @Singleton
