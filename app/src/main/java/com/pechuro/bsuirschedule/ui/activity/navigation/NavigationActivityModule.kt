@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.ui.navigation
+package com.pechuro.bsuirschedule.ui.activity.navigation
 
 import dagger.Module
 

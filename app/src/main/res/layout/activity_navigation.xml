@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.pechuro.bsuirschedule.ui.navigation.NavigationActivityViewModel" />
+            type="com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivityViewModel" />
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -20,13 +20,13 @@
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.navigation.NavigationActivity">
+            tools:context=".ui.activity.navigation.NavigationActivity">
 
             <FrameLayout
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".ui.navigation.NavigationActivity" />
+                tools:context=".ui.activity.navigation.NavigationActivity" />
 
             <com.google.android.material.bottomappbar.BottomAppBar
                 android:id="@+id/bar"

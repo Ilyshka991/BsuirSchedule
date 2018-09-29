@@ -3,7 +3,8 @@ package com.pechuro.bsuirschedule.di.module
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.pechuro.bsuirschedule.di.annotations.ViewModelKey
-import com.pechuro.bsuirschedule.ui.navigation.NavigationActivityViewModel
+import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivityViewModel
+import com.pechuro.bsuirschedule.ui.fragment.classes.ScheduleFragmentViewModel
 import com.pechuro.bsuirschedule.viewmodel.ViewModelFactory
 import dagger.Binds
 import dagger.Module
@@ -18,4 +19,9 @@ abstract class AppViewModelsModule {
     @IntoMap
     @ViewModelKey(NavigationActivityViewModel::class)
     abstract fun navigationActivity(viewModel: NavigationActivityViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ScheduleFragmentViewModel::class)
+    abstract fun scheduleFragment(viewModel: ScheduleFragmentViewModel): ViewModel
 }
