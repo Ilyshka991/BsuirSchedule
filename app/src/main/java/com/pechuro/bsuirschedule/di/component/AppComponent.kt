@@ -6,20 +6,20 @@ import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
-
 @Singleton
-@Component(modules = [NetworkModule::class,
+@Component(modules = [
     ApplicationModule::class,
-    DatabaseModule::class,
     AppActivitiesModule::class,
-    AppFragmentsModule::class])
+    AppViewModelsModule::class,
+    NetworkModule::class,
+    DatabaseModule::class])
 interface AppComponent {
     fun inject(app: App)
 
     @Component.Builder
     interface Builder {
         @BindsInstance
-        fun appContext(app: App): Builder
+        fun application(app: App): Builder
 
         fun build(): AppComponent
     }
