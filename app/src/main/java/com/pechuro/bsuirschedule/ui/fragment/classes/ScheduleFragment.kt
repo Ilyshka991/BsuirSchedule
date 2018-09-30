@@ -8,6 +8,7 @@ import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentSheduleBinding
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
+import com.pechuro.bsuirschedule.ui.fragment.classes.ScheduleFragmentArgs.fromBundle
 import javax.inject.Inject
 
 class ScheduleFragment : BaseFragment<FragmentSheduleBinding, ScheduleFragmentViewModel>() {
@@ -16,13 +17,11 @@ class ScheduleFragment : BaseFragment<FragmentSheduleBinding, ScheduleFragmentVi
     @Inject
     lateinit var mPagerAdapter: SchedulePagerAdapter
 
-    companion object {
-        fun newInstance(): ScheduleFragment {
-            val args = Bundle()
-            val fragment = ScheduleFragment()
-            fragment.arguments = args
-            return fragment
-        }
+    private val scheduleName by lazy {
+        fromBundle(arguments).scheduleName
+    }
+    private val scheduleType by lazy {
+        fromBundle(arguments).scheduleType
     }
 
     override val mViewModel: ScheduleFragmentViewModel

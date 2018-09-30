@@ -17,6 +17,8 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
     fun getClasses(name: String, type: Int): Single<Classes> =
             getFromCache(name, type).onErrorResumeNext { getFromApi(name, type) }
 
+    fun getSchedules() = dao.getSchedules()
+
     fun getNotAddedGroups(type: Int) = dao.getNotAddedGroups(type)
 
     fun getNotAddedEmployees(type: Int) = dao.getNotAddedEmployees(type)

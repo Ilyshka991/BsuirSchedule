@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentStartBinding
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
-import com.pechuro.bsuirschedule.ui.fragment.start.StartFragmentDirections.actionStartToSchedule
 
 class StartFragment : BaseFragment<FragmentStartBinding, StartFragmentViewModel>() {
 
@@ -33,8 +31,5 @@ class StartFragment : BaseFragment<FragmentStartBinding, StartFragmentViewModel>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = mViewDataBinding
-        binding.fab.setOnClickListener {
-            findNavController().navigate(actionStartToSchedule())
-        }
     }
 }

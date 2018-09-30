@@ -14,5 +14,4 @@ object BindingUtils {
         adapter?.clearItems()
         data?.let { adapter?.addItems(it) }
     }
-
 }
