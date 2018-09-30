@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/startFragment">
+
+
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="com.pechuro.bsuirschedule.ui.fragment.start.StartFragment"
+        android:label="StartFragment">
+        <action
+            android:id="@+id/action_start_to_schedule"
+            app:destination="@id/scheduleFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/scheduleFragment"
+        android:name="com.pechuro.bsuirschedule.ui.fragment.classes.ScheduleFragment"
+        android:label="ScheduleFragment" />
+</navigation>

@@ -5,11 +5,12 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.ui.NavigationUI.*
 import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.ActivityNavigationBinding
 import com.pechuro.bsuirschedule.ui.base.BaseActivity
-import com.pechuro.bsuirschedule.ui.fragment.classes.ScheduleFragment
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_navigation.*
@@ -36,9 +37,11 @@ class NavigationActivity :
         super.onCreate(savedInstanceState)
         binding = mViewDataBinding
         setup()
+        setupNavigation()
+    }
 
-        supportFragmentManager.beginTransaction()
-                .replace(binding.container.id, ScheduleFragment.newInstance()).commit()
+    override fun onSupportNavigateUp(): Boolean {
+        return navigateUp(binding.drawerLayout, findNavController(this, R.id.nav_host_fragment))
     }
 
     override fun onBackPressed() {
@@ -56,5 +59,20 @@ class NavigationActivity :
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+
+    }
+
+    private fun setupNavigation() {
+        val navController = findNavController(this, R.id.nav_host_fragment)
+
+        setupActionBarWithNavController(this, navController, binding.drawerLayout)
+
+        binding.navView.setNavigationItemSelectedListener { menuItem ->
+            menuItem.isChecked = true
+            binding.drawerLayout.closeDrawers()
+            true
+        }
+
+        setupWithNavController(binding.navView, navController)
     }
 }

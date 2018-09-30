@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: "androidx.navigation.safeargs"
 
 kapt {
     generateStubs = true
@@ -42,6 +43,10 @@ dependencies {
 
     //Ktx
     implementation 'androidx.core:core-ktx:1.0.0'
+
+    //Navigation
+    implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0-alpha06"
+    implementation "android.arch.navigation:navigation-ui-ktx:1.0.0-alpha06"
 
     //Arch components
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'

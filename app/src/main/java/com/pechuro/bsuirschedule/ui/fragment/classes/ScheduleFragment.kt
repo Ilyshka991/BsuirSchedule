@@ -25,7 +25,6 @@ class ScheduleFragment : BaseFragment<FragmentSheduleBinding, ScheduleFragmentVi
         }
     }
 
-
     override val mViewModel: ScheduleFragmentViewModel
         get() = ViewModelProviders.of(this, mViewModelFactory).get(ScheduleFragmentViewModel::class.java)
     override val bindingVariable: Int
@@ -46,6 +45,11 @@ class ScheduleFragment : BaseFragment<FragmentSheduleBinding, ScheduleFragmentVi
                 .addOnPageChangeListener(
                         TabLayout.TabLayoutOnPageChangeListener(
                                 binding.tabLayout))
+
+
+        for (i in 0..31) {
+            binding.tabLayout.addTab(binding.tabLayout.newTab().setText(i.toString()))
+        }
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab) {
