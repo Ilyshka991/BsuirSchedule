@@ -10,4 +10,5 @@
     <string name="schedules">Schedules</string>
     <string name="exams">Exams</string>
     <string name="add_schedule">Add schedule</string>
+    <string name="schedule_tab_text">"%1$s, Week %2$d"</string>
 </resources>

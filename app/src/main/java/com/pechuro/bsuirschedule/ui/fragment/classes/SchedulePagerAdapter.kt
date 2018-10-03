@@ -9,7 +9,7 @@ import javax.inject.Inject
 class SchedulePagerAdapter @Inject constructor(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
 
-    override fun getCount() = 31
+    override fun getCount() = 40
 
     override fun getItem(position: Int): Fragment {
         return ListFragment.newInstance()

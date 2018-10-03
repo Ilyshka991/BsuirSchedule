@@ -11,7 +11,12 @@ import com.pechuro.bsuirschedule.ui.base.BaseFragment
 import com.pechuro.bsuirschedule.ui.fragment.classes.ScheduleFragmentArgs.fromBundle
 import javax.inject.Inject
 
+
 class ScheduleFragment : BaseFragment<FragmentSheduleBinding, ScheduleFragmentViewModel>() {
+
+    companion object {
+        const val NUMBER_OF_TABS = 40
+    }
 
     private lateinit var binding: FragmentSheduleBinding
     @Inject
@@ -46,8 +51,10 @@ class ScheduleFragment : BaseFragment<FragmentSheduleBinding, ScheduleFragmentVi
                                 binding.tabLayout))
 
 
-        for (i in 0..31) {
-            binding.tabLayout.addTab(binding.tabLayout.newTab().setText(i.toString()))
+        for (i in 0 until NUMBER_OF_TABS) {
+            val (day, week) = mViewModel.getTabDate(i)
+            binding.tabLayout.addTab(binding.tabLayout.newTab()
+                    .setText(getString(R.string.schedule_tab_text, day, week)))
         }
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
