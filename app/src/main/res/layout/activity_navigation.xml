@@ -20,7 +20,6 @@
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
             tools:context=".ui.activity.navigation.NavigationActivity">
 
             <fragment
@@ -49,26 +48,15 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
-            app:menu="@menu/activity_navigation_drawer">
+            app:menu="@menu/menu_navigation_list">
 
-            <LinearLayout
+            <com.google.android.material.navigation.NavigationView
+                android:id="@+id/nav_footer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:clickable="true"
-                android:focusable="true"
-                android:orientation="vertical">
+                app:menu="@menu/menu_navigation_footer" />
 
-                <TextView
-                    android:id="@+id/action_add_schedule"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Add new schedule"
-                    android:layout_margin="16dp"
-                    android:textSize="18sp" />
-            </LinearLayout>
         </com.google.android.material.navigation.NavigationView>
-
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

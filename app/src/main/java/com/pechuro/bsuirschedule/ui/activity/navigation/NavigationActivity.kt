@@ -109,16 +109,17 @@ class NavigationActivity :
             items[typeGroup]?.takeIf { it.isNotEmpty() }?.sorted()?.let { list ->
 
                 val subMenu = when (typeGroup) {
-                    SCHEDULES -> binding.navView.menu.addSubMenu("Schedules")
-                    EXAMS -> binding.navView.menu.addSubMenu("Exams")
+                    SCHEDULES -> binding.navView.menu.addSubMenu(getString(R.string.schedules))
+                    EXAMS -> binding.navView.menu.addSubMenu(getString(R.string.exams))
                     else -> throw UnsupportedOperationException("Invalid type")
                 }
 
                 list.forEach { menuItem ->
-                    subMenu.add(menuItem).setOnMenuItemClickListener {
-                        onClick(typeGroup, it)
-                        true
-                    }
+                    subMenu.add(menuItem)
+                            .setOnMenuItemClickListener {
+                                onClick(typeGroup, it)
+                                true
+                            }
                 }
             }
         }
