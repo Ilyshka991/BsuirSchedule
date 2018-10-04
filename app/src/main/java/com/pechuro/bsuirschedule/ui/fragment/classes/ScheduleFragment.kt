@@ -25,9 +25,6 @@ class ScheduleFragment : BaseFragment<FragmentSheduleBinding, ScheduleFragmentVi
     private val scheduleName by lazy {
         fromBundle(arguments).scheduleName
     }
-    private val scheduleType by lazy {
-        fromBundle(arguments).scheduleType
-    }
 
     override val mViewModel: ScheduleFragmentViewModel
         get() = ViewModelProviders.of(this, mViewModelFactory).get(ScheduleFragmentViewModel::class.java)
@@ -39,23 +36,30 @@ class ScheduleFragment : BaseFragment<FragmentSheduleBinding, ScheduleFragmentVi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = mViewDataBinding
-        setup()
+        setupView()
+        inflateLayout()
     }
 
-    private fun setup() {
+    private fun inflateLayout() {
+        val fragmentsInfo = mutableListOf<DayScheduleInformation>()
+
+        for (i in 0 until NUMBER_OF_TABS) {
+            val (day, week, dayRu) = mViewModel.getTabDate(i)
+            fragmentsInfo.add(DayScheduleInformation(scheduleName, dayRu, week, 0))
+            binding.tabLayout.addTab(binding.tabLayout.newTab()
+                    .setText(getString(R.string.schedule_tab_text, day, week)))
+        }
+
+        mPagerAdapter.fragments = fragmentsInfo
+    }
+
+    private fun setupView() {
         binding.viewPager.adapter = mPagerAdapter
 
         binding.viewPager
                 .addOnPageChangeListener(
                         TabLayout.TabLayoutOnPageChangeListener(
                                 binding.tabLayout))
-
-
-        for (i in 0 until NUMBER_OF_TABS) {
-            val (day, week) = mViewModel.getTabDate(i)
-            binding.tabLayout.addTab(binding.tabLayout.newTab()
-                    .setText(getString(R.string.schedule_tab_text, day, week)))
-        }
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab) {

@@ -8,10 +8,15 @@ import javax.inject.Inject
 
 class SchedulePagerAdapter @Inject constructor(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
-
-    override fun getCount() = 40
+    var fragments: List<DayScheduleInformation> = listOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun getItem(position: Int): Fragment {
-        return ListFragment.newInstance()
+        return ListFragment.newInstance(fragments[position])
     }
+
+    override fun getCount() = fragments.size
 }

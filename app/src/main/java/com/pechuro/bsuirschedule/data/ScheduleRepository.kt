@@ -9,13 +9,17 @@ import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 import com.pechuro.bsuirschedule.data.entity.complex.Classes
 import com.pechuro.bsuirschedule.data.network.*
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
                                              private val dao: ScheduleDao) {
 
-    fun getClasses(name: String, type: Int): Single<Classes> =
-            getFromCache(name, type).onErrorResumeNext { getFromApi(name, type) }
+    fun loadClasses(name: String, type: Int) =
+            getFromApi(name, type)
+
+    fun getClasses(name: String, type: Int, day: String, week: Int): Single<List<ScheduleItem>> =
+            dao.get(name, type, day, week.toString())
 
     fun getSchedules() = dao.getSchedules()
 
@@ -33,13 +37,18 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
         when (type) {
             STUDENT_CLASSES, STUDENT_EXAMS ->
                 response = api.getStudentSchedule(name)
-                        .onErrorReturn { ResponseError(it) }.blockingGet()
+                        .subscribeOn(Schedulers.io())
+                        .onErrorReturn { ResponseError(it) }
+                        .blockingGet()
             EMPLOYEE_CLASSES, EMPLOYEE_EXAMS ->
                 response = api.getEmployeeSchedule(name)
-                        .onErrorReturn { ResponseError(it) }.blockingGet()
+                        .subscribeOn(Schedulers.io())
+                        .onErrorReturn { ResponseError(it) }
+                        .blockingGet()
         }
 
         val lastUpdate = api.getLastUpdateDate(name)
+                .subscribeOn(Schedulers.io())
                 .onErrorReturn { LastUpdateResponse(null) }
                 .blockingGet().lastUpdateDate
 
@@ -56,8 +65,7 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
                 classes.schedule = getScheduleItems(response.exam)
         }
 
-        return Single.just(classes)
-                .doOnSuccess { storeInCache(it) }
+        return Single.just(classes).doOnSuccess { storeInCache(it) }
     }
 
     private fun getScheduleItems(response: List<ScheduleResponse>?): List<ScheduleItem> {
@@ -67,13 +75,11 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
         response?.forEach {
             for (item in it.classes) {
                 schedule.add(item)
-                schedule[schedule.size - 1].weekDay = it.weekDay
+                schedule[schedule.size - 1].weekDay = it.weekDay.toLowerCase()
             }
         }
         return schedule
     }
-
-    private fun getFromCache(name: String, type: Int) = dao.get(name, type)
 
     private fun storeInCache(schedule: Classes) =
             dao.insertSchedule(schedule)

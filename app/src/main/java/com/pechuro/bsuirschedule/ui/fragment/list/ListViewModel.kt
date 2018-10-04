@@ -4,8 +4,9 @@ import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
 import com.pechuro.bsuirschedule.constant.ScheduleType
 import com.pechuro.bsuirschedule.data.ScheduleRepository
-import com.pechuro.bsuirschedule.data.entity.complex.Classes
+import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
+import com.pechuro.bsuirschedule.ui.fragment.classes.DayScheduleInformation
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -14,18 +15,14 @@ class ListViewModel @Inject constructor(private val repository: ScheduleReposito
     val listItems = ObservableArrayList<ListItemData>()
     val listItemsLiveData = MutableLiveData<List<ListItemData>>()
 
-    init {
-        loadData()
-    }
-
     fun addItems(data: List<ListItemData>) {
         listItems.clear()
         listItems.addAll(data)
     }
 
-    private fun loadData() {
+    fun loadData(info: DayScheduleInformation) {
         compositeDisposable.add(
-                repository.getClasses("750502", ScheduleType.STUDENT_CLASSES)
+                repository.getClasses(info.group, ScheduleType.STUDENT_CLASSES, info.day, info.week)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
@@ -33,9 +30,9 @@ class ListViewModel @Inject constructor(private val repository: ScheduleReposito
                         }, {}))
     }
 
-    private fun transformItems(data: Classes): List<ListItemData> {
+    private fun transformItems(data: List<ScheduleItem>): List<ListItemData> {
         val items = mutableListOf<ListItemData>()
-        data.schedule.forEach { items.add(ListItemData(it.subject)) }
+        data.forEach { items.add(ListItemData(it.subject)) }
         return items
     }
 }

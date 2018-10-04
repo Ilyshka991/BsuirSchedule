@@ -9,15 +9,18 @@ import javax.inject.Inject
 
 class ScheduleFragmentViewModel @Inject constructor() : BaseViewModel() {
 
-    fun getTabDate(days: Int): Pair<String, Int> {
+    fun getTabDate(days: Int): Triple<String, Int, String> {
         val dateFormat = SimpleDateFormat("EEE, d MMM",
                 Locale.getDefault())
+        val dateFormatRu = SimpleDateFormat("EEEE",
+                Locale("ru"))
         val calendar = Calendar.getInstance()
 
         val time = calendar.addDays(days)
         val day = dateFormat.format(time)
         val week = calendar.getCurrentWeek()
+        val dayRu = dateFormatRu.format(time)
 
-        return Pair(day, week)
+        return Triple(day, week, dayRu)
     }
 }

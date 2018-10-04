@@ -27,8 +27,4 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun provideGroupDao(appDatabase: AppDatabase) = appDatabase.groupDao()
-
-    @Provides
-    @Singleton
-    fun provideScheduleItemDao(appDatabase: AppDatabase) = appDatabase.scheduleItemDao()
 }

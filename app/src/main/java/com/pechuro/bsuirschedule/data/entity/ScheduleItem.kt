@@ -1,14 +1,17 @@
 package com.pechuro.bsuirschedule.data.entity
 
 import androidx.room.*
+import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
-import com.pechuro.bsuirschedule.data.database.Converters
+import com.pechuro.bsuirschedule.data.utils.Converters
+import com.pechuro.bsuirschedule.data.utils.WeekNumberTypeAdapter
 
 @Entity(tableName = "schedule_item")
 @TypeConverters(Converters::class)
 data class ScheduleItem(
         val subject: String?,
-        val weekNumber: List<Int>?,
+        @JsonAdapter(WeekNumberTypeAdapter::class)
+        val weekNumber: String?,
         @SerializedName("numSubgroup")
         val subgroupNumber: Int?,
         val lessonType: String?,

@@ -10,9 +10,11 @@ import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentListBinding
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
+import com.pechuro.bsuirschedule.ui.fragment.classes.DayScheduleInformation
 import javax.inject.Inject
 
 class ListFragment : BaseFragment<FragmentListBinding, ListViewModel>() {
+
     private lateinit var mBinding: FragmentListBinding
 
     @Inject
@@ -21,8 +23,12 @@ class ListFragment : BaseFragment<FragmentListBinding, ListViewModel>() {
     lateinit var mListAdapter: ListAdapter
 
     companion object {
-        fun newInstance(): ListFragment {
+        const val ARG_INFO = "arg_information"
+
+        fun newInstance(info: DayScheduleInformation): ListFragment {
             val args = Bundle()
+            args.putParcelable(ARG_INFO, info)
+
             val fragment = ListFragment()
             fragment.arguments = args
             return fragment
@@ -41,6 +47,11 @@ class ListFragment : BaseFragment<FragmentListBinding, ListViewModel>() {
         mBinding = mViewDataBinding
         setUp()
         subscribeToLiveData()
+
+        if (savedInstanceState == null) {
+            val info: DayScheduleInformation? = arguments?.getParcelable(ARG_INFO)
+            info?.let { mViewModel.loadData(it) }
+        }
     }
 
     private fun setUp() {

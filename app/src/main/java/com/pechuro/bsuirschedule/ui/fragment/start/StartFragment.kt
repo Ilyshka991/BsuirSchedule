@@ -12,15 +12,6 @@ class StartFragment : BaseFragment<FragmentStartBinding, StartFragmentViewModel>
 
     private lateinit var binding: FragmentStartBinding
 
-    companion object {
-        fun newInstance(): StartFragment {
-            val args = Bundle()
-            val fragment = StartFragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     override val mViewModel: StartFragmentViewModel
         get() = ViewModelProviders.of(this, mViewModelFactory).get(StartFragmentViewModel::class.java)
     override val bindingVariable: Int
@@ -31,5 +22,6 @@ class StartFragment : BaseFragment<FragmentStartBinding, StartFragmentViewModel>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = mViewDataBinding
+        binding.fab.setOnClickListener { mViewModel.onClick() }
     }
 }

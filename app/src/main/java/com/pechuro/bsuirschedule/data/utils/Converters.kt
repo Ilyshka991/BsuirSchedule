@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.data.database
+package com.pechuro.bsuirschedule.data.utils
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
@@ -7,13 +7,6 @@ import com.pechuro.bsuirschedule.data.entity.Employee
 
 
 class Converters {
-    @TypeConverter
-    fun fromIntList(value: List<Int>): String {
-        val gson = Gson()
-        val type = object : TypeToken<List<Int>>() {}.type
-        return gson.toJson(value, type)
-    }
-
     @TypeConverter
     fun fromStringList(value: List<String>): String {
         val gson = Gson()
@@ -26,13 +19,6 @@ class Converters {
         val gson = Gson()
         val type = object : TypeToken<List<Employee>>() {}.type
         return gson.toJson(value, type)
-    }
-
-    @TypeConverter
-    fun toIntList(value: String): List<Int> {
-        val gson = Gson()
-        val type = object : TypeToken<List<Int>>() {}.type
-        return gson.fromJson(value, type)
     }
 
     @TypeConverter

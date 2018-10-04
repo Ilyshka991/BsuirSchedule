@@ -97,9 +97,9 @@ class NavigationActivity :
             }
 
             val navDirection = if (navController.currentDestination?.id == R.id.scheduleFragment) {
-                actionScheduleSelf(menuItem.title.toString(), type)
+                actionScheduleSelf(menuItem.title.toString())
             } else {
-                actionStartToSchedule(menuItem.title.toString(), type)
+                actionStartToSchedule(menuItem.title.toString())
             }
 
             navigate(navDirection)
