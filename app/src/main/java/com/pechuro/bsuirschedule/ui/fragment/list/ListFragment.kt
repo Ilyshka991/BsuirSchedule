@@ -10,7 +10,8 @@ import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentListBinding
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
-import com.pechuro.bsuirschedule.ui.fragment.classes.DayScheduleInformation
+import com.pechuro.bsuirschedule.ui.fragment.transactioninfo.BaseScheduleInformation
+import com.pechuro.bsuirschedule.ui.fragment.transactioninfo.impl.ScheduleInformation
 import javax.inject.Inject
 
 class ListFragment : BaseFragment<FragmentListBinding, ListViewModel>() {
@@ -25,7 +26,7 @@ class ListFragment : BaseFragment<FragmentListBinding, ListViewModel>() {
     companion object {
         const val ARG_INFO = "arg_information"
 
-        fun newInstance(info: DayScheduleInformation): ListFragment {
+        fun <T : BaseScheduleInformation> newInstance(info: T): ListFragment {
             val args = Bundle()
             args.putParcelable(ARG_INFO, info)
 
@@ -48,10 +49,8 @@ class ListFragment : BaseFragment<FragmentListBinding, ListViewModel>() {
         setUp()
         subscribeToLiveData()
 
-        if (savedInstanceState == null) {
-            val info: DayScheduleInformation? = arguments?.getParcelable(ARG_INFO)
-            info?.let { mViewModel.loadData(it) }
-        }
+        val info: BaseScheduleInformation? = arguments?.getParcelable(ARG_INFO)
+        (info as? ScheduleInformation)?.let { mViewModel.loadData(it) }
     }
 
     private fun setUp() {
@@ -63,7 +62,7 @@ class ListFragment : BaseFragment<FragmentListBinding, ListViewModel>() {
     private fun subscribeToLiveData() {
         mViewModel.listItemsLiveData.observe(this,
                 Observer {
-                    if (it != null) mViewModel.addItems(it)
+                    if (it != null) mListAdapter.setItems(it)
                 })
     }
 }

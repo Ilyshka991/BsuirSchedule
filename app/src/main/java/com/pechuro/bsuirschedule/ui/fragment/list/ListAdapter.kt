@@ -21,12 +21,11 @@ class ListAdapter : RecyclerView.Adapter<BaseViewHolder>() {
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) = holder.onBind(position)
 
-    fun addItems(data: List<ListItemData>) {
+    fun setItems(data: List<ListItemData>) {
+        mItemsList.clear()
         mItemsList.addAll(data)
         notifyDataSetChanged()
     }
-
-    fun clearItems() = mItemsList.clear()
 
     inner class CacheViewHolder(private val mBinding: ItemListViewBinding) : BaseViewHolder(mBinding.root) {
 

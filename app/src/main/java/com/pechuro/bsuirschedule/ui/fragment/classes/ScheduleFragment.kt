@@ -9,6 +9,7 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentSheduleBinding
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
 import com.pechuro.bsuirschedule.ui.fragment.classes.ScheduleFragmentArgs.fromBundle
+import com.pechuro.bsuirschedule.ui.fragment.transactioninfo.impl.ScheduleInformation
 import javax.inject.Inject
 
 
@@ -24,6 +25,9 @@ class ScheduleFragment : BaseFragment<FragmentSheduleBinding, ScheduleFragmentVi
 
     private val scheduleName by lazy {
         fromBundle(arguments).scheduleName
+    }
+    private val scheduleType by lazy {
+        fromBundle(arguments).scheduleType
     }
 
     override val mViewModel: ScheduleFragmentViewModel
@@ -41,16 +45,16 @@ class ScheduleFragment : BaseFragment<FragmentSheduleBinding, ScheduleFragmentVi
     }
 
     private fun inflateLayout() {
-        val fragmentsInfo = mutableListOf<DayScheduleInformation>()
+        val info = mutableListOf<ScheduleInformation>()
 
         for (i in 0 until NUMBER_OF_TABS) {
             val (day, week, dayRu) = mViewModel.getTabDate(i)
-            fragmentsInfo.add(DayScheduleInformation(scheduleName, dayRu, week, 0))
+            info.add(ScheduleInformation(scheduleName, scheduleType, dayRu, week, 0))
             binding.tabLayout.addTab(binding.tabLayout.newTab()
                     .setText(getString(R.string.schedule_tab_text, day, week)))
         }
 
-        mPagerAdapter.fragments = fragmentsInfo
+        mPagerAdapter.fragmentsInfo = info
     }
 
     private fun setupView() {

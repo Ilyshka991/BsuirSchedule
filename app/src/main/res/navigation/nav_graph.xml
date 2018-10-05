@@ -26,6 +26,9 @@
         <argument
             android:name="schedule_name"
             app:argType="string" />
+        <argument
+            android:name="schedule_type"
+            app:argType="integer" />
         <action
             android:id="@+id/action_schedule_self"
             app:destination="@id/scheduleFragment"

@@ -1,28 +1,20 @@
 package com.pechuro.bsuirschedule.ui.fragment.list
 
-import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
-import com.pechuro.bsuirschedule.constant.ScheduleType
 import com.pechuro.bsuirschedule.data.ScheduleRepository
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
-import com.pechuro.bsuirschedule.ui.fragment.classes.DayScheduleInformation
+import com.pechuro.bsuirschedule.ui.fragment.transactioninfo.impl.ScheduleInformation
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class ListViewModel @Inject constructor(private val repository: ScheduleRepository) : BaseViewModel() {
-    val listItems = ObservableArrayList<ListItemData>()
     val listItemsLiveData = MutableLiveData<List<ListItemData>>()
 
-    fun addItems(data: List<ListItemData>) {
-        listItems.clear()
-        listItems.addAll(data)
-    }
-
-    fun loadData(info: DayScheduleInformation) {
+    fun loadData(info: ScheduleInformation) {
         compositeDisposable.add(
-                repository.getClasses(info.group, ScheduleType.STUDENT_CLASSES, info.day, info.week)
+                repository.getClasses(info.name, info.type, info.day, info.week)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
