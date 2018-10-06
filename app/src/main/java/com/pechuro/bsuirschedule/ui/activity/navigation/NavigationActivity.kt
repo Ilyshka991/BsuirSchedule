@@ -33,7 +33,6 @@ class NavigationActivity :
     @Inject
     lateinit var fragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
 
-    private lateinit var binding: ActivityNavigationBinding
     private lateinit var navController: NavController
 
     override val mViewModel: NavigationActivityViewModel
@@ -47,17 +46,16 @@ class NavigationActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = mViewDataBinding
         setupView()
         setupNavigation()
         subscribeToLiveData()
     }
 
-    override fun onSupportNavigateUp() = navigateUp(binding.drawerLayout, navController)
+    override fun onSupportNavigateUp() = navigateUp(mViewDataBinding.drawerLayout, navController)
 
     override fun onBackPressed() {
-        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        if (mViewDataBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mViewDataBinding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
@@ -66,9 +64,9 @@ class NavigationActivity :
     private fun setupView() {
         setSupportActionBar(bar)
         val toggle = ActionBarDrawerToggle(
-                this, binding.drawerLayout, binding.bar,
+                this, mViewDataBinding.drawerLayout, mViewDataBinding.bar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        binding.drawerLayout.addDrawerListener(toggle)
+        mViewDataBinding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
     }
 
@@ -109,8 +107,8 @@ class NavigationActivity :
             items[typeGroup]?.takeIf { it.isNotEmpty() }?.sorted()?.let { list ->
 
                 val subMenu = when (typeGroup) {
-                    SCHEDULES -> binding.navView.menu.addSubMenu(getString(R.string.schedules))
-                    EXAMS -> binding.navView.menu.addSubMenu(getString(R.string.exams))
+                    SCHEDULES -> mViewDataBinding.navView.menu.addSubMenu(getString(R.string.schedules))
+                    EXAMS -> mViewDataBinding.navView.menu.addSubMenu(getString(R.string.exams))
                     else -> throw UnsupportedOperationException("Invalid type")
                 }
 
@@ -131,12 +129,12 @@ class NavigationActivity :
     private fun setupNavigation() {
         navController = findNavController(this, R.id.nav_host_fragment)
 
-        setupActionBarWithNavController(this, navController, binding.drawerLayout)
-        setupWithNavController(binding.navView, navController)
+        setupActionBarWithNavController(this, navController, mViewDataBinding.drawerLayout)
+        setupWithNavController(mViewDataBinding.navView, navController)
     }
 
     private fun navigate(navDirection: NavDirections?) {
-        binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+        mViewDataBinding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(newState: Int) {
 
             }
@@ -147,13 +145,13 @@ class NavigationActivity :
 
             override fun onDrawerClosed(drawerView: View) {
                 if (navDirection != null) navController.navigate(navDirection)
-                binding.drawerLayout.removeDrawerListener(this)
+                mViewDataBinding.drawerLayout.removeDrawerListener(this)
             }
 
             override fun onDrawerOpened(drawerView: View) {
 
             }
         })
-        binding.drawerLayout.closeDrawers()
+        mViewDataBinding.drawerLayout.closeDrawers()
     }
 }

@@ -16,8 +16,6 @@ import javax.inject.Inject
 
 class ListFragment : BaseFragment<FragmentListBinding, ListViewModel>() {
 
-    private lateinit var mBinding: FragmentListBinding
-
     @Inject
     lateinit var mLayoutManager: LinearLayoutManager
     @Inject
@@ -45,24 +43,33 @@ class ListFragment : BaseFragment<FragmentListBinding, ListViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mBinding = mViewDataBinding
         setUp()
         subscribeToLiveData()
+        loadData()
+    }
 
+    private fun loadData() {
         val info: BaseScheduleInformation? = arguments?.getParcelable(ARG_INFO)
-        (info as? ScheduleInformation)?.let { mViewModel.loadData(it) }
+
+        with(mViewModel) {
+            when (info) {
+                is ScheduleInformation -> loadData(info)
+            }
+        }
     }
 
     private fun setUp() {
         mLayoutManager.orientation = RecyclerView.VERTICAL
-        mBinding.cacheRecyclerView.layoutManager = mLayoutManager
-        mBinding.cacheRecyclerView.adapter = mListAdapter
+        mViewDataBinding.cacheRecyclerView.layoutManager = mLayoutManager
+        mViewDataBinding.cacheRecyclerView.adapter = mListAdapter
     }
 
     private fun subscribeToLiveData() {
         mViewModel.listItemsLiveData.observe(this,
                 Observer {
-                    if (it != null) mListAdapter.setItems(it)
+                    if (it != null) {
+                        mListAdapter.setItems(it)
+                    }
                 })
     }
 }

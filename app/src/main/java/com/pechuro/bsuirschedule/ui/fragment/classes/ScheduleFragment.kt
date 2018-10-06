@@ -19,7 +19,6 @@ class ScheduleFragment : BaseFragment<FragmentSheduleBinding, ScheduleFragmentVi
         const val NUMBER_OF_TABS = 40
     }
 
-    private lateinit var binding: FragmentSheduleBinding
     @Inject
     lateinit var mPagerAdapter: SchedulePagerAdapter
 
@@ -39,7 +38,7 @@ class ScheduleFragment : BaseFragment<FragmentSheduleBinding, ScheduleFragmentVi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = mViewDataBinding
+
         setupView()
         inflateLayout()
     }
@@ -50,7 +49,7 @@ class ScheduleFragment : BaseFragment<FragmentSheduleBinding, ScheduleFragmentVi
         for (i in 0 until NUMBER_OF_TABS) {
             val (day, week, dayRu) = mViewModel.getTabDate(i)
             info.add(ScheduleInformation(scheduleName, scheduleType, dayRu, week, 0))
-            binding.tabLayout.addTab(binding.tabLayout.newTab()
+            mViewDataBinding.tabLayout.addTab(mViewDataBinding.tabLayout.newTab()
                     .setText(getString(R.string.schedule_tab_text, day, week)))
         }
 
@@ -58,20 +57,20 @@ class ScheduleFragment : BaseFragment<FragmentSheduleBinding, ScheduleFragmentVi
     }
 
     private fun setupView() {
-        binding.viewPager.adapter = mPagerAdapter
+        mViewDataBinding.viewPager.adapter = mPagerAdapter
 
-        binding.viewPager
+        mViewDataBinding.viewPager
                 .addOnPageChangeListener(
                         TabLayout.TabLayoutOnPageChangeListener(
-                                binding.tabLayout))
+                                mViewDataBinding.tabLayout))
 
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        mViewDataBinding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab) {
 
             }
 
             override fun onTabSelected(tab: TabLayout.Tab) {
-                binding.viewPager.currentItem = tab.position
+                mViewDataBinding.viewPager.currentItem = tab.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {

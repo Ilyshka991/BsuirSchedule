@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.databinding.ItemListViewBinding
 import com.pechuro.bsuirschedule.ui.base.BaseViewHolder
+import com.pechuro.bsuirschedule.ui.fragment.list.item.impl.ListItemData
 
 class ListAdapter : RecyclerView.Adapter<BaseViewHolder>() {
 

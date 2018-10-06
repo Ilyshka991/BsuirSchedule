@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.pechuro.bsuirschedule.di.annotations.ViewModelKey
 import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivityViewModel
+import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.classes.ScheduleFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.list.ListViewModel
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragmentViewModel
@@ -36,4 +37,9 @@ abstract class AppViewModelsModule {
     @IntoMap
     @ViewModelKey(StartFragmentViewModel::class)
     abstract fun startFragment(viewModel: StartFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AddDialogFragmentViewModel::class)
+    abstract fun testFragment(viewModel: AddDialogFragmentViewModel): ViewModel
 }

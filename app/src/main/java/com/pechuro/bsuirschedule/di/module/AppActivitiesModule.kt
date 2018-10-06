@@ -3,6 +3,7 @@ package com.pechuro.bsuirschedule.di.module
 import com.pechuro.bsuirschedule.di.annotations.ActivityScope
 import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivity
 import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivityModule
+import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.classes.ScheduleFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.list.ListFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragmentProvider
@@ -18,7 +19,8 @@ abstract class AppActivitiesModule {
     @ContributesAndroidInjector(modules = [NavigationActivityModule::class,
         ScheduleFragmentProvider::class,
         ListFragmentProvider::class,
-        StartFragmentProvider::class])
+        StartFragmentProvider::class,
+        AddDialogFragmentProvider::class])
     abstract fun bindNavigationActivity(): NavigationActivity
 
 }
