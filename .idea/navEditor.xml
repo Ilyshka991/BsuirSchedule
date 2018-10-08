@@ -8,6 +8,18 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
+                  <entry key="addDialog">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="scheduleFragment">
                     <value>
                       <LayoutPositions>
@@ -19,6 +31,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_scheduleFragment_to_addDialog">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_schedule_self">
                               <value>
                                 <LayoutPositions />
@@ -40,6 +57,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_start_to_add_dialog">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_start_to_schedule">
                               <value>
                                 <LayoutPositions />

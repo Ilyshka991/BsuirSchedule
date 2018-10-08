@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.databinding.FragmentSheduleBinding
+import com.pechuro.bsuirschedule.databinding.FragmentViewpagerBinding
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
 import com.pechuro.bsuirschedule.ui.fragment.classes.ScheduleFragmentArgs.fromBundle
 import com.pechuro.bsuirschedule.ui.fragment.transactioninfo.impl.ScheduleInformation
 import javax.inject.Inject
 
 
-class ScheduleFragment : BaseFragment<FragmentSheduleBinding, ScheduleFragmentViewModel>() {
+class ScheduleFragment : BaseFragment<FragmentViewpagerBinding, ScheduleFragmentViewModel>() {
 
     companion object {
         const val NUMBER_OF_TABS = 40
@@ -32,13 +32,12 @@ class ScheduleFragment : BaseFragment<FragmentSheduleBinding, ScheduleFragmentVi
     override val mViewModel: ScheduleFragmentViewModel
         get() = ViewModelProviders.of(this, mViewModelFactory).get(ScheduleFragmentViewModel::class.java)
     override val bindingVariable: Int
-        get() = BR.viewModel
+        get() = BR._all
     override val layoutId: Int
-        get() = R.layout.fragment_shedule
+        get() = R.layout.fragment_viewpager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupView()
         inflateLayout()
     }

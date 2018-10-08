@@ -8,4 +8,7 @@ object ScheduleType {
 
     const val SCHEDULES = 10
     const val EXAMS = 11
+
+    const val STUDENT = 20
+    const val EMPLOYEE = 21
 }

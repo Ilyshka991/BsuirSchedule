@@ -1,9 +1,9 @@
 package com.pechuro.bsuirschedule.ui.base
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
@@ -30,14 +30,12 @@ abstract class BaseDialog<T : ViewDataBinding, V : BaseViewModel> : DialogFragme
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = Dialog(requireContext())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mViewDataBinding = DataBindingUtil
                 .inflate(LayoutInflater.from(context), layoutId, null, false)
         mRootView = mViewDataBinding.root
-        dialog.setContentView(mRootView)
-        return dialog
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        return mRootView
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

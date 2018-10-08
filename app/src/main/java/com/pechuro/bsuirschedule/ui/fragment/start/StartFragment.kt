@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentStartBinding
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
-import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogFragment
+import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
 
 class StartFragment : BaseFragment<FragmentStartBinding, StartFragmentViewModel>() {
 
@@ -21,7 +21,7 @@ class StartFragment : BaseFragment<FragmentStartBinding, StartFragmentViewModel>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mViewDataBinding.fab.setOnClickListener {
-            AddDialogFragment.newInstance().show(fragmentManager, "dfs")
+            AddDialog.newInstance().show(fragmentManager, "dfs")
         }
     }
 }

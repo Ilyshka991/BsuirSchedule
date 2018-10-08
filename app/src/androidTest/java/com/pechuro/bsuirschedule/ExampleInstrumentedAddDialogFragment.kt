@@ -7,7 +7,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * Instrumented dialog_fragment_add, which will execute on an Android device.
+ * Instrumented dialog_add, which will execute on an Android device.
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
@@ -15,7 +15,7 @@ import org.junit.runner.RunWith
 class ExampleInstrumentedAddDialogFragment {
     @Test
     fun useAppContext() {
-        // Context of the app under dialog_fragment_add.
+        // Context of the app under dialog_add.
         val appContext = InstrumentationRegistry.getTargetContext()
         assertEquals("com.pechuro.bsuirschedule", appContext.packageName)
     }
