@@ -44,7 +44,7 @@ fun Calendar.getCurrentWeek(): Int {
     }
 
     val firstDay = Calendar.getInstance()
-    firstDay.set(year, SEPTEMBER, 1)
+    firstDay.set(year, SEPTEMBER, 1, 0, 0, 0)
 
     val difference = (currentDate.timeInMillis - firstDay.timeInMillis) / 1000 / 60 / 60 / 24
     var day = firstDay.get(DAY_OF_WEEK)

@@ -51,9 +51,9 @@ class ScheduleFragment : BaseFragment<FragmentViewpagerBinding, ScheduleFragment
             mViewDataBinding.tabLayout.addTab(mViewDataBinding.tabLayout.newTab()
                     .setText(getString(R.string.schedule_tab_text, day, week)))
         }
-
         mPagerAdapter.fragmentsInfo = info
     }
+
 
     private fun setupView() {
         mViewDataBinding.viewPager.adapter = mPagerAdapter
