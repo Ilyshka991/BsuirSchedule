@@ -13,8 +13,10 @@ class SplashActivityViewModel @Inject constructor(
 
     fun decideNextActivity() =
             doAsync {
-                if (groupRepository.isCacheNotEmpty && employeeRepository.isCacheNotEmpty)
-                    navigator.openNavigationActivity() else navigator.openInfoLoadActivity()
+                if (groupRepository.isCacheNotEmpty && employeeRepository.isCacheNotEmpty) {
+                    navigator.openNavigationActivity()
+                } else {
+                    navigator.openInfoLoadActivity()
+                }
             }
-
 }

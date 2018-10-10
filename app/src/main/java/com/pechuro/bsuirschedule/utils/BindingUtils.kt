@@ -6,13 +6,13 @@ import androidx.databinding.BindingAdapter
 
 object BindingUtils {
 
-    @BindingAdapter("progressBar_visibility")
+    @BindingAdapter("visibility")
     @JvmStatic
     fun setProgressBarVisibility(view: View, isVisible: Boolean) {
         view.visibility = if (isVisible) VISIBLE else GONE
     }
 
-    @BindingAdapter("view_visibility")
+    @BindingAdapter("visibility_invisible")
     @JvmStatic
     fun setVewVisibility(view: View, isVisible: Boolean) {
         view.visibility = if (isVisible) VISIBLE else INVISIBLE

@@ -11,6 +11,8 @@ class GroupRepository @Inject constructor(private val api: GroupApi, private val
 
     fun get(): Single<List<Group>> = getFromCache()
 
+    fun getNumbers(): Single<List<String>> = dao.getNumbers()
+
     fun load(): Single<Boolean> = getFromApi()
 
     fun delete() = dao.delete()

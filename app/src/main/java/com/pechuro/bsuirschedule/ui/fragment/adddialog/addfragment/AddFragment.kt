@@ -44,13 +44,13 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
     }
 
     private fun subscribeToLiveData() {
-        mViewModel.notAddedSchedules.observe(this,
+        mViewModel.suggestions.observe(this,
                 Observer {
                     if (it != null) {
                         val adapter = ArrayAdapter<String>(
                                 mViewDataBinding.textInput.context,
                                 R.layout.item_autocomplete_adapter,
-                                it.toList())
+                                it)
                         mViewDataBinding.textInput.setAdapter(adapter)
                     }
                 })
