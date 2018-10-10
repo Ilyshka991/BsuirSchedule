@@ -41,8 +41,8 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
         mViewDataBinding.viewPager.adapter = mPagerAdapter
         mViewDataBinding.viewPager.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
 
-        mViewDataBinding.tabLayout.addTab(mViewDataBinding.tabLayout.newTab().setText("1"))
-        mViewDataBinding.tabLayout.addTab(mViewDataBinding.tabLayout.newTab().setText("2"))
+        mViewDataBinding.tabLayout.addTab(mViewDataBinding.tabLayout.newTab().setText("Students"))
+        mViewDataBinding.tabLayout.addTab(mViewDataBinding.tabLayout.newTab().setText("Employees"))
 
         mViewDataBinding.viewPager
                 .addOnPageChangeListener(

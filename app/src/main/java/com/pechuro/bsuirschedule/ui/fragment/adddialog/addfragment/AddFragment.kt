@@ -1,7 +1,10 @@
 package com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment
 
 import android.os.Bundle
+import android.view.View
+import android.widget.ArrayAdapter
 import androidx.databinding.library.baseAdapters.BR
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentAddBinding
@@ -9,11 +12,11 @@ import com.pechuro.bsuirschedule.ui.base.BaseFragment
 
 class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
     companion object {
-        const val ARG_INFO = "arg_add_fragment_schedule_type"
+        const val ARG_SCHEDULE_TYPE = "arg_add_fragment_schedule_type"
 
         fun newInstance(scheduleType: Int): AddFragment {
             val args = Bundle()
-            args.putInt(ARG_INFO, scheduleType)
+            args.putInt(ARG_SCHEDULE_TYPE, scheduleType)
 
             val fragment = AddFragment()
             fragment.arguments = args
@@ -27,4 +30,29 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
         get() = BR.viewModel
     override val layoutId: Int
         get() = R.layout.fragment_add
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        with(arguments?.getInt(ARG_SCHEDULE_TYPE)) {
+            if (this != null && savedInstanceState == null) {
+                mViewModel.loadNotAddedSchedules(this)
+            }
+        }
+
+        subscribeToLiveData()
+    }
+
+    private fun subscribeToLiveData() {
+        mViewModel.notAddedSchedules.observe(this,
+                Observer {
+                    if (it != null) {
+                        val adapter = ArrayAdapter<String>(
+                                mViewDataBinding.textInput.context,
+                                R.layout.item_autocomplete_adapter,
+                                it.toList())
+                        mViewDataBinding.textInput.setAdapter(adapter)
+                    }
+                })
+    }
 }
