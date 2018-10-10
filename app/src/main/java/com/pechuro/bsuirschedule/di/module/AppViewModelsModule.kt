@@ -3,7 +3,9 @@ package com.pechuro.bsuirschedule.di.module
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.pechuro.bsuirschedule.di.annotations.ViewModelKey
+import com.pechuro.bsuirschedule.ui.activity.infoload.InfoLoadActivityViewModel
 import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivityViewModel
+import com.pechuro.bsuirschedule.ui.activity.splash.SplashActivityViewModel
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogViewModel
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.classes.ScheduleFragmentViewModel
@@ -48,4 +50,14 @@ abstract class AppViewModelsModule {
     @IntoMap
     @ViewModelKey(AddFragmentViewModel::class)
     abstract fun addFragment(viewModel: AddFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SplashActivityViewModel::class)
+    abstract fun splashActivity(viewModel: SplashActivityViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(InfoLoadActivityViewModel::class)
+    abstract fun infoLoadActivity(viewModel: InfoLoadActivityViewModel): ViewModel
 }

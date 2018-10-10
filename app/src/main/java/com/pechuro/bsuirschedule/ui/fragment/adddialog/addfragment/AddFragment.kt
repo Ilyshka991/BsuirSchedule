@@ -36,7 +36,7 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
 
         with(arguments?.getInt(ARG_SCHEDULE_TYPE)) {
             if (this != null && savedInstanceState == null) {
-                mViewModel.loadNotAddedSchedules(this)
+                mViewModel.loadSuggestions(this)
             }
         }
 

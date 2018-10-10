@@ -9,15 +9,19 @@ import javax.inject.Inject
 class GroupRepository @Inject constructor(private val api: GroupApi, private val dao: GroupDao) {
     val isCacheNotEmpty get() = dao.isNotEmpty()
 
-    fun getGroups(): Single<List<Group>> = getFromCache().onErrorResumeNext { getFromApi() }
+    fun get(): Single<List<Group>> = getFromCache()
+
+    fun load(): Single<Boolean> = getFromApi()
 
     fun delete() = dao.delete()
 
     private fun getFromCache(): Single<List<Group>> =
             dao.get().filter { it.isNotEmpty() }.toSingle()
 
-    private fun getFromApi(): Single<List<Group>> =
-            api.get().doOnSuccess { storeInCache(it) }
+    private fun getFromApi(): Single<Boolean> =
+            api.get().doOnSuccess {
+                storeInCache(it)
+            }.map { true }.onErrorReturn { false }
 
     private fun storeInCache(groups: List<Group>) =
             dao.insert(groups)

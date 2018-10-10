@@ -1,5 +1,7 @@
 package com.pechuro.bsuirschedule.ui.activity.navigation
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -29,6 +31,9 @@ import javax.inject.Inject
 
 class NavigationActivity :
         BaseActivity<ActivityNavigationBinding, NavigationActivityViewModel>(), HasSupportFragmentInjector {
+    companion object {
+        fun newIntent(context: Context) = Intent(context, NavigationActivity::class.java)
+    }
 
     @Inject
     lateinit var fragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>

@@ -23,10 +23,6 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
 
     fun getSchedules() = dao.getSchedules()
 
-    fun getNotAddedGroups(type: Int) = dao.getNotAddedGroups(type)
-
-    fun getNotAddedEmployees(type: Int) = dao.getNotAddedEmployees(type)
-
     fun delete(name: String, type: Int) = dao.delete(name, type)
 
     fun delete(type: Int) = dao.delete(type)

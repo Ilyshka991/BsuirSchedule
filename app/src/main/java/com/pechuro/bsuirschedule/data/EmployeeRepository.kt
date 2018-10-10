@@ -10,8 +10,9 @@ class EmployeeRepository @Inject constructor(private val api: EmployeeApi,
                                              private val dao: EmployeeDao) {
     val isCacheNotEmpty get() = dao.isNotEmpty()
 
-    fun getEmployees(): Single<List<Employee>> =
-            getFromDb().onErrorResumeNext { getFromApi() }
+    fun get(): Single<List<Employee>> = getFromDb()
+
+    fun load(): Single<Boolean> = getFromApi()
 
     fun delete() = dao.delete()
 
@@ -24,8 +25,10 @@ class EmployeeRepository @Inject constructor(private val api: EmployeeApi,
     private fun getFromDb(): Single<List<Employee>> =
             dao.get().filter { it.isNotEmpty() }.toSingle()
 
-    private fun getFromApi(): Single<List<Employee>> =
-            api.get().doOnSuccess { storeInDb(it) }
+    private fun getFromApi(): Single<Boolean> =
+            api.get().doOnSuccess {
+                storeInDb(it)
+            }.map { true }.onErrorReturn { false }
 
     private fun storeInDb(groups: List<Employee>) = dao.insert(groups)
 }
