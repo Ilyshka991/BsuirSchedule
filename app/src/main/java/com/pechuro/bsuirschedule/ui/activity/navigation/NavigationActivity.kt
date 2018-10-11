@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
-import androidx.navigation.NavDirections
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI.*
 import com.pechuro.bsuirschedule.BR
@@ -22,6 +21,7 @@ import com.pechuro.bsuirschedule.constant.ScheduleType.EXAMS
 import com.pechuro.bsuirschedule.constant.ScheduleType.SCHEDULES
 import com.pechuro.bsuirschedule.databinding.ActivityNavigationBinding
 import com.pechuro.bsuirschedule.ui.base.BaseActivity
+import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
 import com.pechuro.bsuirschedule.ui.fragment.classes.ScheduleFragmentDirections.actionScheduleSelf
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragmentDirections.actionStartToSchedule
 import dagger.android.DispatchingAndroidInjector
@@ -31,6 +31,7 @@ import javax.inject.Inject
 
 class NavigationActivity :
         BaseActivity<ActivityNavigationBinding, NavigationActivityViewModel>(), HasSupportFragmentInjector {
+
     companion object {
         fun newIntent(context: Context) = Intent(context, NavigationActivity::class.java)
     }
@@ -73,16 +74,32 @@ class NavigationActivity :
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         mViewDataBinding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+
+        mViewDataBinding.navFooter.setNavigationItemSelectedListener {
+            if (it.itemId == R.id.menu_add_schedule) {
+                navigate {
+                    AddDialog.newInstance().show(supportFragmentManager, "add_dialog")
+                }
+            }
+            true
+        }
     }
 
     private fun subscribeToLiveData() {
-        mViewModel.menuItems.observe(this, Observer { addMenuItems(it) })
+        mViewModel.menuItems.observe(this, Observer {
+            clearMenuItems()
+            addMenuItems(it)
+        })
+    }
+
+    private fun clearMenuItems() {
+        mViewDataBinding.navView.menu.clear()
     }
 
     private fun addMenuItems(items: Map<Int, List<String>>) {
         fun onClick(typeGroup: Int, menuItem: MenuItem) {
             if (menuItem.isChecked) {
-                navigate(null)
+                navigate {}
                 return
             }
 
@@ -105,7 +122,9 @@ class NavigationActivity :
                 actionStartToSchedule(menuItem.title.toString(), type)
             }
 
-            navigate(navDirection)
+            navigate {
+                navController.navigate(navDirection)
+            }
         }
 
         fun add(typeGroup: Int) {
@@ -129,6 +148,8 @@ class NavigationActivity :
 
         add(SCHEDULES)
         add(EXAMS)
+
+        mViewDataBinding.navView.menu.add("").isEnabled = false
     }
 
     private fun setupNavigation() {
@@ -138,7 +159,7 @@ class NavigationActivity :
         setupWithNavController(mViewDataBinding.navView, navController)
     }
 
-    private fun navigate(navDirection: NavDirections?) {
+    private fun navigate(action: () -> Unit) {
         mViewDataBinding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(newState: Int) {
 
@@ -149,7 +170,7 @@ class NavigationActivity :
             }
 
             override fun onDrawerClosed(drawerView: View) {
-                if (navDirection != null) navController.navigate(navDirection)
+                action.invoke()
                 mViewDataBinding.drawerLayout.removeDrawerListener(this)
             }
 

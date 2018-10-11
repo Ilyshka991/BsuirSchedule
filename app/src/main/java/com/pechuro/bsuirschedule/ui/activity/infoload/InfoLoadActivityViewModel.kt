@@ -12,6 +12,7 @@ import javax.inject.Inject
 class InfoLoadActivityViewModel @Inject constructor(
         private val groupRepository: GroupRepository,
         private val employeeRepository: EmployeeRepository) : BaseViewModel() {
+
     val isLoading = ObservableField<Boolean>()
     lateinit var navigator: InfoLoadNavigator
 
@@ -31,12 +32,10 @@ class InfoLoadActivityViewModel @Inject constructor(
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            if (it.contains(false)) {
-                                isLoading.set(false)
-                            } else {
-                                navigator.onSuccess()
-                            }
-                        }, {})
+                            navigator.onSuccess()
+                        }, {
+                            isLoading.set(false)
+                        })
         )
     }
 }

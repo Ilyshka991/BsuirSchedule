@@ -21,7 +21,7 @@ class StartFragment : BaseFragment<FragmentStartBinding, StartFragmentViewModel>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mViewDataBinding.fab.setOnClickListener {
-            AddDialog.newInstance().show(fragmentManager, "dfs")
+            AddDialog.newInstance().show(fragmentManager, "add_dialog")
         }
     }
 }

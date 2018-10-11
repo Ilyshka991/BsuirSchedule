@@ -4,6 +4,7 @@ import androidx.room.*
 import com.pechuro.bsuirschedule.data.entity.Schedule
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 import com.pechuro.bsuirschedule.data.entity.complex.Classes
+import io.reactivex.Observable
 import io.reactivex.Single
 
 @Dao
@@ -16,10 +17,10 @@ interface ScheduleDao {
         insert(schedule.schedule)
     }
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(values: Schedule): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(values: List<ScheduleItem>)
 
     @Query("DELETE FROM all_schedules WHERE name = :name AND type = :type")
@@ -38,15 +39,5 @@ interface ScheduleDao {
     fun get(name: String, type: Int, day: String, week: String): Single<List<ScheduleItem>>
 
     @Query("SELECT * FROM all_schedules")
-    fun getSchedules(): Single<List<Schedule>>
-
-    @Query("SELECT all_groups.number FROM all_groups" +
-            " LEFT JOIN all_schedules ON all_schedules.name = all_groups.number" +
-            " AND all_schedules.type IN (:types) WHERE all_schedules.name IS NULL")
-    fun getNotAddedGroups(types: List<Int>): Single<List<String>>
-
-    @Query("SELECT all_employees.fio FROM all_employees" +
-            " LEFT JOIN all_schedules ON all_schedules.name = all_employees.employee_id" +
-            " AND all_schedules.type = :type WHERE all_schedules.name IS NULL")
-    fun getNotAddedEmployees(type: Int): Single<List<String>>
+    fun getSchedules(): Observable<List<Schedule>>
 }

@@ -15,10 +15,10 @@ import javax.inject.Inject
 class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
                                              private val dao: ScheduleDao) {
 
-    fun loadClasses(name: String, type: Int) =
-            getFromApi(name, type)
+    fun loadClasses(name: String, types: List<Int>) =
+            getFromApi(name, types)
 
-    fun getClasses(name: String, type: Int, day: String, week: Int): Single<List<ScheduleItem>> =
+    fun getClasses(name: String, type: Int, day: String, week: Int) =
             dao.get(name, type, day, week.toString())
 
     fun getSchedules() = dao.getSchedules()
@@ -27,56 +27,67 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
 
     fun delete(type: Int) = dao.delete(type)
 
-    private fun getFromApi(name: String, type: Int): Single<Classes> {
-        lateinit var response: Response
+    private fun getFromApi(name: String, types: List<Int>): Single<MutableList<Classes>> {
 
-        when (type) {
-            STUDENT_CLASSES, STUDENT_EXAMS ->
-                response = api.getStudentSchedule(name)
-                        .subscribeOn(Schedulers.io())
-                        .onErrorReturn { ResponseError(it) }
-                        .blockingGet()
-            EMPLOYEE_CLASSES, EMPLOYEE_EXAMS ->
-                response = api.getEmployeeSchedule(name)
-                        .subscribeOn(Schedulers.io())
-                        .onErrorReturn { ResponseError(it) }
-                        .blockingGet()
-        }
+        fun getScheduleItems(response: List<ScheduleResponse>?): List<ScheduleItem> {
+            val schedule = ArrayList<ScheduleItem>()
 
-        val lastUpdate = api.getLastUpdateDate(name)
-                .subscribeOn(Schedulers.io())
-                .onErrorReturn { LastUpdateResponse(null) }
-                .blockingGet().lastUpdateDate
-
-        if (response is ResponseError) {
-            return Single.error(response.error)
-        }
-
-        val classes = Classes(name, type, lastUpdate)
-
-        when (type) {
-            STUDENT_CLASSES, EMPLOYEE_CLASSES ->
-                classes.schedule = getScheduleItems(response.schedule)
-            STUDENT_EXAMS, EMPLOYEE_EXAMS ->
-                classes.schedule = getScheduleItems(response.exam)
-        }
-
-        return Single.just(classes).doOnSuccess { storeInCache(it) }
-    }
-
-    private fun getScheduleItems(response: List<ScheduleResponse>?): List<ScheduleItem> {
-        val schedule = ArrayList<ScheduleItem>()
-
-        //Add weekDay to all scheduleItems
-        response?.forEach {
-            for (item in it.classes) {
-                schedule.add(item)
-                schedule[schedule.size - 1].weekDay = it.weekDay.toLowerCase()
+            //Add weekDay to all scheduleItems
+            response?.forEach {
+                for (item in it.classes) {
+                    schedule.add(item)
+                    schedule[schedule.size - 1].weekDay = it.weekDay.toLowerCase()
+                }
             }
+            return schedule
         }
-        return schedule
+
+        fun deleteLastSchedules() = types.forEach { dao.delete(name, it) }
+
+        return Single.fromCallable {
+            lateinit var response: Response
+
+            when (types[0]) {
+                STUDENT_CLASSES, STUDENT_EXAMS ->
+                    response = api.getStudentSchedule(name)
+                            .subscribeOn(Schedulers.io())
+                            .onErrorReturn { ResponseError(it) }
+                            .blockingGet()
+                EMPLOYEE_CLASSES, EMPLOYEE_EXAMS ->
+                    response = api.getEmployeeSchedule(name)
+                            .subscribeOn(Schedulers.io())
+                            .onErrorReturn { ResponseError(it) }
+                            .blockingGet()
+            }
+
+            val lastUpdate = api.getLastUpdateDate(name)
+                    .subscribeOn(Schedulers.io())
+                    .onErrorReturn { LastUpdateResponse(null) }
+                    .blockingGet().lastUpdateDate
+
+            if (response is ResponseError) {
+                throw Throwable(response.error)
+            }
+
+            deleteLastSchedules()
+
+            val classesList = mutableListOf<Classes>()
+            types.forEach { type ->
+                val classes = Classes(name, type, lastUpdate)
+                when (type) {
+                    STUDENT_CLASSES, EMPLOYEE_CLASSES ->
+                        classes.schedule = getScheduleItems(response.schedule)
+                    STUDENT_EXAMS, EMPLOYEE_EXAMS ->
+                        classes.schedule = getScheduleItems(response.exam)
+                }
+                classesList.add(classes)
+            }
+            classesList
+        }.doOnSuccess { storeInCache(it) }
     }
 
-    private fun storeInCache(schedule: Classes) =
-            dao.insertSchedule(schedule)
+    private fun storeInCache(schedule: MutableList<Classes>) =
+            schedule.forEach {
+                dao.insertSchedule(it)
+            }
 }
