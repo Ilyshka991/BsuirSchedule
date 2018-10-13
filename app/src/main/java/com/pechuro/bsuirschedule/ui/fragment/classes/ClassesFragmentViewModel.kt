@@ -18,10 +18,21 @@ class ClassesFragmentViewModel @Inject constructor() : BaseViewModel() {
 
         val calendar = Calendar.getInstance()
 
-        val time = calendar.addDays(days)
-        val day = dateFormat.format(time)
+        calendar.addDays(days)
+        val day = dateFormat.format(calendar.time)
         val week = calendar.getCurrentWeek()
-        val dayRu = dateFormatRu.format(time)
+        val dayRu = dateFormatRu.format(calendar.time)
         return Triple(day, week, dayRu)
+    }
+
+    fun getWeekday(days: Int): Pair<String, String> {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+        calendar.addDays(days)
+        val dateFormat = SimpleDateFormat("EEEE",
+                Locale.getDefault())
+        val dateFormatRu = SimpleDateFormat("EEEE",
+                Locale("ru"))
+        return Pair(dateFormat.format(calendar.time), dateFormatRu.format(calendar.time))
     }
 }

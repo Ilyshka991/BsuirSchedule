@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.enumeration
+package com.pechuro.bsuirschedule.domain.enumeration
 
 enum class Days constructor(val day: String) {
     MONDAY("понедельник"), TUESDAY("вторник"),

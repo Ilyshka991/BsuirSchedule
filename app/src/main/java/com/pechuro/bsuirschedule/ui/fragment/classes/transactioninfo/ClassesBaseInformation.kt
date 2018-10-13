@@ -1,10 +1,10 @@
-package com.pechuro.bsuirschedule.ui.fragment.transactioninfo
+package com.pechuro.bsuirschedule.ui.fragment.classes.transactioninfo
 
 import android.os.Parcel
 import android.os.Parcelable
 
-abstract class BaseInformation(var name: String,
-                               val type: Int) : Parcelable {
+abstract class ClassesBaseInformation(var name: String,
+                                      val type: Int) : Parcelable {
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)

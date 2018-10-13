@@ -19,4 +19,13 @@
     <string name="error_blank_schedule_name">Please, fill in schedule name</string>
     <string name="error_unknown_schedule">Unknown schedule</string>
 
+    <string-array name="days">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
 </resources>

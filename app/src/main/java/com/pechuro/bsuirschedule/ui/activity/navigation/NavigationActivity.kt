@@ -27,9 +27,8 @@ import com.pechuro.bsuirschedule.databinding.ActivityNavigationBinding
 import com.pechuro.bsuirschedule.ui.base.BaseActivity
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragment
-import com.pechuro.bsuirschedule.ui.fragment.list.ListFragment
+import com.pechuro.bsuirschedule.ui.fragment.exam.ExamFragment
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragment
-import com.pechuro.bsuirschedule.ui.fragment.transactioninfo.impl.ScheduleInformation
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_navigation.*
@@ -58,7 +57,9 @@ class NavigationActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupView()
-        homeFragment()
+        if (savedInstanceState == null) {
+            homeFragment()
+        }
         subscribeToLiveData()
     }
 
@@ -72,7 +73,7 @@ class NavigationActivity :
             val argInfo = ScheduleInformation(name!!, type)
             when (type) {
                 STUDENT_CLASSES, EMPLOYEE_CLASSES -> ClassesFragment.newInstance(argInfo)
-                STUDENT_EXAMS, EMPLOYEE_EXAMS -> ListFragment.newInstance(argInfo)
+                STUDENT_EXAMS, EMPLOYEE_EXAMS -> ExamFragment.newInstance(argInfo)
                 else -> throw UnsupportedOperationException("Invalid type")
             }
         }
@@ -142,7 +143,7 @@ class NavigationActivity :
             val argInfo = ScheduleInformation(name, type)
             val fragment = when (typeGroup) {
                 SCHEDULES -> ClassesFragment.newInstance(argInfo)
-                EXAMS -> ListFragment.newInstance(argInfo)
+                EXAMS -> ExamFragment.newInstance(argInfo)
                 else -> throw UnsupportedOperationException("Invalid type")
             }
 

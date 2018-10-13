@@ -1,17 +1,18 @@
-package com.pechuro.bsuirschedule.ui.fragment.transactioninfo.impl
+package com.pechuro.bsuirschedule.ui.activity.navigation
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.pechuro.bsuirschedule.ui.fragment.transactioninfo.BaseInformation
 
-class ScheduleInformation(name: String, type: Int) : BaseInformation(name, type) {
+class ScheduleInformation(val name: String, val type: Int) : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readString()!!,
             parcel.readInt())
 
-    override fun describeContents(): Int {
-        return 0
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+
     }
+
+    override fun describeContents() = 0
 
     companion object CREATOR : Parcelable.Creator<ScheduleInformation> {
         override fun createFromParcel(parcel: Parcel): ScheduleInformation {

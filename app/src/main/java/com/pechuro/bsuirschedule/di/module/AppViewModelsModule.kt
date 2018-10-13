@@ -6,12 +6,14 @@ import com.pechuro.bsuirschedule.di.annotations.ViewModelKey
 import com.pechuro.bsuirschedule.ui.activity.infoload.InfoLoadActivityViewModel
 import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivityViewModel
 import com.pechuro.bsuirschedule.ui.activity.splash.SplashActivityViewModel
+import com.pechuro.bsuirschedule.ui.base.ViewModelFactory
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogViewModel
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragmentViewModel
-import com.pechuro.bsuirschedule.ui.fragment.list.ListViewModel
+import com.pechuro.bsuirschedule.ui.fragment.classes.dayitems.ClassesDayViewModel
+import com.pechuro.bsuirschedule.ui.fragment.classes.weekitems.ClassesWeekViewModel
+import com.pechuro.bsuirschedule.ui.fragment.exam.ExamViewModel
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragmentViewModel
-import com.pechuro.bsuirschedule.viewmodel.ViewModelFactory
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -33,8 +35,18 @@ abstract class AppViewModelsModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(ListViewModel::class)
-    abstract fun listFragment(viewModel: ListViewModel): ViewModel
+    @ViewModelKey(ClassesDayViewModel::class)
+    abstract fun listClassesDayFragment(viewModel: ClassesDayViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ClassesWeekViewModel::class)
+    abstract fun listClassesWeekFragment(viewModel: ClassesWeekViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ExamViewModel::class)
+    abstract fun examFragment(viewModel: ExamViewModel): ViewModel
 
     @Binds
     @IntoMap
