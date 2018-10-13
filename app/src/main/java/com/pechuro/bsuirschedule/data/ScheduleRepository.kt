@@ -4,6 +4,7 @@ import com.pechuro.bsuirschedule.constant.ScheduleType.EMPLOYEE_CLASSES
 import com.pechuro.bsuirschedule.constant.ScheduleType.EMPLOYEE_EXAMS
 import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT_CLASSES
 import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT_EXAMS
+import com.pechuro.bsuirschedule.data.database.dao.EmployeeDao
 import com.pechuro.bsuirschedule.data.database.dao.ScheduleDao
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 import com.pechuro.bsuirschedule.data.entity.complex.Classes
@@ -13,19 +14,23 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
-                                             private val dao: ScheduleDao) {
+                                             private val scheduleDao: ScheduleDao,
+                                             private val employeeDao: EmployeeDao) {
 
     fun loadClasses(name: String, types: List<Int>) =
             getFromApi(name, types)
 
     fun getClasses(name: String, type: Int, day: String, week: Int) =
-            dao.get(name, type, day, week.toString())
+            scheduleDao.get(name, type, day, week.toString())
 
-    fun getSchedules() = dao.getSchedules()
+    fun getClasses(name: String, type: Int) =
+            scheduleDao.get(name, type)
 
-    fun delete(name: String, type: Int) = dao.delete(name, type)
+    fun getSchedules() = scheduleDao.getSchedules()
 
-    fun delete(type: Int) = dao.delete(type)
+    fun delete(name: String, type: Int) = scheduleDao.delete(name, type)
+
+    fun delete(type: Int) = scheduleDao.delete(type)
 
     private fun getFromApi(name: String, types: List<Int>): Single<MutableList<Classes>> {
 
@@ -42,7 +47,7 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
             return schedule
         }
 
-        fun deleteLastSchedules() = types.forEach { dao.delete(name, it) }
+        fun deleteLastSchedules() = types.forEach { scheduleDao.delete(name, it) }
 
         return Single.fromCallable {
             lateinit var response: Response
@@ -53,11 +58,13 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
                             .subscribeOn(Schedulers.io())
                             .onErrorReturn { ResponseError(it) }
                             .blockingGet()
-                EMPLOYEE_CLASSES, EMPLOYEE_EXAMS ->
-                    response = api.getEmployeeSchedule(name)
+                EMPLOYEE_CLASSES, EMPLOYEE_EXAMS -> {
+                    val id = employeeDao.getId(name).onErrorReturn { "" }.blockingGet()
+                    response = api.getEmployeeSchedule(id)
                             .subscribeOn(Schedulers.io())
                             .onErrorReturn { ResponseError(it) }
                             .blockingGet()
+                }
             }
 
             val lastUpdate = api.getLastUpdateDate(name)
@@ -88,6 +95,6 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
 
     private fun storeInCache(schedule: MutableList<Classes>) =
             schedule.forEach {
-                dao.insertSchedule(it)
+                scheduleDao.insertSchedule(it)
             }
 }

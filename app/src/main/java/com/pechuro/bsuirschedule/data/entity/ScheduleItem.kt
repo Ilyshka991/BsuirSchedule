@@ -6,7 +6,9 @@ import com.google.gson.annotations.SerializedName
 import com.pechuro.bsuirschedule.data.utils.Converters
 import com.pechuro.bsuirschedule.data.utils.WeekNumberTypeAdapter
 
-@Entity(tableName = "schedule_item")
+@Entity(tableName = "schedule_item", foreignKeys = [ForeignKey(entity = Schedule::class,
+        parentColumns = ["_id"], childColumns = ["schedule_id"],
+        onDelete = ForeignKey.CASCADE)])
 @TypeConverters(Converters::class)
 data class ScheduleItem(
         val subject: String?,
@@ -28,9 +30,6 @@ data class ScheduleItem(
     var id = 0
 
     @Transient
-    @ForeignKey(entity = Schedule::class,
-            parentColumns = ["_id"], childColumns = ["schedule_id"],
-            onDelete = ForeignKey.CASCADE)
     @ColumnInfo(name = "schedule_id")
     var scheduleId: Int = 0
 

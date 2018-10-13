@@ -37,6 +37,11 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
                         }))
     }
 
+    fun onCancelClick() {
+        isError.set(false)
+        navigator.onCancel()
+    }
+
     fun loadSchedule(scheduleName: String, scheduleTypes: List<Int>) {
         navigator.onLoading()
 
@@ -52,9 +57,10 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    navigator.onSuccess()
+                    navigator.onSuccess(scheduleName, scheduleTypes[0])
                     isLoading.set(false)
                 }, {
+                    navigator.onError(0)
                     isError.set(true)
                     isLoading.set(false)
                 })

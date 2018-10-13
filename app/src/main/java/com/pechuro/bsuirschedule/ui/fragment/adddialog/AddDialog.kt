@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentViewpagerBinding
+import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivity
 import com.pechuro.bsuirschedule.ui.base.BaseDialog
 import javax.inject.Inject
 
@@ -35,6 +36,11 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupView()
+    }
+
+    override fun dismiss() {
+        super.dismiss()
+        (activity as? NavigationActivity)?.homeFragment()
     }
 
     private fun setupView() {

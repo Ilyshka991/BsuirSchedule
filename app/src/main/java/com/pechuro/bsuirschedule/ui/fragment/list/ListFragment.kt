@@ -10,21 +10,16 @@ import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentListBinding
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
-import com.pechuro.bsuirschedule.ui.fragment.transactioninfo.BaseScheduleInformation
+import com.pechuro.bsuirschedule.ui.fragment.transactioninfo.BaseInformation
+import com.pechuro.bsuirschedule.ui.fragment.transactioninfo.impl.ClassesDayInformation
 import com.pechuro.bsuirschedule.ui.fragment.transactioninfo.impl.ScheduleInformation
 import javax.inject.Inject
 
 class ListFragment : BaseFragment<FragmentListBinding, ListViewModel>() {
-
-    @Inject
-    lateinit var mLayoutManager: LinearLayoutManager
-    @Inject
-    lateinit var mListAdapter: ListAdapter
-
     companion object {
         const val ARG_INFO = "arg_information"
 
-        fun <T : BaseScheduleInformation> newInstance(info: T): ListFragment {
+        fun <T : BaseInformation> newInstance(info: T): ListFragment {
             val args = Bundle()
             args.putParcelable(ARG_INFO, info)
 
@@ -33,6 +28,11 @@ class ListFragment : BaseFragment<FragmentListBinding, ListViewModel>() {
             return fragment
         }
     }
+
+    @Inject
+    lateinit var mLayoutManager: LinearLayoutManager
+    @Inject
+    lateinit var mListAdapter: ListAdapter
 
     override val mViewModel: ListViewModel
         get() = ViewModelProviders.of(this, mViewModelFactory).get(ListViewModel::class.java)
@@ -49,11 +49,12 @@ class ListFragment : BaseFragment<FragmentListBinding, ListViewModel>() {
     }
 
     private fun loadData() {
-        val info: BaseScheduleInformation? = arguments?.getParcelable(ARG_INFO)
+        val info: BaseInformation? = arguments?.getParcelable(ARG_INFO)
 
         with(mViewModel) {
             when (info) {
                 is ScheduleInformation -> loadData(info)
+                is ClassesDayInformation -> loadData(info)
             }
         }
     }

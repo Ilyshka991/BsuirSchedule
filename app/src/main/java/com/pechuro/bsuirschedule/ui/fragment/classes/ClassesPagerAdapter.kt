@@ -4,12 +4,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.pechuro.bsuirschedule.ui.fragment.list.ListFragment
-import com.pechuro.bsuirschedule.ui.fragment.transactioninfo.impl.ScheduleInformation
+import com.pechuro.bsuirschedule.ui.fragment.transactioninfo.impl.ClassesDayInformation
 import javax.inject.Inject
 
-class SchedulePagerAdapter @Inject constructor(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+class ClassesPagerAdapter @Inject constructor(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
-    var fragmentsInfo: List<ScheduleInformation> = listOf()
+    var fragmentsInfo: List<ClassesDayInformation> = listOf()
         set(value) {
             field = value
             notifyDataSetChanged()

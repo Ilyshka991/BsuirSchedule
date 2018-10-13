@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.content.edit
 import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -13,9 +14,11 @@ import com.pechuro.bsuirschedule.constant.ScheduleType.EMPLOYEE_EXAMS
 import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT
 import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT_CLASSES
 import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT_EXAMS
+import com.pechuro.bsuirschedule.constant.SharedPrefConstants
 import com.pechuro.bsuirschedule.databinding.FragmentAddBinding
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
+import org.jetbrains.anko.defaultSharedPreferences
 
 class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), AddFragmentNavigator {
     companion object {
@@ -67,10 +70,21 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), Ad
         mViewDataBinding.errorTextView.text = ""
     }
 
-    override fun onSuccess() {
+    override fun onSuccess(scheduleName: String, scheduleType: Int) {
+        context?.defaultSharedPreferences?.edit {
+            putString(SharedPrefConstants.SCHEDULE_NAME, scheduleName)
+            putInt(SharedPrefConstants.SCHEDULE_TYPE, scheduleType)
+        }
+
         mViewDataBinding.buttonOk.isEnabled = true
         Toast.makeText(context, "Success", Toast.LENGTH_LONG).show()
         (parentFragment as? AddDialog)?.dismiss()
+    }
+
+    override fun onCancel() {
+        mViewDataBinding.errorTextView.text = ""
+        mViewDataBinding.buttonOk.isEnabled = true
+        (parentFragment as? AddDialog)?.isCancelable = true
     }
 
     private fun setupView() {
@@ -96,8 +110,12 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), Ad
             loadSchedule()
         }
 
-        mViewDataBinding.retryButton.setOnClickListener {
+        mViewDataBinding.buttonRetry.setOnClickListener {
             loadSchedule()
+        }
+
+        mViewDataBinding.buttonCancel.setOnClickListener {
+            mViewModel.onCancelClick()
         }
     }
 

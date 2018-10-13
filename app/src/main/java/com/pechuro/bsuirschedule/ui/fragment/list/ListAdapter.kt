@@ -14,7 +14,7 @@ class ListAdapter : RecyclerView.Adapter<BaseViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         val cacheViewBinding = ItemListViewBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
-        return CacheViewHolder(cacheViewBinding)
+        return ClassesViewHolder(cacheViewBinding)
 
     }
 
@@ -28,7 +28,7 @@ class ListAdapter : RecyclerView.Adapter<BaseViewHolder>() {
         notifyDataSetChanged()
     }
 
-    inner class CacheViewHolder(private val mBinding: ItemListViewBinding) : BaseViewHolder(mBinding.root) {
+    inner class ClassesViewHolder(private val mBinding: ItemListViewBinding) : BaseViewHolder(mBinding.root) {
 
         override fun onBind(position: Int) {
             val mCacheItemViewModel = mItemsList[position]

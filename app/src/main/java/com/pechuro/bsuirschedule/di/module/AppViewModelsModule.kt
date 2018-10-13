@@ -8,7 +8,7 @@ import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivityViewMo
 import com.pechuro.bsuirschedule.ui.activity.splash.SplashActivityViewModel
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogViewModel
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragmentViewModel
-import com.pechuro.bsuirschedule.ui.fragment.classes.ScheduleFragmentViewModel
+import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.list.ListViewModel
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragmentViewModel
 import com.pechuro.bsuirschedule.viewmodel.ViewModelFactory
@@ -28,8 +28,8 @@ abstract class AppViewModelsModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(ScheduleFragmentViewModel::class)
-    abstract fun scheduleFragment(viewModel: ScheduleFragmentViewModel): ViewModel
+    @ViewModelKey(ClassesFragmentViewModel::class)
+    abstract fun scheduleFragment(viewModel: ClassesFragmentViewModel): ViewModel
 
     @Binds
     @IntoMap

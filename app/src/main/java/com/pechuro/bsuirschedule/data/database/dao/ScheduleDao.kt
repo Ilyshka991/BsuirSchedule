@@ -33,6 +33,13 @@ interface ScheduleDao {
             "JOIN all_schedules " +
             "ON schedule_item.schedule_id = all_schedules._id " +
             "WHERE all_schedules.name = :name " +
+            "AND all_schedules.type = :type")
+    fun get(name: String, type: Int): Single<List<ScheduleItem>>
+
+    @Query("SELECT * FROM schedule_item " +
+            "JOIN all_schedules " +
+            "ON schedule_item.schedule_id = all_schedules._id " +
+            "WHERE all_schedules.name = :name " +
             "AND all_schedules.type = :type " +
             "AND schedule_item.week_day = :day " +
             "AND weekNumber LIKE '%' || :week || '%'")

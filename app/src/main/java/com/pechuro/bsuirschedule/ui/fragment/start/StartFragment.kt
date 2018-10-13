@@ -10,6 +10,14 @@ import com.pechuro.bsuirschedule.ui.base.BaseFragment
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
 
 class StartFragment : BaseFragment<FragmentStartBinding, StartFragmentViewModel>() {
+    companion object {
+        fun newInstance(): StartFragment {
+            val args = Bundle()
+            val fragment = StartFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     override val mViewModel: StartFragmentViewModel
         get() = ViewModelProviders.of(this, mViewModelFactory).get(StartFragmentViewModel::class.java)

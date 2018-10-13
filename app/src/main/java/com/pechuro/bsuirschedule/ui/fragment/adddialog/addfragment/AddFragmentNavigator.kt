@@ -5,7 +5,9 @@ interface AddFragmentNavigator {
 
     fun onClearError()
 
-    fun onSuccess()
+    fun onSuccess(scheduleName: String, scheduleType: Int)
 
     fun onLoading()
+
+    fun onCancel()
 }

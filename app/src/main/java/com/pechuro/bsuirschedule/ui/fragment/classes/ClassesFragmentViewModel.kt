@@ -8,7 +8,7 @@ import java.util.*
 import javax.inject.Inject
 
 
-class ScheduleFragmentViewModel @Inject constructor() : BaseViewModel() {
+class ClassesFragmentViewModel @Inject constructor() : BaseViewModel() {
 
     fun getTabDate(days: Int): Triple<String, Int, String> {
         val dateFormat = SimpleDateFormat("EEE, d MMM",

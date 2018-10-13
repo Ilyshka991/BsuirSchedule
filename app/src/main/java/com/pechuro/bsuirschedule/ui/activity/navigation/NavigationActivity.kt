@@ -6,27 +6,34 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.content.edit
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.NavController
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.ui.NavigationUI.*
 import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.constant.ScheduleType
+import com.pechuro.bsuirschedule.constant.ScheduleType.EMPLOYEE_CLASSES
+import com.pechuro.bsuirschedule.constant.ScheduleType.EMPLOYEE_EXAMS
 import com.pechuro.bsuirschedule.constant.ScheduleType.EXAMS
 import com.pechuro.bsuirschedule.constant.ScheduleType.SCHEDULES
+import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT_CLASSES
+import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT_EXAMS
+import com.pechuro.bsuirschedule.constant.SharedPrefConstants.SCHEDULE_NAME
+import com.pechuro.bsuirschedule.constant.SharedPrefConstants.SCHEDULE_TYPE
 import com.pechuro.bsuirschedule.databinding.ActivityNavigationBinding
 import com.pechuro.bsuirschedule.ui.base.BaseActivity
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
-import com.pechuro.bsuirschedule.ui.fragment.classes.ScheduleFragmentDirections.actionScheduleSelf
-import com.pechuro.bsuirschedule.ui.fragment.start.StartFragmentDirections.actionStartToSchedule
+import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragment
+import com.pechuro.bsuirschedule.ui.fragment.list.ListFragment
+import com.pechuro.bsuirschedule.ui.fragment.start.StartFragment
+import com.pechuro.bsuirschedule.ui.fragment.transactioninfo.impl.ScheduleInformation
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_navigation.*
+import org.jetbrains.anko.defaultSharedPreferences
 import javax.inject.Inject
 
 class NavigationActivity :
@@ -38,8 +45,6 @@ class NavigationActivity :
 
     @Inject
     lateinit var fragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
-
-    private lateinit var navController: NavController
 
     override val mViewModel: NavigationActivityViewModel
         get() = ViewModelProviders.of(this, mViewModelFactory).get(NavigationActivityViewModel::class.java)
@@ -53,11 +58,29 @@ class NavigationActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupView()
-        setupNavigation()
+        homeFragment()
         subscribeToLiveData()
     }
 
-    override fun onSupportNavigateUp() = navigateUp(mViewDataBinding.drawerLayout, navController)
+    fun homeFragment() {
+        val name = defaultSharedPreferences.getString(SCHEDULE_NAME, "")
+        val type = defaultSharedPreferences.getInt(SCHEDULE_TYPE, -1)
+
+        val fragment = if (name.isNullOrEmpty() || type == -1) {
+            StartFragment.newInstance()
+        } else {
+            val argInfo = ScheduleInformation(name!!, type)
+            when (type) {
+                STUDENT_CLASSES, EMPLOYEE_CLASSES -> ClassesFragment.newInstance(argInfo)
+                STUDENT_EXAMS, EMPLOYEE_EXAMS -> ListFragment.newInstance(argInfo)
+                else -> throw UnsupportedOperationException("Invalid type")
+            }
+        }
+
+        supportFragmentManager.transaction {
+            replace(mViewDataBinding.navHostFragment.id, fragment)
+        }
+    }
 
     override fun onBackPressed() {
         if (mViewDataBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -92,9 +115,7 @@ class NavigationActivity :
         })
     }
 
-    private fun clearMenuItems() {
-        mViewDataBinding.navView.menu.clear()
-    }
+    private fun clearMenuItems() = mViewDataBinding.navView.menu.clear()
 
     private fun addMenuItems(items: Map<Int, List<String>>) {
         fun onClick(typeGroup: Int, menuItem: MenuItem) {
@@ -106,24 +127,34 @@ class NavigationActivity :
             menuItem.isCheckable = true
             menuItem.isChecked = true
 
-            val type = when (typeGroup) {
-                SCHEDULES -> if (menuItem.title.matches(Regex("[0-9]*")))
-                    ScheduleType.STUDENT_CLASSES else ScheduleType.EMPLOYEE_CLASSES
+            val name = menuItem.title.toString()
 
-                EXAMS -> if (menuItem.title.matches(Regex("[0-9]*")))
-                    ScheduleType.STUDENT_EXAMS else ScheduleType.EMPLOYEE_EXAMS
+            val type = when (typeGroup) {
+                SCHEDULES -> if (name.matches(Regex("[0-9]*")))
+                    STUDENT_CLASSES else EMPLOYEE_CLASSES
+
+                EXAMS -> if (name.matches(Regex("[0-9]*")))
+                    STUDENT_EXAMS else EMPLOYEE_EXAMS
 
                 else -> throw UnsupportedOperationException("Invalid type")
             }
 
-            val navDirection = if (navController.currentDestination?.id == R.id.scheduleFragment) {
-                actionScheduleSelf(menuItem.title.toString(), type)
-            } else {
-                actionStartToSchedule(menuItem.title.toString(), type)
+            val argInfo = ScheduleInformation(name, type)
+            val fragment = when (typeGroup) {
+                SCHEDULES -> ClassesFragment.newInstance(argInfo)
+                EXAMS -> ListFragment.newInstance(argInfo)
+                else -> throw UnsupportedOperationException("Invalid type")
             }
 
             navigate {
-                navController.navigate(navDirection)
+                defaultSharedPreferences.edit {
+                    putString(SCHEDULE_NAME, name)
+                    putInt(SCHEDULE_TYPE, type)
+                }
+
+                supportFragmentManager.transaction {
+                    replace(mViewDataBinding.navHostFragment.id, fragment)
+                }
             }
         }
 
@@ -150,13 +181,6 @@ class NavigationActivity :
         add(EXAMS)
 
         mViewDataBinding.navView.menu.add("").isEnabled = false
-    }
-
-    private fun setupNavigation() {
-        navController = findNavController(this, R.id.nav_host_fragment)
-
-        setupActionBarWithNavController(this, navController, mViewDataBinding.drawerLayout)
-        setupWithNavController(mViewDataBinding.navView, navController)
     }
 
     private fun navigate(action: () -> Unit) {
