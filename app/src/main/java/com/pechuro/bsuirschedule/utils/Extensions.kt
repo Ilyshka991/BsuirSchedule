@@ -1,11 +1,11 @@
 package com.pechuro.bsuirschedule.utils
 
-import com.pechuro.bsuirschedule.constant.ScheduleType.EMPLOYEE_CLASSES
-import com.pechuro.bsuirschedule.constant.ScheduleType.EMPLOYEE_EXAMS
-import com.pechuro.bsuirschedule.constant.ScheduleType.EXAMS
-import com.pechuro.bsuirschedule.constant.ScheduleType.SCHEDULES
-import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT_CLASSES
-import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT_EXAMS
+import com.pechuro.bsuirschedule.constant.ScheduleTypes.EMPLOYEE_CLASSES
+import com.pechuro.bsuirschedule.constant.ScheduleTypes.EMPLOYEE_EXAMS
+import com.pechuro.bsuirschedule.constant.ScheduleTypes.EXAMS
+import com.pechuro.bsuirschedule.constant.ScheduleTypes.SCHEDULES
+import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT_CLASSES
+import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT_EXAMS
 import com.pechuro.bsuirschedule.data.entity.Schedule
 import java.util.*
 import java.util.Calendar.*

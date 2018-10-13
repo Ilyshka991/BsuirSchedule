@@ -2,8 +2,9 @@ package com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment
 
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
-import com.pechuro.bsuirschedule.constant.ScheduleType.EMPLOYEE
-import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT
+import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.constant.ScheduleTypes.EMPLOYEE
+import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT
 import com.pechuro.bsuirschedule.data.EmployeeRepository
 import com.pechuro.bsuirschedule.data.GroupRepository
 import com.pechuro.bsuirschedule.data.ScheduleRepository
@@ -33,7 +34,7 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
                         .subscribe({
                             suggestions.value = it
                         }, {
-                            navigator.onError(5) //suggestions
+                            navigator.onError(R.string.error_empty_suggestions)
                         }))
     }
 
@@ -60,7 +61,6 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
                     navigator.onSuccess(scheduleName, scheduleTypes[0])
                     isLoading.set(false)
                 }, {
-                    navigator.onError(0)
                     isError.set(true)
                     isLoading.set(false)
                 })
@@ -69,19 +69,19 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
 
     private fun isValid(scheduleName: String, scheduleTypes: List<Int>): Boolean {
         if (scheduleTypes.isEmpty()) {
-            navigator.onError(1) //types not specified
+            navigator.onError(R.string.error_types_not_specified)
             return false
         }
         if (scheduleName.isBlank()) {
-            navigator.onError(2) //blank name
+            navigator.onError(R.string.error_blank_schedule_name)
             return false
         }
         if (suggestions.value == null) {
-            navigator.onError(3) //empty suggestions
+            navigator.onError(R.string.error_empty_suggestions)
             return false
         }
         if (!suggestions.value!!.contains(scheduleName)) {
-            navigator.onError(4) //unknown schedule
+            navigator.onError(R.string.error_unknown_schedule)
             return false
         }
         navigator.onClearError()

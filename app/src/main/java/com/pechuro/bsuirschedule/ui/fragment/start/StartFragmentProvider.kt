@@ -6,6 +6,6 @@ import dagger.android.ContributesAndroidInjector
 @Module
 interface StartFragmentProvider {
 
-    @ContributesAndroidInjector(modules = [StartFragmentModule::class])
+    @ContributesAndroidInjector()
     fun bind(): StartFragment
 }

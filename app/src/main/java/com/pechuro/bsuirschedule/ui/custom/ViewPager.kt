@@ -14,6 +14,7 @@ class ViewPager : ViewPager {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        @Suppress("NAME_SHADOWING")
         var heightMeasureSpec = heightMeasureSpec
         val mode = View.MeasureSpec.getMode(heightMeasureSpec)
         if (mode == View.MeasureSpec.UNSPECIFIED || mode == View.MeasureSpec.AT_MOST) {

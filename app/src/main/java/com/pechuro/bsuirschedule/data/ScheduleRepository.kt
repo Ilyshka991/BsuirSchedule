@@ -1,16 +1,18 @@
 package com.pechuro.bsuirschedule.data
 
-import com.pechuro.bsuirschedule.constant.ScheduleType.EMPLOYEE_CLASSES
-import com.pechuro.bsuirschedule.constant.ScheduleType.EMPLOYEE_EXAMS
-import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT_CLASSES
-import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT_EXAMS
+import com.pechuro.bsuirschedule.constant.ScheduleTypes.EMPLOYEE_CLASSES
+import com.pechuro.bsuirschedule.constant.ScheduleTypes.EMPLOYEE_EXAMS
+import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT_CLASSES
+import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT_EXAMS
 import com.pechuro.bsuirschedule.data.database.dao.EmployeeDao
 import com.pechuro.bsuirschedule.data.database.dao.ScheduleDao
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 import com.pechuro.bsuirschedule.data.entity.complex.Classes
-import com.pechuro.bsuirschedule.data.network.*
+import com.pechuro.bsuirschedule.data.network.LastUpdateResponse
+import com.pechuro.bsuirschedule.data.network.ResponseError
+import com.pechuro.bsuirschedule.data.network.ScheduleApi
+import com.pechuro.bsuirschedule.data.network.ScheduleResponse
 import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
@@ -50,25 +52,22 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
         fun deleteLastSchedules() = types.forEach { scheduleDao.delete(name, it) }
 
         return Single.fromCallable {
-            lateinit var response: Response
 
-            when (types[0]) {
+            val observable = when (types[0]) {
                 STUDENT_CLASSES, STUDENT_EXAMS ->
-                    response = api.getStudentSchedule(name)
-                            .subscribeOn(Schedulers.io())
-                            .onErrorReturn { ResponseError(it) }
-                            .blockingGet()
+                    api.getStudentSchedule(name)
                 EMPLOYEE_CLASSES, EMPLOYEE_EXAMS -> {
                     val id = employeeDao.getId(name).onErrorReturn { "" }.blockingGet()
-                    response = api.getEmployeeSchedule(id)
-                            .subscribeOn(Schedulers.io())
-                            .onErrorReturn { ResponseError(it) }
-                            .blockingGet()
+                    api.getEmployeeSchedule(id)
                 }
+                else -> throw IllegalStateException()
             }
 
+            val response = observable
+                    .onErrorReturn { ResponseError(it) }
+                    .blockingGet()
+
             val lastUpdate = api.getLastUpdateDate(name)
-                    .subscribeOn(Schedulers.io())
                     .onErrorReturn { LastUpdateResponse(null) }
                     .blockingGet().lastUpdateDate
 

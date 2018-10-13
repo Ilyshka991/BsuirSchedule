@@ -1,6 +1,6 @@
 package com.pechuro.bsuirschedule.constant
 
-object ScheduleType {
+object ScheduleTypes {
     const val STUDENT_CLASSES = 0
     const val STUDENT_EXAMS = 1
     const val EMPLOYEE_CLASSES = 2

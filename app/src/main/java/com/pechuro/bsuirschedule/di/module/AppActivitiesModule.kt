@@ -2,11 +2,8 @@ package com.pechuro.bsuirschedule.di.module
 
 import com.pechuro.bsuirschedule.di.annotations.ActivityScope
 import com.pechuro.bsuirschedule.ui.activity.infoload.InfoLoadActivity
-import com.pechuro.bsuirschedule.ui.activity.infoload.InfoLoadActivityModule
 import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivity
-import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivityModule
 import com.pechuro.bsuirschedule.ui.activity.splash.SplashActivity
-import com.pechuro.bsuirschedule.ui.activity.splash.SplashActivityModule
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogProvider
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragmentProvider
@@ -21,7 +18,7 @@ import dagger.android.support.AndroidSupportInjectionModule
 abstract class AppActivitiesModule {
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = [NavigationActivityModule::class,
+    @ContributesAndroidInjector(modules = [
         ClassesFragmentProvider::class,
         ListFragmentProvider::class,
         StartFragmentProvider::class,
@@ -30,10 +27,10 @@ abstract class AppActivitiesModule {
     abstract fun bindNavigationActivity(): NavigationActivity
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = [SplashActivityModule::class])
+    @ContributesAndroidInjector()
     abstract fun bindSplashActivity(): SplashActivity
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = [InfoLoadActivityModule::class])
+    @ContributesAndroidInjector()
     abstract fun bindInfoLoadActivity(): InfoLoadActivity
 }

@@ -9,11 +9,11 @@ import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.constant.ScheduleType.EMPLOYEE_CLASSES
-import com.pechuro.bsuirschedule.constant.ScheduleType.EMPLOYEE_EXAMS
-import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT
-import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT_CLASSES
-import com.pechuro.bsuirschedule.constant.ScheduleType.STUDENT_EXAMS
+import com.pechuro.bsuirschedule.constant.ScheduleTypes.EMPLOYEE_CLASSES
+import com.pechuro.bsuirschedule.constant.ScheduleTypes.EMPLOYEE_EXAMS
+import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT
+import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT_CLASSES
+import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT_EXAMS
 import com.pechuro.bsuirschedule.constant.SharedPrefConstants
 import com.pechuro.bsuirschedule.databinding.FragmentAddBinding
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
@@ -63,7 +63,7 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), Ad
         (parentFragment as? AddDialog)?.isCancelable = true
         mViewDataBinding.buttonOk.isEnabled = true
 
-        mViewDataBinding.errorTextView.text = "Error"
+        mViewDataBinding.errorTextView.text = getString(messageId)
     }
 
     override fun onClearError() {
@@ -77,7 +77,7 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), Ad
         }
 
         mViewDataBinding.buttonOk.isEnabled = true
-        Toast.makeText(context, "Success", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, getString(R.string.success), Toast.LENGTH_LONG).show()
         (parentFragment as? AddDialog)?.dismiss()
     }
 
