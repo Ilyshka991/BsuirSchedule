@@ -25,7 +25,9 @@ import com.pechuro.bsuirschedule.constant.SharedPrefConstants.SCHEDULE_NAME
 import com.pechuro.bsuirschedule.constant.SharedPrefConstants.SCHEDULE_TYPE
 import com.pechuro.bsuirschedule.databinding.ActivityNavigationBinding
 import com.pechuro.bsuirschedule.ui.base.BaseActivity
+import com.pechuro.bsuirschedule.ui.custom.OnSwipeTouchListener
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
+import com.pechuro.bsuirschedule.ui.fragment.bottomsheet.BottomSheetFragment
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragment
 import com.pechuro.bsuirschedule.ui.fragment.exam.ExamFragment
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragment
@@ -111,6 +113,17 @@ class NavigationActivity :
             }
             true
         }
+
+        mViewDataBinding.bar.setOnTouchListener(object : OnSwipeTouchListener(this) {
+            override fun onSwipeTop() {
+                println(supportFragmentManager.findFragmentById(mViewDataBinding.navHostFragment.id).toString())
+                BottomSheetFragment.newInstance().show(supportFragmentManager, "bottom_sheet")
+            }
+        })
+        mViewDataBinding.buttonShowBottomSheet?.setOnClickListener {
+            BottomSheetFragment.newInstance().show(supportFragmentManager, "bottom_sheet")
+        }
+
     }
 
     private fun subscribeToLiveData() {
@@ -209,7 +222,8 @@ class NavigationActivity :
                 }
             })
             (mViewDataBinding.drawerLayout as DrawerLayout).closeDrawers()
-        } else
+        } else {
             action.invoke()
+        }
     }
 }

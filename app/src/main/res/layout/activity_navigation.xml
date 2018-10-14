@@ -29,23 +29,41 @@
                 android:layout_marginBottom="?attr/actionBarSize"
                 tools:context=".ui.activity.navigation.NavigationActivity" />
 
-            <com.google.android.material.bottomappbar.BottomAppBar
+            <com.pechuro.bsuirschedule.ui.custom.BottomAppBar
                 android:id="@+id/bar"
                 style="@style/Widget.MaterialComponents.BottomAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom">
 
-            </com.google.android.material.bottomappbar.BottomAppBar>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/button_show_bottom_sheet"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical|end"
+                        android:padding="16dp"
+                        android:textColorLink="@android:color/transparent"
+                        app:icon="@drawable/ic_arrow_up" />
+
+                </LinearLayout>
+
+            </com.pechuro.bsuirschedule.ui.custom.BottomAppBar>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/nav_view"
             android:layout_width="wrap_content"
-            app:insetForeground="#4000"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="true"
+            android:visibility="visible"
+            app:insetForeground="#4000">
 
             <com.google.android.material.navigation.NavigationView
                 android:id="@+id/nav_footer"
