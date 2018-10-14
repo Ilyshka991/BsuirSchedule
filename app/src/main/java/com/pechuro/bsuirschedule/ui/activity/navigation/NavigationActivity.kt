@@ -84,8 +84,10 @@ class NavigationActivity :
     }
 
     override fun onBackPressed() {
-        if (mViewDataBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mViewDataBinding.drawerLayout.closeDrawer(GravityCompat.START)
+        if (mViewDataBinding.drawerLayout is DrawerLayout &&
+                (mViewDataBinding.drawerLayout as DrawerLayout)
+                        .isDrawerOpen(GravityCompat.START)) {
+            (mViewDataBinding.drawerLayout as DrawerLayout).closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
@@ -93,11 +95,13 @@ class NavigationActivity :
 
     private fun setupView() {
         setSupportActionBar(bar)
-        val toggle = ActionBarDrawerToggle(
-                this, mViewDataBinding.drawerLayout, mViewDataBinding.bar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        mViewDataBinding.drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
+        if (mViewDataBinding.drawerLayout is DrawerLayout) {
+            val toggle = ActionBarDrawerToggle(
+                    this, mViewDataBinding.drawerLayout as DrawerLayout, mViewDataBinding.bar,
+                    R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+            (mViewDataBinding.drawerLayout as DrawerLayout).addDrawerListener(toggle)
+            toggle.syncState()
+        }
 
         mViewDataBinding.navFooter.setNavigationItemSelectedListener {
             if (it.itemId == R.id.menu_add_schedule) {
@@ -185,24 +189,27 @@ class NavigationActivity :
     }
 
     private fun navigate(action: () -> Unit) {
-        mViewDataBinding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
-            override fun onDrawerStateChanged(newState: Int) {
+        if (mViewDataBinding.drawerLayout is DrawerLayout) {
+            (mViewDataBinding.drawerLayout as DrawerLayout).addDrawerListener(object : DrawerLayout.DrawerListener {
+                override fun onDrawerStateChanged(newState: Int) {
 
-            }
+                }
 
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+                override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
 
-            }
+                }
 
-            override fun onDrawerClosed(drawerView: View) {
-                action.invoke()
-                mViewDataBinding.drawerLayout.removeDrawerListener(this)
-            }
+                override fun onDrawerClosed(drawerView: View) {
+                    action.invoke()
+                    (mViewDataBinding.drawerLayout as DrawerLayout).removeDrawerListener(this)
+                }
 
-            override fun onDrawerOpened(drawerView: View) {
+                override fun onDrawerOpened(drawerView: View) {
 
-            }
-        })
-        mViewDataBinding.drawerLayout.closeDrawers()
+                }
+            })
+            (mViewDataBinding.drawerLayout as DrawerLayout).closeDrawers()
+        } else
+            action.invoke()
     }
 }

@@ -11,9 +11,9 @@ class ClassesDayInformation(
         val subgroup: Int = 0
 ) : ClassesBaseInformation(name, type) {
     constructor(parcel: Parcel) : this(
-            parcel.readString()!!,
+            parcel.readString() ?: "",
             parcel.readInt(),
-            parcel.readString()!!,
+            parcel.readString() ?: "",
             parcel.readInt(),
             parcel.readInt())
 

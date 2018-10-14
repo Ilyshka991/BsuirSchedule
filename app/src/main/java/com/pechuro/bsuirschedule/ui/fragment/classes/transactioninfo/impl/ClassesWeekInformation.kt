@@ -10,9 +10,9 @@ class ClassesWeekInformation(
         val subgroup: Int = 0
 ) : ClassesBaseInformation(name, type) {
     constructor(parcel: Parcel) : this(
-            parcel.readString()!!,
+            parcel.readString() ?: "",
             parcel.readInt(),
-            parcel.readString()!!,
+            parcel.readString() ?: "",
             parcel.readInt())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
