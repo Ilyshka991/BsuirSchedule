@@ -3,7 +3,7 @@ package com.pechuro.bsuirschedule.ui.fragment.exam
 import androidx.lifecycle.MutableLiveData
 import com.pechuro.bsuirschedule.data.ScheduleRepository
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
-import com.pechuro.bsuirschedule.ui.activity.navigation.ScheduleInformation
+import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
 import com.pechuro.bsuirschedule.ui.fragment.exam.data.ExamData
 import io.reactivex.android.schedulers.AndroidSchedulers

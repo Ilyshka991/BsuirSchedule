@@ -3,27 +3,27 @@ package com.pechuro.bsuirschedule.ui.activity.navigation
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.core.content.edit
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.constant.ScheduleTypes.EMPLOYEE_CLASSES
 import com.pechuro.bsuirschedule.constant.ScheduleTypes.EMPLOYEE_EXAMS
-import com.pechuro.bsuirschedule.constant.ScheduleTypes.EXAMS
-import com.pechuro.bsuirschedule.constant.ScheduleTypes.SCHEDULES
 import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT_CLASSES
 import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT_EXAMS
 import com.pechuro.bsuirschedule.constant.SharedPrefConstants.SCHEDULE_NAME
 import com.pechuro.bsuirschedule.constant.SharedPrefConstants.SCHEDULE_TYPE
 import com.pechuro.bsuirschedule.databinding.ActivityNavigationBinding
+import com.pechuro.bsuirschedule.ui.activity.navigation.adapter.NavItemAdapter
+import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseActivity
 import com.pechuro.bsuirschedule.ui.custom.OnSwipeTouchListener
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
@@ -46,6 +46,10 @@ class NavigationActivity :
 
     @Inject
     lateinit var fragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+    @Inject
+    lateinit var mLayoutManager: LinearLayoutManager
+    @Inject
+    lateinit var mNavAdapter: NavItemAdapter
 
     override val mViewModel: NavigationActivityViewModel
         get() = ViewModelProviders.of(this, mViewModelFactory).get(NavigationActivityViewModel::class.java)
@@ -105,14 +109,6 @@ class NavigationActivity :
             toggle.syncState()
         }
 
-        mViewDataBinding.navFooter.setNavigationItemSelectedListener {
-            if (it.itemId == R.id.menu_add_schedule) {
-                navigate {
-                    AddDialog.newInstance().show(supportFragmentManager, "add_dialog")
-                }
-            }
-            true
-        }
 
         mViewDataBinding.bar.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeTop() {
@@ -124,82 +120,88 @@ class NavigationActivity :
             BottomSheetFragment.newInstance().show(supportFragmentManager, "bottom_sheet")
         }
 
+        mViewDataBinding.navFooter.setOnClickListener {
+            navigate {
+                AddDialog.newInstance().show(supportFragmentManager, "add_dialog")
+            }
+        }
+
+        mLayoutManager.orientation = RecyclerView.VERTICAL
+        mViewDataBinding.navItemList?.layoutManager = mLayoutManager
+        mViewDataBinding.navItemList?.adapter = mNavAdapter
     }
 
     private fun subscribeToLiveData() {
         mViewModel.menuItems.observe(this, Observer {
-            clearMenuItems()
-            addMenuItems(it)
+            mNavAdapter.setItems(it)
         })
     }
 
-    private fun clearMenuItems() = mViewDataBinding.navView.menu.clear()
-
-    private fun addMenuItems(items: Map<Int, List<String>>) {
-        fun onClick(typeGroup: Int, menuItem: MenuItem) {
-            if (menuItem.isChecked) {
-                navigate {}
-                return
-            }
-
-            menuItem.isCheckable = true
-            menuItem.isChecked = true
-
-            val name = menuItem.title.toString()
-
-            val type = when (typeGroup) {
-                SCHEDULES -> if (name.matches(Regex("[0-9]*")))
-                    STUDENT_CLASSES else EMPLOYEE_CLASSES
-
-                EXAMS -> if (name.matches(Regex("[0-9]*")))
-                    STUDENT_EXAMS else EMPLOYEE_EXAMS
-
-                else -> throw UnsupportedOperationException("Invalid type")
-            }
-
-            val argInfo = ScheduleInformation(name, type)
-            val fragment = when (typeGroup) {
-                SCHEDULES -> ClassesFragment.newInstance(argInfo)
-                EXAMS -> ExamFragment.newInstance(argInfo)
-                else -> throw UnsupportedOperationException("Invalid type")
-            }
-
-            navigate {
-                defaultSharedPreferences.edit {
-                    putString(SCHEDULE_NAME, name)
-                    putInt(SCHEDULE_TYPE, type)
+    /* private fun addMenuItems(items: Map<Int, List<String>>) {
+            fun onClick(typeGroup: Int, menuItem: MenuItem) {
+                if (menuItem.isChecked) {
+                    navigate {}
+                    return
                 }
 
-                supportFragmentManager.transaction {
-                    replace(mViewDataBinding.navHostFragment.id, fragment)
-                }
-            }
-        }
+                menuItem.isCheckable = true
+                menuItem.isChecked = true
 
-        fun add(typeGroup: Int) {
-            items[typeGroup]?.takeIf { it.isNotEmpty() }?.sorted()?.let { list ->
+                val name = menuItem.title.toString()
 
-                val subMenu = when (typeGroup) {
-                    SCHEDULES -> mViewDataBinding.navView.menu.addSubMenu(getString(R.string.schedules))
-                    EXAMS -> mViewDataBinding.navView.menu.addSubMenu(getString(R.string.exams))
+                val type = when (typeGroup) {
+                    SCHEDULES -> if (name.matches(Regex("[0-9]*")))
+                        STUDENT_CLASSES else EMPLOYEE_CLASSES
+
+                    EXAMS -> if (name.matches(Regex("[0-9]*")))
+                        STUDENT_EXAMS else EMPLOYEE_EXAMS
+
                     else -> throw UnsupportedOperationException("Invalid type")
                 }
 
-                list.forEach { menuItem ->
-                    subMenu.add(menuItem)
-                            .setOnMenuItemClickListener {
-                                onClick(typeGroup, it)
-                                true
-                            }
+                val argInfo = ScheduleInformation(name, type)
+                val fragment = when (typeGroup) {
+                    SCHEDULES -> ClassesFragment.newInstance(argInfo)
+                    EXAMS -> ExamFragment.newInstance(argInfo)
+                    else -> throw UnsupportedOperationException("Invalid type")
+                }
+
+                navigate {
+                    defaultSharedPreferences.edit {
+                        putString(SCHEDULE_NAME, name)
+                        putInt(SCHEDULE_TYPE, type)
+                    }
+
+                    supportFragmentManager.transaction {
+                        replace(mViewDataBinding.navHostFragment.id, fragment)
+                    }
                 }
             }
-        }
 
-        add(SCHEDULES)
-        add(EXAMS)
+            fun add(typeGroup: Int) {
+                items[typeGroup]?.takeIf { it.isNotEmpty() }?.sorted()?.let { list ->
 
-        mViewDataBinding.navView.menu.add("").isEnabled = false
-    }
+                    val subMenu = when (typeGroup) {
+                        SCHEDULES -> mViewDataBinding.navView.menu.addSubMenu(getString(R.string.schedules))
+                        EXAMS -> mViewDataBinding.navView.menu.addSubMenu(getString(R.string.exams))
+                        else -> throw UnsupportedOperationException("Invalid type")
+                    }
+
+                    list.forEach { menuItem ->
+                        subMenu.add(menuItem)
+                                .setOnMenuItemClickListener {
+                                    onClick(typeGroup, it)
+                                    true
+                                }
+                    }
+                }
+            }
+
+            add(SCHEDULES)
+            add(EXAMS)
+
+            mViewDataBinding.navView.menu.add("").isEnabled = false
+     }*/
 
     private fun navigate(action: () -> Unit) {
         if (mViewDataBinding.drawerLayout is DrawerLayout) {

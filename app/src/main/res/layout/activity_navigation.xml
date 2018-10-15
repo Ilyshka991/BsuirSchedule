@@ -57,22 +57,39 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <com.google.android.material.navigation.NavigationView
-            android:id="@+id/nav_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
-            android:visibility="visible"
             app:insetForeground="#4000">
 
-            <com.google.android.material.navigation.NavigationView
-                android:id="@+id/nav_footer"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:fitsSystemWindows="true"
-                app:menu="@menu/menu_navigation_footer" />
+                android:layout_height="match_parent"
+                android:background="@android:color/white">
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/nav_item_list"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="32dp"
+                    android:fitsSystemWindows="true"
+                    app:layout_constraintBottom_toTopOf="@+id/nav_footer"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/nav_footer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Add schedule"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/nav_item_list"
+                    app:layout_constraintStart_toStartOf="@+id/nav_item_list" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.navigation.NavigationView>
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

@@ -7,7 +7,7 @@ import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentViewpagerBinding
-import com.pechuro.bsuirschedule.ui.activity.navigation.ScheduleInformation
+import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
 import com.pechuro.bsuirschedule.ui.fragment.classes.transactioninfo.ClassesBaseInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.transactioninfo.impl.ClassesDayInformation

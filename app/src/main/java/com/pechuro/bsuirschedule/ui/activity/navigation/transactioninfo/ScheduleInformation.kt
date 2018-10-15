@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.ui.activity.navigation
+package com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo
 
 import android.os.Parcel
 import android.os.Parcelable
