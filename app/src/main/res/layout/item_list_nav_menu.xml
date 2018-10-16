@@ -10,14 +10,11 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+        <TextView
             android:layout_width="match_parent"
-            android:id="@+id/schedule_name_button"
             android:layout_height="wrap_content"
             android:gravity="center_vertical|start"
             android:text="@{data.name}"

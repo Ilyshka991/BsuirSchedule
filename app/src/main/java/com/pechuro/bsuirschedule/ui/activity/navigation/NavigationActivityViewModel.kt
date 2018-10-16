@@ -2,8 +2,9 @@ package com.pechuro.bsuirschedule.ui.activity.navigation
 
 import androidx.lifecycle.MutableLiveData
 import com.pechuro.bsuirschedule.data.ScheduleRepository
-import com.pechuro.bsuirschedule.ui.activity.navigation.adapter.NavItemData
+import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
+import com.pechuro.bsuirschedule.utils.toMap
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -11,7 +12,7 @@ import javax.inject.Inject
 
 class NavigationActivityViewModel @Inject constructor(
         private val repository: ScheduleRepository) : BaseViewModel() {
-    val menuItems = MutableLiveData<List<NavItemData>>()
+    val menuItems = MutableLiveData<Map<Int, List<ScheduleInformation>>>()
 
     init {
         loadMenuItems()
@@ -19,11 +20,7 @@ class NavigationActivityViewModel @Inject constructor(
 
     private fun loadMenuItems() {
         compositeDisposable.add(repository.getSchedules()
-                .map { list ->
-                    val result = mutableListOf<NavItemData>()
-                    list.forEach { result.add(NavItemData(it.name)) }
-                    return@map result
-                }
+                .map { it.toMap() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

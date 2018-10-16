@@ -38,7 +38,7 @@ import org.jetbrains.anko.defaultSharedPreferences
 import javax.inject.Inject
 
 class NavigationActivity :
-        BaseActivity<ActivityNavigationBinding, NavigationActivityViewModel>(), HasSupportFragmentInjector {
+        BaseActivity<ActivityNavigationBinding, NavigationActivityViewModel>(), HasSupportFragmentInjector, INavigator {
 
     companion object {
         fun newIntent(context: Context) = Intent(context, NavigationActivity::class.java)
@@ -101,6 +101,7 @@ class NavigationActivity :
 
     private fun setupView() {
         setSupportActionBar(bar)
+
         if (mViewDataBinding.drawerLayout is DrawerLayout) {
             val toggle = ActionBarDrawerToggle(
                     this, mViewDataBinding.drawerLayout as DrawerLayout, mViewDataBinding.bar,
@@ -108,7 +109,6 @@ class NavigationActivity :
             (mViewDataBinding.drawerLayout as DrawerLayout).addDrawerListener(toggle)
             toggle.syncState()
         }
-
 
         mViewDataBinding.bar.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeTop() {
@@ -119,12 +119,13 @@ class NavigationActivity :
         mViewDataBinding.buttonShowBottomSheet?.setOnClickListener {
             BottomSheetFragment.newInstance().show(supportFragmentManager, "bottom_sheet")
         }
-
         mViewDataBinding.navFooter.setOnClickListener {
             navigate {
                 AddDialog.newInstance().show(supportFragmentManager, "add_dialog")
             }
         }
+
+        mNavAdapter.navigator = this
 
         mLayoutManager.orientation = RecyclerView.VERTICAL
         mViewDataBinding.navItemList?.layoutManager = mLayoutManager
@@ -137,71 +138,19 @@ class NavigationActivity :
         })
     }
 
-    /* private fun addMenuItems(items: Map<Int, List<String>>) {
-            fun onClick(typeGroup: Int, menuItem: MenuItem) {
-                if (menuItem.isChecked) {
-                    navigate {}
-                    return
-                }
-
-                menuItem.isCheckable = true
-                menuItem.isChecked = true
-
-                val name = menuItem.title.toString()
-
-                val type = when (typeGroup) {
-                    SCHEDULES -> if (name.matches(Regex("[0-9]*")))
-                        STUDENT_CLASSES else EMPLOYEE_CLASSES
-
-                    EXAMS -> if (name.matches(Regex("[0-9]*")))
-                        STUDENT_EXAMS else EMPLOYEE_EXAMS
-
-                    else -> throw UnsupportedOperationException("Invalid type")
-                }
-
-                val argInfo = ScheduleInformation(name, type)
-                val fragment = when (typeGroup) {
-                    SCHEDULES -> ClassesFragment.newInstance(argInfo)
-                    EXAMS -> ExamFragment.newInstance(argInfo)
-                    else -> throw UnsupportedOperationException("Invalid type")
-                }
-
-                navigate {
-                    defaultSharedPreferences.edit {
-                        putString(SCHEDULE_NAME, name)
-                        putInt(SCHEDULE_TYPE, type)
-                    }
-
-                    supportFragmentManager.transaction {
-                        replace(mViewDataBinding.navHostFragment.id, fragment)
-                    }
-                }
+    override fun onNavigate(info: ScheduleInformation) {
+        val argInfo = ScheduleInformation(info.name, info.type)
+        val fragment = when (info.type) {
+            STUDENT_CLASSES, EMPLOYEE_CLASSES -> ClassesFragment.newInstance(argInfo)
+            STUDENT_EXAMS, EMPLOYEE_EXAMS -> ExamFragment.newInstance(argInfo)
+            else -> throw UnsupportedOperationException("Invalid type")
+        }
+        navigate {
+            supportFragmentManager.transaction {
+                replace(mViewDataBinding.navHostFragment.id, fragment)
             }
-
-            fun add(typeGroup: Int) {
-                items[typeGroup]?.takeIf { it.isNotEmpty() }?.sorted()?.let { list ->
-
-                    val subMenu = when (typeGroup) {
-                        SCHEDULES -> mViewDataBinding.navView.menu.addSubMenu(getString(R.string.schedules))
-                        EXAMS -> mViewDataBinding.navView.menu.addSubMenu(getString(R.string.exams))
-                        else -> throw UnsupportedOperationException("Invalid type")
-                    }
-
-                    list.forEach { menuItem ->
-                        subMenu.add(menuItem)
-                                .setOnMenuItemClickListener {
-                                    onClick(typeGroup, it)
-                                    true
-                                }
-                    }
-                }
-            }
-
-            add(SCHEDULES)
-            add(EXAMS)
-
-            mViewDataBinding.navView.menu.add("").isEnabled = false
-     }*/
+        }
+    }
 
     private fun navigate(action: () -> Unit) {
         if (mViewDataBinding.drawerLayout is DrawerLayout) {

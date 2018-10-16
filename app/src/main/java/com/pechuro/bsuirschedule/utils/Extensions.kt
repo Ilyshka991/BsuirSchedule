@@ -7,13 +7,13 @@ import com.pechuro.bsuirschedule.constant.ScheduleTypes.SCHEDULES
 import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT_CLASSES
 import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT_EXAMS
 import com.pechuro.bsuirschedule.data.entity.Schedule
+import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import java.util.*
 import java.util.Calendar.*
 import java.util.GregorianCalendar.DAY_OF_WEEK
 
-fun List<Schedule>.toMap(): Map<Int, List<String>> {
-    val map = mutableMapOf<Int, List<String>>()
-
+fun List<Schedule>.toMap(): Map<Int, List<ScheduleInformation>> {
+    val map = mutableMapOf<Int, List<ScheduleInformation>>()
 
     map[SCHEDULES] =
             this.asSequence()
@@ -21,7 +21,7 @@ fun List<Schedule>.toMap(): Map<Int, List<String>> {
                         it.type == STUDENT_CLASSES ||
                                 it.type == EMPLOYEE_CLASSES
                     }
-                    .map { it.name }
+                    .map { ScheduleInformation(it.name, it.type) }
                     .toList()
 
     map[EXAMS] =
@@ -30,9 +30,15 @@ fun List<Schedule>.toMap(): Map<Int, List<String>> {
                         it.type == STUDENT_EXAMS ||
                                 it.type == EMPLOYEE_EXAMS
                     }
-                    .map { it.name }
+                    .map { ScheduleInformation(it.name, it.type) }
                     .toList()
     return map
+}
+
+fun List<Schedule>.transform(): List<ScheduleInformation> {
+    val result = mutableListOf<ScheduleInformation>()
+    this.forEach { result.add(ScheduleInformation(it.name, it.type)) }
+    return result
 }
 
 fun Calendar.getCurrentWeek(): Int {
