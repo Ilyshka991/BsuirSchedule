@@ -49,12 +49,12 @@ class NavItemAdapter(private val mContext: Context) : RecyclerView.Adapter<BaseV
 
     fun setItems(data: Map<Int, List<ScheduleInformation>>) {
         mItemsList.clear()
-        if (data.containsKey(SCHEDULES)) {
+        if (data[SCHEDULES]?.isNotEmpty() == true) {
             mItemsList.add(ScheduleInformation(mContext.getString(R.string.schedules), NAV_ITEM_MENU))
             mItemsList.addAll(data[SCHEDULES]!!)
         }
 
-        if (data.containsKey(EXAMS)) {
+        if (data[EXAMS]?.isNotEmpty() == true) {
             mItemsList.add(ScheduleInformation(mContext.getString(R.string.exams), NAV_ITEM_MENU))
             mItemsList.addAll(data[EXAMS]!!)
         }
