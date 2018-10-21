@@ -4,6 +4,7 @@ import com.pechuro.bsuirschedule.di.annotations.ActivityScope
 import com.pechuro.bsuirschedule.ui.activity.infoload.InfoLoadActivity
 import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivity
 import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivityModule
+import com.pechuro.bsuirschedule.ui.activity.settings.SettingsActivity
 import com.pechuro.bsuirschedule.ui.activity.splash.SplashActivity
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogProvider
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragmentProvider
@@ -39,4 +40,8 @@ abstract class AppActivitiesModule {
     @ActivityScope
     @ContributesAndroidInjector()
     abstract fun bindInfoLoadActivity(): InfoLoadActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector()
+    abstract fun bindSettingsActivity(): SettingsActivity
 }

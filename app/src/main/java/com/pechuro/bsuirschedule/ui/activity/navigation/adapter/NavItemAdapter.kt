@@ -50,7 +50,6 @@ class NavItemAdapter(private val mContext: Context) : RecyclerView.Adapter<BaseV
     fun setItems(data: Map<Int, List<ScheduleInformation>>) {
         mItemsList.clear()
         if (data.containsKey(SCHEDULES)) {
-
             mItemsList.add(ScheduleInformation(mContext.getString(R.string.schedules), NAV_ITEM_MENU))
             mItemsList.addAll(data[SCHEDULES]!!)
         }
@@ -61,6 +60,7 @@ class NavItemAdapter(private val mContext: Context) : RecyclerView.Adapter<BaseV
         }
 
         notifyDataSetChanged()
+
     }
 
     inner class ItemViewHolder(private val mBinding: ItemListNavBinding) : BaseViewHolder(mBinding.root) {

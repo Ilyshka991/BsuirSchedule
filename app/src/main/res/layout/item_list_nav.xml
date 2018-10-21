@@ -15,10 +15,10 @@
         android:layout_height="wrap_content">
 
         <Button
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="match_parent"
             android:id="@+id/schedule_name_button"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/nav_button"
             android:gravity="center_vertical|start"
             android:text="@{data.name}"
             app:layout_constraintStart_toStartOf="parent"

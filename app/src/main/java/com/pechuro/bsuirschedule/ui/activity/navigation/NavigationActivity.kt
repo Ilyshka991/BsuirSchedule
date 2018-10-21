@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.content.edit
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -24,10 +25,9 @@ import com.pechuro.bsuirschedule.constant.SharedPrefConstants.SCHEDULE_TYPE
 import com.pechuro.bsuirschedule.databinding.ActivityNavigationBinding
 import com.pechuro.bsuirschedule.ui.activity.navigation.adapter.NavItemAdapter
 import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
+import com.pechuro.bsuirschedule.ui.activity.settings.SettingsActivity
 import com.pechuro.bsuirschedule.ui.base.BaseActivity
-import com.pechuro.bsuirschedule.ui.custom.OnSwipeTouchListener
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
-import com.pechuro.bsuirschedule.ui.fragment.bottomsheet.BottomSheetFragment
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragment
 import com.pechuro.bsuirschedule.ui.fragment.exam.ExamFragment
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragment
@@ -63,10 +63,32 @@ class NavigationActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupView()
+        setListeners()
         if (savedInstanceState == null) {
             homeFragment()
         }
         subscribeToLiveData()
+    }
+
+    override fun onNavigate(info: ScheduleInformation) {
+        val argInfo = ScheduleInformation(info.name, info.type)
+        val fragment = when (info.type) {
+            STUDENT_CLASSES, EMPLOYEE_CLASSES -> ClassesFragment.newInstance(argInfo)
+            STUDENT_EXAMS, EMPLOYEE_EXAMS -> ExamFragment.newInstance(argInfo)
+            else -> throw IllegalStateException("Invalid type")
+        }
+        navigate {
+            supportFragmentManager.transaction {
+                replace(mViewDataBinding.navHostFragment.id, fragment)
+
+                defaultSharedPreferences.edit {
+                    putString(SCHEDULE_NAME, info.name)
+                    putInt(SCHEDULE_TYPE, info.type)
+                }
+
+                setupBottomBar(info.type)
+            }
+        }
     }
 
     fun homeFragment() {
@@ -76,17 +98,25 @@ class NavigationActivity :
         val fragment = if (name.isNullOrEmpty() || type == -1) {
             StartFragment.newInstance()
         } else {
+            setupBottomBar(type)
+
             val argInfo = ScheduleInformation(name!!, type)
             when (type) {
                 STUDENT_CLASSES, EMPLOYEE_CLASSES -> ClassesFragment.newInstance(argInfo)
                 STUDENT_EXAMS, EMPLOYEE_EXAMS -> ExamFragment.newInstance(argInfo)
-                else -> throw UnsupportedOperationException("Invalid type")
+                else -> throw IllegalStateException("Invalid type")
             }
         }
 
         supportFragmentManager.transaction {
             replace(mViewDataBinding.navHostFragment.id, fragment)
         }
+    }
+
+    private fun subscribeToLiveData() {
+        mViewModel.menuItems.observe(this, Observer {
+            mNavAdapter.setItems(it)
+        })
     }
 
     override fun onBackPressed() {
@@ -102,6 +132,14 @@ class NavigationActivity :
     private fun setupView() {
         setSupportActionBar(bar)
 
+        mNavAdapter.navigator = this
+
+        mLayoutManager.orientation = RecyclerView.VERTICAL
+        mViewDataBinding.navItemList?.layoutManager = mLayoutManager
+        mViewDataBinding.navItemList?.adapter = mNavAdapter
+    }
+
+    private fun setListeners() {
         if (mViewDataBinding.drawerLayout is DrawerLayout) {
             val toggle = ActionBarDrawerToggle(
                     this, mViewDataBinding.drawerLayout as DrawerLayout, mViewDataBinding.bar,
@@ -110,45 +148,32 @@ class NavigationActivity :
             toggle.syncState()
         }
 
-        mViewDataBinding.bar.setOnTouchListener(object : OnSwipeTouchListener(this) {
-            override fun onSwipeTop() {
-                println(supportFragmentManager.findFragmentById(mViewDataBinding.navHostFragment.id).toString())
-                BottomSheetFragment.newInstance().show(supportFragmentManager, "bottom_sheet")
-            }
-        })
-        mViewDataBinding.buttonShowBottomSheet?.setOnClickListener {
-            BottomSheetFragment.newInstance().show(supportFragmentManager, "bottom_sheet")
+        mViewDataBinding.navFooterSettings?.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
         }
-        mViewDataBinding.navFooter.setOnClickListener {
+        mViewDataBinding.navFooterAddSchedule?.setOnClickListener {
             navigate {
                 AddDialog.newInstance().show(supportFragmentManager, "add_dialog")
             }
         }
-
-        mNavAdapter.navigator = this
-
-        mLayoutManager.orientation = RecyclerView.VERTICAL
-        mViewDataBinding.navItemList?.layoutManager = mLayoutManager
-        mViewDataBinding.navItemList?.adapter = mNavAdapter
     }
 
-    private fun subscribeToLiveData() {
-        mViewModel.menuItems.observe(this, Observer {
-            mNavAdapter.setItems(it)
-        })
-    }
-
-    override fun onNavigate(info: ScheduleInformation) {
-        val argInfo = ScheduleInformation(info.name, info.type)
-        val fragment = when (info.type) {
-            STUDENT_CLASSES, EMPLOYEE_CLASSES -> ClassesFragment.newInstance(argInfo)
-            STUDENT_EXAMS, EMPLOYEE_EXAMS -> ExamFragment.newInstance(argInfo)
-            else -> throw UnsupportedOperationException("Invalid type")
-        }
-        navigate {
-            supportFragmentManager.transaction {
-                replace(mViewDataBinding.navHostFragment.id, fragment)
+    private fun setupBottomBar(type: Int) {
+        when (type) {
+            STUDENT_CLASSES -> {
+                mViewDataBinding.barScheduleSubgroup?.visibility = View.VISIBLE
+                mViewDataBinding.barScheduleType?.visibility = View.VISIBLE
             }
+            EMPLOYEE_CLASSES -> {
+                mViewDataBinding.barScheduleSubgroup?.visibility = View.GONE
+                mViewDataBinding.barScheduleType?.visibility = View.VISIBLE
+            }
+            STUDENT_EXAMS, EMPLOYEE_EXAMS -> {
+                mViewDataBinding.barScheduleSubgroup?.visibility = View.GONE
+                mViewDataBinding.barScheduleType?.visibility = View.GONE
+            }
+            else -> throw IllegalStateException("Invalid type")
         }
     }
 

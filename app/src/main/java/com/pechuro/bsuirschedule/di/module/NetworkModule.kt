@@ -21,7 +21,7 @@ import javax.inject.Singleton
 @Module
 class NetworkModule {
     companion object {
-        private const val BASE_URL = "https://students.bsuir.by/api/v1/"
+        private const val BASE_URL = "https://journal.bsuir.by/api/v1/"
         private const val CONNECT_TIMEOUT = 60L
     }
 

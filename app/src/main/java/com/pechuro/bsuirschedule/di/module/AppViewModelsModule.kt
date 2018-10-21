@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.pechuro.bsuirschedule.di.annotations.ViewModelKey
 import com.pechuro.bsuirschedule.ui.activity.infoload.InfoLoadActivityViewModel
 import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivityViewModel
+import com.pechuro.bsuirschedule.ui.activity.settings.SettingsActivityViewModel
 import com.pechuro.bsuirschedule.ui.activity.splash.SplashActivityViewModel
 import com.pechuro.bsuirschedule.ui.base.ViewModelFactory
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogViewModel
@@ -72,4 +73,9 @@ abstract class AppViewModelsModule {
     @IntoMap
     @ViewModelKey(InfoLoadActivityViewModel::class)
     abstract fun infoLoadActivity(viewModel: InfoLoadActivityViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SettingsActivityViewModel::class)
+    abstract fun settingsActivity(viewModel: SettingsActivityViewModel): ViewModel
 }

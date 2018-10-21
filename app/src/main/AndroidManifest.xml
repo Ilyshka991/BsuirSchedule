@@ -13,7 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
         <activity
             android:name=".ui.activity.splash.SplashActivity"
             android:theme="@style/splashTheme">
@@ -23,13 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.activity.navigation.NavigationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity android:name=".ui.activity.infoload.InfoLoadActivity" />
-
+        <activity
+            android:name=".ui.activity.settings.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".ui.activity.navigation.NavigationActivity" />
     </application>
 
 </manifest>
