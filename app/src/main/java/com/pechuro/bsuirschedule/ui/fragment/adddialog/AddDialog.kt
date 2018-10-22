@@ -1,5 +1,6 @@
 package com.pechuro.bsuirschedule.ui.fragment.adddialog
 
+import android.content.Context
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.databinding.library.baseAdapters.BR
@@ -26,6 +27,8 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
     @Inject
     lateinit var mPagerAdapter: AddDialogPagerAdapter
 
+    var mNavigator: AddDialogCallback? = null
+
     override val mViewModel: AddDialogViewModel
         get() = ViewModelProviders.of(this, mViewModelFactory).get(AddDialogViewModel::class.java)
     override val bindingVariable: Int
@@ -40,7 +43,12 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
 
     override fun dismiss() {
         super.dismiss()
-        (activity as? NavigationActivity)?.homeFragment()
+        mNavigator?.onDismiss()
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        mNavigator = context as? NavigationActivity
     }
 
     private fun setupView() {
@@ -69,4 +77,9 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
             }
         })
     }
+
+    interface AddDialogCallback {
+        fun onDismiss()
+    }
 }
+

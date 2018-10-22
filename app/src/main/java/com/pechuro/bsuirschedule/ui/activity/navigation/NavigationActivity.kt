@@ -33,13 +33,14 @@ import com.pechuro.bsuirschedule.ui.fragment.exam.ExamFragment
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragment
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_navigation.*
 import org.jetbrains.anko.defaultSharedPreferences
 import javax.inject.Inject
 
 class NavigationActivity :
-        BaseActivity<ActivityNavigationBinding, NavigationActivityViewModel>(), HasSupportFragmentInjector, INavigator {
-
+        BaseActivity<ActivityNavigationBinding, NavigationActivityViewModel>(),
+        HasSupportFragmentInjector, INavigator, AddDialog.AddDialogCallback {
     companion object {
         fun newIntent(context: Context) = Intent(context, NavigationActivity::class.java)
     }
@@ -51,12 +52,15 @@ class NavigationActivity :
     @Inject
     lateinit var mNavAdapter: NavItemAdapter
 
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+
     override val mViewModel: NavigationActivityViewModel
         get() = ViewModelProviders.of(this, mViewModelFactory).get(NavigationActivityViewModel::class.java)
     override val layoutId: Int
         get() = R.layout.activity_navigation
     override val bindingVariable: Int
         get() = BR.viewModel
+
 
     override fun supportFragmentInjector() = fragmentDispatchingAndroidInjector
 
@@ -67,7 +71,23 @@ class NavigationActivity :
         if (savedInstanceState == null) {
             homeFragment()
         }
+        setupBottomBar()
         subscribeToLiveData()
+    }
+
+    override fun onBackPressed() {
+        if (mViewDataBinding.drawerLayout is DrawerLayout &&
+                (mViewDataBinding.drawerLayout as DrawerLayout)
+                        .isDrawerOpen(GravityCompat.START)) {
+            (mViewDataBinding.drawerLayout as DrawerLayout).closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.dispose()
     }
 
     override fun onNavigate(info: ScheduleInformation) {
@@ -86,47 +106,20 @@ class NavigationActivity :
                     putInt(SCHEDULE_TYPE, info.type)
                 }
 
-                setupBottomBar(info.type)
+                setupBottomBar()
             }
         }
     }
 
-    fun homeFragment() {
-        val name = defaultSharedPreferences.getString(SCHEDULE_NAME, "")
-        val type = defaultSharedPreferences.getInt(SCHEDULE_TYPE, -1)
-
-        val fragment = if (name.isNullOrEmpty() || type == -1) {
-            StartFragment.newInstance()
-        } else {
-            setupBottomBar(type)
-
-            val argInfo = ScheduleInformation(name!!, type)
-            when (type) {
-                STUDENT_CLASSES, EMPLOYEE_CLASSES -> ClassesFragment.newInstance(argInfo)
-                STUDENT_EXAMS, EMPLOYEE_EXAMS -> ExamFragment.newInstance(argInfo)
-                else -> throw IllegalStateException("Invalid type")
-            }
-        }
-
-        supportFragmentManager.transaction {
-            replace(mViewDataBinding.navHostFragment.id, fragment)
-        }
+    override fun onDismiss() {
+        homeFragment()
+        setupBottomBar()
     }
 
     private fun subscribeToLiveData() {
         mViewModel.menuItems.observe(this, Observer {
             mNavAdapter.setItems(it)
         })
-    }
-
-    override fun onBackPressed() {
-        if (mViewDataBinding.drawerLayout is DrawerLayout &&
-                (mViewDataBinding.drawerLayout as DrawerLayout)
-                        .isDrawerOpen(GravityCompat.START)) {
-            (mViewDataBinding.drawerLayout as DrawerLayout).closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
     }
 
     private fun setupView() {
@@ -157,23 +150,54 @@ class NavigationActivity :
                 AddDialog.newInstance().show(supportFragmentManager, "add_dialog")
             }
         }
+
+        mViewDataBinding.fabBack?.setOnClickListener {
+            FabCommunication.publish(OnFabClick)
+        }
+
+        compositeDisposable.addAll(
+                FabCommunication.listen(OnFabShow::class.java).subscribe {
+                    mViewDataBinding.fabBack?.show()
+                },
+                FabCommunication.listen(OnFabHide::class.java).subscribe {
+                    mViewDataBinding.fabBack?.hide()
+                })
     }
 
-    private fun setupBottomBar(type: Int) {
+    private fun setupBottomBar() {
+        val type = defaultSharedPreferences.getInt(SCHEDULE_TYPE, -1)
         when (type) {
             STUDENT_CLASSES -> {
-                mViewDataBinding.barScheduleSubgroup?.visibility = View.VISIBLE
-                mViewDataBinding.barScheduleType?.visibility = View.VISIBLE
+                mViewDataBinding.barOptions?.visibility = View.VISIBLE
+                mViewDataBinding.barAddLayout?.visibility = View.GONE
             }
-            EMPLOYEE_CLASSES -> {
-                mViewDataBinding.barScheduleSubgroup?.visibility = View.GONE
-                mViewDataBinding.barScheduleType?.visibility = View.VISIBLE
+            EMPLOYEE_CLASSES, STUDENT_EXAMS, EMPLOYEE_EXAMS -> {
+                mViewDataBinding.barOptions?.visibility = View.GONE
+                mViewDataBinding.barAddLayout?.visibility = View.VISIBLE
             }
-            STUDENT_EXAMS, EMPLOYEE_EXAMS -> {
-                mViewDataBinding.barScheduleSubgroup?.visibility = View.GONE
-                mViewDataBinding.barScheduleType?.visibility = View.GONE
+            else -> Unit
+        }
+
+        mViewDataBinding.fabBack?.hide()
+    }
+
+    private fun homeFragment() {
+        val name = defaultSharedPreferences.getString(SCHEDULE_NAME, "")
+        val type = defaultSharedPreferences.getInt(SCHEDULE_TYPE, -1)
+
+        val fragment = if (name.isNullOrEmpty() || type == -1) {
+            StartFragment.newInstance()
+        } else {
+            val argInfo = ScheduleInformation(name!!, type)
+            when (type) {
+                STUDENT_CLASSES, EMPLOYEE_CLASSES -> ClassesFragment.newInstance(argInfo)
+                STUDENT_EXAMS, EMPLOYEE_EXAMS -> ExamFragment.newInstance(argInfo)
+                else -> throw IllegalStateException("Invalid type")
             }
-            else -> throw IllegalStateException("Invalid type")
+        }
+
+        supportFragmentManager.transaction {
+            replace(mViewDataBinding.navHostFragment.id, fragment)
         }
     }
 

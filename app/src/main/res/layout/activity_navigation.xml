@@ -34,33 +34,45 @@
                 style="@style/Widget.MaterialComponents.BottomAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:layout_gravity="bottom">
+                android:layout_gravity="bottom"
+                app:fabAlignmentMode="end">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/bar_options"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Icon"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    app:icon="@drawable/ic_more_vert_black_24dp"
+                    app:iconGravity="textStart" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bar_add_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                     <Button
-                        android:id="@+id/bar_schedule_subgroup"
+                        android:id="@+id/bar_add"
+                        style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="subgroup" />
-
-                    <Button
-                        android:id="@+id/bar_schedule_type"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="all" />
-
-                    <Button
-                        android:id="@+id/bar_schedule_add"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="add" />
-                </LinearLayout>
-
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        app:icon="@drawable/ic_add_black_24dp"
+                        app:iconGravity="textStart"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </com.pechuro.bsuirschedule.ui.custom.BottomAppBar>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_anchor="@+id/bar"
+                app:srcCompat="@color/colorAccent" />
+
+
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <com.google.android.material.navigation.NavigationView
@@ -68,6 +80,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
+            android:visibility="visible"
             app:insetForeground="#4000">
 
             <androidx.constraintlayout.widget.ConstraintLayout
