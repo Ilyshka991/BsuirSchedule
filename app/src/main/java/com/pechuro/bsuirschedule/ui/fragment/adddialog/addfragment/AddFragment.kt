@@ -1,5 +1,6 @@
 package com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
@@ -41,8 +42,14 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), Ad
     override val layoutId: Int
         get() = R.layout.fragment_add
 
+    private var callback: AddFragmentCallback? = null
     private val scheduleType: Int by lazy {
         arguments?.getInt(ARG_SCHEDULE_TYPE) ?: throw IllegalStateException()
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        callback = parentFragment as? AddDialog
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,11 +63,17 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), Ad
     }
 
     override fun onLoading() {
-        (parentFragment as? AddDialog)?.isCancelable = false
+        callback?.setDialogCancelable(false)
+    }
+
+    override fun onCancel() {
+        mViewDataBinding.errorTextView.text = ""
+        mViewDataBinding.buttonOk.isEnabled = true
+        callback?.setDialogCancelable(true)
     }
 
     override fun onError(messageId: Int) {
-        (parentFragment as? AddDialog)?.isCancelable = true
+        callback?.setDialogCancelable(true)
         mViewDataBinding.buttonOk.isEnabled = true
 
         mViewDataBinding.errorTextView.text = getString(messageId)
@@ -78,13 +91,7 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), Ad
 
         mViewDataBinding.buttonOk.isEnabled = true
         Toast.makeText(context, getString(R.string.success), Toast.LENGTH_LONG).show()
-        (parentFragment as? AddDialog)?.dismiss()
-    }
-
-    override fun onCancel() {
-        mViewDataBinding.errorTextView.text = ""
-        mViewDataBinding.buttonOk.isEnabled = true
-        (parentFragment as? AddDialog)?.isCancelable = true
+        callback?.onDismiss()
     }
 
     private fun setupView() {
@@ -130,5 +137,11 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), Ad
                         mViewDataBinding.textInput.setAdapter(adapter)
                     }
                 })
+    }
+
+    interface AddFragmentCallback {
+        fun onDismiss()
+
+        fun setDialogCancelable(isCancelable: Boolean)
     }
 }

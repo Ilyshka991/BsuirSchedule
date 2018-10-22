@@ -10,11 +10,11 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentViewpagerBinding
 import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivity
 import com.pechuro.bsuirschedule.ui.base.BaseDialog
+import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragment
 import javax.inject.Inject
 
 
-class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
-
+class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>(), AddFragment.AddFragmentCallback {
     companion object {
         fun newInstance(): AddDialog {
             val fragment = AddDialog()
@@ -27,7 +27,7 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
     @Inject
     lateinit var mPagerAdapter: AddDialogPagerAdapter
 
-    var mNavigator: AddDialogCallback? = null
+    private var mNavigator: AddDialogCallback? = null
 
     override val mViewModel: AddDialogViewModel
         get() = ViewModelProviders.of(this, mViewModelFactory).get(AddDialogViewModel::class.java)
@@ -36,20 +36,27 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
     override val layoutId: Int
         get() = R.layout.fragment_viewpager
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        setupView()
-    }
-
-    override fun dismiss() {
-        super.dismiss()
-        mNavigator?.onDismiss()
-    }
-
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         mNavigator = context as? NavigationActivity
     }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setupView()
+        setListeners()
+    }
+
+    override fun dismiss() {
+        super.dismiss()
+        mNavigator?.onAddDialogDismiss()
+    }
+
+    override fun setDialogCancelable(isCancelable: Boolean) {
+        setCancelable(isCancelable)
+    }
+
+    override fun onDismiss() = dismiss()
 
     private fun setupView() {
         mViewDataBinding.viewPager.adapter = mPagerAdapter
@@ -57,7 +64,9 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
 
         mViewDataBinding.tabLayout.addTab(mViewDataBinding.tabLayout.newTab().setText(getString(R.string.students)))
         mViewDataBinding.tabLayout.addTab(mViewDataBinding.tabLayout.newTab().setText(getString(R.string.employees)))
+    }
 
+    private fun setListeners() {
         mViewDataBinding.viewPager
                 .addOnPageChangeListener(
                         TabLayout.TabLayoutOnPageChangeListener(
@@ -79,7 +88,7 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
     }
 
     interface AddDialogCallback {
-        fun onDismiss()
+        fun onAddDialogDismiss()
     }
 }
 

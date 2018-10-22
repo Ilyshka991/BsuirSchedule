@@ -1,12 +1,7 @@
 <resources>
     <string name="app_name">Bsuir Schedule</string>
-    <string name="title_activity_navigation">NavigationActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
     <string name="schedules">Schedules</string>
     <string name="exams">Exams</string>
     <string name="add_schedule">Add schedule</string>
@@ -19,20 +14,6 @@
     <string name="error_blank_schedule_name">Please, fill in schedule name</string>
     <string name="error_unknown_schedule">Unknown schedule</string>
 
-    <string-array name="days">
-        <item>Monday</item>
-        <item>Tuesday</item>
-        <item>Wednesday</item>
-        <item>Thursday</item>
-        <item>Friday</item>
-        <item>Saturday</item>
-        <item>Sunday</item>
-    </string-array>
     <string name="title_activity_settings">Settings</string>
 
-    <string-array name="subgroup_types">
-        <item>1</item>
-        <item>2</item>
-        <item>all</item>
-    </string-array>
 </resources>

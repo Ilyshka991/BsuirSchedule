@@ -42,7 +42,7 @@ class ExamFragment : BaseFragment<FragmentListBinding, ExamViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUp()
+        setupView()
         subscribeToLiveData()
         loadData()
     }
@@ -52,7 +52,7 @@ class ExamFragment : BaseFragment<FragmentListBinding, ExamViewModel>() {
         info?.let { mViewModel.loadData(it) }
     }
 
-    private fun setUp() {
+    private fun setupView() {
         mLayoutManager.orientation = RecyclerView.VERTICAL
         mViewDataBinding.recyclerView.layoutManager = mLayoutManager
         mViewDataBinding.recyclerView.adapter = mAdapter

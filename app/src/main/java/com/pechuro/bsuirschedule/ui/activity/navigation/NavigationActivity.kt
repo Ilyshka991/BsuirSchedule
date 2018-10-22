@@ -40,7 +40,7 @@ import javax.inject.Inject
 
 class NavigationActivity :
         BaseActivity<ActivityNavigationBinding, NavigationActivityViewModel>(),
-        HasSupportFragmentInjector, INavigator, AddDialog.AddDialogCallback {
+        HasSupportFragmentInjector, NavItemAdapter.NavCallback, AddDialog.AddDialogCallback {
     companion object {
         fun newIntent(context: Context) = Intent(context, NavigationActivity::class.java)
     }
@@ -111,7 +111,7 @@ class NavigationActivity :
         }
     }
 
-    override fun onDismiss() {
+    override fun onAddDialogDismiss() {
         homeFragment()
         setupBottomBar()
     }
@@ -125,7 +125,7 @@ class NavigationActivity :
     private fun setupView() {
         setSupportActionBar(bar)
 
-        mNavAdapter.navigator = this
+        mNavAdapter.callback = this
 
         mLayoutManager.orientation = RecyclerView.VERTICAL
         mViewDataBinding.navItemList?.layoutManager = mLayoutManager

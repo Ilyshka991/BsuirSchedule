@@ -28,6 +28,10 @@ class StartFragment : BaseFragment<FragmentStartBinding, StartFragmentViewModel>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setListeners()
+    }
+
+    private fun setListeners() {
         mViewDataBinding.fab.setOnClickListener {
             AddDialog.newInstance().show(fragmentManager, "add_dialog")
         }

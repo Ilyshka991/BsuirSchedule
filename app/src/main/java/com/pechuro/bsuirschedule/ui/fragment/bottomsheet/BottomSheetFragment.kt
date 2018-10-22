@@ -10,7 +10,6 @@ import com.pechuro.bsuirschedule.R
 
 class BottomSheetFragment : BottomSheetDialogFragment() {
     companion object {
-
         fun newInstance(): BottomSheetFragment =
                 BottomSheetFragment().apply {
                     arguments = Bundle().apply {
@@ -19,7 +18,6 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_bottom_sheet, container, false)
-    }
+                              savedInstanceState: Bundle?): View =
+            inflater.inflate(R.layout.fragment_bottom_sheet, container, false)
 }

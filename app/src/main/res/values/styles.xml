@@ -11,10 +11,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
     <style name="splashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:background">@drawable/background_splash</item>
     </style>

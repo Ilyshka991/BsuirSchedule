@@ -9,7 +9,6 @@ import com.pechuro.bsuirschedule.constant.ScheduleTypes.EXAMS
 import com.pechuro.bsuirschedule.constant.ScheduleTypes.SCHEDULES
 import com.pechuro.bsuirschedule.databinding.ItemListNavBinding
 import com.pechuro.bsuirschedule.databinding.ItemListNavMenuBinding
-import com.pechuro.bsuirschedule.ui.activity.navigation.INavigator
 import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseViewHolder
 
@@ -20,9 +19,8 @@ class NavItemAdapter(private val mContext: Context) : RecyclerView.Adapter<BaseV
         private const val NAV_ITEM = -2
     }
 
-    lateinit var navigator: INavigator
+    lateinit var callback: NavCallback
     private val mItemsList = ArrayList<ScheduleInformation>()
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder =
             when (viewType) {
@@ -60,7 +58,6 @@ class NavItemAdapter(private val mContext: Context) : RecyclerView.Adapter<BaseV
         }
 
         notifyDataSetChanged()
-
     }
 
     inner class ItemViewHolder(private val mBinding: ItemListNavBinding) : BaseViewHolder(mBinding.root) {
@@ -72,7 +69,7 @@ class NavItemAdapter(private val mContext: Context) : RecyclerView.Adapter<BaseV
 
             mBinding.scheduleNameButton.apply {
                 setOnClickListener {
-                    navigator.onNavigate(ScheduleInformation(data.name, data.type))
+                    callback.onNavigate(ScheduleInformation(data.name, data.type))
                 }
 
                 setOnLongClickListener {
@@ -89,5 +86,9 @@ class NavItemAdapter(private val mContext: Context) : RecyclerView.Adapter<BaseV
             mBinding.data = NavItemData(data.name)
             mBinding.executePendingBindings()
         }
+    }
+
+    interface NavCallback {
+        fun onNavigate(info: ScheduleInformation)
     }
 }
