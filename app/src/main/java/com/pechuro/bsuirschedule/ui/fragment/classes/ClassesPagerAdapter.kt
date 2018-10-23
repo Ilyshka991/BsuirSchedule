@@ -3,6 +3,7 @@ package com.pechuro.bsuirschedule.ui.fragment.classes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager.widget.PagerAdapter
 import com.pechuro.bsuirschedule.ui.fragment.classes.dayitems.ClassesDayFragment
 import com.pechuro.bsuirschedule.ui.fragment.classes.transactioninfo.ClassesBaseInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.transactioninfo.impl.ClassesDayInformation
@@ -26,6 +27,8 @@ class ClassesPagerAdapter @Inject constructor(fm: FragmentManager) : FragmentSta
             else -> throw IllegalArgumentException()
         }
     }
+
+    override fun getItemPosition(`object`: Any) = PagerAdapter.POSITION_NONE
 
     override fun getCount() = fragmentsInfo.size
 }

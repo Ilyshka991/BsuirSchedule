@@ -13,7 +13,15 @@
     <string name="error_empty_suggestions">Please, update information</string>
     <string name="error_blank_schedule_name">Please, fill in schedule name</string>
     <string name="error_unknown_schedule">Unknown schedule</string>
+    <string name="show_by_weeks">Show by weeks</string>
+    <string name="show_by_days">Show by days</string>
 
     <string name="title_activity_settings">Settings</string>
+
+    <array name="subgroups">
+        <item>all group</item>
+        <item>1 subgroup</item>
+        <item>2 subgroup</item>
+    </array>
 
 </resources>

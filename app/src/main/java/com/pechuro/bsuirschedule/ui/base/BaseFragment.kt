@@ -20,7 +20,6 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel> : Fragment()
     lateinit var mViewDataBinding: T
     abstract val bindingVariable: Int
 
-    lateinit var mRootView: View
     @get:LayoutRes
     abstract val layoutId: Int
 
@@ -32,8 +31,7 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel> : Fragment()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mViewDataBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
-        mRootView = mViewDataBinding.root
-        return mRootView
+        return mViewDataBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -22,8 +22,11 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
     fun loadClasses(name: String, types: List<Int>) =
             getFromApi(name, types)
 
-    fun getClasses(name: String, type: Int, day: String, week: Int) =
-            scheduleDao.get(name, type, day, week.toString())
+    fun getClasses(name: String, type: Int, day: String, week: Int, subgroup: Int) =
+            scheduleDao.get(name, type, day, week.toString(), if (subgroup == 0) arrayOf(0, 1, 2) else arrayOf(0, subgroup))
+
+    fun getClasses(name: String, type: Int, day: String, subgroup: Int) =
+            scheduleDao.get(name, type, day, if (subgroup == 0) arrayOf(0, 1, 2) else arrayOf(0, subgroup))
 
     fun getClasses(name: String, type: Int) =
             scheduleDao.get(name, type)

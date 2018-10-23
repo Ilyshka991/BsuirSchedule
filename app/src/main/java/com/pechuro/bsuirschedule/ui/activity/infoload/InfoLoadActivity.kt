@@ -26,8 +26,8 @@ class InfoLoadActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mViewModel.navigator = this
-        setupView()
+        setCallback()
+        setListeners()
     }
 
     override fun onSuccess() {
@@ -36,7 +36,11 @@ class InfoLoadActivity :
         finish()
     }
 
-    private fun setupView() {
+    private fun setCallback() {
+        mViewModel.navigator = this
+    }
+
+    private fun setListeners() {
         mViewDataBinding.retryButton.setOnClickListener {
             mViewModel.onRetryClick()
         }

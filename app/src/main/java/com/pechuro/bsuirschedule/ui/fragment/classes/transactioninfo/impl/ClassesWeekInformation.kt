@@ -7,8 +7,7 @@ import com.pechuro.bsuirschedule.ui.fragment.classes.transactioninfo.ClassesBase
 class ClassesWeekInformation(
         name: String, type: Int,
         val day: String,
-        val subgroup: Int = 0
-) : ClassesBaseInformation(name, type) {
+        val subgroupNumber: Int) : ClassesBaseInformation(name, type) {
     constructor(parcel: Parcel) : this(
             parcel.readString() ?: "",
             parcel.readInt(),
@@ -18,7 +17,6 @@ class ClassesWeekInformation(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         super.writeToParcel(parcel, flags)
         parcel.writeString(day)
-        parcel.writeInt(subgroup)
     }
 
     override fun describeContents() = 0

@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.di.module
 
 import com.pechuro.bsuirschedule.di.annotations.ActivityScope
+import com.pechuro.bsuirschedule.ui.activity.editlesson.EditLessonActivity
 import com.pechuro.bsuirschedule.ui.activity.infoload.InfoLoadActivity
 import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivity
 import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivityModule
@@ -8,6 +9,7 @@ import com.pechuro.bsuirschedule.ui.activity.settings.SettingsActivity
 import com.pechuro.bsuirschedule.ui.activity.splash.SplashActivity
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogProvider
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragmentProvider
+import com.pechuro.bsuirschedule.ui.fragment.bottomsheet.OptionsFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.classes.dayitems.ClassesDayFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.classes.weekitems.ClassesWeekFragmentProvider
@@ -30,7 +32,8 @@ abstract class AppActivitiesModule {
         ExamFragmentProvider::class,
         StartFragmentProvider::class,
         AddDialogProvider::class,
-        AddFragmentProvider::class])
+        AddFragmentProvider::class,
+        OptionsFragmentProvider::class])
     abstract fun bindNavigationActivity(): NavigationActivity
 
     @ActivityScope
@@ -44,4 +47,8 @@ abstract class AppActivitiesModule {
     @ActivityScope
     @ContributesAndroidInjector()
     abstract fun bindSettingsActivity(): SettingsActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector()
+    abstract fun bindEditLessonActivity(): EditLessonActivity
 }

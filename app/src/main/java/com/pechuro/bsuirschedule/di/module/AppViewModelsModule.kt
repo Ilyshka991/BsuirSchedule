@@ -3,6 +3,7 @@ package com.pechuro.bsuirschedule.di.module
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.pechuro.bsuirschedule.di.annotations.ViewModelKey
+import com.pechuro.bsuirschedule.ui.activity.editlesson.EditLessonActivityViewModel
 import com.pechuro.bsuirschedule.ui.activity.infoload.InfoLoadActivityViewModel
 import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivityViewModel
 import com.pechuro.bsuirschedule.ui.activity.settings.SettingsActivityViewModel
@@ -78,4 +79,9 @@ abstract class AppViewModelsModule {
     @IntoMap
     @ViewModelKey(SettingsActivityViewModel::class)
     abstract fun settingsActivity(viewModel: SettingsActivityViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(EditLessonActivityViewModel::class)
+    abstract fun editLessonActivity(viewModel: EditLessonActivityViewModel): ViewModel
 }

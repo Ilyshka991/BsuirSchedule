@@ -2,13 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
     android:orientation="vertical"
-    tools:context=".ui.fragment.bottomsheet.BottomSheetFragment">
+    tools:context=".ui.fragment.bottomsheet.ScheduleOptionsFragment">
 
-    <TextView
+    <Button
+        android:id="@+id/bar_options_add"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Test"
-        android:textSize="24sp" />
+        android:layout_height="wrap_content"
+        android:text="Add lesson" />
+
+    <Spinner
+        android:id="@+id/bar_options_subgroup_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:entries="@array/subgroups"
+        android:gravity="center|fill" />
+
+    <Button
+        android:id="@+id/bar_options_view_type"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Show by weeks" />
 </LinearLayout>

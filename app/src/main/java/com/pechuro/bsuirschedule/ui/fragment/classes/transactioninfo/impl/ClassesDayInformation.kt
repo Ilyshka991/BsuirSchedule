@@ -8,7 +8,7 @@ class ClassesDayInformation(
         name: String, type: Int,
         val day: String,
         val week: Int,
-        val subgroup: Int = 0
+        val subgroup: Int
 ) : ClassesBaseInformation(name, type) {
     constructor(parcel: Parcel) : this(
             parcel.readString() ?: "",

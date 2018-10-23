@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentListBinding
+import com.pechuro.bsuirschedule.ui.activity.navigation.FabCommunication
+import com.pechuro.bsuirschedule.ui.activity.navigation.OnFabHide
+import com.pechuro.bsuirschedule.ui.activity.navigation.OnFabShowPos
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
 import com.pechuro.bsuirschedule.ui.fragment.classes.transactioninfo.impl.ClassesWeekInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.weekitems.adapter.ClassesWeekAdapter
@@ -45,6 +48,22 @@ class ClassesWeekFragment : BaseFragment<FragmentListBinding, ClassesWeekViewMod
         setUp()
         subscribeToLiveData()
         loadData()
+        setListeners()
+    }
+
+    private fun setListeners() {
+        mViewDataBinding.recyclerView
+                .addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        val visibleItemCount = mLayoutManager.childCount
+                        val totalItemCount = mLayoutManager.itemCount
+                        val pastVisibleItems = mLayoutManager.findFirstVisibleItemPosition()
+                        if (pastVisibleItems + visibleItemCount >= totalItemCount) {
+                            FabCommunication.publish(if (dy > 0) OnFabHide else OnFabShowPos)
+                        }
+                    }
+                })
     }
 
     private fun loadData() {

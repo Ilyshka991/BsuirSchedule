@@ -15,7 +15,7 @@ class ClassesDayViewModel @Inject constructor(private val repository: ScheduleRe
 
     fun loadData(info: ClassesDayInformation) {
         compositeDisposable.add(
-                repository.getClasses(info.name, info.type, info.day, info.week)
+                repository.getClasses(info.name, info.type, info.day, info.week, info.subgroup)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({

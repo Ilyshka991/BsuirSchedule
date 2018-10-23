@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.constant.ScheduleTypes
 import com.pechuro.bsuirschedule.constant.ScheduleTypes.EMPLOYEE_CLASSES
 import com.pechuro.bsuirschedule.constant.ScheduleTypes.EMPLOYEE_EXAMS
 import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT_CLASSES
@@ -23,11 +24,14 @@ import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT_EXAMS
 import com.pechuro.bsuirschedule.constant.SharedPrefConstants.SCHEDULE_NAME
 import com.pechuro.bsuirschedule.constant.SharedPrefConstants.SCHEDULE_TYPE
 import com.pechuro.bsuirschedule.databinding.ActivityNavigationBinding
+import com.pechuro.bsuirschedule.ui.activity.editlesson.EditLessonActivity
 import com.pechuro.bsuirschedule.ui.activity.navigation.adapter.NavItemAdapter
 import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.activity.settings.SettingsActivity
 import com.pechuro.bsuirschedule.ui.base.BaseActivity
+import com.pechuro.bsuirschedule.ui.custom.OnSwipeTouchListener
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
+import com.pechuro.bsuirschedule.ui.fragment.bottomsheet.ScheduleOptionsFragment
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragment
 import com.pechuro.bsuirschedule.ui.fragment.exam.ExamFragment
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragment
@@ -40,7 +44,8 @@ import javax.inject.Inject
 
 class NavigationActivity :
         BaseActivity<ActivityNavigationBinding, NavigationActivityViewModel>(),
-        HasSupportFragmentInjector, NavItemAdapter.NavCallback, AddDialog.AddDialogCallback {
+        HasSupportFragmentInjector, NavItemAdapter.NavCallback, AddDialog.AddDialogCallback,
+        ScheduleOptionsFragment.ScheduleOptionsCallback {
     companion object {
         fun newIntent(context: Context) = Intent(context, NavigationActivity::class.java)
     }
@@ -60,7 +65,6 @@ class NavigationActivity :
         get() = R.layout.activity_navigation
     override val bindingVariable: Int
         get() = BR.viewModel
-
 
     override fun supportFragmentInjector() = fragmentDispatchingAndroidInjector
 
@@ -116,6 +120,14 @@ class NavigationActivity :
         setupBottomBar()
     }
 
+    override fun addLesson() {
+        val name = defaultSharedPreferences.getString(SCHEDULE_NAME, "")!!
+        val type = defaultSharedPreferences.getInt(SCHEDULE_TYPE, -1)
+
+        val intent = EditLessonActivity.newIntent(this, name, type)
+        startActivity(intent)
+    }
+
     private fun subscribeToLiveData() {
         mViewModel.menuItems.observe(this, Observer {
             mNavAdapter.setItems(it)
@@ -151,10 +163,22 @@ class NavigationActivity :
             }
         }
 
+        mViewDataBinding.bar.setOnTouchListener(object : OnSwipeTouchListener(this) {
+            override fun onSwipeTop() {
+                val type = defaultSharedPreferences.getInt(SCHEDULE_TYPE, -1)
+                if (type == ScheduleTypes.STUDENT_CLASSES || type == ScheduleTypes.EMPLOYEE_CLASSES) {
+                    ScheduleOptionsFragment.newInstance(type).show(supportFragmentManager, "bottom_sheet")
+                }
+            }
+        })
+        mViewDataBinding.barOptions?.setOnClickListener {
+            val type = defaultSharedPreferences.getInt(SCHEDULE_TYPE, -1)
+            ScheduleOptionsFragment.newInstance(type).show(supportFragmentManager, "bottom_sheet")
+        }
+
         mViewDataBinding.fabBack?.setOnClickListener {
             FabCommunication.publish(OnFabClick)
         }
-
         compositeDisposable.addAll(
                 FabCommunication.listen(OnFabShow::class.java).subscribe {
                     mViewDataBinding.fabBack?.show()
@@ -162,20 +186,27 @@ class NavigationActivity :
                 FabCommunication.listen(OnFabHide::class.java).subscribe {
                     mViewDataBinding.fabBack?.hide()
                 })
+
+        mViewDataBinding.barAdd?.setOnClickListener {
+            addLesson()
+        }
     }
 
     private fun setupBottomBar() {
         val type = defaultSharedPreferences.getInt(SCHEDULE_TYPE, -1)
         when (type) {
-            STUDENT_CLASSES -> {
+            STUDENT_CLASSES, EMPLOYEE_CLASSES -> {
                 mViewDataBinding.barOptions?.visibility = View.VISIBLE
                 mViewDataBinding.barAddLayout?.visibility = View.GONE
             }
-            EMPLOYEE_CLASSES, STUDENT_EXAMS, EMPLOYEE_EXAMS -> {
+            STUDENT_EXAMS, EMPLOYEE_EXAMS -> {
                 mViewDataBinding.barOptions?.visibility = View.GONE
                 mViewDataBinding.barAddLayout?.visibility = View.VISIBLE
             }
-            else -> Unit
+            else -> {
+                mViewDataBinding.barOptions?.visibility = View.GONE
+                mViewDataBinding.barAddLayout?.visibility = View.GONE
+            }
         }
 
         mViewDataBinding.fabBack?.hide()
