@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.utils
+package com.pechuro.bsuirschedule.ui.utils
 
 import android.view.View
 import android.view.View.*
@@ -8,13 +8,13 @@ object BindingUtils {
 
     @BindingAdapter("visibility")
     @JvmStatic
-    fun setProgressBarVisibility(view: View, isVisible: Boolean) {
+    fun setVisibilityGone(view: View, isVisible: Boolean) {
         view.visibility = if (isVisible) VISIBLE else GONE
     }
 
     @BindingAdapter("visibility_invisible")
     @JvmStatic
-    fun setVewVisibility(view: View, isVisible: Boolean) {
+    fun setVisibilityInvisible(view: View, isVisible: Boolean) {
         view.visibility = if (isVisible) VISIBLE else INVISIBLE
     }
 }

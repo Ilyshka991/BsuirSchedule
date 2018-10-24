@@ -27,9 +27,9 @@ interface ScheduleApi {
 
     @GET("studentGroup/schedule")
     fun getStudentSchedule(@Query(value = "studentGroup") studentGroup: String)
-            : Single<Response>
+            : Single<ResponseModel>
 
     @GET("portal/employeeSchedule")
     fun getEmployeeSchedule(@Query(value = "employeeId") employeeId: String)
-            : Single<Response>
+            : Single<ResponseModel>
 }

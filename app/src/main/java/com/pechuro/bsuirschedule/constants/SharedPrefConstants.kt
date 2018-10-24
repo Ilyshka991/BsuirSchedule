@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.constant
+package com.pechuro.bsuirschedule.constants
 
 object SharedPrefConstants {
     const val SCHEDULE_NAME = "name"

@@ -1,8 +1,8 @@
 package com.pechuro.bsuirschedule.ui.fragment.classes
 
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
-import com.pechuro.bsuirschedule.utils.addDays
-import com.pechuro.bsuirschedule.utils.getCurrentWeek
+import com.pechuro.bsuirschedule.ui.utils.addDays
+import com.pechuro.bsuirschedule.ui.utils.getCurrentWeek
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject

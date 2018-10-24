@@ -8,11 +8,11 @@ import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.constant.SharedPrefConstants.SUBGROUP_ALL
-import com.pechuro.bsuirschedule.constant.SharedPrefConstants.SUBGROUP_NUMBER
-import com.pechuro.bsuirschedule.constant.SharedPrefConstants.VIEW_TYPE
-import com.pechuro.bsuirschedule.constant.SharedPrefConstants.VIEW_TYPE_DAY
-import com.pechuro.bsuirschedule.constant.SharedPrefConstants.VIEW_TYPE_WEEK
+import com.pechuro.bsuirschedule.constants.SharedPrefConstants.SUBGROUP_ALL
+import com.pechuro.bsuirschedule.constants.SharedPrefConstants.SUBGROUP_NUMBER
+import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE
+import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE_DAY
+import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE_WEEK
 import com.pechuro.bsuirschedule.databinding.FragmentViewpagerBinding
 import com.pechuro.bsuirschedule.ui.activity.navigation.*
 import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation

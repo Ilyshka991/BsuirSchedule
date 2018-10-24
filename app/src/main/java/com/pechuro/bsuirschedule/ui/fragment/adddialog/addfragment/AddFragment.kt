@@ -10,15 +10,14 @@ import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.constant.ScheduleTypes.EMPLOYEE_CLASSES
-import com.pechuro.bsuirschedule.constant.ScheduleTypes.EMPLOYEE_EXAMS
-import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT
-import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT_CLASSES
-import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT_EXAMS
-import com.pechuro.bsuirschedule.constant.SharedPrefConstants
+import com.pechuro.bsuirschedule.constants.ScheduleTypes.EMPLOYEE_CLASSES
+import com.pechuro.bsuirschedule.constants.ScheduleTypes.EMPLOYEE_EXAMS
+import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT
+import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_CLASSES
+import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_EXAMS
+import com.pechuro.bsuirschedule.constants.SharedPrefConstants
 import com.pechuro.bsuirschedule.databinding.FragmentAddBinding
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
-import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
 import org.jetbrains.anko.defaultSharedPreferences
 
 class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), AddFragmentNavigator {
@@ -43,22 +42,22 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), Ad
         get() = R.layout.fragment_add
 
     private var callback: AddFragmentCallback? = null
-    private val scheduleType: Int by lazy {
-        arguments?.getInt(ARG_SCHEDULE_TYPE) ?: throw IllegalStateException()
+    private val scheduleType: Int? by lazy {
+        arguments?.getInt(ARG_SCHEDULE_TYPE)
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        callback = parentFragment as? AddDialog
+        callback = parentFragment as? AddFragmentCallback
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mViewModel.navigator = this
-        if (savedInstanceState == null) {
-            mViewModel.loadSuggestions(scheduleType)
+        if (savedInstanceState == null && scheduleType != null) {
+            mViewModel.loadSuggestions(scheduleType!!)
         }
-        setupView()
+        setListeners()
         subscribeToLiveData()
     }
 
@@ -94,25 +93,25 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), Ad
         callback?.onDismiss()
     }
 
-    private fun setupView() {
-        fun loadSchedule() {
-            mViewDataBinding.buttonOk.isEnabled = false
+    private fun loadSchedule() {
+        mViewDataBinding.buttonOk.isEnabled = false
 
-            val scheduleName = mViewDataBinding.textInput.text.toString()
+        val scheduleName = mViewDataBinding.textInput.text.toString()
 
-            val types = arrayListOf<Int>()
-            if (mViewDataBinding.typeClasses.isChecked) {
-                types.add(if (scheduleType == STUDENT)
-                    STUDENT_CLASSES else EMPLOYEE_CLASSES)
-            }
-            if (mViewDataBinding.typeExams.isChecked) {
-                types.add(if (scheduleType == STUDENT)
-                    STUDENT_EXAMS else EMPLOYEE_EXAMS)
-            }
-
-            mViewModel.loadSchedule(scheduleName, types)
+        val types = arrayListOf<Int>()
+        if (mViewDataBinding.typeClasses.isChecked) {
+            types.add(if (scheduleType == STUDENT)
+                STUDENT_CLASSES else EMPLOYEE_CLASSES)
+        }
+        if (mViewDataBinding.typeExams.isChecked) {
+            types.add(if (scheduleType == STUDENT)
+                STUDENT_EXAMS else EMPLOYEE_EXAMS)
         }
 
+        mViewModel.loadSchedule(scheduleName, types)
+    }
+
+    private fun setListeners() {
         mViewDataBinding.buttonOk.setOnClickListener {
             loadSchedule()
         }

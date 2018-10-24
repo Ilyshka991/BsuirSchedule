@@ -14,7 +14,7 @@ class EmployeeRepository @Inject constructor(private val api: EmployeeApi,
             .filter { it.isNotEmpty() }.toSingle()
 
     fun load(): Single<List<Employee>> = api.get()
-            .doOnSuccess { storeInDb(it) }
+            .doOnSuccess { storeInCache(it) }
 
     fun delete() = dao.delete()
 
@@ -24,5 +24,5 @@ class EmployeeRepository @Inject constructor(private val api: EmployeeApi,
 
     fun getIdByFio(fio: String) = dao.getId(fio)
 
-    private fun storeInDb(groups: List<Employee>) = dao.insert(groups)
+    private fun storeInCache(groups: List<Employee>) = dao.insert(groups)
 }

@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentViewpagerBinding
-import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivity
 import com.pechuro.bsuirschedule.ui.base.BaseDialog
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragment
 import javax.inject.Inject
@@ -38,7 +37,7 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>(), Ad
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        mNavigator = context as? NavigationActivity
+        mNavigator = context as? AddDialogCallback
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

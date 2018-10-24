@@ -11,13 +11,12 @@ import android.widget.Spinner
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.constant.ScheduleTypes
-import com.pechuro.bsuirschedule.constant.SharedPrefConstants.SUBGROUP_ALL
-import com.pechuro.bsuirschedule.constant.SharedPrefConstants.SUBGROUP_NUMBER
-import com.pechuro.bsuirschedule.constant.SharedPrefConstants.VIEW_TYPE
-import com.pechuro.bsuirschedule.constant.SharedPrefConstants.VIEW_TYPE_DAY
-import com.pechuro.bsuirschedule.constant.SharedPrefConstants.VIEW_TYPE_WEEK
-import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivity
+import com.pechuro.bsuirschedule.constants.ScheduleTypes
+import com.pechuro.bsuirschedule.constants.SharedPrefConstants.SUBGROUP_ALL
+import com.pechuro.bsuirschedule.constants.SharedPrefConstants.SUBGROUP_NUMBER
+import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE
+import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE_DAY
+import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE_WEEK
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -45,7 +44,7 @@ class ScheduleOptionsFragment : BottomSheetDialogFragment() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        callback = context as? NavigationActivity
+        callback = context as? ScheduleOptionsCallback
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

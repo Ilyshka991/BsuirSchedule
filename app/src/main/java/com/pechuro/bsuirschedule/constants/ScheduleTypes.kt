@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.constant
+package com.pechuro.bsuirschedule.constants
 
 object ScheduleTypes {
     const val STUDENT_CLASSES = 0

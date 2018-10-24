@@ -5,20 +5,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.constant.ScheduleTypes.EXAMS
-import com.pechuro.bsuirschedule.constant.ScheduleTypes.SCHEDULES
+import com.pechuro.bsuirschedule.constants.ScheduleTypes.EXAMS
+import com.pechuro.bsuirschedule.constants.ScheduleTypes.SCHEDULES
 import com.pechuro.bsuirschedule.databinding.ItemListNavBinding
 import com.pechuro.bsuirschedule.databinding.ItemListNavMenuBinding
 import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseViewHolder
 
+private const val NAV_ITEM_MENU = -1
+private const val NAV_ITEM = -2
 
 class NavItemAdapter(private val mContext: Context) : RecyclerView.Adapter<BaseViewHolder>() {
-    companion object {
-        private const val NAV_ITEM_MENU = -1
-        private const val NAV_ITEM = -2
-    }
-
     lateinit var callback: NavCallback
     private val mItemsList = ArrayList<ScheduleInformation>()
 
@@ -37,9 +34,8 @@ class NavItemAdapter(private val mContext: Context) : RecyclerView.Adapter<BaseV
             }
 
 
-    override fun getItemViewType(position: Int): Int {
-        return if (mItemsList[position].type == NAV_ITEM_MENU) NAV_ITEM_MENU else NAV_ITEM
-    }
+    override fun getItemViewType(position: Int) =
+            if (mItemsList[position].type == NAV_ITEM_MENU) NAV_ITEM_MENU else NAV_ITEM
 
     override fun getItemCount(): Int = mItemsList.size
 

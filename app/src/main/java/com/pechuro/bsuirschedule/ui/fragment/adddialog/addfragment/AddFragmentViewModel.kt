@@ -3,8 +3,8 @@ package com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.constant.ScheduleTypes.EMPLOYEE
-import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT
+import com.pechuro.bsuirschedule.constants.ScheduleTypes.EMPLOYEE
+import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT
 import com.pechuro.bsuirschedule.data.EmployeeRepository
 import com.pechuro.bsuirschedule.data.GroupRepository
 import com.pechuro.bsuirschedule.data.ScheduleRepository

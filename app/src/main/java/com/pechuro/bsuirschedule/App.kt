@@ -19,6 +19,7 @@ class App : Application(), HasActivityInjector {
              return
          }
          LeakCanary.install(this)*/
+
         DaggerAppComponent.builder().application(this).build().inject(this)
     }
 

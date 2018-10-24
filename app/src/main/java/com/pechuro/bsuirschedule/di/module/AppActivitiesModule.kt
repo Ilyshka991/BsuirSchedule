@@ -11,8 +11,7 @@ import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogProvider
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.bottomsheet.OptionsFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragmentProvider
-import com.pechuro.bsuirschedule.ui.fragment.classes.dayitems.ClassesDayFragmentProvider
-import com.pechuro.bsuirschedule.ui.fragment.classes.weekitems.ClassesWeekFragmentProvider
+import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.ClassesItemFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.exam.ExamFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragmentProvider
 import dagger.Module
@@ -27,8 +26,7 @@ abstract class AppActivitiesModule {
     @ContributesAndroidInjector(modules = [
         NavigationActivityModule::class,
         ClassesFragmentProvider::class,
-        ClassesDayFragmentProvider::class,
-        ClassesWeekFragmentProvider::class,
+        ClassesItemFragmentProvider::class,
         ExamFragmentProvider::class,
         StartFragmentProvider::class,
         AddDialogProvider::class,

@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.ui.fragment.classes.weekitems
+package com.pechuro.bsuirschedule.ui.fragment.classes.classesitem
 
 import android.os.Bundle
 import android.view.View
@@ -13,19 +13,19 @@ import com.pechuro.bsuirschedule.ui.activity.navigation.FabCommunication
 import com.pechuro.bsuirschedule.ui.activity.navigation.OnFabHide
 import com.pechuro.bsuirschedule.ui.activity.navigation.OnFabShowPos
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
-import com.pechuro.bsuirschedule.ui.fragment.classes.transactioninfo.impl.ClassesWeekInformation
-import com.pechuro.bsuirschedule.ui.fragment.classes.weekitems.adapter.ClassesWeekAdapter
+import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.adapter.ClassesAdapter
+import com.pechuro.bsuirschedule.ui.fragment.classes.transactioninfo.ClassesBaseInformation
 import javax.inject.Inject
 
-class ClassesWeekFragment : BaseFragment<FragmentListBinding, ClassesWeekViewModel>() {
+class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewModel>() {
     companion object {
         const val ARG_INFO = "arg_information"
 
-        fun newInstance(info: ClassesWeekInformation): ClassesWeekFragment {
+        fun newInstance(info: ClassesBaseInformation): ClassesItemFragment {
             val args = Bundle()
             args.putParcelable(ARG_INFO, info)
 
-            val fragment = ClassesWeekFragment()
+            val fragment = ClassesItemFragment()
             fragment.arguments = args
             return fragment
         }
@@ -34,10 +34,10 @@ class ClassesWeekFragment : BaseFragment<FragmentListBinding, ClassesWeekViewMod
     @Inject
     lateinit var mLayoutManager: LinearLayoutManager
     @Inject
-    lateinit var mAdapter: ClassesWeekAdapter
+    lateinit var mAdapter: ClassesAdapter
 
-    override val mViewModel: ClassesWeekViewModel
-        get() = ViewModelProviders.of(this, mViewModelFactory).get(ClassesWeekViewModel::class.java)
+    override val mViewModel: ClassesItemViewModel
+        get() = ViewModelProviders.of(this, mViewModelFactory).get(ClassesItemViewModel::class.java)
     override val bindingVariable: Int
         get() = BR._all
     override val layoutId: Int
@@ -67,7 +67,7 @@ class ClassesWeekFragment : BaseFragment<FragmentListBinding, ClassesWeekViewMod
     }
 
     private fun loadData() {
-        val info: ClassesWeekInformation? = arguments?.getParcelable(ARG_INFO)
+        val info: ClassesBaseInformation? = arguments?.getParcelable(ARG_INFO)
         info?.let { mViewModel.loadData(it) }
     }
 

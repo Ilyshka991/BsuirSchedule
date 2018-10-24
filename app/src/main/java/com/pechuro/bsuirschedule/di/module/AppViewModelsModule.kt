@@ -12,8 +12,7 @@ import com.pechuro.bsuirschedule.ui.base.ViewModelFactory
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogViewModel
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragmentViewModel
-import com.pechuro.bsuirschedule.ui.fragment.classes.dayitems.ClassesDayViewModel
-import com.pechuro.bsuirschedule.ui.fragment.classes.weekitems.ClassesWeekViewModel
+import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.ClassesItemViewModel
 import com.pechuro.bsuirschedule.ui.fragment.exam.ExamViewModel
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragmentViewModel
 import dagger.Binds
@@ -37,13 +36,8 @@ abstract class AppViewModelsModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(ClassesDayViewModel::class)
-    abstract fun listClassesDayFragment(viewModel: ClassesDayViewModel): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(ClassesWeekViewModel::class)
-    abstract fun listClassesWeekFragment(viewModel: ClassesWeekViewModel): ViewModel
+    @ViewModelKey(ClassesItemViewModel::class)
+    abstract fun listClassesWeekFragment(viewModel: ClassesItemViewModel): ViewModel
 
     @Binds
     @IntoMap

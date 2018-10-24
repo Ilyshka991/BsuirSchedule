@@ -16,13 +16,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.constant.ScheduleTypes
-import com.pechuro.bsuirschedule.constant.ScheduleTypes.EMPLOYEE_CLASSES
-import com.pechuro.bsuirschedule.constant.ScheduleTypes.EMPLOYEE_EXAMS
-import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT_CLASSES
-import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT_EXAMS
-import com.pechuro.bsuirschedule.constant.SharedPrefConstants.SCHEDULE_NAME
-import com.pechuro.bsuirschedule.constant.SharedPrefConstants.SCHEDULE_TYPE
+import com.pechuro.bsuirschedule.constants.ScheduleTypes
+import com.pechuro.bsuirschedule.constants.ScheduleTypes.EMPLOYEE_CLASSES
+import com.pechuro.bsuirschedule.constants.ScheduleTypes.EMPLOYEE_EXAMS
+import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_CLASSES
+import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_EXAMS
+import com.pechuro.bsuirschedule.constants.SharedPrefConstants.SCHEDULE_NAME
+import com.pechuro.bsuirschedule.constants.SharedPrefConstants.SCHEDULE_TYPE
 import com.pechuro.bsuirschedule.databinding.ActivityNavigationBinding
 import com.pechuro.bsuirschedule.ui.activity.editlesson.EditLessonActivity
 import com.pechuro.bsuirschedule.ui.activity.navigation.adapter.NavItemAdapter
@@ -71,6 +71,7 @@ class NavigationActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupView()
+        setCallback()
         setListeners()
         if (savedInstanceState == null) {
             homeFragment()
@@ -121,8 +122,8 @@ class NavigationActivity :
     }
 
     override fun addLesson() {
-        val name = defaultSharedPreferences.getString(SCHEDULE_NAME, "")!!
-        val type = defaultSharedPreferences.getInt(SCHEDULE_TYPE, -1)
+        val name = getCurrentScheduleName()!!
+        val type = getCurrentScheduleType()
 
         val intent = EditLessonActivity.newIntent(this, name, type)
         startActivity(intent)
@@ -137,11 +138,13 @@ class NavigationActivity :
     private fun setupView() {
         setSupportActionBar(bar)
 
-        mNavAdapter.callback = this
-
         mLayoutManager.orientation = RecyclerView.VERTICAL
         mViewDataBinding.navItemList?.layoutManager = mLayoutManager
         mViewDataBinding.navItemList?.adapter = mNavAdapter
+    }
+
+    private fun setCallback() {
+        mNavAdapter.callback = this
     }
 
     private fun setListeners() {
@@ -165,14 +168,14 @@ class NavigationActivity :
 
         mViewDataBinding.bar.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeTop() {
-                val type = defaultSharedPreferences.getInt(SCHEDULE_TYPE, -1)
+                val type = getCurrentScheduleType()
                 if (type == ScheduleTypes.STUDENT_CLASSES || type == ScheduleTypes.EMPLOYEE_CLASSES) {
                     ScheduleOptionsFragment.newInstance(type).show(supportFragmentManager, "bottom_sheet")
                 }
             }
         })
         mViewDataBinding.barOptions?.setOnClickListener {
-            val type = defaultSharedPreferences.getInt(SCHEDULE_TYPE, -1)
+            val type = getCurrentScheduleType()
             ScheduleOptionsFragment.newInstance(type).show(supportFragmentManager, "bottom_sheet")
         }
 
@@ -193,7 +196,7 @@ class NavigationActivity :
     }
 
     private fun setupBottomBar() {
-        val type = defaultSharedPreferences.getInt(SCHEDULE_TYPE, -1)
+        val type = getCurrentScheduleType()
         when (type) {
             STUDENT_CLASSES, EMPLOYEE_CLASSES -> {
                 mViewDataBinding.barOptions?.visibility = View.VISIBLE
@@ -213,8 +216,8 @@ class NavigationActivity :
     }
 
     private fun homeFragment() {
-        val name = defaultSharedPreferences.getString(SCHEDULE_NAME, "")
-        val type = defaultSharedPreferences.getInt(SCHEDULE_TYPE, -1)
+        val name = getCurrentScheduleName()
+        val type = getCurrentScheduleType()
 
         val fragment = if (name.isNullOrEmpty() || type == -1) {
             StartFragment.newInstance()
@@ -257,4 +260,8 @@ class NavigationActivity :
             action.invoke()
         }
     }
+
+    private fun getCurrentScheduleName() = defaultSharedPreferences.getString(SCHEDULE_NAME, "")
+
+    private fun getCurrentScheduleType() = defaultSharedPreferences.getInt(SCHEDULE_TYPE, -1)
 }

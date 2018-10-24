@@ -2,8 +2,8 @@ package com.pechuro.bsuirschedule.ui.fragment.adddialog
 
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.pechuro.bsuirschedule.constant.ScheduleTypes.EMPLOYEE
-import com.pechuro.bsuirschedule.constant.ScheduleTypes.STUDENT
+import com.pechuro.bsuirschedule.constants.ScheduleTypes.EMPLOYEE
+import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragment
 import javax.inject.Inject
 
