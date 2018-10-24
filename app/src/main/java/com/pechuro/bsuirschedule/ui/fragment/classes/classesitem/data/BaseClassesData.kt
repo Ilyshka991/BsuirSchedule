@@ -1,3 +1,3 @@
 package com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data
 
-open class BaseClassesData
+abstract class BaseClassesData

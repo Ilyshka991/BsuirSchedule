@@ -8,13 +8,13 @@ import com.pechuro.bsuirschedule.ui.activity.infoload.InfoLoadActivityViewModel
 import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivityViewModel
 import com.pechuro.bsuirschedule.ui.activity.settings.SettingsActivityViewModel
 import com.pechuro.bsuirschedule.ui.activity.splash.SplashActivityViewModel
-import com.pechuro.bsuirschedule.ui.base.ViewModelFactory
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogViewModel
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.ClassesItemViewModel
 import com.pechuro.bsuirschedule.ui.fragment.exam.ExamViewModel
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragmentViewModel
+import com.pechuro.bsuirschedule.ui.utils.ViewModelFactory
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
