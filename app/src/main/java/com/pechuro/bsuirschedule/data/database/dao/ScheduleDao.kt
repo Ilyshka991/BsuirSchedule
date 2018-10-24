@@ -41,6 +41,23 @@ interface ScheduleDao {
             "ON schedule_item.schedule_id = all_schedules._id " +
             "WHERE all_schedules.name = :name " +
             "AND all_schedules.type = :type " +
+            "AND schedule_item.week_day = :day")
+    fun get(name: String, type: Int, day: String): Single<List<ScheduleItem>>
+
+    @Query("SELECT * FROM schedule_item " +
+            "JOIN all_schedules " +
+            "ON schedule_item.schedule_id = all_schedules._id " +
+            "WHERE all_schedules.name = :name " +
+            "AND all_schedules.type = :type " +
+            "AND schedule_item.week_day = :day " +
+            "AND weekNumber LIKE '%' || :week || '%'")
+    fun get(name: String, type: Int, day: String, week: String): Single<List<ScheduleItem>>
+
+    @Query("SELECT * FROM schedule_item " +
+            "JOIN all_schedules " +
+            "ON schedule_item.schedule_id = all_schedules._id " +
+            "WHERE all_schedules.name = :name " +
+            "AND all_schedules.type = :type " +
             "AND schedule_item.week_day = :day " +
             "AND subgroupNumber IN (:subgroups)")
     fun get(name: String, type: Int, day: String, subgroups: Array<Int>): Single<List<ScheduleItem>>

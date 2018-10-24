@@ -1,10 +1,10 @@
-package com.pechuro.bsuirschedule.ui.fragment.classes.transactioninfo.impl
+package com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.pechuro.bsuirschedule.ui.fragment.classes.transactioninfo.ClassesBaseInformation
+import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.ClassesBaseInformation
 
-class ClassesDayInformation(
+class StudentClassesDayInformation(
         name: String, type: Int,
         val day: String,
         val week: Int,
@@ -26,11 +26,11 @@ class ClassesDayInformation(
 
     override fun describeContents() = 0
 
-    companion object CREATOR : Parcelable.Creator<ClassesDayInformation> {
+    companion object CREATOR : Parcelable.Creator<StudentClassesDayInformation> {
         override fun createFromParcel(parcel: Parcel) =
-                ClassesDayInformation(parcel)
+                StudentClassesDayInformation(parcel)
 
-        override fun newArray(size: Int): Array<ClassesDayInformation?> =
+        override fun newArray(size: Int): Array<StudentClassesDayInformation?> =
                 arrayOfNulls(size)
     }
 }

@@ -8,6 +8,7 @@ import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.constants.ScheduleTypes
 import com.pechuro.bsuirschedule.constants.SharedPrefConstants.SUBGROUP_ALL
 import com.pechuro.bsuirschedule.constants.SharedPrefConstants.SUBGROUP_NUMBER
 import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE
@@ -17,9 +18,11 @@ import com.pechuro.bsuirschedule.databinding.FragmentViewpagerBinding
 import com.pechuro.bsuirschedule.ui.activity.navigation.*
 import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
-import com.pechuro.bsuirschedule.ui.fragment.classes.transactioninfo.ClassesBaseInformation
-import com.pechuro.bsuirschedule.ui.fragment.classes.transactioninfo.impl.ClassesDayInformation
-import com.pechuro.bsuirschedule.ui.fragment.classes.transactioninfo.impl.ClassesWeekInformation
+import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.ClassesBaseInformation
+import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.EmployeeClassesDayInformation
+import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.EmployeeClassesWeekInformation
+import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.StudentClassesDayInformation
+import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.StudentClassesWeekInformation
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
@@ -70,19 +73,73 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
         inflateLayout()
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        compositeDisposable.clear()
+    }
+
+    private fun inflateLayout(currentItemPosition: Int = 0) {
+        val info = mutableListOf<ClassesBaseInformation>()
+
+        mViewDataBinding.tabLayout.removeAllTabs()
+
+        when (viewType) {
+            VIEW_TYPE_DAY -> {
+                for (i in 0 until NUMBER_OF_TABS) {
+                    val (day, week, dayRu) = mViewModel.getTabDate(i)
+                    mViewDataBinding.tabLayout.addTab(mViewDataBinding.tabLayout.newTab()
+                            .setText(getString(R.string.schedule_tab_text, day, week)).setTag(dayRu))
+
+                    when (scheduleType) {
+                        ScheduleTypes.STUDENT_CLASSES -> {
+                            info.add(StudentClassesDayInformation(scheduleName, scheduleType, dayRu, week, subgroupNumber))
+                        }
+                        ScheduleTypes.EMPLOYEE_CLASSES -> {
+                            info.add(EmployeeClassesDayInformation(scheduleName, scheduleType, dayRu, week))
+                        }
+                    }
+                }
+            }
+            VIEW_TYPE_WEEK -> {
+                for (i in 0..6) {
+                    val (weekday, dayRu) = mViewModel.getWeekday(i)
+                    mViewDataBinding.tabLayout.addTab(mViewDataBinding.tabLayout.newTab()
+                            .setText(weekday).setTag(dayRu))
+
+                    when (scheduleType) {
+                        ScheduleTypes.STUDENT_CLASSES -> {
+                            info.add(StudentClassesWeekInformation(scheduleName, scheduleType, dayRu, subgroupNumber))
+                        }
+                        ScheduleTypes.EMPLOYEE_CLASSES -> {
+                            info.add(EmployeeClassesWeekInformation(scheduleName, scheduleType, dayRu))
+                        }
+                    }
+                }
+            }
+        }
+
+        mViewDataBinding.viewPager.currentItem = currentItemPosition
+
+        mPagerAdapter.fragmentsInfo = info
+    }
+
     private fun initValues() {
         viewType = sharedPref.getInteger(VIEW_TYPE, VIEW_TYPE_DAY).get()
         subgroupNumber = sharedPref.getInteger(SUBGROUP_NUMBER, SUBGROUP_ALL).get()
     }
 
     private fun setListeners() {
-        compositeDisposable.add(
+        compositeDisposable.addAll(
                 FabCommunication.listen(OnFabClick::class.java)
                         .subscribe {
                             mViewDataBinding.viewPager.setCurrentItem(0, true)
-                        })
+                        },
+                FabCommunication.listen(OnFabShowPos::class.java).subscribe {
+                    if (mViewDataBinding.viewPager.currentItem != 0) {
+                        FabCommunication.publish(OnFabShow)
+                    }
+                },
 
-        compositeDisposable.addAll(
                 sharedPref.getInteger(VIEW_TYPE).asObservable().subscribe {
                     if (viewType != it) {
                         viewType = it
@@ -100,59 +157,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
                         subgroupNumber = it
                         inflateLayout(mViewDataBinding.viewPager.currentItem)
                     }
-                }
-        )
-
-        compositeDisposable.addAll(
-                FabCommunication.listen(OnFabShowPos::class.java).subscribe {
-                    if (mViewDataBinding.viewPager.currentItem != 0) {
-                        FabCommunication.publish(OnFabShow)
-                    }
                 })
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        compositeDisposable.clear()
-    }
-
-    private fun inflateLayout(currentItemPosition: Int = 0) {
-        val info = mutableListOf<ClassesBaseInformation>()
-
-        mViewDataBinding.tabLayout.removeAllTabs()
-
-        when (viewType) {
-            VIEW_TYPE_DAY -> {
-                for (i in 0 until NUMBER_OF_TABS) {
-                    val (day, week, dayRu) = mViewModel.getTabDate(i)
-                    info.add(ClassesDayInformation(scheduleName, scheduleType, dayRu, week, subgroupNumber))
-                    mViewDataBinding.tabLayout.addTab(mViewDataBinding.tabLayout.newTab()
-                            .setText(getString(R.string.schedule_tab_text, day, week)).setTag(dayRu))
-
-                }
-            }
-            VIEW_TYPE_WEEK -> {
-                for (i in 0..6) {
-                    val (weekday, dayRu) = mViewModel.getWeekday(i)
-                    info.add(ClassesWeekInformation(scheduleName, scheduleType, dayRu, subgroupNumber))
-                    mViewDataBinding.tabLayout.addTab(mViewDataBinding.tabLayout.newTab()
-                            .setText(weekday).setTag(dayRu))
-                }
-            }
-        }
-
-        mViewDataBinding.viewPager.currentItem = currentItemPosition
-
-        mPagerAdapter.fragmentsInfo = info
-    }
-
-    private fun setupView() {
-        mViewDataBinding.viewPager.adapter = mPagerAdapter
-
-        mViewDataBinding.viewPager
-                .addOnPageChangeListener(
-                        TabLayout.TabLayoutOnPageChangeListener(
-                                mViewDataBinding.tabLayout))
 
         mViewDataBinding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab) {
@@ -181,6 +186,15 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
                 FabCommunication.publish(if (position == 0) OnFabHide else OnFabShow)
             }
         })
+    }
+
+    private fun setupView() {
+        mViewDataBinding.viewPager.adapter = mPagerAdapter
+
+        mViewDataBinding.viewPager
+                .addOnPageChangeListener(
+                        TabLayout.TabLayoutOnPageChangeListener(
+                                mViewDataBinding.tabLayout))
     }
 
     private fun String.getDayIndex() = when (this) {

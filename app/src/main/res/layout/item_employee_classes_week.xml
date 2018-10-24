@@ -6,7 +6,7 @@
 
         <variable
             name="data"
-            type="com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.StudentClassesDayData" />
+            type="com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.EmployeeClassesWeekData" />
     </data>
 
     <androidx.cardview.widget.CardView

@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.ui.fragment.classes.transactioninfo
+package com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation
 
 import android.os.Parcel
 import android.os.Parcelable

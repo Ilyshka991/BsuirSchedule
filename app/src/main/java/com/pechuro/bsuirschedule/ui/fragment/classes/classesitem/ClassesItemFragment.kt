@@ -13,8 +13,8 @@ import com.pechuro.bsuirschedule.ui.activity.navigation.FabCommunication
 import com.pechuro.bsuirschedule.ui.activity.navigation.OnFabHide
 import com.pechuro.bsuirschedule.ui.activity.navigation.OnFabShowPos
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
+import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.ClassesBaseInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.adapter.ClassesAdapter
-import com.pechuro.bsuirschedule.ui.fragment.classes.transactioninfo.ClassesBaseInformation
 import javax.inject.Inject
 
 class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewModel>() {
@@ -45,7 +45,7 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUp()
+        setupView()
         subscribeToLiveData()
         loadData()
         setListeners()
@@ -71,7 +71,7 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
         info?.let { mViewModel.loadData(it) }
     }
 
-    private fun setUp() {
+    private fun setupView() {
         mLayoutManager.orientation = RecyclerView.VERTICAL
         mViewDataBinding.recyclerView.layoutManager = mLayoutManager
         mViewDataBinding.recyclerView.adapter = mAdapter
