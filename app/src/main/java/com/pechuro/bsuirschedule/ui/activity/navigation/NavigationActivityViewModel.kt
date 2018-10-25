@@ -14,6 +14,7 @@ import javax.inject.Inject
 class NavigationActivityViewModel @Inject constructor(
         private val repository: ScheduleRepository) : BaseViewModel() {
     val menuItems = MutableLiveData<Map<Int, List<ScheduleInformation>>>()
+    lateinit var mNavigator: NavNavigator
 
     init {
         loadMenuItems()
@@ -21,14 +22,46 @@ class NavigationActivityViewModel @Inject constructor(
 
     private fun loadMenuItems() {
         compositeDisposable.add(repository.getSchedules()
-                .map { it.toMap() }
-                .subscribeOn(Schedulers.io())
+                .map {
+                    checkUpdate(it)
+                    it.toMap()
+                }.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     menuItems.value = it
                 }, {}))
     }
 
+    fun updateSchedule(schedule: Schedule) =
+            compositeDisposable.add(repository.update(schedule)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        mNavigator.onScheduleUpdated(schedule.name, schedule.type)
+                    }, {
+                        mNavigator.onScheduleUpdateFail(schedule.name, schedule.type)
+                    })
+            )
+
+    private fun checkUpdate(schedules: List<Schedule>) {
+        schedules
+                .filter {
+                    it.type == ScheduleTypes.STUDENT_CLASSES ||
+                            it.type == ScheduleTypes.STUDENT_EXAMS
+                }
+                .forEach { info ->
+                    compositeDisposable.add(
+                            repository.getLastUpdate(info.name)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe({
+                                        val lastUpdate = it.lastUpdateDate
+                                        if (lastUpdate != info.lastUpdate) {
+                                            mNavigator.onRequestUpdate(info)
+                                        }
+                                    }, {}))
+                }
+    }
 
     private fun List<Schedule>.toMap(): Map<Int, List<ScheduleInformation>> {
         val map = mutableMapOf<Int, List<ScheduleInformation>>()

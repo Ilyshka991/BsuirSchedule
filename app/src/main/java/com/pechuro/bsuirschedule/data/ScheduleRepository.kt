@@ -6,8 +6,11 @@ import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_CLASSES
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_EXAMS
 import com.pechuro.bsuirschedule.data.database.dao.EmployeeDao
 import com.pechuro.bsuirschedule.data.database.dao.ScheduleDao
+import com.pechuro.bsuirschedule.data.entity.Schedule
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 import com.pechuro.bsuirschedule.data.entity.complex.Classes
+import com.pechuro.bsuirschedule.data.network.LastUpdateResponse
+import com.pechuro.bsuirschedule.data.network.ResponseModel
 import com.pechuro.bsuirschedule.data.network.ScheduleApi
 import com.pechuro.bsuirschedule.data.network.ScheduleResponse
 import io.reactivex.Single
@@ -17,8 +20,33 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
                                              private val scheduleDao: ScheduleDao,
                                              private val employeeDao: EmployeeDao) {
 
-    fun loadClasses(name: String, types: List<Int>) =
-            getFromApi(name, types)
+    fun loadClasses(name: String, types: List<Int>): Single<MutableList<Classes>> =
+            Single.fromCallable {
+                val response = getFromApi(name, types[0])
+
+                val lastUpdate = getLastUpdate(name)
+                        .onErrorReturn { LastUpdateResponse("") }
+                        .blockingGet().lastUpdateDate
+
+                delete(name, types)
+
+                val classesList = mutableListOf<Classes>()
+                types.forEach { type ->
+                    classesList.add(transformResponse(name, type, lastUpdate, response))
+                }
+                classesList
+            }.doOnSuccess { storeInCache(it) }
+
+    fun update(schedule: Schedule): Single<Classes> =
+            Single.fromCallable {
+                val response = getFromApi(schedule.name, schedule.type)
+
+                val lastUpdate = getLastUpdate(schedule.name)
+                        .onErrorReturn { LastUpdateResponse("") }
+                        .blockingGet().lastUpdateDate
+
+                transformResponse(schedule.name, schedule.type, lastUpdate, response, schedule.id)
+            }.doOnSuccess { updateCache(it) }
 
     fun getClasses(name: String, type: Int) =
             scheduleDao.get(name, type)
@@ -41,8 +69,11 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
 
     fun delete(type: Int) = scheduleDao.delete(type)
 
-    private fun getFromApi(name: String, types: List<Int>): Single<MutableList<Classes>> {
+    fun delete(name: String, types: List<Int>) = types.forEach { scheduleDao.delete(name, it) }
 
+    fun getLastUpdate(name: String): Single<LastUpdateResponse> = api.getLastUpdateDate(name)
+
+    private fun transformResponse(name: String, type: Int, lastUpdate: String, response: ResponseModel, id: Int = -1): Classes {
         fun getScheduleItems(response: List<ScheduleResponse>?): List<ScheduleItem> {
             val scheduleItems = ArrayList<ScheduleItem>()
 
@@ -56,43 +87,38 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
             return scheduleItems
         }
 
-        fun deleteLastSchedules() = types.forEach { scheduleDao.delete(name, it) }
+        val classes = Classes(name, type, lastUpdate)
 
-        return Single.fromCallable {
+        if (id != -1) {
+            classes.id = id
+        }
 
-            val observable = when (types[0]) {
-                STUDENT_CLASSES, STUDENT_EXAMS ->
-                    api.getStudentSchedule(name)
-                EMPLOYEE_CLASSES, EMPLOYEE_EXAMS -> {
-                    val id = employeeDao.getId(name).blockingGet()
-                    api.getEmployeeSchedule(id)
-                }
-                else -> throw IllegalStateException()
-            }
+        classes.schedule = when (classes.type) {
+            STUDENT_CLASSES, EMPLOYEE_CLASSES ->
+                getScheduleItems(response.schedule)
+            STUDENT_EXAMS, EMPLOYEE_EXAMS ->
+                getScheduleItems(response.exam)
+            else -> throw IllegalStateException()
+        }
 
-            val response = observable.blockingGet()
-
-            val lastUpdate = api.getLastUpdateDate(name).blockingGet().lastUpdateDate
-
-            deleteLastSchedules()
-
-            val classesList = mutableListOf<Classes>()
-            types.forEach { type ->
-                val classes = Classes(name, type, lastUpdate)
-                when (type) {
-                    STUDENT_CLASSES, EMPLOYEE_CLASSES ->
-                        classes.schedule = getScheduleItems(response.schedule)
-                    STUDENT_EXAMS, EMPLOYEE_EXAMS ->
-                        classes.schedule = getScheduleItems(response.exam)
-                }
-                classesList.add(classes)
-            }
-            classesList
-        }.doOnSuccess { storeInCache(it) }
+        return classes
     }
+
+    private fun getFromApi(name: String, type: Int) = when (type) {
+        STUDENT_CLASSES, STUDENT_EXAMS ->
+            api.getStudentSchedule(name)
+        EMPLOYEE_CLASSES, EMPLOYEE_EXAMS -> {
+            val id = employeeDao.getId(name).blockingGet()
+            api.getEmployeeSchedule(id)
+        }
+        else -> throw IllegalStateException()
+    }.blockingGet()
 
     private fun storeInCache(schedule: MutableList<Classes>) =
             schedule.forEach {
                 scheduleDao.insertSchedule(it)
             }
+
+    private fun updateCache(classes: Classes) =
+            scheduleDao.update(classes)
 }

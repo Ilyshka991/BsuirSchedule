@@ -19,4 +19,4 @@ class ScheduleResponse(
 )
 
 
-class LastUpdateResponse(val lastUpdateDate: String?)
+class LastUpdateResponse(val lastUpdateDate: String)

@@ -17,14 +17,29 @@ interface ScheduleDao {
         insert(schedule.schedule)
     }
 
+    @Transaction
+    fun update(classes: Classes) {
+        update(classes as Schedule)
+        deleteItems(classes.id)
+
+        classes.schedule.forEach { it.scheduleId = classes.id }
+        insert(classes.schedule)
+    }
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(values: Schedule): Long
+
+    @Update
+    fun update(schedule: Schedule)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(values: List<ScheduleItem>)
 
     @Query("DELETE FROM all_schedules WHERE name = :name AND type = :type")
     fun delete(name: String, type: Int)
+
+    @Query("DELETE FROM schedule_item WHERE schedule_id = :id")
+    fun deleteItems(id: Int)
 
     @Query("DELETE FROM all_schedules WHERE type = :type")
     fun delete(type: Int)
@@ -71,6 +86,9 @@ interface ScheduleDao {
             "AND weekNumber LIKE '%' || :week || '%' " +
             "AND subgroupNumber IN (:subgroups)")
     fun get(name: String, type: Int, day: String, week: String, subgroups: Array<Int>): Single<List<ScheduleItem>>
+
+    @Query("SELECT EXISTS(SELECT 1 FROM all_schedules WHERE name = :name AND type = :type AND last_update = :lastUpdate)")
+    fun isUpToDate(name: String, type: Int, lastUpdate: String): Boolean
 
     @Query("SELECT * FROM all_schedules")
     fun getSchedules(): Observable<List<Schedule>>

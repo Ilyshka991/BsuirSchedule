@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.edit
 import androidx.core.view.GravityCompat
@@ -14,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.constants.ScheduleTypes
@@ -23,6 +25,7 @@ import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_CLASSES
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_EXAMS
 import com.pechuro.bsuirschedule.constants.SharedPrefConstants.SCHEDULE_NAME
 import com.pechuro.bsuirschedule.constants.SharedPrefConstants.SCHEDULE_TYPE
+import com.pechuro.bsuirschedule.data.entity.Schedule
 import com.pechuro.bsuirschedule.databinding.ActivityNavigationBinding
 import com.pechuro.bsuirschedule.ui.activity.editlesson.EditLessonActivity
 import com.pechuro.bsuirschedule.ui.activity.navigation.adapter.NavItemAdapter
@@ -45,7 +48,7 @@ import javax.inject.Inject
 class NavigationActivity :
         BaseActivity<ActivityNavigationBinding, NavigationActivityViewModel>(),
         HasSupportFragmentInjector, NavItemAdapter.NavCallback, AddDialog.AddDialogCallback,
-        ScheduleOptionsFragment.ScheduleOptionsCallback {
+        ScheduleOptionsFragment.ScheduleOptionsCallback, NavNavigator {
     companion object {
         fun newIntent(context: Context) = Intent(context, NavigationActivity::class.java)
     }
@@ -81,10 +84,9 @@ class NavigationActivity :
     }
 
     override fun onBackPressed() {
-        if (mViewDataBinding.drawerLayout is DrawerLayout &&
-                (mViewDataBinding.drawerLayout as DrawerLayout)
+        if (mViewDataBinding.drawerLayout
                         .isDrawerOpen(GravityCompat.START)) {
-            (mViewDataBinding.drawerLayout as DrawerLayout).closeDrawer(GravityCompat.START)
+            mViewDataBinding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
@@ -93,6 +95,26 @@ class NavigationActivity :
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.dispose()
+    }
+
+    override fun onRequestUpdate(schedule: Schedule) {
+        Toast.makeText(this, "${schedule.name} - ${schedule.type} need update", Toast.LENGTH_LONG).show()
+
+        mViewModel.updateSchedule(schedule)
+    }
+
+    override fun onScheduleUpdated(name: String, type: Int) {
+        Snackbar.make(mViewDataBinding.contentLayout, "$name - $type updated!!!!!!!!!!", Snackbar.LENGTH_SHORT).show()
+
+        val currentName = getCurrentScheduleName()
+        val currentType = getCurrentScheduleType()
+        if (name == currentName && type == currentType) {
+            homeFragment()
+        }
+    }
+
+    override fun onScheduleUpdateFail(name: String, type: Int) {
+        Snackbar.make(mViewDataBinding.contentLayout, "$name - $type update fail !!!!!!!!!!", Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onNavigate(info: ScheduleInformation) {
@@ -139,28 +161,27 @@ class NavigationActivity :
         setSupportActionBar(bar)
 
         mLayoutManager.orientation = RecyclerView.VERTICAL
-        mViewDataBinding.navItemList?.layoutManager = mLayoutManager
-        mViewDataBinding.navItemList?.adapter = mNavAdapter
+        mViewDataBinding.navItemList.layoutManager = mLayoutManager
+        mViewDataBinding.navItemList.adapter = mNavAdapter
     }
 
     private fun setCallback() {
         mNavAdapter.callback = this
+        mViewModel.mNavigator = this
     }
 
     private fun setListeners() {
-        if (mViewDataBinding.drawerLayout is DrawerLayout) {
-            val toggle = ActionBarDrawerToggle(
-                    this, mViewDataBinding.drawerLayout as DrawerLayout, mViewDataBinding.bar,
-                    R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-            (mViewDataBinding.drawerLayout as DrawerLayout).addDrawerListener(toggle)
-            toggle.syncState()
-        }
+        val toggle = ActionBarDrawerToggle(
+                this, mViewDataBinding.drawerLayout, mViewDataBinding.bar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        mViewDataBinding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
 
-        mViewDataBinding.navFooterSettings?.setOnClickListener {
+        mViewDataBinding.navFooterSettings.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
-        mViewDataBinding.navFooterAddSchedule?.setOnClickListener {
+        mViewDataBinding.navFooterAddSchedule.setOnClickListener {
             navigate {
                 AddDialog.newInstance().show(supportFragmentManager, "add_dialog")
             }
@@ -174,23 +195,23 @@ class NavigationActivity :
                 }
             }
         })
-        mViewDataBinding.barOptions?.setOnClickListener {
+        mViewDataBinding.barOptions.setOnClickListener {
             val type = getCurrentScheduleType()
             ScheduleOptionsFragment.newInstance(type).show(supportFragmentManager, "bottom_sheet")
         }
 
-        mViewDataBinding.fabBack?.setOnClickListener {
+        mViewDataBinding.fabBack.setOnClickListener {
             FabCommunication.publish(OnFabClick)
         }
         compositeDisposable.addAll(
                 FabCommunication.listen(OnFabShow::class.java).subscribe {
-                    mViewDataBinding.fabBack?.show()
+                    mViewDataBinding.fabBack.show()
                 },
                 FabCommunication.listen(OnFabHide::class.java).subscribe {
-                    mViewDataBinding.fabBack?.hide()
+                    mViewDataBinding.fabBack.hide()
                 })
 
-        mViewDataBinding.barAdd?.setOnClickListener {
+        mViewDataBinding.barAdd.setOnClickListener {
             addLesson()
         }
     }
@@ -199,20 +220,20 @@ class NavigationActivity :
         val type = getCurrentScheduleType()
         when (type) {
             STUDENT_CLASSES, EMPLOYEE_CLASSES -> {
-                mViewDataBinding.barOptions?.visibility = View.VISIBLE
-                mViewDataBinding.barAddLayout?.visibility = View.GONE
+                mViewDataBinding.barOptions.visibility = View.VISIBLE
+                mViewDataBinding.barAddLayout.visibility = View.GONE
             }
-            STUDENT_EXAMS, EMPLOYEE_EXAMS -> {
-                mViewDataBinding.barOptions?.visibility = View.GONE
-                mViewDataBinding.barAddLayout?.visibility = View.VISIBLE
+            STUDENT_EXAMS -> {
+                mViewDataBinding.barOptions.visibility = View.GONE
+                mViewDataBinding.barAddLayout.visibility = View.VISIBLE
             }
             else -> {
-                mViewDataBinding.barOptions?.visibility = View.GONE
-                mViewDataBinding.barAddLayout?.visibility = View.GONE
+                mViewDataBinding.barOptions.visibility = View.GONE
+                mViewDataBinding.barAddLayout.visibility = View.GONE
             }
         }
 
-        mViewDataBinding.fabBack?.hide()
+        mViewDataBinding.fabBack.hide()
     }
 
     private fun homeFragment() {
@@ -236,29 +257,25 @@ class NavigationActivity :
     }
 
     private fun navigate(action: () -> Unit) {
-        if (mViewDataBinding.drawerLayout is DrawerLayout) {
-            (mViewDataBinding.drawerLayout as DrawerLayout).addDrawerListener(object : DrawerLayout.DrawerListener {
-                override fun onDrawerStateChanged(newState: Int) {
+        mViewDataBinding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerStateChanged(newState: Int) {
 
-                }
+            }
 
-                override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
 
-                }
+            }
 
-                override fun onDrawerClosed(drawerView: View) {
-                    action.invoke()
-                    (mViewDataBinding.drawerLayout as DrawerLayout).removeDrawerListener(this)
-                }
+            override fun onDrawerClosed(drawerView: View) {
+                action.invoke()
+                mViewDataBinding.drawerLayout.removeDrawerListener(this)
+            }
 
-                override fun onDrawerOpened(drawerView: View) {
+            override fun onDrawerOpened(drawerView: View) {
 
-                }
-            })
-            (mViewDataBinding.drawerLayout as DrawerLayout).closeDrawers()
-        } else {
-            action.invoke()
-        }
+            }
+        })
+        mViewDataBinding.drawerLayout.closeDrawers()
     }
 
     private fun getCurrentScheduleName() = defaultSharedPreferences.getString(SCHEDULE_NAME, "")

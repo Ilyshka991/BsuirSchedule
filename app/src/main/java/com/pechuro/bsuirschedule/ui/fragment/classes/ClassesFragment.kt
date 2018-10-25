@@ -140,10 +140,9 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
                     }
                 },
 
-                sharedPref.getInteger(VIEW_TYPE).asObservable().subscribe {
+                sharedPref.getInteger(VIEW_TYPE, VIEW_TYPE_DAY).asObservable().subscribe {
                     if (viewType != it) {
                         viewType = it
-
                         val position = if (viewType == VIEW_TYPE_WEEK)
                             with(mViewDataBinding.tabLayout) {
                                 getTabAt(selectedTabPosition)?.tag.toString().getDayIndex()
@@ -152,7 +151,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
                         inflateLayout(position)
                     }
                 },
-                sharedPref.getInteger(SUBGROUP_NUMBER).asObservable().subscribe {
+                sharedPref.getInteger(SUBGROUP_NUMBER, SUBGROUP_ALL).asObservable().subscribe {
                     if (subgroupNumber != it) {
                         subgroupNumber = it
                         inflateLayout(mViewDataBinding.viewPager.currentItem)
