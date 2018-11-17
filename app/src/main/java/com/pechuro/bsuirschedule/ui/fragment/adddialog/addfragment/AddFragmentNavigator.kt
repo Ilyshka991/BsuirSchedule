@@ -1,6 +1,8 @@
 package com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment
 
-interface AddFragmentNavigator {
+import com.pechuro.bsuirschedule.ui.base.BaseNavigator
+
+interface AddFragmentNavigator : BaseNavigator {
     fun onError(messageId: Int)
 
     fun onClearError()

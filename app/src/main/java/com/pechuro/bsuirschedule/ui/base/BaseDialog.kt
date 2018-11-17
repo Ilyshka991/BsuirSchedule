@@ -14,12 +14,12 @@ import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 
-abstract class BaseDialog<T : ViewDataBinding, V : BaseViewModel> : DialogFragment() {
+abstract class BaseDialog<T : ViewDataBinding, V : BaseViewModel<out BaseNavigator>> : DialogFragment() {
     @Inject
     lateinit var mViewModelFactory: ViewModelProvider.Factory
 
     lateinit var mViewDataBinding: T
-    abstract val mViewModel: V
+    abstract val mViewModel: V?
     abstract val bindingVariable: Int
     lateinit var mRootView: View
     @get:LayoutRes

@@ -11,6 +11,6 @@ class SettingsActivity : BaseActivity<ActivitySettingsBinding, SettingsActivityV
         get() = ViewModelProviders.of(this, mViewModelFactory).get(SettingsActivityViewModel::class.java)
     override val layoutId: Int
         get() = R.layout.activity_settings
-    override val bindingVariable: Int
-        get() = BR._all
+    override val bindingVariables: Map<Int, Any>
+        get() = mapOf()
 }

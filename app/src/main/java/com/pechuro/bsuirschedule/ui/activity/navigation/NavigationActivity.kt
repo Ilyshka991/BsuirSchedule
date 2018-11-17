@@ -34,7 +34,7 @@ import com.pechuro.bsuirschedule.ui.activity.settings.SettingsActivity
 import com.pechuro.bsuirschedule.ui.base.BaseActivity
 import com.pechuro.bsuirschedule.ui.custom.OnSwipeTouchListener
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
-import com.pechuro.bsuirschedule.ui.fragment.bottomsheet.ScheduleOptionsFragment
+import com.pechuro.bsuirschedule.ui.fragment.bottomsheet.OptionsFragment
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragment
 import com.pechuro.bsuirschedule.ui.fragment.exam.ExamFragment
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragment
@@ -48,7 +48,7 @@ import javax.inject.Inject
 class NavigationActivity :
         BaseActivity<ActivityNavigationBinding, NavigationActivityViewModel>(),
         HasSupportFragmentInjector, NavItemAdapter.NavCallback, AddDialog.AddDialogCallback,
-        ScheduleOptionsFragment.ScheduleOptionsCallback, NavNavigator {
+        OptionsFragment.ScheduleOptionsCallback, NavNavigator {
     companion object {
         fun newIntent(context: Context) = Intent(context, NavigationActivity::class.java)
     }
@@ -66,8 +66,8 @@ class NavigationActivity :
         get() = ViewModelProviders.of(this, mViewModelFactory).get(NavigationActivityViewModel::class.java)
     override val layoutId: Int
         get() = R.layout.activity_navigation
-    override val bindingVariable: Int
-        get() = BR.viewModel
+    override val bindingVariables: Map<Int, Any>
+        get() = mapOf(Pair(BR.viewModel, mViewModel))
 
     override fun supportFragmentInjector() = fragmentDispatchingAndroidInjector
 
@@ -138,6 +138,10 @@ class NavigationActivity :
         }
     }
 
+    override fun onLongClick(info: ScheduleInformation) {
+        mViewModel.deleteSchedule(info.name, info.type)
+    }
+
     override fun onAddDialogDismiss() {
         homeFragment()
         setupBottomBar()
@@ -167,7 +171,7 @@ class NavigationActivity :
 
     private fun setCallback() {
         mNavAdapter.callback = this
-        mViewModel.mNavigator = this
+        mViewModel.setNavigator(this)
     }
 
     private fun setListeners() {
@@ -191,13 +195,13 @@ class NavigationActivity :
             override fun onSwipeTop() {
                 val type = getCurrentScheduleType()
                 if (type == ScheduleTypes.STUDENT_CLASSES || type == ScheduleTypes.EMPLOYEE_CLASSES) {
-                    ScheduleOptionsFragment.newInstance(type).show(supportFragmentManager, "bottom_sheet")
+                    OptionsFragment.newInstance(type).show(supportFragmentManager, "bottom_sheet")
                 }
             }
         })
         mViewDataBinding.barOptions.setOnClickListener {
             val type = getCurrentScheduleType()
-            ScheduleOptionsFragment.newInstance(type).show(supportFragmentManager, "bottom_sheet")
+            OptionsFragment.newInstance(type).show(supportFragmentManager, "bottom_sheet")
         }
 
         mViewDataBinding.fabBack.setOnClickListener {

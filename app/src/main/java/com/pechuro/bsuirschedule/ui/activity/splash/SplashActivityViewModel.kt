@@ -8,15 +8,14 @@ import javax.inject.Inject
 
 class SplashActivityViewModel @Inject constructor(
         private val groupRepository: GroupRepository,
-        private val employeeRepository: EmployeeRepository) : BaseViewModel() {
-    lateinit var navigator: SplashNavigator
+        private val employeeRepository: EmployeeRepository) : BaseViewModel<SplashNavigator>() {
 
     fun decideNextActivity() =
             doAsync {
                 if (groupRepository.isCacheNotEmpty && employeeRepository.isCacheNotEmpty) {
-                    navigator.openNavigationActivity()
+                    getNavigator()?.openNavigationActivity()
                 } else {
-                    navigator.openInfoLoadActivity()
+                    getNavigator()?.openInfoLoadActivity()
                 }
             }
 }

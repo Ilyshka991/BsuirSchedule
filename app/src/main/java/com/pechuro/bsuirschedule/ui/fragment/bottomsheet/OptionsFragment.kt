@@ -21,12 +21,12 @@ import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 
-class ScheduleOptionsFragment : BottomSheetDialogFragment() {
+class OptionsFragment : BottomSheetDialogFragment() {
     companion object {
         private const val ARG_SCHEDULE_TYPE = "schedule_type"
 
-        fun newInstance(scheduleType: Int): ScheduleOptionsFragment =
-                ScheduleOptionsFragment().apply {
+        fun newInstance(scheduleType: Int): OptionsFragment =
+                OptionsFragment().apply {
                     arguments = Bundle().apply {
                         putInt(ARG_SCHEDULE_TYPE, scheduleType)
                     }

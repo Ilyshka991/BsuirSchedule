@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatActivity() {
+abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel<out BaseNavigator>> : AppCompatActivity() {
     @Inject
     lateinit var mViewModelFactory: ViewModelProvider.Factory
 
@@ -18,7 +18,7 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
 
     @get:LayoutRes
     abstract val layoutId: Int
-    abstract val bindingVariable: Int
+    abstract val bindingVariables: Map<Int, Any>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         performDI()
@@ -31,7 +31,7 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
 
     private fun performDataBinding() {
         mViewDataBinding = DataBindingUtil.setContentView(this, layoutId)
-        mViewDataBinding.setVariable(bindingVariable, mViewModel)
+        bindingVariables.forEach { (variable, obj) -> mViewDataBinding.setVariable(variable, obj) }
         mViewDataBinding.executePendingBindings()
     }
 }

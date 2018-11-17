@@ -6,6 +6,7 @@ import com.pechuro.bsuirschedule.data.ScheduleRepository
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
+import com.pechuro.bsuirschedule.ui.base.stubs.StubNavigator
 import com.pechuro.bsuirschedule.ui.fragment.exam.adapter.ExamViewTypes
 import com.pechuro.bsuirschedule.ui.fragment.exam.data.BaseExamData
 import com.pechuro.bsuirschedule.ui.fragment.exam.data.impl.EmployeeExamData
@@ -14,7 +15,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class ExamViewModel @Inject constructor(private val repository: ScheduleRepository) : BaseViewModel() {
+class ExamViewModel @Inject constructor(private val repository: ScheduleRepository) : BaseViewModel<StubNavigator>() {
     val listItemsLiveData = MutableLiveData<Pair<ExamViewTypes, List<BaseExamData>>>()
 
     fun loadData(info: ScheduleInformation) {

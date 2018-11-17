@@ -15,12 +15,12 @@ class SplashActivity :
         get() = ViewModelProviders.of(this, mViewModelFactory).get(SplashActivityViewModel::class.java)
     override val layoutId: Int
         get() = R.layout.activity_splash
-    override val bindingVariable: Int
-        get() = BR.viewModel
+    override val bindingVariables: Map<Int, Any>
+        get() = mapOf(Pair(BR.viewModel, mViewModel))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mViewModel.navigator = this
+        mViewModel.setNavigator(this)
         if (savedInstanceState == null) mViewModel.decideNextActivity()
     }
 

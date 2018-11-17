@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.pechuro.bsuirschedule.data.ScheduleRepository
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
+import com.pechuro.bsuirschedule.ui.base.stubs.StubNavigator
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.ClassesBaseInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.EmployeeClassesDayInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.EmployeeClassesWeekInformation
@@ -19,7 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class ClassesItemViewModel @Inject constructor(private val repository: ScheduleRepository) : BaseViewModel() {
+class ClassesItemViewModel @Inject constructor(private val repository: ScheduleRepository) : BaseViewModel<StubNavigator>() {
     val listItemsLiveData = MutableLiveData<Pair<ViewTypes, List<BaseClassesData>>>()
 
     fun loadData(info: ClassesBaseInformation) {

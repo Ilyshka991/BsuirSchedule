@@ -69,7 +69,7 @@ class NavItemAdapter(private val mContext: Context) : RecyclerView.Adapter<BaseV
                 }
 
                 setOnLongClickListener {
-
+                    callback.onLongClick(ScheduleInformation(data.name, data.type))
                     true
                 }
             }
@@ -86,5 +86,7 @@ class NavItemAdapter(private val mContext: Context) : RecyclerView.Adapter<BaseV
 
     interface NavCallback {
         fun onNavigate(info: ScheduleInformation)
+
+        fun onLongClick(info: ScheduleInformation)
     }
 }

@@ -1,6 +1,6 @@
 package com.pechuro.bsuirschedule.ui.activity.infoload
 
-import androidx.databinding.ObservableField
+import androidx.databinding.ObservableBoolean
 import com.pechuro.bsuirschedule.data.EmployeeRepository
 import com.pechuro.bsuirschedule.data.GroupRepository
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
@@ -11,20 +11,15 @@ import javax.inject.Inject
 
 class InfoLoadActivityViewModel @Inject constructor(
         private val groupRepository: GroupRepository,
-        private val employeeRepository: EmployeeRepository) : BaseViewModel() {
+        private val employeeRepository: EmployeeRepository) : BaseViewModel<InfoLoadNavigator>() {
 
-    val isLoading = ObservableField<Boolean>()
-    lateinit var navigator: InfoLoadNavigator
+    val isLoading = ObservableBoolean()
 
     init {
         loadInfo()
     }
 
-    fun onRetryClick() {
-        loadInfo()
-    }
-
-    private fun loadInfo() {
+    fun loadInfo() {
         isLoading.set(true)
         compositeDisposable.add(
                 Single.merge(groupRepository.load(), employeeRepository.load())
@@ -32,7 +27,7 @@ class InfoLoadActivityViewModel @Inject constructor(
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            navigator.onSuccess()
+                            getNavigator()?.onSuccess()
                         }, {
                             isLoading.set(false)
                         })

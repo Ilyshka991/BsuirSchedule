@@ -1,12 +1,13 @@
 package com.pechuro.bsuirschedule.ui.fragment.classes
 
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
+import com.pechuro.bsuirschedule.ui.base.stubs.StubNavigator
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
 
-class ClassesFragmentViewModel @Inject constructor() : BaseViewModel() {
+class ClassesFragmentViewModel @Inject constructor() : BaseViewModel<StubNavigator>() {
 
     fun getTabDate(days: Int): Triple<String, Int, String> {
         val dateFormat = SimpleDateFormat("EEE, d MMM",

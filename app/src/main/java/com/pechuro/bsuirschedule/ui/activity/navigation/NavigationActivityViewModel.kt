@@ -12,9 +12,8 @@ import javax.inject.Inject
 
 
 class NavigationActivityViewModel @Inject constructor(
-        private val repository: ScheduleRepository) : BaseViewModel() {
+        private val repository: ScheduleRepository) : BaseViewModel<NavNavigator>() {
     val menuItems = MutableLiveData<Map<Int, List<ScheduleInformation>>>()
-    lateinit var mNavigator: NavNavigator
 
     init {
         loadMenuItems()
@@ -37,11 +36,21 @@ class NavigationActivityViewModel @Inject constructor(
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        mNavigator.onScheduleUpdated(schedule.name, schedule.type)
+                        getNavigator()?.onScheduleUpdated(schedule.name, schedule.type)
                     }, {
-                        mNavigator.onScheduleUpdateFail(schedule.name, schedule.type)
+                        getNavigator()?.onScheduleUpdateFail(schedule.name, schedule.type)
                     })
             )
+
+    fun deleteSchedule(name: String, type: Int) {
+        compositeDisposable.add(
+                repository.delete(name, type)
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({
+
+                        }, {})
+        )
+    }
 
     private fun checkUpdate(schedules: List<Schedule>) {
         schedules
@@ -57,7 +66,7 @@ class NavigationActivityViewModel @Inject constructor(
                                     .subscribe({
                                         val lastUpdate = it.lastUpdateDate
                                         if (lastUpdate != info.lastUpdate) {
-                                            mNavigator.onRequestUpdate(info)
+                                            getNavigator()?.onRequestUpdate(info)
                                         }
                                     }, {}))
                 }

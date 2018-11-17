@@ -53,7 +53,7 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), Ad
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewModel.navigator = this
+        mViewModel.setNavigator(this)
         if (savedInstanceState == null && scheduleType != null) {
             mViewModel.loadSuggestions(scheduleType!!)
         }
@@ -118,10 +118,6 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), Ad
 
         mViewDataBinding.buttonRetry.setOnClickListener {
             loadSchedule()
-        }
-
-        mViewDataBinding.buttonCancel.setOnClickListener {
-            mViewModel.onCancelClick()
         }
     }
 

@@ -1,5 +1,7 @@
 package com.pechuro.bsuirschedule.ui.activity.infoload
 
-interface InfoLoadNavigator {
+import com.pechuro.bsuirschedule.ui.base.BaseNavigator
+
+interface InfoLoadNavigator : BaseNavigator {
     fun onSuccess()
 }
