@@ -22,18 +22,7 @@ import javax.inject.Inject
 
 
 class OptionsFragment : BottomSheetDialogFragment() {
-    companion object {
-        private const val ARG_SCHEDULE_TYPE = "schedule_type"
-
-        fun newInstance(scheduleType: Int): OptionsFragment =
-                OptionsFragment().apply {
-                    arguments = Bundle().apply {
-                        putInt(ARG_SCHEDULE_TYPE, scheduleType)
-                    }
-                }
-    }
-
-    private var callback: ScheduleOptionsCallback? = null
+    private var _callback: ScheduleOptionsCallback? = null
 
     private lateinit var mViewTypeButton: Button
     private lateinit var mAddButton: Button
@@ -44,7 +33,7 @@ class OptionsFragment : BottomSheetDialogFragment() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        callback = context as? ScheduleOptionsCallback
+        _callback = context as? ScheduleOptionsCallback
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,7 +81,7 @@ class OptionsFragment : BottomSheetDialogFragment() {
                     }
                 }
         mAddButton.setOnClickListener {
-            callback?.addLesson()
+            _callback?.addLesson()
             dismiss()
         }
         mViewTypeButton.setOnClickListener {
@@ -114,5 +103,16 @@ class OptionsFragment : BottomSheetDialogFragment() {
 
     interface ScheduleOptionsCallback {
         fun addLesson()
+    }
+
+    companion object {
+        private const val ARG_SCHEDULE_TYPE = "schedule_type"
+
+        fun newInstance(scheduleType: Int): OptionsFragment =
+                OptionsFragment().apply {
+                    arguments = Bundle().apply {
+                        putInt(ARG_SCHEDULE_TYPE, scheduleType)
+                    }
+                }
     }
 }

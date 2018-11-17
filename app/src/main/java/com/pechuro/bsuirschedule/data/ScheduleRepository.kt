@@ -6,13 +6,13 @@ import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_CLASSES
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_EXAMS
 import com.pechuro.bsuirschedule.data.database.dao.EmployeeDao
 import com.pechuro.bsuirschedule.data.database.dao.ScheduleDao
-import com.pechuro.bsuirschedule.data.entity.Schedule
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 import com.pechuro.bsuirschedule.data.entity.complex.Classes
 import com.pechuro.bsuirschedule.data.network.LastUpdateResponse
 import com.pechuro.bsuirschedule.data.network.ResponseModel
 import com.pechuro.bsuirschedule.data.network.ScheduleApi
 import com.pechuro.bsuirschedule.data.network.ScheduleResponse
+import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -37,15 +37,15 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
                 classesList
             }.doOnSuccess { storeInCache(it) }
 
-    fun update(schedule: Schedule): Single<Classes> =
+    fun update(info: ScheduleInformation): Single<Classes> =
             Single.fromCallable {
-                val response = getFromApi(schedule.name, schedule.type)
+                val response = getFromApi(info.name, info.type)
 
-                val lastUpdate = getLastUpdate(schedule.name)
+                val lastUpdate = getLastUpdate(info.name)
                         .onErrorReturn { LastUpdateResponse("") }
                         .blockingGet().lastUpdateDate
 
-                transformResponse(schedule.name, schedule.type, lastUpdate, response, schedule.id)
+                transformResponse(info.name, info.type, lastUpdate, response, info.id)
             }.doOnSuccess { updateCache(it) }
 
     fun getClasses(name: String, type: Int) =

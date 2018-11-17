@@ -7,6 +7,7 @@ import com.pechuro.bsuirschedule.data.entity.Schedule
 import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
 import com.pechuro.bsuirschedule.ui.utils.SingleLiveEvent
+import com.pechuro.bsuirschedule.ui.utils.getInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -33,26 +34,16 @@ class NavigationActivityViewModel @Inject constructor(
                 }, {}))
     }
 
-    fun updateSchedule(schedule: Schedule) =
-            compositeDisposable.add(repository.update(schedule)
+    fun updateSchedule(info: ScheduleInformation) =
+            compositeDisposable.add(repository.update(info)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        command.call(OnScheduleUpdated(schedule.name, schedule.type))
+                        command.call(OnScheduleUpdated(info))
                     }, {
-                        command.call(OnScheduleUpdateFail(schedule.name, schedule.type))
+                        command.call(OnScheduleUpdateFail(info))
                     })
             )
-
-    fun deleteSchedule(name: String, type: Int) {
-        compositeDisposable.add(
-                repository.delete(name, type)
-                        .subscribeOn(Schedulers.io())
-                        .subscribe({
-
-                        }, {})
-        )
-    }
 
     private fun checkUpdate(schedules: List<Schedule>) {
         schedules
@@ -60,15 +51,15 @@ class NavigationActivityViewModel @Inject constructor(
                     it.type == ScheduleTypes.STUDENT_CLASSES ||
                             it.type == ScheduleTypes.STUDENT_EXAMS
                 }
-                .forEach { info ->
+                .forEach { schedule ->
                     compositeDisposable.add(
-                            repository.getLastUpdate(info.name)
+                            repository.getLastUpdate(schedule.name)
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe({
                                         val lastUpdate = it.lastUpdateDate
-                                        if (lastUpdate != info.lastUpdate) {
-                                            command.call(OnRequestUpdate(info))
+                                        if (lastUpdate != schedule.lastUpdate) {
+                                            command.call(OnRequestUpdate(schedule.getInfo()))
                                         }
                                     }, {}))
                 }
@@ -83,7 +74,7 @@ class NavigationActivityViewModel @Inject constructor(
                             it.type == ScheduleTypes.STUDENT_CLASSES ||
                                     it.type == ScheduleTypes.EMPLOYEE_CLASSES
                         }
-                        .map { ScheduleInformation(it.name, it.type) }
+                        .map { ScheduleInformation(it.id, it.name, it.type) }
                         .toList()
 
         map[ScheduleTypes.EXAMS] =
@@ -92,7 +83,7 @@ class NavigationActivityViewModel @Inject constructor(
                             it.type == ScheduleTypes.STUDENT_EXAMS ||
                                     it.type == ScheduleTypes.EMPLOYEE_EXAMS
                         }
-                        .map { ScheduleInformation(it.name, it.type) }
+                        .map { ScheduleInformation(it.id, it.name, it.type) }
                         .toList()
         return map
     }

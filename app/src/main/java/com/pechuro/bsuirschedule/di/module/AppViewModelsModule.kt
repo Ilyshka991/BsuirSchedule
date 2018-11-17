@@ -12,7 +12,9 @@ import com.pechuro.bsuirschedule.ui.base.stubs.StubViewModel
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.ClassesItemViewModel
+import com.pechuro.bsuirschedule.ui.fragment.edit.EditLessonFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.exam.ExamViewModel
+import com.pechuro.bsuirschedule.ui.fragment.optiondialog.DrawerOptionsDialogViewModel
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragmentViewModel
 import com.pechuro.bsuirschedule.ui.utils.ViewModelFactory
 import dagger.Binds
@@ -78,4 +80,14 @@ abstract class AppViewModelsModule {
     @IntoMap
     @ViewModelKey(EditLessonActivityViewModel::class)
     abstract fun editLessonActivity(viewModel: EditLessonActivityViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DrawerOptionsDialogViewModel::class)
+    abstract fun drawerOptionsDialog(viewModel: DrawerOptionsDialogViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(EditLessonFragmentViewModel::class)
+    abstract fun editLessonFragment(viewModel: EditLessonFragmentViewModel): ViewModel
 }

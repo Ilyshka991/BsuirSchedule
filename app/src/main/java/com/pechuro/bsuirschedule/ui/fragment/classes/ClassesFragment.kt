@@ -27,32 +27,16 @@ import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentViewModel>() {
-    companion object {
-        const val NUMBER_OF_TABS = 40
-        const val ARG_INFO = "arg_information"
-
-        fun newInstance(info: ScheduleInformation): ClassesFragment {
-            val args = Bundle()
-            args.putParcelable(ARG_INFO, info)
-
-            val fragment = ClassesFragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
 
     @Inject
-    lateinit var mPagerAdapter: ClassesPagerAdapter
+    lateinit var pagerAdapter: ClassesPagerAdapter
     @Inject
     lateinit var sharedPref: RxSharedPreferences
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-    private val scheduleName by lazy {
-        (arguments?.getParcelable(ARG_INFO) as? ScheduleInformation)?.name ?: ""
-    }
-    private val scheduleType by lazy {
-        (arguments?.getParcelable(ARG_INFO) as? ScheduleInformation)?.type ?: -1
+    private val scheduleInfo by lazy {
+        (arguments?.getParcelable(ARG_INFO) as? ScheduleInformation)
     }
 
     private var viewType = VIEW_TYPE_DAY
@@ -83,6 +67,10 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
 
         viewDataBinding.tabLayout.removeAllTabs()
 
+        if (scheduleInfo == null) {
+            return
+        }
+
         when (viewType) {
             VIEW_TYPE_DAY -> {
                 for (i in 0 until NUMBER_OF_TABS) {
@@ -90,12 +78,12 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
                     viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab()
                             .setText(getString(R.string.schedule_tab_text, day, week)).setTag(dayRu))
 
-                    when (scheduleType) {
+                    when (scheduleInfo!!.type) {
                         ScheduleTypes.STUDENT_CLASSES -> {
-                            info.add(StudentClassesDayInformation(scheduleName, scheduleType, dayRu, week, subgroupNumber))
+                            info.add(StudentClassesDayInformation(scheduleInfo!!.name, scheduleInfo!!.type, dayRu, week, subgroupNumber))
                         }
                         ScheduleTypes.EMPLOYEE_CLASSES -> {
-                            info.add(EmployeeClassesDayInformation(scheduleName, scheduleType, dayRu, week))
+                            info.add(EmployeeClassesDayInformation(scheduleInfo!!.name, scheduleInfo!!.type, dayRu, week))
                         }
                     }
                 }
@@ -106,12 +94,12 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
                     viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab()
                             .setText(weekday).setTag(dayRu))
 
-                    when (scheduleType) {
+                    when (scheduleInfo!!.type) {
                         ScheduleTypes.STUDENT_CLASSES -> {
-                            info.add(StudentClassesWeekInformation(scheduleName, scheduleType, dayRu, subgroupNumber))
+                            info.add(StudentClassesWeekInformation(scheduleInfo!!.name, scheduleInfo!!.type, dayRu, subgroupNumber))
                         }
                         ScheduleTypes.EMPLOYEE_CLASSES -> {
-                            info.add(EmployeeClassesWeekInformation(scheduleName, scheduleType, dayRu))
+                            info.add(EmployeeClassesWeekInformation(scheduleInfo!!.name, scheduleInfo!!.type, dayRu))
                         }
                     }
                 }
@@ -120,7 +108,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
 
         viewDataBinding.viewPager.currentItem = currentItemPosition
 
-        mPagerAdapter.fragmentsInfo = info
+        pagerAdapter.fragmentsInfo = info
     }
 
     private fun initValues() {
@@ -188,7 +176,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
     }
 
     private fun setupView() {
-        viewDataBinding.viewPager.adapter = mPagerAdapter
+        viewDataBinding.viewPager.adapter = pagerAdapter
 
         viewDataBinding.viewPager
                 .addOnPageChangeListener(
@@ -205,5 +193,19 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
         "суббота" -> 5
         "воскресенье" -> 6
         else -> -1
+    }
+
+    companion object {
+        const val NUMBER_OF_TABS = 40
+        const val ARG_INFO = "arg_information"
+
+        fun newInstance(info: ScheduleInformation): ClassesFragment {
+            val args = Bundle()
+            args.putParcelable(ARG_INFO, info)
+
+            val fragment = ClassesFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

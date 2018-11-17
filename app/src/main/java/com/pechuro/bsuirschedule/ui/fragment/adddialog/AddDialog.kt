@@ -25,9 +25,9 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, StubViewModel>(), AddFrag
     }
 
     @Inject
-    lateinit var mPagerAdapter: AddDialogPagerAdapter
+    lateinit var pagerAdapter: AddDialogPagerAdapter
 
-    private var mNavigator: AddDialogCallback? = null
+    private var navigator: AddDialogCallback? = null
 
     override val viewModel: StubViewModel
         get() = ViewModelProviders.of(this, mViewModelFactory).get(StubViewModel::class.java)
@@ -38,7 +38,12 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, StubViewModel>(), AddFrag
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        mNavigator = context as? AddDialogCallback
+        navigator = context as? AddDialogCallback
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        navigator = null
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -49,7 +54,7 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, StubViewModel>(), AddFrag
 
     override fun dismiss() {
         super.dismiss()
-        mNavigator?.onAddDialogDismiss()
+        navigator?.onAddDialogDismiss()
     }
 
     override fun setDialogCancelable(isCancelable: Boolean) {
@@ -59,7 +64,7 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, StubViewModel>(), AddFrag
     override fun onDismiss() = dismiss()
 
     private fun setupView() {
-        viewDataBinding.viewPager.adapter = mPagerAdapter
+        viewDataBinding.viewPager.adapter = pagerAdapter
         viewDataBinding.viewPager.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
 
         viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab().setText(getString(R.string.students)))

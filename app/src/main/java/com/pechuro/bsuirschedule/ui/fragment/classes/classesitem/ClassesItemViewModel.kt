@@ -47,17 +47,18 @@ class ClassesItemViewModel @Inject constructor(private val repository: ScheduleR
 
         compositeDisposable.add(observable
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    val data = when (viewType) {
+                .map {
+                    when (viewType) {
                         ViewTypes.STUDENT_DAY -> transformStudentDayItems(it)
                         ViewTypes.STUDENT_WEEK -> transformStudentWeekItems(it)
                         ViewTypes.EMPLOYEE_DAY -> transformEmployeeDayItems(it)
                         ViewTypes.EMPLOYEE_WEEK -> transformEmployeeWeekItems(it)
                         else -> throw IllegalStateException()
                     }
-
-                    listItemsLiveData.value = Pair(viewType, data)
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    listItemsLiveData.value = Pair(viewType, it)
                 }, {}))
     }
 

@@ -44,12 +44,12 @@ class NavItemAdapter(private val mContext: Context) : RecyclerView.Adapter<BaseV
     fun setItems(data: Map<Int, List<ScheduleInformation>>) {
         mItemsList.clear()
         if (data[SCHEDULES]?.isNotEmpty() == true) {
-            mItemsList.add(ScheduleInformation(mContext.getString(R.string.schedules), NAV_ITEM_MENU))
+            mItemsList.add(ScheduleInformation(-1, mContext.getString(R.string.schedules), NAV_ITEM_MENU))
             mItemsList.addAll(data[SCHEDULES]!!)
         }
 
         if (data[EXAMS]?.isNotEmpty() == true) {
-            mItemsList.add(ScheduleInformation(mContext.getString(R.string.exams), NAV_ITEM_MENU))
+            mItemsList.add(ScheduleInformation(-1, mContext.getString(R.string.exams), NAV_ITEM_MENU))
             mItemsList.addAll(data[EXAMS]!!)
         }
 
@@ -65,11 +65,11 @@ class NavItemAdapter(private val mContext: Context) : RecyclerView.Adapter<BaseV
 
             mBinding.scheduleNameButton.apply {
                 setOnClickListener {
-                    callback.onNavigate(ScheduleInformation(data.name, data.type))
+                    callback.onNavigate(ScheduleInformation(data.id, data.name, data.type))
                 }
 
                 setOnLongClickListener {
-                    callback.onLongClick(ScheduleInformation(data.name, data.type))
+                    callback.onDrawerItemLongClick(ScheduleInformation(data.id, data.name, data.type))
                     true
                 }
             }
@@ -87,6 +87,6 @@ class NavItemAdapter(private val mContext: Context) : RecyclerView.Adapter<BaseV
     interface NavCallback {
         fun onNavigate(info: ScheduleInformation)
 
-        fun onLongClick(info: ScheduleInformation)
+        fun onDrawerItemLongClick(info: ScheduleInformation)
     }
 }

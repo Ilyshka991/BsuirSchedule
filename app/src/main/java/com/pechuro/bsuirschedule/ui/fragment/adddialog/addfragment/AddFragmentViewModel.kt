@@ -8,6 +8,7 @@ import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT
 import com.pechuro.bsuirschedule.data.EmployeeRepository
 import com.pechuro.bsuirschedule.data.GroupRepository
 import com.pechuro.bsuirschedule.data.ScheduleRepository
+import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
 import com.pechuro.bsuirschedule.ui.utils.SingleLiveEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -59,7 +60,14 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    command.call(OnSuccess(scheduleName, scheduleTypes[0]))
+                    if (it.size > 0) {
+                        val info = with(it[0]) {
+                            ScheduleInformation(id, name, type)
+                        }
+                        command.call(OnSuccess(info))
+                    } else {
+                        isError.set(true)
+                    }
                     isLoading.set(false)
                 }, {
                     isError.set(true)

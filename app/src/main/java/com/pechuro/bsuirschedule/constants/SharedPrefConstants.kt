@@ -1,8 +1,7 @@
 package com.pechuro.bsuirschedule.constants
 
 object SharedPrefConstants {
-    const val SCHEDULE_NAME = "name"
-    const val SCHEDULE_TYPE = "type"
+    const val SCHEDULE_INFO = "schedule_info"
 
     const val VIEW_TYPE = "view_type"
     const val VIEW_TYPE_WEEK = 123

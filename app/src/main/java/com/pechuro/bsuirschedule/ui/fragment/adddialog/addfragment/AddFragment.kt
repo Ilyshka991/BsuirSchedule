@@ -9,6 +9,7 @@ import androidx.core.content.edit
 import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.gson.Gson
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.EMPLOYEE_CLASSES
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.EMPLOYEE_EXAMS
@@ -19,20 +20,12 @@ import com.pechuro.bsuirschedule.constants.SharedPrefConstants
 import com.pechuro.bsuirschedule.databinding.FragmentAddBinding
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
 import org.jetbrains.anko.defaultSharedPreferences
+import javax.inject.Inject
 
 class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
-    companion object {
-        const val ARG_SCHEDULE_TYPE = "arg_add_fragment_schedule_type"
 
-        fun newInstance(scheduleType: Int): AddFragment {
-            val args = Bundle()
-            args.putInt(ARG_SCHEDULE_TYPE, scheduleType)
-
-            val fragment = AddFragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
+    @Inject
+    lateinit var gson: Gson
 
     override val viewModel: AddFragmentViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(AddFragmentViewModel::class.java)
@@ -66,8 +59,7 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
             when (it) {
                 is OnSuccess -> {
                     context?.defaultSharedPreferences?.edit {
-                        putString(SharedPrefConstants.SCHEDULE_NAME, it.scheduleName)
-                        putInt(SharedPrefConstants.SCHEDULE_TYPE, it.scheduleType)
+                        putString(SharedPrefConstants.SCHEDULE_INFO, gson.toJson(it.info))
                     }
 
                     viewDataBinding.buttonOk.isEnabled = true
@@ -144,5 +136,18 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
         fun onDismiss()
 
         fun setDialogCancelable(isCancelable: Boolean)
+    }
+
+    companion object {
+        const val ARG_SCHEDULE_TYPE = "arg_add_fragment_schedule_type"
+
+        fun newInstance(scheduleType: Int): AddFragment {
+            val args = Bundle()
+            args.putInt(ARG_SCHEDULE_TYPE, scheduleType)
+
+            val fragment = AddFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

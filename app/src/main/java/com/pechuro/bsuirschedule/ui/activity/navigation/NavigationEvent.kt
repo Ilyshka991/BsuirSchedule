@@ -1,9 +1,9 @@
 package com.pechuro.bsuirschedule.ui.activity.navigation
 
-import com.pechuro.bsuirschedule.data.entity.Schedule
+import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 
 sealed class NavigationEvent
 
-class OnScheduleUpdated(val name: String, val type: Int) : NavigationEvent()
-class OnScheduleUpdateFail(val name: String, val type: Int) : NavigationEvent()
-class OnRequestUpdate(val schedule: Schedule) : NavigationEvent()
+class OnScheduleUpdated(val info: ScheduleInformation) : NavigationEvent()
+class OnScheduleUpdateFail(val info: ScheduleInformation) : NavigationEvent()
+class OnRequestUpdate(val info: ScheduleInformation) : NavigationEvent()

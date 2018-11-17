@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.ActivityContainerBinding
+import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseActivity
 import com.pechuro.bsuirschedule.ui.fragment.edit.EditLessonFragment
 
@@ -15,14 +16,12 @@ class EditLessonActivity :
         BaseActivity<ActivityContainerBinding, EditLessonActivityViewModel>() {
 
     companion object {
-        private const val INTENT_SCHEDULE_TYPE = "schedule_type"
-        private const val INTENT_SCHEDULE_NAME = "schedule_name"
+        private const val INTENT_SCHEDULE_INFO = "schedule_info"
         private const val INTENT_LESSON_ID = "lesson_id"
 
-        fun newIntent(context: Context, name: String, type: Int): Intent {
+        fun newIntent(context: Context, info: ScheduleInformation): Intent {
             val intent = Intent(context, EditLessonActivity::class.java)
-            intent.putExtra(INTENT_SCHEDULE_NAME, name)
-            intent.putExtra(INTENT_SCHEDULE_TYPE, type)
+            intent.putExtra(INTENT_SCHEDULE_INFO, info)
             return intent
         }
 
