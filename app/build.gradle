@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: "androidx.navigation.safeargs"
 
 kapt {
     generateStubs = true
@@ -42,7 +41,7 @@ dependencies {
     implementation 'org.jetbrains.anko:anko:0.10.5'
 
     //Ktx
-    implementation 'androidx.core:core-ktx:1.0.0'
+    implementation 'androidx.core:core-ktx:1.0.1'
     implementation 'androidx.fragment:fragment-ktx:1.0.0'
     implementation 'androidx.collection:collection-ktx:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
@@ -54,14 +53,14 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:2.0.0"
 
     //Android
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
 
     //Test
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0-beta02'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-beta02'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
@@ -80,9 +79,9 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
 
     //Room database
-    implementation 'androidx.room:room-runtime:2.0.0-rc01'
-    implementation 'androidx.room:room-rxjava2:2.0.0-rc01'
-    kapt "androidx.room:room-compiler:2.0.0-rc01"
+    implementation 'androidx.room:room-runtime:2.1.0-alpha02'
+    implementation 'androidx.room:room-rxjava2:2.1.0-alpha02'
+    kapt "androidx.room:room-compiler:2.1.0-alpha02"
 
     //Dagger (issue with androidx and 2.17 version)
     //noinspection GradleDependency
@@ -93,11 +92,6 @@ dependencies {
     implementation 'com.google.dagger:dagger-android-support:2.16'
     //noinspection GradleDependency
     kapt 'com.google.dagger:dagger-android-processor:2.16'
-
-    //LeakCanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.2'
 
     //RxPreferences
     implementation 'com.f2prateek.rx.preferences2:rx-preferences:2.0.0'
