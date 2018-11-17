@@ -3,19 +3,24 @@ package com.pechuro.bsuirschedule.ui.activity.splash
 import com.pechuro.bsuirschedule.data.EmployeeRepository
 import com.pechuro.bsuirschedule.data.GroupRepository
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
-import org.jetbrains.anko.doAsync
+import com.pechuro.bsuirschedule.ui.utils.SingleLiveEvent
+import org.jetbrains.anko.doAsyncResult
 import javax.inject.Inject
 
 class SplashActivityViewModel @Inject constructor(
         private val groupRepository: GroupRepository,
-        private val employeeRepository: EmployeeRepository) : BaseViewModel<SplashNavigator>() {
+        private val employeeRepository: EmployeeRepository) : BaseViewModel() {
+    val command = SingleLiveEvent<SplashEvent>()
 
-    fun decideNextActivity() =
-            doAsync {
-                if (groupRepository.isCacheNotEmpty && employeeRepository.isCacheNotEmpty) {
-                    getNavigator()?.openNavigationActivity()
-                } else {
-                    getNavigator()?.openInfoLoadActivity()
-                }
-            }
+    fun decideNextActivity() {
+        val isInfoLoaded = doAsyncResult {
+            groupRepository.isCacheNotEmpty && employeeRepository.isCacheNotEmpty
+        }.get()
+
+        if (isInfoLoaded) {
+            command.call(OpenNavigationActivity)
+        } else {
+            command.call(OpenInfoLoadActivity)
+        }
+    }
 }

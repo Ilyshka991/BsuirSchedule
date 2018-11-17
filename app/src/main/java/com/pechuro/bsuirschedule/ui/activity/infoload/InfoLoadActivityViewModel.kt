@@ -4,6 +4,7 @@ import androidx.databinding.ObservableBoolean
 import com.pechuro.bsuirschedule.data.EmployeeRepository
 import com.pechuro.bsuirschedule.data.GroupRepository
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
+import com.pechuro.bsuirschedule.ui.utils.SingleLiveEvent
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -11,9 +12,10 @@ import javax.inject.Inject
 
 class InfoLoadActivityViewModel @Inject constructor(
         private val groupRepository: GroupRepository,
-        private val employeeRepository: EmployeeRepository) : BaseViewModel<InfoLoadNavigator>() {
+        private val employeeRepository: EmployeeRepository) : BaseViewModel() {
 
     val isLoading = ObservableBoolean()
+    val command = SingleLiveEvent<InfoLoadEvent>()
 
     init {
         loadInfo()
@@ -27,7 +29,7 @@ class InfoLoadActivityViewModel @Inject constructor(
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            getNavigator()?.onSuccess()
+                            command.call(OnSuccess)
                         }, {
                             isLoading.set(false)
                         })

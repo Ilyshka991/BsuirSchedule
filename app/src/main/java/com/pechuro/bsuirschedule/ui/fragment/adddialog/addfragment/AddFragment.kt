@@ -20,7 +20,7 @@ import com.pechuro.bsuirschedule.databinding.FragmentAddBinding
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
 import org.jetbrains.anko.defaultSharedPreferences
 
-class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), AddFragmentNavigator {
+class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
     companion object {
         const val ARG_SCHEDULE_TYPE = "arg_add_fragment_schedule_type"
 
@@ -53,44 +53,50 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), Ad
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.setNavigator(this)
         if (savedInstanceState == null && scheduleType != null) {
             viewModel.loadSuggestions(scheduleType!!)
         }
         setListeners()
         subscribeToLiveData()
+        setEventListeners()
     }
 
-    override fun onLoading() {
-        callback?.setDialogCancelable(false)
-    }
+    private fun setEventListeners() {
+        viewModel.command.observe(this, Observer {
+            when (it) {
+                is OnSuccess -> {
+                    context?.defaultSharedPreferences?.edit {
+                        putString(SharedPrefConstants.SCHEDULE_NAME, it.scheduleName)
+                        putInt(SharedPrefConstants.SCHEDULE_TYPE, it.scheduleType)
+                    }
 
-    override fun onCancel() {
-        viewDataBinding.errorTextView.text = ""
-        viewDataBinding.buttonOk.isEnabled = true
-        callback?.setDialogCancelable(true)
-    }
+                    viewDataBinding.buttonOk.isEnabled = true
+                    Toast.makeText(context, getString(R.string.success), Toast.LENGTH_LONG).show()
+                    callback?.onDismiss()
+                }
 
-    override fun onError(messageId: Int) {
-        callback?.setDialogCancelable(true)
-        viewDataBinding.buttonOk.isEnabled = true
+                is OnClearError -> {
+                    viewDataBinding.errorTextView.text = ""
+                }
 
-        viewDataBinding.errorTextView.text = getString(messageId)
-    }
+                is OnError -> {
+                    callback?.setDialogCancelable(true)
+                    viewDataBinding.buttonOk.isEnabled = true
 
-    override fun onClearError() {
-        viewDataBinding.errorTextView.text = ""
-    }
+                    viewDataBinding.errorTextView.text = getString(it.messageId)
+                }
 
-    override fun onSuccess(scheduleName: String, scheduleType: Int) {
-        context?.defaultSharedPreferences?.edit {
-            putString(SharedPrefConstants.SCHEDULE_NAME, scheduleName)
-            putInt(SharedPrefConstants.SCHEDULE_TYPE, scheduleType)
-        }
+                is OnCancel -> {
+                    viewDataBinding.errorTextView.text = ""
+                    viewDataBinding.buttonOk.isEnabled = true
+                    callback?.setDialogCancelable(true)
+                }
 
-        viewDataBinding.buttonOk.isEnabled = true
-        Toast.makeText(context, getString(R.string.success), Toast.LENGTH_LONG).show()
-        callback?.onDismiss()
+                is OnLoading -> {
+                    callback?.setDialogCancelable(false)
+                }
+            }
+        })
     }
 
     private fun loadSchedule() {

@@ -25,7 +25,6 @@ import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_CLASSES
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_EXAMS
 import com.pechuro.bsuirschedule.constants.SharedPrefConstants.SCHEDULE_NAME
 import com.pechuro.bsuirschedule.constants.SharedPrefConstants.SCHEDULE_TYPE
-import com.pechuro.bsuirschedule.data.entity.Schedule
 import com.pechuro.bsuirschedule.databinding.ActivityNavigationBinding
 import com.pechuro.bsuirschedule.ui.activity.editlesson.EditLessonActivity
 import com.pechuro.bsuirschedule.ui.activity.navigation.adapter.NavItemAdapter
@@ -48,7 +47,7 @@ import javax.inject.Inject
 class NavigationActivity :
         BaseActivity<ActivityNavigationBinding, NavigationActivityViewModel>(),
         HasSupportFragmentInjector, NavItemAdapter.NavCallback, AddDialog.AddDialogCallback,
-        OptionsFragment.ScheduleOptionsCallback, NavNavigator {
+        OptionsFragment.ScheduleOptionsCallback {
     companion object {
         fun newIntent(context: Context) = Intent(context, NavigationActivity::class.java)
     }
@@ -81,6 +80,7 @@ class NavigationActivity :
         }
         setupBottomBar()
         subscribeToLiveData()
+        setEventListeners()
     }
 
     override fun onBackPressed() {
@@ -95,26 +95,6 @@ class NavigationActivity :
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.dispose()
-    }
-
-    override fun onRequestUpdate(schedule: Schedule) {
-        Toast.makeText(this, "${schedule.name} - ${schedule.type} need update", Toast.LENGTH_LONG).show()
-
-        viewModel.updateSchedule(schedule)
-    }
-
-    override fun onScheduleUpdated(name: String, type: Int) {
-        Snackbar.make(viewDataBinding.contentLayout, "$name - $type updated!!!!!!!!!!", Snackbar.LENGTH_SHORT).show()
-
-        val currentName = getCurrentScheduleName()
-        val currentType = getCurrentScheduleType()
-        if (name == currentName && type == currentType) {
-            homeFragment()
-        }
-    }
-
-    override fun onScheduleUpdateFail(name: String, type: Int) {
-        Snackbar.make(viewDataBinding.contentLayout, "$name - $type update fail !!!!!!!!!!", Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onNavigate(info: ScheduleInformation) {
@@ -155,6 +135,32 @@ class NavigationActivity :
         startActivity(intent)
     }
 
+    private fun setEventListeners() {
+        viewModel.command.observe(this, Observer {
+            when (it) {
+                is OnRequestUpdate -> {
+                    Toast.makeText(this, "${it.schedule.name} - ${it.schedule.type} need update", Toast.LENGTH_LONG).show()
+
+                    viewModel.updateSchedule(it.schedule)
+                }
+
+                is OnScheduleUpdated -> {
+                    Snackbar.make(viewDataBinding.contentLayout, "${it.name} - ${it.type} updated!!!!!!!!!!", Snackbar.LENGTH_SHORT).show()
+
+                    val currentName = getCurrentScheduleName()
+                    val currentType = getCurrentScheduleType()
+                    if (it.name == currentName && it.type == currentType) {
+                        homeFragment()
+                    }
+                }
+
+                is OnScheduleUpdateFail -> {
+                    Snackbar.make(viewDataBinding.contentLayout, "${it.name} - ${it.type} update fail !!!!!!!!!!", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
     private fun subscribeToLiveData() {
         viewModel.menuItems.observe(this, Observer {
             mNavAdapter.setItems(it)
@@ -171,7 +177,6 @@ class NavigationActivity :
 
     private fun setCallback() {
         mNavAdapter.callback = this
-        viewModel.setNavigator(this)
     }
 
     private fun setListeners() {

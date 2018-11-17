@@ -6,14 +6,16 @@ import com.pechuro.bsuirschedule.data.ScheduleRepository
 import com.pechuro.bsuirschedule.data.entity.Schedule
 import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
+import com.pechuro.bsuirschedule.ui.utils.SingleLiveEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 
 class NavigationActivityViewModel @Inject constructor(
-        private val repository: ScheduleRepository) : BaseViewModel<NavNavigator>() {
+        private val repository: ScheduleRepository) : BaseViewModel() {
     val menuItems = MutableLiveData<Map<Int, List<ScheduleInformation>>>()
+    val command = SingleLiveEvent<NavigationEvent>()
 
     init {
         loadMenuItems()
@@ -36,9 +38,9 @@ class NavigationActivityViewModel @Inject constructor(
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        getNavigator()?.onScheduleUpdated(schedule.name, schedule.type)
+                        command.call(OnScheduleUpdated(schedule.name, schedule.type))
                     }, {
-                        getNavigator()?.onScheduleUpdateFail(schedule.name, schedule.type)
+                        command.call(OnScheduleUpdateFail(schedule.name, schedule.type))
                     })
             )
 
@@ -66,7 +68,7 @@ class NavigationActivityViewModel @Inject constructor(
                                     .subscribe({
                                         val lastUpdate = it.lastUpdateDate
                                         if (lastUpdate != info.lastUpdate) {
-                                            getNavigator()?.onRequestUpdate(info)
+                                            command.call(OnRequestUpdate(info))
                                         }
                                     }, {}))
                 }

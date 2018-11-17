@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel<out BaseNavigator>> : Fragment() {
+abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel> : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     abstract val viewModel: V

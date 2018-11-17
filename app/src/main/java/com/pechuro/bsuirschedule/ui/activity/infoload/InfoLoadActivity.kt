@@ -3,6 +3,7 @@ package com.pechuro.bsuirschedule.ui.activity.infoload
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
@@ -11,7 +12,7 @@ import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivity
 import com.pechuro.bsuirschedule.ui.base.BaseActivity
 
 class InfoLoadActivity :
-        BaseActivity<ActivityInfoLoadBinding, InfoLoadActivityViewModel>(), InfoLoadNavigator {
+        BaseActivity<ActivityInfoLoadBinding, InfoLoadActivityViewModel>() {
 
     companion object {
         fun newIntent(context: Context) = Intent(context, InfoLoadActivity::class.java)
@@ -26,16 +27,18 @@ class InfoLoadActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setCallback()
+        setEventListeners()
     }
 
-    override fun onSuccess() {
-        val intent = NavigationActivity.newIntent(this)
-        startActivity(intent)
-        finish()
-    }
-
-    private fun setCallback() {
-        viewModel.setNavigator(this)
+    private fun setEventListeners() {
+        viewModel.command.observe(this, Observer {
+            when (it) {
+                is OnSuccess -> {
+                    val intent = NavigationActivity.newIntent(this)
+                    startActivity(intent)
+                    finish()
+                }
+            }
+        })
     }
 }

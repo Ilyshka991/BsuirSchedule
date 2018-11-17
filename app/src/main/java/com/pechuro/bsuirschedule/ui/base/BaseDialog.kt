@@ -14,7 +14,7 @@ import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 
-abstract class BaseDialog<T : ViewDataBinding, V : BaseViewModel<out BaseNavigator>> : DialogFragment() {
+abstract class BaseDialog<T : ViewDataBinding, V : BaseViewModel> : DialogFragment() {
     @Inject
     lateinit var mViewModelFactory: ViewModelProvider.Factory
 
