@@ -58,8 +58,8 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
     private var viewType = VIEW_TYPE_DAY
     private var subgroupNumber = SUBGROUP_ALL
 
-    override val mViewModel: ClassesFragmentViewModel
-        get() = ViewModelProviders.of(this, mViewModelFactory).get(ClassesFragmentViewModel::class.java)
+    override val viewModel: ClassesFragmentViewModel
+        get() = ViewModelProviders.of(this, viewModelFactory).get(ClassesFragmentViewModel::class.java)
     override val bindingVariable: Int
         get() = BR._all
     override val layoutId: Int
@@ -81,13 +81,13 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
     private fun inflateLayout(currentItemPosition: Int = 0) {
         val info = mutableListOf<ClassesBaseInformation>()
 
-        mViewDataBinding.tabLayout.removeAllTabs()
+        viewDataBinding.tabLayout.removeAllTabs()
 
         when (viewType) {
             VIEW_TYPE_DAY -> {
                 for (i in 0 until NUMBER_OF_TABS) {
-                    val (day, week, dayRu) = mViewModel.getTabDate(i)
-                    mViewDataBinding.tabLayout.addTab(mViewDataBinding.tabLayout.newTab()
+                    val (day, week, dayRu) = viewModel.getTabDate(i)
+                    viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab()
                             .setText(getString(R.string.schedule_tab_text, day, week)).setTag(dayRu))
 
                     when (scheduleType) {
@@ -102,8 +102,8 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
             }
             VIEW_TYPE_WEEK -> {
                 for (i in 0..6) {
-                    val (weekday, dayRu) = mViewModel.getWeekday(i)
-                    mViewDataBinding.tabLayout.addTab(mViewDataBinding.tabLayout.newTab()
+                    val (weekday, dayRu) = viewModel.getWeekday(i)
+                    viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab()
                             .setText(weekday).setTag(dayRu))
 
                     when (scheduleType) {
@@ -118,7 +118,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
             }
         }
 
-        mViewDataBinding.viewPager.currentItem = currentItemPosition
+        viewDataBinding.viewPager.currentItem = currentItemPosition
 
         mPagerAdapter.fragmentsInfo = info
     }
@@ -132,10 +132,10 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
         compositeDisposable.addAll(
                 FabCommunication.listen(OnFabClick::class.java)
                         .subscribe {
-                            mViewDataBinding.viewPager.setCurrentItem(0, true)
+                            viewDataBinding.viewPager.setCurrentItem(0, true)
                         },
                 FabCommunication.listen(OnFabShowPos::class.java).subscribe {
-                    if (mViewDataBinding.viewPager.currentItem != 0) {
+                    if (viewDataBinding.viewPager.currentItem != 0) {
                         FabCommunication.publish(OnFabShow)
                     }
                 },
@@ -144,7 +144,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
                     if (viewType != it) {
                         viewType = it
                         val position = if (viewType == VIEW_TYPE_WEEK)
-                            with(mViewDataBinding.tabLayout) {
+                            with(viewDataBinding.tabLayout) {
                                 getTabAt(selectedTabPosition)?.tag.toString().getDayIndex()
                             } else 0
 
@@ -154,17 +154,17 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
                 sharedPref.getInteger(SUBGROUP_NUMBER, SUBGROUP_ALL).asObservable().subscribe {
                     if (subgroupNumber != it) {
                         subgroupNumber = it
-                        inflateLayout(mViewDataBinding.viewPager.currentItem)
+                        inflateLayout(viewDataBinding.viewPager.currentItem)
                     }
                 })
 
-        mViewDataBinding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        viewDataBinding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab) {
 
             }
 
             override fun onTabSelected(tab: TabLayout.Tab) {
-                mViewDataBinding.viewPager.currentItem = tab.position
+                viewDataBinding.viewPager.currentItem = tab.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
@@ -172,7 +172,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
             }
         })
 
-        mViewDataBinding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        viewDataBinding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
 
             }
@@ -188,12 +188,12 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
     }
 
     private fun setupView() {
-        mViewDataBinding.viewPager.adapter = mPagerAdapter
+        viewDataBinding.viewPager.adapter = mPagerAdapter
 
-        mViewDataBinding.viewPager
+        viewDataBinding.viewPager
                 .addOnPageChangeListener(
                         TabLayout.TabLayoutOnPageChangeListener(
-                                mViewDataBinding.tabLayout))
+                                viewDataBinding.tabLayout))
     }
 
     private fun String.getDayIndex() = when (this) {

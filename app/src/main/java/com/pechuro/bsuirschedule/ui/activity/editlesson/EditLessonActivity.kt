@@ -33,19 +33,19 @@ class EditLessonActivity :
         }
     }
 
-    override val mViewModel: EditLessonActivityViewModel
-        get() = ViewModelProviders.of(this, mViewModelFactory).get(EditLessonActivityViewModel::class.java)
+    override val viewModel: EditLessonActivityViewModel
+        get() = ViewModelProviders.of(this, viewModelFactory).get(EditLessonActivityViewModel::class.java)
     override val layoutId: Int
         get() = R.layout.activity_container
     override val bindingVariables: Map<Int, Any>
-        get() = mapOf(Pair(BR.viewModel, mViewModel))
+        get() = mapOf(Pair(BR.viewModel, viewModel))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val fragment = EditLessonFragment.newInstance()
         supportFragmentManager.transaction {
-            replace(mViewDataBinding.container.id, fragment)
+            replace(viewDataBinding.container.id, fragment)
         }
     }
 

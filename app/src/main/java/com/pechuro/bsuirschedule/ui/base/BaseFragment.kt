@@ -14,10 +14,10 @@ import javax.inject.Inject
 
 abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel<out BaseNavigator>> : Fragment() {
     @Inject
-    lateinit var mViewModelFactory: ViewModelProvider.Factory
-    abstract val mViewModel: V
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    abstract val viewModel: V
 
-    lateinit var mViewDataBinding: T
+    lateinit var viewDataBinding: T
     abstract val bindingVariable: Int
 
     @get:LayoutRes
@@ -30,14 +30,14 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel<out BaseNavig
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mViewDataBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
-        return mViewDataBinding.root
+        viewDataBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
+        return viewDataBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewDataBinding.setVariable(bindingVariable, mViewModel)
-        mViewDataBinding.executePendingBindings()
+        viewDataBinding.setVariable(bindingVariable, viewModel)
+        viewDataBinding.executePendingBindings()
     }
 
     private fun performDI() = AndroidSupportInjection.inject(this)

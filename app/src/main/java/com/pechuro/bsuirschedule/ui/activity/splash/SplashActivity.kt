@@ -11,17 +11,17 @@ import com.pechuro.bsuirschedule.ui.base.BaseActivity
 
 class SplashActivity :
         BaseActivity<ActivitySplashBinding, SplashActivityViewModel>(), SplashNavigator {
-    override val mViewModel: SplashActivityViewModel
-        get() = ViewModelProviders.of(this, mViewModelFactory).get(SplashActivityViewModel::class.java)
+    override val viewModel: SplashActivityViewModel
+        get() = ViewModelProviders.of(this, viewModelFactory).get(SplashActivityViewModel::class.java)
     override val layoutId: Int
         get() = R.layout.activity_splash
     override val bindingVariables: Map<Int, Any>
-        get() = mapOf(Pair(BR.viewModel, mViewModel))
+        get() = mapOf(Pair(BR.viewModel, viewModel))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mViewModel.setNavigator(this)
-        if (savedInstanceState == null) mViewModel.decideNextActivity()
+        viewModel.setNavigator(this)
+        if (savedInstanceState == null) viewModel.decideNextActivity()
     }
 
     override fun openInfoLoadActivity() {

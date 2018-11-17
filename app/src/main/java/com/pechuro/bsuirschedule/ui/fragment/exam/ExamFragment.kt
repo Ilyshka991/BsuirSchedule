@@ -33,8 +33,8 @@ class ExamFragment : BaseFragment<FragmentListBinding, ExamViewModel>() {
     @Inject
     lateinit var mAdapter: ExamAdapter
 
-    override val mViewModel: ExamViewModel
-        get() = ViewModelProviders.of(this, mViewModelFactory).get(ExamViewModel::class.java)
+    override val viewModel: ExamViewModel
+        get() = ViewModelProviders.of(this, viewModelFactory).get(ExamViewModel::class.java)
     override val bindingVariable: Int
         get() = BR.data
     override val layoutId: Int
@@ -49,17 +49,17 @@ class ExamFragment : BaseFragment<FragmentListBinding, ExamViewModel>() {
 
     private fun loadData() {
         val info: ScheduleInformation? = arguments?.getParcelable(ARG_INFO)
-        info?.let { mViewModel.loadData(it) }
+        info?.let { viewModel.loadData(it) }
     }
 
     private fun setupView() {
         mLayoutManager.orientation = RecyclerView.VERTICAL
-        mViewDataBinding.recyclerView.layoutManager = mLayoutManager
-        mViewDataBinding.recyclerView.adapter = mAdapter
+        viewDataBinding.recyclerView.layoutManager = mLayoutManager
+        viewDataBinding.recyclerView.adapter = mAdapter
     }
 
     private fun subscribeToLiveData() {
-        mViewModel.listItemsLiveData.observe(this,
+        viewModel.listItemsLiveData.observe(this,
                 Observer {
                     if (it != null) {
                         mAdapter.setItems(it)

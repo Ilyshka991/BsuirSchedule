@@ -18,10 +18,10 @@ abstract class BaseDialog<T : ViewDataBinding, V : BaseViewModel<out BaseNavigat
     @Inject
     lateinit var mViewModelFactory: ViewModelProvider.Factory
 
-    lateinit var mViewDataBinding: T
-    abstract val mViewModel: V?
+    lateinit var viewDataBinding: T
+    abstract val viewModel: V?
     abstract val bindingVariable: Int
-    lateinit var mRootView: View
+    lateinit var rootView: View
     @get:LayoutRes
     abstract val layoutId: Int
 
@@ -31,17 +31,17 @@ abstract class BaseDialog<T : ViewDataBinding, V : BaseViewModel<out BaseNavigat
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mViewDataBinding = DataBindingUtil
+        viewDataBinding = DataBindingUtil
                 .inflate(LayoutInflater.from(context), layoutId, null, false)
-        mRootView = mViewDataBinding.root
+        rootView = viewDataBinding.root
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        return mRootView
+        return rootView
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mViewDataBinding.setVariable(bindingVariable, mViewModel)
-        mViewDataBinding.executePendingBindings()
+        viewDataBinding.setVariable(bindingVariable, viewModel)
+        viewDataBinding.executePendingBindings()
     }
 
     private fun performDI() = AndroidSupportInjection.inject(this)

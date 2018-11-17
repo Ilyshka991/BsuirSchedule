@@ -34,8 +34,8 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), Ad
         }
     }
 
-    override val mViewModel: AddFragmentViewModel
-        get() = ViewModelProviders.of(this, mViewModelFactory).get(AddFragmentViewModel::class.java)
+    override val viewModel: AddFragmentViewModel
+        get() = ViewModelProviders.of(this, viewModelFactory).get(AddFragmentViewModel::class.java)
     override val bindingVariable: Int
         get() = BR.viewModel
     override val layoutId: Int
@@ -53,9 +53,9 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), Ad
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewModel.setNavigator(this)
+        viewModel.setNavigator(this)
         if (savedInstanceState == null && scheduleType != null) {
-            mViewModel.loadSuggestions(scheduleType!!)
+            viewModel.loadSuggestions(scheduleType!!)
         }
         setListeners()
         subscribeToLiveData()
@@ -66,20 +66,20 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), Ad
     }
 
     override fun onCancel() {
-        mViewDataBinding.errorTextView.text = ""
-        mViewDataBinding.buttonOk.isEnabled = true
+        viewDataBinding.errorTextView.text = ""
+        viewDataBinding.buttonOk.isEnabled = true
         callback?.setDialogCancelable(true)
     }
 
     override fun onError(messageId: Int) {
         callback?.setDialogCancelable(true)
-        mViewDataBinding.buttonOk.isEnabled = true
+        viewDataBinding.buttonOk.isEnabled = true
 
-        mViewDataBinding.errorTextView.text = getString(messageId)
+        viewDataBinding.errorTextView.text = getString(messageId)
     }
 
     override fun onClearError() {
-        mViewDataBinding.errorTextView.text = ""
+        viewDataBinding.errorTextView.text = ""
     }
 
     override fun onSuccess(scheduleName: String, scheduleType: Int) {
@@ -88,48 +88,48 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>(), Ad
             putInt(SharedPrefConstants.SCHEDULE_TYPE, scheduleType)
         }
 
-        mViewDataBinding.buttonOk.isEnabled = true
+        viewDataBinding.buttonOk.isEnabled = true
         Toast.makeText(context, getString(R.string.success), Toast.LENGTH_LONG).show()
         callback?.onDismiss()
     }
 
     private fun loadSchedule() {
-        mViewDataBinding.buttonOk.isEnabled = false
+        viewDataBinding.buttonOk.isEnabled = false
 
-        val scheduleName = mViewDataBinding.textInput.text.toString()
+        val scheduleName = viewDataBinding.textInput.text.toString()
 
         val types = arrayListOf<Int>()
-        if (mViewDataBinding.typeClasses.isChecked) {
+        if (viewDataBinding.typeClasses.isChecked) {
             types.add(if (scheduleType == STUDENT)
                 STUDENT_CLASSES else EMPLOYEE_CLASSES)
         }
-        if (mViewDataBinding.typeExams.isChecked) {
+        if (viewDataBinding.typeExams.isChecked) {
             types.add(if (scheduleType == STUDENT)
                 STUDENT_EXAMS else EMPLOYEE_EXAMS)
         }
 
-        mViewModel.loadSchedule(scheduleName, types)
+        viewModel.loadSchedule(scheduleName, types)
     }
 
     private fun setListeners() {
-        mViewDataBinding.buttonOk.setOnClickListener {
+        viewDataBinding.buttonOk.setOnClickListener {
             loadSchedule()
         }
 
-        mViewDataBinding.buttonRetry.setOnClickListener {
+        viewDataBinding.buttonRetry.setOnClickListener {
             loadSchedule()
         }
     }
 
     private fun subscribeToLiveData() {
-        mViewModel.suggestions.observe(this,
+        viewModel.suggestions.observe(this,
                 Observer {
                     if (it != null) {
                         val adapter = ArrayAdapter<String>(
-                                mViewDataBinding.textInput.context,
+                                viewDataBinding.textInput.context,
                                 R.layout.item_autocomplete_adapter,
                                 it)
-                        mViewDataBinding.textInput.setAdapter(adapter)
+                        viewDataBinding.textInput.setAdapter(adapter)
                     }
                 })
     }

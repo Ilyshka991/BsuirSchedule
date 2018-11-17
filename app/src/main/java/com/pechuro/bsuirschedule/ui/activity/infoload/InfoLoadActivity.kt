@@ -9,7 +9,6 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.ActivityInfoLoadBinding
 import com.pechuro.bsuirschedule.ui.activity.navigation.NavigationActivity
 import com.pechuro.bsuirschedule.ui.base.BaseActivity
-import java.lang.ref.WeakReference
 
 class InfoLoadActivity :
         BaseActivity<ActivityInfoLoadBinding, InfoLoadActivityViewModel>(), InfoLoadNavigator {
@@ -18,12 +17,12 @@ class InfoLoadActivity :
         fun newIntent(context: Context) = Intent(context, InfoLoadActivity::class.java)
     }
 
-    override val mViewModel: InfoLoadActivityViewModel
-        get() = ViewModelProviders.of(this, mViewModelFactory).get(InfoLoadActivityViewModel::class.java)
+    override val viewModel: InfoLoadActivityViewModel
+        get() = ViewModelProviders.of(this, viewModelFactory).get(InfoLoadActivityViewModel::class.java)
     override val layoutId: Int
         get() = R.layout.activity_info_load
     override val bindingVariables: Map<Int, Any>
-        get() = mapOf(Pair(BR.viewModel, mViewModel))
+        get() = mapOf(Pair(BR.viewModel, viewModel))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +36,6 @@ class InfoLoadActivity :
     }
 
     private fun setCallback() {
-        mViewModel.setNavigator(this)
+        viewModel.setNavigator(this)
     }
 }

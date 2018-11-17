@@ -19,8 +19,8 @@ class StartFragment : BaseFragment<FragmentStartBinding, StartFragmentViewModel>
         }
     }
 
-    override val mViewModel: StartFragmentViewModel
-        get() = ViewModelProviders.of(this, mViewModelFactory).get(StartFragmentViewModel::class.java)
+    override val viewModel: StartFragmentViewModel
+        get() = ViewModelProviders.of(this, viewModelFactory).get(StartFragmentViewModel::class.java)
     override val bindingVariable: Int
         get() = BR.viewModel
     override val layoutId: Int
@@ -32,7 +32,7 @@ class StartFragment : BaseFragment<FragmentStartBinding, StartFragmentViewModel>
     }
 
     private fun setListeners() {
-        mViewDataBinding.fab.setOnClickListener {
+        viewDataBinding.fab.setOnClickListener {
             AddDialog.newInstance().show(fragmentManager, "add_dialog")
         }
     }

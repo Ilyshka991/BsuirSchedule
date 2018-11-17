@@ -11,10 +11,10 @@ import javax.inject.Inject
 
 abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel<out BaseNavigator>> : AppCompatActivity() {
     @Inject
-    lateinit var mViewModelFactory: ViewModelProvider.Factory
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    lateinit var mViewDataBinding: T
-    abstract val mViewModel: V
+    lateinit var viewDataBinding: T
+    abstract val viewModel: V
 
     @get:LayoutRes
     abstract val layoutId: Int
@@ -30,8 +30,8 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel<out BaseNavig
     private fun performDI() = AndroidInjection.inject(this)
 
     private fun performDataBinding() {
-        mViewDataBinding = DataBindingUtil.setContentView(this, layoutId)
-        bindingVariables.forEach { (variable, obj) -> mViewDataBinding.setVariable(variable, obj) }
-        mViewDataBinding.executePendingBindings()
+        viewDataBinding = DataBindingUtil.setContentView(this, layoutId)
+        bindingVariables.forEach { (variable, obj) -> viewDataBinding.setVariable(variable, obj) }
+        viewDataBinding.executePendingBindings()
     }
 }

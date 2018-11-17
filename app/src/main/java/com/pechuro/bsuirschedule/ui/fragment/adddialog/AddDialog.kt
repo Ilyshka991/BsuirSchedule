@@ -29,7 +29,7 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, StubViewModel>(), AddFrag
 
     private var mNavigator: AddDialogCallback? = null
 
-    override val mViewModel: StubViewModel
+    override val viewModel: StubViewModel
         get() = ViewModelProviders.of(this, mViewModelFactory).get(StubViewModel::class.java)
     override val bindingVariable: Int
         get() = BR._all
@@ -59,26 +59,26 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, StubViewModel>(), AddFrag
     override fun onDismiss() = dismiss()
 
     private fun setupView() {
-        mViewDataBinding.viewPager.adapter = mPagerAdapter
-        mViewDataBinding.viewPager.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        viewDataBinding.viewPager.adapter = mPagerAdapter
+        viewDataBinding.viewPager.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
 
-        mViewDataBinding.tabLayout.addTab(mViewDataBinding.tabLayout.newTab().setText(getString(R.string.students)))
-        mViewDataBinding.tabLayout.addTab(mViewDataBinding.tabLayout.newTab().setText(getString(R.string.employees)))
+        viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab().setText(getString(R.string.students)))
+        viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab().setText(getString(R.string.employees)))
     }
 
     private fun setListeners() {
-        mViewDataBinding.viewPager
+        viewDataBinding.viewPager
                 .addOnPageChangeListener(
                         TabLayout.TabLayoutOnPageChangeListener(
-                                mViewDataBinding.tabLayout))
+                                viewDataBinding.tabLayout))
 
-        mViewDataBinding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        viewDataBinding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab) {
 
             }
 
             override fun onTabSelected(tab: TabLayout.Tab) {
-                mViewDataBinding.viewPager.currentItem = tab.position
+                viewDataBinding.viewPager.currentItem = tab.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {

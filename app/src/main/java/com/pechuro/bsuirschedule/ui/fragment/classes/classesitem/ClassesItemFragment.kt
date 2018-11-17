@@ -36,8 +36,8 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
     @Inject
     lateinit var mAdapter: ClassesAdapter
 
-    override val mViewModel: ClassesItemViewModel
-        get() = ViewModelProviders.of(this, mViewModelFactory).get(ClassesItemViewModel::class.java)
+    override val viewModel: ClassesItemViewModel
+        get() = ViewModelProviders.of(this, viewModelFactory).get(ClassesItemViewModel::class.java)
     override val bindingVariable: Int
         get() = BR._all
     override val layoutId: Int
@@ -52,7 +52,7 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
     }
 
     private fun setListeners() {
-        mViewDataBinding.recyclerView
+        viewDataBinding.recyclerView
                 .addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         super.onScrolled(recyclerView, dx, dy)
@@ -68,17 +68,17 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
 
     private fun loadData() {
         val info: ClassesBaseInformation? = arguments?.getParcelable(ARG_INFO)
-        info?.let { mViewModel.loadData(it) }
+        info?.let { viewModel.loadData(it) }
     }
 
     private fun setupView() {
         mLayoutManager.orientation = RecyclerView.VERTICAL
-        mViewDataBinding.recyclerView.layoutManager = mLayoutManager
-        mViewDataBinding.recyclerView.adapter = mAdapter
+        viewDataBinding.recyclerView.layoutManager = mLayoutManager
+        viewDataBinding.recyclerView.adapter = mAdapter
     }
 
     private fun subscribeToLiveData() {
-        mViewModel.listItemsLiveData.observe(this,
+        viewModel.listItemsLiveData.observe(this,
                 Observer {
                     if (it != null) {
                         mAdapter.setItems(it)
