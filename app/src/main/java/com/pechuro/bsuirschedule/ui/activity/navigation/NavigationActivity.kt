@@ -61,7 +61,7 @@ class NavigationActivity :
     @Inject
     lateinit var gson: Gson
 
-    private var lastScheduleInfo: ScheduleInformation? = null
+    private var _lastScheduleInfo: ScheduleInformation? = null
 
     override val viewModel: NavigationActivityViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(NavigationActivityViewModel::class.java)
@@ -96,14 +96,14 @@ class NavigationActivity :
     }
 
     override fun onItemUpdated(info: ScheduleInformation) {
-        val currentScheduleInfo = lastScheduleInfo
+        val currentScheduleInfo = _lastScheduleInfo
         if (info.id == currentScheduleInfo?.id) {
             homeFragment()
         }
     }
 
     override fun onItemDeleted(info: ScheduleInformation) {
-        val currentScheduleInfo = lastScheduleInfo
+        val currentScheduleInfo = _lastScheduleInfo
         if (info.name == currentScheduleInfo?.name && info.type == currentScheduleInfo.type) {
             changeLastScheduleInfo(null)
             homeFragment()
@@ -137,14 +137,14 @@ class NavigationActivity :
     }
 
     override fun addLesson() {
-        val info = lastScheduleInfo!!
+        val info = _lastScheduleInfo!!
 
         val intent = EditLessonActivity.newIntent(this, info)
         startActivity(intent)
     }
 
     private fun initValues() {
-        lastScheduleInfo = gson.fromJson(sharedPref.getString(SCHEDULE_INFO, "").get(), ScheduleInformation::class.java)
+        _lastScheduleInfo = gson.fromJson(sharedPref.getString(SCHEDULE_INFO, "").get(), ScheduleInformation::class.java)
     }
 
     private fun setupView() {
@@ -156,7 +156,7 @@ class NavigationActivity :
     }
 
     private fun homeFragment() {
-        val info = lastScheduleInfo
+        val info = _lastScheduleInfo
 
         val fragment = if (info == null) {
             StartFragment.newInstance()
@@ -175,7 +175,7 @@ class NavigationActivity :
     }
 
     private fun setupBottomBar() {
-        val type = lastScheduleInfo?.type
+        val type = _lastScheduleInfo?.type
         when (type) {
             STUDENT_CLASSES, EMPLOYEE_CLASSES -> {
                 viewDataBinding.barOptions.visibility = View.VISIBLE
@@ -216,7 +216,7 @@ class NavigationActivity :
                 is OnScheduleUpdated -> {
                     Snackbar.make(viewDataBinding.contentLayout, "${it.info.name} - ${it.info.type} updated!!!!!!!!!!", Snackbar.LENGTH_SHORT).show()
 
-                    val currentScheduleInfo = lastScheduleInfo
+                    val currentScheduleInfo = _lastScheduleInfo
                     if (it.info.name == currentScheduleInfo?.name && it.info.type == currentScheduleInfo.type) {
                         homeFragment()
                     }
@@ -243,7 +243,7 @@ class NavigationActivity :
         compositeDisposable.add(sharedPref.getString(SCHEDULE_INFO, "")
                 .asObservable()
                 .subscribe {
-                    lastScheduleInfo = if (it.isNullOrEmpty()) null else gson.fromJson(it, ScheduleInformation::class.java)
+                    _lastScheduleInfo = if (it.isNullOrEmpty()) null else gson.fromJson(it, ScheduleInformation::class.java)
                 })
     }
 
@@ -266,14 +266,14 @@ class NavigationActivity :
 
         viewDataBinding.bar.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeTop() {
-                val info = lastScheduleInfo
+                val info = _lastScheduleInfo
                 if (info?.type == ScheduleTypes.STUDENT_CLASSES || info?.type == ScheduleTypes.EMPLOYEE_CLASSES) {
                     OptionsFragment.newInstance(info.type).show(supportFragmentManager, "bottom_sheet")
                 }
             }
         })
         viewDataBinding.barOptions.setOnClickListener {
-            val type = lastScheduleInfo?.type!!
+            val type = _lastScheduleInfo?.type!!
             OptionsFragment.newInstance(type).show(supportFragmentManager, "bottom_sheet")
         }
 
@@ -318,4 +318,3 @@ class NavigationActivity :
         fun newIntent(context: Context) = Intent(context, NavigationActivity::class.java)
     }
 }
-
