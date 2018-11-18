@@ -14,10 +14,6 @@ import com.pechuro.bsuirschedule.ui.base.BaseActivity
 class InfoLoadActivity :
         BaseActivity<ActivityInfoLoadBinding, InfoLoadActivityViewModel>() {
 
-    companion object {
-        fun newIntent(context: Context) = Intent(context, InfoLoadActivity::class.java)
-    }
-
     override val viewModel: InfoLoadActivityViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(InfoLoadActivityViewModel::class.java)
     override val layoutId: Int
@@ -40,5 +36,9 @@ class InfoLoadActivity :
                 }
             }
         })
+    }
+
+    companion object {
+        fun newIntent(context: Context) = Intent(context, InfoLoadActivity::class.java)
     }
 }

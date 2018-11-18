@@ -1,9 +1,9 @@
-package com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo
+package com.pechuro.bsuirschedule.ui.data
 
 import android.os.Parcel
 import android.os.Parcelable
 
-class ScheduleInformation(val id: Int, val name: String, val type: Int) : Parcelable {
+data class ScheduleInformation(val id: Int, val name: String, val type: Int) : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readInt(),
             parcel.readString() ?: "",

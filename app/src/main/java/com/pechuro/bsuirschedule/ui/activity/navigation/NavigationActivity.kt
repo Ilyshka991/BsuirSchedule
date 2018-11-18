@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.pechuro.bsuirschedule.BR
@@ -28,10 +29,10 @@ import com.pechuro.bsuirschedule.constants.SharedPrefConstants.SCHEDULE_INFO
 import com.pechuro.bsuirschedule.databinding.ActivityNavigationBinding
 import com.pechuro.bsuirschedule.ui.activity.editlesson.EditLessonActivity
 import com.pechuro.bsuirschedule.ui.activity.navigation.adapter.NavItemAdapter
-import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.activity.settings.SettingsActivity
 import com.pechuro.bsuirschedule.ui.base.BaseActivity
 import com.pechuro.bsuirschedule.ui.custom.OnSwipeTouchListener
+import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
 import com.pechuro.bsuirschedule.ui.fragment.bottomsheet.OptionsFragment
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragment
@@ -40,7 +41,6 @@ import com.pechuro.bsuirschedule.ui.fragment.optiondialog.DrawerOptionsDialog
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragment
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_navigation.*
 import org.jetbrains.anko.defaultSharedPreferences
 import javax.inject.Inject
@@ -51,15 +51,17 @@ class NavigationActivity :
         OptionsFragment.ScheduleOptionsCallback, DrawerOptionsDialog.DrawerOptionsCallback {
 
     @Inject
-    lateinit var gson: Gson
-    @Inject
     lateinit var fragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
     @Inject
     lateinit var layoutManager: LinearLayoutManager
     @Inject
     lateinit var navAdapter: NavItemAdapter
+    @Inject
+    lateinit var sharedPref: RxSharedPreferences
+    @Inject
+    lateinit var gson: Gson
 
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    private var lastScheduleInfo: ScheduleInformation? = null
 
     override val viewModel: NavigationActivityViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(NavigationActivityViewModel::class.java)
@@ -72,18 +74,17 @@ class NavigationActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setListeners()
+        initValues()
         setupView()
         setCallback()
-        setListeners()
+        setViewListeners()
         setCommunicationListeners()
-        if (savedInstanceState == null) {
-            homeFragment()
-        }
+        if (savedInstanceState == null) homeFragment()
         setupBottomBar()
         subscribeToLiveData()
         setEventListeners()
     }
-
 
     override fun onBackPressed() {
         if (viewDataBinding.drawerLayout
@@ -94,20 +95,15 @@ class NavigationActivity :
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        compositeDisposable.dispose()
-    }
-
     override fun onItemUpdated(info: ScheduleInformation) {
-        val currentScheduleInfo = getCurrentScheduleInfo()
+        val currentScheduleInfo = lastScheduleInfo
         if (info.id == currentScheduleInfo?.id) {
             homeFragment()
         }
     }
 
     override fun onItemDeleted(info: ScheduleInformation) {
-        val currentScheduleInfo = getCurrentScheduleInfo()
+        val currentScheduleInfo = lastScheduleInfo
         if (info.name == currentScheduleInfo?.name && info.type == currentScheduleInfo.type) {
             changeLastScheduleInfo(null)
             homeFragment()
@@ -141,57 +137,14 @@ class NavigationActivity :
     }
 
     override fun addLesson() {
-        val info = getCurrentScheduleInfo()!!
+        val info = lastScheduleInfo!!
 
         val intent = EditLessonActivity.newIntent(this, info)
         startActivity(intent)
     }
 
-    private fun setCommunicationListeners() {
-        compositeDisposable.addAll(
-                FabCommunication.listen(OnFabShow::class.java).subscribe {
-                    viewDataBinding.fabBack.show()
-                },
-                FabCommunication.listen(OnFabHide::class.java).subscribe {
-                    viewDataBinding.fabBack.hide()
-                })
-    }
-
-    private fun changeLastScheduleInfo(info: ScheduleInformation?) {
-        defaultSharedPreferences.edit {
-            putString(SCHEDULE_INFO, gson.toJson(info))
-        }
-    }
-
-    private fun setEventListeners() {
-        viewModel.command.observe(this, Observer {
-            when (it) {
-                is OnRequestUpdate -> {
-                    Toast.makeText(this, "${it.info.name} - ${it.info.type} need update", Toast.LENGTH_LONG).show()
-
-                    viewModel.updateSchedule(it.info)
-                }
-
-                is OnScheduleUpdated -> {
-                    Snackbar.make(viewDataBinding.contentLayout, "${it.info.name} - ${it.info.type} updated!!!!!!!!!!", Snackbar.LENGTH_SHORT).show()
-
-                    val currentScheduleInfo = getCurrentScheduleInfo()
-                    if (it.info.name == currentScheduleInfo?.name && it.info.type == currentScheduleInfo.type) {
-                        homeFragment()
-                    }
-                }
-
-                is OnScheduleUpdateFail -> {
-                    Snackbar.make(viewDataBinding.contentLayout, "${it.info.name} - ${it.info.type} update fail !!!!!!!!!!", Snackbar.LENGTH_SHORT).show()
-                }
-            }
-        })
-    }
-
-    private fun subscribeToLiveData() {
-        viewModel.menuItems.observe(this, Observer {
-            navAdapter.setItems(it)
-        })
+    private fun initValues() {
+        lastScheduleInfo = gson.fromJson(sharedPref.getString(SCHEDULE_INFO, "").get(), ScheduleInformation::class.java)
     }
 
     private fun setupView() {
@@ -202,51 +155,27 @@ class NavigationActivity :
         viewDataBinding.navItemList.adapter = navAdapter
     }
 
-    private fun setCallback() {
-        navAdapter.callback = this
-    }
+    private fun homeFragment() {
+        val info = lastScheduleInfo
 
-    private fun setListeners() {
-        val toggle = ActionBarDrawerToggle(
-                this, viewDataBinding.drawerLayout, viewDataBinding.bar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        viewDataBinding.drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-
-        viewDataBinding.navFooterSettings.setOnClickListener {
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
-        }
-        viewDataBinding.navFooterAddSchedule.setOnClickListener {
-            navigate {
-                AddDialog.newInstance().show(supportFragmentManager, "add_dialog")
+        val fragment = if (info == null) {
+            StartFragment.newInstance()
+        } else {
+            when (info.type) {
+                STUDENT_CLASSES, EMPLOYEE_CLASSES -> ClassesFragment.newInstance(info)
+                STUDENT_EXAMS, EMPLOYEE_EXAMS -> ExamFragment.newInstance(info)
+                else -> throw IllegalStateException("Invalid type")
             }
         }
 
-        viewDataBinding.bar.setOnTouchListener(object : OnSwipeTouchListener(this) {
-            override fun onSwipeTop() {
-                val info = getCurrentScheduleInfo()
-                if (info?.type == ScheduleTypes.STUDENT_CLASSES || info?.type == ScheduleTypes.EMPLOYEE_CLASSES) {
-                    OptionsFragment.newInstance(info.type).show(supportFragmentManager, "bottom_sheet")
-                }
-            }
-        })
-        viewDataBinding.barOptions.setOnClickListener {
-            val type = getCurrentScheduleInfo()?.type!!
-            OptionsFragment.newInstance(type).show(supportFragmentManager, "bottom_sheet")
+        supportFragmentManager.transaction {
+            replace(viewDataBinding.navHostFragment.id, fragment)
         }
-
-        viewDataBinding.fabBack.setOnClickListener {
-            FabCommunication.publish(OnFabClick)
-        }
-
-        viewDataBinding.barAdd.setOnClickListener {
-            addLesson()
-        }
+        setupBottomBar()
     }
 
     private fun setupBottomBar() {
-        val type = getCurrentScheduleInfo()?.type
+        val type = lastScheduleInfo?.type
         when (type) {
             STUDENT_CLASSES, EMPLOYEE_CLASSES -> {
                 viewDataBinding.barOptions.visibility = View.VISIBLE
@@ -265,23 +194,96 @@ class NavigationActivity :
         viewDataBinding.fabBack.hide()
     }
 
-    private fun homeFragment() {
-        val info = getCurrentScheduleInfo()
+    private fun setCommunicationListeners() {
+        compositeDisposable.addAll(
+                FabCommunication.listen(OnFabShow::class.java).subscribe {
+                    viewDataBinding.fabBack.show()
+                },
+                FabCommunication.listen(OnFabHide::class.java).subscribe {
+                    viewDataBinding.fabBack.hide()
+                })
+    }
 
-        val fragment = if (info == null) {
-            StartFragment.newInstance()
-        } else {
-            when (info.type) {
-                STUDENT_CLASSES, EMPLOYEE_CLASSES -> ClassesFragment.newInstance(info)
-                STUDENT_EXAMS, EMPLOYEE_EXAMS -> ExamFragment.newInstance(info)
-                else -> throw IllegalStateException("Invalid type")
+    private fun setEventListeners() {
+        viewModel.command.observe(this, Observer {
+            when (it) {
+                is OnRequestUpdate -> {
+                    Toast.makeText(this, "${it.info.name} - ${it.info.type} need update", Toast.LENGTH_LONG).show()
+
+                    viewModel.updateSchedule(it.info)
+                }
+
+                is OnScheduleUpdated -> {
+                    Snackbar.make(viewDataBinding.contentLayout, "${it.info.name} - ${it.info.type} updated!!!!!!!!!!", Snackbar.LENGTH_SHORT).show()
+
+                    val currentScheduleInfo = lastScheduleInfo
+                    if (it.info.name == currentScheduleInfo?.name && it.info.type == currentScheduleInfo.type) {
+                        homeFragment()
+                    }
+                }
+
+                is OnScheduleUpdateFail -> {
+                    Snackbar.make(viewDataBinding.contentLayout, "${it.info.name} - ${it.info.type} update fail !!!!!!!!!!", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
+    private fun subscribeToLiveData() {
+        viewModel.menuItems.observe(this, Observer {
+            navAdapter.setItems(it)
+        })
+    }
+
+    private fun setCallback() {
+        navAdapter.callback = this
+    }
+
+    private fun setListeners() {
+        compositeDisposable.add(sharedPref.getString(SCHEDULE_INFO, "")
+                .asObservable()
+                .subscribe {
+                    lastScheduleInfo = if (it.isNullOrEmpty()) null else gson.fromJson(it, ScheduleInformation::class.java)
+                })
+    }
+
+    private fun setViewListeners() {
+        val toggle = ActionBarDrawerToggle(
+                this, viewDataBinding.drawerLayout, viewDataBinding.bar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        viewDataBinding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        viewDataBinding.navFooterSettings.setOnClickListener {
+            val intent = SettingsActivity.newIntent(this)
+            startActivity(intent)
+        }
+        viewDataBinding.navFooterAddSchedule.setOnClickListener {
+            navigate {
+                AddDialog.newInstance().show(supportFragmentManager, "add_dialog")
             }
         }
 
-        supportFragmentManager.transaction {
-            replace(viewDataBinding.navHostFragment.id, fragment)
+        viewDataBinding.bar.setOnTouchListener(object : OnSwipeTouchListener(this) {
+            override fun onSwipeTop() {
+                val info = lastScheduleInfo
+                if (info?.type == ScheduleTypes.STUDENT_CLASSES || info?.type == ScheduleTypes.EMPLOYEE_CLASSES) {
+                    OptionsFragment.newInstance(info.type).show(supportFragmentManager, "bottom_sheet")
+                }
+            }
+        })
+        viewDataBinding.barOptions.setOnClickListener {
+            val type = lastScheduleInfo?.type!!
+            OptionsFragment.newInstance(type).show(supportFragmentManager, "bottom_sheet")
         }
-        setupBottomBar()
+
+        viewDataBinding.fabBack.setOnClickListener {
+            FabCommunication.publish(OnFabClick)
+        }
+
+        viewDataBinding.barAdd.setOnClickListener {
+            addLesson()
+        }
     }
 
     private fun navigate(action: () -> Unit) {
@@ -306,12 +308,14 @@ class NavigationActivity :
         viewDataBinding.drawerLayout.closeDrawers()
     }
 
-    private fun getCurrentScheduleInfo(): ScheduleInformation? {
-        val json = defaultSharedPreferences.getString(SCHEDULE_INFO, "")
-        return if (json.isNullOrEmpty()) null else gson.fromJson(json, ScheduleInformation::class.java)
+    private fun changeLastScheduleInfo(info: ScheduleInformation?) {
+        defaultSharedPreferences.edit {
+            putString(SCHEDULE_INFO, gson.toJson(info))
+        }
     }
 
     companion object {
         fun newIntent(context: Context) = Intent(context, NavigationActivity::class.java)
     }
 }
+

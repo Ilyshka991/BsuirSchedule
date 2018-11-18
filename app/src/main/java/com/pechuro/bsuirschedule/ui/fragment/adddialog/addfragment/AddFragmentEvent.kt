@@ -1,6 +1,6 @@
 package com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment
 
-import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
+import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 
 sealed class AddFragmentEvent
 

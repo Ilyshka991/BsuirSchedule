@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import com.pechuro.bsuirschedule.constants.ScheduleTypes
 import com.pechuro.bsuirschedule.data.ScheduleRepository
 import com.pechuro.bsuirschedule.data.entity.Schedule
-import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
+import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.utils.SingleLiveEvent
 import com.pechuro.bsuirschedule.ui.utils.getInfo
 import io.reactivex.android.schedulers.AndroidSchedulers

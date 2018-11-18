@@ -8,8 +8,8 @@ import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT
 import com.pechuro.bsuirschedule.data.EmployeeRepository
 import com.pechuro.bsuirschedule.data.GroupRepository
 import com.pechuro.bsuirschedule.data.ScheduleRepository
-import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
+import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.utils.SingleLiveEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -46,15 +46,14 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
     }
 
     fun loadSchedule(scheduleName: String, scheduleTypes: List<Int>) {
+        if (!isValid(scheduleName, scheduleTypes)) {
+            return
+        }
+
         command.call(OnLoading)
 
         isLoading.set(true)
         isError.set(false)
-
-        if (!isValid(scheduleName, scheduleTypes)) {
-            isLoading.set(false)
-            return
-        }
 
         compositeDisposable.add(repository.loadClasses(scheduleName, scheduleTypes)
                 .subscribeOn(Schedulers.io())

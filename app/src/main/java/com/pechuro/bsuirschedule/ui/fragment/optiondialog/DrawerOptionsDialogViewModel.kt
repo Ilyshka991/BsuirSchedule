@@ -1,8 +1,8 @@
 package com.pechuro.bsuirschedule.ui.fragment.optiondialog
 
 import com.pechuro.bsuirschedule.data.ScheduleRepository
-import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
+import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.utils.SingleLiveEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

@@ -1,5 +1,7 @@
 package com.pechuro.bsuirschedule.ui.activity.settings
 
+import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.ActivitySettingsBinding
@@ -12,4 +14,8 @@ class SettingsActivity : BaseActivity<ActivitySettingsBinding, SettingsActivityV
         get() = R.layout.activity_settings
     override val bindingVariables: Map<Int, Any>
         get() = mapOf()
+
+    companion object {
+        fun newIntent(context: Context) = Intent(context, SettingsActivity::class.java)
+    }
 }

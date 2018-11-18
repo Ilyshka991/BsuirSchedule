@@ -12,7 +12,7 @@ import com.pechuro.bsuirschedule.data.network.LastUpdateResponse
 import com.pechuro.bsuirschedule.data.network.ResponseModel
 import com.pechuro.bsuirschedule.data.network.ScheduleApi
 import com.pechuro.bsuirschedule.data.network.ScheduleResponse
-import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
+import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -28,7 +28,7 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
                         .onErrorReturn { LastUpdateResponse("") }
                         .blockingGet().lastUpdateDate
 
-                delete(name, types)
+                deleteLastSchedules(name, types)
 
                 val classesList = mutableListOf<Classes>()
                 types.forEach { type ->
@@ -73,9 +73,7 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
         scheduleDao.delete(type)
     }
 
-    fun delete(name: String, types: List<Int>) = Single.fromCallable {
-        types.forEach { scheduleDao.delete(name, it) }
-    }
+    private fun deleteLastSchedules(name: String, types: List<Int>) = types.forEach { scheduleDao.delete(name, it) }
 
     fun getLastUpdate(name: String): Single<LastUpdateResponse> = api.getLastUpdateDate(name)
 

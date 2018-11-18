@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import com.pechuro.bsuirschedule.constants.ScheduleTypes
 import com.pechuro.bsuirschedule.data.ScheduleRepository
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
-import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
+import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.fragment.exam.adapter.ExamViewTypes
 import com.pechuro.bsuirschedule.ui.fragment.exam.data.BaseExamData
 import com.pechuro.bsuirschedule.ui.fragment.exam.data.impl.EmployeeExamData

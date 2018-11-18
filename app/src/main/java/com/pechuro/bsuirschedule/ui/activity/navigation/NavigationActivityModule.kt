@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.pechuro.bsuirschedule.ui.activity.navigation.adapter.NavItemAdapter
+import com.pechuro.bsuirschedule.ui.activity.navigation.adapter.NavItemsDiffCallback
 import dagger.Module
 import dagger.Provides
 import org.jetbrains.anko.defaultSharedPreferences
@@ -12,7 +13,7 @@ import org.jetbrains.anko.defaultSharedPreferences
 @Module
 class NavigationActivityModule {
     @Provides
-    fun provideAdapter(context: Context) = NavItemAdapter(context)
+    fun provideAdapter(context: Context, diffCallback: NavItemsDiffCallback) = NavItemAdapter(context, diffCallback)
 
     @Provides
     fun provideLinearLayoutManager(activity: NavigationActivity) =
@@ -23,5 +24,8 @@ class NavigationActivityModule {
 
     @Provides
     fun provideRxPref(pref: SharedPreferences) = RxSharedPreferences.create(pref)
+
+    @Provides
+    fun provideNavItemsDiffCallback() = NavItemsDiffCallback()
 }
 

@@ -8,12 +8,31 @@ import androidx.lifecycle.ViewModelProviders
 import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.ActivityContainerBinding
-import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseActivity
+import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.fragment.edit.EditLessonFragment
 
 class EditLessonActivity :
         BaseActivity<ActivityContainerBinding, EditLessonActivityViewModel>() {
+
+    override val viewModel: EditLessonActivityViewModel
+        get() = ViewModelProviders.of(this, viewModelFactory).get(EditLessonActivityViewModel::class.java)
+    override val layoutId: Int
+        get() = R.layout.activity_container
+    override val bindingVariables: Map<Int, Any>
+        get() = mapOf(Pair(BR.viewModel, viewModel))
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (savedInstanceState == null) homeFragment()
+    }
+
+    private fun homeFragment() {
+        val fragment = EditLessonFragment.newInstance()
+        supportFragmentManager.transaction {
+            replace(viewDataBinding.container.id, fragment)
+        }
+    }
 
     companion object {
         private const val INTENT_SCHEDULE_INFO = "schedule_info"
@@ -31,21 +50,4 @@ class EditLessonActivity :
             return intent
         }
     }
-
-    override val viewModel: EditLessonActivityViewModel
-        get() = ViewModelProviders.of(this, viewModelFactory).get(EditLessonActivityViewModel::class.java)
-    override val layoutId: Int
-        get() = R.layout.activity_container
-    override val bindingVariables: Map<Int, Any>
-        get() = mapOf(Pair(BR.viewModel, viewModel))
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val fragment = EditLessonFragment.newInstance()
-        supportFragmentManager.transaction {
-            replace(viewDataBinding.container.id, fragment)
-        }
-    }
-
 }

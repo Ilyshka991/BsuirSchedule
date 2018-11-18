@@ -26,7 +26,7 @@ interface ScheduleDao {
         insert(classes.schedule)
     }
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(values: Schedule): Long
 
     @Update

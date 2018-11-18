@@ -3,21 +3,24 @@ package com.pechuro.bsuirschedule.ui.activity.navigation.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.EXAMS
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.SCHEDULES
 import com.pechuro.bsuirschedule.databinding.ItemListNavBinding
 import com.pechuro.bsuirschedule.databinding.ItemListNavMenuBinding
-import com.pechuro.bsuirschedule.ui.activity.navigation.transactioninfo.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.base.BaseViewHolder
+import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 
 private const val NAV_ITEM_MENU = -1
 private const val NAV_ITEM = -2
 
-class NavItemAdapter(private val mContext: Context) : RecyclerView.Adapter<BaseViewHolder>() {
+class NavItemAdapter(private val context: Context,
+                     private val diffCallback: NavItemsDiffCallback) : RecyclerView.Adapter<BaseViewHolder>() {
+
     lateinit var callback: NavCallback
-    private val mItemsList = ArrayList<ScheduleInformation>()
+    private val _itemsList = mutableListOf<ScheduleInformation>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder =
             when (viewType) {
@@ -35,31 +38,38 @@ class NavItemAdapter(private val mContext: Context) : RecyclerView.Adapter<BaseV
 
 
     override fun getItemViewType(position: Int) =
-            if (mItemsList[position].type == NAV_ITEM_MENU) NAV_ITEM_MENU else NAV_ITEM
+            if (_itemsList[position].type == NAV_ITEM_MENU) NAV_ITEM_MENU else NAV_ITEM
 
-    override fun getItemCount(): Int = mItemsList.size
+    override fun getItemCount(): Int = _itemsList.size
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) = holder.onBind(position)
 
     fun setItems(data: Map<Int, List<ScheduleInformation>>) {
-        mItemsList.clear()
+        val result = mutableListOf<ScheduleInformation>()
+
         if (data[SCHEDULES]?.isNotEmpty() == true) {
-            mItemsList.add(ScheduleInformation(-1, mContext.getString(R.string.schedules), NAV_ITEM_MENU))
-            mItemsList.addAll(data[SCHEDULES]!!)
+            result.add(ScheduleInformation(-1, context.getString(R.string.schedules), NAV_ITEM_MENU))
+            result.addAll(data[SCHEDULES]!!)
         }
 
         if (data[EXAMS]?.isNotEmpty() == true) {
-            mItemsList.add(ScheduleInformation(-1, mContext.getString(R.string.exams), NAV_ITEM_MENU))
-            mItemsList.addAll(data[EXAMS]!!)
+            result.add(ScheduleInformation(-1, context.getString(R.string.exams), NAV_ITEM_MENU))
+            result.addAll(data[EXAMS]!!)
         }
 
-        notifyDataSetChanged()
+        diffCallback.setData(_itemsList, result)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
+        _itemsList.clear()
+        _itemsList += result
+
+        diffResult.dispatchUpdatesTo(this)
     }
 
     inner class ItemViewHolder(private val mBinding: ItemListNavBinding) : BaseViewHolder(mBinding.root) {
 
         override fun onBind(position: Int) {
-            val data = mItemsList[position]
+            val data = _itemsList[position]
             mBinding.data = NavItemData(data.name)
             mBinding.executePendingBindings()
 
@@ -78,7 +88,7 @@ class NavItemAdapter(private val mContext: Context) : RecyclerView.Adapter<BaseV
 
     inner class MenuViewHolder(private val mBinding: ItemListNavMenuBinding) : BaseViewHolder(mBinding.root) {
         override fun onBind(position: Int) {
-            val data = mItemsList[position]
+            val data = _itemsList[position]
             mBinding.data = NavItemData(data.name)
             mBinding.executePendingBindings()
         }
