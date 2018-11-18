@@ -14,19 +14,11 @@ import javax.inject.Inject
 
 
 class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>(), AddFragment.AddFragmentCallback {
-    companion object {
-        fun newInstance(): AddDialog {
-            val fragment = AddDialog()
-            val bundle = Bundle()
-            fragment.arguments = bundle
-            return fragment
-        }
-    }
 
     @Inject
     lateinit var pagerAdapter: AddDialogPagerAdapter
 
-    private var navigator: AddDialogCallback? = null
+    private var _navigator: AddDialogCallback? = null
 
     override val viewModel: AddDialogViewModel
         get() = ViewModelProviders.of(this, mViewModelFactory).get(AddDialogViewModel::class.java)
@@ -37,12 +29,7 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>(), Ad
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        navigator = context as? AddDialogCallback
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        navigator = null
+        _navigator = context as? AddDialogCallback
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -51,9 +38,14 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>(), Ad
         setListeners()
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        _navigator = null
+    }
+
     override fun dismiss() {
         super.dismiss()
-        navigator?.onAddDialogDismiss()
+        _navigator?.onAddDialogDismiss()
     }
 
     override fun setDialogCancelable(isCancelable: Boolean) {
@@ -93,6 +85,15 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>(), Ad
 
     interface AddDialogCallback {
         fun onAddDialogDismiss()
+    }
+
+    companion object {
+        fun newInstance(): AddDialog {
+            val fragment = AddDialog()
+            val bundle = Bundle()
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 }
 

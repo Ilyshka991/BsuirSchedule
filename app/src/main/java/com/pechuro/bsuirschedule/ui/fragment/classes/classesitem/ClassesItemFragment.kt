@@ -18,23 +18,10 @@ import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.adapter.Classes
 import javax.inject.Inject
 
 class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewModel>() {
-    companion object {
-        const val ARG_INFO = "arg_information"
-
-        fun newInstance(info: ClassesBaseInformation): ClassesItemFragment {
-            val args = Bundle()
-            args.putParcelable(ARG_INFO, info)
-
-            val fragment = ClassesItemFragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     @Inject
-    lateinit var mLayoutManager: LinearLayoutManager
+    lateinit var layoutManager: LinearLayoutManager
     @Inject
-    lateinit var mAdapter: ClassesAdapter
+    lateinit var adapter: ClassesAdapter
 
     override val viewModel: ClassesItemViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(ClassesItemViewModel::class.java)
@@ -56,9 +43,9 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
                 .addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         super.onScrolled(recyclerView, dx, dy)
-                        val visibleItemCount = mLayoutManager.childCount
-                        val totalItemCount = mLayoutManager.itemCount
-                        val pastVisibleItems = mLayoutManager.findFirstVisibleItemPosition()
+                        val visibleItemCount = layoutManager.childCount
+                        val totalItemCount = layoutManager.itemCount
+                        val pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
                         if (pastVisibleItems + visibleItemCount >= totalItemCount) {
                             FabCommunication.publish(if (dy > 0) OnFabHide else OnFabShowPos)
                         }
@@ -72,17 +59,30 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
     }
 
     private fun setupView() {
-        mLayoutManager.orientation = RecyclerView.VERTICAL
-        viewDataBinding.recyclerView.layoutManager = mLayoutManager
-        viewDataBinding.recyclerView.adapter = mAdapter
+        layoutManager.orientation = RecyclerView.VERTICAL
+        viewDataBinding.recyclerView.layoutManager = layoutManager
+        viewDataBinding.recyclerView.adapter = adapter
     }
 
     private fun subscribeToLiveData() {
         viewModel.listItemsLiveData.observe(this,
                 Observer {
                     if (it != null) {
-                        mAdapter.setItems(it)
+                        adapter.setItems(it)
                     }
                 })
+    }
+
+    companion object {
+        private const val ARG_INFO = "arg_information"
+
+        fun newInstance(info: ClassesBaseInformation): ClassesItemFragment {
+            val args = Bundle()
+            args.putParcelable(ARG_INFO, info)
+
+            val fragment = ClassesItemFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

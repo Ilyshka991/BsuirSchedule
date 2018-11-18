@@ -65,11 +65,11 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
 
     fun getSchedules() = scheduleDao.getSchedules()
 
-    fun delete(name: String, type: Int) = Single.fromCallable {
+    fun delete(name: String, type: Int): Single<Unit> = Single.fromCallable {
         scheduleDao.delete(name, type)
     }
 
-    fun delete(type: Int) = Single.fromCallable {
+    fun delete(type: Int): Single<Unit> = Single.fromCallable {
         scheduleDao.delete(type)
     }
 

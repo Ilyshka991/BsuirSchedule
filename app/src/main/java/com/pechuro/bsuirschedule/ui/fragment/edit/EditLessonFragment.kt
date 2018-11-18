@@ -8,6 +8,13 @@ import com.pechuro.bsuirschedule.databinding.FragmentEditLessonBinding
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
 
 class EditLessonFragment : BaseFragment<FragmentEditLessonBinding, EditLessonFragmentViewModel>() {
+    override val viewModel: EditLessonFragmentViewModel
+        get() = ViewModelProviders.of(this, viewModelFactory).get(EditLessonFragmentViewModel::class.java)
+    override val bindingVariable: Int
+        get() = BR.viewModel
+    override val layoutId: Int
+        get() = R.layout.fragment_edit_lesson
+
     companion object {
         fun newInstance(): EditLessonFragment {
             val args = Bundle()
@@ -16,11 +23,4 @@ class EditLessonFragment : BaseFragment<FragmentEditLessonBinding, EditLessonFra
             return fragment
         }
     }
-
-    override val viewModel: EditLessonFragmentViewModel
-        get() = ViewModelProviders.of(this, viewModelFactory).get(EditLessonFragmentViewModel::class.java)
-    override val bindingVariable: Int
-        get() = BR.viewModel
-    override val layoutId: Int
-        get() = R.layout.fragment_edit_lesson
 }

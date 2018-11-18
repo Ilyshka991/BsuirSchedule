@@ -23,7 +23,6 @@ import org.jetbrains.anko.defaultSharedPreferences
 import javax.inject.Inject
 
 class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
-
     @Inject
     lateinit var gson: Gson
 
@@ -34,14 +33,14 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
     override val layoutId: Int
         get() = R.layout.fragment_add
 
-    private var callback: AddFragmentCallback? = null
+    private var _callback: AddFragmentCallback? = null
     private val scheduleType: Int? by lazy {
         arguments?.getInt(ARG_SCHEDULE_TYPE)
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        callback = parentFragment as? AddFragmentCallback
+        _callback = parentFragment as? AddFragmentCallback
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,7 +63,7 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
 
                     viewDataBinding.buttonOk.isEnabled = true
                     Toast.makeText(context, getString(R.string.success), Toast.LENGTH_LONG).show()
-                    callback?.onDismiss()
+                    _callback?.onDismiss()
                 }
 
                 is OnClearError -> {
@@ -72,7 +71,7 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
                 }
 
                 is OnError -> {
-                    callback?.setDialogCancelable(true)
+                    _callback?.setDialogCancelable(true)
                     viewDataBinding.buttonOk.isEnabled = true
 
                     viewDataBinding.errorTextView.text = getString(it.messageId)
@@ -81,11 +80,11 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
                 is OnCancel -> {
                     viewDataBinding.errorTextView.text = ""
                     viewDataBinding.buttonOk.isEnabled = true
-                    callback?.setDialogCancelable(true)
+                    _callback?.setDialogCancelable(true)
                 }
 
                 is OnLoading -> {
-                    callback?.setDialogCancelable(false)
+                    _callback?.setDialogCancelable(false)
                 }
             }
         })
@@ -139,7 +138,7 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
     }
 
     companion object {
-        const val ARG_SCHEDULE_TYPE = "arg_add_fragment_schedule_type"
+        private const val ARG_SCHEDULE_TYPE = "arg_add_fragment_schedule_type"
 
         fun newInstance(scheduleType: Int): AddFragment {
             val args = Bundle()

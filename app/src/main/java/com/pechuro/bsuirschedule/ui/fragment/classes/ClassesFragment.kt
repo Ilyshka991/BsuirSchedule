@@ -39,8 +39,8 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
         (arguments?.getParcelable(ARG_INFO) as? ScheduleInformation)
     }
 
-    private var viewType = VIEW_TYPE_DAY
-    private var subgroupNumber = SUBGROUP_ALL
+    private var _viewType = VIEW_TYPE_DAY
+    private var _subgroupNumber = SUBGROUP_ALL
 
     override val viewModel: ClassesFragmentViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(ClassesFragmentViewModel::class.java)
@@ -71,7 +71,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
             return
         }
 
-        when (viewType) {
+        when (_viewType) {
             VIEW_TYPE_DAY -> {
                 for (i in 0 until NUMBER_OF_TABS) {
                     val (day, week, dayRu) = viewModel.getTabDate(i)
@@ -80,7 +80,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
 
                     when (scheduleInfo!!.type) {
                         ScheduleTypes.STUDENT_CLASSES -> {
-                            info.add(StudentClassesDayInformation(scheduleInfo!!.name, scheduleInfo!!.type, dayRu, week, subgroupNumber))
+                            info.add(StudentClassesDayInformation(scheduleInfo!!.name, scheduleInfo!!.type, dayRu, week, _subgroupNumber))
                         }
                         ScheduleTypes.EMPLOYEE_CLASSES -> {
                             info.add(EmployeeClassesDayInformation(scheduleInfo!!.name, scheduleInfo!!.type, dayRu, week))
@@ -96,7 +96,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
 
                     when (scheduleInfo!!.type) {
                         ScheduleTypes.STUDENT_CLASSES -> {
-                            info.add(StudentClassesWeekInformation(scheduleInfo!!.name, scheduleInfo!!.type, dayRu, subgroupNumber))
+                            info.add(StudentClassesWeekInformation(scheduleInfo!!.name, scheduleInfo!!.type, dayRu, _subgroupNumber))
                         }
                         ScheduleTypes.EMPLOYEE_CLASSES -> {
                             info.add(EmployeeClassesWeekInformation(scheduleInfo!!.name, scheduleInfo!!.type, dayRu))
@@ -112,8 +112,8 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
     }
 
     private fun initValues() {
-        viewType = sharedPref.getInteger(VIEW_TYPE, VIEW_TYPE_DAY).get()
-        subgroupNumber = sharedPref.getInteger(SUBGROUP_NUMBER, SUBGROUP_ALL).get()
+        _viewType = sharedPref.getInteger(VIEW_TYPE, VIEW_TYPE_DAY).get()
+        _subgroupNumber = sharedPref.getInteger(SUBGROUP_NUMBER, SUBGROUP_ALL).get()
     }
 
     private fun setListeners() {
@@ -129,9 +129,9 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
                 },
 
                 sharedPref.getInteger(VIEW_TYPE, VIEW_TYPE_DAY).asObservable().subscribe {
-                    if (viewType != it) {
-                        viewType = it
-                        val position = if (viewType == VIEW_TYPE_WEEK)
+                    if (_viewType != it) {
+                        _viewType = it
+                        val position = if (_viewType == VIEW_TYPE_WEEK)
                             with(viewDataBinding.tabLayout) {
                                 getTabAt(selectedTabPosition)?.tag.toString().getDayIndex()
                             } else 0
@@ -140,8 +140,8 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
                     }
                 },
                 sharedPref.getInteger(SUBGROUP_NUMBER, SUBGROUP_ALL).asObservable().subscribe {
-                    if (subgroupNumber != it) {
-                        subgroupNumber = it
+                    if (_subgroupNumber != it) {
+                        _subgroupNumber = it
                         inflateLayout(viewDataBinding.viewPager.currentItem)
                     }
                 })
