@@ -12,6 +12,7 @@ import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogViewModel
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.ClassesItemViewModel
+import com.pechuro.bsuirschedule.ui.fragment.drawer.DrawerFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionsDialogViewModel
 import com.pechuro.bsuirschedule.ui.fragment.edit.EditLessonFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.exam.ExamViewModel
@@ -91,6 +92,11 @@ abstract class AppViewModelsModule {
     @IntoMap
     @ViewModelKey(EditLessonFragmentViewModel::class)
     abstract fun editLessonFragment(viewModel: EditLessonFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DrawerFragmentViewModel::class)
+    abstract fun drawerFragment(viewModel: DrawerFragmentViewModel): ViewModel
 
     @Binds
     @IntoMap

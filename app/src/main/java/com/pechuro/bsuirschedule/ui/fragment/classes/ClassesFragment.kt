@@ -14,7 +14,6 @@ import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE
 import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE_DAY
 import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE_WEEK
 import com.pechuro.bsuirschedule.databinding.FragmentViewpagerBinding
-import com.pechuro.bsuirschedule.ui.activity.navigation.*
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.ClassesBaseInformation
@@ -22,7 +21,7 @@ import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.Emp
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.EmployeeClassesWeekInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.StudentClassesDayInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.StudentClassesWeekInformation
-import io.reactivex.disposables.CompositeDisposable
+import com.pechuro.bsuirschedule.ui.utils.*
 import javax.inject.Inject
 
 class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentViewModel>() {
@@ -31,8 +30,6 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
     lateinit var pagerAdapter: ClassesPagerAdapter
     @Inject
     lateinit var sharedPref: RxSharedPreferences
-
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     private val scheduleInfo by lazy {
         (arguments?.getParcelable(ARG_INFO) as? ScheduleInformation)
@@ -54,11 +51,6 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
         setupView()
         setListeners()
         inflateLayout()
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        compositeDisposable.clear()
     }
 
     private fun inflateLayout(currentItemPosition: Int = 0) {
@@ -117,13 +109,13 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
 
     private fun setListeners() {
         compositeDisposable.addAll(
-                FabCommunication.listen(OnFabClick::class.java)
+                EventBus.listen(OnFabClick::class.java)
                         .subscribe {
                             viewDataBinding.viewPager.setCurrentItem(0, true)
                         },
-                FabCommunication.listen(OnFabShowPos::class.java).subscribe {
+                EventBus.listen(OnFabShowPos::class.java).subscribe {
                     if (viewDataBinding.viewPager.currentItem != 0) {
-                        FabCommunication.publish(OnFabShow)
+                        EventBus.publish(OnFabShow)
                     }
                 },
 
@@ -169,7 +161,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
             }
 
             override fun onPageSelected(position: Int) {
-                FabCommunication.publish(if (position == 0) OnFabHide else OnFabShow)
+                EventBus.publish(if (position == 0) OnFabHide else OnFabShow)
             }
         })
     }

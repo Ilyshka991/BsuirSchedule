@@ -10,6 +10,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import dagger.android.support.AndroidSupportInjection
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel> : Fragment() {
@@ -22,6 +23,8 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel> : Fragment()
 
     @get:LayoutRes
     abstract val layoutId: Int
+
+    val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         performDI()
@@ -38,6 +41,11 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel> : Fragment()
         super.onViewCreated(view, savedInstanceState)
         bindingVariables?.forEach { (variable, obj) -> viewDataBinding.setVariable(variable, obj) }
         viewDataBinding.executePendingBindings()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        compositeDisposable.clear()
     }
 
     private fun performDI() = AndroidSupportInjection.inject(this)

@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.ui.activity.navigation.adapter
+package com.pechuro.bsuirschedule.ui.fragment.drawer.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -12,6 +12,9 @@ import com.pechuro.bsuirschedule.databinding.ItemListNavBinding
 import com.pechuro.bsuirschedule.databinding.ItemListNavMenuBinding
 import com.pechuro.bsuirschedule.ui.base.BaseViewHolder
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
+import com.pechuro.bsuirschedule.ui.fragment.drawer.OnDriwerItemLongClick
+import com.pechuro.bsuirschedule.ui.fragment.drawer.OnNavigate
+import com.pechuro.bsuirschedule.ui.utils.EventBus
 
 private const val NAV_ITEM_MENU = -1
 private const val NAV_ITEM = -2
@@ -19,7 +22,6 @@ private const val NAV_ITEM = -2
 class NavItemAdapter(private val context: Context,
                      private val diffCallback: NavItemsDiffCallback) : RecyclerView.Adapter<BaseViewHolder>() {
 
-    lateinit var callback: NavCallback
     private val _itemsList = mutableListOf<ScheduleInformation>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder =
@@ -75,11 +77,11 @@ class NavItemAdapter(private val context: Context,
 
             mBinding.scheduleNameButton.apply {
                 setOnClickListener {
-                    callback.onNavigate(ScheduleInformation(data.id, data.name, data.type))
+                    EventBus.publish(OnNavigate(ScheduleInformation(data.id, data.name, data.type)))
                 }
 
                 setOnLongClickListener {
-                    callback.onDrawerItemLongClick(ScheduleInformation(data.id, data.name, data.type))
+                    EventBus.publish(OnDriwerItemLongClick(ScheduleInformation(data.id, data.name, data.type)))
                     true
                 }
             }
@@ -92,11 +94,5 @@ class NavItemAdapter(private val context: Context,
             mBinding.data = NavItemData(data.name)
             mBinding.executePendingBindings()
         }
-    }
-
-    interface NavCallback {
-        fun onNavigate(info: ScheduleInformation)
-
-        fun onDrawerItemLongClick(info: ScheduleInformation)
     }
 }

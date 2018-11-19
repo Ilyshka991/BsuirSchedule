@@ -6,7 +6,7 @@
 
         <variable
             name="data"
-            type="com.pechuro.bsuirschedule.ui.activity.navigation.adapter.NavItemData" />
+            type="com.pechuro.bsuirschedule.ui.fragment.drawer.adapter.NavItemData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

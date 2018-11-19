@@ -84,45 +84,12 @@
             android:visibility="visible"
             app:insetForeground="#4000">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+
+            <fragment
+                android:id="@+id/drawer_fragment"
+                android:name="com.pechuro.bsuirschedule.ui.fragment.drawer.DrawerFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/white">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/nav_item_list"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="32dp"
-                    android:fitsSystemWindows="true"
-                    app:layout_constraintBottom_toTopOf="@+id/nav_footer_layout"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
-                    android:id="@+id/nav_footer_layout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/nav_item_list"
-                    app:layout_constraintStart_toStartOf="@+id/nav_item_list">
-
-                    <Button
-                        android:id="@+id/nav_footer_settings"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Settings" />
-
-                    <Button
-                        android:id="@+id/nav_footer_add_schedule"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Add schedule" />
-                </LinearLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_height="match_parent" />
         </com.google.android.material.navigation.NavigationView>
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

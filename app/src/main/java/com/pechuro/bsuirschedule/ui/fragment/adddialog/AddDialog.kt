@@ -1,6 +1,5 @@
 package com.pechuro.bsuirschedule.ui.fragment.adddialog
 
-import android.content.Context
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
@@ -8,16 +7,13 @@ import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentViewpagerBinding
 import com.pechuro.bsuirschedule.ui.base.BaseDialog
-import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragment
+import com.pechuro.bsuirschedule.ui.utils.EventBus
 import javax.inject.Inject
 
-
-class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>(), AddFragment.AddFragmentCallback {
+class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
 
     @Inject
     lateinit var pagerAdapter: AddDialogPagerAdapter
-
-    private var _navigator: AddDialogCallback? = null
 
     override val viewModel: AddDialogViewModel
         get() = ViewModelProviders.of(this, mViewModelFactory).get(AddDialogViewModel::class.java)
@@ -26,32 +22,12 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>(), Ad
     override val layoutId: Int
         get() = R.layout.fragment_viewpager
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        _navigator = context as? AddDialogCallback
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupView()
         setListeners()
+        setEventListeners()
     }
-
-    override fun onDetach() {
-        super.onDetach()
-        _navigator = null
-    }
-
-    override fun dismiss() {
-        super.dismiss()
-        _navigator?.onAddDialogDismiss()
-    }
-
-    override fun setDialogCancelable(isCancelable: Boolean) {
-        setCancelable(isCancelable)
-    }
-
-    override fun onDismiss() = dismiss()
 
     private fun setupView() {
         viewDataBinding.viewPager.adapter = pagerAdapter
@@ -59,6 +35,16 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>(), Ad
 
         viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab().setText(getString(R.string.students)))
         viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab().setText(getString(R.string.employees)))
+    }
+
+    private fun setEventListeners() {
+        compositeDisposable.addAll(
+                EventBus.listen(SetDialogCancelable::class.java).subscribe {
+                    isCancelable = it.isCancelable
+                },
+                EventBus.listen(OnAddDialogDismissEvent::class.java).subscribe {
+                    dismiss()
+                })
     }
 
     private fun setListeners() {
@@ -80,10 +66,6 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>(), Ad
 
             }
         })
-    }
-
-    interface AddDialogCallback {
-        fun onAddDialogDismiss()
     }
 
     companion object {

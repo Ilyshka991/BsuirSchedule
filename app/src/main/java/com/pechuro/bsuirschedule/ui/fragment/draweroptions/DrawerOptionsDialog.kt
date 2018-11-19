@@ -1,6 +1,5 @@
 package com.pechuro.bsuirschedule.ui.fragment.draweroptions
 
-import android.content.Context
 import android.os.Bundle
 import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.Observer
@@ -9,9 +8,9 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.DialogDrawerOptionsBinding
 import com.pechuro.bsuirschedule.ui.base.BaseDialog
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
+import com.pechuro.bsuirschedule.ui.utils.EventBus
 
 class DrawerOptionsDialog : BaseDialog<DialogDrawerOptionsBinding, DrawerOptionsDialogViewModel>() {
-    private var _callback: DrawerOptionsCallback? = null
     private val _scheduleInfo: ScheduleInformation? by lazy {
         arguments?.getParcelable<ScheduleInformation>(ARG_SCHEDULE_INFO)
     }
@@ -23,11 +22,6 @@ class DrawerOptionsDialog : BaseDialog<DialogDrawerOptionsBinding, DrawerOptions
     override val layoutId: Int
         get() = R.layout.dialog_drawer_options
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        _callback = context as? DrawerOptionsCallback
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setEventListener()
@@ -36,18 +30,12 @@ class DrawerOptionsDialog : BaseDialog<DialogDrawerOptionsBinding, DrawerOptions
     private fun setEventListener() {
         viewModel.command.observe(this, Observer {
             when (it) {
-                is OnDeleted -> _callback?.onItemDeleted(it.info)
-                is OnUpdated -> _callback?.onItemUpdated(it.info)
+                is OnDeleted -> EventBus.publish(OnScheduleDeletedEvent(it.info))
+                is OnUpdated -> EventBus.publish(OnScheduleUpdatedEvent(it.info))
                 is OnCancel -> dismiss()
             }
             dismiss()
         })
-    }
-
-    interface DrawerOptionsCallback {
-        fun onItemUpdated(info: ScheduleInformation)
-
-        fun onItemDeleted(info: ScheduleInformation)
     }
 
     companion object {

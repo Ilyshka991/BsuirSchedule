@@ -1,6 +1,5 @@
 package com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
@@ -19,6 +18,9 @@ import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_EXAMS
 import com.pechuro.bsuirschedule.constants.SharedPrefConstants
 import com.pechuro.bsuirschedule.databinding.FragmentAddBinding
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
+import com.pechuro.bsuirschedule.ui.fragment.adddialog.OnAddDialogDismissEvent
+import com.pechuro.bsuirschedule.ui.fragment.adddialog.SetDialogCancelable
+import com.pechuro.bsuirschedule.ui.utils.EventBus
 import org.jetbrains.anko.defaultSharedPreferences
 import javax.inject.Inject
 
@@ -33,14 +35,8 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
     override val layoutId: Int
         get() = R.layout.fragment_add
 
-    private var _callback: AddFragmentCallback? = null
     private val scheduleType: Int? by lazy {
         arguments?.getInt(ARG_SCHEDULE_TYPE)
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        _callback = parentFragment as? AddFragmentCallback
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,7 +59,7 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
 
                     viewDataBinding.buttonOk.isEnabled = true
                     Toast.makeText(context, getString(R.string.success), Toast.LENGTH_LONG).show()
-                    _callback?.onDismiss()
+                    EventBus.publish(OnAddDialogDismissEvent)
                 }
 
                 is OnClearError -> {
@@ -71,7 +67,7 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
                 }
 
                 is OnError -> {
-                    _callback?.setDialogCancelable(true)
+                    EventBus.publish(SetDialogCancelable(true))
                     viewDataBinding.buttonOk.isEnabled = true
 
                     viewDataBinding.errorTextView.text = getString(it.messageId)
@@ -80,11 +76,11 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
                 is OnCancel -> {
                     viewDataBinding.errorTextView.text = ""
                     viewDataBinding.buttonOk.isEnabled = true
-                    _callback?.setDialogCancelable(true)
+                    EventBus.publish(SetDialogCancelable(true))
                 }
 
                 is OnLoading -> {
-                    _callback?.setDialogCancelable(false)
+                    EventBus.publish(SetDialogCancelable(false))
                 }
             }
         })
@@ -128,12 +124,6 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
                         viewDataBinding.textInput.setAdapter(adapter)
                     }
                 })
-    }
-
-    interface AddFragmentCallback {
-        fun onDismiss()
-
-        fun setDialogCancelable(isCancelable: Boolean)
     }
 
     companion object {

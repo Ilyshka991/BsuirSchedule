@@ -7,5 +7,5 @@ import dagger.android.ContributesAndroidInjector
 interface OptionsFragmentProvider {
 
     @ContributesAndroidInjector()
-    fun bind(): OptionsFragment
+    fun bind(): BottomOptionsFragment
 }

@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.ui.activity.navigation.adapter
+package com.pechuro.bsuirschedule.ui.fragment.drawer.adapter
 
 import androidx.recyclerview.widget.DiffUtil
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation

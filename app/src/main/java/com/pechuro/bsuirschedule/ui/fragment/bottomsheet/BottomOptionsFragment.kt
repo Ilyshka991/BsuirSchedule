@@ -1,6 +1,5 @@
 package com.pechuro.bsuirschedule.ui.fragment.bottomsheet
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,24 +16,18 @@ import com.pechuro.bsuirschedule.constants.SharedPrefConstants.SUBGROUP_NUMBER
 import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE
 import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE_DAY
 import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE_WEEK
+import com.pechuro.bsuirschedule.ui.utils.EventBus
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 
-class OptionsFragment : BottomSheetDialogFragment() {
-    private var _callback: ScheduleOptionsCallback? = null
-
+class BottomOptionsFragment : BottomSheetDialogFragment() {
     private lateinit var _viewTypeButton: Button
     private lateinit var _addButton: Button
     private lateinit var _subgroupNumberSpinner: Spinner
 
     @Inject
     lateinit var sharedPref: RxSharedPreferences
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        _callback = context as? ScheduleOptionsCallback
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         performDI()
@@ -81,7 +74,7 @@ class OptionsFragment : BottomSheetDialogFragment() {
                     }
                 }
         _addButton.setOnClickListener {
-            _callback?.addLesson()
+            EventBus.publish(OnAddLessonEvent)
             dismiss()
         }
         _viewTypeButton.setOnClickListener {
@@ -101,15 +94,11 @@ class OptionsFragment : BottomSheetDialogFragment() {
         }
     }
 
-    interface ScheduleOptionsCallback {
-        fun addLesson()
-    }
-
     companion object {
         private const val ARG_SCHEDULE_TYPE = "schedule_type"
 
-        fun newInstance(scheduleType: Int): OptionsFragment =
-                OptionsFragment().apply {
+        fun newInstance(scheduleType: Int): BottomOptionsFragment =
+                BottomOptionsFragment().apply {
                     arguments = Bundle().apply {
                         putInt(ARG_SCHEDULE_TYPE, scheduleType)
                     }

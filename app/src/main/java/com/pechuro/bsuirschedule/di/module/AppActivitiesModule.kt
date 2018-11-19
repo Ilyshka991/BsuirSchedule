@@ -12,6 +12,7 @@ import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragmentPr
 import com.pechuro.bsuirschedule.ui.fragment.bottomsheet.OptionsFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.ClassesItemFragmentProvider
+import com.pechuro.bsuirschedule.ui.fragment.drawer.DrawerFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionsDialogProvider
 import com.pechuro.bsuirschedule.ui.fragment.edit.EditLessonFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.exam.ExamFragmentProvider
@@ -36,6 +37,7 @@ abstract class AppActivitiesModule {
         AddFragmentProvider::class,
         ItemOptionsDialogProvider::class,
         DrawerOptionsDialogProvider::class,
+        DrawerFragmentProvider::class,
         EditLessonFragmentProvider::class,
         OptionsFragmentProvider::class])
     abstract fun bindNavigationActivity(): NavigationActivity

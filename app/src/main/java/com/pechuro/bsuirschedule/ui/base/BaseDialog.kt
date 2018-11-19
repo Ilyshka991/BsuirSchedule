@@ -11,6 +11,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import dagger.android.support.AndroidSupportInjection
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 
@@ -24,6 +25,8 @@ abstract class BaseDialog<T : ViewDataBinding, V : BaseViewModel> : DialogFragme
     lateinit var rootView: View
     @get:LayoutRes
     abstract val layoutId: Int
+
+    val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         performDI()
@@ -42,6 +45,11 @@ abstract class BaseDialog<T : ViewDataBinding, V : BaseViewModel> : DialogFragme
         super.onActivityCreated(savedInstanceState)
         bindingVariables?.forEach { (variable, obj) -> viewDataBinding.setVariable(variable, obj) }
         viewDataBinding.executePendingBindings()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.dispose()
     }
 
     private fun performDI() = AndroidSupportInjection.inject(this)
