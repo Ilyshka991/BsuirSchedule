@@ -36,8 +36,8 @@ import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
 import com.pechuro.bsuirschedule.ui.fragment.bottomsheet.OptionsFragment
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragment
+import com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionsDialog
 import com.pechuro.bsuirschedule.ui.fragment.exam.ExamFragment
-import com.pechuro.bsuirschedule.ui.fragment.optiondialog.DrawerOptionsDialog
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragment
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector

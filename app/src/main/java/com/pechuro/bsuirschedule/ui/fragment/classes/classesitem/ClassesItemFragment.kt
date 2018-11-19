@@ -6,7 +6,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentListBinding
 import com.pechuro.bsuirschedule.ui.activity.navigation.FabCommunication
@@ -25,8 +24,8 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
 
     override val viewModel: ClassesItemViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(ClassesItemViewModel::class.java)
-    override val bindingVariable: Int
-        get() = BR._all
+    override val bindingVariables: Map<Int, Any>?
+        get() = null
     override val layoutId: Int
         get() = R.layout.fragment_list
 

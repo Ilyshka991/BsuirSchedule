@@ -23,8 +23,8 @@ class ExamFragment : BaseFragment<FragmentListBinding, ExamViewModel>() {
 
     override val viewModel: ExamViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(ExamViewModel::class.java)
-    override val bindingVariable: Int
-        get() = BR.data
+    override val bindingVariables: Map<Int, Any>
+        get() = mapOf(Pair(BR.data, viewModel))
     override val layoutId: Int
         get() = R.layout.fragment_list
 

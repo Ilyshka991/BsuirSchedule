@@ -28,8 +28,8 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
 
     override val viewModel: AddFragmentViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(AddFragmentViewModel::class.java)
-    override val bindingVariable: Int
-        get() = BR.viewModel
+    override val bindingVariables: Map<Int, Any>
+        get() = mapOf(Pair(BR.viewModel, viewModel))
     override val layoutId: Int
         get() = R.layout.fragment_add
 
@@ -91,7 +91,6 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
     }
 
     private fun loadSchedule() {
-        viewDataBinding.buttonOk.isEnabled = false
 
         val scheduleName = viewDataBinding.textInput.text.toString()
 

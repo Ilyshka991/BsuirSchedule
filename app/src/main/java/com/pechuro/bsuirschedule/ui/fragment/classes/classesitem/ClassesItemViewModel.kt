@@ -64,25 +64,25 @@ class ClassesItemViewModel @Inject constructor(private val repository: ScheduleR
 
     private fun transformStudentDayItems(data: List<ScheduleItem>): List<StudentClassesDayData> {
         val items = mutableListOf<StudentClassesDayData>()
-        data.forEach { items.add(StudentClassesDayData(it.subject)) }
+        data.forEach { items.add(StudentClassesDayData(it.id, it.subject)) }
         return items
     }
 
     private fun transformStudentWeekItems(data: List<ScheduleItem>): List<StudentClassesWeekData> {
         val items = mutableListOf<StudentClassesWeekData>()
-        data.forEach { items.add(StudentClassesWeekData(it.subject)) }
+        data.forEach { items.add(StudentClassesWeekData(it.id, it.subject)) }
         return items
     }
 
     private fun transformEmployeeDayItems(data: List<ScheduleItem>): List<EmployeeClassesDayData> {
         val items = mutableListOf<EmployeeClassesDayData>()
-        data.forEach { items.add(EmployeeClassesDayData(it.startTime)) }
+        data.forEach { items.add(EmployeeClassesDayData(it.id, it.startTime)) }
         return items
     }
 
     private fun transformEmployeeWeekItems(data: List<ScheduleItem>): List<EmployeeClassesWeekData> {
         val items = mutableListOf<EmployeeClassesWeekData>()
-        data.forEach { items.add(EmployeeClassesWeekData(it.subject)) }
+        data.forEach { items.add(EmployeeClassesWeekData(it.id, it.subject)) }
         return items
     }
 }

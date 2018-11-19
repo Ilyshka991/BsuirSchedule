@@ -1,5 +1,6 @@
-package com.pechuro.bsuirschedule.ui.fragment.optiondialog
+package com.pechuro.bsuirschedule.ui.fragment.draweroptions
 
+import androidx.databinding.ObservableBoolean
 import com.pechuro.bsuirschedule.data.ScheduleRepository
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
@@ -10,15 +11,22 @@ import javax.inject.Inject
 
 class DrawerOptionsDialogViewModel @Inject constructor(private val repository: ScheduleRepository) : BaseViewModel() {
     val command = SingleLiveEvent<DrawerOptionsEvent>()
+    val isLoading = ObservableBoolean()
+    val isError = ObservableBoolean()
 
     fun update(info: ScheduleInformation) {
+        isLoading.set(true)
+        isError.set(false)
         compositeDisposable.add(
                 repository.update(info)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            command.call(OnUpdate(info))
-                        }, {})
+                            command.call(OnUpdated(info))
+                        }, {
+                            isError.set(true)
+                            isLoading.set(false)
+                        })
         )
     }
 
@@ -28,9 +36,10 @@ class DrawerOptionsDialogViewModel @Inject constructor(private val repository: S
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            command.call(OnDelete(info))
+                            command.call(OnDeleted(info))
                         }, {})
         )
     }
 
+    fun cancel() = command.call(OnCancel)
 }

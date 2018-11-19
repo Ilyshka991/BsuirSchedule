@@ -19,7 +19,7 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
 
     @get:LayoutRes
     abstract val layoutId: Int
-    abstract val bindingVariables: Map<Int, Any>
+    abstract val bindingVariables: Map<Int, Any>?
 
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
@@ -38,7 +38,7 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
 
     private fun performDataBinding() {
         viewDataBinding = DataBindingUtil.setContentView(this, layoutId)
-        bindingVariables.forEach { (variable, obj) -> viewDataBinding.setVariable(variable, obj) }
+        bindingVariables?.forEach { (variable, obj) -> viewDataBinding.setVariable(variable, obj) }
         viewDataBinding.executePendingBindings()
     }
 }

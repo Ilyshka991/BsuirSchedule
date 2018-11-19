@@ -10,8 +10,8 @@ import com.pechuro.bsuirschedule.ui.base.BaseFragment
 class EditLessonFragment : BaseFragment<FragmentEditLessonBinding, EditLessonFragmentViewModel>() {
     override val viewModel: EditLessonFragmentViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(EditLessonFragmentViewModel::class.java)
-    override val bindingVariable: Int
-        get() = BR.viewModel
+    override val bindingVariables: Map<Int, Any>
+        get() = mapOf(Pair(BR.viewModel, viewModel))
     override val layoutId: Int
         get() = R.layout.fragment_edit_lesson
 

@@ -3,7 +3,6 @@ package com.pechuro.bsuirschedule.ui.fragment.adddialog
 import android.content.Context
 import android.os.Bundle
 import android.view.ViewGroup
-import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.R
@@ -22,8 +21,8 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>(), Ad
 
     override val viewModel: AddDialogViewModel
         get() = ViewModelProviders.of(this, mViewModelFactory).get(AddDialogViewModel::class.java)
-    override val bindingVariable: Int
-        get() = BR._all
+    override val bindingVariables: Map<Int, Any>?
+        get() = null
     override val layoutId: Int
         get() = R.layout.fragment_viewpager
 

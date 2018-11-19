@@ -12,9 +12,10 @@ import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogViewModel
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.ClassesItemViewModel
+import com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionsDialogViewModel
 import com.pechuro.bsuirschedule.ui.fragment.edit.EditLessonFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.exam.ExamViewModel
-import com.pechuro.bsuirschedule.ui.fragment.optiondialog.DrawerOptionsDialogViewModel
+import com.pechuro.bsuirschedule.ui.fragment.itemoptions.ItemOptionsDialogViewModel
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragmentViewModel
 import com.pechuro.bsuirschedule.ui.utils.ViewModelFactory
 import dagger.Binds
@@ -80,6 +81,11 @@ abstract class AppViewModelsModule {
     @IntoMap
     @ViewModelKey(DrawerOptionsDialogViewModel::class)
     abstract fun drawerOptionsDialog(viewModel: DrawerOptionsDialogViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ItemOptionsDialogViewModel::class)
+    abstract fun itemOptionsDialog(viewModel: ItemOptionsDialogViewModel): ViewModel
 
     @Binds
     @IntoMap

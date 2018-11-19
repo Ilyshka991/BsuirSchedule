@@ -12,9 +12,10 @@ import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragmentPr
 import com.pechuro.bsuirschedule.ui.fragment.bottomsheet.OptionsFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.ClassesItemFragmentProvider
+import com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionsDialogProvider
 import com.pechuro.bsuirschedule.ui.fragment.edit.EditLessonFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.exam.ExamFragmentProvider
-import com.pechuro.bsuirschedule.ui.fragment.optiondialog.DrawerOptionsDialogProvider
+import com.pechuro.bsuirschedule.ui.fragment.itemoptions.ItemOptionsDialogProvider
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragmentProvider
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -33,6 +34,7 @@ abstract class AppActivitiesModule {
         StartFragmentProvider::class,
         AddDialogProvider::class,
         AddFragmentProvider::class,
+        ItemOptionsDialogProvider::class,
         DrawerOptionsDialogProvider::class,
         EditLessonFragmentProvider::class,
         OptionsFragmentProvider::class])

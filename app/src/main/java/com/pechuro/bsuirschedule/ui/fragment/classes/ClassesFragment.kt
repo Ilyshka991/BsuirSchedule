@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.google.android.material.tabs.TabLayout
-import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.constants.ScheduleTypes
 import com.pechuro.bsuirschedule.constants.SharedPrefConstants.SUBGROUP_ALL
@@ -44,8 +43,8 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
 
     override val viewModel: ClassesFragmentViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(ClassesFragmentViewModel::class.java)
-    override val bindingVariable: Int
-        get() = BR._all
+    override val bindingVariables: Map<Int, Any>?
+        get() = null
     override val layoutId: Int
         get() = R.layout.fragment_viewpager
 

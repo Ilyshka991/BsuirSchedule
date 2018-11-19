@@ -12,8 +12,8 @@ import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
 class StartFragment : BaseFragment<FragmentStartBinding, StartFragmentViewModel>() {
     override val viewModel: StartFragmentViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(StartFragmentViewModel::class.java)
-    override val bindingVariable: Int
-        get() = BR.viewModel
+    override val bindingVariables: Map<Int, Any>
+        get() = mapOf(Pair(BR.viewModel, viewModel))
     override val layoutId: Int
         get() = R.layout.fragment_start
 

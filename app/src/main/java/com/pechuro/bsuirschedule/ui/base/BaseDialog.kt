@@ -20,7 +20,7 @@ abstract class BaseDialog<T : ViewDataBinding, V : BaseViewModel> : DialogFragme
 
     lateinit var viewDataBinding: T
     abstract val viewModel: V?
-    abstract val bindingVariable: Int
+    abstract val bindingVariables: Map<Int, Any?>?
     lateinit var rootView: View
     @get:LayoutRes
     abstract val layoutId: Int
@@ -40,7 +40,7 @@ abstract class BaseDialog<T : ViewDataBinding, V : BaseViewModel> : DialogFragme
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewDataBinding.setVariable(bindingVariable, viewModel)
+        bindingVariables?.forEach { (variable, obj) -> viewDataBinding.setVariable(variable, obj) }
         viewDataBinding.executePendingBindings()
     }
 

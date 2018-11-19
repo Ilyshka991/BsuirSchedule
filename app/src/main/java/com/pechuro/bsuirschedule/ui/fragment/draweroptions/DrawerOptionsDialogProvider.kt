@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.ui.fragment.optiondialog
+package com.pechuro.bsuirschedule.ui.fragment.draweroptions
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

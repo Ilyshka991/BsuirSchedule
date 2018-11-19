@@ -18,7 +18,7 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel> : Fragment()
     abstract val viewModel: V
 
     lateinit var viewDataBinding: T
-    abstract val bindingVariable: Int
+    abstract val bindingVariables: Map<Int, Any>?
 
     @get:LayoutRes
     abstract val layoutId: Int
@@ -36,7 +36,7 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel> : Fragment()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewDataBinding.setVariable(bindingVariable, viewModel)
+        bindingVariables?.forEach { (variable, obj) -> viewDataBinding.setVariable(variable, obj) }
         viewDataBinding.executePendingBindings()
     }
 

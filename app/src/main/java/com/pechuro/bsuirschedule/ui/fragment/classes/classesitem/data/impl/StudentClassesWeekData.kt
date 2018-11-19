@@ -3,7 +3,7 @@ package com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl
 import androidx.databinding.ObservableField
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.BaseClassesData
 
-class StudentClassesWeekData(subject: String?) : BaseClassesData() {
+class StudentClassesWeekData(itemId: Int, subject: String?) : BaseClassesData(itemId) {
 
     val subject = ObservableField<String>()
 

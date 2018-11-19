@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.ui.fragment.optiondialog
+package com.pechuro.bsuirschedule.ui.fragment.draweroptions
 
 import android.content.Context
 import android.os.Bundle
@@ -12,11 +12,14 @@ import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 
 class DrawerOptionsDialog : BaseDialog<DialogDrawerOptionsBinding, DrawerOptionsDialogViewModel>() {
     private var _callback: DrawerOptionsCallback? = null
+    private val _scheduleInfo: ScheduleInformation? by lazy {
+        arguments?.getParcelable<ScheduleInformation>(ARG_SCHEDULE_INFO)
+    }
 
     override val viewModel: DrawerOptionsDialogViewModel
         get() = ViewModelProviders.of(this, mViewModelFactory).get(DrawerOptionsDialogViewModel::class.java)
-    override val bindingVariable: Int
-        get() = BR._all
+    override val bindingVariables: Map<Int, Any?>
+        get() = mapOf(Pair(BR.viewModel, viewModel), Pair(BR.info, _scheduleInfo))
     override val layoutId: Int
         get() = R.layout.dialog_drawer_options
 
@@ -27,29 +30,18 @@ class DrawerOptionsDialog : BaseDialog<DialogDrawerOptionsBinding, DrawerOptions
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setListeners()
         setEventListener()
     }
 
     private fun setEventListener() {
         viewModel.command.observe(this, Observer {
             when (it) {
-                is OnDelete -> _callback?.onItemDeleted(it.info)
-                is OnUpdate -> _callback?.onItemUpdated(it.info)
+                is OnDeleted -> _callback?.onItemDeleted(it.info)
+                is OnUpdated -> _callback?.onItemUpdated(it.info)
+                is OnCancel -> dismiss()
             }
             dismiss()
         })
-    }
-
-    private fun setListeners() {
-        viewDataBinding.buttonUpdate.setOnClickListener {
-            val info: ScheduleInformation? = arguments?.getParcelable(ARG_SCHEDULE_INFO)
-            info?.let { viewModel.update(it) }
-        }
-        viewDataBinding.buttonDelete.setOnClickListener {
-            val info: ScheduleInformation? = arguments?.getParcelable(ARG_SCHEDULE_INFO)
-            info?.let { viewModel.delete(it) }
-        }
     }
 
     interface DrawerOptionsCallback {

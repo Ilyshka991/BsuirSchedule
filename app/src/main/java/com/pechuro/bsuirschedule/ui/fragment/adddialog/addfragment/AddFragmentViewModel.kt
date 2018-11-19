@@ -18,8 +18,8 @@ import javax.inject.Inject
 class AddFragmentViewModel @Inject constructor(private val repository: ScheduleRepository,
                                                private val groupRepository: GroupRepository,
                                                private val employeeRepository: EmployeeRepository) : BaseViewModel() {
-    val isLoading = ObservableBoolean(false)
-    val isError = ObservableBoolean(false)
+    val isLoading = ObservableBoolean()
+    val isError = ObservableBoolean()
     val suggestions = MutableLiveData<List<String>>()
     val command = SingleLiveEvent<AddFragmentEvent>()
 
