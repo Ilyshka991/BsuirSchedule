@@ -30,22 +30,16 @@ import com.pechuro.bsuirschedule.ui.base.BaseActivity
 import com.pechuro.bsuirschedule.ui.custom.OnSwipeTouchListener
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
-import com.pechuro.bsuirschedule.ui.fragment.adddialog.OnAddDialogDismissEvent
+import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogEvent
+import com.pechuro.bsuirschedule.ui.fragment.bottomsheet.BottomOptionsEvent
 import com.pechuro.bsuirschedule.ui.fragment.bottomsheet.BottomOptionsFragment
-import com.pechuro.bsuirschedule.ui.fragment.bottomsheet.OnAddLessonEvent
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragment
-import com.pechuro.bsuirschedule.ui.fragment.drawer.OnDriwerItemLongClick
-import com.pechuro.bsuirschedule.ui.fragment.drawer.OnNavigate
-import com.pechuro.bsuirschedule.ui.fragment.drawer.OnOpenAddDialog
+import com.pechuro.bsuirschedule.ui.fragment.drawer.DrawerEvent
+import com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionEvent
 import com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionsDialog
-import com.pechuro.bsuirschedule.ui.fragment.draweroptions.OnScheduleDeletedEvent
-import com.pechuro.bsuirschedule.ui.fragment.draweroptions.OnScheduleUpdatedEvent
 import com.pechuro.bsuirschedule.ui.fragment.exam.ExamFragment
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragment
 import com.pechuro.bsuirschedule.ui.utils.EventBus
-import com.pechuro.bsuirschedule.ui.utils.OnFabClick
-import com.pechuro.bsuirschedule.ui.utils.OnFabHide
-import com.pechuro.bsuirschedule.ui.utils.OnFabShow
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_navigation.*
@@ -173,36 +167,34 @@ class NavigationActivity :
 
     private fun setCommunicationListeners() {
         compositeDisposable.addAll(
-                EventBus.listen(OnFabShow::class.java).subscribe {
-                    viewDataBinding.fabBack.show()
-                },
-                EventBus.listen(OnFabHide::class.java).subscribe {
-                    viewDataBinding.fabBack.hide()
-                })
+                EventBus.listen(FabEvent::class.java).subscribe {
+                    when (it) {
+                        is FabEvent.OnFabShow -> viewDataBinding.fabBack.show()
+                        is FabEvent.OnFabHide -> viewDataBinding.fabBack.hide()
+                    }
 
-        compositeDisposable.addAll(
-                EventBus.listen(OnNavigate::class.java).subscribe {
-                    onNavigate(it.info)
                 },
-                EventBus.listen(OnDriwerItemLongClick::class.java).subscribe {
-                    onDrawerItemLongClick(it.info)
+                EventBus.listen(DrawerEvent::class.java).subscribe {
+                    when (it) {
+                        is DrawerEvent.OnNavigate -> onNavigate(it.info)
+                        is DrawerEvent.OnItemLongClick -> onDrawerItemLongClick(it.info)
+                        is DrawerEvent.OnOpenAddDialog -> navigate {
+                            AddDialog.newInstance().show(supportFragmentManager, "add_dialog")
+                        }
+                    }
                 },
-                EventBus.listen(OnScheduleUpdatedEvent::class.java).subscribe {
-                    onScheduleUpdated(it.info)
+                EventBus.listen(DrawerOptionEvent::class.java).subscribe {
+                    when (it) {
+                        is DrawerOptionEvent.OnScheduleUpdated -> onScheduleUpdated(it.info)
+                        is DrawerOptionEvent.OnScheduleDeleted -> onScheduleDeleted(it.info)
+                    }
+
                 },
-                EventBus.listen(OnScheduleDeletedEvent::class.java).subscribe {
-                    onScheduleDeleted(it.info)
-                },
-                EventBus.listen(OnAddLessonEvent::class.java).subscribe {
+                EventBus.listen(BottomOptionsEvent.OnAddLesson::class.java).subscribe {
                     addLesson()
                 },
-                EventBus.listen(OnAddDialogDismissEvent::class.java).subscribe {
+                EventBus.listen(AddDialogEvent.OnDismiss::class.java).subscribe {
                     onAddDialogDismiss()
-                },
-                EventBus.listen(OnOpenAddDialog::class.java).subscribe {
-                    navigate {
-                        AddDialog.newInstance().show(supportFragmentManager, "add_dialog")
-                    }
                 }
         )
     }
@@ -283,7 +275,7 @@ class NavigationActivity :
         }
 
         viewDataBinding.fabBack.setOnClickListener {
-            EventBus.publish(OnFabClick)
+            EventBus.publish(FabEvent.OnFabClick)
         }
 
         viewDataBinding.barAdd.setOnClickListener {

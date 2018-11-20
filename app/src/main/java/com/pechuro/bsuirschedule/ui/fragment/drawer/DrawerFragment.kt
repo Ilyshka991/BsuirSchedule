@@ -36,7 +36,6 @@ class DrawerFragment : BaseFragment<FragmentDrawerBinding, DrawerFragmentViewMod
     }
 
     private fun setupView() {
-
         layoutManager.orientation = RecyclerView.VERTICAL
         viewDataBinding.navItemList.layoutManager = layoutManager
         viewDataBinding.navItemList.adapter = navAdapter
@@ -56,7 +55,7 @@ class DrawerFragment : BaseFragment<FragmentDrawerBinding, DrawerFragmentViewMod
             }
         }
         viewDataBinding.navFooterAddSchedule.setOnClickListener {
-            EventBus.publish(OnOpenAddDialog)
+            EventBus.publish(DrawerEvent.OnOpenAddDialog)
         }
     }
 

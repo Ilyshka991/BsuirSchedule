@@ -74,7 +74,7 @@ class BottomOptionsFragment : BottomSheetDialogFragment() {
                     }
                 }
         _addButton.setOnClickListener {
-            EventBus.publish(OnAddLessonEvent)
+            EventBus.publish(BottomOptionsEvent.OnAddLesson)
             dismiss()
         }
         _viewTypeButton.setOnClickListener {

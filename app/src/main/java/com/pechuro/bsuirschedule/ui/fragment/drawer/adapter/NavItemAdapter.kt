@@ -12,8 +12,7 @@ import com.pechuro.bsuirschedule.databinding.ItemListNavBinding
 import com.pechuro.bsuirschedule.databinding.ItemListNavMenuBinding
 import com.pechuro.bsuirschedule.ui.base.BaseViewHolder
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
-import com.pechuro.bsuirschedule.ui.fragment.drawer.OnDriwerItemLongClick
-import com.pechuro.bsuirschedule.ui.fragment.drawer.OnNavigate
+import com.pechuro.bsuirschedule.ui.fragment.drawer.DrawerEvent
 import com.pechuro.bsuirschedule.ui.utils.EventBus
 
 private const val NAV_ITEM_MENU = -1
@@ -77,11 +76,11 @@ class NavItemAdapter(private val context: Context,
 
             mBinding.scheduleNameButton.apply {
                 setOnClickListener {
-                    EventBus.publish(OnNavigate(ScheduleInformation(data.id, data.name, data.type)))
+                    EventBus.publish(DrawerEvent.OnNavigate(ScheduleInformation(data.id, data.name, data.type)))
                 }
 
                 setOnLongClickListener {
-                    EventBus.publish(OnDriwerItemLongClick(ScheduleInformation(data.id, data.name, data.type)))
+                    EventBus.publish(DrawerEvent.OnItemLongClick(ScheduleInformation(data.id, data.name, data.type)))
                     true
                 }
             }

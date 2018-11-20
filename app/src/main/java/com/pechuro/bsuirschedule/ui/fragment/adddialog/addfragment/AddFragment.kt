@@ -18,8 +18,7 @@ import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_EXAMS
 import com.pechuro.bsuirschedule.constants.SharedPrefConstants
 import com.pechuro.bsuirschedule.databinding.FragmentAddBinding
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
-import com.pechuro.bsuirschedule.ui.fragment.adddialog.OnAddDialogDismissEvent
-import com.pechuro.bsuirschedule.ui.fragment.adddialog.SetDialogCancelable
+import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogEvent
 import com.pechuro.bsuirschedule.ui.utils.EventBus
 import org.jetbrains.anko.defaultSharedPreferences
 import javax.inject.Inject
@@ -59,7 +58,7 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
 
                     viewDataBinding.buttonOk.isEnabled = true
                     Toast.makeText(context, getString(R.string.success), Toast.LENGTH_LONG).show()
-                    EventBus.publish(OnAddDialogDismissEvent)
+                    EventBus.publish(AddDialogEvent.OnDismiss)
                 }
 
                 is Status.OnClearError -> {
@@ -67,7 +66,7 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
                 }
 
                 is Status.OnError -> {
-                    EventBus.publish(SetDialogCancelable(true))
+                    EventBus.publish(AddDialogEvent.SetCancelable(true))
                     viewDataBinding.buttonOk.isEnabled = true
 
                     viewDataBinding.errorTextView.text = getString(it.messageId)
@@ -76,11 +75,11 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
                 is Status.OnCancel -> {
                     viewDataBinding.errorTextView.text = ""
                     viewDataBinding.buttonOk.isEnabled = true
-                    EventBus.publish(SetDialogCancelable(true))
+                    EventBus.publish(AddDialogEvent.SetCancelable(true))
                 }
 
                 is Status.OnLoading -> {
-                    EventBus.publish(SetDialogCancelable(false))
+                    EventBus.publish(AddDialogEvent.SetCancelable(false))
                 }
             }
         })

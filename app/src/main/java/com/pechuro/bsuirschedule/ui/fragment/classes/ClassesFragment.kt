@@ -14,6 +14,7 @@ import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE
 import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE_DAY
 import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE_WEEK
 import com.pechuro.bsuirschedule.databinding.FragmentViewpagerBinding
+import com.pechuro.bsuirschedule.ui.activity.navigation.FabEvent
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.ClassesBaseInformation
@@ -21,7 +22,7 @@ import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.Emp
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.EmployeeClassesWeekInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.StudentClassesDayInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.StudentClassesWeekInformation
-import com.pechuro.bsuirschedule.ui.utils.*
+import com.pechuro.bsuirschedule.ui.utils.EventBus
 import javax.inject.Inject
 
 class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentViewModel>() {
@@ -109,16 +110,14 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
 
     private fun setListeners() {
         compositeDisposable.addAll(
-                EventBus.listen(OnFabClick::class.java)
-                        .subscribe {
-                            viewDataBinding.viewPager.setCurrentItem(0, true)
-                        },
-                EventBus.listen(OnFabShowPos::class.java).subscribe {
-                    if (viewDataBinding.viewPager.currentItem != 0) {
-                        EventBus.publish(OnFabShow)
+                EventBus.listen(FabEvent::class.java).subscribe {
+                    when (it) {
+                        is FabEvent.OnFabClick -> viewDataBinding.viewPager.setCurrentItem(0, true)
+                        is FabEvent.OnFabShowPos -> if (viewDataBinding.viewPager.currentItem != 0) {
+                            EventBus.publish(FabEvent.OnFabShow)
+                        }
                     }
                 },
-
                 sharedPref.getInteger(VIEW_TYPE, VIEW_TYPE_DAY).asObservable().subscribe {
                     if (_viewType != it) {
                         _viewType = it
@@ -161,7 +160,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
             }
 
             override fun onPageSelected(position: Int) {
-                EventBus.publish(if (position == 0) OnFabHide else OnFabShow)
+                EventBus.publish(if (position == 0) FabEvent.OnFabHide else FabEvent.OnFabShow)
             }
         })
     }

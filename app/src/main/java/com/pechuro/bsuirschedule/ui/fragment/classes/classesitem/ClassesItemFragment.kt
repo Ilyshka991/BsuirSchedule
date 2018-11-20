@@ -8,12 +8,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentListBinding
+import com.pechuro.bsuirschedule.ui.activity.navigation.FabEvent
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.ClassesBaseInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.adapter.ClassesAdapter
 import com.pechuro.bsuirschedule.ui.utils.EventBus
-import com.pechuro.bsuirschedule.ui.utils.OnFabHide
-import com.pechuro.bsuirschedule.ui.utils.OnFabShowPos
 import javax.inject.Inject
 
 class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewModel>() {
@@ -46,7 +45,7 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
                         val totalItemCount = layoutManager.itemCount
                         val pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
                         if (pastVisibleItems + visibleItemCount >= totalItemCount) {
-                            EventBus.publish(if (dy > 0) OnFabHide else OnFabShowPos)
+                            EventBus.publish(if (dy > 0) FabEvent.OnFabHide else FabEvent.OnFabShowPos)
                         }
                     }
                 })

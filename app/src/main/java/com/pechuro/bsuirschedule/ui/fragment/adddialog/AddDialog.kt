@@ -38,12 +38,12 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
     }
 
     private fun setEventListeners() {
-        compositeDisposable.addAll(
-                EventBus.listen(SetDialogCancelable::class.java).subscribe {
-                    isCancelable = it.isCancelable
-                },
-                EventBus.listen(OnAddDialogDismissEvent::class.java).subscribe {
-                    dismiss()
+        compositeDisposable.add(
+                EventBus.listen(AddDialogEvent::class.java).subscribe {
+                    when (it) {
+                        is AddDialogEvent.SetCancelable -> isCancelable = it.isCancelable
+                        is AddDialogEvent.OnDismiss -> dismiss()
+                    }
                 })
     }
 

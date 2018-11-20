@@ -22,7 +22,7 @@ class DrawerOptionsDialogViewModel @Inject constructor(private val repository: S
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            status.call(Status.OnUpdated(info))
+                            status.call(Status.OnCancel)
                         }, {
                             isError.set(true)
                             isLoading.set(false)

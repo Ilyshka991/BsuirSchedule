@@ -5,11 +5,6 @@ import io.reactivex.subjects.PublishSubject
 
 abstract class BaseEvent
 
-object OnFabClick : BaseEvent()
-object OnFabShow : BaseEvent()
-object OnFabHide : BaseEvent()
-object OnFabShowPos : BaseEvent()
-
 object EventBus {
     private val publisher = PublishSubject.create<BaseEvent>()
 

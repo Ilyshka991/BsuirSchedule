@@ -30,9 +30,12 @@ class DrawerOptionsDialog : BaseDialog<DialogDrawerOptionsBinding, DrawerOptions
     private fun setStatusListener() {
         viewModel.status.observe(this, Observer {
             when (it) {
-                is Status.OnDeleted -> EventBus.publish(OnScheduleDeletedEvent(it.info))
-                is Status.OnUpdated -> EventBus.publish(OnScheduleUpdatedEvent(it.info))
-                is Status.OnCancel -> dismiss()
+                is Status.OnDeleted -> EventBus.publish(DrawerOptionEvent.OnScheduleDeleted(it.info))
+                is Status.OnUpdated -> EventBus.publish(DrawerOptionEvent.OnScheduleUpdated(it.info))
+                is Status.OnCancel -> {
+                    dismiss()
+                    return@Observer
+                }
             }
             dismiss()
         })

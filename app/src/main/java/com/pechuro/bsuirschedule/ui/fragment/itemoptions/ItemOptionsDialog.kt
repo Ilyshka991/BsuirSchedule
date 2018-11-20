@@ -1,6 +1,5 @@
 package com.pechuro.bsuirschedule.ui.fragment.itemoptions
 
-import android.content.Context
 import android.os.Bundle
 import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.Observer
@@ -10,7 +9,6 @@ import com.pechuro.bsuirschedule.databinding.DialogItemOptionsBinding
 import com.pechuro.bsuirschedule.ui.base.BaseDialog
 
 class ItemOptionsDialog : BaseDialog<DialogItemOptionsBinding, ItemOptionsDialogViewModel>() {
-    private var _callback: DrawerOptionsCallback? = null
     private val _itemId: Int? by lazy {
         arguments?.getInt(ARG_ITEM_ID)
     }
@@ -22,11 +20,6 @@ class ItemOptionsDialog : BaseDialog<DialogItemOptionsBinding, ItemOptionsDialog
     override val layoutId: Int
         get() = R.layout.dialog_item_options
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        _callback = context as? DrawerOptionsCallback
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setStatusListener()
@@ -35,14 +28,10 @@ class ItemOptionsDialog : BaseDialog<DialogItemOptionsBinding, ItemOptionsDialog
     private fun setStatusListener() {
         viewModel.status.observe(this, Observer {
             when (it) {
-                is Status.OnDeleted -> _callback?.onItemDeleted(it.itemId)
+                is Status.OnDeleted -> TODO()
             }
             dismiss()
         })
-    }
-
-    interface DrawerOptionsCallback {
-        fun onItemDeleted(itemId: Int)
     }
 
     companion object {
