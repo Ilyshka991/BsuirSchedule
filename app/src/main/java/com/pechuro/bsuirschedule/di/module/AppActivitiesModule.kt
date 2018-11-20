@@ -17,6 +17,7 @@ import com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionsDialogPr
 import com.pechuro.bsuirschedule.ui.fragment.edit.EditLessonFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.exam.ExamFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.itemoptions.ItemOptionsDialogProvider
+import com.pechuro.bsuirschedule.ui.fragment.requestupdatedialog.RequestUpdateDialogProvider
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragmentProvider
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -38,6 +39,7 @@ abstract class AppActivitiesModule {
         ItemOptionsDialogProvider::class,
         DrawerOptionsDialogProvider::class,
         DrawerFragmentProvider::class,
+        RequestUpdateDialogProvider::class,
         EditLessonFragmentProvider::class,
         OptionsFragmentProvider::class])
     abstract fun bindNavigationActivity(): NavigationActivity

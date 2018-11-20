@@ -4,17 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.edit
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.transaction
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.pechuro.bsuirschedule.BR
 import com.pechuro.bsuirschedule.R
@@ -38,6 +35,7 @@ import com.pechuro.bsuirschedule.ui.fragment.drawer.DrawerEvent
 import com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionEvent
 import com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionsDialog
 import com.pechuro.bsuirschedule.ui.fragment.exam.ExamFragment
+import com.pechuro.bsuirschedule.ui.fragment.requestupdatedialog.RequestUpdateDialog
 import com.pechuro.bsuirschedule.ui.fragment.start.StartFragment
 import com.pechuro.bsuirschedule.ui.utils.EventBus
 import dagger.android.DispatchingAndroidInjector
@@ -77,7 +75,6 @@ class NavigationActivity :
         setCommunicationListeners()
         if (savedInstanceState == null) homeFragment()
         setupBottomBar()
-        setScheduleUpdateStatusListeners()
     }
 
     override fun onBackPressed() {
@@ -172,8 +169,8 @@ class NavigationActivity :
                         is FabEvent.OnFabShow -> viewDataBinding.fabBack.show()
                         is FabEvent.OnFabHide -> viewDataBinding.fabBack.hide()
                     }
-
                 },
+
                 EventBus.listen(DrawerEvent::class.java).subscribe {
                     when (it) {
                         is DrawerEvent.OnNavigate -> onNavigate(it.info)
@@ -183,45 +180,26 @@ class NavigationActivity :
                         }
                     }
                 },
+
                 EventBus.listen(DrawerOptionEvent::class.java).subscribe {
                     when (it) {
                         is DrawerOptionEvent.OnScheduleUpdated -> onScheduleUpdated(it.info)
                         is DrawerOptionEvent.OnScheduleDeleted -> onScheduleDeleted(it.info)
                     }
-
                 },
+
                 EventBus.listen(BottomOptionsEvent.OnAddLesson::class.java).subscribe {
                     addLesson()
                 },
+
                 EventBus.listen(AddDialogEvent.OnDismiss::class.java).subscribe {
                     onAddDialogDismiss()
+                },
+
+                EventBus.listen(ScheduleUpdateEvent.OnRequestUpdate::class.java).subscribe {
+                    RequestUpdateDialog.newInstance(it.info).show(supportFragmentManager, "schedule_request_update")
                 }
         )
-    }
-
-    private fun setScheduleUpdateStatusListeners() {
-        viewModel.command.observe(this, Observer {
-            when (it) {
-                is ScheduleUpdateStatus.OnRequestUpdate -> {
-                    Toast.makeText(this, "${it.info.name} - ${it.info.type} need update", Toast.LENGTH_LONG).show()
-
-                    viewModel.updateSchedule(it.info)
-                }
-
-                is ScheduleUpdateStatus.OnScheduleUpdateUpdated -> {
-                    Snackbar.make(viewDataBinding.contentLayout, "${it.info.name} - ${it.info.type} updated!!!!!!!!!!", Snackbar.LENGTH_SHORT).show()
-
-                    val currentScheduleInfo = _lastScheduleInfo
-                    if (it.info.name == currentScheduleInfo?.name && it.info.type == currentScheduleInfo.type) {
-                        homeFragment()
-                    }
-                }
-
-                is ScheduleUpdateStatus.OnScheduleFailUpdate -> {
-                    Snackbar.make(viewDataBinding.contentLayout, "${it.info.name} - ${it.info.type} update fail !!!!!!!!!!", Snackbar.LENGTH_SHORT).show()
-                }
-            }
-        })
     }
 
     private fun onNavigate(info: ScheduleInformation) {

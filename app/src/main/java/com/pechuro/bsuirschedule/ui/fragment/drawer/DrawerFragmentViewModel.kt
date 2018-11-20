@@ -4,8 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import com.pechuro.bsuirschedule.constants.ScheduleTypes
 import com.pechuro.bsuirschedule.data.ScheduleRepository
 import com.pechuro.bsuirschedule.data.entity.Schedule
+import com.pechuro.bsuirschedule.ui.activity.navigation.ScheduleUpdateEvent
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
+import com.pechuro.bsuirschedule.ui.utils.EventBus
+import com.pechuro.bsuirschedule.ui.utils.getInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -43,7 +46,7 @@ class DrawerFragmentViewModel @Inject constructor(private val repository: Schedu
                                     .subscribe({
                                         val lastUpdate = it.lastUpdateDate
                                         if (lastUpdate != schedule.lastUpdate) {
-                                            //  status.call(OnRequestUpdate(schedule.getInfo()))
+                                            EventBus.publish(ScheduleUpdateEvent.OnRequestUpdate(schedule.getInfo()))
                                         }
                                     }, {}))
                 }
