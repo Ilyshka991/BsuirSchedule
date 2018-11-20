@@ -46,13 +46,13 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
         }
         setListeners()
         subscribeToLiveData()
-        setEventListeners()
+        setStatusListeners()
     }
 
-    private fun setEventListeners() {
-        viewModel.command.observe(this, Observer {
+    private fun setStatusListeners() {
+        viewModel.status.observe(this, Observer {
             when (it) {
-                is OnSuccess -> {
+                is Status.OnSuccess -> {
                     context?.defaultSharedPreferences?.edit {
                         putString(SharedPrefConstants.SCHEDULE_INFO, gson.toJson(it.info))
                     }
@@ -62,24 +62,24 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
                     EventBus.publish(OnAddDialogDismissEvent)
                 }
 
-                is OnClearError -> {
+                is Status.OnClearError -> {
                     viewDataBinding.errorTextView.text = ""
                 }
 
-                is OnError -> {
+                is Status.OnError -> {
                     EventBus.publish(SetDialogCancelable(true))
                     viewDataBinding.buttonOk.isEnabled = true
 
                     viewDataBinding.errorTextView.text = getString(it.messageId)
                 }
 
-                is OnCancel -> {
+                is Status.OnCancel -> {
                     viewDataBinding.errorTextView.text = ""
                     viewDataBinding.buttonOk.isEnabled = true
                     EventBus.publish(SetDialogCancelable(true))
                 }
 
-                is OnLoading -> {
+                is Status.OnLoading -> {
                     EventBus.publish(SetDialogCancelable(false))
                 }
             }

@@ -23,19 +23,22 @@ class InfoLoadActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setEventListeners()
+        setStatusListeners()
     }
 
-    private fun setEventListeners() {
-        viewModel.command.observe(this, Observer {
+    private fun setStatusListeners() {
+        viewModel.status.observe(this, Observer {
             when (it) {
-                is OnSuccess -> {
-                    val intent = NavigationActivity.newIntent(this)
-                    startActivity(intent)
-                    finish()
-                }
+                Status.COMPLETE -> handleCompleteStatus()
+                null -> throw UnsupportedOperationException()
             }
         })
+    }
+
+    private fun handleCompleteStatus() {
+        val intent = NavigationActivity.newIntent(this)
+        startActivity(intent)
+        finish()
     }
 
     companion object {

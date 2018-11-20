@@ -83,7 +83,7 @@ class NavigationActivity :
         setCommunicationListeners()
         if (savedInstanceState == null) homeFragment()
         setupBottomBar()
-        setEventListeners()
+        setScheduleUpdateStatusListeners()
     }
 
     override fun onBackPressed() {
@@ -109,7 +109,6 @@ class NavigationActivity :
             homeFragment()
         }
     }
-
 
     private fun onAddDialogDismiss() {
         homeFragment()
@@ -208,16 +207,16 @@ class NavigationActivity :
         )
     }
 
-    private fun setEventListeners() {
+    private fun setScheduleUpdateStatusListeners() {
         viewModel.command.observe(this, Observer {
             when (it) {
-                is OnRequestUpdate -> {
+                is ScheduleUpdateStatus.OnRequestUpdate -> {
                     Toast.makeText(this, "${it.info.name} - ${it.info.type} need update", Toast.LENGTH_LONG).show()
 
                     viewModel.updateSchedule(it.info)
                 }
 
-                is OnScheduleUpdated -> {
+                is ScheduleUpdateStatus.OnScheduleUpdateUpdated -> {
                     Snackbar.make(viewDataBinding.contentLayout, "${it.info.name} - ${it.info.type} updated!!!!!!!!!!", Snackbar.LENGTH_SHORT).show()
 
                     val currentScheduleInfo = _lastScheduleInfo
@@ -226,7 +225,7 @@ class NavigationActivity :
                     }
                 }
 
-                is OnScheduleUpdateFail -> {
+                is ScheduleUpdateStatus.OnScheduleFailUpdate -> {
                     Snackbar.make(viewDataBinding.contentLayout, "${it.info.name} - ${it.info.type} update fail !!!!!!!!!!", Snackbar.LENGTH_SHORT).show()
                 }
             }

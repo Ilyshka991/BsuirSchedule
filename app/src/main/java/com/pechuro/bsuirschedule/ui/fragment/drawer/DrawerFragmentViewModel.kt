@@ -43,7 +43,7 @@ class DrawerFragmentViewModel @Inject constructor(private val repository: Schedu
                                     .subscribe({
                                         val lastUpdate = it.lastUpdateDate
                                         if (lastUpdate != schedule.lastUpdate) {
-                                            //  command.call(OnRequestUpdate(schedule.getInfo()))
+                                            //  status.call(OnRequestUpdate(schedule.getInfo()))
                                         }
                                     }, {}))
                 }

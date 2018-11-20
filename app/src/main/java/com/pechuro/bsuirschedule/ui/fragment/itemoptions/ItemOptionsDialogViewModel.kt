@@ -8,7 +8,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class ItemOptionsDialogViewModel @Inject constructor(private val repository: ScheduleRepository) : BaseViewModel() {
-    val command = SingleLiveEvent<ItemOptionsEvent>()
+    val status = SingleLiveEvent<Status>()
 
     fun delete(id: Int) {
         compositeDisposable.add(
@@ -16,8 +16,12 @@ class ItemOptionsDialogViewModel @Inject constructor(private val repository: Sch
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            command.call(OnDeleted(id))
+                            status.call(Status.OnDeleted(id))
                         }, {})
         )
     }
+}
+
+sealed class Status {
+    class OnDeleted(val itemId: Int) : Status()
 }

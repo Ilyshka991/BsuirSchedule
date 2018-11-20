@@ -15,7 +15,7 @@ class InfoLoadActivityViewModel @Inject constructor(
         private val employeeRepository: EmployeeRepository) : BaseViewModel() {
 
     val isLoading = ObservableBoolean()
-    val command = SingleLiveEvent<InfoLoadEvent>()
+    val status = SingleLiveEvent<Status>()
 
     init {
         loadInfo()
@@ -29,10 +29,14 @@ class InfoLoadActivityViewModel @Inject constructor(
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            command.call(OnSuccess)
+                            status.call(Status.COMPLETE)
                         }, {
                             isLoading.set(false)
                         })
         )
     }
+}
+
+enum class Status {
+    COMPLETE
 }

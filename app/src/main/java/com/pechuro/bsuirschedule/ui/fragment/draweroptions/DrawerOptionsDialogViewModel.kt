@@ -10,7 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class DrawerOptionsDialogViewModel @Inject constructor(private val repository: ScheduleRepository) : BaseViewModel() {
-    val command = SingleLiveEvent<DrawerOptionsEvent>()
+    val status = SingleLiveEvent<Status>()
     val isLoading = ObservableBoolean()
     val isError = ObservableBoolean()
 
@@ -22,7 +22,7 @@ class DrawerOptionsDialogViewModel @Inject constructor(private val repository: S
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            command.call(OnUpdated(info))
+                            status.call(Status.OnUpdated(info))
                         }, {
                             isError.set(true)
                             isLoading.set(false)
@@ -36,10 +36,16 @@ class DrawerOptionsDialogViewModel @Inject constructor(private val repository: S
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            command.call(OnDeleted(info))
+                            status.call(Status.OnDeleted(info))
                         }, {})
         )
     }
 
-    fun cancel() = command.call(OnCancel)
+    fun cancel() = status.call(Status.OnCancel)
+}
+
+sealed class Status {
+    class OnDeleted(val info: ScheduleInformation) : Status()
+    class OnUpdated(val info: ScheduleInformation) : Status()
+    object OnCancel : Status()
 }

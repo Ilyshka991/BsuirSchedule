@@ -29,13 +29,13 @@ class ItemOptionsDialog : BaseDialog<DialogItemOptionsBinding, ItemOptionsDialog
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setEventListener()
+        setStatusListener()
     }
 
-    private fun setEventListener() {
-        viewModel.command.observe(this, Observer {
+    private fun setStatusListener() {
+        viewModel.status.observe(this, Observer {
             when (it) {
-                is OnDeleted -> _callback?.onItemDeleted(it.itemId)
+                is Status.OnDeleted -> _callback?.onItemDeleted(it.itemId)
             }
             dismiss()
         })

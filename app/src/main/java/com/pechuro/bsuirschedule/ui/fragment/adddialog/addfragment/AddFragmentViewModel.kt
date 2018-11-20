@@ -21,7 +21,7 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
     val isLoading = ObservableBoolean()
     val isError = ObservableBoolean()
     val suggestions = MutableLiveData<List<String>>()
-    val command = SingleLiveEvent<AddFragmentEvent>()
+    val status = SingleLiveEvent<Status>()
 
     fun loadSuggestions(scheduleType: Int) {
         val observable = when (scheduleType) {
@@ -36,13 +36,13 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
                         .subscribe({
                             suggestions.value = it
                         }, {
-                            command.call(OnError(R.string.error_empty_suggestions))
+                            status.call(Status.OnError(R.string.error_empty_suggestions))
                         }))
     }
 
     fun onCancelClick() {
         isError.set(false)
-        command.call(OnCancel)
+        status.call(Status.OnCancel)
     }
 
     fun loadSchedule(scheduleName: String, scheduleTypes: List<Int>) {
@@ -50,7 +50,7 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
             return
         }
 
-        command.call(OnLoading)
+        status.call(Status.OnLoading)
 
         isLoading.set(true)
         isError.set(false)
@@ -63,7 +63,7 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
                         val info = with(it[0]) {
                             ScheduleInformation(id, name, type)
                         }
-                        command.call(OnSuccess(info))
+                        status.call(Status.OnSuccess(info))
                     } else {
                         isError.set(true)
                     }
@@ -77,22 +77,30 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
 
     private fun isValid(scheduleName: String, scheduleTypes: List<Int>): Boolean {
         if (scheduleTypes.isEmpty()) {
-            command.call(OnError(R.string.error_types_not_specified))
+            status.call(Status.OnError(R.string.error_types_not_specified))
             return false
         }
         if (scheduleName.isBlank()) {
-            command.call(OnError(R.string.error_blank_schedule_name))
+            status.call(Status.OnError(R.string.error_blank_schedule_name))
             return false
         }
         if (suggestions.value == null) {
-            command.call(OnError(R.string.error_empty_suggestions))
+            status.call(Status.OnError(R.string.error_empty_suggestions))
             return false
         }
         if (!suggestions.value!!.contains(scheduleName)) {
-            command.call(OnError(R.string.error_unknown_schedule))
+            status.call(Status.OnError(R.string.error_unknown_schedule))
             return false
         }
-        command.call(OnClearError)
+        status.call(Status.OnClearError)
         return true
     }
+}
+
+sealed class Status {
+    class OnError(val messageId: Int) : Status()
+    object OnClearError : Status()
+    class OnSuccess(val info: ScheduleInformation) : Status()
+    object OnLoading : Status()
+    object OnCancel : Status()
 }

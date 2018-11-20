@@ -21,19 +21,20 @@ class SplashActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setEventListeners()
+        setActionListeners()
         if (savedInstanceState == null) viewModel.decideNextActivity()
     }
 
-    private fun setEventListeners() {
-        viewModel.command.observe(this, Observer {
+    private fun setActionListeners() {
+        viewModel.action.observe(this, Observer {
             val intent = when (it) {
-                is OpenInfoLoadActivity -> {
+                Action.OPEN_INFO_LOAD_ACTIVITY -> {
                     InfoLoadActivity.newIntent(this)
                 }
-                is OpenNavigationActivity -> {
+                Action.OPEN_NAVIGATION_ACTIVITY -> {
                     NavigationActivity.newIntent(this)
                 }
+                null -> throw IllegalArgumentException()
             }
             startActivity(intent)
             finish()

@@ -11,16 +11,22 @@ import javax.inject.Inject
 
 class NavigationActivityViewModel @Inject constructor(
         private val repository: ScheduleRepository) : BaseViewModel() {
-    val command = SingleLiveEvent<NavigationEvent>()
+    val command = SingleLiveEvent<ScheduleUpdateStatus>()
 
     fun updateSchedule(info: ScheduleInformation) =
             compositeDisposable.add(repository.update(info)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        command.call(OnScheduleUpdated(info))
+                        command.call(ScheduleUpdateStatus.OnScheduleUpdateUpdated(info))
                     }, {
-                        command.call(OnScheduleUpdateFail(info))
+                        command.call(ScheduleUpdateStatus.OnScheduleFailUpdate(info))
                     })
             )
+}
+
+sealed class ScheduleUpdateStatus {
+    class OnScheduleUpdateUpdated(val info: ScheduleInformation) : ScheduleUpdateStatus()
+    class OnScheduleFailUpdate(val info: ScheduleInformation) : ScheduleUpdateStatus()
+    class OnRequestUpdate(val info: ScheduleInformation) : ScheduleUpdateStatus()
 }

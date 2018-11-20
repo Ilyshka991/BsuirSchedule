@@ -24,15 +24,15 @@ class DrawerOptionsDialog : BaseDialog<DialogDrawerOptionsBinding, DrawerOptions
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setEventListener()
+        setStatusListener()
     }
 
-    private fun setEventListener() {
-        viewModel.command.observe(this, Observer {
+    private fun setStatusListener() {
+        viewModel.status.observe(this, Observer {
             when (it) {
-                is OnDeleted -> EventBus.publish(OnScheduleDeletedEvent(it.info))
-                is OnUpdated -> EventBus.publish(OnScheduleUpdatedEvent(it.info))
-                is OnCancel -> dismiss()
+                is Status.OnDeleted -> EventBus.publish(OnScheduleDeletedEvent(it.info))
+                is Status.OnUpdated -> EventBus.publish(OnScheduleUpdatedEvent(it.info))
+                is Status.OnCancel -> dismiss()
             }
             dismiss()
         })
