@@ -40,6 +40,7 @@ import com.pechuro.bsuirschedule.ui.fragment.start.StartFragment
 import com.pechuro.bsuirschedule.ui.utils.EventBus
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_navigation.*
 import org.jetbrains.anko.defaultSharedPreferences
 import javax.inject.Inject
@@ -101,10 +102,7 @@ class NavigationActivity :
         }
     }
 
-    private fun onAddDialogDismiss() {
-        homeFragment()
-        setupBottomBar()
-    }
+    private fun onScheduleAdded() = homeFragment()
 
     private fun addLesson() {
         val info = _lastScheduleInfo!!
@@ -192,8 +190,8 @@ class NavigationActivity :
                     addLesson()
                 },
 
-                EventBus.listen(AddDialogEvent.OnDismiss::class.java).subscribe {
-                    onAddDialogDismiss()
+                EventBus.listen(AddDialogEvent.OnScheduleAdded::class.java).subscribe {
+                    onScheduleAdded()
                 },
 
                 EventBus.listen(ScheduleUpdateEvent.OnRequestUpdate::class.java).subscribe {
@@ -227,6 +225,7 @@ class NavigationActivity :
     private fun setListeners() {
         compositeDisposable.add(sharedPref.getString(SCHEDULE_INFO, "")
                 .asObservable()
+                .subscribeOn(Schedulers.io())
                 .subscribe {
                     _lastScheduleInfo = if (it.isNullOrEmpty()) null else gson.fromJson(it, ScheduleInformation::class.java)
                 })
@@ -235,7 +234,7 @@ class NavigationActivity :
     private fun setViewListeners() {
         val toggle = ActionBarDrawerToggle(
                 this, viewDataBinding.drawerLayout, viewDataBinding.bar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+                R.string.nav_drawer_action_open, R.string.nav_drawer_action_close)
         viewDataBinding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 

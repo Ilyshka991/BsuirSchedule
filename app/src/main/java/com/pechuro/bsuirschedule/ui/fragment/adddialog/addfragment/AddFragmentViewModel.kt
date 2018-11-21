@@ -36,7 +36,7 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
                         .subscribe({
                             suggestions.value = it
                         }, {
-                            status.call(Status.OnError(R.string.error_empty_suggestions))
+                            status.call(Status.OnError(R.string.add_fragment_error_empty_suggestions))
                         }))
     }
 
@@ -77,19 +77,19 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
 
     private fun isValid(scheduleName: String, scheduleTypes: List<Int>): Boolean {
         if (scheduleTypes.isEmpty()) {
-            status.call(Status.OnError(R.string.error_types_not_specified))
+            status.call(Status.OnError(R.string.add_fragment_error_types_not_specified))
             return false
         }
         if (scheduleName.isBlank()) {
-            status.call(Status.OnError(R.string.error_blank_schedule_name))
+            status.call(Status.OnError(R.string.add_fragment_error_blank_schedule_name))
             return false
         }
         if (suggestions.value == null) {
-            status.call(Status.OnError(R.string.error_empty_suggestions))
+            status.call(Status.OnError(R.string.add_fragment_error_empty_suggestions))
             return false
         }
         if (!suggestions.value!!.contains(scheduleName)) {
-            status.call(Status.OnError(R.string.error_unknown_schedule))
+            status.call(Status.OnError(R.string.add_fragment_error_unknown_schedule))
             return false
         }
         status.call(Status.OnClearError)

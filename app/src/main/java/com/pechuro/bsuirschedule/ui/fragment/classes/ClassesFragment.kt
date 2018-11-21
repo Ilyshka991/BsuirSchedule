@@ -68,7 +68,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
                 for (i in 0 until NUMBER_OF_TABS) {
                     val (day, week, dayRu) = viewModel.getTabDate(i)
                     viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab()
-                            .setText(getString(R.string.schedule_tab_text, day, week)).setTag(dayRu))
+                            .setText(getString(R.string.classes_tab_item, day, week)).setTag(dayRu))
 
                     when (scheduleInfo!!.type) {
                         ScheduleTypes.STUDENT_CLASSES -> {

@@ -96,10 +96,10 @@ dependencies {
     //RxPreferences
     implementation 'com.f2prateek.rx.preferences2:rx-preferences:2.0.0'
 
-    //Leak Canary
+  /*  //Leak Canary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
     debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.2'
 
     //SqlScout
-    debugImplementation 'com.idescout.sql:sqlscout-server:4.1'
+    debugImplementation 'com.idescout.sql:sqlscout-server:4.1'*/
 }

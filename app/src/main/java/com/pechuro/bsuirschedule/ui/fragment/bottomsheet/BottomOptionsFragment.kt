@@ -55,8 +55,8 @@ class BottomOptionsFragment : BottomSheetDialogFragment() {
         }
 
         when (sharedPref.getInteger(VIEW_TYPE, VIEW_TYPE_DAY).get()) {
-            VIEW_TYPE_DAY -> _viewTypeButton.text = getString(R.string.show_by_days)
-            VIEW_TYPE_WEEK -> _viewTypeButton.text = getString(R.string.show_by_weeks)
+            VIEW_TYPE_DAY -> _viewTypeButton.text = getString(R.string.bottom_sheet_action_show_by_days)
+            VIEW_TYPE_WEEK -> _viewTypeButton.text = getString(R.string.bottom_sheet_action_show_by_weeks)
         }
 
         _subgroupNumberSpinner.setSelection(sharedPref.getInteger(SUBGROUP_NUMBER, SUBGROUP_ALL).get())
@@ -82,12 +82,12 @@ class BottomOptionsFragment : BottomSheetDialogFragment() {
                 when (get()) {
                     VIEW_TYPE_DAY -> {
                         set(VIEW_TYPE_WEEK)
-                        _viewTypeButton.text = getString(R.string.show_by_weeks)
+                        _viewTypeButton.text = getString(R.string.bottom_sheet_action_show_by_weeks)
 
                     }
                     VIEW_TYPE_WEEK -> {
                         set(VIEW_TYPE_DAY)
-                        _viewTypeButton.text = getString(R.string.show_by_days)
+                        _viewTypeButton.text = getString(R.string.bottom_sheet_action_show_by_days)
                     }
                 }
             }

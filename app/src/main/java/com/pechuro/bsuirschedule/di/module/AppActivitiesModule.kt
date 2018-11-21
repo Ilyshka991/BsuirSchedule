@@ -40,7 +40,6 @@ abstract class AppActivitiesModule {
         DrawerOptionsDialogProvider::class,
         DrawerFragmentProvider::class,
         RequestUpdateDialogProvider::class,
-        EditLessonFragmentProvider::class,
         OptionsFragmentProvider::class])
     abstract fun bindNavigationActivity(): NavigationActivity
 
@@ -57,6 +56,8 @@ abstract class AppActivitiesModule {
     abstract fun bindSettingsActivity(): SettingsActivity
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector(modules = [
+        EditLessonFragmentProvider::class
+    ])
     abstract fun bindEditLessonActivity(): EditLessonActivity
 }

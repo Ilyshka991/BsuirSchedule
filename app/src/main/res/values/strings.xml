@@ -1,22 +1,27 @@
 <resources>
     <string name="app_name">Bsuir Schedule</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="schedules">Schedules</string>
-    <string name="exams">Exams</string>
-    <string name="add_schedule">Add schedule</string>
-    <string name="schedule_tab_text">"%1$s, Week %2$d"</string>
-    <string name="employees">Employees</string>
-    <string name="students">Students</string>
-    <string name="success">Success</string>
-    <string name="error_types_not_specified">Please, select type</string>
-    <string name="error_empty_suggestions">Please, update information</string>
-    <string name="error_blank_schedule_name">Please, fill in schedule name</string>
-    <string name="error_unknown_schedule">Unknown schedule</string>
-    <string name="show_by_weeks">Show by weeks</string>
-    <string name="show_by_days">Show by days</string>
+
+    <string name="nav_drawer_action_open">Open navigation drawer</string>
+    <string name="nav_drawer_action_close">Close navigation drawer</string>
+    <string name="nav_drawer_title_schedules">Schedules</string>
+    <string name="nav_drawer_title_exams">Exams</string>
+    <string name="nav_drawer_action_add_schedule">Add schedule</string>
+
+    <string name="classes_tab_item">"%1$s, Week %2$d"</string>
+
+    <string name="add_dialog_tab_item_employees">Employees</string>
+    <string name="add_dialog_tab_item_students">Students</string>
+
+    <string name="add_fragment_error_types_not_specified">Please, select type</string>
+    <string name="add_fragment_error_empty_suggestions">Please, update information</string>
+    <string name="add_fragment_error_blank_schedule_name">Please, fill in schedule name</string>
+    <string name="add_fragment_error_unknown_schedule">Unknown schedule</string>
+
+    <string name="bottom_sheet_action_show_by_weeks">Show by weeks</string>
+    <string name="bottom_sheet_action_show_by_days">Show by days</string>
 
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_edit">Edit</string>
 
     <array name="subgroups">
         <item>all group</item>

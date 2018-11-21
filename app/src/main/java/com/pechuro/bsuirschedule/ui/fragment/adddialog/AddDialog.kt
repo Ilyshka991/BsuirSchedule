@@ -33,8 +33,8 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
         viewDataBinding.viewPager.adapter = pagerAdapter
         viewDataBinding.viewPager.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
 
-        viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab().setText(getString(R.string.students)))
-        viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab().setText(getString(R.string.employees)))
+        viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab().setText(getString(R.string.add_dialog_tab_item_students)))
+        viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab().setText(getString(R.string.add_dialog_tab_item_employees)))
     }
 
     private fun setEventListeners() {
@@ -42,7 +42,10 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
                 EventBus.listen(AddDialogEvent::class.java).subscribe {
                     when (it) {
                         is AddDialogEvent.SetCancelable -> isCancelable = it.isCancelable
-                        is AddDialogEvent.OnDismiss -> dismiss()
+                        is AddDialogEvent.OnSuccess -> {
+                            dismiss()
+                            EventBus.publish(AddDialogEvent.OnScheduleAdded)
+                        }
                     }
                 })
     }

@@ -49,12 +49,12 @@ class NavItemAdapter(private val context: Context,
         val result = mutableListOf<ScheduleInformation>()
 
         if (data[SCHEDULES]?.isNotEmpty() == true) {
-            result.add(ScheduleInformation(-1, context.getString(R.string.schedules), NAV_ITEM_MENU))
+            result.add(ScheduleInformation(-1, context.getString(R.string.nav_drawer_title_schedules), NAV_ITEM_MENU))
             result.addAll(data[SCHEDULES]!!)
         }
 
         if (data[EXAMS]?.isNotEmpty() == true) {
-            result.add(ScheduleInformation(-1, context.getString(R.string.exams), NAV_ITEM_MENU))
+            result.add(ScheduleInformation(-1, context.getString(R.string.nav_drawer_title_exams), NAV_ITEM_MENU))
             result.addAll(data[EXAMS]!!)
         }
 

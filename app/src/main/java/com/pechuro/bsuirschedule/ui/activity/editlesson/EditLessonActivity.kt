@@ -3,6 +3,7 @@ package com.pechuro.bsuirschedule.ui.activity.editlesson
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.transaction
 import androidx.lifecycle.ViewModelProviders
 import com.pechuro.bsuirschedule.BR
@@ -11,9 +12,14 @@ import com.pechuro.bsuirschedule.databinding.ActivityContainerBinding
 import com.pechuro.bsuirschedule.ui.base.BaseActivity
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.fragment.edit.EditLessonFragment
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.HasSupportFragmentInjector
+import javax.inject.Inject
 
 class EditLessonActivity :
-        BaseActivity<ActivityContainerBinding, EditLessonActivityViewModel>() {
+        BaseActivity<ActivityContainerBinding, EditLessonActivityViewModel>(), HasSupportFragmentInjector {
+    @Inject
+    lateinit var fragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
 
     override val viewModel: EditLessonActivityViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(EditLessonActivityViewModel::class.java)
@@ -21,6 +27,8 @@ class EditLessonActivity :
         get() = R.layout.activity_container
     override val bindingVariables: Map<Int, Any>
         get() = mapOf(Pair(BR.viewModel, viewModel))
+
+    override fun supportFragmentInjector() = fragmentDispatchingAndroidInjector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

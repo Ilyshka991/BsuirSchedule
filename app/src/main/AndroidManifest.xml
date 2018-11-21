@@ -32,6 +32,7 @@
             android:parentActivityName=".ui.activity.navigation.NavigationActivity" />
         <activity
             android:name=".ui.activity.editlesson.EditLessonActivity"
+            android:label="@string/title_activity_edit"
             android:parentActivityName=".ui.activity.navigation.NavigationActivity" />
     </application>
 

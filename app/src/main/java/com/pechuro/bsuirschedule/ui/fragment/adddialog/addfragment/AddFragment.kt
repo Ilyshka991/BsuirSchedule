@@ -3,7 +3,6 @@ package com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.core.content.edit
 import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.Observer
@@ -56,9 +55,7 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
                         putString(SharedPrefConstants.SCHEDULE_INFO, gson.toJson(it.info))
                     }
 
-                    viewDataBinding.buttonOk.isEnabled = true
-                    Toast.makeText(context, getString(R.string.success), Toast.LENGTH_LONG).show()
-                    EventBus.publish(AddDialogEvent.OnDismiss)
+                    EventBus.publish(AddDialogEvent.OnSuccess)
                 }
 
                 is Status.OnClearError -> {
