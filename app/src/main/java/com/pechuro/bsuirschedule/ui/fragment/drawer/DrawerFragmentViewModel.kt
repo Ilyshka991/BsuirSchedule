@@ -8,7 +8,6 @@ import com.pechuro.bsuirschedule.ui.activity.navigation.ScheduleUpdateEvent
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.utils.EventBus
-import com.pechuro.bsuirschedule.ui.utils.getInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -22,34 +21,22 @@ class DrawerFragmentViewModel @Inject constructor(private val repository: Schedu
 
     private fun loadMenuItems() {
         compositeDisposable.add(repository.getSchedules()
-                .map {
-                    checkUpdate(it)
-                    it.toMap()
-                }.subscribeOn(Schedulers.io())
+                .map { it.toMap() }.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     menuItems.value = it
                 }, {}))
     }
 
-    private fun checkUpdate(schedules: List<Schedule>) {
-        schedules
-                .filter {
-                    it.type == ScheduleTypes.STUDENT_CLASSES ||
-                            it.type == ScheduleTypes.STUDENT_EXAMS
-                }
-                .forEach { schedule ->
-                    compositeDisposable.add(
-                            repository.getLastUpdate(schedule.name)
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe({
-                                        val lastUpdate = it.lastUpdateDate
-                                        if (lastUpdate != schedule.lastUpdate) {
-                                            EventBus.publish(ScheduleUpdateEvent.OnRequestUpdate(schedule.getInfo()))
-                                        }
-                                    }, {}))
-                }
+    fun checkUpdate() {
+        compositeDisposable.add(repository.getNotUpdatedSchedules()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    it.forEach { info ->
+                        EventBus.publish(ScheduleUpdateEvent.OnRequestUpdate(info))
+                    }
+                }, {}))
     }
 
     private fun List<Schedule>.toMap(): Map<Int, List<ScheduleInformation>> {

@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.data.database.dao
 
 import androidx.room.*
+import com.pechuro.bsuirschedule.constants.ScheduleTypes
 import com.pechuro.bsuirschedule.data.entity.Schedule
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 import com.pechuro.bsuirschedule.data.entity.complex.Classes
@@ -92,4 +93,8 @@ interface ScheduleDao {
 
     @Query("SELECT * FROM all_schedules")
     fun getSchedules(): Observable<List<Schedule>>
+
+    @Query("SELECT * FROM all_schedules " +
+            "WHERE type = ${ScheduleTypes.STUDENT_CLASSES} OR type = ${ScheduleTypes.STUDENT_EXAMS}")
+    fun getStudentSchedules(): Single<List<Schedule>>
 }

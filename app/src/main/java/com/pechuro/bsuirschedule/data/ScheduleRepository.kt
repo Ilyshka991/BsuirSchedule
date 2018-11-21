@@ -13,6 +13,7 @@ import com.pechuro.bsuirschedule.data.network.ResponseModel
 import com.pechuro.bsuirschedule.data.network.ScheduleApi
 import com.pechuro.bsuirschedule.data.network.ScheduleResponse
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
+import com.pechuro.bsuirschedule.ui.utils.getInfo
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -73,9 +74,21 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
         scheduleDao.delete(type)
     }
 
-    private fun deleteLastSchedules(name: String, types: List<Int>) = types.forEach { scheduleDao.delete(name, it) }
+    fun getNotUpdatedSchedules(): Single<List<ScheduleInformation>> = Single.fromCallable {
+        val schedules = scheduleDao.getStudentSchedules().blockingGet()
+        val schedulesForUpdate = mutableListOf<ScheduleInformation>()
+        schedules.forEach {
+            val currentUpdate = getLastUpdate(it.name).blockingGet().lastUpdateDate
+            if (currentUpdate != it.lastUpdate) {
+                schedulesForUpdate += it.getInfo()
+            }
+        }
+        schedulesForUpdate
+    }
 
-    fun getLastUpdate(name: String): Single<LastUpdateResponse> = api.getLastUpdateDate(name)
+    private fun getLastUpdate(name: String): Single<LastUpdateResponse> = api.getLastUpdateDate(name)
+
+    private fun deleteLastSchedules(name: String, types: List<Int>) = types.forEach { scheduleDao.delete(name, it) }
 
     private fun transformResponse(name: String, type: Int, lastUpdate: String, response: ResponseModel, id: Int = -1): Classes {
         fun getScheduleItems(response: List<ScheduleResponse>?): List<ScheduleItem> {

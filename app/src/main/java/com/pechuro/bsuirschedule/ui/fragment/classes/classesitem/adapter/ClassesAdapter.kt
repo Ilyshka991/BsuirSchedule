@@ -22,10 +22,10 @@ enum class ViewTypes {
 
 class ClassesAdapter : RecyclerView.Adapter<BaseViewHolder>() {
 
-    private val mItemsList = ArrayList<BaseClassesData>()
-    private var mViewType = ViewTypes.UNDEFINED
+    private val _classesList = ArrayList<BaseClassesData>()
+    private var _viewType = ViewTypes.UNDEFINED
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (mViewType) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (_viewType) {
         ViewTypes.STUDENT_DAY -> {
             val viewBinding = ItemStudentsClassesDayBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
@@ -49,21 +49,21 @@ class ClassesAdapter : RecyclerView.Adapter<BaseViewHolder>() {
         ViewTypes.UNDEFINED -> throw IllegalStateException()
     }
 
-    override fun getItemCount(): Int = mItemsList.size
+    override fun getItemCount(): Int = _classesList.size
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) = holder.onBind(position)
 
     fun setItems(data: Pair<ViewTypes, List<BaseClassesData>>) {
-        mItemsList.clear()
-        mItemsList.addAll(data.second)
-        mViewType = data.first
+        _classesList.clear()
+        _classesList.addAll(data.second)
+        _viewType = data.first
         notifyDataSetChanged()
     }
 
     inner class StudentDayViewHolder(private val mBinding: ItemStudentsClassesDayBinding) : BaseViewHolder(mBinding.root) {
 
         override fun onBind(position: Int) {
-            val data = mItemsList[position] as StudentClassesDayData
+            val data = _classesList[position] as StudentClassesDayData
             mBinding.data = data
             mBinding.executePendingBindings()
         }
@@ -72,7 +72,7 @@ class ClassesAdapter : RecyclerView.Adapter<BaseViewHolder>() {
     inner class StudentWeekViewHolder(private val mBinding: ItemStudentClassesWeekBinding) : BaseViewHolder(mBinding.root) {
 
         override fun onBind(position: Int) {
-            val data = mItemsList[position] as StudentClassesWeekData
+            val data = _classesList[position] as StudentClassesWeekData
             mBinding.data = data
             mBinding.executePendingBindings()
         }
@@ -81,7 +81,7 @@ class ClassesAdapter : RecyclerView.Adapter<BaseViewHolder>() {
     inner class EmployeeDayViewHolder(private val mBinding: ItemEmployeeClassesDayBinding) : BaseViewHolder(mBinding.root) {
 
         override fun onBind(position: Int) {
-            val data = mItemsList[position] as EmployeeClassesDayData
+            val data = _classesList[position] as EmployeeClassesDayData
             mBinding.data = data
             mBinding.executePendingBindings()
         }
@@ -90,7 +90,7 @@ class ClassesAdapter : RecyclerView.Adapter<BaseViewHolder>() {
     inner class EmployeeWeekViewHolder(private val mBinding: ItemEmployeeClassesWeekBinding) : BaseViewHolder(mBinding.root) {
 
         override fun onBind(position: Int) {
-            val data = mItemsList[position] as EmployeeClassesWeekData
+            val data = _classesList[position] as EmployeeClassesWeekData
             mBinding.data = data
             mBinding.executePendingBindings()
         }

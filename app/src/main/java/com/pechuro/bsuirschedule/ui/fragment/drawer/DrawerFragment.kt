@@ -33,6 +33,7 @@ class DrawerFragment : BaseFragment<FragmentDrawerBinding, DrawerFragmentViewMod
         setupView()
         subscribeToLiveData()
         setViewListeners()
+        if (savedInstanceState == null) viewModel.checkUpdate()
     }
 
     private fun setupView() {
