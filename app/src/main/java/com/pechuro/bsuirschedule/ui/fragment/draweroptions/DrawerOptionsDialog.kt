@@ -16,7 +16,7 @@ class DrawerOptionsDialog : BaseDialog<DialogDrawerOptionsBinding, DrawerOptions
     }
 
     override val viewModel: DrawerOptionsDialogViewModel
-        get() = ViewModelProviders.of(this, mViewModelFactory).get(DrawerOptionsDialogViewModel::class.java)
+        get() = ViewModelProviders.of(this, viewModelFactory).get(DrawerOptionsDialogViewModel::class.java)
     override val bindingVariables: Map<Int, Any?>
         get() = mapOf(Pair(BR.viewModel, viewModel), Pair(BR.info, _scheduleInfo))
     override val layoutId: Int

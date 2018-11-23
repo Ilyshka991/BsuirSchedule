@@ -16,15 +16,16 @@ import javax.inject.Inject
 abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel> : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    abstract val viewModel: V
+    @Inject
+    lateinit var compositeDisposable: CompositeDisposable
 
+    abstract val viewModel: V
     lateinit var viewDataBinding: T
     abstract val bindingVariables: Map<Int, Any>?
 
     @get:LayoutRes
     abstract val layoutId: Int
 
-    val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         performDI()

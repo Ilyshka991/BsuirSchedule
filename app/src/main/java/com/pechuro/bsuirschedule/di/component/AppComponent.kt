@@ -12,6 +12,7 @@ import javax.inject.Singleton
     AppActivitiesModule::class,
     AppViewModelsModule::class,
     NetworkModule::class,
+    RxModule::class,
     DatabaseModule::class])
 interface AppComponent {
     fun inject(app: App)

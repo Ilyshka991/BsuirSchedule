@@ -14,7 +14,7 @@ class ItemOptionsDialog : BaseDialog<DialogItemOptionsBinding, ItemOptionsDialog
     }
 
     override val viewModel: ItemOptionsDialogViewModel
-        get() = ViewModelProviders.of(this, mViewModelFactory).get(ItemOptionsDialogViewModel::class.java)
+        get() = ViewModelProviders.of(this, viewModelFactory).get(ItemOptionsDialogViewModel::class.java)
     override val bindingVariables: Map<Int, Any?>
         get() = mapOf(Pair(BR.viewModel, viewModel), Pair(BR.id, _itemId))
     override val layoutId: Int

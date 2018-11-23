@@ -18,7 +18,7 @@ class RequestUpdateDialog : BaseDialog<DialogRequestScheduleUpdateBinding, Reque
     }
 
     override val viewModel: RequestUpdateDialogViewModel
-        get() = ViewModelProviders.of(this, mViewModelFactory).get(RequestUpdateDialogViewModel::class.java)
+        get() = ViewModelProviders.of(this, viewModelFactory).get(RequestUpdateDialogViewModel::class.java)
     override val bindingVariables: Map<Int, Any?>
         get() = mapOf(Pair(BR.viewModel, viewModel), Pair(BR.info, _scheduleInfo))
     override val layoutId: Int
@@ -45,6 +45,7 @@ class RequestUpdateDialog : BaseDialog<DialogRequestScheduleUpdateBinding, Reque
 
 
     companion object {
+        const val TAG = "request_update_dialog"
         private const val ARG_SCHEDULE_INFO = "schedule_info"
 
         fun newInstance(info: ScheduleInformation) =

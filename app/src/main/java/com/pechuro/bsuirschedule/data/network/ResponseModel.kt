@@ -18,5 +18,4 @@ class ScheduleResponse(
         val classes: List<ScheduleItem>
 )
 
-
 class LastUpdateResponse(val lastUpdateDate: String)

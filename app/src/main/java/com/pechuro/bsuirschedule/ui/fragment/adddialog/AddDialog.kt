@@ -16,7 +16,7 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
     lateinit var pagerAdapter: AddDialogPagerAdapter
 
     override val viewModel: AddDialogViewModel
-        get() = ViewModelProviders.of(this, mViewModelFactory).get(AddDialogViewModel::class.java)
+        get() = ViewModelProviders.of(this, viewModelFactory).get(AddDialogViewModel::class.java)
     override val bindingVariables: Map<Int, Any>?
         get() = null
     override val layoutId: Int
@@ -72,6 +72,8 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
     }
 
     companion object {
+        const val TAG = "add_dialog"
+
         fun newInstance(): AddDialog {
             val fragment = AddDialog()
             val bundle = Bundle()

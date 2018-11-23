@@ -17,7 +17,9 @@ import javax.inject.Inject
 
 abstract class BaseDialog<T : ViewDataBinding, V : BaseViewModel> : DialogFragment() {
     @Inject
-    lateinit var mViewModelFactory: ViewModelProvider.Factory
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var compositeDisposable: CompositeDisposable
 
     lateinit var viewDataBinding: T
     abstract val viewModel: V?
@@ -25,8 +27,6 @@ abstract class BaseDialog<T : ViewDataBinding, V : BaseViewModel> : DialogFragme
     lateinit var rootView: View
     @get:LayoutRes
     abstract val layoutId: Int
-
-    val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         performDI()

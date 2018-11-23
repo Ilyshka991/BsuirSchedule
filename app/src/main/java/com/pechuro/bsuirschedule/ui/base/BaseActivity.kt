@@ -13,6 +13,8 @@ import javax.inject.Inject
 abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var compositeDisposable: CompositeDisposable
 
     lateinit var viewDataBinding: T
     abstract val viewModel: V
@@ -21,7 +23,6 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
     abstract val layoutId: Int
     abstract val bindingVariables: Map<Int, Any>?
 
-    val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         performDI()

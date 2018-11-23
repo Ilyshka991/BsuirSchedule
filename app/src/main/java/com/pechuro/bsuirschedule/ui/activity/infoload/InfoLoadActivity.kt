@@ -30,7 +30,7 @@ class InfoLoadActivity :
         viewModel.status.observe(this, Observer {
             when (it) {
                 Status.COMPLETE -> handleCompleteStatus()
-                null -> throw UnsupportedOperationException()
+                null -> throw IllegalArgumentException()
             }
         })
     }
