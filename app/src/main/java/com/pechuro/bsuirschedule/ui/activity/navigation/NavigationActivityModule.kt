@@ -20,8 +20,5 @@ class NavigationActivityModule {
 
     @Provides
     fun provideRxPref(pref: SharedPreferences) = RxSharedPreferences.create(pref)
-
-    @Provides
-    fun provideNavItemsDiffCallback() = NavItemsDiffCallback()
 }
 

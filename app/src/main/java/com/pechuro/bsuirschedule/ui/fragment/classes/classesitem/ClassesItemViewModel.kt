@@ -9,7 +9,6 @@ import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.Emp
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.EmployeeClassesWeekInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.StudentClassesDayInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.StudentClassesWeekInformation
-import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.adapter.ViewTypes
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.BaseClassesData
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.EmployeeClassesDayData
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.EmployeeClassesWeekData
@@ -20,7 +19,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class ClassesItemViewModel @Inject constructor(private val repository: ScheduleRepository) : BaseViewModel() {
-    val listItemsLiveData = MutableLiveData<Pair<ViewTypes, List<BaseClassesData>>>()
+    val listItemsLiveData = MutableLiveData<List<BaseClassesData>>()
 
     fun loadData(info: ClassesBaseInformation) {
         val viewType: ViewTypes
@@ -53,12 +52,11 @@ class ClassesItemViewModel @Inject constructor(private val repository: ScheduleR
                         ViewTypes.STUDENT_WEEK -> transformStudentWeekItems(it)
                         ViewTypes.EMPLOYEE_DAY -> transformEmployeeDayItems(it)
                         ViewTypes.EMPLOYEE_WEEK -> transformEmployeeWeekItems(it)
-                        else -> throw IllegalStateException()
                     }
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    listItemsLiveData.value = Pair(viewType, it)
+                    listItemsLiveData.value = it
                 }, {}))
     }
 
@@ -85,4 +83,9 @@ class ClassesItemViewModel @Inject constructor(private val repository: ScheduleR
         data.forEach { items.add(EmployeeClassesWeekData(it.id, it.subject)) }
         return items
     }
+}
+
+private enum class ViewTypes {
+    STUDENT_DAY, STUDENT_WEEK,
+    EMPLOYEE_DAY, EMPLOYEE_WEEK
 }

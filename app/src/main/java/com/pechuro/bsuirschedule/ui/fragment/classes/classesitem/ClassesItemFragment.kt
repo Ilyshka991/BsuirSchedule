@@ -65,9 +65,7 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
     private fun subscribeToLiveData() {
         viewModel.listItemsLiveData.observe(this,
                 Observer {
-                    if (it != null) {
-                        adapter.setItems(it)
-                    }
+                    adapter.setItems(it)
                 })
     }
 

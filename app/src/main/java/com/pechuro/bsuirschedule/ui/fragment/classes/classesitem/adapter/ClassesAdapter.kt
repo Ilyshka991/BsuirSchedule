@@ -2,62 +2,76 @@ package com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.pechuro.bsuirschedule.databinding.ItemEmployeeClassesDayBinding
-import com.pechuro.bsuirschedule.databinding.ItemEmployeeClassesWeekBinding
-import com.pechuro.bsuirschedule.databinding.ItemStudentClassesWeekBinding
-import com.pechuro.bsuirschedule.databinding.ItemStudentsClassesDayBinding
+import com.pechuro.bsuirschedule.databinding.*
 import com.pechuro.bsuirschedule.ui.base.BaseViewHolder
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.BaseClassesData
-import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.EmployeeClassesDayData
-import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.EmployeeClassesWeekData
-import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.StudentClassesDayData
-import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.StudentClassesWeekData
+import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.*
+import org.jetbrains.anko.doAsyncResult
+import kotlin.IllegalArgumentException
 
-enum class ViewTypes {
-    STUDENT_DAY, STUDENT_WEEK,
-    EMPLOYEE_DAY, EMPLOYEE_WEEK,
-    UNDEFINED
-}
-
-class ClassesAdapter : RecyclerView.Adapter<BaseViewHolder>() {
+class ClassesAdapter(private val diffCallback: ClassesDiffCallback) : RecyclerView.Adapter<BaseViewHolder>() {
 
     private val _classesList = ArrayList<BaseClassesData>()
-    private var _viewType = ViewTypes.UNDEFINED
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (_viewType) {
-        ViewTypes.STUDENT_DAY -> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
+        ViewTypes.STUDENT_DAY.type -> {
             val viewBinding = ItemStudentsClassesDayBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             StudentDayViewHolder(viewBinding)
         }
-        ViewTypes.STUDENT_WEEK -> {
+        ViewTypes.STUDENT_WEEK.type -> {
             val viewBinding = ItemStudentClassesWeekBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             StudentWeekViewHolder(viewBinding)
         }
-        ViewTypes.EMPLOYEE_DAY -> {
+        ViewTypes.EMPLOYEE_DAY.type -> {
             val viewBinding = ItemEmployeeClassesDayBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             EmployeeDayViewHolder(viewBinding)
         }
-        ViewTypes.EMPLOYEE_WEEK -> {
+        ViewTypes.EMPLOYEE_WEEK.type -> {
             val viewBinding = ItemEmployeeClassesWeekBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             EmployeeWeekViewHolder(viewBinding)
         }
-        ViewTypes.UNDEFINED -> throw IllegalStateException()
+        ViewTypes.EMPTY.type -> {
+            val viewBinding = ItemClassesEmptyBinding
+                    .inflate(LayoutInflater.from(parent.context), parent, false)
+            EmptyViewHolder(viewBinding)
+        }
+        else -> throw IllegalArgumentException()
+    }
+
+    override fun getItemViewType(position: Int) = when (_classesList[position]) {
+        is StudentClassesDayData -> ViewTypes.STUDENT_DAY.type
+        is StudentClassesWeekData -> ViewTypes.STUDENT_WEEK.type
+        is EmployeeClassesDayData -> ViewTypes.EMPLOYEE_DAY.type
+        is EmployeeClassesWeekData -> ViewTypes.EMPLOYEE_WEEK.type
+        is EmptyClassesData -> ViewTypes.EMPTY.type
+        else -> throw IllegalArgumentException()
     }
 
     override fun getItemCount(): Int = _classesList.size
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) = holder.onBind(position)
 
-    fun setItems(data: Pair<ViewTypes, List<BaseClassesData>>) {
+    fun setItems(data: List<BaseClassesData>) {
+        val result = mutableListOf<BaseClassesData>()
+
+        val diffResult = doAsyncResult {
+            result += if (data.isEmpty()) listOf(EmptyClassesData()) else data
+            diffCallback.setData(_classesList, result)
+            DiffUtil.calculateDiff(diffCallback)
+        }.get()
+
         _classesList.clear()
-        _classesList.addAll(data.second)
-        _viewType = data.first
-        notifyDataSetChanged()
+        _classesList += result
+
+        diffResult.dispatchUpdatesTo(this)
     }
 
     inner class StudentDayViewHolder(private val mBinding: ItemStudentsClassesDayBinding) : BaseViewHolder(mBinding.root) {
@@ -95,4 +109,15 @@ class ClassesAdapter : RecyclerView.Adapter<BaseViewHolder>() {
             mBinding.executePendingBindings()
         }
     }
+
+    inner class EmptyViewHolder(mBinding: ItemClassesEmptyBinding) : BaseViewHolder(mBinding.root) {
+
+        override fun onBind(position: Int) {}
+    }
+}
+
+private enum class ViewTypes(val type: Int) {
+    STUDENT_DAY(1), STUDENT_WEEK(2),
+    EMPLOYEE_DAY(3), EMPLOYEE_WEEK(4),
+    EMPTY(0)
 }

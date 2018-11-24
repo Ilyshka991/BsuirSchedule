@@ -9,6 +9,9 @@ import dagger.Provides
 @Module
 class DrawerFragmentModule {
     @Provides
+    fun provideNavItemsDiffCallback() = NavItemsDiffCallback()
+
+    @Provides
     fun provideAdapter(context: Context, diffCallback: NavItemsDiffCallback) =
             NavItemAdapter(context, diffCallback)
 

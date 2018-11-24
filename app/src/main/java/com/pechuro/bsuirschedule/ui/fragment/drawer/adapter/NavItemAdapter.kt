@@ -9,39 +9,53 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.EXAMS
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.SCHEDULES
 import com.pechuro.bsuirschedule.databinding.ItemListNavBinding
-import com.pechuro.bsuirschedule.databinding.ItemListNavMenuBinding
+import com.pechuro.bsuirschedule.databinding.ItemListNavEmptyBinding
+import com.pechuro.bsuirschedule.databinding.ItemListNavTitleBinding
 import com.pechuro.bsuirschedule.ui.base.BaseViewHolder
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.fragment.drawer.DrawerEvent
 import com.pechuro.bsuirschedule.ui.utils.EventBus
 
-private const val NAV_ITEM_MENU = -1
-private const val NAV_ITEM = -2
+enum class ViewType(val type: Int) {
+    VIEW_TITLE(-1),
+    VIEW_ITEM(-2),
+    VIEW_EMPTY(-3)
+}
 
 class NavItemAdapter(private val context: Context,
                      private val diffCallback: NavItemsDiffCallback) : RecyclerView.Adapter<BaseViewHolder>() {
 
     private val _itemsList = mutableListOf<ScheduleInformation>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder =
-            when (viewType) {
-                NAV_ITEM -> {
-                    val viewBinding = ItemListNavBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                    ItemViewHolder(viewBinding)
-                }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
+        ViewType.VIEW_ITEM.type -> {
+            val viewBinding = ItemListNavBinding
+                    .inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemViewHolder(viewBinding)
+        }
 
-                NAV_ITEM_MENU -> {
-                    val viewBinding = ItemListNavMenuBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                    MenuViewHolder(viewBinding)
-                }
-                else -> throw IllegalStateException()
-            }
+        ViewType.VIEW_TITLE.type -> {
+            val viewBinding = ItemListNavTitleBinding
+                    .inflate(LayoutInflater.from(parent.context), parent, false)
+            TitleViewHolder(viewBinding)
+        }
 
+        ViewType.VIEW_EMPTY.type -> {
+            val viewBinding = ItemListNavEmptyBinding
+                    .inflate(LayoutInflater.from(parent.context), parent, false)
+            EmptyViewHolder(viewBinding)
+        }
 
-    override fun getItemViewType(position: Int) =
-            if (_itemsList[position].type == NAV_ITEM_MENU) NAV_ITEM_MENU else NAV_ITEM
+        else -> throw IllegalStateException()
+    }
 
-    override fun getItemCount(): Int = _itemsList.size
+    override fun getItemViewType(position: Int) = when {
+        _itemsList[position].type == ViewType.VIEW_EMPTY.type -> ViewType.VIEW_EMPTY.type
+        _itemsList[position].type == ViewType.VIEW_TITLE.type -> ViewType.VIEW_TITLE.type
+        else -> ViewType.VIEW_ITEM.type
+    }
+
+    override fun getItemCount() = _itemsList.size
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) = holder.onBind(position)
 
@@ -49,13 +63,17 @@ class NavItemAdapter(private val context: Context,
         val result = mutableListOf<ScheduleInformation>()
 
         if (data[SCHEDULES]?.isNotEmpty() == true) {
-            result.add(ScheduleInformation(-1, context.getString(R.string.nav_drawer_title_schedules), NAV_ITEM_MENU))
-            result.addAll(data[SCHEDULES]!!)
+            result += ScheduleInformation(-1, context.getString(R.string.nav_drawer_title_schedules), ViewType.VIEW_TITLE.type)
+            result += data[SCHEDULES]!!
         }
 
         if (data[EXAMS]?.isNotEmpty() == true) {
-            result.add(ScheduleInformation(-1, context.getString(R.string.nav_drawer_title_exams), NAV_ITEM_MENU))
-            result.addAll(data[EXAMS]!!)
+            result += ScheduleInformation(-1, context.getString(R.string.nav_drawer_title_exams), ViewType.VIEW_TITLE.type)
+            result += data[EXAMS]!!
+        }
+
+        if (data[SCHEDULES].isNullOrEmpty() && data[EXAMS].isNullOrEmpty()) {
+            result += ScheduleInformation(-1, "DSF", ViewType.VIEW_EMPTY.type)
         }
 
         diffCallback.setData(_itemsList, result)
@@ -87,11 +105,15 @@ class NavItemAdapter(private val context: Context,
         }
     }
 
-    inner class MenuViewHolder(private val mBinding: ItemListNavMenuBinding) : BaseViewHolder(mBinding.root) {
+    inner class TitleViewHolder(private val mBinding: ItemListNavTitleBinding) : BaseViewHolder(mBinding.root) {
         override fun onBind(position: Int) {
             val data = _itemsList[position]
             mBinding.data = NavItemData(data.name)
             mBinding.executePendingBindings()
         }
+    }
+
+    inner class EmptyViewHolder(private val mBinding: ItemListNavEmptyBinding) : BaseViewHolder(mBinding.root) {
+        override fun onBind(position: Int) {}
     }
 }

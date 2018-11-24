@@ -64,8 +64,6 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
 
                 is Status.OnError -> {
                     EventBus.publish(AddDialogEvent.SetCancelable(true))
-                    viewDataBinding.buttonOk.isEnabled = true
-
                     viewDataBinding.errorTextView.text = getString(it.messageId)
                 }
 
@@ -83,7 +81,6 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
     }
 
     private fun loadSchedule() {
-
         val scheduleName = viewDataBinding.textInput.text.toString()
 
         val types = arrayListOf<Int>()

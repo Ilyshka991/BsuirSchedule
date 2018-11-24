@@ -14,6 +14,16 @@
         android:layout_height="match_parent"
         android:background="@android:color/white">
 
+
+        <TextView
+            android:id="@+id/text_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="No Schedules"
+            android:textSize="24sp"
+            android:visibility="gone" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/nav_item_list"
             android:layout_width="0dp"
