@@ -24,6 +24,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:onClick="@{() -> viewModel.delete(id)}"
-            android:text="Delete" />
+            android:text="@string/action_delete" />
     </LinearLayout>
 </layout>
