@@ -2,12 +2,15 @@ package com.pechuro.bsuirschedule.ui.custom
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.viewpager.widget.ViewPager
 
 
 class ViewPager : ViewPager {
+
+    var isSwipeEnabled = true
 
     constructor(context: Context) : super(context)
 
@@ -32,4 +35,11 @@ class ViewPager : ViewPager {
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
+
+    override fun onTouchEvent(event: MotionEvent) =
+            if (isSwipeEnabled) super.onTouchEvent(event) else false
+
+    override fun onInterceptTouchEvent(event: MotionEvent) =
+            if (isSwipeEnabled) super.onInterceptTouchEvent(event) else false
+
 }

@@ -22,6 +22,23 @@
 
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_edit">Edit</string>
+    <string name="title_choose_action">Choose action:</string>
+
+    <string name="info_load_activity_text">Information is loading, please wait</string>
+
+    <string name="error_loading">Something went wrong, retry later</string>
+
+    <string name="action_retry">Retry</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_update">Update</string>
+    <string name="action_delete">Delete</string>
+
+    <string name="request_update_dialog_schedule_info">Update for %1$s is available</string>
+    <string name="title_type">Type:</string>
+    <string name="add_fragment_hint_enter_schedule">Enter schedule</string>
+    <string name="action_ok">Ok</string>
+    <string name="msg_classes">Classes</string>
+    <string name="msg_exams">Exams</string>
 
     <array name="subgroups">
         <item>all group</item>

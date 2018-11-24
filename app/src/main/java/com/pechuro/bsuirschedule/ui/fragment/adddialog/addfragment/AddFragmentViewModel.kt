@@ -40,7 +40,7 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
                         }))
     }
 
-    fun onCancelClick() {
+    fun cancel() {
         isError.set(false)
         status.call(Status.OnCancel)
     }

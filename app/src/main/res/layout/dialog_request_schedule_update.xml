@@ -25,7 +25,7 @@
             app:visibility="@{viewModel.isLoading}" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="16dp"
@@ -33,20 +33,19 @@
             android:paddingRight="16dp"
             app:visibility="@{viewModel.isError}">
 
-
             <TextView
                 android:id="@+id/text_error"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="PZDC"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:gravity="center_horizontal"
+                android:text="@string/error_loading"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.31" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/button_error_cancel"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -54,30 +53,29 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:onClick="@{() -> viewModel.cancel()}"
-                android:text="Cancel"
+                android:text="@string/action_cancel"
                 app:layout_constraintEnd_toStartOf="@+id/button_error_retry"
-                app:layout_constraintHorizontal_bias="0.988"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/text_error"
                 app:layout_constraintTop_toTopOf="@+id/button_error_retry" />
 
             <Button
                 android:id="@+id/button_error_retry"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginBottom="16dp"
                 android:onClick="@{() -> viewModel.update(info)}"
-                android:text="Retry"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.25"
-                app:layout_constraintStart_toStartOf="@+id/text_error"
+                android:text="@string/action_retry"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/text_error"
                 app:layout_constraintTop_toBottomOf="@+id/text_error" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="16dp"
@@ -85,20 +83,19 @@
             android:paddingRight="16dp"
             app:visibility_invisible="@{!viewModel.isLoading &amp;&amp; !viewModel.isError}">
 
-
             <TextView
-                android:id="@+id/text_info"
-                android:layout_width="wrap_content"
+                android:id="@+id/text_choose_action"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="INFOOOO"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:gravity="center_horizontal"
+                android:text="@{String.format(@string/request_update_dialog_schedule_info, info.name)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.31" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/button_cancel"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -106,25 +103,25 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:onClick="@{() -> viewModel.cancel()}"
-                android:text="Cancel"
+                android:text="@string/action_cancel"
                 app:layout_constraintEnd_toStartOf="@+id/button_update"
-                app:layout_constraintHorizontal_bias="0.988"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/text_choose_action"
                 app:layout_constraintTop_toTopOf="@+id/button_update" />
 
             <Button
                 android:id="@+id/button_update"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginBottom="16dp"
                 android:onClick="@{() -> viewModel.update(info)}"
-                android:text="UPDATE!!!!11"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.25"
-                app:layout_constraintStart_toStartOf="@+id/text_info"
-                app:layout_constraintTop_toBottomOf="@+id/text_info" />
+                android:text="@string/action_update"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/text_choose_action"
+                app:layout_constraintTop_toBottomOf="@+id/text_choose_action" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>

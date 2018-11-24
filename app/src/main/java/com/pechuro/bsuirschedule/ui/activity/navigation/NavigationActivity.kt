@@ -94,7 +94,7 @@ class NavigationActivity :
     }
 
     private fun setupView() {
-        setSupportActionBar(bar)
+        setSupportActionBar(bar_layout)
     }
 
     private fun setupBottomBar() {
@@ -128,12 +128,12 @@ class NavigationActivity :
 
     private fun setViewListeners() {
         val toggle = ActionBarDrawerToggle(
-                this, viewDataBinding.drawerLayout, viewDataBinding.bar,
+                this, viewDataBinding.drawerLayout, viewDataBinding.barLayout,
                 R.string.nav_drawer_action_open, R.string.nav_drawer_action_close)
         viewDataBinding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        viewDataBinding.bar.setOnTouchListener(object : OnSwipeTouchListener(this@NavigationActivity) {
+        viewDataBinding.barLayout.setOnTouchListener(object : OnSwipeTouchListener(this@NavigationActivity) {
             override fun onSwipeTop() {
                 if (_lastScheduleInfo?.type == STUDENT_CLASSES || _lastScheduleInfo?.type == EMPLOYEE_CLASSES) {
                     showBottomSheetDialog(_lastScheduleInfo!!.type)
@@ -147,7 +147,7 @@ class NavigationActivity :
         viewDataBinding.fabBack.setOnClickListener {
             EventBus.publish(FabEvent.OnFabClick)
         }
-        viewDataBinding.barAdd.setOnClickListener {
+        viewDataBinding.buttonAdd.setOnClickListener {
             addLesson()
         }
     }

@@ -31,7 +31,7 @@
                 tools:context=".ui.activity.navigation.NavigationActivity" />
 
             <com.pechuro.bsuirschedule.ui.custom.BottomAppBar
-                android:id="@+id/bar"
+                android:id="@+id/bar_layout"
                 style="@style/Widget.MaterialComponents.BottomAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -52,7 +52,7 @@
                     android:layout_height="match_parent">
 
                     <Button
-                        android:id="@+id/bar_add"
+                        android:id="@+id/button_add"
                         style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -70,10 +70,8 @@
                 android:id="@+id/fab_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_anchor="@+id/bar"
+                app:layout_anchor="@+id/bar_layout"
                 app:srcCompat="@color/colorAccent" />
-
-
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <com.google.android.material.navigation.NavigationView
@@ -84,9 +82,8 @@
             android:visibility="visible"
             app:insetForeground="#4000">
 
-
             <fragment
-                android:id="@+id/drawer_fragment"
+                android:id="@+id/fragment_drawer"
                 android:name="com.pechuro.bsuirschedule.ui.fragment.drawer.DrawerFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

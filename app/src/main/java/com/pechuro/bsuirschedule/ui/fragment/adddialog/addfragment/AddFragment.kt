@@ -55,26 +55,27 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
                         putString(SharedPrefConstants.SCHEDULE_INFO, gson.toJson(it.info))
                     }
 
+                    EventBus.publishWithReplay(AddDialogEvent.OnLoading(true))
                     EventBus.publish(AddDialogEvent.OnSuccess)
                 }
 
                 is Status.OnClearError -> {
-                    viewDataBinding.errorTextView.text = ""
+                    viewDataBinding.textErrorValidation.text = ""
                 }
 
                 is Status.OnError -> {
-                    EventBus.publish(AddDialogEvent.SetCancelable(true))
-                    viewDataBinding.errorTextView.text = getString(it.messageId)
+                    EventBus.publishWithReplay(AddDialogEvent.OnLoading(true))
+                    viewDataBinding.textErrorValidation.text = getString(it.messageId)
                 }
 
                 is Status.OnCancel -> {
-                    viewDataBinding.errorTextView.text = ""
+                    viewDataBinding.textErrorValidation.text = ""
                     viewDataBinding.buttonOk.isEnabled = true
-                    EventBus.publish(AddDialogEvent.SetCancelable(true))
+                    EventBus.publishWithReplay(AddDialogEvent.OnLoading(true))
                 }
 
                 is Status.OnLoading -> {
-                    EventBus.publish(AddDialogEvent.SetCancelable(false))
+                    EventBus.publishWithReplay(AddDialogEvent.OnLoading(false))
                 }
             }
         })
