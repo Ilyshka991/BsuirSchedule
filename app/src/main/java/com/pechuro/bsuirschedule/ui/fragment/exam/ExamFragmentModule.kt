@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.ui.fragment.exam
 
 import com.pechuro.bsuirschedule.ui.fragment.exam.adapter.ExamAdapter
+import com.pechuro.bsuirschedule.ui.fragment.exam.adapter.ExamsDiffCallback
 import dagger.Module
 import dagger.Provides
 
@@ -8,5 +9,8 @@ import dagger.Provides
 class ExamFragmentModule {
 
     @Provides
-    fun provideListAdapter() = ExamAdapter()
+    fun provideClassesDiffCallback() = ExamsDiffCallback()
+
+    @Provides
+    fun provideListAdapter(diffCallback: ExamsDiffCallback) = ExamAdapter(diffCallback)
 }

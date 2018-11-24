@@ -15,6 +15,7 @@ import com.pechuro.bsuirschedule.ui.base.BaseViewHolder
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.fragment.drawer.DrawerEvent
 import com.pechuro.bsuirschedule.ui.utils.EventBus
+import org.jetbrains.anko.doAsyncResult
 
 enum class ViewType(val type: Int) {
     VIEW_TITLE(-1),
@@ -62,22 +63,22 @@ class NavItemAdapter(private val context: Context,
     fun setItems(data: Map<Int, List<ScheduleInformation>>) {
         val result = mutableListOf<ScheduleInformation>()
 
-        if (data[SCHEDULES]?.isNotEmpty() == true) {
-            result += ScheduleInformation(-1, context.getString(R.string.nav_drawer_title_schedules), ViewType.VIEW_TITLE.type)
-            result += data[SCHEDULES]!!
-        }
-
-        if (data[EXAMS]?.isNotEmpty() == true) {
-            result += ScheduleInformation(-1, context.getString(R.string.nav_drawer_title_exams), ViewType.VIEW_TITLE.type)
-            result += data[EXAMS]!!
-        }
-
-        if (data[SCHEDULES].isNullOrEmpty() && data[EXAMS].isNullOrEmpty()) {
-            result += ScheduleInformation(-1, "DSF", ViewType.VIEW_EMPTY.type)
-        }
-
-        diffCallback.setData(_itemsList, result)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        val diffResult = doAsyncResult {
+            if (data[SCHEDULES].isNullOrEmpty() && data[EXAMS].isNullOrEmpty()) {
+                result += ScheduleInformation(-1, "DSF", ViewType.VIEW_EMPTY.type)
+            } else {
+                if (data[SCHEDULES]?.isNotEmpty() == true) {
+                    result += ScheduleInformation(-1, context.getString(R.string.nav_drawer_title_schedules), ViewType.VIEW_TITLE.type)
+                    result += data[SCHEDULES]!!
+                }
+                if (data[EXAMS]?.isNotEmpty() == true) {
+                    result += ScheduleInformation(-1, context.getString(R.string.nav_drawer_title_exams), ViewType.VIEW_TITLE.type)
+                    result += data[EXAMS]!!
+                }
+            }
+            diffCallback.setData(_itemsList, result)
+            DiffUtil.calculateDiff(diffCallback)
+        }.get()
 
         _itemsList.clear()
         _itemsList += result

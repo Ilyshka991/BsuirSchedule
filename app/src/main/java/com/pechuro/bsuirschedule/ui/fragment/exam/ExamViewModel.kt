@@ -6,7 +6,6 @@ import com.pechuro.bsuirschedule.data.ScheduleRepository
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
-import com.pechuro.bsuirschedule.ui.fragment.exam.adapter.ExamViewTypes
 import com.pechuro.bsuirschedule.ui.fragment.exam.data.BaseExamData
 import com.pechuro.bsuirschedule.ui.fragment.exam.data.impl.EmployeeExamData
 import com.pechuro.bsuirschedule.ui.fragment.exam.data.impl.StudentExamData
@@ -15,7 +14,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class ExamViewModel @Inject constructor(private val repository: ScheduleRepository) : BaseViewModel() {
-    val listItemsLiveData = MutableLiveData<Pair<ExamViewTypes, List<BaseExamData>>>()
+    val listItemsLiveData = MutableLiveData<List<BaseExamData>>()
 
     fun loadData(info: ScheduleInformation) {
         compositeDisposable.add(
@@ -24,12 +23,8 @@ class ExamViewModel @Inject constructor(private val repository: ScheduleReposito
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             listItemsLiveData.value = when (info.type) {
-                                ScheduleTypes.STUDENT_EXAMS -> {
-                                    Pair(ExamViewTypes.STUDENT, transformStudentItems(it))
-                                }
-                                ScheduleTypes.EMPLOYEE_EXAMS -> {
-                                    Pair(ExamViewTypes.EMPLOYEE, transformEmployeeItems(it))
-                                }
+                                ScheduleTypes.STUDENT_EXAMS -> transformStudentItems(it)
+                                ScheduleTypes.EMPLOYEE_EXAMS -> transformEmployeeItems(it)
                                 else -> throw IllegalStateException()
                             }
                         }, {}))
