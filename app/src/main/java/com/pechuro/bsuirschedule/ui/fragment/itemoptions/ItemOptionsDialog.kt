@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.DialogItemOptionsBinding
 import com.pechuro.bsuirschedule.ui.base.BaseDialog
+import com.pechuro.bsuirschedule.ui.utils.EventBus
 
 class ItemOptionsDialog : BaseDialog<DialogItemOptionsBinding, ItemOptionsDialogViewModel>() {
     private val _itemId: Int? by lazy {
@@ -28,13 +29,14 @@ class ItemOptionsDialog : BaseDialog<DialogItemOptionsBinding, ItemOptionsDialog
     private fun setStatusListener() {
         viewModel.status.observe(this, Observer {
             when (it) {
-                is Status.OnDeleted -> TODO()
+                is Status.OnDeleted -> EventBus.publish(ItemOptionEvent.OnLessonDeleted(it.itemId))
             }
             dismiss()
         })
     }
 
     companion object {
+        const val TAG = "item_options_dialog"
         private const val ARG_ITEM_ID = "item_id"
 
         fun newInstance(itemId: Int) =

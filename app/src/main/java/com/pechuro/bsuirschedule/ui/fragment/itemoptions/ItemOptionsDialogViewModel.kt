@@ -12,7 +12,7 @@ class ItemOptionsDialogViewModel @Inject constructor(private val repository: Sch
 
     fun delete(id: Int) {
         compositeDisposable.add(
-                repository.delete(id)
+                repository.deleteItem(id)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({

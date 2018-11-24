@@ -2,16 +2,15 @@ package com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.databinding.*
 import com.pechuro.bsuirschedule.ui.base.BaseViewHolder
+import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.ClassesItemEvent
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.BaseClassesData
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.*
+import com.pechuro.bsuirschedule.ui.utils.EventBus
 import org.jetbrains.anko.doAsyncResult
-import kotlin.IllegalArgumentException
 
 class ClassesAdapter(private val diffCallback: ClassesDiffCallback) : RecyclerView.Adapter<BaseViewHolder>() {
 
@@ -74,39 +73,67 @@ class ClassesAdapter(private val diffCallback: ClassesDiffCallback) : RecyclerVi
         diffResult.dispatchUpdatesTo(this)
     }
 
-    inner class StudentDayViewHolder(private val mBinding: ItemStudentsClassesDayBinding) : BaseViewHolder(mBinding.root) {
+    inner class StudentDayViewHolder(private val binding: ItemStudentsClassesDayBinding) : BaseViewHolder(binding.root) {
 
         override fun onBind(position: Int) {
             val data = _classesList[position] as StudentClassesDayData
-            mBinding.data = data
-            mBinding.executePendingBindings()
+            binding.data = data
+            binding.executePendingBindings()
+
+            binding.container.apply {
+                setOnLongClickListener {
+                    EventBus.publish(ClassesItemEvent.OnItemLongClick(data.itemId))
+                    true
+                }
+            }
         }
     }
 
-    inner class StudentWeekViewHolder(private val mBinding: ItemStudentClassesWeekBinding) : BaseViewHolder(mBinding.root) {
+    inner class StudentWeekViewHolder(private val binding: ItemStudentClassesWeekBinding) : BaseViewHolder(binding.root) {
 
         override fun onBind(position: Int) {
             val data = _classesList[position] as StudentClassesWeekData
-            mBinding.data = data
-            mBinding.executePendingBindings()
+            binding.data = data
+            binding.executePendingBindings()
+
+            binding.container.apply {
+                setOnLongClickListener {
+                    EventBus.publish(ClassesItemEvent.OnItemLongClick(data.itemId))
+                    true
+                }
+            }
         }
     }
 
-    inner class EmployeeDayViewHolder(private val mBinding: ItemEmployeeClassesDayBinding) : BaseViewHolder(mBinding.root) {
+    inner class EmployeeDayViewHolder(private val binding: ItemEmployeeClassesDayBinding) : BaseViewHolder(binding.root) {
 
         override fun onBind(position: Int) {
             val data = _classesList[position] as EmployeeClassesDayData
-            mBinding.data = data
-            mBinding.executePendingBindings()
+            binding.data = data
+            binding.executePendingBindings()
+
+            binding.container.apply {
+                setOnLongClickListener {
+                    EventBus.publish(ClassesItemEvent.OnItemLongClick(data.itemId))
+                    true
+                }
+            }
         }
     }
 
-    inner class EmployeeWeekViewHolder(private val mBinding: ItemEmployeeClassesWeekBinding) : BaseViewHolder(mBinding.root) {
+    inner class EmployeeWeekViewHolder(private val binding: ItemEmployeeClassesWeekBinding) : BaseViewHolder(binding.root) {
 
         override fun onBind(position: Int) {
             val data = _classesList[position] as EmployeeClassesWeekData
-            mBinding.data = data
-            mBinding.executePendingBindings()
+            binding.data = data
+            binding.executePendingBindings()
+
+            binding.container.apply {
+                setOnLongClickListener {
+                    EventBus.publish(ClassesItemEvent.OnItemLongClick(data.itemId))
+                    true
+                }
+            }
         }
     }
 

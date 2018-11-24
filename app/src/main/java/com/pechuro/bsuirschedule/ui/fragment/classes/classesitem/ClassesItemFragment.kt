@@ -12,6 +12,7 @@ import com.pechuro.bsuirschedule.ui.activity.navigation.FabEvent
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.ClassesBaseInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.adapter.ClassesAdapter
+import com.pechuro.bsuirschedule.ui.fragment.itemoptions.ItemOptionsDialog
 import com.pechuro.bsuirschedule.ui.utils.EventBus
 import javax.inject.Inject
 
@@ -34,6 +35,20 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
         subscribeToLiveData()
         loadData()
         setListeners()
+        setEventListeners()
+    }
+
+    private fun setEventListeners() {
+        compositeDisposable.addAll(
+                EventBus.listen(ClassesItemEvent::class.java).subscribe {
+                    if (userVisibleHint) {
+                        when (it) {
+                            is ClassesItemEvent.OnItemLongClick -> ItemOptionsDialog.newInstance(it.id)
+                                    .show(childFragmentManager, ItemOptionsDialog.TAG)
+                        }
+                    }
+                }
+        )
     }
 
     private fun setListeners() {
@@ -63,10 +78,9 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
     }
 
     private fun subscribeToLiveData() {
-        viewModel.listItemsLiveData.observe(this,
-                Observer {
-                    adapter.setItems(it)
-                })
+        viewModel.listItemsLiveData.observe(this, Observer {
+            adapter.setItems(it)
+        })
     }
 
     companion object {

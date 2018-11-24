@@ -26,7 +26,7 @@ data class ScheduleItem(
         val employee: List<Employee>?) {
     @Transient
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "_id")
+    @ColumnInfo(name = "item_id")
     var id = 0
 
     @Transient

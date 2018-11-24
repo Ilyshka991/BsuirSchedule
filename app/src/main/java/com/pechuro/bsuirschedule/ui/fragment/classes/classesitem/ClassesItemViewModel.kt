@@ -14,7 +14,6 @@ import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.Emplo
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.EmployeeClassesWeekData
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.StudentClassesDayData
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.StudentClassesWeekData
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -54,9 +53,8 @@ class ClassesItemViewModel @Inject constructor(private val repository: ScheduleR
                         ViewTypes.EMPLOYEE_WEEK -> transformEmployeeWeekItems(it)
                     }
                 }
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    listItemsLiveData.value = it
+                    listItemsLiveData.postValue(it)
                 }, {}))
     }
 

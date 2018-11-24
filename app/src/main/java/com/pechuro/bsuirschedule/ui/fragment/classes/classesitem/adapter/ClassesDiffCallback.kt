@@ -19,8 +19,8 @@ class ClassesDiffCallback : DiffUtil.Callback() {
     override fun getNewListSize() = newList.size
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-            oldList[oldItemPosition] == newList[newItemPosition]
+            oldList[oldItemPosition].itemId == newList[newItemPosition].itemId
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-            oldList[oldItemPosition] == newList[newItemPosition]
+            oldList[oldItemPosition].itemId == newList[newItemPosition].itemId
 }

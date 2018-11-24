@@ -8,5 +8,5 @@ class ClassesFragmentModule {
 
     @Provides
     fun providePagerAdapter(fragment: ClassesFragment) =
-            ClassesPagerAdapter(fragment.requireFragmentManager())
+            ClassesPagerAdapter(fragment.childFragmentManager)
 }

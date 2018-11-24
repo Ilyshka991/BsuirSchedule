@@ -166,12 +166,14 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
     }
 
     private fun setupView() {
-        viewDataBinding.viewPager.adapter = pagerAdapter
+        viewDataBinding.viewPager.apply {
+            adapter = pagerAdapter
 
-        viewDataBinding.viewPager
-                .addOnPageChangeListener(
-                        TabLayout.TabLayoutOnPageChangeListener(
-                                viewDataBinding.tabLayout))
+
+            addOnPageChangeListener(
+                    TabLayout.TabLayoutOnPageChangeListener(
+                            viewDataBinding.tabLayout))
+        }
     }
 
     private fun String.getDayIndex() = when (this) {
@@ -186,7 +188,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
     }
 
     companion object {
-        const val NUMBER_OF_TABS = 40
+        const val NUMBER_OF_TABS = 120
         const val ARG_INFO = "arg_information"
 
         fun newInstance(info: ScheduleInformation): ClassesFragment {

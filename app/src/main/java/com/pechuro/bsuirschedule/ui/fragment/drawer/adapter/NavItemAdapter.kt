@@ -65,7 +65,7 @@ class NavItemAdapter(private val context: Context,
 
         val diffResult = doAsyncResult {
             if (data[SCHEDULES].isNullOrEmpty() && data[EXAMS].isNullOrEmpty()) {
-                result += ScheduleInformation(-1, "DSF", ViewType.VIEW_EMPTY.type)
+                result += ScheduleInformation(-1, "", ViewType.VIEW_EMPTY.type)
             } else {
                 if (data[SCHEDULES]?.isNotEmpty() == true) {
                     result += ScheduleInformation(-1, context.getString(R.string.nav_drawer_title_schedules), ViewType.VIEW_TITLE.type)
@@ -86,14 +86,14 @@ class NavItemAdapter(private val context: Context,
         diffResult.dispatchUpdatesTo(this)
     }
 
-    inner class ItemViewHolder(private val mBinding: ItemListNavBinding) : BaseViewHolder(mBinding.root) {
+    inner class ItemViewHolder(private val binding: ItemListNavBinding) : BaseViewHolder(binding.root) {
 
         override fun onBind(position: Int) {
             val data = _itemsList[position]
-            mBinding.data = NavItemData(data.name)
-            mBinding.executePendingBindings()
+            binding.data = NavItemData(data.name)
+            binding.executePendingBindings()
 
-            mBinding.scheduleNameButton.apply {
+            binding.scheduleNameButton.apply {
                 setOnClickListener {
                     EventBus.publish(DrawerEvent.OnNavigate(ScheduleInformation(data.id, data.name, data.type)))
                 }
@@ -106,15 +106,15 @@ class NavItemAdapter(private val context: Context,
         }
     }
 
-    inner class TitleViewHolder(private val mBinding: ItemListNavTitleBinding) : BaseViewHolder(mBinding.root) {
+    inner class TitleViewHolder(private val binding: ItemListNavTitleBinding) : BaseViewHolder(binding.root) {
         override fun onBind(position: Int) {
             val data = _itemsList[position]
-            mBinding.data = NavItemData(data.name)
-            mBinding.executePendingBindings()
+            binding.data = NavItemData(data.name)
+            binding.executePendingBindings()
         }
     }
 
-    inner class EmptyViewHolder(private val mBinding: ItemListNavEmptyBinding) : BaseViewHolder(mBinding.root) {
+    inner class EmptyViewHolder(binding: ItemListNavEmptyBinding) : BaseViewHolder(binding.root) {
         override fun onBind(position: Int) {}
     }
 }
