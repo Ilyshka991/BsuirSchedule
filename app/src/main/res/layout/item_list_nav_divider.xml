@@ -8,11 +8,9 @@
             type="com.pechuro.bsuirschedule.ui.fragment.drawer.adapter.NavItemData" />
     </data>
 
-    <TextView
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:text="@{data.name}"
-        android:textSize="18sp"
-        android:layout_marginStart="8dp" />
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:background="?android:attr/listDivider" />
 </layout>

@@ -12,7 +12,7 @@
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add lesson" />
+        android:text="@string/action_add_lesson" />
 
     <Spinner
         android:id="@+id/bar_options_subgroup_number"
@@ -26,6 +26,5 @@
         android:id="@+id/bar_options_view_type"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Show by weeks" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

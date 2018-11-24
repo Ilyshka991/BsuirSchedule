@@ -16,6 +16,7 @@
     <string name="add_fragment_error_empty_suggestions">Please, update information</string>
     <string name="add_fragment_error_blank_schedule_name">Please, fill in schedule name</string>
     <string name="add_fragment_error_unknown_schedule">Unknown schedule</string>
+    <string name="add_fragment_hint_enter_schedule">Enter schedule</string>
 
     <string name="bottom_sheet_action_show_by_weeks">Show by weeks</string>
     <string name="bottom_sheet_action_show_by_days">Show by days</string>
@@ -23,6 +24,7 @@
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_edit">Edit</string>
     <string name="title_choose_action">Choose action:</string>
+    <string name="title_type">Type:</string>
 
     <string name="info_load_activity_text">Information is loading, please wait</string>
 
@@ -32,13 +34,20 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_update">Update</string>
     <string name="action_delete">Delete</string>
+    <string name="action_add_lesson">Add lesson</string>
+    <string name="action_ok">OK</string>
 
     <string name="request_update_dialog_schedule_info">Update for %1$s is available</string>
-    <string name="title_type">Type:</string>
-    <string name="add_fragment_hint_enter_schedule">Enter schedule</string>
-    <string name="action_ok">Ok</string>
+
     <string name="msg_classes">Classes</string>
     <string name="msg_exams">Exams</string>
+    <string name="drawer_fragment_action_add_schedule">Add schedule</string>
+    <string name="drawer_fragment_action_settings">Settings</string>
+    <string name="drawer_fragment_msg_no_schedules">No Schedules</string>
+    <string name="start_fragment_text">Hello</string>
+    <string name="item_classes_empty">There are no lessons, relax</string>
+    <string name="item_exam_empty">Exams not specified</string>
+    <string name="item_nav_empty">No Schedules</string>
 
     <array name="subgroups">
         <item>all group</item>

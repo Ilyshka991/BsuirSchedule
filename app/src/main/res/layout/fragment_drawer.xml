@@ -14,13 +14,12 @@
         android:layout_height="match_parent"
         android:background="@android:color/white">
 
-
         <TextView
             android:id="@+id/text_empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="No Schedules"
+            android:text="@string/drawer_fragment_msg_no_schedules"
             android:textSize="24sp"
             android:visibility="gone" />
 
@@ -28,7 +27,7 @@
             android:id="@+id/nav_item_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:fitsSystemWindows="true"
             app:layout_constraintBottom_toTopOf="@+id/nav_footer_layout"
             app:layout_constraintEnd_toEndOf="parent"
@@ -44,17 +43,25 @@
             app:layout_constraintEnd_toEndOf="@+id/nav_item_list"
             app:layout_constraintStart_toStartOf="@+id/nav_item_list">
 
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider" />
+
             <Button
                 android:id="@+id/nav_footer_settings"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Settings" />
+                android:text="@string/drawer_fragment_action_settings" />
 
             <Button
                 android:id="@+id/nav_footer_add_schedule"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add schedule" />
+                android:text="@string/drawer_fragment_action_add_schedule" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
