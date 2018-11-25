@@ -36,8 +36,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom"
-                app:fabCradleRoundedCornerRadius="64dp"
-                app:fabAlignmentMode="end">
+                app:backgroundTint="@android:color/darker_gray"
+                app:contentInsetStartWithNavigation="0dp"
+                app:fabAlignmentMode="end"
+                app:fabCradleRoundedCornerRadius="16dp">
 
                 <Button
                     android:id="@+id/bar_options"

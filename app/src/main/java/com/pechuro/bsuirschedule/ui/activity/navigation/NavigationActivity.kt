@@ -41,7 +41,6 @@ import com.pechuro.bsuirschedule.ui.utils.EventBus
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_navigation.*
 import org.jetbrains.anko.defaultSharedPreferences
 import javax.inject.Inject
 
@@ -94,7 +93,7 @@ class NavigationActivity :
     }
 
     private fun setupView() {
-        setSupportActionBar(bar_layout)
+        setSupportActionBar(viewDataBinding.barLayout)
     }
 
     private fun setupBottomBar() {
