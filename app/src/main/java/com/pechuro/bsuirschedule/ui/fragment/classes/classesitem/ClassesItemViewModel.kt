@@ -62,8 +62,8 @@ class ClassesItemViewModel @Inject constructor(private val repository: ScheduleR
         val items = mutableListOf<StudentClassesDayData>()
         data.forEach {
             with(it) {
-                items.add(StudentClassesDayData(id, subject, lessonType, auditory,
-                        employee, subgroupNumber, startTime, endTime, note))
+                items.add(StudentClassesDayData(id, subject, lessonType, auditories,
+                        employees, subgroupNumber, startTime, endTime, note))
             }
 
         }

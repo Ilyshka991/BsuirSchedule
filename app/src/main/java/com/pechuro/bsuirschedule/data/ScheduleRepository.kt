@@ -93,12 +93,21 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
     private fun transformResponse(name: String, type: Int, lastUpdate: String, response: ResponseModel, id: Int = -1): Classes {
         fun getScheduleItems(response: List<ScheduleResponse>?): List<ScheduleItem> {
             val scheduleItems = ArrayList<ScheduleItem>()
-
-            //Add weekDay to all scheduleItems
             response?.forEach {
+                //Add weekDay to all scheduleItems
                 for (item in it.classes) {
                     scheduleItems.add(item)
                     scheduleItems[scheduleItems.size - 1].weekDay = it.weekDay.toLowerCase()
+
+                    val auditoriesSize = item.auditories?.size
+                    val employeesSize = item.employees?.size
+                    if (auditoriesSize != null && employeesSize != null && auditoriesSize < employeesSize) {
+                        val difference = employeesSize - auditoriesSize
+                        for (i in 1..difference) {
+                            item.auditories.add("")
+                            //846501
+                        }
+                    }
                 }
             }
             return scheduleItems

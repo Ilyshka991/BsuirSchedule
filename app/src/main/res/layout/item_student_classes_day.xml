@@ -22,15 +22,18 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp">
+            android:layout_margin="16dp"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="16dp">
 
             <ImageView
                 android:id="@+id/image_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:contentDescription="@string/item_classes_type_icon_description"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:lesson_type_image="@{data.type}"
                 app:srcCompat="@mipmap/ic_type_unknown" />
 
             <TextView
@@ -39,7 +42,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
                 android:text="@{data.subject}"
                 app:layout_constraintStart_toEndOf="@+id/image_type"
                 app:layout_constraintTop_toTopOf="@+id/image_type"
@@ -51,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:text="@{data.subgroupNumber.toString()}"
+                app:text_subgroup="@{data.subgroupNumber}"
                 app:layout_constraintBottom_toBottomOf="@+id/text_subject"
                 app:layout_constraintStart_toEndOf="@+id/text_subject"
                 tools:text="Subgroup" />
@@ -60,8 +62,8 @@
                 android:id="@+id/text_time_start"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:text="@{data.startTime}"
+                app:layout_constraintBottom_toBottomOf="@+id/text_subgroup"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Time start" />
@@ -70,10 +72,10 @@
                 android:id="@+id/text_auditory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="222-2"
-                app:layout_constraintBottom_toBottomOf="@+id/image_type"
+                android:layout_marginTop="12dp"
                 app:layout_constraintStart_toStartOf="@+id/text_subject"
+                app:layout_constraintTop_toBottomOf="@+id/text_subject"
+                app:text_auditory="@{data.auditories}"
                 tools:text="Auditory" />
 
             <TextView
@@ -82,9 +84,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:text="Test T.T."
-                app:layout_constraintBottom_toBottomOf="@+id/text_auditory"
+                android:maxLines="4"
                 app:layout_constraintStart_toEndOf="@+id/text_auditory"
+                app:layout_constraintTop_toTopOf="@+id/text_auditory"
+                app:text_employee="@{data.employees}"
                 tools:text="Employee" />
 
             <TextView
@@ -92,8 +95,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{data.endTime}"
-                app:layout_constraintBottom_toBottomOf="@+id/text_employee"
                 app:layout_constraintStart_toStartOf="@+id/text_time_start"
+                app:layout_constraintTop_toTopOf="@+id/text_employee"
                 tools:text="Time end" />
 
             <TextView
@@ -101,10 +104,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@{data.note}"
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="@+id/image_type"
-                app:layout_constraintTop_toBottomOf="@+id/image_type"
+                app:layout_constraintTop_toBottomOf="@+id/text_auditory"
+                app:text_note="@{data.note}"
                 tools:text="Note" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

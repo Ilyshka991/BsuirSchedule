@@ -5,15 +5,15 @@ import com.pechuro.bsuirschedule.data.entity.Employee
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.BaseClassesData
 
 class StudentClassesDayData(itemId: Int, subject: String?,
-                            type: String?, auditory: List<String>?,
-                            employee: List<Employee>?, subgroupNumber: Int?,
+                            type: String?, auditories: List<String>?,
+                            employees: List<Employee>?, subgroupNumber: Int?,
                             startTime: String?, endTime: String?,
                             note: String?) : BaseClassesData(itemId) {
 
     val subject = ObservableField<String?>()
     val type = ObservableField<String?>()
-    val auditory = ObservableField<List<String>?>()
-    val employee = ObservableField<List<Employee>?>()
+    val auditories = ObservableField<List<String>?>()
+    val employees = ObservableField<List<Employee>?>()
     val subgroupNumber = ObservableField<Int?>()
     val startTime = ObservableField<String?>()
     val endTime = ObservableField<String?>()
@@ -22,8 +22,8 @@ class StudentClassesDayData(itemId: Int, subject: String?,
     init {
         this.subject.set(subject)
         this.type.set(type)
-        this.auditory.set(auditory)
-        this.employee.set(employee)
+        this.auditories.set(auditories)
+        this.employees.set(employees)
         this.subgroupNumber.set(subgroupNumber)
         this.startTime.set(startTime)
         this.endTime.set(endTime)

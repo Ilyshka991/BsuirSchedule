@@ -17,13 +17,15 @@ data class ScheduleItem(
         @SerializedName("numSubgroup")
         val subgroupNumber: Int?,
         val lessonType: String?,
-        val auditory: List<String>?,
+        @SerializedName("auditory")
+        val auditories: MutableList<String>?,
         val note: String?,
         @SerializedName("startLessonTime")
         val startTime: String?,
         @SerializedName("endLessonTime")
         val endTime: String?,
-        val employee: List<Employee>?) {
+        @SerializedName("employee")
+        val employees: List<Employee>?) {
     @Transient
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "item_id")

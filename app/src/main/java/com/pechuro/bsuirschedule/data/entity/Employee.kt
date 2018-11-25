@@ -14,13 +14,13 @@ data class Employee(
         var employeeId: String,
 
         @ColumnInfo(name = "first_name")
-        var firstName: String,
+        var firstName: String?,
 
         @ColumnInfo(name = "last_name")
         var lastName: String,
 
         @ColumnInfo(name = "middle_name")
-        var middleName: String,
+        var middleName: String?,
 
         var fio: String,
 
