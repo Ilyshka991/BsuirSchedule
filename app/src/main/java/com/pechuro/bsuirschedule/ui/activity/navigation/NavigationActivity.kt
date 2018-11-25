@@ -100,16 +100,16 @@ class NavigationActivity :
         val type = _lastScheduleInfo?.type
         when (type) {
             STUDENT_CLASSES, EMPLOYEE_CLASSES -> {
-                viewDataBinding.barOptions.visibility = View.VISIBLE
-                viewDataBinding.barAddLayout.visibility = View.GONE
+                viewDataBinding.barClassesOptions.visibility = View.VISIBLE
+                viewDataBinding.barExamsActionAddExam.visibility = View.GONE
             }
             STUDENT_EXAMS -> {
-                viewDataBinding.barOptions.visibility = View.GONE
-                viewDataBinding.barAddLayout.visibility = View.VISIBLE
+                viewDataBinding.barClassesOptions.visibility = View.GONE
+                viewDataBinding.barExamsActionAddExam.visibility = View.VISIBLE
             }
             else -> {
-                viewDataBinding.barOptions.visibility = View.GONE
-                viewDataBinding.barAddLayout.visibility = View.GONE
+                viewDataBinding.barClassesOptions.visibility = View.GONE
+                viewDataBinding.barExamsActionAddExam.visibility = View.GONE
             }
         }
 
@@ -132,6 +132,8 @@ class NavigationActivity :
         viewDataBinding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
+
+
         viewDataBinding.barLayout.setOnTouchListener(object : OnSwipeTouchListener(this@NavigationActivity) {
             override fun onSwipeTop() {
                 if (_lastScheduleInfo?.type == STUDENT_CLASSES || _lastScheduleInfo?.type == EMPLOYEE_CLASSES) {
@@ -139,14 +141,17 @@ class NavigationActivity :
                 }
             }
         })
-        viewDataBinding.barOptions.setOnClickListener {
+
+        viewDataBinding.barClassesOptions.setOnClickListener {
             showBottomSheetDialog(_lastScheduleInfo!!.type)
         }
+
+
 
         viewDataBinding.fabBack.setOnClickListener {
             EventBus.publish(FabEvent.OnFabClick)
         }
-        viewDataBinding.buttonAdd.setOnClickListener {
+        viewDataBinding.barExamsActionAddExam.setOnClickListener {
             addLesson()
         }
     }

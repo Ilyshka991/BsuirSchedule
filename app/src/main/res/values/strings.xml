@@ -48,6 +48,7 @@
     <string name="item_classes_empty">There are no lessons, relax</string>
     <string name="item_exam_empty">Exams not specified</string>
     <string name="item_nav_empty">No Schedules</string>
+    <string name="item_classes_type_icon_description">Lesson type icon</string>
 
     <array name="subgroups">
         <item>all group</item>

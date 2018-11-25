@@ -169,7 +169,6 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
         viewDataBinding.viewPager.apply {
             adapter = pagerAdapter
 
-
             addOnPageChangeListener(
                     TabLayout.TabLayoutOnPageChangeListener(
                             viewDataBinding.tabLayout))

@@ -18,7 +18,7 @@ class ClassesAdapter(private val diffCallback: ClassesDiffCallback) : RecyclerVi
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
         ViewTypes.STUDENT_DAY.type -> {
-            val viewBinding = ItemStudentsClassesDayBinding
+            val viewBinding = ItemStudentClassesDayBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             StudentDayViewHolder(viewBinding)
         }
@@ -73,7 +73,7 @@ class ClassesAdapter(private val diffCallback: ClassesDiffCallback) : RecyclerVi
         diffResult.dispatchUpdatesTo(this)
     }
 
-    inner class StudentDayViewHolder(private val binding: ItemStudentsClassesDayBinding) : BaseViewHolder(binding.root) {
+    inner class StudentDayViewHolder(private val binding: ItemStudentClassesDayBinding) : BaseViewHolder(binding.root) {
 
         override fun onBind(position: Int) {
             val data = _classesList[position] as StudentClassesDayData

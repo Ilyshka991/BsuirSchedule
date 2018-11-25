@@ -42,31 +42,26 @@
                 app:fabCradleRoundedCornerRadius="16dp">
 
                 <Button
-                    android:id="@+id/bar_options"
+                    android:id="@+id/bar_classes_options"
                     style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    app:icon="@drawable/ic_settings_black_24dp"
+                    app:icon="@drawable/ic_info_black_24dp"
                     app:iconGravity="textStart" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/bar_add_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <Button
-                        android:id="@+id/button_add"
-                        style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
-                        app:icon="@drawable/ic_add_white_24dp"
-                        app:iconGravity="textStart"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:id="@+id/bar_exams_action_add_exam"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    app:icon="@drawable/ic_add_white_24dp"
+                    app:iconGravity="textStart"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
             </com.pechuro.bsuirschedule.ui.custom.BottomAppBar>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
