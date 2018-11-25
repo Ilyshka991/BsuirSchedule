@@ -84,7 +84,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:maxLines="4"
                 app:layout_constraintStart_toEndOf="@+id/text_auditory"
                 app:layout_constraintTop_toTopOf="@+id/text_auditory"
                 app:text_employee="@{data.employees}"
@@ -101,10 +100,11 @@
 
             <TextView
                 android:id="@+id/text_note"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/image_type"
                 app:layout_constraintTop_toBottomOf="@+id/text_auditory"
                 app:text_note="@{data.note}"

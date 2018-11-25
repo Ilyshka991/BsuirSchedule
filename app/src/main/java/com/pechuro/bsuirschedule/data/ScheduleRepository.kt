@@ -94,7 +94,6 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
         fun getScheduleItems(response: List<ScheduleResponse>?): List<ScheduleItem> {
             val scheduleItems = ArrayList<ScheduleItem>()
             response?.forEach {
-                //Add weekDay to all scheduleItems
                 for (item in it.classes) {
                     scheduleItems.add(item)
                     scheduleItems[scheduleItems.size - 1].weekDay = it.weekDay.toLowerCase()
@@ -105,7 +104,6 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
                         val difference = employeesSize - auditoriesSize
                         for (i in 1..difference) {
                             item.auditories.add("")
-                            //846501
                         }
                     }
                 }

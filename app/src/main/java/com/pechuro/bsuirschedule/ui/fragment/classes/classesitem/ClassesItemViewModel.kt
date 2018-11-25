@@ -72,7 +72,12 @@ class ClassesItemViewModel @Inject constructor(private val repository: ScheduleR
 
     private fun transformStudentWeekItems(data: List<ScheduleItem>): List<StudentClassesWeekData> {
         val items = mutableListOf<StudentClassesWeekData>()
-        data.forEach { items.add(StudentClassesWeekData(it.id, it.subject)) }
+        data.forEach {
+            with(it) {
+                items.add(StudentClassesWeekData(id, subject, lessonType, auditories,
+                        employees, subgroupNumber, startTime, endTime, note, weekNumber))
+            }
+        }
         return items
     }
 

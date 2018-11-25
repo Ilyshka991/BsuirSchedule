@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bsuir Schedule</string>
+    <string name="app_name">Bsuir Schedule(For test)</string>
 
     <string name="nav_drawer_action_open">Open navigation drawer</string>
     <string name="nav_drawer_action_close">Close navigation drawer</string>
@@ -53,6 +53,9 @@
     <string name="item_nav_empty">No Schedules</string>
     <string name="item_classes_type_icon_description">Lesson type icon</string>
     <string name="item_classes_text_subgroup">%1$d subgroup</string>
+    <string name="item_classes_text_week_number">Weeks: %1$s</string>
+
+    <string name="msg_all">all</string>
 
     <array name="subgroups">
         <item>all group</item>

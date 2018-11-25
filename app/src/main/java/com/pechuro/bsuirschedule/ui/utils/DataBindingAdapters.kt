@@ -36,14 +36,15 @@ fun setAuditories(view: TextView, auditories: List<String>?) {
 fun setEmployees(view: TextView, employees: List<Employee>?) {
     var text = ""
     employees?.forEachIndexed { index, employee ->
-        text += "${employee.lastName} " +
-                (if (!employee.firstName.isNullOrEmpty()) employee.firstName!![0] + "." else "") +
-                (if (!employee.middleName.isNullOrEmpty()) employee.middleName!![0] + "." else "") +
-                (if (index != employees.lastIndex) "\n" else "")
+        text += "${employee.lastName} "
+        if (employee.lastName.length < 15) {
+            text += (if (!employee.firstName.isNullOrEmpty()) employee.firstName!![0] + "." else "") +
+                    (if (!employee.middleName.isNullOrEmpty()) employee.middleName!![0] + "." else "")
+        }
+        text += (if (index != employees.lastIndex) "\n" else "")
     }
     view.text = text
 }
-
 
 @BindingAdapter("text_subgroup")
 fun setSubgroup(view: TextView, number: Int?) =
@@ -52,3 +53,10 @@ fun setSubgroup(view: TextView, number: Int?) =
         } else {
             view.visibility = View.GONE
         }
+
+
+@BindingAdapter("text_week_number")
+fun setWeekNumber(view: TextView, weekNumbers: String?) {
+    val result = if (weekNumbers != "0 1 2 3 4 ") weekNumbers?.trim() else view.context.getString(R.string.msg_all)
+    view.text = view.context.getString(R.string.item_classes_text_week_number, result)
+}
