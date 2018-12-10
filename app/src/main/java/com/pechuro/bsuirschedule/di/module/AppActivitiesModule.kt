@@ -9,7 +9,7 @@ import com.pechuro.bsuirschedule.ui.activity.settings.SettingsActivity
 import com.pechuro.bsuirschedule.ui.activity.splash.SplashActivity
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogProvider
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragmentProvider
-import com.pechuro.bsuirschedule.ui.fragment.bottomsheet.OptionsFragmentProvider
+import com.pechuro.bsuirschedule.ui.fragment.bottomoptions.OptionsFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.ClassesItemFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.drawer.DrawerFragmentProvider
