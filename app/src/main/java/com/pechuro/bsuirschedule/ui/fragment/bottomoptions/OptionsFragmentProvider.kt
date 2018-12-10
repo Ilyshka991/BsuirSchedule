@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.ui.fragment.bottomsheet
+package com.pechuro.bsuirschedule.ui.fragment.bottomoptions
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

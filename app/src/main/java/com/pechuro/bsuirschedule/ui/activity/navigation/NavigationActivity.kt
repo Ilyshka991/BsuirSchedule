@@ -28,8 +28,8 @@ import com.pechuro.bsuirschedule.ui.custom.OnSwipeTouchListener
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogEvent
-import com.pechuro.bsuirschedule.ui.fragment.bottomsheet.BottomOptionsEvent
-import com.pechuro.bsuirschedule.ui.fragment.bottomsheet.BottomOptionsFragment
+import com.pechuro.bsuirschedule.ui.fragment.bottomoptions.BottomOptionsEvent
+import com.pechuro.bsuirschedule.ui.fragment.bottomoptions.BottomOptionsFragment
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragment
 import com.pechuro.bsuirschedule.ui.fragment.drawer.DrawerEvent
 import com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionEvent

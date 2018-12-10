@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.ui.fragment.bottomsheet
+package com.pechuro.bsuirschedule.ui.fragment.bottomoptions
 
 import com.pechuro.bsuirschedule.ui.utils.BaseEvent
 

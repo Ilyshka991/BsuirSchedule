@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
     android:orientation="vertical"
-    tools:context=".ui.fragment.bottomsheet.BottomOptionsFragment">
+    tools:context=".ui.fragment.bottomoptions.BottomOptionsFragment">
 
     <Button
         android:id="@+id/bar_options_add"

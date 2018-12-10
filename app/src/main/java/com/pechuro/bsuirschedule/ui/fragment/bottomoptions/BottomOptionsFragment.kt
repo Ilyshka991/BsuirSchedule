@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.ui.fragment.bottomsheet
+package com.pechuro.bsuirschedule.ui.fragment.bottomoptions
 
 import android.os.Bundle
 import android.view.LayoutInflater
