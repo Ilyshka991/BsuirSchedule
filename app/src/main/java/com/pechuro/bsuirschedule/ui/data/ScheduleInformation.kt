@@ -2,8 +2,9 @@ package com.pechuro.bsuirschedule.ui.data
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.pechuro.bsuirschedule.ui.base.BaseViewHolderData
 
-data class ScheduleInformation(val id: Int, val name: String, val type: Int) : Parcelable {
+data class ScheduleInformation(val id: Int, val name: String, val type: Int) : BaseViewHolderData(), Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readInt(),
             parcel.readString() ?: "",

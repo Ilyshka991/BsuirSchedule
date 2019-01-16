@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.databinding.*
 import com.pechuro.bsuirschedule.ui.base.BaseViewHolder
+import com.pechuro.bsuirschedule.ui.base.BaseViewHolderData
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.ClassesItemEvent
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.BaseClassesData
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.*
@@ -19,27 +20,27 @@ class ClassesAdapter(private val diffCallback: ClassesDiffCallback) : RecyclerVi
         EMPTY -> {
             val viewBinding = ItemClassesEmptyBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
-            EmptyViewHolder(viewBinding)
+            ClassesAdapterViewHolders.EmptyViewHolder(viewBinding)
         }
         STUDENT_DAY -> {
             val viewBinding = ItemStudentClassesDayBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
-            StudentDayViewHolder(viewBinding)
+            ClassesAdapterViewHolders.StudentDayViewHolder(viewBinding)
         }
         STUDENT_WEEK -> {
             val viewBinding = ItemStudentClassesWeekBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
-            StudentWeekViewHolder(viewBinding)
+            ClassesAdapterViewHolders.StudentWeekViewHolder(viewBinding)
         }
         EMPLOYEE_DAY -> {
             val viewBinding = ItemEmployeeClassesDayBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
-            EmployeeDayViewHolder(viewBinding)
+            ClassesAdapterViewHolders.EmployeeDayViewHolder(viewBinding)
         }
         EMPLOYEE_WEEK -> {
             val viewBinding = ItemEmployeeClassesWeekBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
-            EmployeeWeekViewHolder(viewBinding)
+            ClassesAdapterViewHolders.EmployeeWeekViewHolder(viewBinding)
         }
         else -> throw IllegalArgumentException("Illegal view type")
     }
@@ -55,11 +56,7 @@ class ClassesAdapter(private val diffCallback: ClassesDiffCallback) : RecyclerVi
 
     override fun getItemCount(): Int = _classesList.size
 
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        if (position < _classesList.size) {
-            holder.onBind(position)
-        }
-    }
+    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) = holder.onBind(_classesList[position])
 
     fun setItems(data: List<BaseClassesData>) {
         val result = mutableListOf<BaseClassesData>()
@@ -76,81 +73,80 @@ class ClassesAdapter(private val diffCallback: ClassesDiffCallback) : RecyclerVi
         }
     }
 
-    inner class StudentDayViewHolder(private val binding: ItemStudentClassesDayBinding) : BaseViewHolder(binding.root) {
-
-        override fun onBind(position: Int) {
-            val data = _classesList[position] as StudentClassesDayData
-            binding.data = data
-            binding.executePendingBindings()
-
-            binding.container.apply {
-                setOnLongClickListener {
-                    EventBus.publish(ClassesItemEvent.OnItemLongClick(data.itemId))
-                    true
-                }
-            }
-        }
-    }
-
-    inner class StudentWeekViewHolder(private val binding: ItemStudentClassesWeekBinding) : BaseViewHolder(binding.root) {
-
-        override fun onBind(position: Int) {
-            val data = _classesList[position] as StudentClassesWeekData
-            binding.data = data
-            binding.executePendingBindings()
-
-            binding.container.apply {
-                setOnLongClickListener {
-                    EventBus.publish(ClassesItemEvent.OnItemLongClick(data.itemId))
-                    true
-                }
-            }
-        }
-    }
-
-    inner class EmployeeDayViewHolder(private val binding: ItemEmployeeClassesDayBinding) : BaseViewHolder(binding.root) {
-
-        override fun onBind(position: Int) {
-            val data = _classesList[position] as EmployeeClassesDayData
-            binding.data = data
-            binding.executePendingBindings()
-
-            binding.container.apply {
-                setOnLongClickListener {
-                    EventBus.publish(ClassesItemEvent.OnItemLongClick(data.itemId))
-                    true
-                }
-            }
-        }
-    }
-
-    inner class EmployeeWeekViewHolder(private val binding: ItemEmployeeClassesWeekBinding) : BaseViewHolder(binding.root) {
-
-        override fun onBind(position: Int) {
-
-            val data = _classesList[position] as EmployeeClassesWeekData
-            binding.data = data
-            binding.executePendingBindings()
-
-            binding.container.apply {
-                setOnLongClickListener {
-                    EventBus.publish(ClassesItemEvent.OnItemLongClick(data.itemId))
-                    true
-                }
-            }
-        }
-    }
-
-    inner class EmptyViewHolder(mBinding: ItemClassesEmptyBinding) : BaseViewHolder(mBinding.root) {
-
-        override fun onBind(position: Int) {}
-    }
-
     companion object ClassesViewTypes {
         const val STUDENT_DAY = 1
         const val STUDENT_WEEK = 2
         const val EMPLOYEE_DAY = 3
         const val EMPLOYEE_WEEK = 4
         const val EMPTY = 0
+    }
+}
+
+sealed class ClassesAdapterViewHolders {
+
+    class StudentDayViewHolder(private val binding: ItemStudentClassesDayBinding) : BaseViewHolder(binding.root) {
+
+        override fun onBind(data: BaseViewHolderData) {
+            binding.data = data as StudentClassesDayData
+            binding.executePendingBindings()
+
+            binding.container.apply {
+                setOnLongClickListener {
+                    EventBus.publish(ClassesItemEvent.OnItemLongClick(data.itemId))
+                    true
+                }
+            }
+        }
+
+    }
+
+    class StudentWeekViewHolder(private val binding: ItemStudentClassesWeekBinding) : BaseViewHolder(binding.root) {
+
+        override fun onBind(data: BaseViewHolderData) {
+            binding.data = data as StudentClassesWeekData
+            binding.executePendingBindings()
+
+            binding.container.apply {
+                setOnLongClickListener {
+                    EventBus.publish(ClassesItemEvent.OnItemLongClick(data.itemId))
+                    true
+                }
+            }
+        }
+    }
+
+    class EmployeeDayViewHolder(private val binding: ItemEmployeeClassesDayBinding) : BaseViewHolder(binding.root) {
+
+        override fun onBind(data: BaseViewHolderData) {
+            binding.data = data as EmployeeClassesDayData
+            binding.executePendingBindings()
+
+            binding.container.apply {
+                setOnLongClickListener {
+                    EventBus.publish(ClassesItemEvent.OnItemLongClick(data.itemId))
+                    true
+                }
+            }
+        }
+    }
+
+    class EmployeeWeekViewHolder(private val binding: ItemEmployeeClassesWeekBinding) : BaseViewHolder(binding.root) {
+
+        override fun onBind(data: BaseViewHolderData) {
+            binding.data = data as EmployeeClassesWeekData
+            binding.executePendingBindings()
+
+            binding.container.apply {
+                setOnLongClickListener {
+                    EventBus.publish(ClassesItemEvent.OnItemLongClick(data.itemId))
+                    true
+                }
+            }
+        }
+    }
+
+    class EmptyViewHolder(mBinding: ItemClassesEmptyBinding) : BaseViewHolder(mBinding.root) {
+
+        override fun onBind(data: BaseViewHolderData) {}
     }
 }

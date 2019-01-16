@@ -1,3 +1,5 @@
 package com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data
 
-abstract class BaseClassesData(val itemId: Int)
+import com.pechuro.bsuirschedule.ui.base.BaseViewHolderData
+
+abstract class BaseClassesData(val itemId: Int) : BaseViewHolderData()
