@@ -18,14 +18,14 @@ import javax.inject.Inject
 
 class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewModel>() {
     @Inject
-    lateinit var layoutManager: LinearLayoutManager
+    lateinit var linearLayoutManager: LinearLayoutManager
     @Inject
-    lateinit var adapter: ClassesAdapter
+    lateinit var recyclerAdapter: ClassesAdapter
+    @Inject
+    lateinit var recyclerPool: RecyclerView.RecycledViewPool
 
     override val viewModel: ClassesItemViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(ClassesItemViewModel::class.java)
-    override val bindingVariables: Map<Int, Any>?
-        get() = null
     override val layoutId: Int
         get() = R.layout.fragment_list
 
@@ -34,31 +34,39 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
         setupView()
         subscribeToLiveData()
         loadData()
-        setListeners()
+        setViewListeners()
         setEventListeners()
     }
 
-    private fun setEventListeners() {
-        compositeDisposable.addAll(
-                EventBus.listen(ClassesItemEvent::class.java).subscribe {
-                    if (userVisibleHint) {
-                        when (it) {
-                            is ClassesItemEvent.OnItemLongClick -> ItemOptionsDialog.newInstance(it.id)
-                                    .show(childFragmentManager, ItemOptionsDialog.TAG)
-                        }
-                    }
-                }
-        )
+    private fun setupView() {
+        linearLayoutManager.recycleChildrenOnDetach = true
+
+        viewDataBinding.recyclerView.apply {
+            layoutManager = linearLayoutManager
+            adapter = recyclerAdapter
+            setRecycledViewPool(recyclerPool)
+        }
     }
 
-    private fun setListeners() {
+    private fun setEventListeners() {
+        EventBus.listen(ClassesItemEvent::class.java).subscribe {
+            if (userVisibleHint) {
+                when (it) {
+                    is ClassesItemEvent.OnItemLongClick -> ItemOptionsDialog.newInstance(it.id)
+                            .show(childFragmentManager, ItemOptionsDialog.TAG)
+                }
+            }
+        }.let(compositeDisposable::add)
+    }
+
+    private fun setViewListeners() {
         viewDataBinding.recyclerView
                 .addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         super.onScrolled(recyclerView, dx, dy)
-                        val visibleItemCount = layoutManager.childCount
-                        val totalItemCount = layoutManager.itemCount
-                        val pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
+                        val visibleItemCount = linearLayoutManager.childCount
+                        val totalItemCount = linearLayoutManager.itemCount
+                        val pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition()
                         if (pastVisibleItems + visibleItemCount >= totalItemCount) {
                             EventBus.publish(if (dy > 0) FabEvent.OnFabHide else FabEvent.OnFabShowPos)
                         }
@@ -71,28 +79,19 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
         info?.let { viewModel.loadData(it) }
     }
 
-    private fun setupView() {
-        layoutManager.orientation = RecyclerView.VERTICAL
-        viewDataBinding.recyclerView.layoutManager = layoutManager
-        viewDataBinding.recyclerView.adapter = adapter
-    }
-
     private fun subscribeToLiveData() {
         viewModel.listItemsLiveData.observe(this, Observer {
-            adapter.setItems(it)
+            recyclerAdapter.setItems(it)
         })
     }
 
     companion object {
         private const val ARG_INFO = "arg_information"
 
-        fun newInstance(info: ClassesBaseInformation): ClassesItemFragment {
-            val args = Bundle()
-            args.putParcelable(ARG_INFO, info)
-
-            val fragment = ClassesItemFragment()
-            fragment.arguments = args
-            return fragment
+        fun newInstance(info: ClassesBaseInformation) = ClassesItemFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(ARG_INFO, info)
+            }
         }
     }
 }

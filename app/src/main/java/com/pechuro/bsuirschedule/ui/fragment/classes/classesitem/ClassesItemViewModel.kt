@@ -43,7 +43,7 @@ class ClassesItemViewModel @Inject constructor(private val repository: ScheduleR
             else -> throw IllegalStateException()
         }
 
-        compositeDisposable.add(observable
+        observable
                 .subscribeOn(Schedulers.io())
                 .map {
                     when (viewType) {
@@ -55,7 +55,8 @@ class ClassesItemViewModel @Inject constructor(private val repository: ScheduleR
                 }
                 .subscribe({
                     listItemsLiveData.postValue(it)
-                }, {}))
+                }, {})
+                .let(compositeDisposable::add)
     }
 
     private fun transformStudentDayItems(data: List<ScheduleItem>): List<StudentClassesDayData> {

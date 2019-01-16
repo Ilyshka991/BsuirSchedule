@@ -23,17 +23,16 @@ class InfoLoadActivityViewModel @Inject constructor(
 
     fun loadInfo() {
         isLoading.set(true)
-        compositeDisposable.add(
-                Single.merge(groupRepository.load(), employeeRepository.load())
-                        .toList()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            status.call(Status.COMPLETE)
-                        }, {
-                            isLoading.set(false)
-                        })
-        )
+        Single.merge(groupRepository.load(), employeeRepository.load())
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    status.call(Status.COMPLETE)
+                }, {
+                    isLoading.set(false)
+                })
+                .let(compositeDisposable::add)
     }
 }
 

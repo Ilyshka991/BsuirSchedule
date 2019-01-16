@@ -11,14 +11,13 @@ class ItemOptionsDialogViewModel @Inject constructor(private val repository: Sch
     val status = SingleLiveEvent<Status>()
 
     fun delete(id: Int) {
-        compositeDisposable.add(
-                repository.deleteItem(id)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            status.call(Status.OnDeleted(id))
-                        }, {})
-        )
+        repository.deleteItem(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    status.call(Status.OnDeleted(id))
+                }, {})
+                .let(compositeDisposable::add)
     }
 }
 

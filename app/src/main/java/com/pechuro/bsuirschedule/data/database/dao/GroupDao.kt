@@ -26,5 +26,5 @@ interface GroupDao {
     fun getNumbers(): Single<List<String>>
 
     @Query("SELECT EXISTS(SELECT 1 FROM all_groups)")
-    fun isNotEmpty(): Boolean
+    fun isNotEmpty(): Single<Boolean>
 }

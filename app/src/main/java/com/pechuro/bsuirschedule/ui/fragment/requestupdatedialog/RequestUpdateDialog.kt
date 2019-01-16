@@ -13,16 +13,17 @@ import com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionEvent
 import com.pechuro.bsuirschedule.ui.utils.EventBus
 
 class RequestUpdateDialog : BaseDialog<DialogRequestScheduleUpdateBinding, RequestUpdateDialogViewModel>() {
-    private val _scheduleInfo: ScheduleInformation? by lazy {
-        arguments?.getParcelable<ScheduleInformation>(ARG_SCHEDULE_INFO)
-    }
 
     override val viewModel: RequestUpdateDialogViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(RequestUpdateDialogViewModel::class.java)
-    override val bindingVariables: Map<Int, Any?>
-        get() = mapOf(Pair(BR.viewModel, viewModel), Pair(BR.info, _scheduleInfo))
     override val layoutId: Int
         get() = R.layout.dialog_request_schedule_update
+    override val bindingVariables: Map<Int, Any?>
+        get() = mapOf(BR.viewModel to viewModel, BR.info to _scheduleInfo)
+
+    private val _scheduleInfo: ScheduleInformation? by lazy {
+        arguments?.getParcelable<ScheduleInformation>(ARG_SCHEDULE_INFO)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

@@ -24,20 +24,21 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
     val status = SingleLiveEvent<Status>()
 
     fun loadSuggestions(scheduleType: Int) {
-        val observable = when (scheduleType) {
+        val source = when (scheduleType) {
             STUDENT -> groupRepository.getGroupNumbers()
             EMPLOYEE -> employeeRepository.getNames()
             else -> throw IllegalArgumentException()
         }
 
-        compositeDisposable.add(
-                observable.subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            suggestions.value = it
-                        }, {
-                            status.call(Status.OnError(R.string.add_fragment_error_empty_suggestions))
-                        }))
+        source
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    suggestions.value = it
+                }, {
+                    status.call(Status.OnError(R.string.add_fragment_error_empty_suggestions))
+                })
+                .let(compositeDisposable::add)
     }
 
     fun cancel() {
@@ -55,7 +56,7 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
         isLoading.set(true)
         isError.set(false)
 
-        compositeDisposable.add(repository.loadClasses(scheduleName, scheduleTypes)
+        repository.loadClasses(scheduleName, scheduleTypes)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -72,7 +73,7 @@ class AddFragmentViewModel @Inject constructor(private val repository: ScheduleR
                     isError.set(true)
                     isLoading.set(false)
                 })
-        )
+                .let(compositeDisposable::add)
     }
 
     private fun isValid(scheduleName: String, scheduleTypes: List<Int>): Boolean {

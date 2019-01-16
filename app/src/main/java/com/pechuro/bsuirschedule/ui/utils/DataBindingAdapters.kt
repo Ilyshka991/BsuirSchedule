@@ -7,6 +7,15 @@ import androidx.databinding.BindingAdapter
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.data.entity.Employee
 
+@BindingAdapter("visibility")
+fun setVisibilityGone(view: View, isVisible: Boolean) {
+    view.visibility = if (isVisible) View.VISIBLE else View.GONE
+}
+
+@BindingAdapter("visibility_invisible")
+fun setVisibilityInvisible(view: View, isVisible: Boolean) {
+    view.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+}
 
 @BindingAdapter("lesson_type_image")
 fun setLessonTypeImage(view: ImageView, type: String?) {

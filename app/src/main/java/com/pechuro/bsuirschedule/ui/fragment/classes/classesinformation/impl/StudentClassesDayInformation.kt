@@ -10,6 +10,7 @@ class StudentClassesDayInformation(
         val week: Int,
         val subgroup: Int
 ) : ClassesBaseInformation(name, type) {
+
     constructor(parcel: Parcel) : this(
             parcel.readString() ?: "",
             parcel.readInt(),
@@ -23,8 +24,6 @@ class StudentClassesDayInformation(
         parcel.writeInt(week)
         parcel.writeInt(subgroup)
     }
-
-    override fun describeContents() = 0
 
     companion object CREATOR : Parcelable.Creator<StudentClassesDayInformation> {
         override fun createFromParcel(parcel: Parcel) =

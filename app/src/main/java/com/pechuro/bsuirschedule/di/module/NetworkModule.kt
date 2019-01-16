@@ -18,12 +18,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-@Module
+@Module()
 class NetworkModule {
-    companion object {
-        private const val BASE_URL = "https://journal.bsuir.by/api/v1/"
-        private const val CONNECT_TIMEOUT = 60L
-    }
 
     @Provides
     @Singleton
@@ -79,4 +75,9 @@ class NetworkModule {
     @Singleton
     fun provideGroupApi(retrofit: Retrofit): GroupApi =
             retrofit.create(GroupApi::class.java)
+
+    companion object {
+        private const val BASE_URL = "https://journal.bsuir.by/api/v1/"
+        private const val CONNECT_TIMEOUT = 60L
+    }
 }

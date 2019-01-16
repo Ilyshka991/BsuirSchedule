@@ -5,6 +5,7 @@ import dagger.Provides
 
 @Module
 class AddDialogModule {
+
     @Provides
     fun providePagerAdapter(fragment: AddDialog) =
             AddDialogPagerAdapter(fragment.childFragmentManager)

@@ -10,16 +10,17 @@ import com.pechuro.bsuirschedule.ui.base.BaseDialog
 import com.pechuro.bsuirschedule.ui.utils.EventBus
 
 class ItemOptionsDialog : BaseDialog<DialogItemOptionsBinding, ItemOptionsDialogViewModel>() {
-    private val _itemId: Int? by lazy {
-        arguments?.getInt(ARG_ITEM_ID)
-    }
 
     override val viewModel: ItemOptionsDialogViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(ItemOptionsDialogViewModel::class.java)
-    override val bindingVariables: Map<Int, Any?>
-        get() = mapOf(Pair(BR.viewModel, viewModel), Pair(BR.id, _itemId))
     override val layoutId: Int
         get() = R.layout.dialog_item_options
+    override val bindingVariables: Map<Int, Any?>
+        get() = mapOf(BR.viewModel to viewModel, BR.id to _itemId)
+
+    private val _itemId: Int? by lazy {
+        arguments?.getInt(ARG_ITEM_ID)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -39,12 +40,11 @@ class ItemOptionsDialog : BaseDialog<DialogItemOptionsBinding, ItemOptionsDialog
         const val TAG = "item_options_dialog"
         private const val ARG_ITEM_ID = "item_id"
 
-        fun newInstance(itemId: Int) =
-                ItemOptionsDialog().apply {
-                    arguments = Bundle().apply {
-                        putInt(ARG_ITEM_ID, itemId)
-                    }
-                }
+        fun newInstance(itemId: Int) = ItemOptionsDialog().apply {
+            arguments = Bundle().apply {
+                putInt(ARG_ITEM_ID, itemId)
+            }
+        }
     }
 }
 

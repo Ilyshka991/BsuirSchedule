@@ -17,17 +17,17 @@ class ExamViewModel @Inject constructor(private val repository: ScheduleReposito
     val listItemsLiveData = MutableLiveData<List<BaseExamData>>()
 
     fun loadData(info: ScheduleInformation) {
-        compositeDisposable.add(
-                repository.getClasses(info.name, info.type)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            listItemsLiveData.value = when (info.type) {
-                                ScheduleTypes.STUDENT_EXAMS -> transformStudentItems(it)
-                                ScheduleTypes.EMPLOYEE_EXAMS -> transformEmployeeItems(it)
-                                else -> throw IllegalStateException()
-                            }
-                        }, {}))
+        repository.getClasses(info.name, info.type)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    listItemsLiveData.value = when (info.type) {
+                        ScheduleTypes.STUDENT_EXAMS -> transformStudentItems(it)
+                        ScheduleTypes.EMPLOYEE_EXAMS -> transformEmployeeItems(it)
+                        else -> throw IllegalStateException()
+                    }
+                }, {})
+                .let(compositeDisposable::add)
     }
 
     private fun transformStudentItems(data: List<ScheduleItem>): List<StudentExamData> {

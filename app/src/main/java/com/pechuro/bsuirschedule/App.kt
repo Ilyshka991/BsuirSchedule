@@ -2,6 +2,7 @@ package com.pechuro.bsuirschedule
 
 import android.app.Activity
 import android.app.Application
+import com.pechuro.bsuirschedule.di.component.AppComponent
 import com.pechuro.bsuirschedule.di.component.DaggerAppComponent
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -15,17 +16,21 @@ class App : Application(), HasActivityInjector {
     override fun onCreate() {
         super.onCreate()
 
-        /* if (LeakCanary.isInAnalyzerProcess(this)) {
-             return
-         }
-         LeakCanary.install(this)
-         */
+        /*if (LeakCanary.isInAnalyzerProcess(this)) return
+        LeakCanary.install(this)*/
 
-        // SqlScoutServer.create(this, packageName)
-
-        DaggerAppComponent.builder().application(this).build().inject(this)
+        initDI()
     }
 
     override fun activityInjector() = activityDispatchingAndroidInjector
-}
 
+    private fun initDI() {
+        appComponent = DaggerAppComponent.builder().application(this).build().also {
+            it.inject(this)
+        }
+    }
+
+    companion object {
+        lateinit var appComponent: AppComponent
+    }
+}

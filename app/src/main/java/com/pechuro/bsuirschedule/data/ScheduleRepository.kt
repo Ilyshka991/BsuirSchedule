@@ -11,9 +11,9 @@ import com.pechuro.bsuirschedule.data.entity.complex.Classes
 import com.pechuro.bsuirschedule.data.network.LastUpdateResponse
 import com.pechuro.bsuirschedule.data.network.ResponseModel
 import com.pechuro.bsuirschedule.data.network.ScheduleApi
-import com.pechuro.bsuirschedule.data.network.ScheduleResponse
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.utils.getInfo
+import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -29,7 +29,7 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
                         .onErrorReturn { LastUpdateResponse("") }
                         .blockingGet().lastUpdateDate
 
-                deleteLastSchedules(name, types)
+                deleteLastSchedules(name, types).blockingAwait()
 
                 val classesList = mutableListOf<Classes>()
                 types.forEach { type ->
@@ -66,13 +66,9 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
 
     fun getSchedules() = scheduleDao.getSchedules()
 
-    fun delete(name: String, type: Int): Single<Unit> = Single.fromCallable {
-        scheduleDao.delete(name, type)
-    }
+    fun delete(name: String, type: Int) = Completable.fromAction { scheduleDao.delete(name, type) }
 
-    fun deleteItem(id: Int): Single<Unit> = Single.fromCallable {
-        scheduleDao.deleteItem(id)
-    }
+    fun deleteItem(id: Int) = Completable.fromAction { scheduleDao.deleteItem(id) }
 
     fun getNotUpdatedSchedules(): Single<List<ScheduleInformation>> = Single.fromCallable {
         val schedules = scheduleDao.getStudentSchedules().blockingGet()
@@ -88,10 +84,12 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
 
     private fun getLastUpdate(name: String): Single<LastUpdateResponse> = api.getLastUpdateDate(name)
 
-    private fun deleteLastSchedules(name: String, types: List<Int>) = types.forEach { scheduleDao.delete(name, it) }
+    private fun deleteLastSchedules(name: String, types: List<Int>) = Completable.fromAction {
+        types.forEach { scheduleDao.delete(name, it) }
+    }
 
     private fun transformResponse(name: String, type: Int, lastUpdate: String, response: ResponseModel, id: Int = -1): Classes {
-        fun getScheduleItems(response: List<ScheduleResponse>?): List<ScheduleItem> {
+        fun getScheduleItems(response: List<ResponseModel.ScheduleResponse>?): List<ScheduleItem> {
             val scheduleItems = ArrayList<ScheduleItem>()
             response?.forEach {
                 for (item in it.classes) {
@@ -140,9 +138,9 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
 
     private fun storeInCache(schedule: MutableList<Classes>) =
             schedule.forEach {
-                scheduleDao.insertSchedule(it)
+                scheduleDao.insertSchedule(it).blockingAwait()
             }
 
     private fun updateCache(classes: Classes) =
-            scheduleDao.update(classes)
+            scheduleDao.update(classes).blockingAwait()
 }

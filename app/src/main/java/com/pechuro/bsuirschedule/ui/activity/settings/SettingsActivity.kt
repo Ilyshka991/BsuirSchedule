@@ -12,8 +12,6 @@ class SettingsActivity : BaseActivity<ActivitySettingsBinding, SettingsActivityV
         get() = ViewModelProviders.of(this, viewModelFactory).get(SettingsActivityViewModel::class.java)
     override val layoutId: Int
         get() = R.layout.activity_settings
-    override val bindingVariables: Map<Int, Any>
-        get() = mapOf()
 
     companion object {
         fun newIntent(context: Context) = Intent(context, SettingsActivity::class.java)

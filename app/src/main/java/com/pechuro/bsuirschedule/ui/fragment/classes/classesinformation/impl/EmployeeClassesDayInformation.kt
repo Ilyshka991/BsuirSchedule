@@ -8,6 +8,7 @@ class EmployeeClassesDayInformation(
         name: String, type: Int,
         val day: String,
         val week: Int) : ClassesBaseInformation(name, type) {
+
     constructor(parcel: Parcel) : this(
             parcel.readString() ?: "",
             parcel.readInt(),
@@ -19,8 +20,6 @@ class EmployeeClassesDayInformation(
         parcel.writeString(day)
         parcel.writeInt(week)
     }
-
-    override fun describeContents() = 0
 
     companion object CREATOR : Parcelable.Creator<EmployeeClassesDayInformation> {
         override fun createFromParcel(parcel: Parcel) =

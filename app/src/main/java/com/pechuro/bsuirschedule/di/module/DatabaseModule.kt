@@ -9,6 +9,7 @@ import javax.inject.Singleton
 
 @Module
 class DatabaseModule {
+
     @Provides
     @Singleton
     fun provideAppDatabase(context: Context) = Room

@@ -3,7 +3,6 @@ package com.pechuro.bsuirschedule.ui.fragment.exam.adapter
 import androidx.recyclerview.widget.DiffUtil
 import com.pechuro.bsuirschedule.ui.fragment.exam.data.BaseExamData
 
-
 class ExamsDiffCallback : DiffUtil.Callback() {
 
     private var oldList: List<BaseExamData> = emptyList()

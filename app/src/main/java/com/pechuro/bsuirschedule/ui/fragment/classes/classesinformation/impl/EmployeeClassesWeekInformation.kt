@@ -5,8 +5,8 @@ import android.os.Parcelable
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.ClassesBaseInformation
 
 class EmployeeClassesWeekInformation(
-        name: String, type: Int,
-        val day: String) : ClassesBaseInformation(name, type) {
+        name: String, type: Int, val day: String) : ClassesBaseInformation(name, type) {
+
     constructor(parcel: Parcel) : this(
             parcel.readString() ?: "",
             parcel.readInt(),
@@ -16,8 +16,6 @@ class EmployeeClassesWeekInformation(
         super.writeToParcel(parcel, flags)
         parcel.writeString(day)
     }
-
-    override fun describeContents() = 0
 
     companion object CREATOR : Parcelable.Creator<EmployeeClassesWeekInformation> {
         override fun createFromParcel(parcel: Parcel) =

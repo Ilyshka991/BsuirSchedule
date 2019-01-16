@@ -17,28 +17,27 @@ class DrawerOptionsDialogViewModel @Inject constructor(private val repository: S
     fun update(info: ScheduleInformation) {
         isLoading.set(true)
         isError.set(false)
-        compositeDisposable.add(
-                repository.update(info)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            status.call(Status.OnCancel)
-                        }, {
-                            isError.set(true)
-                            isLoading.set(false)
-                        })
-        )
+
+        repository.update(info)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    status.call(Status.OnCancel)
+                }, {
+                    isError.set(true)
+                    isLoading.set(false)
+                })
+                .let(compositeDisposable::add)
     }
 
     fun delete(info: ScheduleInformation) {
-        compositeDisposable.add(
-                repository.delete(info.name, info.type)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            status.call(Status.OnDeleted(info))
-                        }, {})
-        )
+        repository.delete(info.name, info.type)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    status.call(Status.OnDeleted(info))
+                }, {})
+                .let(compositeDisposable::add)
     }
 
     fun cancel() = status.call(Status.OnCancel)

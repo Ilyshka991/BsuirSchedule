@@ -9,6 +9,7 @@ import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentViewpagerBinding
 import com.pechuro.bsuirschedule.ui.base.BaseDialog
+import com.pechuro.bsuirschedule.ui.custom.listeners.TabLayoutListener
 import com.pechuro.bsuirschedule.ui.utils.EventBus
 import javax.inject.Inject
 
@@ -20,8 +21,6 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
 
     override val viewModel: AddDialogViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(AddDialogViewModel::class.java)
-    override val bindingVariables: Map<Int, Any>?
-        get() = null
     override val layoutId: Int
         get() = R.layout.fragment_viewpager
 
@@ -33,11 +32,14 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
     }
 
     private fun setupView() {
-        viewDataBinding.viewPager.adapter = pagerAdapter
-        viewDataBinding.viewPager.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-
-        viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab().setText(getString(R.string.add_dialog_tab_item_students)))
-        viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab().setText(getString(R.string.add_dialog_tab_item_employees)))
+        viewDataBinding.viewPager.apply {
+            adapter = pagerAdapter
+            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        }
+        viewDataBinding.tabLayout.apply {
+            addTab(viewDataBinding.tabLayout.newTab().setText(getString(R.string.add_dialog_tab_item_students)))
+            addTab(viewDataBinding.tabLayout.newTab().setText(getString(R.string.add_dialog_tab_item_employees)))
+        }
     }
 
     private fun setEventListeners() {
@@ -50,6 +52,7 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
                         }
                     }
                 },
+
                 EventBus.listenWithReplay(AddDialogEvent.OnLoading::class.java).subscribe {
                     isCancelable = it.isEnabled
                     viewDataBinding.viewPager.isSwipeEnabled = it.isEnabled
@@ -72,17 +75,9 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
                         TabLayout.TabLayoutOnPageChangeListener(
                                 viewDataBinding.tabLayout))
 
-        viewDataBinding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(tab: TabLayout.Tab) {
-
-            }
-
+        viewDataBinding.tabLayout.addOnTabSelectedListener(object : TabLayoutListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 viewDataBinding.viewPager.currentItem = tab.position
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab) {
-
             }
         })
     }
@@ -90,11 +85,9 @@ class AddDialog : BaseDialog<FragmentViewpagerBinding, AddDialogViewModel>() {
     companion object {
         const val TAG = "add_dialog"
 
-        fun newInstance(): AddDialog {
-            val fragment = AddDialog()
-            val bundle = Bundle()
-            fragment.arguments = bundle
-            return fragment
+        fun newInstance() = AddDialog().apply {
+            arguments = Bundle().apply {
+            }
         }
     }
 }

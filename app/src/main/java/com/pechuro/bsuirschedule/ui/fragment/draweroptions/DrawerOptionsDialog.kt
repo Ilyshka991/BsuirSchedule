@@ -11,16 +11,17 @@ import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.utils.EventBus
 
 class DrawerOptionsDialog : BaseDialog<DialogDrawerOptionsBinding, DrawerOptionsDialogViewModel>() {
-    private val _scheduleInfo: ScheduleInformation? by lazy {
-        arguments?.getParcelable<ScheduleInformation>(ARG_SCHEDULE_INFO)
-    }
 
     override val viewModel: DrawerOptionsDialogViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(DrawerOptionsDialogViewModel::class.java)
-    override val bindingVariables: Map<Int, Any?>
-        get() = mapOf(Pair(BR.viewModel, viewModel), Pair(BR.info, _scheduleInfo))
     override val layoutId: Int
         get() = R.layout.dialog_drawer_options
+    override val bindingVariables: Map<Int, Any?>
+        get() = mapOf(BR.viewModel to viewModel, BR.info to _scheduleInfo)
+
+    private val _scheduleInfo: ScheduleInformation? by lazy {
+        arguments?.getParcelable<ScheduleInformation>(ARG_SCHEDULE_INFO)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -32,16 +33,13 @@ class DrawerOptionsDialog : BaseDialog<DialogDrawerOptionsBinding, DrawerOptions
             when (it) {
                 is Status.OnDeleted -> EventBus.publish(DrawerOptionEvent.OnScheduleDeleted(it.info))
                 is Status.OnUpdated -> EventBus.publish(DrawerOptionEvent.OnScheduleUpdated(it.info))
-                is Status.OnCancel -> {
-                    dismiss()
-                    return@Observer
-                }
             }
             dismiss()
         })
     }
 
     companion object {
+        const val TAG = "drawer_options_dialog"
         private const val ARG_SCHEDULE_INFO = "schedule_info"
 
         fun newInstance(info: ScheduleInformation) =

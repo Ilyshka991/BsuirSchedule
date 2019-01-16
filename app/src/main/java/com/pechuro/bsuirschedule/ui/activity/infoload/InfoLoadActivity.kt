@@ -19,7 +19,7 @@ class InfoLoadActivity :
     override val layoutId: Int
         get() = R.layout.activity_info_load
     override val bindingVariables: Map<Int, Any>
-        get() = mapOf(Pair(BR.viewModel, viewModel))
+        get() = mapOf(BR.viewModel to viewModel)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

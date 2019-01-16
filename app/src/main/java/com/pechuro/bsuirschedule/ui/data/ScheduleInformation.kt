@@ -9,6 +9,8 @@ data class ScheduleInformation(val id: Int, val name: String, val type: Int) : P
             parcel.readString() ?: "",
             parcel.readInt())
 
+    constructor() : this(-1, "", -1)
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(id)
         parcel.writeString(name)
@@ -16,6 +18,8 @@ data class ScheduleInformation(val id: Int, val name: String, val type: Int) : P
     }
 
     override fun describeContents() = 0
+
+    fun isEmpty() = id == -1 && name.isEmpty() && type == -1
 
     companion object CREATOR : Parcelable.Creator<ScheduleInformation> {
         override fun createFromParcel(parcel: Parcel): ScheduleInformation {

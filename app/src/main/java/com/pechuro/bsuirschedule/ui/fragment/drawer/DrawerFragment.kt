@@ -6,7 +6,6 @@ import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentDrawerBinding
 import com.pechuro.bsuirschedule.ui.activity.settings.SettingsActivity
@@ -17,16 +16,16 @@ import javax.inject.Inject
 
 class DrawerFragment : BaseFragment<FragmentDrawerBinding, DrawerFragmentViewModel>() {
     @Inject
-    lateinit var layoutManager: LinearLayoutManager
+    lateinit var linearLayoutManager: LinearLayoutManager
     @Inject
     lateinit var navAdapter: NavItemAdapter
 
     override val viewModel: DrawerFragmentViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(DrawerFragmentViewModel::class.java)
-    override val bindingVariables: Map<Int, Any>
-        get() = mapOf(Pair(BR.viewModel, viewModel))
     override val layoutId: Int
         get() = R.layout.fragment_drawer
+    override val bindingVariables: Map<Int, Any>
+        get() = mapOf(BR.viewModel to viewModel)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,9 +36,10 @@ class DrawerFragment : BaseFragment<FragmentDrawerBinding, DrawerFragmentViewMod
     }
 
     private fun setupView() {
-        layoutManager.orientation = RecyclerView.VERTICAL
-        viewDataBinding.navItemList.layoutManager = layoutManager
-        viewDataBinding.navItemList.adapter = navAdapter
+        viewDataBinding.navItemList.apply {
+            layoutManager = linearLayoutManager
+            adapter = navAdapter
+        }
     }
 
     private fun subscribeToLiveData() {
@@ -61,11 +61,9 @@ class DrawerFragment : BaseFragment<FragmentDrawerBinding, DrawerFragmentViewMod
     }
 
     companion object {
-        fun newInstance(): DrawerFragment {
-            val args = Bundle()
-            val fragment = DrawerFragment()
-            fragment.arguments = args
-            return fragment
+        fun newInstance() = DrawerFragment().apply {
+            arguments = Bundle().apply {
+            }
         }
     }
 }

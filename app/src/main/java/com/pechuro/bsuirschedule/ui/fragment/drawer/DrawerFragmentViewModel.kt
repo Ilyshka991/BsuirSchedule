@@ -10,7 +10,6 @@ import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.utils.EventBus
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class DrawerFragmentViewModel @Inject constructor(private val repository: ScheduleRepository) : BaseViewModel() {
@@ -21,23 +20,26 @@ class DrawerFragmentViewModel @Inject constructor(private val repository: Schedu
     }
 
     private fun loadMenuItems() {
-        compositeDisposable.add(repository.getSchedules()
-                .map { it.toMap() }.subscribeOn(Schedulers.io())
+        repository.getSchedules()
+                .subscribeOn(Schedulers.io())
+                .map { it.toMap() }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     menuItems.value = it
-                }, {}))
+                }, {})
+                .let(compositeDisposable::add)
     }
 
     fun checkUpdate() {
-        compositeDisposable.add(repository.getNotUpdatedSchedules()
+        repository.getNotUpdatedSchedules()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     it.forEach { info ->
                         EventBus.publish(ScheduleUpdateEvent.OnRequestUpdate(info))
                     }
-                }, {}))
+                }, {})
+                .let(compositeDisposable::add)
     }
 
     private fun List<Schedule>.toMap(): Map<Int, List<ScheduleInformation>> {

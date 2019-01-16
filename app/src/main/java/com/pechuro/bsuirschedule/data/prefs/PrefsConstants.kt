@@ -1,6 +1,6 @@
-package com.pechuro.bsuirschedule.constants
+package com.pechuro.bsuirschedule.data.prefs
 
-object SharedPrefConstants {
+object PrefsConstants {
     const val SCHEDULE_INFO = "schedule_info"
 
     const val VIEW_TYPE = "view_type"

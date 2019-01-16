@@ -19,7 +19,7 @@ class RequestUpdateDialogViewModel @Inject constructor(
     fun update(info: ScheduleInformation) {
         isLoading.set(true)
         isError.set(false)
-        compositeDisposable.add(repository.update(info)
+        repository.update(info)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -28,7 +28,7 @@ class RequestUpdateDialogViewModel @Inject constructor(
                     isError.set(true)
                     isLoading.set(false)
                 })
-        )
+                .let(compositeDisposable::add)
     }
 
     fun cancel() = status.call(Status.OnCancel)

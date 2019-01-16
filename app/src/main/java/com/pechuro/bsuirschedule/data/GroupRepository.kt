@@ -3,11 +3,12 @@ package com.pechuro.bsuirschedule.data
 import com.pechuro.bsuirschedule.data.database.dao.GroupDao
 import com.pechuro.bsuirschedule.data.entity.Group
 import com.pechuro.bsuirschedule.data.network.GroupApi
+import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
 
 class GroupRepository @Inject constructor(private val api: GroupApi, private val dao: GroupDao) {
-    val isCacheNotEmpty get() = dao.isNotEmpty()
+    fun isCacheNotEmpty() = dao.isNotEmpty()
 
     fun get(): Single<List<Group>> = dao.get()
             .filter { it.isNotEmpty() }.toSingle()
@@ -15,10 +16,10 @@ class GroupRepository @Inject constructor(private val api: GroupApi, private val
     fun getGroupNumbers(): Single<List<String>> = dao.getNumbers()
 
     fun load(): Single<List<Group>> = api.get()
-            .doOnSuccess { storeInCache(it) }
+            .doOnSuccess { storeInCache(it).blockingAwait() }
 
-    fun delete() = dao.delete()
+    fun delete() = Completable.fromAction { dao.delete() }
 
     private fun storeInCache(groups: List<Group>) =
-            dao.insert(groups)
+            Completable.fromAction { dao.insert(groups) }
 }

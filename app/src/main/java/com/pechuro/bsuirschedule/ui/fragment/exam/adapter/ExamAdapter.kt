@@ -12,25 +12,23 @@ import com.pechuro.bsuirschedule.ui.fragment.exam.data.BaseExamData
 import com.pechuro.bsuirschedule.ui.fragment.exam.data.impl.EmployeeExamData
 import com.pechuro.bsuirschedule.ui.fragment.exam.data.impl.EmptyExamData
 import com.pechuro.bsuirschedule.ui.fragment.exam.data.impl.StudentExamData
-import org.jetbrains.anko.doAsyncResult
-
 
 class ExamAdapter(private val diffCallback: ExamsDiffCallback) : RecyclerView.Adapter<BaseViewHolder>() {
 
     private val _examsList = ArrayList<BaseExamData>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
-        ViewTypes.STUDENT.type -> {
+        STUDENT -> {
             val viewBinding = ItemStudentExamBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             StudentViewHolder(viewBinding)
         }
-        ViewTypes.EMPLOYEE.type -> {
+        EMPLOYEE -> {
             val viewBinding = ItemEmployeeExamBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             EmployeeViewHolder(viewBinding)
         }
-        ViewTypes.EMPTY.type -> {
+        EMPTY -> {
             val viewBinding = ItemEmptyExamBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             EmptyViewHolder(viewBinding)
@@ -39,9 +37,9 @@ class ExamAdapter(private val diffCallback: ExamsDiffCallback) : RecyclerView.Ad
     }
 
     override fun getItemViewType(position: Int) = when (_examsList[position]) {
-        is StudentExamData -> ViewTypes.STUDENT.type
-        is EmployeeExamData -> ViewTypes.EMPLOYEE.type
-        is EmptyExamData -> ViewTypes.EMPTY.type
+        is StudentExamData -> STUDENT
+        is EmployeeExamData -> EMPLOYEE
+        is EmptyExamData -> EMPTY
         else -> throw IllegalArgumentException()
     }
 
@@ -51,12 +49,10 @@ class ExamAdapter(private val diffCallback: ExamsDiffCallback) : RecyclerView.Ad
 
     fun setItems(data: List<BaseExamData>) {
         val result = mutableListOf<BaseExamData>()
+        result += if (data.isEmpty()) listOf(EmptyExamData()) else data
 
-        val diffResult = doAsyncResult {
-            result += if (data.isEmpty()) listOf(EmptyExamData()) else data
-            diffCallback.setData(_examsList, result)
-            DiffUtil.calculateDiff(diffCallback)
-        }.get()
+        diffCallback.setData(_examsList, result)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
 
         _examsList.clear()
         _examsList += result
@@ -86,8 +82,10 @@ class ExamAdapter(private val diffCallback: ExamsDiffCallback) : RecyclerView.Ad
 
         override fun onBind(position: Int) {}
     }
-}
 
-private enum class ViewTypes(val type: Int) {
-    STUDENT(1), EMPLOYEE(2), EMPTY(0)
+    companion object ExamsViewTypes {
+        const val STUDENT = 1
+        const val EMPLOYEE = 2
+        const val EMPTY = 0
+    }
 }

@@ -15,8 +15,6 @@ class SplashActivity :
         get() = ViewModelProviders.of(this, viewModelFactory).get(SplashActivityViewModel::class.java)
     override val layoutId: Int
         get() = R.layout.activity_splash
-    override val bindingVariables: Map<Int, Any>?
-        get() = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

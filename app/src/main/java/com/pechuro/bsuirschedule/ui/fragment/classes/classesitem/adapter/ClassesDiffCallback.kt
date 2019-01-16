@@ -3,7 +3,6 @@ package com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.adapter
 import androidx.recyclerview.widget.DiffUtil
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.BaseClassesData
 
-
 class ClassesDiffCallback : DiffUtil.Callback() {
 
     private var oldList: List<BaseClassesData> = emptyList()

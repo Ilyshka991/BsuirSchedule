@@ -10,12 +10,13 @@ import com.pechuro.bsuirschedule.ui.base.BaseFragment
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialog
 
 class StartFragment : BaseFragment<FragmentStartBinding, StartFragmentViewModel>() {
+
     override val viewModel: StartFragmentViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(StartFragmentViewModel::class.java)
-    override val bindingVariables: Map<Int, Any>
-        get() = mapOf(Pair(BR.viewModel, viewModel))
     override val layoutId: Int
         get() = R.layout.fragment_start
+    override val bindingVariables: Map<Int, Any>
+        get() = mapOf(BR.viewModel to viewModel)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -24,16 +25,14 @@ class StartFragment : BaseFragment<FragmentStartBinding, StartFragmentViewModel>
 
     private fun setListeners() {
         viewDataBinding.fab.setOnClickListener {
-            AddDialog.newInstance().show(fragmentManager, "add_dialog")
+            AddDialog.newInstance().show(fragmentManager, AddDialog.TAG)
         }
     }
 
     companion object {
-        fun newInstance(): StartFragment {
-            val args = Bundle()
-            val fragment = StartFragment()
-            fragment.arguments = args
-            return fragment
+        fun newInstance() = StartFragment().apply {
+            arguments = Bundle().apply {
+            }
         }
     }
 }

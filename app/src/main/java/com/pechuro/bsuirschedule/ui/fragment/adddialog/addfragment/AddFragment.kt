@@ -3,28 +3,24 @@ package com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
-import androidx.core.content.edit
 import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.gson.Gson
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.EMPLOYEE_CLASSES
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.EMPLOYEE_EXAMS
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_CLASSES
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_EXAMS
-import com.pechuro.bsuirschedule.constants.SharedPrefConstants
+import com.pechuro.bsuirschedule.data.prefs.PrefsConstants
+import com.pechuro.bsuirschedule.data.prefs.PrefsDelegate
 import com.pechuro.bsuirschedule.databinding.FragmentAddBinding
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
+import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogEvent
 import com.pechuro.bsuirschedule.ui.utils.EventBus
-import org.jetbrains.anko.defaultSharedPreferences
-import javax.inject.Inject
 
 class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
-    @Inject
-    lateinit var gson: Gson
 
     override val viewModel: AddFragmentViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(AddFragmentViewModel::class.java)
@@ -32,6 +28,8 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
         get() = mapOf(Pair(BR.viewModel, viewModel))
     override val layoutId: Int
         get() = R.layout.fragment_add
+
+    private var _lastScheduleInfo: ScheduleInformation by PrefsDelegate(PrefsConstants.SCHEDULE_INFO, ScheduleInformation())
 
     private val scheduleType: Int? by lazy {
         arguments?.getInt(ARG_SCHEDULE_TYPE)
@@ -51,11 +49,7 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
         viewModel.status.observe(this, Observer {
             when (it) {
                 is Status.OnSuccess -> {
-                    context?.defaultSharedPreferences?.edit {
-                        putString(SharedPrefConstants.SCHEDULE_INFO, gson.toJson(it.info))
-                    }
-
-                    EventBus.publishWithReplay(AddDialogEvent.OnLoading(true))
+                    _lastScheduleInfo = it.info
                     EventBus.publish(AddDialogEvent.OnSuccess)
                 }
 
@@ -101,7 +95,6 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
         viewDataBinding.buttonOk.setOnClickListener {
             loadSchedule()
         }
-
         viewDataBinding.buttonRetry.setOnClickListener {
             loadSchedule()
         }
@@ -123,13 +116,10 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
     companion object {
         private const val ARG_SCHEDULE_TYPE = "arg_add_fragment_schedule_type"
 
-        fun newInstance(scheduleType: Int): AddFragment {
-            val args = Bundle()
-            args.putInt(ARG_SCHEDULE_TYPE, scheduleType)
-
-            val fragment = AddFragment()
-            fragment.arguments = args
-            return fragment
+        fun newInstance(scheduleType: Int) = AddFragment().apply {
+            arguments = Bundle().apply {
+                putInt(ARG_SCHEDULE_TYPE, scheduleType)
+            }
         }
     }
 }

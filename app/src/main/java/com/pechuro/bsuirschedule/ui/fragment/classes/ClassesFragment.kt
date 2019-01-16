@@ -3,19 +3,21 @@ package com.pechuro.bsuirschedule.ui.fragment.classes
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
-import androidx.viewpager.widget.ViewPager
-import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.constants.ScheduleTypes
-import com.pechuro.bsuirschedule.constants.SharedPrefConstants.SUBGROUP_ALL
-import com.pechuro.bsuirschedule.constants.SharedPrefConstants.SUBGROUP_NUMBER
-import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE
-import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE_DAY
-import com.pechuro.bsuirschedule.constants.SharedPrefConstants.VIEW_TYPE_WEEK
+import com.pechuro.bsuirschedule.data.prefs.PrefsConstants.SUBGROUP_ALL
+import com.pechuro.bsuirschedule.data.prefs.PrefsConstants.SUBGROUP_NUMBER
+import com.pechuro.bsuirschedule.data.prefs.PrefsConstants.VIEW_TYPE
+import com.pechuro.bsuirschedule.data.prefs.PrefsConstants.VIEW_TYPE_DAY
+import com.pechuro.bsuirschedule.data.prefs.PrefsConstants.VIEW_TYPE_WEEK
+import com.pechuro.bsuirschedule.data.prefs.PrefsDelegate
+import com.pechuro.bsuirschedule.data.prefs.PrefsEvent
 import com.pechuro.bsuirschedule.databinding.FragmentViewpagerBinding
 import com.pechuro.bsuirschedule.ui.activity.navigation.FabEvent
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
+import com.pechuro.bsuirschedule.ui.custom.listeners.TabLayoutListener
+import com.pechuro.bsuirschedule.ui.custom.listeners.ViewPagerListener
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.ClassesBaseInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.EmployeeClassesDayInformation
@@ -29,39 +31,34 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
 
     @Inject
     lateinit var pagerAdapter: ClassesPagerAdapter
-    @Inject
-    lateinit var sharedPref: RxSharedPreferences
+
+    override val viewModel: ClassesFragmentViewModel
+        get() = ViewModelProviders.of(this, viewModelFactory).get(ClassesFragmentViewModel::class.java)
+    override val layoutId: Int
+        get() = R.layout.fragment_viewpager
 
     private val scheduleInfo by lazy {
         (arguments?.getParcelable(ARG_INFO) as? ScheduleInformation)
     }
 
-    private var _viewType = VIEW_TYPE_DAY
-    private var _subgroupNumber = SUBGROUP_ALL
-
-    override val viewModel: ClassesFragmentViewModel
-        get() = ViewModelProviders.of(this, viewModelFactory).get(ClassesFragmentViewModel::class.java)
-    override val bindingVariables: Map<Int, Any>?
-        get() = null
-    override val layoutId: Int
-        get() = R.layout.fragment_viewpager
+    private var _viewType: Int by PrefsDelegate(VIEW_TYPE, VIEW_TYPE_DAY)
+    private var _subgroupNumber: Int by PrefsDelegate(SUBGROUP_NUMBER, SUBGROUP_ALL)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initValues()
         setupView()
-        setListeners()
+        setEventListeners()
+        setViewListeners()
         inflateLayout()
     }
 
     private fun inflateLayout(currentItemPosition: Int = 0) {
-        val info = mutableListOf<ClassesBaseInformation>()
-
-        viewDataBinding.tabLayout.removeAllTabs()
-
         if (scheduleInfo == null) {
             return
         }
+
+        val info = mutableListOf<ClassesBaseInformation>()
+        viewDataBinding.tabLayout.removeAllTabs()
 
         when (_viewType) {
             VIEW_TYPE_DAY -> {
@@ -103,12 +100,17 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
         pagerAdapter.fragmentsInfo = info
     }
 
-    private fun initValues() {
-        _viewType = sharedPref.getInteger(VIEW_TYPE, VIEW_TYPE_DAY).get()
-        _subgroupNumber = sharedPref.getInteger(SUBGROUP_NUMBER, SUBGROUP_ALL).get()
+    private fun setupView() {
+        viewDataBinding.viewPager.apply {
+            adapter = pagerAdapter
+
+            addOnPageChangeListener(
+                    TabLayout.TabLayoutOnPageChangeListener(
+                            viewDataBinding.tabLayout))
+        }
     }
 
-    private fun setListeners() {
+    private fun setEventListeners() {
         compositeDisposable.addAll(
                 EventBus.listen(FabEvent::class.java).subscribe {
                     when (it) {
@@ -118,61 +120,34 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
                         }
                     }
                 },
-                sharedPref.getInteger(VIEW_TYPE, VIEW_TYPE_DAY).asObservable().subscribe {
-                    if (_viewType != it) {
-                        _viewType = it
-                        val position = if (_viewType == VIEW_TYPE_WEEK)
-                            with(viewDataBinding.tabLayout) {
-                                getTabAt(selectedTabPosition)?.tag.toString().getDayIndex()
-                            } else 0
 
-                        inflateLayout(position)
-                    }
-                },
-                sharedPref.getInteger(SUBGROUP_NUMBER, SUBGROUP_ALL).asObservable().subscribe {
-                    if (_subgroupNumber != it) {
-                        _subgroupNumber = it
-                        inflateLayout(viewDataBinding.viewPager.currentItem)
+                EventBus.listen(PrefsEvent.OnChanged::class.java).subscribe {
+                    when (it.key) {
+                        VIEW_TYPE -> {
+                            val position = if (_viewType == VIEW_TYPE_WEEK)
+                                with(viewDataBinding.tabLayout) {
+                                    getTabAt(selectedTabPosition)?.tag.toString().getDayIndex()
+                                } else 0
+
+                            inflateLayout(position)
+                        }
+                        SUBGROUP_NUMBER -> inflateLayout(viewDataBinding.viewPager.currentItem)
                     }
                 })
+    }
 
-        viewDataBinding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(tab: TabLayout.Tab) {
-
-            }
-
+    private fun setViewListeners() {
+        viewDataBinding.tabLayout.addOnTabSelectedListener(object : TabLayoutListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 viewDataBinding.viewPager.currentItem = tab.position
             }
-
-            override fun onTabUnselected(tab: TabLayout.Tab) {
-
-            }
         })
 
-        viewDataBinding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-
-            }
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-
-            }
-
+        viewDataBinding.viewPager.addOnPageChangeListener(object : ViewPagerListener {
             override fun onPageSelected(position: Int) {
                 EventBus.publish(if (position == 0) FabEvent.OnFabHide else FabEvent.OnFabShow)
             }
         })
-    }
-
-    private fun setupView() {
-        viewDataBinding.viewPager.apply {
-            adapter = pagerAdapter
-
-            addOnPageChangeListener(
-                    TabLayout.TabLayoutOnPageChangeListener(
-                            viewDataBinding.tabLayout))
-        }
     }
 
     private fun String.getDayIndex() = when (this) {
@@ -190,13 +165,10 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
         const val NUMBER_OF_TABS = 120
         const val ARG_INFO = "arg_information"
 
-        fun newInstance(info: ScheduleInformation): ClassesFragment {
-            val args = Bundle()
-            args.putParcelable(ARG_INFO, info)
-
-            val fragment = ClassesFragment()
-            fragment.arguments = args
-            return fragment
+        fun newInstance(info: ScheduleInformation) = ClassesFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(ARG_INFO, info)
+            }
         }
     }
 }

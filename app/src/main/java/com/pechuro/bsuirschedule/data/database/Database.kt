@@ -10,7 +10,6 @@ import com.pechuro.bsuirschedule.data.entity.Group
 import com.pechuro.bsuirschedule.data.entity.Schedule
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 
-
 @Database(entities = [Group::class, Employee::class, Schedule::class, ScheduleItem::class],
         version = 8)
 abstract class AppDatabase : RoomDatabase() {
