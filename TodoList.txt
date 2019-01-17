@@ -1,4 +1,4 @@
-1) History
+
 2) Add/edit screen
 3) Dark/light theme
 4) Lesson details

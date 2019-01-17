@@ -19,8 +19,8 @@ class ClassesFragmentModule {
     @Provides
     @FragmentScope
     fun provideRvPool() = RecyclerView.RecycledViewPool().apply {
-        setMaxRecycledViews(STUDENT_DAY, 20)
-        setMaxRecycledViews(STUDENT_WEEK, 20)
+        setMaxRecycledViews(STUDENT_DAY, 25)
+        setMaxRecycledViews(STUDENT_WEEK, 30)
         setMaxRecycledViews(EMPLOYEE_DAY, 20)
         setMaxRecycledViews(EMPLOYEE_WEEK, 20)
     }
