@@ -1,7 +1,6 @@
 package com.pechuro.bsuirschedule.ui.fragment.start
 
 import android.os.Bundle
-import android.view.View
 import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.ViewModelProviders
 import com.pechuro.bsuirschedule.R
@@ -18,8 +17,8 @@ class StartFragment : BaseFragment<FragmentStartBinding, StartFragmentViewModel>
     override val bindingVariables: Map<Int, Any>
         get() = mapOf(BR.viewModel to viewModel)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         setListeners()
     }
 

@@ -1,7 +1,6 @@
 package com.pechuro.bsuirschedule.ui.fragment.classes
 
 import android.os.Bundle
-import android.view.View
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
@@ -47,15 +46,15 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
     private var viewType: Int by PrefsDelegate(VIEW_TYPE, VIEW_TYPE_DAY)
     private var subgroupNumber: Int by PrefsDelegate(SUBGROUP_NUMBER, SUBGROUP_ALL)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         setupView()
         setEventListeners()
         setViewListeners()
         inflateLayout()
     }
 
-    private fun inflateLayout(currentItemPosition: Int = 0) {
+    private fun inflateLayout(currentItemPosition: Int = NUMBER_OF_HISTORY_TABS) {
         if (scheduleInfo == null) {
             showErrorSnackbar(R.string.classes_error_inflate)
             return
@@ -66,7 +65,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
 
         when (viewType) {
             VIEW_TYPE_DAY -> {
-                for (i in 0 until NUMBER_OF_TABS) {
+                for (i in -NUMBER_OF_HISTORY_TABS..NUMBER_OF_TABS) {
                     val (day, week, dateTag, dayRu) = viewModel.getTabDateInfo(i)
                     viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab()
                             .setText(getString(R.string.classes_tab_item, day, week)).setTag(dayRu))
@@ -99,8 +98,8 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
             }
         }
 
-        viewDataBinding.viewPager.currentItem = currentItemPosition
         pagerAdapter.fragmentsInfo = info
+        viewDataBinding.viewPager.currentItem = currentItemPosition
     }
 
     private fun setupView() {
@@ -116,9 +115,14 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
         compositeDisposable.addAll(
                 EventBus.listen(FabEvent::class.java).subscribe {
                     when (it) {
-                        is FabEvent.OnFabClick -> scrollTo(0)
-                        is FabEvent.OnFabShowPos -> if (viewDataBinding.viewPager.currentItem != 0) {
-                            EventBus.publish(FabEvent.OnFabShow)
+                        is FabEvent.OnFabClick -> onBackClick()
+                        is FabEvent.OnFabShowPos -> when (viewType) {
+                            VIEW_TYPE_DAY -> if (viewDataBinding.viewPager.currentItem != NUMBER_OF_HISTORY_TABS) {
+                                EventBus.publish(FabEvent.OnFabShow)
+                            }
+                            VIEW_TYPE_WEEK -> if (viewDataBinding.viewPager.currentItem != 0) {
+                                EventBus.publish(FabEvent.OnFabShow)
+                            }
                         }
                     }
                 },
@@ -139,7 +143,13 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
 
         viewDataBinding.viewPager.addOnPageChangeListener(object : ViewPagerListener {
             override fun onPageSelected(position: Int) {
-                EventBus.publish(if (position == 0) FabEvent.OnFabHide else FabEvent.OnFabShow)
+                when (viewType) {
+                    VIEW_TYPE_DAY ->
+                        EventBus.publish(if (position == NUMBER_OF_HISTORY_TABS) FabEvent.OnFabHide else FabEvent.OnFabShow)
+                    VIEW_TYPE_WEEK ->
+                        EventBus.publish(if (position == 0) FabEvent.OnFabHide else FabEvent.OnFabShow)
+                }
+
             }
         })
     }
@@ -150,11 +160,19 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
                 val position = if (viewType == VIEW_TYPE_WEEK)
                     with(viewDataBinding.tabLayout) {
                         getTabAt(selectedTabPosition)?.tag.toString().getDayIndex()
-                    } else 0
+                    } else NUMBER_OF_HISTORY_TABS
 
                 inflateLayout(position)
             }
             SUBGROUP_NUMBER -> inflateLayout(viewDataBinding.viewPager.currentItem)
+        }
+    }
+
+    private fun onBackClick() {
+        if (viewType == VIEW_TYPE_DAY) {
+            scrollTo(NUMBER_OF_HISTORY_TABS)
+        } else {
+            scrollTo(0)
         }
     }
 
@@ -198,6 +216,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
 
     companion object {
         const val NUMBER_OF_TABS = 150
+        const val NUMBER_OF_HISTORY_TABS = 100
         const val ARG_INFO = "arg_information"
 
         fun newInstance(info: ScheduleInformation) = ClassesFragment().apply {

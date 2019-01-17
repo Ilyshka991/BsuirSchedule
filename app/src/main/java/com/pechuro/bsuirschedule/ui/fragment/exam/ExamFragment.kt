@@ -1,7 +1,6 @@
 package com.pechuro.bsuirschedule.ui.fragment.exam
 
 import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,8 +26,8 @@ class ExamFragment : BaseFragment<FragmentListBinding, ExamViewModel>() {
     override val bindingVariables: Map<Int, Any>
         get() = mapOf(BR.data to viewModel)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         setupView()
         subscribeToLiveData()
         if (savedInstanceState == null) loadData()

@@ -1,7 +1,6 @@
 package com.pechuro.bsuirschedule.ui.fragment.classes.classesitem
 
 import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,8 +28,8 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
     override val layoutId: Int
         get() = R.layout.fragment_list
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         setupView()
         subscribeToLiveData()
         loadData()

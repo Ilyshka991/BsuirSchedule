@@ -134,8 +134,8 @@ class NavigationActivity :
         compositeDisposable.addAll(
                 EventBus.listen(FabEvent::class.java).subscribe {
                     when (it) {
-                        is FabEvent.OnFabShow -> viewDataBinding.fabBack.show()
-                        is FabEvent.OnFabHide -> viewDataBinding.fabBack.hide()
+                        is FabEvent.OnFabShow -> changeFabBackState(true)
+                        is FabEvent.OnFabHide -> changeFabBackState(false)
                     }
                 },
                 EventBus.listen(DrawerEvent::class.java).subscribe {
@@ -197,6 +197,13 @@ class NavigationActivity :
         if (info.name == _lastScheduleInfo.name && info.type == _lastScheduleInfo.type) {
             _lastScheduleInfo = ScheduleInformation()
             homeFragment()
+        }
+    }
+
+    private fun changeFabBackState(show: Boolean) = with(viewDataBinding.fabBack) {
+        when {
+            show && !isShown -> show()
+            !show && isShown -> hide()
         }
     }
 

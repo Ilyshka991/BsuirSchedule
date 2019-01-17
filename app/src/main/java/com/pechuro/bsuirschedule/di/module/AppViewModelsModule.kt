@@ -12,6 +12,7 @@ import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogViewModel
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment.AddFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.ClassesItemViewModel
+import com.pechuro.bsuirschedule.ui.fragment.datepickerdialog.DatePickerDialogViewModel
 import com.pechuro.bsuirschedule.ui.fragment.drawer.DrawerFragmentViewModel
 import com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionsDialogViewModel
 import com.pechuro.bsuirschedule.ui.fragment.edit.EditLessonFragmentViewModel
@@ -109,4 +110,9 @@ interface AppViewModelsModule {
     @IntoMap
     @ViewModelKey(AddDialogViewModel::class)
     fun addDialog(viewModel: AddDialogViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DatePickerDialogViewModel::class)
+    fun datePickerDialog(viewModel: DatePickerDialogViewModel): ViewModel
 }

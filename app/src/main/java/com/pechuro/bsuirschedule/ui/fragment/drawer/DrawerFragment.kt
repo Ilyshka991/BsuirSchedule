@@ -1,7 +1,6 @@
 package com.pechuro.bsuirschedule.ui.fragment.drawer
 
 import android.os.Bundle
-import android.view.View
 import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -27,8 +26,8 @@ class DrawerFragment : BaseFragment<FragmentDrawerBinding, DrawerFragmentViewMod
     override val bindingVariables: Map<Int, Any>
         get() = mapOf(BR.viewModel to viewModel)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         setupView()
         subscribeToLiveData()
         setViewListeners()

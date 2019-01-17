@@ -5,3 +5,5 @@
 5) Notifications
 6) Update all information function
 7) DESIGN!
+8) Widget
+9) Update service???

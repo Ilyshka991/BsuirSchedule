@@ -31,6 +31,6 @@ inline fun FragmentManager.transaction(
 }
 
 fun Calendar.addDays(days: Int): Long {
-    this.add(Calendar.DATE, days)
-    return this.time.time
+    add(Calendar.DATE, days)
+    return timeInMillis
 }

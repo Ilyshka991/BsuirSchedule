@@ -37,8 +37,9 @@ class DatePickerDialog : BaseDialog<DialogDatePickerBinding, DatePickerDialogVie
 
     private fun setupDatePicker() = viewDataBinding.datePicker.apply {
         val calendar = Calendar.getInstance()
+        calendar.addDays(-ClassesFragment.NUMBER_OF_HISTORY_TABS)
         minDate = calendar.timeInMillis
-        calendar.addDays(ClassesFragment.NUMBER_OF_TABS - 1)
+        calendar.addDays(ClassesFragment.NUMBER_OF_TABS)
         maxDate = calendar.timeInMillis
     }
 
