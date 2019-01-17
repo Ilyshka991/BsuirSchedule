@@ -25,8 +25,6 @@ class PrefsDelegate<T>(private val key: String, private val defaultValue: T) :
             is String -> getString(key, defaultValue)
 
             is ScheduleInformation -> {
-                println(prefs)
-                println(this@PrefsDelegate)
                 gson.fromJson(getString(key, SCHEDULE_INFORMATION_DEFAULT_VALUE),
                         ScheduleInformation::class.java)
             }

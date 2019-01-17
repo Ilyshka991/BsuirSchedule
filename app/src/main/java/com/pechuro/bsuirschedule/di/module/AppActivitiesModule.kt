@@ -10,6 +10,7 @@ import com.pechuro.bsuirschedule.ui.activity.splash.SplashActivity
 import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogProvider
 import com.pechuro.bsuirschedule.ui.fragment.bottomoptions.OptionsFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragmentProvider
+import com.pechuro.bsuirschedule.ui.fragment.datepickerdialog.DatePickerDialogProvider
 import com.pechuro.bsuirschedule.ui.fragment.drawer.DrawerFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionsDialogProvider
 import com.pechuro.bsuirschedule.ui.fragment.edit.EditLessonFragmentProvider
@@ -36,6 +37,7 @@ interface AppActivitiesModule {
         DrawerOptionsDialogProvider::class,
         DrawerFragmentProvider::class,
         RequestUpdateDialogProvider::class,
+        DatePickerDialogProvider::class,
         OptionsFragmentProvider::class])
     fun bindNavigationActivity(): NavigationActivity
 

@@ -43,6 +43,14 @@
                     app:iconGravity="textStart" />
 
                 <Button
+                    android:id="@+id/bar_classes_day_chooser"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:icon="@drawable/ic_navigate_next_black_24dp"
+                    app:iconGravity="textStart" />
+
+                <Button
                     android:id="@+id/bar_exams_action_add_exam"
                     style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Icon"
                     android:layout_width="wrap_content"

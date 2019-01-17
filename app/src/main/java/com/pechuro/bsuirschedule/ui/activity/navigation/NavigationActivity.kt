@@ -13,8 +13,11 @@ import com.pechuro.bsuirschedule.constants.ScheduleTypes.EMPLOYEE_CLASSES
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.EMPLOYEE_EXAMS
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_CLASSES
 import com.pechuro.bsuirschedule.constants.ScheduleTypes.STUDENT_EXAMS
+import com.pechuro.bsuirschedule.data.prefs.PrefsConstants
 import com.pechuro.bsuirschedule.data.prefs.PrefsConstants.SCHEDULE_INFO
+import com.pechuro.bsuirschedule.data.prefs.PrefsConstants.VIEW_TYPE_DAY
 import com.pechuro.bsuirschedule.data.prefs.PrefsDelegate
+import com.pechuro.bsuirschedule.data.prefs.PrefsEvent
 import com.pechuro.bsuirschedule.databinding.ActivityNavigationBinding
 import com.pechuro.bsuirschedule.ui.activity.editlesson.EditLessonActivity
 import com.pechuro.bsuirschedule.ui.base.BaseActivity
@@ -26,6 +29,7 @@ import com.pechuro.bsuirschedule.ui.fragment.adddialog.AddDialogEvent
 import com.pechuro.bsuirschedule.ui.fragment.bottomoptions.BottomOptionsEvent
 import com.pechuro.bsuirschedule.ui.fragment.bottomoptions.BottomOptionsFragment
 import com.pechuro.bsuirschedule.ui.fragment.classes.ClassesFragment
+import com.pechuro.bsuirschedule.ui.fragment.datepickerdialog.DatePickerDialog
 import com.pechuro.bsuirschedule.ui.fragment.drawer.DrawerEvent
 import com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionEvent
 import com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionsDialog
@@ -44,6 +48,7 @@ class NavigationActivity :
         get() = R.layout.activity_navigation
 
     private var _lastScheduleInfo: ScheduleInformation by PrefsDelegate(SCHEDULE_INFO, ScheduleInformation())
+    private var _scheduleViewType: Int by PrefsDelegate(PrefsConstants.VIEW_TYPE, PrefsConstants.VIEW_TYPE_DAY)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,18 +74,24 @@ class NavigationActivity :
 
     private fun setupBottomBar() {
         val type = _lastScheduleInfo.type
-        when (type) {
-            STUDENT_CLASSES, EMPLOYEE_CLASSES -> {
-                viewDataBinding.barClassesOptions.visibility = View.VISIBLE
-                viewDataBinding.barExamsActionAddExam.visibility = View.GONE
-            }
-            STUDENT_EXAMS -> {
-                viewDataBinding.barClassesOptions.visibility = View.GONE
-                viewDataBinding.barExamsActionAddExam.visibility = View.VISIBLE
-            }
-            else -> {
-                viewDataBinding.barClassesOptions.visibility = View.GONE
-                viewDataBinding.barExamsActionAddExam.visibility = View.GONE
+        with(viewDataBinding) {
+            when (type) {
+                STUDENT_CLASSES, EMPLOYEE_CLASSES -> {
+                    barClassesOptions.visibility = View.VISIBLE
+                    barClassesDayChooser.visibility =
+                            if (_scheduleViewType == VIEW_TYPE_DAY) View.VISIBLE else View.GONE
+                    barExamsActionAddExam.visibility = View.GONE
+                }
+                STUDENT_EXAMS -> {
+                    barClassesOptions.visibility = View.GONE
+                    barClassesDayChooser.visibility = View.GONE
+                    barExamsActionAddExam.visibility = View.VISIBLE
+                }
+                else -> {
+                    barClassesOptions.visibility = View.GONE
+                    barClassesDayChooser.visibility = View.GONE
+                    barExamsActionAddExam.visibility = View.GONE
+                }
             }
         }
 
@@ -88,29 +99,34 @@ class NavigationActivity :
     }
 
     private fun setViewListeners() {
-        val drawerToggle = ActionBarDrawerToggle(
-                this, viewDataBinding.drawerLayout, viewDataBinding.barLayout,
-                R.string.nav_drawer_action_open, R.string.nav_drawer_action_close)
-        viewDataBinding.drawerLayout.addDrawerListener(drawerToggle)
-        drawerToggle.syncState()
+        with(viewDataBinding) {
+            val drawerToggle = ActionBarDrawerToggle(
+                    this@NavigationActivity, drawerLayout, barLayout,
+                    R.string.nav_drawer_action_open, R.string.nav_drawer_action_close)
+            drawerLayout.addDrawerListener(drawerToggle)
+            drawerToggle.syncState()
 
-        val swipeHandler = object : OnSwipeTouchListener(this@NavigationActivity) {
-            override fun onSwipeTop() {
-                if (_lastScheduleInfo.type == STUDENT_CLASSES || _lastScheduleInfo.type == EMPLOYEE_CLASSES) {
-                    showBottomSheetDialog(_lastScheduleInfo.type)
+            val swipeHandler = object : OnSwipeTouchListener(this@NavigationActivity) {
+                override fun onSwipeTop() {
+                    if (_lastScheduleInfo.type == STUDENT_CLASSES || _lastScheduleInfo.type == EMPLOYEE_CLASSES) {
+                        showBottomSheetDialog(_lastScheduleInfo.type)
+                    }
                 }
             }
-        }
-        viewDataBinding.barLayout.setOnTouchListener(swipeHandler)
+            barLayout.setOnTouchListener(swipeHandler)
 
-        viewDataBinding.barClassesOptions.setOnClickListener {
-            showBottomSheetDialog(_lastScheduleInfo.type)
-        }
-        viewDataBinding.fabBack.setOnClickListener {
-            EventBus.publish(FabEvent.OnFabClick)
-        }
-        viewDataBinding.barExamsActionAddExam.setOnClickListener {
-            addLesson()
+            barClassesOptions.setOnClickListener {
+                showBottomSheetDialog(_lastScheduleInfo.type)
+            }
+            barClassesDayChooser.setOnClickListener {
+                showDatePickerDialog()
+            }
+            fabBack.setOnClickListener {
+                EventBus.publish(FabEvent.OnFabClick)
+            }
+            barExamsActionAddExam.setOnClickListener {
+                addLesson()
+            }
         }
     }
 
@@ -122,7 +138,6 @@ class NavigationActivity :
                         is FabEvent.OnFabHide -> viewDataBinding.fabBack.hide()
                     }
                 },
-
                 EventBus.listen(DrawerEvent::class.java).subscribe {
                     when (it) {
                         is DrawerEvent.OnNavigate -> onNavigate(it.info)
@@ -130,22 +145,23 @@ class NavigationActivity :
                         is DrawerEvent.OnOpenAddDialog -> showAddDialog()
                     }
                 },
-
                 EventBus.listen(DrawerOptionEvent::class.java).subscribe {
                     when (it) {
                         is DrawerOptionEvent.OnScheduleUpdated -> onScheduleUpdated(it.info)
                         is DrawerOptionEvent.OnScheduleDeleted -> onScheduleDeleted(it.info)
                     }
                 },
-
+                EventBus.listen(PrefsEvent.OnChanged::class.java).subscribe {
+                    when (it.key) {
+                        PrefsConstants.VIEW_TYPE -> setupBottomBar()
+                    }
+                },
                 EventBus.listen(BottomOptionsEvent.OnAddLesson::class.java).subscribe {
                     addLesson()
                 },
-
                 EventBus.listen(AddDialogEvent.OnScheduleAdded::class.java).subscribe {
                     onScheduleAdded()
                 },
-
                 EventBus.listen(ScheduleUpdateEvent.OnRequestUpdate::class.java).subscribe {
                     showRequestUpdateDialog(it.info)
                 }
@@ -188,6 +204,9 @@ class NavigationActivity :
 
     private fun showRequestUpdateDialog(info: ScheduleInformation) =
             RequestUpdateDialog.newInstance(info).show(supportFragmentManager, RequestUpdateDialog.TAG)
+
+    private fun showDatePickerDialog() =
+            DatePickerDialog.newInstance().show(supportFragmentManager, DatePickerDialog.TAG)
 
     private fun showAddDialog() =
             navigate {

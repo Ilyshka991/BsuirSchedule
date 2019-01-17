@@ -4,16 +4,16 @@ import androidx.lifecycle.MutableLiveData
 import com.pechuro.bsuirschedule.data.ScheduleRepository
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
-import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.ClassesBaseInformation
-import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.EmployeeClassesDayInformation
-import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.EmployeeClassesWeekInformation
-import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.StudentClassesDayInformation
-import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl.StudentClassesWeekInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.BaseClassesData
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.EmployeeClassesDayData
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.EmployeeClassesWeekData
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.StudentClassesDayData
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.StudentClassesWeekData
+import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.ClassesBaseInformation
+import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.impl.EmployeeClassesDayInformation
+import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.impl.EmployeeClassesWeekInformation
+import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.impl.StudentClassesDayInformation
+import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.impl.StudentClassesWeekInformation
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -66,7 +66,6 @@ class ClassesItemViewModel @Inject constructor(private val repository: ScheduleR
                 items.add(StudentClassesDayData(id, subject, lessonType, auditories,
                         employees, subgroupNumber, startTime, endTime, note))
             }
-
         }
         return items
     }

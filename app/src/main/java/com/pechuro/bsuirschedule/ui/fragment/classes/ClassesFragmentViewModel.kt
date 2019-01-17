@@ -1,26 +1,27 @@
 package com.pechuro.bsuirschedule.ui.fragment.classes
 
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
+import com.pechuro.bsuirschedule.ui.fragment.classes.data.TabDateInfo
+import com.pechuro.bsuirschedule.ui.utils.addDays
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
 
 class ClassesFragmentViewModel @Inject constructor() : BaseViewModel() {
+    private val dateFormat = SimpleDateFormat("EEE, d MMM", Locale.getDefault())
+    private val dateFormatRu = SimpleDateFormat("EEEE", Locale("ru"))
+    private val dateFormatTag = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
 
-    fun getTabDate(days: Int): Triple<String, Int, String> {
-        val dateFormat = SimpleDateFormat("EEE, d MMM",
-                Locale.getDefault())
-        val dateFormatRu = SimpleDateFormat("EEEE",
-                Locale("ru"))
-
+    fun getTabDateInfo(days: Int): TabDateInfo {
         val calendar = Calendar.getInstance()
-
         calendar.addDays(days)
+
         val day = dateFormat.format(calendar.time)
         val week = calendar.getCurrentWeek()
+        val dateTag = dateFormatTag.format(calendar.time)
         val dayRu = dateFormatRu.format(calendar.time)
-        return Triple(day, week, dayRu)
+        return TabDateInfo(day, week, dateTag, dayRu)
     }
 
     fun getWeekday(days: Int): Pair<String, String> {
@@ -53,10 +54,5 @@ class ClassesFragmentViewModel @Inject constructor() : BaseViewModel() {
             day = 6
         }
         return ((difference + day).toInt() / 7) % 4 + 1
-    }
-
-    private fun Calendar.addDays(days: Int): Long {
-        this.add(Calendar.DATE, days)
-        return this.time.time
     }
 }

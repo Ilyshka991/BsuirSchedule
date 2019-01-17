@@ -4,8 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.PagerAdapter
-import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.ClassesBaseInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.ClassesItemFragment
+import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.ClassesBaseInformation
 import javax.inject.Inject
 
 class ClassesPagerAdapter @Inject constructor(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {

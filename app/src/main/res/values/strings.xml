@@ -8,6 +8,8 @@
     <string name="nav_drawer_action_add_schedule">Add schedule</string>
 
     <string name="classes_tab_item">"%1$s, Week %2$d"</string>
+    <string name="classes_error_incorrect_date">Incorrect date</string>
+    <string name="classes_error_inflate">Something went wrong</string>
 
     <string name="add_dialog_tab_item_employees">Employees</string>
     <string name="add_dialog_tab_item_students">Students</string>

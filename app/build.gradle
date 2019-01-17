@@ -85,4 +85,8 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.16'
     implementation 'com.google.dagger:dagger-android-support:2.16'
     kapt 'com.google.dagger:dagger-android-processor:2.16'
+
+    //LeakCanary
+   /* implementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
+    implementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'*/
 }

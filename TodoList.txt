@@ -1,0 +1,7 @@
+1) History
+2) Add/edit screen
+3) Dark/light theme
+4) Lesson details
+5) Notifications
+6) Update all information function
+7) DESIGN!

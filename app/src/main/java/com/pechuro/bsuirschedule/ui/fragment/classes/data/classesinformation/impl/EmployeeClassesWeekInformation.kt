@@ -1,8 +1,8 @@
-package com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.impl
+package com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.impl
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.ClassesBaseInformation
+import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.ClassesBaseInformation
 
 class EmployeeClassesWeekInformation(
         name: String, type: Int, val day: String) : ClassesBaseInformation(name, type) {

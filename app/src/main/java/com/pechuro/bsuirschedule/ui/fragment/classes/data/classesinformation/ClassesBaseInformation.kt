@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation
+package com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation
 
 import android.os.Parcel
 import android.os.Parcelable

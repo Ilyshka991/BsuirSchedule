@@ -7,6 +7,7 @@ class EmployeeClassesDayData(itemId: Int, subject: String?) : BaseClassesData(it
 
     val subject = ObservableField<String>()
 
+
     init {
         this.subject.set(subject)
     }

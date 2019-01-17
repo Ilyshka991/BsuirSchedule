@@ -10,8 +10,8 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.FragmentListBinding
 import com.pechuro.bsuirschedule.ui.activity.navigation.FabEvent
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
-import com.pechuro.bsuirschedule.ui.fragment.classes.classesinformation.ClassesBaseInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.adapter.ClassesAdapter
+import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.ClassesBaseInformation
 import com.pechuro.bsuirschedule.ui.fragment.itemoptions.ItemOptionsDialog
 import com.pechuro.bsuirschedule.ui.utils.EventBus
 import javax.inject.Inject

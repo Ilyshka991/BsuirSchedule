@@ -19,7 +19,6 @@ import com.pechuro.bsuirschedule.data.prefs.PrefsDelegate
 import com.pechuro.bsuirschedule.ui.utils.EventBus
 import dagger.android.support.AndroidSupportInjection
 
-
 class BottomOptionsFragment : BottomSheetDialogFragment() {
     private lateinit var viewTypeButton: Button
     private lateinit var addButton: Button

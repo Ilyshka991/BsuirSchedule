@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.pechuro.bsuirschedule.data.entity.Schedule
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
+import java.util.*
 
 fun Schedule.getInfo() = ScheduleInformation(id, name, type)
 
@@ -27,4 +28,9 @@ inline fun FragmentManager.transaction(
             transaction.commit()
         }
     }
+}
+
+fun Calendar.addDays(days: Int): Long {
+    this.add(Calendar.DATE, days)
+    return this.time.time
 }
