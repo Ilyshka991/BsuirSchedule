@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.ui.fragment.adddialog.addfragment
 
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.databinding.library.baseAdapters.BR
@@ -40,9 +41,15 @@ class AddFragment : BaseFragment<FragmentAddBinding, AddFragmentViewModel>() {
         if (savedInstanceState == null && scheduleType != null) {
             viewModel.loadSuggestions(scheduleType!!)
         }
+        setupView()
         setListeners()
         subscribeToLiveData()
         setStatusListeners()
+    }
+
+    private fun setupView() {
+        viewDataBinding.textInput.inputType =
+                if (scheduleType == STUDENT) InputType.TYPE_CLASS_NUMBER else InputType.TYPE_TEXT_VARIATION_PERSON_NAME
     }
 
     private fun setStatusListeners() {
