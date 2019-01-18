@@ -19,12 +19,14 @@ class RequestUpdateDialogViewModel @Inject constructor(
     fun update(info: ScheduleInformation) {
         isLoading.set(true)
         isError.set(false)
+        status.call(Status.OnLoading)
         repository.update(info)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     status.call(Status.OnUpdated(info))
                 }, {
+                    status.call(Status.OnLoadingCancel)
                     isError.set(true)
                     isLoading.set(false)
                 })
@@ -37,4 +39,6 @@ class RequestUpdateDialogViewModel @Inject constructor(
 sealed class Status {
     class OnUpdated(val info: ScheduleInformation) : Status()
     object OnCancel : Status()
+    object OnLoading : Status()
+    object OnLoadingCancel : Status()
 }

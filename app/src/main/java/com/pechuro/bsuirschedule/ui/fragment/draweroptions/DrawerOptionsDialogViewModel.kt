@@ -17,13 +17,15 @@ class DrawerOptionsDialogViewModel @Inject constructor(private val repository: S
     fun update(info: ScheduleInformation) {
         isLoading.set(true)
         isError.set(false)
+        status.call(Status.OnUpdating)
 
         repository.update(info)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    status.call(Status.OnCancel)
+                    status.call(Status.OnUpdated(info))
                 }, {
+                    status.call(Status.OnUpdateCancel)
                     isError.set(true)
                     isLoading.set(false)
                 })
@@ -47,4 +49,6 @@ sealed class Status {
     class OnDeleted(val info: ScheduleInformation) : Status()
     class OnUpdated(val info: ScheduleInformation) : Status()
     object OnCancel : Status()
+    object OnUpdating : Status()
+    object OnUpdateCancel : Status()
 }

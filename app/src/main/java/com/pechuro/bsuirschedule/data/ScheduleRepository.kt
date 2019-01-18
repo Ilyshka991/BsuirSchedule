@@ -38,16 +38,17 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
                 classesList
             }.doOnSuccess { storeInCache(it) }
 
-    fun update(info: ScheduleInformation): Single<Classes> =
-            Single.fromCallable {
+    fun update(info: ScheduleInformation): Completable =
+            Completable.fromAction {
                 val response = getFromApi(info.name, info.type)
 
                 val lastUpdate = getLastUpdate(info.name)
                         .onErrorReturn { LastUpdateResponse("") }
                         .blockingGet().lastUpdateDate
 
-                transformResponse(info.name, info.type, lastUpdate, response, info.id)
-            }.doOnSuccess { updateCache(it) }
+                val classes = transformResponse(info.name, info.type, lastUpdate, response, info.id)
+                updateCache(classes)
+            }
 
     fun getClasses(name: String, type: Int) =
             scheduleDao.get(name, type)

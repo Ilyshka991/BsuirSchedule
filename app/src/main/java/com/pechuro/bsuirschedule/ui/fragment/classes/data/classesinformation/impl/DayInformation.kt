@@ -4,11 +4,10 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.ClassesBaseInformation
 
-class StudentClassesDayInformation(
+class DayInformation(
         name: String, type: Int,
         val day: String,
         val week: Int,
-        val subgroup: Int,
         val dateTag: String
 ) : ClassesBaseInformation(name, type) {
 
@@ -17,22 +16,20 @@ class StudentClassesDayInformation(
             parcel.readInt(),
             parcel.readString() ?: "",
             parcel.readInt(),
-            parcel.readInt(),
             parcel.readString() ?: "")
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         super.writeToParcel(parcel, flags)
         parcel.writeString(day)
         parcel.writeInt(week)
-        parcel.writeInt(subgroup)
         parcel.writeString(dateTag)
     }
 
-    companion object CREATOR : Parcelable.Creator<StudentClassesDayInformation> {
+    companion object CREATOR : Parcelable.Creator<DayInformation> {
         override fun createFromParcel(parcel: Parcel) =
-                StudentClassesDayInformation(parcel)
+                DayInformation(parcel)
 
-        override fun newArray(size: Int): Array<StudentClassesDayInformation?> =
+        override fun newArray(size: Int): Array<DayInformation?> =
                 arrayOfNulls(size)
     }
 }

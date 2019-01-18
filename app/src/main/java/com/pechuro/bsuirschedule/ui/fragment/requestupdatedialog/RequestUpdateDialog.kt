@@ -37,9 +37,9 @@ class RequestUpdateDialog : BaseDialog<DialogRequestScheduleUpdateBinding, Reque
                     EventBus.publish(DrawerOptionEvent.OnScheduleUpdated(it.info))
                     dismiss()
                 }
-                is Status.OnCancel -> {
-                    dismiss()
-                }
+                is Status.OnCancel -> dismiss()
+                is Status.OnLoading -> isCancelable = false
+                is Status.OnLoadingCancel -> isCancelable = true
             }
         })
     }

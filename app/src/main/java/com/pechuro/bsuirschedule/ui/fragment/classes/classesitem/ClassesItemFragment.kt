@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.data.prefs.PrefsConstants
+import com.pechuro.bsuirschedule.data.prefs.PrefsDelegate
+import com.pechuro.bsuirschedule.data.prefs.PrefsEvent
 import com.pechuro.bsuirschedule.databinding.FragmentListBinding
 import com.pechuro.bsuirschedule.ui.activity.navigation.FabEvent
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
@@ -28,6 +31,8 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
     override val layoutId: Int
         get() = R.layout.fragment_list
 
+    private var subgroupNumber: Int by PrefsDelegate(PrefsConstants.SUBGROUP_NUMBER, PrefsConstants.SUBGROUP_ALL)
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupView()
@@ -48,14 +53,20 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
     }
 
     private fun setEventListeners() {
-        EventBus.listen(ClassesItemEvent::class.java).subscribe {
-            if (userVisibleHint) {
-                when (it) {
-                    is ClassesItemEvent.OnItemLongClick -> ItemOptionsDialog.newInstance(it.id)
-                            .show(childFragmentManager, ItemOptionsDialog.TAG)
-                }
-            }
-        }.let(compositeDisposable::add)
+        compositeDisposable.addAll(
+                EventBus.listen(ClassesItemEvent::class.java).subscribe {
+                    if (userVisibleHint) {
+                        when (it) {
+                            is ClassesItemEvent.OnItemLongClick -> ItemOptionsDialog.newInstance(it.id)
+                                    .show(childFragmentManager, ItemOptionsDialog.TAG)
+                        }
+                    }
+                },
+                EventBus.listen(PrefsEvent.OnChanged::class.java).subscribe {
+                    when (it.key) {
+                        PrefsConstants.SUBGROUP_NUMBER -> loadData()
+                    }
+                })
     }
 
     private fun setViewListeners() {
@@ -75,7 +86,7 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
 
     private fun loadData() {
         val info: ClassesBaseInformation? = arguments?.getParcelable(ARG_INFO)
-        info?.let { viewModel.loadData(it) }
+        info?.let { viewModel.loadData(it, subgroupNumber) }
     }
 
     private fun subscribeToLiveData() {

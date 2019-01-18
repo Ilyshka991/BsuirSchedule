@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.ui.fragment.classes.classesitem
 
 import androidx.lifecycle.MutableLiveData
+import com.pechuro.bsuirschedule.constants.ScheduleTypes
 import com.pechuro.bsuirschedule.data.ScheduleRepository
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 import com.pechuro.bsuirschedule.ui.base.BaseViewModel
@@ -10,33 +11,31 @@ import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.Emplo
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.StudentClassesDayData
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.data.impl.StudentClassesWeekData
 import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.ClassesBaseInformation
-import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.impl.EmployeeClassesDayInformation
-import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.impl.EmployeeClassesWeekInformation
-import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.impl.StudentClassesDayInformation
-import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.impl.StudentClassesWeekInformation
+import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.impl.DayInformation
+import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.impl.WeekInformation
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class ClassesItemViewModel @Inject constructor(private val repository: ScheduleRepository) : BaseViewModel() {
     val listItemsLiveData = MutableLiveData<List<BaseClassesData>>()
 
-    fun loadData(info: ClassesBaseInformation) {
+    fun loadData(info: ClassesBaseInformation, subgroupNumber: Int) {
         val viewType: ViewTypes
 
-        val observable = when (info) {
-            is StudentClassesDayInformation -> {
+        val observable = when {
+            info is DayInformation && info.type == ScheduleTypes.STUDENT_CLASSES -> {
                 viewType = ViewTypes.STUDENT_DAY
-                repository.getStudentClasses(info.name, info.type, info.day, info.week, info.subgroup)
+                repository.getStudentClasses(info.name, info.type, info.day, info.week, subgroupNumber)
             }
-            is StudentClassesWeekInformation -> {
+            info is WeekInformation && info.type == ScheduleTypes.STUDENT_CLASSES -> {
                 viewType = ViewTypes.STUDENT_WEEK
-                repository.getStudentClasses(info.name, info.type, info.day, info.subgroupNumber)
+                repository.getStudentClasses(info.name, info.type, info.day, subgroupNumber)
             }
-            is EmployeeClassesDayInformation -> {
+            info is DayInformation && info.type == ScheduleTypes.EMPLOYEE_CLASSES -> {
                 viewType = ViewTypes.EMPLOYEE_DAY
                 repository.getEmployeeClasses(info.name, info.type, info.day, info.week)
             }
-            is EmployeeClassesWeekInformation -> {
+            info is WeekInformation && info.type == ScheduleTypes.EMPLOYEE_CLASSES -> {
                 viewType = ViewTypes.EMPLOYEE_WEEK
                 repository.getEmployeeClasses(info.name, info.type, info.day)
             }
@@ -52,8 +51,7 @@ class ClassesItemViewModel @Inject constructor(private val repository: ScheduleR
                         ViewTypes.EMPLOYEE_DAY -> transformEmployeeDayItems(it)
                         ViewTypes.EMPLOYEE_WEEK -> transformEmployeeWeekItems(it)
                     }
-                }
-                .subscribe({
+                }.subscribe({
                     listItemsLiveData.postValue(it)
                 }, {})
                 .let(compositeDisposable::add)

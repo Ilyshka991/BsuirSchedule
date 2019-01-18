@@ -39,7 +39,7 @@ class DatePickerDialog : BaseDialog<DialogDatePickerBinding, DatePickerDialogVie
         val calendar = Calendar.getInstance()
         calendar.addDays(-ClassesFragment.NUMBER_OF_HISTORY_TABS)
         minDate = calendar.timeInMillis
-        calendar.addDays(ClassesFragment.NUMBER_OF_TABS)
+        calendar.addDays(ClassesFragment.NUMBER_OF_TABS + ClassesFragment.NUMBER_OF_HISTORY_TABS)
         maxDate = calendar.timeInMillis
     }
 

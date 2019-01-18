@@ -6,9 +6,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.constants.ScheduleTypes
-import com.pechuro.bsuirschedule.data.prefs.PrefsConstants.SUBGROUP_ALL
-import com.pechuro.bsuirschedule.data.prefs.PrefsConstants.SUBGROUP_NUMBER
 import com.pechuro.bsuirschedule.data.prefs.PrefsConstants.VIEW_TYPE
 import com.pechuro.bsuirschedule.data.prefs.PrefsConstants.VIEW_TYPE_DAY
 import com.pechuro.bsuirschedule.data.prefs.PrefsConstants.VIEW_TYPE_WEEK
@@ -21,10 +18,8 @@ import com.pechuro.bsuirschedule.ui.custom.listeners.TabLayoutListener
 import com.pechuro.bsuirschedule.ui.custom.listeners.ViewPagerListener
 import com.pechuro.bsuirschedule.ui.data.ScheduleInformation
 import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.ClassesBaseInformation
-import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.impl.EmployeeClassesDayInformation
-import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.impl.EmployeeClassesWeekInformation
-import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.impl.StudentClassesDayInformation
-import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.impl.StudentClassesWeekInformation
+import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.impl.DayInformation
+import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.impl.WeekInformation
 import com.pechuro.bsuirschedule.ui.fragment.datepickerdialog.DatePickerEvent
 import com.pechuro.bsuirschedule.ui.utils.EventBus
 import javax.inject.Inject
@@ -44,7 +39,6 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
     }
 
     private var viewType: Int by PrefsDelegate(VIEW_TYPE, VIEW_TYPE_DAY)
-    private var subgroupNumber: Int by PrefsDelegate(SUBGROUP_NUMBER, SUBGROUP_ALL)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -69,15 +63,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
                     val (day, week, dateTag, dayRu) = viewModel.getTabDateInfo(i)
                     viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab()
                             .setText(getString(R.string.classes_tab_item, day, week)).setTag(dayRu))
-
-                    when (scheduleInfo!!.type) {
-                        ScheduleTypes.STUDENT_CLASSES -> {
-                            info.add(StudentClassesDayInformation(scheduleInfo!!.name, scheduleInfo!!.type, dayRu, week, subgroupNumber, dateTag))
-                        }
-                        ScheduleTypes.EMPLOYEE_CLASSES -> {
-                            info.add(EmployeeClassesDayInformation(scheduleInfo!!.name, scheduleInfo!!.type, dayRu, week, dateTag))
-                        }
-                    }
+                    info.add(DayInformation(scheduleInfo!!.name, scheduleInfo!!.type, dayRu, week, dateTag))
                 }
             }
             VIEW_TYPE_WEEK -> {
@@ -85,15 +71,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
                     val (weekday, dayRu) = viewModel.getWeekday(i)
                     viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab()
                             .setText(weekday).setTag(dayRu))
-
-                    when (scheduleInfo!!.type) {
-                        ScheduleTypes.STUDENT_CLASSES -> {
-                            info.add(StudentClassesWeekInformation(scheduleInfo!!.name, scheduleInfo!!.type, dayRu, subgroupNumber))
-                        }
-                        ScheduleTypes.EMPLOYEE_CLASSES -> {
-                            info.add(EmployeeClassesWeekInformation(scheduleInfo!!.name, scheduleInfo!!.type, dayRu))
-                        }
-                    }
+                    info.add(WeekInformation(scheduleInfo!!.name, scheduleInfo!!.type, dayRu))
                 }
             }
         }
@@ -130,7 +108,7 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
                     onPrefsChanged(it.key)
                 },
                 EventBus.listen(DatePickerEvent.OnDateChoose::class.java).subscribe {
-                    onDataChoosed(it.dateTag)
+                    onDateChoosed(it.dateTag)
                 })
     }
 
@@ -164,7 +142,6 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
 
                 inflateLayout(position)
             }
-            SUBGROUP_NUMBER -> inflateLayout(viewDataBinding.viewPager.currentItem)
         }
     }
 
@@ -177,17 +154,10 @@ class ClassesFragment : BaseFragment<FragmentViewpagerBinding, ClassesFragmentVi
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun onDataChoosed(dateTag: String) {
-        val index = when (scheduleInfo?.type) {
-            ScheduleTypes.STUDENT_CLASSES -> with(pagerAdapter.fragmentsInfo as List<StudentClassesDayInformation>) {
-                indexOf(find { it.dateTag == dateTag })
-            }
-            ScheduleTypes.EMPLOYEE_CLASSES -> with(pagerAdapter.fragmentsInfo as List<EmployeeClassesDayInformation>) {
-                indexOf(find { it.dateTag == dateTag })
-            }
-            else -> -1
+    private fun onDateChoosed(dateTag: String) {
+        val index = with(pagerAdapter.fragmentsInfo as List<DayInformation>) {
+            indexOf(find { it.dateTag == dateTag })
         }
-
         if (index == -1) {
             showErrorSnackbar(R.string.classes_error_incorrect_date)
         } else {
