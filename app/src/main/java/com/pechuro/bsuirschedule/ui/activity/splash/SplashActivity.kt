@@ -1,7 +1,6 @@
 package com.pechuro.bsuirschedule.ui.activity.splash
 
 import android.os.Bundle
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.databinding.ActivitySplashBinding
@@ -18,23 +17,17 @@ class SplashActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setActionListeners()
-        if (savedInstanceState == null) viewModel.decideNextActivity()
-    }
+        if (savedInstanceState == null) {
+            val isDataLoaded = viewModel.decideNextActivity()
 
-    private fun setActionListeners() {
-        viewModel.action.observe(this, Observer {
-            val intent = when (it) {
-                Action.OPEN_INFO_LOAD_ACTIVITY -> {
-                    InfoLoadActivity.newIntent(this)
-                }
-                Action.OPEN_NAVIGATION_ACTIVITY -> {
-                    NavigationActivity.newIntent(this)
-                }
-                null -> throw IllegalArgumentException()
+            val intent = if (isDataLoaded) {
+                NavigationActivity.newIntent(this)
+            } else {
+                InfoLoadActivity.newIntent(this)
             }
+
             startActivity(intent)
             finish()
-        })
+        }
     }
 }

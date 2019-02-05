@@ -13,6 +13,7 @@ import dagger.Provides
 class ClassesFragmentModule {
 
     @Provides
+    @FragmentScope
     fun providePagerAdapter(fragment: ClassesFragment) =
             ClassesPagerAdapter(fragment.childFragmentManager)
 
