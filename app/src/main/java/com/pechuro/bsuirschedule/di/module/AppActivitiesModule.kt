@@ -14,6 +14,7 @@ import com.pechuro.bsuirschedule.ui.fragment.datepickerdialog.DatePickerDialogPr
 import com.pechuro.bsuirschedule.ui.fragment.drawer.DrawerFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionsDialogProvider
 import com.pechuro.bsuirschedule.ui.fragment.edit.EditLessonFragmentProvider
+import com.pechuro.bsuirschedule.ui.fragment.employeedetails.EmployeeDetailsDialogProvider
 import com.pechuro.bsuirschedule.ui.fragment.exam.ExamFragmentProvider
 import com.pechuro.bsuirschedule.ui.fragment.itemoptions.ItemOptionsDialogProvider
 import com.pechuro.bsuirschedule.ui.fragment.requestupdatedialog.RequestUpdateDialogProvider
@@ -38,6 +39,7 @@ interface AppActivitiesModule {
         DrawerFragmentProvider::class,
         RequestUpdateDialogProvider::class,
         DatePickerDialogProvider::class,
+        EmployeeDetailsDialogProvider::class,
         OptionsFragmentProvider::class])
     fun bindNavigationActivity(): NavigationActivity
 

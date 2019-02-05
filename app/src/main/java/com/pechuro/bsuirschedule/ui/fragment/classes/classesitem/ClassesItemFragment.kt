@@ -14,6 +14,7 @@ import com.pechuro.bsuirschedule.ui.activity.navigation.FabEvent
 import com.pechuro.bsuirschedule.ui.base.BaseFragment
 import com.pechuro.bsuirschedule.ui.fragment.classes.classesitem.adapter.ClassesAdapter
 import com.pechuro.bsuirschedule.ui.fragment.classes.data.classesinformation.ClassesBaseInformation
+import com.pechuro.bsuirschedule.ui.fragment.employeedetails.EmployeeDetailsDialog
 import com.pechuro.bsuirschedule.ui.fragment.itemoptions.ItemOptionsDialog
 import com.pechuro.bsuirschedule.ui.utils.EventBus
 import javax.inject.Inject
@@ -59,6 +60,8 @@ class ClassesItemFragment : BaseFragment<FragmentListBinding, ClassesItemViewMod
                         when (it) {
                             is ClassesItemEvent.OnItemLongClick -> ItemOptionsDialog.newInstance(it.id)
                                     .show(childFragmentManager, ItemOptionsDialog.TAG)
+                            is ClassesItemEvent.OnItemClick -> EmployeeDetailsDialog.newInstance(it.employees)
+                                    .show(childFragmentManager, EmployeeDetailsDialog.TAG)
                         }
                     }
                 },

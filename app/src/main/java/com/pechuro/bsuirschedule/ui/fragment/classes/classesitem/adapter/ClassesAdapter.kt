@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.pechuro.bsuirschedule.data.entity.Employee
 import com.pechuro.bsuirschedule.databinding.*
 import com.pechuro.bsuirschedule.ui.base.BaseViewHolder
 import com.pechuro.bsuirschedule.ui.base.BaseViewHolderData
@@ -91,6 +92,11 @@ sealed class ClassesAdapterViewHolders {
             binding.executePendingBindings()
 
             binding.container.apply {
+                setOnClickListener {
+                    if (data.employees.get()?.isNotEmpty() == true) {
+                        EventBus.publish(ClassesItemEvent.OnItemClick(data.employees.get() as ArrayList<Employee>))
+                    }
+                }
                 setOnLongClickListener {
                     EventBus.publish(ClassesItemEvent.OnItemLongClick(data.itemId))
                     true

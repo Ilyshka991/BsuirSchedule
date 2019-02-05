@@ -4,6 +4,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.data.entity.Employee
 
@@ -68,4 +70,9 @@ fun setSubgroup(view: TextView, number: Int?) =
 fun setWeekNumber(view: TextView, weekNumbers: String?) {
     val result = if (weekNumbers != "0 1 2 3 4 ") weekNumbers?.trim() else view.context.getString(R.string.msg_all)
     view.text = view.context.getString(R.string.item_classes_text_week_number, result)
+}
+
+@BindingAdapter("photo_link")
+fun setPhoto(view: ImageView, link: String?) {
+    Glide.with(view).load(link).apply(RequestOptions.circleCropTransform()).into(view)
 }

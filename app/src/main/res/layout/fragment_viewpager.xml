@@ -14,7 +14,7 @@
             app:tabMode="scrollable" />
 
         <com.pechuro.bsuirschedule.ui.custom.ViewPager
-            android:id="@+id/viewPager"
+            android:id="@+id/view_pager"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
     </LinearLayout>
