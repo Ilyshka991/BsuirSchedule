@@ -27,7 +27,7 @@ fun setLessonTypeImage(view: ImageView, type: String?) {
         "ЛР" -> R.mipmap.ic_type_lr
         else -> R.mipmap.ic_type_unknown
     }
-    view.setImageResource(id)
+    Glide.with(view).load(id).into(view)
 }
 
 @BindingAdapter("text_note")
@@ -74,5 +74,18 @@ fun setWeekNumber(view: TextView, weekNumbers: String?) {
 
 @BindingAdapter("photo_link")
 fun setPhoto(view: ImageView, link: String?) {
-    Glide.with(view).load(link).apply(RequestOptions.circleCropTransform()).into(view)
+    val options = RequestOptions().apply {
+        optionalCircleCrop()
+        placeholder(R.drawable.ic_photo_load)
+        error(R.drawable.ic_photo_load_error)
+    }
+    Glide.with(view).load(link).apply(options).into(view)
+}
+
+@BindingAdapter("text_employee_fio")
+fun setEmployeeFio(view: TextView, employee: Employee) {
+    val fio = "${employee.lastName} " +
+            "${if (employee.firstName == null) "" else employee.firstName} " +
+            "${if (employee.middleName == null) "" else employee.middleName}"
+    view.text = fio
 }

@@ -241,7 +241,7 @@ class NavigationActivity :
         }
     }
 
-    private fun navigate(action: () -> Unit) {
+    private inline fun navigate(crossinline action: () -> Unit) {
         viewDataBinding.drawerLayout.addDrawerListener(object : DrawerListener {
             override fun onDrawerClosed(drawerView: View) {
                 action()
