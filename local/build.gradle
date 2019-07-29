@@ -9,6 +9,10 @@ apply from: '../configuration.gradle'
 android {
     compileSdkVersion configuration.compileSdkVersion
 
+    defaultConfig {
+        buildConfigField "int", "DATABASE_VERSION", DATABASE_VERSION
+    }
+
     buildTypes {
         release {
             minifyEnabled true

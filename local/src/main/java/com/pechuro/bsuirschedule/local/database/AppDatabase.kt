@@ -2,6 +2,7 @@ package com.pechuro.bsuirschedule.local.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.pechuro.bsuirschedule.local.BuildConfig
 import com.pechuro.bsuirschedule.local.database.dao.EmployeeDao
 import com.pechuro.bsuirschedule.local.database.dao.GroupDao
 import com.pechuro.bsuirschedule.local.database.dao.ScheduleDao
@@ -11,9 +12,9 @@ import com.pechuro.bsuirschedule.local.database.entity.Schedule
 import com.pechuro.bsuirschedule.local.database.entity.ScheduleItem
 
 @Database(entities = [Group::class, Employee::class, Schedule::class, ScheduleItem::class],
-        version = 8)
+        version = BuildConfig.DATABASE_VERSION)
 abstract class AppDatabase : RoomDatabase() {
-    
+
     abstract fun groupDao(): GroupDao
 
     abstract fun employeeDao(): EmployeeDao
