@@ -33,11 +33,11 @@ data class Employee(
         var rank: String?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+            parcel.readString()!!,
             parcel.readString(),
+            parcel.readString()!!,
             parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
+            parcel.readString()!!,
             parcel.readString(),
             parcel.readString()) {
     }

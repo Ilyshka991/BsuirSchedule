@@ -1,23 +1,17 @@
 apply plugin: 'com.android.library'
 
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+apply from: '../dependencies.gradle'
+apply from: '../configuration.gradle'
+
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.0"
-
-
-    defaultConfig {
-        minSdkVersion 11
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-    }
+    compileSdkVersion configuration.compileSdkVersion
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -25,10 +19,12 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation kotlin
 
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation rxDependencies.values()
+    implementation daggerDependencies.values()
+    kapt daggerProcessorDependencies.values()
+
+    implementation room.values()
+    kapt roomProcessor.values()
 }

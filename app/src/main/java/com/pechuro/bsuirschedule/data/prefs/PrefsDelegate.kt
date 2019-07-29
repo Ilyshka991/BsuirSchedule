@@ -22,7 +22,7 @@ class PrefsDelegate<T>(private val key: String, private val defaultValue: T) :
             is Int -> getInt(key, defaultValue)
             is Long -> getLong(key, defaultValue)
             is Float -> getFloat(key, defaultValue)
-            is String -> getString(key, defaultValue)
+            is String -> getString(key, defaultValue)!!
 
             is ScheduleInformation -> {
                 gson.fromJson(getString(key, SCHEDULE_INFORMATION_DEFAULT_VALUE),

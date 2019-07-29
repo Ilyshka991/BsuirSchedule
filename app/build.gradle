@@ -48,4 +48,6 @@ dependencies {
     kapt roomProcessor.values()
     implementation networkDependencies.values()
     implementation jsonSerializer.values()
+
+    implementation project(path: ':data')
 }
