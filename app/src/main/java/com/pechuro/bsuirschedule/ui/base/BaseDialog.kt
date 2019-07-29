@@ -46,7 +46,7 @@ abstract class BaseDialog<T : ViewDataBinding, V : BaseViewModel> : DialogFragme
         viewDataBinding = DataBindingUtil
                 .inflate(LayoutInflater.from(context), layoutId, null, false)
         rootView = viewDataBinding.root
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         return rootView
     }
 

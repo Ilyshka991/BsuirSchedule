@@ -24,7 +24,7 @@ class StartFragment : BaseFragment<FragmentStartBinding, StartFragmentViewModel>
 
     private fun setListeners() {
         viewDataBinding.fab.setOnClickListener {
-            AddDialog.newInstance().show(fragmentManager, AddDialog.TAG)
+            AddDialog.newInstance().show(fragmentManager!!, AddDialog.TAG)
         }
     }
 

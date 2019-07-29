@@ -5,7 +5,6 @@ import com.pechuro.bsuirschedule.constants.ScheduleTypes
 import com.pechuro.bsuirschedule.data.entity.Schedule
 import com.pechuro.bsuirschedule.data.entity.ScheduleItem
 import com.pechuro.bsuirschedule.data.entity.complex.Classes
-import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -13,14 +12,14 @@ import io.reactivex.Single
 interface ScheduleDao {
 
     @Transaction
-    fun insertSchedule(schedule: Classes) = Completable.fromAction {
+    fun insertSchedule(schedule: Classes) {
         val id: Int = insert(schedule).toInt()
         schedule.schedule.forEach { it.scheduleId = id }
         insert(schedule.schedule)
     }
 
     @Transaction
-    fun update(classes: Classes) = Completable.fromAction {
+    fun update(classes: Classes) {
         update(classes as Schedule)
         deleteItems(classes.id)
 

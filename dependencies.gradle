@@ -1,0 +1,107 @@
+def libraryVersions = [
+        kotlin          : '1.3.31',
+
+        appCompat       : '1.1.0-alpha05',
+        constraintLayout: '1.1.3',
+        materialDesign  : '1.1.0-alpha05',
+        recyclerView    : '1.1.0-alpha05',
+
+        archComponents  : '2.0.0',
+
+        ktx             : '1.0.1',
+
+        rxJava          : '2.2.8',
+        rxKotlin        : '2.3.0',
+        rxAndroid       : '2.0.2',
+
+        dagger          : '2.21',
+
+        junit           : '4.12',
+        testRunner      : '1.2.0-alpha03',
+        espresso        : '3.2.0-alpha03',
+
+        leekcanary      : '2.0-alpha-2',
+
+        room            : '2.1.0',
+
+        glide           : '4.9.0',
+
+        retrofit              : '2.5.0',
+        okHttp                : '3.14.1',
+        gsonAdapter          : '2.5.0',
+        gson                 : '2.8.5'
+]
+
+ext {
+    kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${libraryVersions.kotlin}"
+
+    leekcanary = "com.squareup.leakcanary:leakcanary-android:${libraryVersions.leekcanary}"
+
+    androidFrameworkDependencies = [
+            appCompat       : "androidx.appcompat:appcompat:${libraryVersions.appCompat}",
+            constraintlayout: "androidx.constraintlayout:constraintlayout:${libraryVersions.constraintLayout}",
+            materialDesign  : "com.google.android.material:material:${libraryVersions.materialDesign}",
+            recyclerView    : "androidx.recyclerview:recyclerview:${libraryVersions.recyclerView}"
+    ]
+
+    archComponentsDependencies = [
+            lifeCycle: "androidx.lifecycle:lifecycle-extensions:${libraryVersions.archComponents}"
+    ]
+    archComponentsProcessorDependencies = [
+            lifeCycleProcessor: "androidx.lifecycle:lifecycle-compiler:${libraryVersions.archComponents}"
+    ]
+
+    ktxDependencies = [
+            core: "androidx.core:core-ktx:${libraryVersions.ktx}"
+    ]
+
+    rxDependencies = [
+            rxJava   : "io.reactivex.rxjava2:rxjava:${libraryVersions.rxJava}",
+            rxKotlin : "io.reactivex.rxjava2:rxkotlin:${libraryVersions.rxKotlin}",
+            rxAndroid: "io.reactivex.rxjava2:rxandroid:${libraryVersions.rxAndroid}",
+
+    ]
+
+    daggerDependencies = [
+            dagger       : "com.google.dagger:dagger:${libraryVersions.dagger}",
+            daggerAndroid: "com.google.dagger:dagger-android-support:${libraryVersions.dagger}"
+    ]
+    daggerProcessorDependencies = [
+            daggerProcessor       : "com.google.dagger:dagger-compiler:${libraryVersions.dagger}",
+            daggerAndroidProcessor: "com.google.dagger:dagger-android-processor:${libraryVersions.dagger}"
+    ]
+
+    testDependencies = [
+            junit: "junit:junit:${libraryVersions.junit}"
+    ]
+
+    androidTestDependencies = [
+            testRunner: "androidx.test:runner:${libraryVersions.testRunner}",
+            espresso  : "androidx.test.espresso:espresso-core:${libraryVersions.espresso}"
+    ]
+
+    room = [
+            database : "androidx.room:room-runtime:${libraryVersions.room}",
+            rxAdapter: "androidx.room:room-rxjava2:${libraryVersions.room}"
+    ]
+    roomProcessor = [
+            databaseProcessor: "androidx.room:room-compiler:${libraryVersions.room}"
+    ]
+
+    glide = [
+            glide: "com.github.bumptech.glide:glide:${libraryVersions.glide}"
+    ]
+
+    jsonSerializer = [
+            gson: "com.google.code.gson:gson:${libraryVersions.gson}"
+    ]
+
+    networkDependencies = [
+            retrofit            : "com.squareup.retrofit2:retrofit:${libraryVersions.retrofit}",
+            adapter             : "com.squareup.retrofit2:adapter-rxjava2:${libraryVersions.retrofit}",
+            gsonAdapter        : "com.squareup.retrofit2:converter-gson:${libraryVersions.gsonAdapter}",
+            log                 : "com.squareup.okhttp3:logging-interceptor:${libraryVersions.okHttp}",
+            okHttp              : "com.squareup.okhttp3:okhttp:${libraryVersions.okHttp}"
+    ]
+
+}

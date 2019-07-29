@@ -1,1 +1,1 @@
-include ':app'
+include ':app', ':local', ':remote', ':data'

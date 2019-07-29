@@ -139,9 +139,9 @@ class ScheduleRepository @Inject constructor(private val api: ScheduleApi,
 
     private fun storeInCache(schedule: MutableList<Classes>) =
             schedule.forEach {
-                scheduleDao.insertSchedule(it).blockingAwait()
+                scheduleDao.insertSchedule(it)
             }
 
     private fun updateCache(classes: Classes) =
-            scheduleDao.update(classes).blockingAwait()
+            scheduleDao.update(classes)
 }
