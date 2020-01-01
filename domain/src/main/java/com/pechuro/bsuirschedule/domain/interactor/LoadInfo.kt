@@ -18,8 +18,8 @@ class LoadInfo(
 ) : BaseInteractor<Completable, BaseInteractor.NoParams>() {
 
     override fun execute(params: NoParams) = Single.zip(
-            employeeRepository.getAll().subscribeOn(Schedulers.io()).map { it.isNotEmpty() },
-            groupRepository.getAll().subscribeOn(Schedulers.io()).map { it.isNotEmpty() },
+            employeeRepository.getAll().subscribeOn(Schedulers.io()).take(1).singleOrError().map { it.isNotEmpty() },
+            groupRepository.getAll().subscribeOn(Schedulers.io()).take(1).singleOrError().map { it.isNotEmpty() },
             BiFunction { t1: Boolean, t2: Boolean -> t1 and t2 })
             .ignoreElement()
 }

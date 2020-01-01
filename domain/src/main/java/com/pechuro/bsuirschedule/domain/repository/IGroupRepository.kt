@@ -2,11 +2,12 @@ package com.pechuro.bsuirschedule.domain.repository
 
 import com.pechuro.bsuirschedule.domain.entity.Group
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 
 interface IGroupRepository {
 
-    fun getAll(): Single<List<Group>>
+    fun getAll(): Observable<List<Group>>
 
     fun getByNumber(number: String): Single<Group>
 

@@ -5,19 +5,20 @@ import com.pechuro.bsuirschedule.domain.entity.Faculty
 import com.pechuro.bsuirschedule.domain.entity.Speciality
 import com.pechuro.bsuirschedule.domain.repository.ISpecialityRepository
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 
 class SpecialityRepositoryImpl : ISpecialityRepository {
 
-    override fun getAllFaculties(): Single<List<Faculty>> {
+    override fun getAllFaculties(): Observable<List<Faculty>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getAllDepartments(): Single<List<Department>> {
+    override fun getAllDepartments(): Observable<List<Department>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getAllSpecialities(): Single<List<Speciality>> {
+    override fun getAllSpecialities(): Observable<List<Speciality>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
