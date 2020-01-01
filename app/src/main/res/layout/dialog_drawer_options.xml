@@ -1,127 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <data>
+    <ProgressBar
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
 
-        <variable
-            name="viewModel"
-            type="com.pechuro.bsuirschedule.ui.fragment.draweroptions.DrawerOptionsDialogViewModel" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp">
 
-        <variable
-            name="info"
-            type="com.pechuro.bsuirschedule.ui.data.ScheduleInformation" />
-    </data>
+        <TextView
+            android:id="@+id/text_error"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/error_loading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ProgressBar
-            style="?android:attr/progressBarStyle"
+        <Button
+            android:id="@+id/button_cancel"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:visibility="@{viewModel.isLoading}" />
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/action_cancel"
+            app:layout_constraintEnd_toStartOf="@+id/button_retry"
+            app:layout_constraintStart_toStartOf="@+id/text_error"
+            app:layout_constraintTop_toTopOf="@+id/button_retry" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="250dp"
+        <Button
+            android:id="@+id/button_retry"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="16dp"
-            android:paddingTop="16dp"
-            android:paddingRight="16dp"
-            app:visibility="@{viewModel.isError}">
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/action_retry"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/text_error"
+            app:layout_constraintTop_toBottomOf="@+id/text_error" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/text_error"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="@string/error_loading"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp">
 
-            <Button
-                android:id="@+id/button_cancel"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:onClick="@{() -> viewModel.cancel()}"
-                android:text="@string/action_cancel"
-                app:layout_constraintEnd_toStartOf="@+id/button_retry"
-                app:layout_constraintStart_toStartOf="@+id/text_error"
-                app:layout_constraintTop_toTopOf="@+id/button_retry" />
-
-            <Button
-                android:id="@+id/button_retry"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="16dp"
-                android:onClick="@{() -> viewModel.update(info)}"
-                android:text="@string/action_retry"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/text_error"
-                app:layout_constraintTop_toBottomOf="@+id/text_error" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="250dp"
+        <TextView
+            android:id="@+id/text_choose_action"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="16dp"
-            android:paddingTop="16dp"
-            android:paddingRight="16dp"
-            app:visibility_invisible="@{!viewModel.isLoading &amp;&amp; !viewModel.isError}">
+            android:gravity="center_horizontal"
+            android:text="@string/title_choose_action"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/text_choose_action"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="@string/title_choose_action"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/button_delete"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/action_delete"
+            app:layout_constraintEnd_toStartOf="@+id/button_update"
+            app:layout_constraintStart_toStartOf="@+id/text_choose_action"
+            app:layout_constraintTop_toTopOf="@+id/button_update" />
 
-            <Button
-                android:id="@+id/button_delete"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:onClick="@{() -> viewModel.delete(info)}"
-                android:text="@string/action_delete"
-                app:layout_constraintEnd_toStartOf="@+id/button_update"
-                app:layout_constraintStart_toStartOf="@+id/text_choose_action"
-                app:layout_constraintTop_toTopOf="@+id/button_update" />
-
-            <Button
-                android:id="@+id/button_update"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="16dp"
-                android:onClick="@{() -> viewModel.update(info)}"
-                android:text="@string/action_update"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/text_choose_action"
-                app:layout_constraintTop_toBottomOf="@+id/text_choose_action" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </FrameLayout>
-</layout>
+        <Button
+            android:id="@+id/button_update"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/action_update"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/text_choose_action"
+            app:layout_constraintTop_toBottomOf="@+id/text_choose_action" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

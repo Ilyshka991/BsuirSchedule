@@ -1,43 +1,43 @@
 package com.pechuro.bsuirschedule.di.module
 
 import android.util.Log
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.pechuro.bsuirschedule.BuildConfig
-import com.pechuro.bsuirschedule.data.network.EmployeeApi
-import com.pechuro.bsuirschedule.data.network.GroupApi
-import com.pechuro.bsuirschedule.data.network.ScheduleApi
+import com.pechuro.bsuirschedule.di.annotations.AppScope
+import com.pechuro.bsuirschedule.remote.api.*
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
+import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
-import javax.inject.Singleton
 
-@Module()
+@Module
 class NetworkModule {
 
+    companion object {
+        private const val BASE_URL = "https://journal.bsuir.by/api/v1/"
+        private const val CONNECT_TIMEOUT = 60L
+    }
+
     @Provides
-    @Singleton
-    fun provideRetrofit(httpClient: OkHttpClient,
-                        gsonConverterFactory: GsonConverterFactory): Retrofit =
+    @AppScope
+    fun provideRetrofit(
+            httpClient: OkHttpClient,
+            converterFactory: Converter.Factory
+    ): Retrofit =
             Retrofit.Builder()
                     .client(httpClient)
-                    .addConverterFactory(gsonConverterFactory)
+                    .addConverterFactory(converterFactory)
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .baseUrl(BASE_URL)
                     .build()
 
     @Provides
-    @Singleton
-    fun provideGson(): Gson = GsonBuilder().serializeNulls().create()
-
-    @Provides
-    @Singleton
+    @AppScope
     fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
             OkHttpClient.Builder()
                     .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
@@ -46,7 +46,7 @@ class NetworkModule {
                     .build()
 
     @Provides
-    @Singleton
+    @AppScope
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         val interceptor = HttpLoggingInterceptor(
                 HttpLoggingInterceptor.Logger { Log.i("Retrofit ", it) })
@@ -57,27 +57,32 @@ class NetworkModule {
     }
 
     @Provides
-    @Singleton
-    fun provideGsonConverterFactory(gson: Gson): GsonConverterFactory =
-            GsonConverterFactory.create(gson)
+    @AppScope
+    fun provideConverterFactory(): Converter.Factory =
+            MoshiConverterFactory.create()
 
     @Provides
-    @Singleton
+    @AppScope
+    fun provideAnnouncementApi(retrofit: Retrofit): AnnouncementApi =
+            retrofit.create(AnnouncementApi::class.java)
+
+    @Provides
+    @AppScope
+    fun provideBuildingApi(retrofit: Retrofit): BuildingApi =
+            retrofit.create(BuildingApi::class.java)
+
+    @Provides
+    @AppScope
     fun provideScheduleApi(retrofit: Retrofit): ScheduleApi =
             retrofit.create(ScheduleApi::class.java)
 
     @Provides
-    @Singleton
-    fun provideEmployeeApi(retrofit: Retrofit): EmployeeApi =
-            retrofit.create(EmployeeApi::class.java)
+    @AppScope
+    fun provideSpecialityApi(retrofit: Retrofit): SpecialityApi =
+            retrofit.create(SpecialityApi::class.java)
 
     @Provides
-    @Singleton
-    fun provideGroupApi(retrofit: Retrofit): GroupApi =
-            retrofit.create(GroupApi::class.java)
-
-    companion object {
-        private const val BASE_URL = "https://journal.bsuir.by/api/v1/"
-        private const val CONNECT_TIMEOUT = 60L
-    }
+    @AppScope
+    fun provideStaffApi(retrofit: Retrofit): StaffApi =
+            retrofit.create(StaffApi::class.java)
 }

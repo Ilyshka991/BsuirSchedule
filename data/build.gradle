@@ -22,9 +22,8 @@ dependencies {
     implementation kotlin
 
     implementation rxDependencies.values()
-    implementation daggerDependencies.values()
-    kapt daggerProcessorDependencies.values()
 
-    implementation project(path: ':local')
-    implementation project(path: ':remote')
+    api project(path: ':local')
+    api project(path: ':remote')
+    implementation project(path: ':domain')
 }

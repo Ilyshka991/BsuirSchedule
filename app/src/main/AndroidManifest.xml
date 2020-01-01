@@ -13,8 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity
-            android:name=".ui.activity.splash.SplashActivity"
+            android:name=".feature.splash.SplashActivity"
             android:theme="@style/splashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,18 +23,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.activity.navigation.NavigationActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.activity.infoload.InfoLoadActivity" />
-        <activity
-            android:name=".ui.activity.settings.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".ui.activity.navigation.NavigationActivity" />
-        <activity
-            android:name=".ui.activity.editlesson.EditLessonActivity"
-            android:label="@string/title_activity_edit"
-            android:parentActivityName=".ui.activity.navigation.NavigationActivity" />
-    </application>
 
+        <activity android:name=".feature.load.InfoLoadActivity" />
+
+        <activity
+            android:name=".feature.settings.SettingsActivity"
+            android:label="@string/title_activity_settings"/>
+
+        <activity
+            android:name=".feature.edit.EditLessonActivity"
+            android:label="@string/title_activity_edit" />
+    </application>
 </manifest>

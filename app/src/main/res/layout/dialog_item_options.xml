@@ -1,29 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.pechuro.bsuirschedule.ui.fragment.itemoptions.ItemOptionsDialogViewModel" />
-
-        <variable
-            name="id"
-            type="java.lang.Integer" />
-    </data>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/button_delete"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/button_delete"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:onClick="@{() -> viewModel.delete(id)}"
-            android:text="@string/action_delete" />
-    </LinearLayout>
-</layout>
+        android:layout_margin="8dp"
+        android:text="@string/action_delete" />
+</LinearLayout>

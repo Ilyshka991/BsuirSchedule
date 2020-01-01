@@ -1,47 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-    <data>
-
-        <variable
-            name="dialog"
-            type="com.pechuro.bsuirschedule.ui.fragment.datepickerdialog.DatePickerDialog" />
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <DatePicker
+        android:id="@+id/date_picker"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <DatePicker
-            android:id="@+id/date_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/button_cancel"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/action_cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_ok"
+        app:layout_constraintTop_toBottomOf="@+id/date_picker" />
 
-        <Button
-            android:id="@+id/button_cancel"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:onClick="@{() -> dialog.cancel()}"
-            android:text="@string/action_cancel"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_ok"
-            app:layout_constraintTop_toBottomOf="@+id/date_picker" />
-
-        <Button
-            android:id="@+id/button_ok"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> dialog.chooseDate(datePicker.getDayOfMonth(), datePicker.getMonth()+1, datePicker.getYear())}"
-            android:text="@string/action_ok"
-            app:layout_constraintEnd_toEndOf="@+id/date_picker"
-            app:layout_constraintTop_toBottomOf="@+id/date_picker" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+    <Button
+        android:id="@+id/button_ok"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_ok"
+        app:layout_constraintEnd_toEndOf="@+id/date_picker"
+        app:layout_constraintTop_toBottomOf="@+id/date_picker" />
+</androidx.constraintlayout.widget.ConstraintLayout>
