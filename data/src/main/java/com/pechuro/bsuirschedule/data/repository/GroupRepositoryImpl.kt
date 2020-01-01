@@ -11,6 +11,14 @@ class GroupRepositoryImpl : IGroupRepository {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    override fun getByNumber(number: String): Single<Group> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun update(): Completable {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun deleteAll(): Completable {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

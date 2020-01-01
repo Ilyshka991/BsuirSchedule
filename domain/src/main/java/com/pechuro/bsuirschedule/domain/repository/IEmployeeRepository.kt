@@ -10,6 +10,8 @@ interface IEmployeeRepository {
 
     fun getById(id: Long): Single<Employee>
 
+    fun update(): Completable
+
     fun deleteAll(): Completable
 
     fun isStored(): Single<Boolean>

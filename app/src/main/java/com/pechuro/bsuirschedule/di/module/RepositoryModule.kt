@@ -28,4 +28,8 @@ class RepositoryModule {
     @Provides
     @AppScope
     fun provideBuildingRepository(): IBuildingRepository = BuildingRepositoryImpl()
+
+    @Provides
+    @AppScope
+    fun provideAnnouncementRepository(): IAnnouncementRepository = AnnouncementRepositoryImpl()
 }

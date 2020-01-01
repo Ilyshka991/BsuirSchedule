@@ -8,6 +8,10 @@ interface IGroupRepository {
 
     fun getAll(): Single<List<Group>>
 
+    fun getByNumber(number: String): Single<Group>
+
+    fun update(): Completable
+
     fun deleteAll(): Completable
 
     fun isStored(): Single<Boolean>

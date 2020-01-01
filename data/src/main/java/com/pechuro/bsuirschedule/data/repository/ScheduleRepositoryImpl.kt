@@ -9,7 +9,15 @@ import io.reactivex.Single
 
 class ScheduleRepositoryImpl : IScheduleRepository {
 
-    override fun getClasses(name: String, vararg type: ScheduleType): Single<MutableList<Classes>> {
+    override fun getCurrentWeek(): Single<Int> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getAllStoredClasses(): Single<List<Classes>> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getClasses(name: String, vararg type: ScheduleType): Single<List<Classes>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -17,7 +25,23 @@ class ScheduleRepositoryImpl : IScheduleRepository {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    override fun updateAll(): Completable {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun isUpdateAvailable(schedule: Schedule): Single<Boolean> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun delete(name: String, type: ScheduleType): Completable {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun deleteByType(vararg type: ScheduleType): Completable {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun deleteAll(): Completable {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

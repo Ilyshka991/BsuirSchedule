@@ -15,6 +15,10 @@ class EmployeeRepositoryImpl : IEmployeeRepository {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    override fun update(): Completable {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun deleteAll(): Completable {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -22,5 +26,4 @@ class EmployeeRepositoryImpl : IEmployeeRepository {
     override fun isStored(): Single<Boolean> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
 }

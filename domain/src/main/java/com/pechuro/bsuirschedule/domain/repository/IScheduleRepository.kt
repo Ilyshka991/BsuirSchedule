@@ -8,9 +8,21 @@ import io.reactivex.Single
 
 interface IScheduleRepository {
 
-    fun getClasses(name: String, vararg type: ScheduleType): Single<MutableList<Classes>>
+    fun getCurrentWeek(): Single<Int>
+
+    fun getAllStoredClasses(): Single<List<Classes>>
+
+    fun getClasses(name: String, vararg type: ScheduleType): Single<List<Classes>>
 
     fun update(schedule: Schedule): Completable
 
+    fun updateAll(): Completable
+
+    fun isUpdateAvailable(schedule: Schedule): Single<Boolean>
+
     fun delete(name: String, type: ScheduleType): Completable
+
+    fun deleteByType(vararg type: ScheduleType): Completable
+
+    fun deleteAll(): Completable
 }
