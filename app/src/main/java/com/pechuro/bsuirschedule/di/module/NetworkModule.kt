@@ -3,6 +3,7 @@ package com.pechuro.bsuirschedule.di.module
 import android.util.Log
 import com.pechuro.bsuirschedule.BuildConfig
 import com.pechuro.bsuirschedule.di.annotations.AppScope
+import com.pechuro.bsuirschedule.remote.api.AnnouncementApi
 import com.pechuro.bsuirschedule.remote.api.EmployeeApi
 import com.pechuro.bsuirschedule.remote.api.GroupApi
 import com.pechuro.bsuirschedule.remote.api.ScheduleApi
@@ -60,7 +61,7 @@ class NetworkModule {
 
     @Provides
     @AppScope
-    fun provideGsonConverterFactory(): Converter.Factory =
+    fun provideConverterFactory(): Converter.Factory =
             MoshiConverterFactory.create()
 
     @Provides
@@ -77,4 +78,9 @@ class NetworkModule {
     @AppScope
     fun provideGroupApi(retrofit: Retrofit): GroupApi =
             retrofit.create(GroupApi::class.java)
+
+    @Provides
+    @AppScope
+    fun provideAnnouncementApi(retrofit: Retrofit): AnnouncementApi =
+            retrofit.create(AnnouncementApi::class.java)
 }

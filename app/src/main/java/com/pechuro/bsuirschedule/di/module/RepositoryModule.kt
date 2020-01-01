@@ -3,6 +3,7 @@ package com.pechuro.bsuirschedule.di.module
 import com.pechuro.bsuirschedule.data.repository.*
 import com.pechuro.bsuirschedule.di.annotations.AppScope
 import com.pechuro.bsuirschedule.domain.repository.*
+import com.pechuro.bsuirschedule.remote.api.AnnouncementApi
 import dagger.Module
 import dagger.Provides
 
@@ -31,5 +32,6 @@ class RepositoryModule {
 
     @Provides
     @AppScope
-    fun provideAnnouncementRepository(): IAnnouncementRepository = AnnouncementRepositoryImpl()
+    fun provideAnnouncementRepository(api: AnnouncementApi): IAnnouncementRepository =
+            AnnouncementRepositoryImpl(api)
 }
