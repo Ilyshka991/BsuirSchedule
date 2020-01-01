@@ -1,12 +1,8 @@
 package com.pechuro.bsuirschedule.di.module
 
-import com.pechuro.bsuirschedule.data.repository.EmployeeRepositoryImpl
-import com.pechuro.bsuirschedule.data.repository.GroupRepositoryImpl
-import com.pechuro.bsuirschedule.data.repository.ScheduleRepositoryImpl
+import com.pechuro.bsuirschedule.data.repository.*
 import com.pechuro.bsuirschedule.di.annotations.AppScope
-import com.pechuro.bsuirschedule.domain.repository.IEmployeeRepository
-import com.pechuro.bsuirschedule.domain.repository.IGroupRepository
-import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
+import com.pechuro.bsuirschedule.domain.repository.*
 import dagger.Module
 import dagger.Provides
 
@@ -24,4 +20,12 @@ class RepositoryModule {
     @Provides
     @AppScope
     fun provideScheduleRepository(): IScheduleRepository = ScheduleRepositoryImpl()
+
+    @Provides
+    @AppScope
+    fun provideSpecialityRepository(): ISpecialityRepository = SpecialityRepositoryImpl()
+
+    @Provides
+    @AppScope
+    fun provideBuildingRepository(): IBuildingRepository = BuildingRepositoryImpl()
 }

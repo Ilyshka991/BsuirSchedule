@@ -7,7 +7,7 @@ data class ScheduleItem(
         val weekNumber: String?,
         val subgroupNumber: Int?,
         val lessonType: String?,
-        val auditories: List<String>?,
+        val auditories: List<Auditory>?,
         val note: String?,
         val startTime: String?,
         val endTime: String?,
