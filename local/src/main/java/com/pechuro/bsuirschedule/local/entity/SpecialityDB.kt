@@ -23,8 +23,8 @@ data class SpecialityDB(
         val facultyId: Long,
         @ColumnInfo(name = "name")
         var name: String,
-        @ColumnInfo(name = "abbrev")
-        val abbrev: String,
+        @ColumnInfo(name = "abbreviation")
+        val abbreviation: String,
         @ColumnInfo(name = "code")
         val code: String
 )

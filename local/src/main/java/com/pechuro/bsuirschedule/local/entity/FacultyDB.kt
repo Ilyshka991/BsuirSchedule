@@ -11,6 +11,6 @@ data class FacultyDB(
         val id: Long,
         @ColumnInfo(name = "name")
         val name: String,
-        @ColumnInfo(name = "abbrev")
-        val abbrev: String
+        @ColumnInfo(name = "abbreviation")
+        val abbreviation: String
 )

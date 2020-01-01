@@ -3,5 +3,5 @@ package com.pechuro.bsuirschedule.domain.entity
 data class Faculty(
         val id: Long,
         val name: String,
-        val abbrev: String
+        val abbreviation: String
 )

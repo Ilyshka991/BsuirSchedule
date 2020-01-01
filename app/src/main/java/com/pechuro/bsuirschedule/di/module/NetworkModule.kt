@@ -3,10 +3,7 @@ package com.pechuro.bsuirschedule.di.module
 import android.util.Log
 import com.pechuro.bsuirschedule.BuildConfig
 import com.pechuro.bsuirschedule.di.annotations.AppScope
-import com.pechuro.bsuirschedule.remote.api.AnnouncementApi
-import com.pechuro.bsuirschedule.remote.api.EmployeeApi
-import com.pechuro.bsuirschedule.remote.api.GroupApi
-import com.pechuro.bsuirschedule.remote.api.ScheduleApi
+import com.pechuro.bsuirschedule.remote.api.*
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -66,21 +63,26 @@ class NetworkModule {
 
     @Provides
     @AppScope
+    fun provideAnnouncementApi(retrofit: Retrofit): AnnouncementApi =
+            retrofit.create(AnnouncementApi::class.java)
+
+    @Provides
+    @AppScope
+    fun provideBuildingApi(retrofit: Retrofit): BuildingApi =
+            retrofit.create(BuildingApi::class.java)
+
+    @Provides
+    @AppScope
     fun provideScheduleApi(retrofit: Retrofit): ScheduleApi =
             retrofit.create(ScheduleApi::class.java)
 
     @Provides
     @AppScope
-    fun provideEmployeeApi(retrofit: Retrofit): EmployeeApi =
-            retrofit.create(EmployeeApi::class.java)
+    fun provideSpecialityApi(retrofit: Retrofit): SpecialityApi =
+            retrofit.create(SpecialityApi::class.java)
 
     @Provides
     @AppScope
-    fun provideGroupApi(retrofit: Retrofit): GroupApi =
-            retrofit.create(GroupApi::class.java)
-
-    @Provides
-    @AppScope
-    fun provideAnnouncementApi(retrofit: Retrofit): AnnouncementApi =
-            retrofit.create(AnnouncementApi::class.java)
+    fun provideStaffApi(retrofit: Retrofit): StaffApi =
+            retrofit.create(StaffApi::class.java)
 }

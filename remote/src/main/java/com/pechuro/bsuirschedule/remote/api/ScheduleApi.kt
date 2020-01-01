@@ -8,18 +8,26 @@ import retrofit2.http.Query
 
 interface ScheduleApi {
 
-    @GET("studentGroup/lastUpdateDate")
-    fun getLastUpdateDate(
-            @Query(value = "studentGroup") studentGroup: String
-    ): Single<LastUpdateDTO>
+    @GET("week")
+    fun getCurrentWeek(): Single<Int>
 
     @GET("studentGroup/schedule")
     fun getStudentSchedule(
-            @Query(value = "studentGroup") studentGroup: String
+            @Query(value = "studentGroup") name: String
+    ): Single<ScheduleDTO>
+
+    @GET("studentGroup/schedule")
+    fun getStudentSchedule(
+            @Query(value = "id") id: Long
     ): Single<ScheduleDTO>
 
     @GET("portal/employeeSchedule")
     fun getEmployeeSchedule(
             @Query(value = "employeeId") employeeId: String
     ): Single<ScheduleDTO>
+
+    @GET("studentGroup/lastUpdateDate")
+    fun getLastUpdateDate(
+            @Query(value = "studentGroup") studentGroup: String
+    ): Single<LastUpdateDTO>
 }

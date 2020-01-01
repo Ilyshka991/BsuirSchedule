@@ -11,6 +11,6 @@ data class DepartmentDB(
         val id: Long,
         @ColumnInfo(name = "name")
         var name: String,
-        @ColumnInfo(name = "abbrev")
-        val abbrev: String
+        @ColumnInfo(name = "abbreviation")
+        val abbreviation: String
 )
