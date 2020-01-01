@@ -17,9 +17,6 @@ android {
         versionName configuration.versionName
         testInstrumentationRunner configuration.androidJUnitRunner
     }
-    dataBinding {
-        enabled = true
-    }
     buildTypes {
         release {
             minifyEnabled true
@@ -47,7 +44,7 @@ dependencies {
     implementation room.values()
     kapt roomProcessor.values()
     implementation networkDependencies.values()
-    implementation jsonSerializer.values()
 
-    implementation project(path: ':data')
+    api project(path: ':data')
+    implementation project(path: ':domain')
 }

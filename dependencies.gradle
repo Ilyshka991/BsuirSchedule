@@ -26,10 +26,10 @@ def libraryVersions = [
 
         glide           : '4.9.0',
 
-        retrofit              : '2.5.0',
-        okHttp                : '3.14.1',
-        gsonAdapter          : '2.5.0',
-        gson                 : '2.8.5'
+        retrofit        : '2.5.0',
+        okHttp          : '3.14.1',
+        moshiAdapter    : '2.5.0',
+        moshi           : '1.9.2'
 ]
 
 ext {
@@ -92,14 +92,17 @@ ext {
     ]
 
     jsonSerializer = [
-            gson: "com.google.code.gson:gson:${libraryVersions.gson}"
+            moshi: "com.squareup.moshi:moshi:${libraryVersions.moshi}"
+    ]
+    jsonSerializerProcessor = [
+            moshi: "com.squareup.moshi:moshi-kotlin-codegen:${libraryVersions.moshi}"
     ]
 
     networkDependencies = [
-            retrofit            : "com.squareup.retrofit2:retrofit:${libraryVersions.retrofit}",
-            adapter             : "com.squareup.retrofit2:adapter-rxjava2:${libraryVersions.retrofit}",
-            gsonAdapter        : "com.squareup.retrofit2:converter-gson:${libraryVersions.gsonAdapter}",
-            log                 : "com.squareup.okhttp3:logging-interceptor:${libraryVersions.okHttp}",
-            okHttp              : "com.squareup.okhttp3:okhttp:${libraryVersions.okHttp}"
+            retrofit    : "com.squareup.retrofit2:retrofit:${libraryVersions.retrofit}",
+            adapter     : "com.squareup.retrofit2:adapter-rxjava2:${libraryVersions.retrofit}",
+            moshiAdapter: "com.squareup.retrofit2:converter-moshi:${libraryVersions.moshiAdapter}",
+            log         : "com.squareup.okhttp3:logging-interceptor:${libraryVersions.okHttp}",
+            okHttp      : "com.squareup.okhttp3:okhttp:${libraryVersions.okHttp}"
     ]
 }

@@ -26,8 +26,6 @@ dependencies {
     implementation kotlin
 
     implementation rxDependencies.values()
-    implementation daggerDependencies.values()
-    kapt daggerProcessorDependencies.values()
 
     implementation room.values()
     kapt roomProcessor.values()

@@ -1,0 +1,30 @@
+package com.pechuro.bsuirschedule.local.entity
+
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
+
+@Entity(
+        tableName = "speciality",
+        foreignKeys = [
+            ForeignKey(
+                    entity = FacultyDB::class,
+                    parentColumns = ["id"],
+                    childColumns = ["faculty_id"],
+                    onDelete = ForeignKey.CASCADE)
+        ]
+)
+data class SpecialityDB(
+        @PrimaryKey
+        @ColumnInfo(name = "id")
+        val id: Long,
+        @ColumnInfo(name = "faculty_id", index = true)
+        val facultyId: Long,
+        @ColumnInfo(name = "name")
+        var name: String,
+        @ColumnInfo(name = "abbrev")
+        val abbrev: String,
+        @ColumnInfo(name = "code")
+        val code: String
+)

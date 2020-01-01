@@ -2,30 +2,30 @@ package com.pechuro.bsuirschedule.di.module
 
 import android.content.Context
 import androidx.room.Room
-import com.pechuro.bsuirschedule.data.database.AppDatabase
+import com.pechuro.bsuirschedule.di.annotations.AppScope
+import com.pechuro.bsuirschedule.local.AppDatabase
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 
 @Module
 class DatabaseModule {
 
     @Provides
-    @Singleton
+    @AppScope
     fun provideAppDatabase(context: Context) = Room
             .databaseBuilder(context, AppDatabase::class.java, "database")
             .fallbackToDestructiveMigration()
             .build()
 
     @Provides
-    @Singleton
+    @AppScope
     fun provideScheduleDao(appDatabase: AppDatabase) = appDatabase.scheduleDao()
 
     @Provides
-    @Singleton
+    @AppScope
     fun provideEmployeeDao(appDatabase: AppDatabase) = appDatabase.employeeDao()
 
     @Provides
-    @Singleton
+    @AppScope
     fun provideGroupDao(appDatabase: AppDatabase) = appDatabase.groupDao()
 }

@@ -2,14 +2,14 @@ package com.pechuro.bsuirschedule.di.module
 
 import android.content.Context
 import com.pechuro.bsuirschedule.App
+import com.pechuro.bsuirschedule.di.annotations.AppScope
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 
-@Module()
+@Module
 class ApplicationModule {
 
     @Provides
-    @Singleton
+    @AppScope
     fun provideContext(app: App): Context = app
 }

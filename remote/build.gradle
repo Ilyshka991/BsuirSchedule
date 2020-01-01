@@ -1,31 +1,18 @@
-apply plugin: 'com.android.library'
+apply plugin: 'java-library'
 
-apply plugin: 'kotlin-android'
+apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 
 apply from: '../dependencies.gradle'
 apply from: '../configuration.gradle'
 
-android {
-    compileSdkVersion configuration.compileSdkVersion
-
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
-}
-
-
 dependencies {
     implementation kotlin
 
     implementation rxDependencies.values()
-    implementation daggerDependencies.values()
-    kapt daggerProcessorDependencies.values()
 
     implementation networkDependencies.values()
+
     implementation jsonSerializer.values()
+    kapt jsonSerializerProcessor.values()
 }
