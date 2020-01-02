@@ -28,4 +28,12 @@ class DatabaseModule {
     @Provides
     @AppScope
     fun provideGroupDao(appDatabase: AppDatabase) = appDatabase.groupDao()
+
+    @Provides
+    @AppScope
+    fun provideBuildingDao(appDatabase: AppDatabase) = appDatabase.buildingDao()
+
+    @Provides
+    @AppScope
+    fun provideSpecialityDao(appDatabase: AppDatabase) = appDatabase.specialityDao()
 }

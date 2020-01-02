@@ -1,14 +1,26 @@
 package com.pechuro.bsuirschedule.common
 
 import androidx.lifecycle.ViewModel
-import io.reactivex.disposables.CompositeDisposable
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class BaseViewModel : ViewModel() {
 
-    val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    protected inline fun launchCoroutine(
+            context: CoroutineContext = EmptyCoroutineContext,
+            crossinline body: suspend CoroutineScope.() -> Unit
+    ) = viewModelScope.launch(context) {
+        body()
+    }
 
-    override fun onCleared() {
-        compositeDisposable.dispose()
-        super.onCleared()
+    protected inline fun <T> async(
+            context: CoroutineContext = EmptyCoroutineContext,
+            crossinline body: suspend CoroutineScope.() -> T
+    ) = viewModelScope.async(context) {
+        body()
     }
 }

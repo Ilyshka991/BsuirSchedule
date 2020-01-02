@@ -33,7 +33,7 @@ data class AuditoryDB(
         @ColumnInfo(name = "auditory_type_id", index = true)
         val auditoryTypeId: Long,
         @ColumnInfo(name = "department_id", index = true)
-        val departmentId: Long,
+        val departmentId: Long?,
         @ColumnInfo(name = "name")
         val name: String,
         @ColumnInfo(name = "note")

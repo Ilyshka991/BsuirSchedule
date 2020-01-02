@@ -4,29 +4,27 @@ import com.pechuro.bsuirschedule.domain.entity.Department
 import com.pechuro.bsuirschedule.domain.entity.Faculty
 import com.pechuro.bsuirschedule.domain.entity.Speciality
 import com.pechuro.bsuirschedule.domain.repository.ISpecialityRepository
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 
 class SpecialityRepositoryImpl : ISpecialityRepository {
 
-    override fun getAllFaculties(): Observable<List<Faculty>> {
+    override fun getAllFaculties(): Flow<List<Faculty>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getAllDepartments(): Observable<List<Department>> {
+    override fun getAllDepartments(): Flow<List<Department>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getAllSpecialities(): Observable<List<Speciality>> {
+    override fun getAllSpecialities(): Flow<List<Speciality>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun update(): Completable {
+    override suspend fun update() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun isStored(): Single<Boolean> {
+    override suspend fun isStored(): Boolean {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

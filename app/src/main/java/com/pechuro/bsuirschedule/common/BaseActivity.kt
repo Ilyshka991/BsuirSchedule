@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProviders
 import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -24,24 +23,9 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
     @get:LayoutRes
     protected abstract val layoutId: Int
 
-    @Inject
-    protected lateinit var weakCompositeDisposable: CompositeDisposable
-    @Inject
-    protected lateinit var strongCompositeDisposable: CompositeDisposable
-
     override fun onCreate(savedInstanceState: Bundle?) {
         performDI()
         super.onCreate(savedInstanceState)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        weakCompositeDisposable.clear()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        strongCompositeDisposable.clear()
     }
 
     override fun supportFragmentInjector() = fragmentDispatchingAndroidInjector

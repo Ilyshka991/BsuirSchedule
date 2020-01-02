@@ -2,29 +2,26 @@ package com.pechuro.bsuirschedule.data.repository
 
 import com.pechuro.bsuirschedule.domain.entity.Employee
 import com.pechuro.bsuirschedule.domain.repository.IEmployeeRepository
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 
 class EmployeeRepositoryImpl : IEmployeeRepository {
-
-    override fun getAll(): Observable<List<Employee>> {
+    override fun getAll(): Flow<List<Employee>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getById(id: Long): Single<Employee> {
+    override suspend fun getById(id: Long): Employee {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun update(): Completable {
+    override suspend fun update() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun deleteAll(): Completable {
+    override suspend fun deleteAll() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun isStored(): Single<Boolean> {
+    override suspend fun isStored(): Boolean {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

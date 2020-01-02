@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.BaseActivity
-import com.pechuro.bsuirschedule.feature.load.InfoLoadActivityViewModel.Status
 
 class InfoLoadActivity : BaseActivity() {
 
@@ -22,17 +21,6 @@ class InfoLoadActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
-        setStatusListeners()
-    }
-
-    private fun setStatusListeners() {
-        viewModel.status.subscribe {
-            when (it) {
-                Status.LOADING -> handleComplete()
-                Status.COMPLETE -> handleComplete()
-                Status.ERROR -> handleError()
-            }
-        }.let(weakCompositeDisposable::add)
     }
 
     private fun handleComplete() {

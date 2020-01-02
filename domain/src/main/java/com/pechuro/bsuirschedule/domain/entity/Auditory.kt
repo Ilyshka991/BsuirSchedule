@@ -7,5 +7,5 @@ data class Auditory(
         val capacity: Int?,
         val building: Building,
         val auditoryType: AuditoryType,
-        val department: Department
+        val department: Department?
 )

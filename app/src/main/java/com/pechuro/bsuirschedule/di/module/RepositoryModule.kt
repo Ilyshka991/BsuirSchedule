@@ -3,7 +3,10 @@ package com.pechuro.bsuirschedule.di.module
 import com.pechuro.bsuirschedule.data.repository.*
 import com.pechuro.bsuirschedule.di.annotations.AppScope
 import com.pechuro.bsuirschedule.domain.repository.*
+import com.pechuro.bsuirschedule.local.dao.BuildingDao
+import com.pechuro.bsuirschedule.local.dao.SpecialityDao
 import com.pechuro.bsuirschedule.remote.api.AnnouncementApi
+import com.pechuro.bsuirschedule.remote.api.BuildingApi
 import dagger.Module
 import dagger.Provides
 
@@ -28,7 +31,15 @@ class RepositoryModule {
 
     @Provides
     @AppScope
-    fun provideBuildingRepository(): IBuildingRepository = BuildingRepositoryImpl()
+    fun provideBuildingRepository(
+            api: BuildingApi,
+            buildingDao: BuildingDao,
+            specialityDao: SpecialityDao
+    ): IBuildingRepository = BuildingRepositoryImpl(
+            api = api,
+            buildingDao = buildingDao,
+            specialityDao = specialityDao
+    )
 
     @Provides
     @AppScope

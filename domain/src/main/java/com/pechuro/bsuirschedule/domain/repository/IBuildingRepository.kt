@@ -2,17 +2,15 @@ package com.pechuro.bsuirschedule.domain.repository
 
 import com.pechuro.bsuirschedule.domain.entity.Auditory
 import com.pechuro.bsuirschedule.domain.entity.AuditoryType
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 
 interface IBuildingRepository {
 
-    fun getAllAuditories(): Observable<List<Auditory>>
+    suspend fun getAllAuditories(): Flow<List<Auditory>>
 
-    fun getAllAuditoryTypes(): Observable<List<AuditoryType>>
+    suspend fun getAllAuditoryTypes(): Flow<List<AuditoryType>>
 
-    fun update(): Completable
+    suspend fun update()
 
-    fun isStored(): Single<Boolean>
+    suspend fun isStored(): Boolean
 }

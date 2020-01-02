@@ -1,19 +1,18 @@
 package com.pechuro.bsuirschedule.remote.api
 
 import com.pechuro.bsuirschedule.remote.dto.AnnouncementDTO
-import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface AnnouncementApi {
 
     @GET("announcementEmployee")
-    fun getFromEmployee(
+    suspend fun getFromEmployee(
             @Query(value = "employeeId") employeeId: Long
-    ): Single<List<AnnouncementDTO>>
+    ): List<AnnouncementDTO>
 
     @GET("announcementDepartment")
-    fun getFromDepartment(
+    suspend fun getFromDepartment(
             @Query(value = "departmentId") departmentId: Long
-    ): Single<List<AnnouncementDTO>>
+    ): List<AnnouncementDTO>
 }

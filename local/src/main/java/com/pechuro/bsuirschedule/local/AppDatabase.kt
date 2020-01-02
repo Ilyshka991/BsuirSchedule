@@ -2,9 +2,7 @@ package com.pechuro.bsuirschedule.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.pechuro.bsuirschedule.local.dao.EmployeeDao
-import com.pechuro.bsuirschedule.local.dao.GroupDao
-import com.pechuro.bsuirschedule.local.dao.ScheduleDao
+import com.pechuro.bsuirschedule.local.dao.*
 import com.pechuro.bsuirschedule.local.entity.*
 
 @Database(
@@ -31,4 +29,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun employeeDao(): EmployeeDao
 
     abstract fun scheduleDao(): ScheduleDao
+
+    abstract fun buildingDao(): BuildingDao
+
+    abstract fun specialityDao(): SpecialityDao
 }

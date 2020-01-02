@@ -12,7 +12,6 @@ import dagger.Component
     AppActivitiesModule::class,
     AppViewModelsModule::class,
     NetworkModule::class,
-    RxModule::class,
     SharedPreferencesModule::class,
     DatabaseModule::class,
     InteractorModule::class,

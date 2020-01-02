@@ -15,7 +15,7 @@ interface EmployeeDao {
     fun delete()
 
     @Query("SELECT EXISTS(SELECT 1 FROM all_employees)")
-    fun isNotEmpty(): Single<Boolean>
+    fun isAuditoriesNotEmpty(): Single<Boolean>
 
     @Query("SELECT * FROM all_employees")
     fun getAll(): Single<List<EmployeeDB>>
