@@ -8,7 +8,7 @@ interface AnnouncementApi {
 
     @GET("announcementEmployee")
     suspend fun getFromEmployee(
-            @Query(value = "employeeId") employeeId: Long
+            @Query(value = "id") employeeId: Long
     ): List<AnnouncementDTO>
 
     @GET("announcementDepartment")

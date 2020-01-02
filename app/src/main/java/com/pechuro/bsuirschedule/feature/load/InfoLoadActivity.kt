@@ -43,15 +43,13 @@ class InfoLoadActivity : BaseActivity() {
         /*val intent = NavigationActivity.newIntent(this)
         startActivity(intent)
         finish()*/
-        println(1)
     }
 
     private fun handleError() {
-        println(2)
+
     }
 
     private fun handleLoading() {
-        println(3)
 
     }
 }

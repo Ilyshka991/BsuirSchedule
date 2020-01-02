@@ -25,8 +25,8 @@ interface GroupDao {
     @Query("SELECT number FROM `group`")
     suspend fun getAllNubmers(): List<String>
 
-    @Query("SELECT * FROM `group` WHERE number = :number")
-    suspend fun getByNumber(number: String): GroupDB
+    @Query("SELECT * FROM `group` WHERE id = :id")
+    suspend fun getById(id: Long): GroupDB
 
     @Query("SELECT EXISTS(SELECT 1 FROM `group`)")
     suspend fun isNotEmpty(): Boolean

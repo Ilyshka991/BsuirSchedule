@@ -5,7 +5,9 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class GroupDTO(
-        @Json(name = "number")
+        @Json(name = "id")
+        val id: Long,
+        @Json(name = "name")
         val number: String,
         @Json(name = "facultyId")
         val facultyId: Long?,

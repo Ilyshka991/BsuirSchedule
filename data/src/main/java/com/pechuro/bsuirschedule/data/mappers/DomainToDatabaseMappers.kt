@@ -63,6 +63,7 @@ fun EducationForm.toDatabaseEntity() = run {
 
 fun Group.toDatabaseEntity() = run {
     GroupDB(
+            id = id,
             number = number,
             facultyId = faculty?.id,
             course = course
@@ -82,7 +83,7 @@ fun Speciality.toDatabaseEntity() = run {
     SpecialityDB(
             id = id,
             name = name,
-            facultyId = faculty.id,
+            facultyId = faculty?.id,
             educationFormId = educationForm.id,
             abbreviation = abbreviation,
             code = code

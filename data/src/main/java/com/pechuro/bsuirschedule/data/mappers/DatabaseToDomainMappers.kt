@@ -64,6 +64,7 @@ fun BuildingDB.toDomainEntity() = run {
 
 fun GroupDB.toDomainEntity(faculty: Faculty?) = run {
     Group(
+            id = id,
             number = number,
             faculty = faculty,
             course = course
@@ -87,7 +88,7 @@ fun EducationFormDB.toDomainEntity() = run {
 }
 
 fun SpecialityDB.toDomainEntity(
-        faculty: Faculty,
+        faculty: Faculty?,
         educationForm: EducationForm
 ) = run {
     Speciality(

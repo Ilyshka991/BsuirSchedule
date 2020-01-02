@@ -62,7 +62,7 @@ interface SpecialityDao {
     suspend fun getDepartmentById(id: Long): DepartmentDB
 
     @Query("SELECT * FROM faculty WHERE id = :id")
-    suspend fun getFacultyById(id: Long): FacultyDB
+    suspend fun getFacultyById(id: Long): FacultyDB?
 
     @Query("SELECT * FROM speciality WHERE id = :id")
     suspend fun getSpecialityById(id: Long): SpecialityDB

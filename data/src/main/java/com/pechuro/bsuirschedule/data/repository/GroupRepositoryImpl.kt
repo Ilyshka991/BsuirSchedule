@@ -24,8 +24,8 @@ class GroupRepositoryImpl(
         return getGroupsFromDao()
     }
 
-    override suspend fun getByNumber(number: String): Group {
-        val groupDB = groupDao.getByNumber(number)
+    override suspend fun getById(id: Long): Group {
+        val groupDB = groupDao.getById(id)
         val faculty = groupDB.facultyId?.let { specialityDao.getFacultyById(it) }
         return groupDB.toDomainEntity(faculty = faculty?.toDomainEntity())
     }

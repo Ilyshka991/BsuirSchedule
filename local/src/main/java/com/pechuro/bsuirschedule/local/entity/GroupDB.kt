@@ -17,6 +17,8 @@ import androidx.room.PrimaryKey
 )
 data class GroupDB(
         @PrimaryKey
+        @ColumnInfo(name = "id")
+        val id: Long,
         @ColumnInfo(name = "number")
         val number: String,
         @ColumnInfo(name = "faculty_id", index = true)

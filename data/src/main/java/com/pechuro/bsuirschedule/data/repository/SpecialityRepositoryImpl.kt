@@ -69,7 +69,9 @@ class SpecialityRepositoryImpl(
 
     private suspend fun loadSpecialitiesFromApi(): List<Speciality> = api.getAllSpecialities()
             .map { dto ->
-                val faculty = dto.facultyId.let { dao.getFacultyById(it) }
+                val faculty = dao.getFacultyById(dto.facultyId)
+                val educationForm = dto.educationForm.toDomainEntity()
+                storeEducationForm(educationForm)
                 dto.toDomainEntity(
                         faculty = faculty?.toDomainEntity()
                 )
@@ -88,10 +90,10 @@ class SpecialityRepositoryImpl(
     private suspend fun getSpecialitiesFromDao() = dao.getAllSpecialities()
             .map { list ->
                 list.map { specialityDB ->
-                    val faculty = dao.getFacultyById(specialityDB.facultyId)
+                    val faculty = specialityDB.facultyId?.let { dao.getFacultyById(it) }
                     val educationForm = dao.getEducationFormById(specialityDB.educationFormId)
                     specialityDB.toDomainEntity(
-                            faculty = faculty.toDomainEntity(),
+                            faculty = faculty?.toDomainEntity(),
                             educationForm = educationForm.toDomainEntity()
                     )
                 }
@@ -127,19 +129,15 @@ class SpecialityRepositoryImpl(
         }
     }
 
-    private suspend fun storeEducationForms(groups: List<EducationForm>) {
-        groups.map {
-            it.toDatabaseEntity()
-        }.run {
-            dao.insertEducationFormList(this)
-        }
-    }
-
     private suspend fun storeSpecialities(groups: List<Speciality>) {
         groups.map {
             it.toDatabaseEntity()
         }.run {
             dao.insertSpecialityList(this)
         }
+    }
+
+    private suspend fun storeEducationForm(educationForm: EducationForm) {
+        dao.insert(educationForm.toDatabaseEntity())
     }
 }

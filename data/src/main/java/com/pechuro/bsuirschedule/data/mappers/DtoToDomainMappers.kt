@@ -43,7 +43,7 @@ fun AuditoryDTO.toDomainEntity() = run {
 
 fun EmployeeDTO.toDomainEntity() = run {
     Employee(
-            id = employeeId,
+            id = id,
             firstName = firstName,
             middleName = middleName,
             lastName = lastName,
@@ -55,6 +55,7 @@ fun EmployeeDTO.toDomainEntity() = run {
 
 fun GroupDTO.toDomainEntity(faculty: Faculty?) = run {
     Group(
+            id = id,
             number = number,
             faculty = faculty,
             course = course
@@ -84,7 +85,7 @@ fun FacultyDTO.toDomainEntity() = run {
     )
 }
 
-fun SpecialityDTO.toDomainEntity(faculty: Faculty) = run {
+fun SpecialityDTO.toDomainEntity(faculty: Faculty?) = run {
     Speciality(
             id = id,
             name = name,

@@ -22,8 +22,10 @@ class InfoLoadActivityViewModel @Inject constructor(
             status.value = LOADING
             try {
                 loadInfo.execute(BaseInteractor.NoParams)
+                println("AAAAAA")
                 status.value = COMPLETE
             } catch (e: Exception) {
+               e.printStackTrace()
                 status.value = ERROR
             }
         }

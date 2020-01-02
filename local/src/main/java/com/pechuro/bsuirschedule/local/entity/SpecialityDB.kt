@@ -25,7 +25,7 @@ data class SpecialityDB(
         @ColumnInfo(name = "id")
         val id: Long,
         @ColumnInfo(name = "faculty_id", index = true)
-        val facultyId: Long,
+        val facultyId: Long?,
         @ColumnInfo(name = "education_form_id", index = true)
         val educationFormId: Long,
         @ColumnInfo(name = "name")

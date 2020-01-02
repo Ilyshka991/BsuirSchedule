@@ -7,7 +7,7 @@ interface IGroupRepository {
 
     suspend fun getAll(): Flow<List<Group>>
 
-    suspend fun getByNumber(number: String): Group
+    suspend fun getById(id: Long): Group
 
     suspend fun update()
 
