@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 class GroupRepositoryImpl : IGroupRepository {
 
-    override fun getAll(): Flow<List<Group>> {
+    override suspend fun getAll(): Flow<List<Group>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

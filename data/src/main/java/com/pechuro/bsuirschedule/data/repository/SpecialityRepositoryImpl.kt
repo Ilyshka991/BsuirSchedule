@@ -8,15 +8,15 @@ import kotlinx.coroutines.flow.Flow
 
 class SpecialityRepositoryImpl : ISpecialityRepository {
 
-    override fun getAllFaculties(): Flow<List<Faculty>> {
+    override suspend fun getAllFaculties(): Flow<List<Faculty>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getAllDepartments(): Flow<List<Department>> {
+    override suspend fun getAllDepartments(): Flow<List<Department>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getAllSpecialities(): Flow<List<Speciality>> {
+    override suspend fun getAllSpecialities(): Flow<List<Speciality>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

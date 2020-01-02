@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface IEmployeeRepository {
 
-    fun getAll(): Flow<List<Employee>>
+    suspend fun getAll(): Flow<List<Employee>>
 
     suspend fun getById(id: Long): Employee
 

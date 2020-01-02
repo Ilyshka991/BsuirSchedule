@@ -5,7 +5,8 @@ import com.pechuro.bsuirschedule.domain.repository.IEmployeeRepository
 import kotlinx.coroutines.flow.Flow
 
 class EmployeeRepositoryImpl : IEmployeeRepository {
-    override fun getAll(): Flow<List<Employee>> {
+
+    override suspend fun getAll(): Flow<List<Employee>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

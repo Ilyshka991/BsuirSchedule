@@ -9,7 +9,7 @@ interface IScheduleRepository {
 
     suspend fun getCurrentWeek(): Int
 
-    fun getAllStoredClasses(): Flow<List<Classes>>
+    suspend fun getAllStoredClasses(): Flow<List<Classes>>
 
     suspend fun getClasses(name: String, vararg type: ScheduleType): List<Classes>
 
@@ -17,7 +17,7 @@ interface IScheduleRepository {
 
     suspend fun updateAll()
 
-    fun isUpdateAvailable(schedule: Schedule): Flow<Boolean>
+    suspend fun isUpdateAvailable(schedule: Schedule): Flow<Boolean>
 
     suspend fun delete(name: String, type: ScheduleType)
 

@@ -11,7 +11,7 @@ class ScheduleRepositoryImpl : IScheduleRepository {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getAllStoredClasses(): Flow<List<Classes>> {
+    override suspend fun getAllStoredClasses(): Flow<List<Classes>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -27,7 +27,7 @@ class ScheduleRepositoryImpl : IScheduleRepository {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun isUpdateAvailable(schedule: Schedule): Flow<Boolean> {
+    override suspend fun isUpdateAvailable(schedule: Schedule): Flow<Boolean> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
