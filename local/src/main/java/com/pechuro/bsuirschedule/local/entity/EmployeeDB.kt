@@ -15,8 +15,8 @@ data class EmployeeDB(
         val lastName: String?,
         @ColumnInfo(name = "middle_name")
         val middleName: String?,
-        @ColumnInfo(name = "fio")
-        val fio: String?,
+        @ColumnInfo(name = "abbreviation")
+        val abbreviation: String?,
         @ColumnInfo(name = "photo_link")
         val photoLink: String?,
         @ColumnInfo(name = "rank")

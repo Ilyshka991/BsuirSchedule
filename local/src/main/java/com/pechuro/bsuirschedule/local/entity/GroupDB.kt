@@ -17,12 +17,10 @@ import androidx.room.PrimaryKey
 )
 data class GroupDB(
         @PrimaryKey
-        @ColumnInfo(name = "id")
-        val id: String,
-        @ColumnInfo(name = "faculty_id", index = true)
-        val facultyId: Long,
         @ColumnInfo(name = "number")
         val number: String,
+        @ColumnInfo(name = "faculty_id", index = true)
+        val facultyId: Long?,
         @ColumnInfo(name = "course")
         val course: Int?
 )

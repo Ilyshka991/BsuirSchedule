@@ -18,7 +18,8 @@ import com.pechuro.bsuirschedule.local.entity.*
             FacultyDB::class,
             ScheduleItemAuditoryJoinDB::class,
             ScheduleItemEmployeeJoinDB::class,
-            SpecialityDB::class
+            SpecialityDB::class,
+            EducationFormDB::class
         ],
         exportSchema = false,
         version = BuildConfig.DATABASE_VERSION)

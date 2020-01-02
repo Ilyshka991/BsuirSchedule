@@ -6,5 +6,5 @@ import retrofit2.http.GET
 interface BuildingApi {
 
     @GET("auditory")
-    suspend  fun getAllAuditories(): List<AuditoryDTO>
+    suspend fun getAllAuditories(): List<AuditoryDTO>
 }

@@ -4,9 +4,13 @@ import com.pechuro.bsuirschedule.data.repository.*
 import com.pechuro.bsuirschedule.di.annotations.AppScope
 import com.pechuro.bsuirschedule.domain.repository.*
 import com.pechuro.bsuirschedule.local.dao.BuildingDao
+import com.pechuro.bsuirschedule.local.dao.EmployeeDao
+import com.pechuro.bsuirschedule.local.dao.GroupDao
 import com.pechuro.bsuirschedule.local.dao.SpecialityDao
 import com.pechuro.bsuirschedule.remote.api.AnnouncementApi
 import com.pechuro.bsuirschedule.remote.api.BuildingApi
+import com.pechuro.bsuirschedule.remote.api.SpecialityApi
+import com.pechuro.bsuirschedule.remote.api.StaffApi
 import dagger.Module
 import dagger.Provides
 
@@ -15,11 +19,25 @@ class RepositoryModule {
 
     @Provides
     @AppScope
-    fun provideEmployeeRepository(): IEmployeeRepository = EmployeeRepositoryImpl()
+    fun provideEmployeeRepository(
+            api: StaffApi,
+            dao: EmployeeDao
+    ): IEmployeeRepository = EmployeeRepositoryImpl(
+            api = api,
+            dao = dao
+    )
 
     @Provides
     @AppScope
-    fun provideGroupRepository(): IGroupRepository = GroupRepositoryImpl()
+    fun provideGroupRepository(
+            api: StaffApi,
+            groupDao: GroupDao,
+            specialityDao: SpecialityDao
+    ): IGroupRepository = GroupRepositoryImpl(
+            api = api,
+            groupDao = groupDao,
+            specialityDao = specialityDao
+    )
 
     @Provides
     @AppScope
@@ -27,7 +45,13 @@ class RepositoryModule {
 
     @Provides
     @AppScope
-    fun provideSpecialityRepository(): ISpecialityRepository = SpecialityRepositoryImpl()
+    fun provideSpecialityRepository(
+            api: SpecialityApi,
+            dao: SpecialityDao
+    ): ISpecialityRepository = SpecialityRepositoryImpl(
+            api = api,
+            dao = dao
+    )
 
     @Provides
     @AppScope

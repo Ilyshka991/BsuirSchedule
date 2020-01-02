@@ -8,7 +8,7 @@ data class GroupDTO(
         @Json(name = "number")
         val number: String,
         @Json(name = "facultyId")
-        val facultyId: String?,
+        val facultyId: Long?,
         @Json(name = "course")
         val course: Int?
 )

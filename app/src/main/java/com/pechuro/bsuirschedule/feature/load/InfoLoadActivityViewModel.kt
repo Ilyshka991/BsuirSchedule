@@ -21,7 +21,7 @@ class InfoLoadActivityViewModel @Inject constructor(
         launchCoroutine {
             status.value = LOADING
             try {
-                loadInfo.executeAsync(BaseInteractor.NoParams).await()
+                loadInfo.execute(BaseInteractor.NoParams)
                 status.value = COMPLETE
             } catch (e: Exception) {
                 status.value = ERROR

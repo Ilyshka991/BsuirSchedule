@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.BaseActivity
+import com.pechuro.bsuirschedule.ext.observeNonNull
+import com.pechuro.bsuirschedule.feature.load.InfoLoadActivityViewModel.Status
 
 class InfoLoadActivity : BaseActivity() {
 
@@ -21,19 +23,35 @@ class InfoLoadActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
+        observeData()
+    }
+
+    private fun observeData() {
+        viewModel.status.observeNonNull(this) {
+            when (it) {
+                Status.IDLE -> {
+
+                }
+                Status.COMPLETE -> handleComplete()
+                Status.ERROR -> handleError()
+                Status.LOADING -> handleLoading()
+            }
+        }
     }
 
     private fun handleComplete() {
         /*val intent = NavigationActivity.newIntent(this)
         startActivity(intent)
         finish()*/
+        println(1)
     }
 
     private fun handleError() {
-
+        println(2)
     }
 
     private fun handleLoading() {
+        println(3)
 
     }
 }
