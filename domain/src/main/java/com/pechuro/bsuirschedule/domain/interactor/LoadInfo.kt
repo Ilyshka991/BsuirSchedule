@@ -20,10 +20,10 @@ class LoadInfo(
     override suspend fun run(params: NoParams) {
         withContext(Dispatchers.IO) {
             listOf(
-                    async { employeeRepository.update() },
-                    async { groupRepository.update() },
-                    async { specialityRepository.update() },
-                    async { buildingRepository.update() }
+                    async { employeeRepository.updateCache() },
+                    async { groupRepository.updateCache() },
+                    async { specialityRepository.updateCache() },
+                    async { buildingRepository.updateCache() }
             ).awaitAll()
         }
     }

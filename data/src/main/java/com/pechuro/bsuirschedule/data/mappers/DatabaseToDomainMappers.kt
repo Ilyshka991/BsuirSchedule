@@ -1,9 +1,10 @@
 package com.pechuro.bsuirschedule.data.mappers
 
 import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.local.entity.*
 
-fun FacultyDB.toDomainEntity() = run {
+fun FacultyCached.toDomainEntity() = run {
     Faculty(
             id = id,
             abbreviation = abbreviation,
@@ -11,7 +12,7 @@ fun FacultyDB.toDomainEntity() = run {
     )
 }
 
-fun EmployeeDB.toDomainEntity() = run {
+fun EmployeeCached.toDomainEntity() = run {
     Employee(
             id = id,
             firstName = firstName,
@@ -23,7 +24,7 @@ fun EmployeeDB.toDomainEntity() = run {
     )
 }
 
-fun DepartmentDB.toDomainEntity() = run {
+fun DepartmentCached.toDomainEntity() = run {
     Department(
             id = id,
             name = name,
@@ -31,7 +32,7 @@ fun DepartmentDB.toDomainEntity() = run {
     )
 }
 
-fun AuditoryTypeDB.toDomainEntity() = run {
+fun AuditoryTypeCached.toDomainEntity() = run {
     AuditoryType(
             id = id,
             name = name,
@@ -39,7 +40,7 @@ fun AuditoryTypeDB.toDomainEntity() = run {
     )
 }
 
-fun AuditoryDB.toDomainEntity(
+fun AuditoryCached.toDomainEntity(
         building: Building,
         auditoryType: AuditoryType,
         department: Department?
@@ -55,14 +56,14 @@ fun AuditoryDB.toDomainEntity(
     )
 }
 
-fun BuildingDB.toDomainEntity() = run {
+fun BuildingCached.toDomainEntity() = run {
     Building(
             id = id,
             name = name
     )
 }
 
-fun GroupDB.toDomainEntity(faculty: Faculty?) = run {
+fun GroupCached.toDomainEntity(faculty: Faculty?) = run {
     Group(
             id = id,
             number = number,
@@ -71,23 +72,23 @@ fun GroupDB.toDomainEntity(faculty: Faculty?) = run {
     )
 }
 
-fun ScheduleDB.toDomainEntity() = run {
+fun ScheduleCached.toDomainEntity() = run {
     Schedule(
             id = id,
             name = name,
-            type = type,
-            lastUpdate = lastUpdate
+            type = ScheduleType.getOrException(type),
+            lastUpdated = lastUpdate
     )
 }
 
-fun EducationFormDB.toDomainEntity() = run {
+fun EducationFormCached.toDomainEntity() = run {
     EducationForm(
             id = id,
             name = name
     )
 }
 
-fun SpecialityDB.toDomainEntity(
+fun SpecialityCached.toDomainEntity(
         faculty: Faculty?,
         educationForm: EducationForm
 ) = run {

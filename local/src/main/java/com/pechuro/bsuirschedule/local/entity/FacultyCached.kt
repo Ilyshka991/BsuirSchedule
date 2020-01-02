@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "auditory_type")
-data class AuditoryTypeDB(
+@Entity(tableName = "faculty")
+data class FacultyCached(
         @PrimaryKey
         @ColumnInfo(name = "id")
         val id: Long,

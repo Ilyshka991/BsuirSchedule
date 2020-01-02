@@ -2,7 +2,6 @@ package com.pechuro.bsuirschedule
 
 import android.app.Activity
 import android.app.Application
-import com.pechuro.bsuirschedule.di.component.AppComponent
 import com.pechuro.bsuirschedule.di.component.DaggerAppComponent
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -25,12 +24,7 @@ class App : Application(), HasActivityInjector {
     override fun activityInjector() = activityDispatchingAndroidInjector
 
     private fun initDI() {
-        appComponent = DaggerAppComponent.builder().application(this).build().also {
-            it.inject(this)
-        }
-    }
-
-    companion object {
-        lateinit var appComponent: AppComponent
+        val appComponent = DaggerAppComponent.builder().application(this).build()
+        appComponent.inject(this)
     }
 }

@@ -9,13 +9,13 @@ import androidx.room.PrimaryKey
         tableName = "group",
         foreignKeys = [
             ForeignKey(
-                    entity = FacultyDB::class,
+                    entity = FacultyCached::class,
                     parentColumns = ["id"],
                     childColumns = ["faculty_id"],
                     onDelete = ForeignKey.CASCADE)
         ]
 )
-data class GroupDB(
+data class GroupCached(
         @PrimaryKey
         @ColumnInfo(name = "id")
         val id: Long,

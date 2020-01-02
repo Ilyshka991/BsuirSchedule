@@ -7,19 +7,19 @@ import com.pechuro.bsuirschedule.local.entity.*
 
 @Database(
         entities = [
-            GroupDB::class,
-            EmployeeDB::class,
-            ScheduleDB::class,
-            ScheduleItemDB::class,
-            AuditoryDB::class,
-            AuditoryTypeDB::class,
-            BuildingDB::class,
-            DepartmentDB::class,
-            FacultyDB::class,
-            ScheduleItemAuditoryJoinDB::class,
-            ScheduleItemEmployeeJoinDB::class,
-            SpecialityDB::class,
-            EducationFormDB::class
+            GroupCached::class,
+            EmployeeCached::class,
+            ScheduleCached::class,
+            ScheduleItemCached::class,
+            AuditoryCached::class,
+            AuditoryTypeCached::class,
+            BuildingCached::class,
+            DepartmentCached::class,
+            FacultyCached::class,
+            ScheduleItemAuditoryJoin::class,
+            ScheduleItemEmployeeJoin::class,
+            SpecialityCached::class,
+            EducationFormCached::class
         ],
         exportSchema = false,
         version = BuildConfig.DATABASE_VERSION)

@@ -13,7 +13,7 @@ interface ISpecialityRepository {
 
     suspend fun getAllSpecialities(): Flow<List<Speciality>>
 
-    suspend fun update()
+    suspend fun updateCache()
 
-    suspend fun isStored(): Boolean
+    suspend fun isCached(): Boolean
 }

@@ -2,10 +2,10 @@ package com.pechuro.bsuirschedule.domain.entity
 
 data class Employee(
         val id: Long,
-        val firstName: String?,
-        val lastName: String?,
+        val firstName: String,
+        val lastName: String,
         val middleName: String?,
-        val abbreviation: String?,
+        val abbreviation: String,
         val photoLink: String?,
         val rank: String?
 )

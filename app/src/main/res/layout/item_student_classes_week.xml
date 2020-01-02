@@ -23,8 +23,7 @@
             android:layout_height="50dp"
             android:contentDescription="@string/item_classes_type_icon_description"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/ic_type_unknown" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/text_subject"

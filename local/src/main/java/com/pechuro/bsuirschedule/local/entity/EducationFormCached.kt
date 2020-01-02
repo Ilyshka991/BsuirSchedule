@@ -4,13 +4,11 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "department")
-data class DepartmentDB(
+@Entity(tableName = "education_form")
+data class EducationFormCached(
         @PrimaryKey
         @ColumnInfo(name = "id")
         val id: Long,
         @ColumnInfo(name = "name")
-        var name: String,
-        @ColumnInfo(name = "abbreviation")
-        val abbreviation: String
+        val name: String
 )

@@ -9,9 +9,9 @@ interface IGroupRepository {
 
     suspend fun getById(id: Long): Group
 
-    suspend fun update()
-
     suspend fun deleteAll()
 
-    suspend fun isStored(): Boolean
+    suspend fun isCached(): Boolean
+
+    suspend fun updateCache()
 }

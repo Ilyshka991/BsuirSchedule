@@ -9,18 +9,18 @@ import androidx.room.PrimaryKey
         tableName = "speciality",
         foreignKeys = [
             ForeignKey(
-                    entity = FacultyDB::class,
+                    entity = FacultyCached::class,
                     parentColumns = ["id"],
                     childColumns = ["faculty_id"],
                     onDelete = ForeignKey.CASCADE),
             ForeignKey(
-                    entity = EducationFormDB::class,
+                    entity = EducationFormCached::class,
                     parentColumns = ["id"],
                     childColumns = ["education_form_id"],
                     onDelete = ForeignKey.CASCADE)
         ]
 )
-data class SpecialityDB(
+data class SpecialityCached(
         @PrimaryKey
         @ColumnInfo(name = "id")
         val id: Long,

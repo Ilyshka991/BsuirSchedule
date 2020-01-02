@@ -10,7 +10,7 @@ interface IBuildingRepository {
 
     suspend fun getAllAuditoryTypes(): Flow<List<AuditoryType>>
 
-    suspend fun update()
+    suspend fun updateCache()
 
-    suspend fun isStored(): Boolean
+    suspend fun isCached(): Boolean
 }

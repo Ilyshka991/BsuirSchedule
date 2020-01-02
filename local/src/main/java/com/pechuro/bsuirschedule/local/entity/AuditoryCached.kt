@@ -8,23 +8,23 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "auditory",
         foreignKeys = [
             ForeignKey(
-                    entity = BuildingDB::class,
+                    entity = BuildingCached::class,
                     parentColumns = ["id"],
                     childColumns = ["building_id"],
                     onDelete = ForeignKey.CASCADE),
             ForeignKey(
-                    entity = AuditoryTypeDB::class,
+                    entity = AuditoryTypeCached::class,
                     parentColumns = ["id"],
                     childColumns = ["auditory_type_id"],
                     onDelete = ForeignKey.CASCADE),
             ForeignKey(
-                    entity = DepartmentDB::class,
+                    entity = DepartmentCached::class,
                     parentColumns = ["id"],
                     childColumns = ["department_id"],
                     onDelete = ForeignKey.CASCADE)
         ]
 )
-data class AuditoryDB(
+data class AuditoryCached(
         @PrimaryKey
         @ColumnInfo(name = "id")
         val id: Long,

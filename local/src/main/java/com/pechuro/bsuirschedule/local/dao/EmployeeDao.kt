@@ -4,26 +4,26 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.pechuro.bsuirschedule.local.entity.EmployeeDB
+import com.pechuro.bsuirschedule.local.entity.EmployeeCached
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EmployeeDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(vararg employee: EmployeeDB)
+    suspend fun insert(vararg employee: EmployeeCached)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(employees: List<EmployeeDB>)
+    suspend fun insert(employees: List<EmployeeCached>)
 
     @Query("DELETE FROM employee")
     suspend fun deleteAll()
 
     @Query("SELECT * FROM employee")
-    fun getAll(): Flow<List<EmployeeDB>>
+    fun getAll(): Flow<List<EmployeeCached>>
 
     @Query("SELECT * FROM employee WHERE id = :id")
-    suspend fun getById(id: Long): EmployeeDB
+    suspend fun getById(id: Long): EmployeeCached
 
     @Query("SELECT abbreviation FROM employee")
     suspend fun getAllNames(): List<String>

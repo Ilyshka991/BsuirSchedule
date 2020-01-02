@@ -13,9 +13,7 @@ abstract class BaseInteractor<out Type, in Params> where Type : Any {
 
     suspend fun executeAsync(params: Params, context: CoroutineContext): Deferred<Type> =
             withContext(context) {
-                async {
-                    run(params)
-                }
+                async { run(params) }
             }
 
 

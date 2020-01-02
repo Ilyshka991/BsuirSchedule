@@ -18,7 +18,7 @@ class BuildingRepositoryImpl(
 ) : IBuildingRepository {
 
     override suspend fun getAllAuditories(): Flow<List<Auditory>> {
-        if (!isStored()) {
+        if (!isCached()) {
             val loadedAuditories = loadAuditoriesFromApi()
             storeAuditories(loadedAuditories)
         }
@@ -31,13 +31,13 @@ class BuildingRepositoryImpl(
         }
     }
 
-    override suspend fun update() {
+    override suspend fun updateCache() {
         val loadedAuditories = loadAuditoriesFromApi()
         buildingDao.deleteAll()
         storeAuditories(loadedAuditories)
     }
 
-    override suspend fun isStored(): Boolean = buildingDao.isAuditoriesNotEmpty()
+    override suspend fun isCached(): Boolean = buildingDao.isAuditoriesNotEmpty()
 
     private suspend fun loadAuditoriesFromApi(): List<Auditory> = api.getAllAuditories()
             .map { dto ->

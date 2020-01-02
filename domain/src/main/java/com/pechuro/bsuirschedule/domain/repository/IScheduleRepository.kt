@@ -7,15 +7,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface IScheduleRepository {
 
-    suspend fun getCurrentWeek(): Int
-
-    suspend fun getAllStoredClasses(): Flow<List<Classes>>
+    suspend fun getAllCachedClasses(): Flow<List<Classes>>
 
     suspend fun getClasses(name: String, vararg type: ScheduleType): List<Classes>
 
-    suspend fun update(schedule: Schedule)
+    suspend fun updateCache(schedule: Schedule)
 
-    suspend fun updateAll()
+    suspend fun updateCached()
 
     suspend fun isUpdateAvailable(schedule: Schedule): Flow<Boolean>
 
@@ -24,4 +22,6 @@ interface IScheduleRepository {
     suspend fun deleteByType(vararg type: ScheduleType)
 
     suspend fun deleteAll()
+
+    suspend fun getCurrentWeek(): Int
 }

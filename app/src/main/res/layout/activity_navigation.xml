@@ -37,7 +37,7 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:icon="@drawable/ic_info_black_24dp"
+                app:icon="@drawable/ic_info"
                 app:iconGravity="textStart" />
 
             <Button
@@ -45,7 +45,7 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:icon="@drawable/ic_navigate_next_black_24dp"
+                app:icon="@drawable/ic_navigate_next"
                 app:iconGravity="textStart" />
 
             <Button
@@ -56,7 +56,7 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                app:icon="@drawable/ic_add_white_24dp"
+                app:icon="@drawable/ic_add"
                 app:iconGravity="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -67,7 +67,7 @@
             android:id="@+id/fab_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_fab_back_white_24dp"
+            android:src="@drawable/ic_fab_back"
             app:layout_anchor="@+id/bar_layout" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

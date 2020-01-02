@@ -17,7 +17,7 @@ class GroupRepositoryImpl(
 ) : IGroupRepository {
 
     override suspend fun getAll(): Flow<List<Group>> {
-        if (!isStored()) {
+        if (!isCached()) {
             val loadedGroups = loadGroupsFromApi()
             storeGroups(loadedGroups)
         }
@@ -30,7 +30,7 @@ class GroupRepositoryImpl(
         return groupDB.toDomainEntity(faculty = faculty?.toDomainEntity())
     }
 
-    override suspend fun update() {
+    override suspend fun updateCache() {
         val loadedGroups = loadGroupsFromApi()
         deleteAll()
         storeGroups(loadedGroups)
@@ -40,7 +40,7 @@ class GroupRepositoryImpl(
         groupDao.deleteAll()
     }
 
-    override suspend fun isStored(): Boolean = groupDao.isNotEmpty()
+    override suspend fun isCached(): Boolean = groupDao.isNotEmpty()
 
     private suspend fun loadGroupsFromApi(): List<Group> = api.getAllGroups()
             .map { dto ->

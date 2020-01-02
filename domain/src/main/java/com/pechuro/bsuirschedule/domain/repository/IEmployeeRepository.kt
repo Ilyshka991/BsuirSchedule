@@ -9,9 +9,9 @@ interface IEmployeeRepository {
 
     suspend fun getById(id: Long): Employee
 
-    suspend fun update()
-
     suspend fun deleteAll()
 
-    suspend fun isStored(): Boolean
+    suspend fun isCached(): Boolean
+
+    suspend fun updateCache()
 }

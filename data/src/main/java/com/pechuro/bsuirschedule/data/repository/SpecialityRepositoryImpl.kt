@@ -45,7 +45,7 @@ class SpecialityRepositoryImpl(
         return getSpecialitiesFromDao()
     }
 
-    override suspend fun update() {
+    override suspend fun updateCache() {
         val departments = loadDepartmentsFromApi()
         dao.deleteAllDepartments()
         storeDepartments(departments)
@@ -57,7 +57,7 @@ class SpecialityRepositoryImpl(
         storeSpecialities(specialities)
     }
 
-    override suspend fun isStored() = withContext(Dispatchers.IO) {
+    override suspend fun isCached() = withContext(Dispatchers.IO) {
         listOf(
                 async { dao.isDepartmentsNotEmpty() },
                 async { dao.isFacultiesNotEmpty() },
@@ -117,7 +117,7 @@ class SpecialityRepositoryImpl(
         groups.map {
             it.toDatabaseEntity()
         }.run {
-            dao.insertFacultyList(this)
+            dao.insertFaculties(this)
         }
     }
 
@@ -125,7 +125,7 @@ class SpecialityRepositoryImpl(
         groups.map {
             it.toDatabaseEntity()
         }.run {
-            dao.insertDepartmentList(this)
+            dao.insertDepartments(this)
         }
     }
 
@@ -133,7 +133,7 @@ class SpecialityRepositoryImpl(
         groups.map {
             it.toDatabaseEntity()
         }.run {
-            dao.insertSpecialityList(this)
+            dao.insertSpecialities(this)
         }
     }
 

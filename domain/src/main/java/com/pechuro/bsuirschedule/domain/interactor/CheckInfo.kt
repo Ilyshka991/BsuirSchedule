@@ -20,10 +20,10 @@ class CheckInfo(
     override suspend fun run(params: NoParams): Boolean {
         return withContext(Dispatchers.IO) {
             val results = listOf(
-                    async { employeeRepository.isStored() },
-                    async { groupRepository.isStored() },
-                    async { specialityRepository.isStored() },
-                    async { buildingRepository.isStored() }
+                    async { employeeRepository.isCached() },
+                    async { groupRepository.isCached() },
+                    async { specialityRepository.isCached() },
+                    async { buildingRepository.isCached() }
             )
             results.awaitAll().foldRight(true) { result, acc ->
                 result and acc

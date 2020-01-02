@@ -1,53 +1,53 @@
 package com.pechuro.bsuirschedule.local.dao
 
 import androidx.room.*
-import com.pechuro.bsuirschedule.local.entity.AuditoryDB
-import com.pechuro.bsuirschedule.local.entity.AuditoryTypeDB
-import com.pechuro.bsuirschedule.local.entity.BuildingDB
+import com.pechuro.bsuirschedule.local.entity.AuditoryCached
+import com.pechuro.bsuirschedule.local.entity.AuditoryTypeCached
+import com.pechuro.bsuirschedule.local.entity.BuildingCached
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BuildingDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(vararg auditoryDB: AuditoryDB)
+    suspend fun insert(vararg auditory: AuditoryCached)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(vararg auditoryTypeDB: AuditoryTypeDB)
+    suspend fun insert(vararg auditoryType: AuditoryTypeCached)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(vararg buildingDB: BuildingDB)
+    suspend fun insert(vararg building: BuildingCached)
 
     @Transaction
     suspend fun deleteAll() {
-        deleteBuildings()
-        deleteAuditoriesType()
-        deleteAuditories()
+        deleteAllBuildings()
+        deleteAllAuditoriesTypes()
+        deleteAllAuditories()
     }
 
     @Query("DELETE FROM auditory")
-    suspend fun deleteAuditories()
+    suspend fun deleteAllAuditories()
 
     @Query("DELETE FROM building")
-    suspend fun deleteBuildings()
+    suspend fun deleteAllBuildings()
 
     @Query("DELETE FROM auditory_type")
-    suspend fun deleteAuditoriesType()
+    suspend fun deleteAllAuditoriesTypes()
 
     @Query("SELECT * FROM auditory")
-    fun getAllAuditories(): Flow<List<AuditoryDB>>
+    fun getAllAuditories(): Flow<List<AuditoryCached>>
 
     @Query("SELECT * FROM building")
-    fun getAllBuildings(): Flow<List<BuildingDB>>
+    fun getAllBuildings(): Flow<List<BuildingCached>>
 
     @Query("SELECT * FROM auditory_type")
-    fun getAllAuditoryTypes(): Flow<List<AuditoryTypeDB>>
+    fun getAllAuditoryTypes(): Flow<List<AuditoryTypeCached>>
 
     @Query("SELECT * FROM building WHERE id = :id")
-    suspend fun getBuildingById(id: Long): BuildingDB
+    suspend fun getBuildingById(id: Long): BuildingCached
 
     @Query("SELECT * FROM auditory_type WHERE id = :id")
-    suspend fun getAuditoryTypeById(id: Long): AuditoryTypeDB
+    suspend fun getAuditoryTypeById(id: Long): AuditoryTypeCached
 
     @Query("SELECT EXISTS(SELECT 1 FROM auditory)")
     suspend fun isAuditoriesNotEmpty(): Boolean

@@ -8,7 +8,7 @@ data class EmployeeDTO(
         @Json(name = "id")
         val id: Long,
         @Json(name = "firstName")
-        val firstName: String?,
+        val firstName: String,
         @Json(name = "lastName")
         val lastName: String,
         @Json(name = "middleName")

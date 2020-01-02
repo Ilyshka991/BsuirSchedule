@@ -15,7 +15,7 @@ class EmployeeRepositoryImpl(
 ) : IEmployeeRepository {
 
     override suspend fun getAll(): Flow<List<Employee>> {
-        if (!isStored()) {
+        if (!isCached()) {
             val loadedEmployees = loadEmployeesFromApi()
             storeEmployees(loadedEmployees)
         }
@@ -24,7 +24,7 @@ class EmployeeRepositoryImpl(
 
     override suspend fun getById(id: Long): Employee = dao.getById(id).toDomainEntity()
 
-    override suspend fun update() {
+    override suspend fun updateCache() {
         val loadedEmployees = loadEmployeesFromApi()
         deleteAll()
         storeEmployees(loadedEmployees)
@@ -34,7 +34,7 @@ class EmployeeRepositoryImpl(
         dao.deleteAll()
     }
 
-    override suspend fun isStored(): Boolean = dao.isNotEmpty()
+    override suspend fun isCached(): Boolean = dao.isNotEmpty()
 
     private suspend fun loadEmployeesFromApi(): List<Employee> = api.getAllEmployees()
             .map { dto ->

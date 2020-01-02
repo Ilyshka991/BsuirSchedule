@@ -9,13 +9,13 @@ import androidx.room.PrimaryKey
         tableName = "schedule_item",
         foreignKeys = [
             ForeignKey(
-                    entity = ScheduleDB::class,
+                    entity = ScheduleCached::class,
                     parentColumns = ["id"],
                     childColumns = ["schedule_id"],
                     onDelete = ForeignKey.CASCADE)
         ]
 )
-data class ScheduleItemDB(
+data class ScheduleItemCached(
         @PrimaryKey(autoGenerate = true)
         @ColumnInfo(name = "id")
         var id: Long = 0,

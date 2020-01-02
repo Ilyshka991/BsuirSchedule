@@ -2,10 +2,14 @@ package com.pechuro.bsuirschedule.common
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.extensions.LayoutContainer
 
-abstract class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+abstract class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), LayoutContainer {
 
-    abstract fun onBind(data: BaseViewHolderData)
+    override val containerView: View?
+        get() = itemView
+
+    abstract fun onBind(data: AbstractViewHolderData)
 }
 
-abstract class BaseViewHolderData
+abstract class AbstractViewHolderData
