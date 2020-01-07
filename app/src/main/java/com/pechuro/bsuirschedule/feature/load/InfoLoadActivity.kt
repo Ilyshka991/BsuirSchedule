@@ -3,7 +3,7 @@ package com.pechuro.bsuirschedule.feature.load
 import android.content.Context
 import android.content.Intent
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.BaseActivity
+import com.pechuro.bsuirschedule.common.base.BaseActivity
 import com.pechuro.bsuirschedule.ext.observeNonNull
 import com.pechuro.bsuirschedule.feature.load.InfoLoadActivityViewModel.Status
 

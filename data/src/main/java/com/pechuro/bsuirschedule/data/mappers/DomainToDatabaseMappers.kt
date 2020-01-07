@@ -3,7 +3,7 @@ package com.pechuro.bsuirschedule.data.mappers
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.local.entity.*
 
-fun Department.toDatabaseEntity() = run {
+internal fun Department.toDatabaseEntity() = run {
     DepartmentCached(
             id = id,
             name = name,
@@ -11,7 +11,7 @@ fun Department.toDatabaseEntity() = run {
     )
 }
 
-fun AuditoryType.toDatabaseEntity() = run {
+internal fun AuditoryType.toDatabaseEntity() = run {
     AuditoryTypeCached(
             id = id,
             name = name,
@@ -19,14 +19,14 @@ fun AuditoryType.toDatabaseEntity() = run {
     )
 }
 
-fun Building.toDatabaseEntity() = run {
+internal fun Building.toDatabaseEntity() = run {
     BuildingCached(
             id = id,
             name = name
     )
 }
 
-fun Auditory.toDatabaseEntity(
+internal fun Auditory.toDatabaseEntity(
         building: BuildingCached,
         auditoryType: AuditoryTypeCached,
         department: DepartmentCached?
@@ -42,7 +42,7 @@ fun Auditory.toDatabaseEntity(
     )
 }
 
-fun Employee.toDatabaseEntity() = run {
+internal fun Employee.toDatabaseEntity() = run {
     EmployeeCached(
             id = id,
             firstName = firstName,
@@ -54,14 +54,14 @@ fun Employee.toDatabaseEntity() = run {
     )
 }
 
-fun EducationForm.toDatabaseEntity() = run {
+internal fun EducationForm.toDatabaseEntity() = run {
     EducationFormCached(
             id = id,
             name = name
     )
 }
 
-fun Group.toDatabaseEntity() = run {
+internal fun Group.toDatabaseEntity() = run {
     GroupCached(
             id = id,
             number = number,
@@ -70,7 +70,7 @@ fun Group.toDatabaseEntity() = run {
     )
 }
 
-fun Schedule.toDatabaseEntity() = run {
+internal fun Schedule.toDatabaseEntity() = run {
     ScheduleCached(
             id = id,
             name = name,
@@ -79,7 +79,7 @@ fun Schedule.toDatabaseEntity() = run {
     )
 }
 
-fun Speciality.toDatabaseEntity() = run {
+internal fun Speciality.toDatabaseEntity() = run {
     SpecialityCached(
             id = id,
             name = name,
@@ -90,7 +90,7 @@ fun Speciality.toDatabaseEntity() = run {
     )
 }
 
-fun Faculty.toDatabaseEntity() = run {
+internal fun Faculty.toDatabaseEntity() = run {
     FacultyCached(
             id = id,
             abbreviation = abbreviation,

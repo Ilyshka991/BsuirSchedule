@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.common
+package com.pechuro.bsuirschedule.common.base
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes

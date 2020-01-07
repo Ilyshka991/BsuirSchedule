@@ -4,7 +4,7 @@ import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.local.entity.*
 
-fun FacultyCached.toDomainEntity() = run {
+internal fun FacultyCached.toDomainEntity() = run {
     Faculty(
             id = id,
             abbreviation = abbreviation,
@@ -12,7 +12,7 @@ fun FacultyCached.toDomainEntity() = run {
     )
 }
 
-fun EmployeeCached.toDomainEntity() = run {
+internal fun EmployeeCached.toDomainEntity() = run {
     Employee(
             id = id,
             firstName = firstName,
@@ -24,7 +24,7 @@ fun EmployeeCached.toDomainEntity() = run {
     )
 }
 
-fun DepartmentCached.toDomainEntity() = run {
+internal fun DepartmentCached.toDomainEntity() = run {
     Department(
             id = id,
             name = name,
@@ -32,7 +32,7 @@ fun DepartmentCached.toDomainEntity() = run {
     )
 }
 
-fun AuditoryTypeCached.toDomainEntity() = run {
+internal fun AuditoryTypeCached.toDomainEntity() = run {
     AuditoryType(
             id = id,
             name = name,
@@ -40,7 +40,7 @@ fun AuditoryTypeCached.toDomainEntity() = run {
     )
 }
 
-fun AuditoryCached.toDomainEntity(
+internal fun AuditoryCached.toDomainEntity(
         building: Building,
         auditoryType: AuditoryType,
         department: Department?
@@ -56,14 +56,14 @@ fun AuditoryCached.toDomainEntity(
     )
 }
 
-fun BuildingCached.toDomainEntity() = run {
+internal fun BuildingCached.toDomainEntity() = run {
     Building(
             id = id,
             name = name
     )
 }
 
-fun GroupCached.toDomainEntity(faculty: Faculty?) = run {
+internal fun GroupCached.toDomainEntity(faculty: Faculty?) = run {
     Group(
             id = id,
             number = number,
@@ -72,7 +72,7 @@ fun GroupCached.toDomainEntity(faculty: Faculty?) = run {
     )
 }
 
-fun ScheduleCached.toDomainEntity() = run {
+internal fun ScheduleCached.toDomainEntity() = run {
     Schedule(
             id = id,
             name = name,
@@ -81,14 +81,14 @@ fun ScheduleCached.toDomainEntity() = run {
     )
 }
 
-fun EducationFormCached.toDomainEntity() = run {
+internal fun EducationFormCached.toDomainEntity() = run {
     EducationForm(
             id = id,
             name = name
     )
 }
 
-fun SpecialityCached.toDomainEntity(
+internal fun SpecialityCached.toDomainEntity(
         faculty: Faculty?,
         educationForm: EducationForm
 ) = run {

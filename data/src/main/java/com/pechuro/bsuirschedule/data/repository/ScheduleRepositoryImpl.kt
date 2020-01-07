@@ -1,12 +1,13 @@
 package com.pechuro.bsuirschedule.data.repository
 
+import com.pechuro.bsuirschedule.data.common.BaseRepository
 import com.pechuro.bsuirschedule.domain.entity.Classes
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
 import kotlinx.coroutines.flow.Flow
 
-class ScheduleRepositoryImpl : IScheduleRepository {
+class ScheduleRepositoryImpl : BaseRepository(), IScheduleRepository {
     override suspend fun getCurrentWeek(): Int {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

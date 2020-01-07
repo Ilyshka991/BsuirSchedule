@@ -22,6 +22,9 @@ dependencies {
     implementation kotlin
     implementation coroutines.values()
 
+    implementation jsonSerializer.values()
+    implementation networkDependencies.values()
+
     api project(path: ':local')
     api project(path: ':remote')
     implementation project(path: ':domain')

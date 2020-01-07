@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface IBuildingRepository {
 
-    suspend fun getAllAuditories(): Flow<List<Auditory>>
+    suspend fun getAllAuditories(forceUpdate: Boolean = false): Flow<List<Auditory>>
 
     suspend fun getAllAuditoryTypes(): Flow<List<AuditoryType>>
 

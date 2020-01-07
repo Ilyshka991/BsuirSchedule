@@ -17,14 +17,14 @@ class LoadInfo(
         private val buildingRepository: IBuildingRepository
 ) : BaseInteractor<Unit, BaseInteractor.NoParams>() {
 
-    override suspend fun run(params: NoParams) {
-        withContext(Dispatchers.IO) {
-            listOf(
-                    async { employeeRepository.updateCache() },
-                    async { groupRepository.updateCache() },
-                    async { specialityRepository.updateCache() },
-                    async { buildingRepository.updateCache() }
-            ).awaitAll()
-        }
+    override suspend fun run(params: NoParams) = withContext(Dispatchers.IO) {
+        listOf(
+                async { employeeRepository.updateCache() },
+                async { groupRepository.updateCache() },
+                async { specialityRepository.updateCache() },
+                async { buildingRepository.updateCache() }
+        )
+                .awaitAll()
+                .first()
     }
 }

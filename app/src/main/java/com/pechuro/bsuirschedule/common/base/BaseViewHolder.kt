@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.common
+package com.pechuro.bsuirschedule.common.base
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

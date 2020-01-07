@@ -3,14 +3,14 @@ package com.pechuro.bsuirschedule.data.mappers
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.remote.dto.*
 
-fun BuildingDTO.toDomainEntity() = run {
+internal fun BuildingDTO.toDomainEntity() = run {
     Building(
             id = id,
             name = name
     )
 }
 
-fun AuditoryTypeDTO.toDomainEntity() = run {
+internal fun AuditoryTypeDTO.toDomainEntity() = run {
     AuditoryType(
             id = id,
             name = name,
@@ -18,7 +18,7 @@ fun AuditoryTypeDTO.toDomainEntity() = run {
     )
 }
 
-fun DepartmentDTO.toDomainEntity() = run {
+internal fun DepartmentDTO.toDomainEntity() = run {
     Department(
             id = id,
             name = name,
@@ -26,7 +26,7 @@ fun DepartmentDTO.toDomainEntity() = run {
     )
 }
 
-fun AuditoryDTO.toDomainEntity() = run {
+internal fun AuditoryDTO.toDomainEntity() = run {
     val building = buildingNumber.toDomainEntity()
     val auditoryType = auditoryType.toDomainEntity()
     val department = department?.toDomainEntity()
@@ -41,7 +41,7 @@ fun AuditoryDTO.toDomainEntity() = run {
     )
 }
 
-fun EmployeeDTO.toDomainEntity() = run {
+internal fun EmployeeDTO.toDomainEntity() = run {
     Employee(
             id = id,
             firstName = firstName,
@@ -53,7 +53,7 @@ fun EmployeeDTO.toDomainEntity() = run {
     )
 }
 
-fun GroupDTO.toDomainEntity(faculty: Faculty?) = run {
+internal fun GroupDTO.toDomainEntity(faculty: Faculty?) = run {
     Group(
             id = id,
             number = number,
@@ -62,7 +62,7 @@ fun GroupDTO.toDomainEntity(faculty: Faculty?) = run {
     )
 }
 
-fun AnnouncementDTO.toDomainEntity() = run {
+internal fun AnnouncementDTO.toDomainEntity() = run {
     Announcement(
             date = date,
             content = content,
@@ -70,14 +70,14 @@ fun AnnouncementDTO.toDomainEntity() = run {
     )
 }
 
-fun EducationFormDTO.toDomainEntity() = run {
+internal fun EducationFormDTO.toDomainEntity() = run {
     EducationForm(
             id = id,
             name = name
     )
 }
 
-fun FacultyDTO.toDomainEntity() = run {
+internal fun FacultyDTO.toDomainEntity() = run {
     Faculty(
             id = id,
             name = name,
@@ -85,7 +85,7 @@ fun FacultyDTO.toDomainEntity() = run {
     )
 }
 
-fun SpecialityDTO.toDomainEntity(faculty: Faculty?) = run {
+internal fun SpecialityDTO.toDomainEntity(faculty: Faculty?) = run {
     Speciality(
             id = id,
             name = name,

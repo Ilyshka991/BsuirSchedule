@@ -1,8 +1,9 @@
 package com.pechuro.bsuirschedule.feature.load
 
 import androidx.lifecycle.MutableLiveData
-import com.pechuro.bsuirschedule.common.BaseViewModel
+import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
+import com.pechuro.bsuirschedule.domain.common.fold
 import com.pechuro.bsuirschedule.domain.interactor.LoadInfo
 import com.pechuro.bsuirschedule.feature.load.InfoLoadActivityViewModel.Status.*
 import javax.inject.Inject
@@ -20,14 +21,15 @@ class InfoLoadActivityViewModel @Inject constructor(
     fun loadInfo() {
         launchCoroutine {
             status.value = LOADING
-            try {
-                loadInfo.execute(BaseInteractor.NoParams)
-                println("AAAAAA")
-                status.value = COMPLETE
-            } catch (e: Exception) {
-               e.printStackTrace()
-                status.value = ERROR
-            }
+            loadInfo.execute(BaseInteractor.NoParams).fold(
+                    onSuccess = {
+                        status.value = COMPLETE
+                    },
+                    onFailure = {
+                        it.printStackTrace()
+                        status.value = ERROR
+                    }
+            )
         }
     }
 

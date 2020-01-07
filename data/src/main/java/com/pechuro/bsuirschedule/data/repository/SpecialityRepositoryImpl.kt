@@ -1,5 +1,6 @@
 package com.pechuro.bsuirschedule.data.repository
 
+import com.pechuro.bsuirschedule.data.common.BaseRepository
 import com.pechuro.bsuirschedule.data.mappers.toDatabaseEntity
 import com.pechuro.bsuirschedule.data.mappers.toDomainEntity
 import com.pechuro.bsuirschedule.domain.entity.Department
@@ -9,89 +10,115 @@ import com.pechuro.bsuirschedule.domain.entity.Speciality
 import com.pechuro.bsuirschedule.domain.repository.ISpecialityRepository
 import com.pechuro.bsuirschedule.local.dao.SpecialityDao
 import com.pechuro.bsuirschedule.remote.api.SpecialityApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
+import kotlin.coroutines.coroutineContext
 
 class SpecialityRepositoryImpl(
         private val api: SpecialityApi,
         private val dao: SpecialityDao
-) : ISpecialityRepository {
+) : BaseRepository(), ISpecialityRepository {
 
-    override suspend fun getAllFaculties(): Flow<List<Faculty>> {
-        if (!dao.isFacultiesNotEmpty()) {
-            val faculties = loadFacultiesFromApi()
-            storeFaculties(faculties)
+    override suspend fun getAllFaculties(forceUpdate: Boolean): Flow<List<Faculty>> {
+        withContext(coroutineContext) {
+            launch {
+                if (performDaoCall { !dao.isFacultiesNotEmpty() }) {
+                    val faculties = loadFacultiesFromApi()
+                    storeFaculties(faculties)
+                }
+                if (forceUpdate) {
+                    updateCache()
+                }
+            }
         }
         return getFacultiesFromDao()
     }
 
-    override suspend fun getAllDepartments(): Flow<List<Department>> {
-        if (!dao.isDepartmentsNotEmpty()) {
-            val departments = loadDepartmentsFromApi()
-            storeDepartments(departments)
+    override suspend fun getAllDepartments(forceUpdate: Boolean): Flow<List<Department>> {
+        withContext(coroutineContext) {
+            launch {
+                if (performDaoCall { !dao.isDepartmentsNotEmpty() }) {
+                    val departments = loadDepartmentsFromApi()
+                    storeDepartments(departments)
+                }
+                if (forceUpdate) {
+                    updateCache()
+                }
+            }
         }
         return getDepartmentsFromDao()
     }
 
-    override suspend fun getAllSpecialities(): Flow<List<Speciality>> {
-        if (!dao.isSpecialitiesNotEmpty()) {
-            val specialities = loadSpecialitiesFromApi()
-            storeSpecialities(specialities)
+    override suspend fun getAllSpecialities(forceUpdate: Boolean): Flow<List<Speciality>> {
+        withContext(coroutineContext) {
+            launch {
+                if (performDaoCall { !dao.isSpecialitiesNotEmpty() }) {
+                    val specialities = loadSpecialitiesFromApi()
+                    storeSpecialities(specialities)
+                }
+                if (forceUpdate) {
+                    updateCache()
+                }
+            }
         }
         return getSpecialitiesFromDao()
     }
 
     override suspend fun updateCache() {
         val departments = loadDepartmentsFromApi()
-        dao.deleteAllDepartments()
+        performDaoCall { dao.deleteAllDepartments() }
         storeDepartments(departments)
         val faculties = loadFacultiesFromApi()
-        dao.deleteAllFaculties()
+        performDaoCall { dao.deleteAllFaculties() }
         storeFaculties(faculties)
         val specialities = loadSpecialitiesFromApi()
-        dao.deleteAllSpecialities()
+        performDaoCall { dao.deleteAllSpecialities() }
         storeSpecialities(specialities)
     }
 
     override suspend fun isCached() = withContext(Dispatchers.IO) {
         listOf(
-                async { dao.isDepartmentsNotEmpty() },
-                async { dao.isFacultiesNotEmpty() },
-                async { dao.isSpecialitiesNotEmpty() }
+                async { performDaoCall { dao.isDepartmentsNotEmpty() } },
+                async { performDaoCall { dao.isFacultiesNotEmpty() } },
+                async { performDaoCall { dao.isSpecialitiesNotEmpty() } }
         ).awaitAll().foldRight(true) { isNotEmpty, acc ->
             isNotEmpty and acc
         }
     }
 
-    private suspend fun loadSpecialitiesFromApi(): List<Speciality> = api.getAllSpecialities()
-            .map { dto ->
-                val faculty = dao.getFacultyById(dto.facultyId)
-                val educationForm = dto.educationForm.toDomainEntity()
-                storeEducationForm(educationForm)
-                dto.toDomainEntity(
-                        faculty = faculty?.toDomainEntity()
-                )
-            }
+    private suspend fun loadSpecialitiesFromApi(): List<Speciality> =
+            performApiCall { api.getAllSpecialities() }
+                    .map { dto ->
+                        val faculty = performDaoCall { dao.getFacultyById(dto.facultyId) }
+                        val educationForm = dto.educationForm.toDomainEntity()
+                        storeEducationForm(educationForm)
+                        dto.toDomainEntity(
+                                faculty = faculty?.toDomainEntity()
+                        )
+                    }
 
-    private suspend fun loadFacultiesFromApi(): List<Faculty> = api.getAllFaculties()
-            .map { dto ->
-                dto.toDomainEntity()
-            }
+    private suspend fun loadFacultiesFromApi(): List<Faculty> =
+            performApiCall { api.getAllFaculties() }
+                    .map { dto ->
+                        dto.toDomainEntity()
+                    }
 
-    private suspend fun loadDepartmentsFromApi(): List<Department> = api.getAllDepartments()
-            .map { dto ->
-                dto.toDomainEntity()
-            }
+    private suspend fun loadDepartmentsFromApi(): List<Department> =
+            performApiCall { api.getAllDepartments() }
+                    .map { dto ->
+                        dto.toDomainEntity()
+                    }
 
-    private suspend fun getSpecialitiesFromDao() = dao.getAllSpecialities()
+    private suspend fun getSpecialitiesFromDao() = performDaoCall { dao.getAllSpecialities() }
             .map { list ->
                 list.map { specialityDB ->
-                    val faculty = specialityDB.facultyId?.let { dao.getFacultyById(it) }
-                    val educationForm = dao.getEducationFormById(specialityDB.educationFormId)
+                    val faculty = specialityDB.facultyId?.let {
+                        performDaoCall { dao.getFacultyById(it) }
+                    }
+                    val educationForm = performDaoCall {
+                        dao.getEducationFormById(specialityDB.educationFormId)
+                    }
                     specialityDB.toDomainEntity(
                             faculty = faculty?.toDomainEntity(),
                             educationForm = educationForm.toDomainEntity()
@@ -99,14 +126,14 @@ class SpecialityRepositoryImpl(
                 }
             }
 
-    private fun getFacultiesFromDao() = dao.getAllFaculties()
+    private suspend fun getFacultiesFromDao() = performDaoCall { dao.getAllFaculties() }
             .map { list ->
                 list.map { facultyDB ->
                     facultyDB.toDomainEntity()
                 }
             }
 
-    private fun getDepartmentsFromDao() = dao.getAllDepartments()
+    private suspend fun getDepartmentsFromDao() = performDaoCall { dao.getAllDepartments() }
             .map { list ->
                 list.map { departmentDB ->
                     departmentDB.toDomainEntity()
@@ -117,7 +144,7 @@ class SpecialityRepositoryImpl(
         groups.map {
             it.toDatabaseEntity()
         }.run {
-            dao.insertFaculties(this)
+            performDaoCall { dao.insertFaculties(this) }
         }
     }
 
@@ -125,7 +152,7 @@ class SpecialityRepositoryImpl(
         groups.map {
             it.toDatabaseEntity()
         }.run {
-            dao.insertDepartments(this)
+            performDaoCall { dao.insertDepartments(this) }
         }
     }
 
@@ -133,11 +160,11 @@ class SpecialityRepositoryImpl(
         groups.map {
             it.toDatabaseEntity()
         }.run {
-            dao.insertSpecialities(this)
+            performDaoCall { dao.insertSpecialities(this) }
         }
     }
 
     private suspend fun storeEducationForm(educationForm: EducationForm) {
-        dao.insert(educationForm.toDatabaseEntity())
+        performDaoCall { dao.insert(educationForm.toDatabaseEntity()) }
     }
 }

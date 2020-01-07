@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.BaseActivity
+import com.pechuro.bsuirschedule.common.base.BaseActivity
 import com.pechuro.bsuirschedule.ext.transaction
 import com.pechuro.bsuirschedule.feature.edit.editlesson.EditLessonFragment
 import kotlinx.android.synthetic.main.activity_container.*

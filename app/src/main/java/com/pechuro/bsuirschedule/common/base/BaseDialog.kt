@@ -1,10 +1,12 @@
-package com.pechuro.bsuirschedule.common
+package com.pechuro.bsuirschedule.common.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.annotation.LayoutRes
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -14,7 +16,7 @@ import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-abstract class BaseFragment : Fragment(), HasSupportFragmentInjector {
+abstract class BaseDialog : DialogFragment(), HasSupportFragmentInjector {
 
     @Inject
     protected lateinit var fragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
@@ -25,18 +27,20 @@ abstract class BaseFragment : Fragment(), HasSupportFragmentInjector {
     @get:LayoutRes
     protected abstract val layoutId: Int
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         performDI()
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? = inflater.inflate(layoutId, container, false)
+    ): View? {
+        val view = inflater.inflate(layoutId, container, false)
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        return view
+    }
 
     override fun supportFragmentInjector() = fragmentDispatchingAndroidInjector
 

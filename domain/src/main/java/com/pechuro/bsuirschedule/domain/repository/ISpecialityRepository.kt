@@ -7,11 +7,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface ISpecialityRepository {
 
-    suspend fun getAllFaculties(): Flow<List<Faculty>>
+    suspend fun getAllFaculties(forceUpdate: Boolean = false): Flow<List<Faculty>>
 
-    suspend fun getAllDepartments(): Flow<List<Department>>
+    suspend fun getAllDepartments(forceUpdate: Boolean = false): Flow<List<Department>>
 
-    suspend fun getAllSpecialities(): Flow<List<Speciality>>
+    suspend fun getAllSpecialities(forceUpdate: Boolean = false): Flow<List<Speciality>>
 
     suspend fun updateCache()
 
