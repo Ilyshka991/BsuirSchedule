@@ -26,7 +26,6 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun decideNextActivityIntent(): Intent = if (viewModel.isInfoLoaded()) {
-
         MainActivity.newIntent(this)
     } else {
         InfoLoadActivity.newIntent(this)
