@@ -2,32 +2,31 @@ package com.pechuro.bsuirschedule.remote.api
 
 import com.pechuro.bsuirschedule.remote.dto.LastUpdateDTO
 import com.pechuro.bsuirschedule.remote.dto.ScheduleDTO
-import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ScheduleApi {
 
     @GET("week")
-    fun getCurrentWeek(): Single<Int>
+    suspend fun getCurrentWeek(): Int
 
     @GET("studentGroup/schedule")
-    fun getStudentSchedule(
+    suspend fun getStudentSchedule(
             @Query(value = "studentGroup") name: String
-    ): Single<ScheduleDTO>
+    ): ScheduleDTO
 
     @GET("studentGroup/schedule")
-    fun getStudentSchedule(
+    suspend fun getStudentSchedule(
             @Query(value = "id") id: Long
-    ): Single<ScheduleDTO>
+    ): ScheduleDTO
 
     @GET("portal/employeeSchedule")
-    fun getEmployeeSchedule(
-            @Query(value = "employeeId") employeeId: String
-    ): Single<ScheduleDTO>
+    suspend fun getEmployeeSchedule(
+            @Query(value = "id") employeeId: String
+    ): ScheduleDTO
 
     @GET("studentGroup/lastUpdateDate")
-    fun getLastUpdateDate(
+    suspend fun getLastUpdateDate(
             @Query(value = "studentGroup") studentGroup: String
-    ): Single<LastUpdateDTO>
+    ): LastUpdateDTO
 }

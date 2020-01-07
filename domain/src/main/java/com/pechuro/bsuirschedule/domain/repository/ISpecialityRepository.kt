@@ -3,19 +3,17 @@ package com.pechuro.bsuirschedule.domain.repository
 import com.pechuro.bsuirschedule.domain.entity.Department
 import com.pechuro.bsuirschedule.domain.entity.Faculty
 import com.pechuro.bsuirschedule.domain.entity.Speciality
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 
 interface ISpecialityRepository {
 
-    fun getAllFaculties(): Observable<List<Faculty>>
+    suspend fun getAllFaculties(forceUpdate: Boolean = false): Flow<List<Faculty>>
 
-    fun getAllDepartments(): Observable<List<Department>>
+    suspend fun getAllDepartments(forceUpdate: Boolean = false): Flow<List<Department>>
 
-    fun getAllSpecialities(): Observable<List<Speciality>>
+    suspend fun getAllSpecialities(forceUpdate: Boolean = false): Flow<List<Speciality>>
 
-    fun update(): Completable
+    suspend fun updateCache()
 
-    fun isStored(): Single<Boolean>
+    suspend fun isCached(): Boolean
 }

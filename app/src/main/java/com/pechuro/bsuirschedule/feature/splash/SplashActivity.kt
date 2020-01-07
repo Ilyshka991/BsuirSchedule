@@ -3,7 +3,7 @@ package com.pechuro.bsuirschedule.feature.splash
 import android.content.Intent
 import android.os.Bundle
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.BaseActivity
+import com.pechuro.bsuirschedule.common.base.BaseActivity
 import com.pechuro.bsuirschedule.feature.load.InfoLoadActivity
 
 class SplashActivity : BaseActivity() {

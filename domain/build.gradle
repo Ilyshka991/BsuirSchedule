@@ -8,6 +8,5 @@ apply from: '../configuration.gradle'
 
 dependencies {
     implementation kotlin
-
-    implementation rxDependencies.values()
+    implementation coroutines.values()
 }

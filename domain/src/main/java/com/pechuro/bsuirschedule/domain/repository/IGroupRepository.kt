@@ -1,19 +1,17 @@
 package com.pechuro.bsuirschedule.domain.repository
 
 import com.pechuro.bsuirschedule.domain.entity.Group
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 
 interface IGroupRepository {
 
-    fun getAll(): Observable<List<Group>>
+    suspend fun getAll(forceUpdate: Boolean = false): Flow<List<Group>>
 
-    fun getByNumber(number: String): Single<Group>
+    suspend fun getById(id: Long): Group
 
-    fun update(): Completable
+    suspend fun deleteAll()
 
-    fun deleteAll(): Completable
+    suspend fun isCached(): Boolean
 
-    fun isStored(): Single<Boolean>
+    suspend fun updateCache()
 }

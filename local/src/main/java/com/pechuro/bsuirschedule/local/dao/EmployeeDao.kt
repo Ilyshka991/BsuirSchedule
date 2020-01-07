@@ -1,31 +1,33 @@
 package com.pechuro.bsuirschedule.local.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.pechuro.bsuirschedule.local.entity.EmployeeCached
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EmployeeDao {
 
-   /* @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(vararg employee: EmployeeDB)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(vararg employee: EmployeeCached)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(employees: List<EmployeeDB>)
+    suspend fun insert(employees: List<EmployeeCached>)
 
-    @Query("DELETE FROM all_employees")
-    fun delete()
+    @Query("DELETE FROM employee")
+    suspend fun deleteAll()
 
-    @Query("SELECT EXISTS(SELECT 1 FROM all_employees)")
-    fun isNotEmpty(): Single<Boolean>
+    @Query("SELECT * FROM employee")
+    fun getAll(): Flow<List<EmployeeCached>>
 
-    @Query("SELECT * FROM all_employees")
-    fun getAll(): Single<List<EmployeeDB>>
+    @Query("SELECT * FROM employee WHERE id = :id")
+    suspend fun getById(id: Long): EmployeeCached
 
-    @Query("SELECT * FROM all_employees WHERE fio = :fio")
-    fun getAll(fio: String): Single<EmployeeDB>
+    @Query("SELECT abbreviation FROM employee")
+    suspend fun getAllNames(): List<String>
 
-    @Query("SELECT fio FROM all_employees")
-    fun getAllNames(): Single<List<String>>
-
-    @Query("Select employee_id FROM all_employees WHERE fio = :fio")
-    fun getId(fio: String): Single<String>*/
+    @Query("SELECT EXISTS(SELECT 1 FROM employee)")
+    suspend fun isNotEmpty(): Boolean
 }

@@ -18,5 +18,5 @@ data class AuditoryDTO(
         @Json(name = "buildingNumber")
         val buildingNumber: BuildingDTO,
         @Json(name = "department")
-        val department: DepartmentDTO
+        val department: DepartmentDTO?
 )

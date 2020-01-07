@@ -24,8 +24,7 @@ android {
 
 dependencies {
     implementation kotlin
-
-    implementation rxDependencies.values()
+    implementation coroutines.values()
 
     implementation room.values()
     kapt roomProcessor.values()

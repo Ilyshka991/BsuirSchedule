@@ -3,7 +3,8 @@ package com.pechuro.bsuirschedule.feature.load
 import android.content.Context
 import android.content.Intent
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.BaseActivity
+import com.pechuro.bsuirschedule.common.base.BaseActivity
+import com.pechuro.bsuirschedule.ext.observeNonNull
 import com.pechuro.bsuirschedule.feature.load.InfoLoadActivityViewModel.Status
 
 class InfoLoadActivity : BaseActivity() {
@@ -22,17 +23,20 @@ class InfoLoadActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
-        setStatusListeners()
+        observeData()
     }
 
-    private fun setStatusListeners() {
-        viewModel.status.subscribe {
+    private fun observeData() {
+        viewModel.status.observeNonNull(this) {
             when (it) {
-                Status.LOADING -> handleComplete()
+                Status.IDLE -> {
+
+                }
                 Status.COMPLETE -> handleComplete()
                 Status.ERROR -> handleError()
+                Status.LOADING -> handleLoading()
             }
-        }.let(weakCompositeDisposable::add)
+        }
     }
 
     private fun handleComplete() {

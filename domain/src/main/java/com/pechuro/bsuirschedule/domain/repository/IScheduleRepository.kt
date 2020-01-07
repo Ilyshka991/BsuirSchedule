@@ -3,27 +3,25 @@ package com.pechuro.bsuirschedule.domain.repository
 import com.pechuro.bsuirschedule.domain.entity.Classes
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 
 interface IScheduleRepository {
 
-    fun getCurrentWeek(): Single<Int>
+    suspend fun getAllCachedClasses(): Flow<List<Classes>>
 
-    fun getAllStoredClasses(): Observable<List<Classes>>
+    suspend fun getClasses(name: String, vararg type: ScheduleType): List<Classes>
 
-    fun getClasses(name: String, vararg type: ScheduleType): Single<List<Classes>>
+    suspend fun updateCache(schedule: Schedule)
 
-    fun update(schedule: Schedule): Completable
+    suspend fun updateCached()
 
-    fun updateAll(): Completable
+    suspend fun isUpdateAvailable(schedule: Schedule): Flow<Boolean>
 
-    fun isUpdateAvailable(schedule: Schedule): Observable<Boolean>
+    suspend fun delete(name: String, type: ScheduleType)
 
-    fun delete(name: String, type: ScheduleType): Completable
+    suspend fun deleteByType(vararg type: ScheduleType)
 
-    fun deleteByType(vararg type: ScheduleType): Completable
+    suspend fun deleteAll()
 
-    fun deleteAll(): Completable
+    suspend fun getCurrentWeek(): Int
 }

@@ -1,8 +1,8 @@
 package com.pechuro.bsuirschedule.domain.entity
 
 data class Employee(
-        val id: String,
-        val firstName: String?,
+        val id: Long,
+        val firstName: String,
         val lastName: String,
         val middleName: String?,
         val abbreviation: String,

@@ -20,8 +20,10 @@ android {
 
 dependencies {
     implementation kotlin
+    implementation coroutines.values()
 
-    implementation rxDependencies.values()
+    implementation jsonSerializer.values()
+    implementation networkDependencies.values()
 
     api project(path: ':local')
     api project(path: ':remote')

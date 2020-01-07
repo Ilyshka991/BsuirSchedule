@@ -1,9 +1,12 @@
 package com.pechuro.bsuirschedule.di.module
 
-import android.util.Log
 import com.pechuro.bsuirschedule.BuildConfig
 import com.pechuro.bsuirschedule.di.annotations.AppScope
+import com.pechuro.bsuirschedule.remote.ApiConfig.BASE_URL
+import com.pechuro.bsuirschedule.remote.ApiConfig.CONNECT_TIMEOUT
 import com.pechuro.bsuirschedule.remote.api.*
+import com.pechuro.bsuirschedule.remote.common.NetworkAvailabilityChecker
+import com.pechuro.bsuirschedule.remote.interceptor.NetworkAvailabilityInterceptor
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -11,17 +14,11 @@ import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 import retrofit2.Converter
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 @Module
 class NetworkModule {
-
-    companion object {
-        private const val BASE_URL = "https://journal.bsuir.by/api/v1/"
-        private const val CONNECT_TIMEOUT = 60L
-    }
 
     @Provides
     @AppScope
@@ -32,29 +29,37 @@ class NetworkModule {
             Retrofit.Builder()
                     .client(httpClient)
                     .addConverterFactory(converterFactory)
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .baseUrl(BASE_URL)
                     .build()
 
     @Provides
     @AppScope
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
+    fun provideOkHttpClient(
+            loggingInterceptor: HttpLoggingInterceptor,
+            networkAvailabilityInterceptor: NetworkAvailabilityInterceptor
+    ): OkHttpClient =
             OkHttpClient.Builder()
                     .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
                     .writeTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
                     .addInterceptor(loggingInterceptor)
+                    .addInterceptor(networkAvailabilityInterceptor)
                     .build()
 
     @Provides
     @AppScope
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         val interceptor = HttpLoggingInterceptor(
-                HttpLoggingInterceptor.Logger { Log.i("Retrofit ", it) })
+                HttpLoggingInterceptor.Logger { })
         if (BuildConfig.DEBUG) {
             interceptor.level = BODY
         }
         return interceptor
     }
+
+    @Provides
+    @AppScope
+    fun provideNetworkAvailabilityInterceptor(networkChecker: NetworkAvailabilityChecker): NetworkAvailabilityInterceptor =
+            NetworkAvailabilityInterceptor(networkChecker)
 
     @Provides
     @AppScope

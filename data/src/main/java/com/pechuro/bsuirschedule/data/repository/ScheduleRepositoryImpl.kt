@@ -1,48 +1,46 @@
 package com.pechuro.bsuirschedule.data.repository
 
+import com.pechuro.bsuirschedule.data.common.BaseRepository
 import com.pechuro.bsuirschedule.domain.entity.Classes
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 
-class ScheduleRepositoryImpl : IScheduleRepository {
-
-    override fun getCurrentWeek(): Single<Int> {
+class ScheduleRepositoryImpl : BaseRepository(), IScheduleRepository {
+    override suspend fun getCurrentWeek(): Int {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getAllStoredClasses(): Observable<List<Classes>> {
+    override suspend fun getAllCachedClasses(): Flow<List<Classes>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getClasses(name: String, vararg type: ScheduleType): Single<List<Classes>> {
+    override suspend fun getClasses(name: String, vararg type: ScheduleType): List<Classes> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun update(schedule: Schedule): Completable {
+    override suspend fun updateCache(schedule: Schedule) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun updateAll(): Completable {
+    override suspend fun updateCached() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun isUpdateAvailable(schedule: Schedule): Observable<Boolean> {
+    override suspend fun isUpdateAvailable(schedule: Schedule): Flow<Boolean> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun delete(name: String, type: ScheduleType): Completable {
+    override suspend fun delete(name: String, type: ScheduleType) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun deleteByType(vararg type: ScheduleType): Completable {
+    override suspend fun deleteByType(vararg type: ScheduleType) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun deleteAll(): Completable {
+    override suspend fun deleteAll() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

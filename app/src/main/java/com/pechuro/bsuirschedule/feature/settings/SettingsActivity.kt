@@ -3,7 +3,7 @@ package com.pechuro.bsuirschedule.feature.settings
 import android.content.Context
 import android.content.Intent
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.BaseActivity
+import com.pechuro.bsuirschedule.common.base.BaseActivity
 
 class SettingsActivity : BaseActivity() {
 

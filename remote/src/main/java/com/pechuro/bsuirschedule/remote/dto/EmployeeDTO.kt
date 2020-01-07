@@ -5,10 +5,10 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class EmployeeDTO(
-        @Json(name = "employeeId")
-        val employeeId: String,
+        @Json(name = "id")
+        val id: Long,
         @Json(name = "firstName")
-        val firstName: String?,
+        val firstName: String,
         @Json(name = "lastName")
         val lastName: String,
         @Json(name = "middleName")

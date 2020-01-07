@@ -1,8 +1,24 @@
 package com.pechuro.bsuirschedule.domain.common
 
-abstract class BaseInteractor<out Type, in Params> where Type : Any {
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.CoroutineContext
 
-    abstract fun execute(params: Params): Type
+abstract class BaseInteractor<out Type, in Params> {
+
+    protected abstract suspend fun run(params: Params): Type
+
+    suspend fun execute(params: Params): Result<Type> = runCatching {
+        run(params)
+    }
+
+    suspend fun executeAsync(params: Params, context: CoroutineContext): Deferred<Result<Type>> =
+            withContext(context) {
+                async {
+                    runCatching { run(params) }
+                }
+            }
 
     object NoParams
 }

@@ -1,11 +1,10 @@
 package com.pechuro.bsuirschedule.domain.repository
 
 import com.pechuro.bsuirschedule.domain.entity.Announcement
-import io.reactivex.Single
 
 interface IAnnouncementRepository {
 
-    fun getActualFromEmployee(employeeId: Long): Single<List<Announcement>>
+    suspend fun getActualFromEmployee(employeeId: Long): List<Announcement>
 
-    fun getActualFromDepartment(departmentId: Long): Single<List<Announcement>>
+    suspend fun getActualFromDepartment(departmentId: Long): List<Announcement>
 }

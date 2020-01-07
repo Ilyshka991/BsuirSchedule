@@ -1,19 +1,17 @@
 package com.pechuro.bsuirschedule.domain.repository
 
 import com.pechuro.bsuirschedule.domain.entity.Employee
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 
 interface IEmployeeRepository {
 
-    fun getAll(): Observable<List<Employee>>
+    suspend fun getAll(forceUpdate: Boolean = false): Flow<List<Employee>>
 
-    fun getById(id: Long): Single<Employee>
+    suspend fun getById(id: Long): Employee
 
-    fun update(): Completable
+    suspend fun deleteAll()
 
-    fun deleteAll(): Completable
+    suspend fun isCached(): Boolean
 
-    fun isStored(): Single<Boolean>
+    suspend fun updateCache()
 }

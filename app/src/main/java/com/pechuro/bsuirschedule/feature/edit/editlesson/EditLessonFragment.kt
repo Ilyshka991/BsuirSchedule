@@ -1,7 +1,7 @@
 package com.pechuro.bsuirschedule.feature.edit.editlesson
 
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.BaseFragment
+import com.pechuro.bsuirschedule.common.base.BaseFragment
 
 class EditLessonFragment : BaseFragment() {
 
