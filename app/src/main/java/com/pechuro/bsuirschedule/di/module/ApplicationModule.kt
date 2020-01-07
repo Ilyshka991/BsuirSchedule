@@ -13,7 +13,7 @@ class ApplicationModule {
 
     @Provides
     @AppScope
-    fun provideContext(app: App): Context = app
+    fun provideContext(app: App): Context = app.applicationContext
 
     @Provides
     @AppScope

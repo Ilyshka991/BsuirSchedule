@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.pechuro.bsuirschedule.domain.common
 
 class Result<out T> private constructor(val value: Any?) {
@@ -52,7 +54,7 @@ inline fun <R, T : R> Result<T>.getOrElse(onFailure: (exception: Throwable) -> R
     }
 }
 
-inline fun <R, T : R> Result<T>.getOrDefault(defaultValue: R): R {
+fun <R, T : R> Result<T>.getOrDefault(defaultValue: R): R {
     if (isFailure) return defaultValue
     return value as T
 }

@@ -2,12 +2,14 @@ def libraryVersions = [
         kotlin          : '1.3.61',
         coroutines      : '1.3.3',
 
+        javax           : '1',
+
         appCompat       : '1.1.0-alpha05',
         constraintLayout: '1.1.3',
         materialDesign  : '1.1.0-alpha05',
         recyclerView    : '1.1.0-alpha05',
 
-        archComponents  : '2.1.0',
+        archComponents  : '2.2.0-rc03',
 
         ktx             : '1.0.1',
 
@@ -32,6 +34,8 @@ def libraryVersions = [
 ext {
     kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${libraryVersions.kotlin}"
 
+    javax = "javax.inject:javax.inject:${libraryVersions.javax}"
+
     coroutines = [
             core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${libraryVersions.coroutines}",
             android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${libraryVersions.coroutines}"
@@ -48,6 +52,8 @@ ext {
 
     archComponentsDependencies = [
             lifeCycle     : "androidx.lifecycle:lifecycle-extensions:${libraryVersions.archComponents}",
+            lifeCycleKtx  : "androidx.lifecycle:lifecycle-runtime-ktx:${libraryVersions.archComponents}",
+            liveDataKtx   : "androidx.lifecycle:lifecycle-livedata-ktx:${libraryVersions.archComponents}",
             viewModelScope: "androidx.lifecycle:lifecycle-viewmodel-ktx:${libraryVersions.archComponents}"
     ]
     archComponentsProcessorDependencies = [
