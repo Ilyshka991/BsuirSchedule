@@ -26,6 +26,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         performDI()
         super.onCreate(savedInstanceState)
+        setContentView(layoutId)
     }
 
     override fun supportFragmentInjector() = fragmentDispatchingAndroidInjector

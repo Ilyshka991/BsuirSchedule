@@ -1,0 +1,17 @@
+package com.pechuro.bsuirschedule.feature.main
+
+import android.content.Context
+import android.content.Intent
+import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.base.BaseActivity
+
+class MainActivity : BaseActivity() {
+
+    companion object {
+
+        fun newIntent(context: Context) = Intent(context, MainActivity::class.java)
+    }
+
+    override val layoutId: Int
+        get() = R.layout.activity_main
+}

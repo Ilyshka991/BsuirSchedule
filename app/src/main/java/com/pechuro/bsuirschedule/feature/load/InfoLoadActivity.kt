@@ -2,10 +2,14 @@ package com.pechuro.bsuirschedule.feature.load
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
+import androidx.core.view.isVisible
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseActivity
 import com.pechuro.bsuirschedule.ext.observeNonNull
 import com.pechuro.bsuirschedule.feature.load.InfoLoadActivityViewModel.Status
+import com.pechuro.bsuirschedule.feature.main.MainActivity
+import kotlinx.android.synthetic.main.activity_info_load.*
 
 class InfoLoadActivity : BaseActivity() {
 
@@ -21,17 +25,21 @@ class InfoLoadActivity : BaseActivity() {
         initViewModel(InfoLoadActivityViewModel::class)
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initView()
         observeData()
+    }
+
+    private fun initView() {
+        infoLoadErrorButton.setOnClickListener {
+            viewModel.loadInfo()
+        }
     }
 
     private fun observeData() {
         viewModel.status.observeNonNull(this) {
             when (it) {
-                Status.IDLE -> {
-
-                }
                 Status.COMPLETE -> handleComplete()
                 Status.ERROR -> handleError()
                 Status.LOADING -> handleLoading()
@@ -40,16 +48,18 @@ class InfoLoadActivity : BaseActivity() {
     }
 
     private fun handleComplete() {
-        /*val intent = NavigationActivity.newIntent(this)
+        val intent = MainActivity.newIntent(this)
         startActivity(intent)
-        finish()*/
+        finish()
     }
 
     private fun handleError() {
-
+        infoLoadProgressParentView.isVisible = false
+        infoLoadErrorParentView.isVisible = true
     }
 
     private fun handleLoading() {
-
+        infoLoadProgressParentView.isVisible = true
+        infoLoadErrorParentView.isVisible = false
     }
 }

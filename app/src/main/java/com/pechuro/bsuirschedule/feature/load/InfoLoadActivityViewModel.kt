@@ -12,13 +12,14 @@ class InfoLoadActivityViewModel @Inject constructor(
         private val loadInfo: LoadInfo
 ) : BaseViewModel() {
 
-    val status = MutableLiveData(IDLE)
+    val status = MutableLiveData<Status>()
 
     init {
         loadInfo()
     }
 
     fun loadInfo() {
+        if (status.value == LOADING) return
         launchCoroutine {
             status.value = LOADING
             loadInfo.execute(BaseInteractor.NoParams).fold(
@@ -26,7 +27,6 @@ class InfoLoadActivityViewModel @Inject constructor(
                         status.value = COMPLETE
                     },
                     onFailure = {
-                        it.printStackTrace()
                         status.value = ERROR
                     }
             )
@@ -34,7 +34,7 @@ class InfoLoadActivityViewModel @Inject constructor(
     }
 
     enum class Status {
-        IDLE, LOADING, COMPLETE, ERROR
+        LOADING, COMPLETE, ERROR
     }
 }
 
