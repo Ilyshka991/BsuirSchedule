@@ -17,7 +17,7 @@
 
         <activity
             android:name=".feature.splash.SplashActivity"
-            android:theme="@style/splashTheme">
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,14 +25,18 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".feature.load.InfoLoadActivity" />
+        <activity
+            android:name=".feature.load.InfoLoadActivity"
+            android:label="@string/title_activity_info_loading" />
 
         <activity
             android:name=".feature.settings.SettingsActivity"
-            android:label="@string/title_activity_settings"/>
+            android:label="@string/title_activity_settings" />
 
         <activity
             android:name=".feature.edit.EditLessonActivity"
             android:label="@string/title_activity_edit" />
+
+        <activity android:name=".feature.main.MainActivity" />
     </application>
 </manifest>

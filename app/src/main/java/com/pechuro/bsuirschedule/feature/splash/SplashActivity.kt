@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseActivity
 import com.pechuro.bsuirschedule.feature.load.InfoLoadActivity
+import com.pechuro.bsuirschedule.feature.main.MainActivity
 
 class SplashActivity : BaseActivity() {
 
@@ -25,8 +26,7 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun decideNextActivityIntent(): Intent = if (viewModel.isInfoLoaded()) {
-    //    NavigationActivity.newIntent(this)
-        InfoLoadActivity.newIntent(this)
+        MainActivity.newIntent(this)
     } else {
         InfoLoadActivity.newIntent(this)
     }

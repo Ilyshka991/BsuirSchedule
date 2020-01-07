@@ -1,5 +1,6 @@
 package com.pechuro.bsuirschedule.di.module
 
+import android.util.Log
 import com.pechuro.bsuirschedule.BuildConfig
 import com.pechuro.bsuirschedule.di.annotations.AppScope
 import com.pechuro.bsuirschedule.remote.ApiConfig.BASE_URL
@@ -49,7 +50,7 @@ class NetworkModule {
     @AppScope
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         val interceptor = HttpLoggingInterceptor(
-                HttpLoggingInterceptor.Logger { })
+                HttpLoggingInterceptor.Logger { Log.i("Retrofit", it) })
         if (BuildConfig.DEBUG) {
             interceptor.level = BODY
         }

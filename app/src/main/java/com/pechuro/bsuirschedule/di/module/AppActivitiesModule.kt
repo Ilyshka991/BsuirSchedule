@@ -4,6 +4,7 @@ import com.pechuro.bsuirschedule.di.annotations.ActivityScope
 import com.pechuro.bsuirschedule.feature.edit.EditLessonActivity
 import com.pechuro.bsuirschedule.feature.edit.editlesson.EditLessonFragmentProvider
 import com.pechuro.bsuirschedule.feature.load.InfoLoadActivity
+import com.pechuro.bsuirschedule.feature.main.MainActivity
 import com.pechuro.bsuirschedule.feature.settings.SettingsActivity
 import com.pechuro.bsuirschedule.feature.splash.SplashActivity
 import dagger.Module
@@ -25,6 +26,10 @@ interface AppActivitiesModule {
     @ActivityScope
     @ContributesAndroidInjector
     fun bindSettingsActivity(): SettingsActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector
+    fun bindMainActivity(): MainActivity
 
     @ActivityScope
     @ContributesAndroidInjector(modules = [
