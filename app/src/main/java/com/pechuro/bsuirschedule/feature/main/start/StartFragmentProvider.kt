@@ -8,6 +8,6 @@ import dagger.android.ContributesAndroidInjector
 interface StartFragmentProvider {
 
     @FragmentScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     fun bind(): StartFragment
 }

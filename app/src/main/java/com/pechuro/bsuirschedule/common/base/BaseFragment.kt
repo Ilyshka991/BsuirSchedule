@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelStoreOwner
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
@@ -40,8 +40,10 @@ abstract class BaseFragment : Fragment(), HasSupportFragmentInjector {
 
     override fun supportFragmentInjector() = fragmentDispatchingAndroidInjector
 
-    protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>) =
-            ViewModelProviders.of(this, viewModelFactory).get(clazz.java)
+    protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>, shared: Boolean = false): T {
+        val owner: ViewModelStoreOwner = if (shared) requireActivity() else this
+        return ViewModelProvider(owner, viewModelFactory).get(clazz.java)
+    }
 
     private fun performDI() = AndroidSupportInjection.inject(this)
 }

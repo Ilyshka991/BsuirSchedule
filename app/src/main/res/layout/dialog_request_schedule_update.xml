@@ -20,7 +20,7 @@
         android:paddingRight="16dp">
 
         <TextView
-            android:id="@+id/text_error"
+            android:id="@+id/addScheduleLoadingErrorText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -40,7 +40,7 @@
             android:layout_marginRight="8dp"
             android:text="@string/action_cancel"
             app:layout_constraintEnd_toStartOf="@+id/button_error_retry"
-            app:layout_constraintStart_toStartOf="@+id/text_error"
+            app:layout_constraintStart_toStartOf="@+id/addScheduleLoadingErrorText"
             app:layout_constraintTop_toTopOf="@+id/button_error_retry" />
 
         <Button
@@ -54,8 +54,8 @@
             android:layout_marginBottom="16dp"
             android:text="@string/action_retry"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/text_error"
-            app:layout_constraintTop_toBottomOf="@+id/text_error" />
+            app:layout_constraintEnd_toEndOf="@+id/addScheduleLoadingErrorText"
+            app:layout_constraintTop_toBottomOf="@+id/addScheduleLoadingErrorText" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -77,7 +77,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button_cancel"
+            android:id="@+id/addScheduleCancelButton"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
