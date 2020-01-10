@@ -7,7 +7,7 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.feature.main.addschedule.fragment.AddScheduleFragment
 
-class AddScheduleDialogPagerAdapter(
+class AddScheduleContainerDialogPagerAdapter(
         fragmentManager: FragmentManager
 ) : FragmentStatePagerAdapter(
         fragmentManager,

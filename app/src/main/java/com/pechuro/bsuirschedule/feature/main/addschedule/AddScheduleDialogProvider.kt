@@ -11,7 +11,7 @@ interface AddScheduleDialogProvider {
     @FragmentScope
     @ContributesAndroidInjector(modules = [
         AddScheduleFragmentProvider::class,
-        AddScheduleDialogModule::class
+        AddScheduleContainerDialogModule::class
     ])
-    fun bind(): AddScheduleDialog
+    fun bind(): AddScheduleContainerDialog
 }

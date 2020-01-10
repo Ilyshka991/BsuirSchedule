@@ -110,7 +110,7 @@
 
         </LinearLayout>
 
-        <AutoCompleteTextView
+        <com.pechuro.bsuirschedule.widget.KeyboardClosableAutoCompleteTextView
             android:id="@+id/addScheduleNameInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -120,19 +120,6 @@
             app:layout_constraintStart_toStartOf="@+id/addScheduleTypesParentView"
             app:layout_constraintTop_toBottomOf="@+id/addScheduleTypesParentView" />
 
-        <TextView
-            android:id="@+id/addScheduleInvalidNameText"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:gravity="start|center_vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/addScheduleDoneButton"
-            app:layout_constraintEnd_toStartOf="@+id/addScheduleDoneButton"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/addScheduleNameInput"
-            app:layout_constraintTop_toTopOf="@+id/addScheduleDoneButton" />
-
         <Button
             android:id="@+id/addScheduleDoneButton"
             style="@style/Widget.AppCompat.Button.Borderless"
@@ -140,6 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            android:enabled="false"
             android:text="@string/action_ok"
             app:layout_constraintEnd_toEndOf="@+id/addScheduleNameInput"
             app:layout_constraintTop_toBottomOf="@+id/addScheduleNameInput" />

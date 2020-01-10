@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.widget.listeners
+package com.pechuro.bsuirschedule.widget
 
 import android.annotation.SuppressLint
 import android.content.Context

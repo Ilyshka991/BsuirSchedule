@@ -42,6 +42,10 @@ abstract class BaseFragment : Fragment(), HasSupportFragmentInjector {
 
     protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>, shared: Boolean = false): T {
         val owner: ViewModelStoreOwner = if (shared) requireActivity() else this
+        return initViewModel(clazz, owner)
+    }
+
+    protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>, owner: ViewModelStoreOwner): T {
         return ViewModelProvider(owner, viewModelFactory).get(clazz.java)
     }
 

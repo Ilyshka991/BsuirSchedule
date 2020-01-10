@@ -1,9 +1,9 @@
-package com.pechuro.bsuirschedule.widget.listeners
+package com.pechuro.bsuirschedule.widget
 
 import android.view.View
 import androidx.drawerlayout.widget.DrawerLayout
 
-interface DrawerListener : DrawerLayout.DrawerListener {
+interface DefaultDrawerListener : DrawerLayout.DrawerListener {
 
     override fun onDrawerStateChanged(newState: Int) {}
 

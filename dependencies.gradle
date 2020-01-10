@@ -11,7 +11,7 @@ def libraryVersions = [
 
         archComponents  : '2.2.0-rc03',
 
-        ktx             : '1.0.1',
+        ktx             : '1.1.0',
 
         dagger          : '2.21',
 
@@ -19,7 +19,7 @@ def libraryVersions = [
         testRunner      : '1.2.0-alpha03',
         espresso        : '3.2.0-alpha03',
 
-        leekcanary      : '2.0-alpha-2',
+        leekcanary      : '2.1',
 
         room            : '2.2.0',
 
