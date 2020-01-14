@@ -118,6 +118,7 @@ class AddScheduleFragment : BaseFragment() {
     }
 
     private fun addSuggestions(suggestions: List<String>) {
+        println("AAAA $scheduleType")
         suggestionsAdapter.apply {
             clear()
             addAll(suggestions)

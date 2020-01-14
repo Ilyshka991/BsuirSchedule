@@ -23,7 +23,7 @@ interface GroupDao {
     fun getAll(): Flow<List<GroupCached>>
 
     @Query("SELECT number FROM `group`")
-    suspend fun getAllNubmers(): List<String>
+    fun getAllNumbers(): Flow<List<String>>
 
     @Query("SELECT * FROM `group` WHERE id = :id")
     suspend fun getById(id: Long): GroupCached
