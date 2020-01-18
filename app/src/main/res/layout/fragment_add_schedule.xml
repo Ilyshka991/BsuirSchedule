@@ -87,26 +87,28 @@
                 android:text="@string/title_type"
                 android:textSize="18sp" />
 
-            <com.google.android.material.chip.ChipGroup
+            <com.pechuro.bsuirschedule.widget.MultipleSelectionChipGroup
+                android:id="@+id/addScheduleChipGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:chipSpacingHorizontal="8dp"
                 app:singleLine="true">
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/addScheduleTypeClasses"
+                    android:id="@+id/addScheduleChipClasses"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
+                    android:checked="true"
                     android:text="@string/msg_classes" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/addScheduleTypeExams"
+                    android:id="@+id/addScheduleChipExams"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
                     android:text="@string/msg_exams" />
-            </com.google.android.material.chip.ChipGroup>
+            </com.pechuro.bsuirschedule.widget.MultipleSelectionChipGroup>
 
         </LinearLayout>
 
@@ -114,6 +116,7 @@
             android:id="@+id/addScheduleNameInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:completionThreshold="1"
             android:dropDownHeight="100dp"
             android:hint="@string/add_fragment_hint_enter_schedule"
             app:layout_constraintEnd_toEndOf="@+id/addScheduleTypesParentView"

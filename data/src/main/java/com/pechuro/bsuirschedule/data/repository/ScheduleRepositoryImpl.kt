@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 
 class ScheduleRepositoryImpl : BaseRepository(), IScheduleRepository {
 
-    override suspend fun getAllCachedSchedules(): Flow<List<Schedule>> {
+    override suspend fun getAllSchedules(): Flow<List<Schedule>> {
         return flow {
             emit(listOf(Schedule(3, "7535", ScheduleType.EMPLOYEE_EXAMS, null),
                     Schedule(4, "235", ScheduleType.EMPLOYEE_EXAMS, null),
@@ -29,11 +29,15 @@ class ScheduleRepositoryImpl : BaseRepository(), IScheduleRepository {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override suspend fun getAllCachedClasses(): Flow<List<Classes>> {
+    override suspend fun getClasses(name: String, type: ScheduleType): Classes {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override suspend fun getClasses(name: String, vararg type: ScheduleType): List<Classes> {
+    override suspend fun getAllClasses(): Flow<List<Classes>> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun getClassesList(name: String, types: List<ScheduleType>): List<Classes> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

@@ -67,7 +67,7 @@ class AddScheduleFragment : BaseFragment() {
             }
 
             onKeyboardClose = {
-                viewModel.close()
+                viewModel.complete()
             }
         }
 
@@ -118,7 +118,6 @@ class AddScheduleFragment : BaseFragment() {
     }
 
     private fun addSuggestions(suggestions: List<String>) {
-        println("AAAA $scheduleType")
         suggestionsAdapter.apply {
             clear()
             addAll(suggestions)
@@ -129,14 +128,14 @@ class AddScheduleFragment : BaseFragment() {
         val scheduleName = addScheduleNameInput.text.toString()
 
         val scheduleTypes = mutableListOf<ScheduleType>()
-        if (addScheduleTypeClasses.isChecked) {
+        if (addScheduleChipClasses.isChecked) {
             val classesType = when (scheduleType) {
                 FragmentType.STUDENT -> ScheduleType.STUDENT_CLASSES
                 FragmentType.EMPLOYEE -> ScheduleType.EMPLOYEE_CLASSES
             }
             scheduleTypes.add(classesType)
         }
-        if (addScheduleTypeExams.isChecked) {
+        if (addScheduleChipExams.isChecked) {
             val examsType = when (scheduleType) {
                 FragmentType.STUDENT -> ScheduleType.STUDENT_EXAMS
                 FragmentType.EMPLOYEE -> ScheduleType.EMPLOYEE_EXAMS

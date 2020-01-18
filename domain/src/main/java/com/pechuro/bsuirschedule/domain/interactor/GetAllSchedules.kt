@@ -13,6 +13,6 @@ class GetAllSchedules @Inject constructor(
 ) : BaseInteractor<Flow<List<Schedule>>, BaseInteractor.NoParams>() {
 
     override suspend fun run(params: NoParams) = withContext(Dispatchers.IO) {
-        employeeRepository.getAllCachedSchedules()
+        employeeRepository.getAllSchedules()
     }
 }
