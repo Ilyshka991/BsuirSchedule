@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "398803956815",
+    "firebase_url": "https://bsuir-schedule-6201c.firebaseio.com",
+    "project_id": "bsuir-schedule-6201c",
+    "storage_bucket": "bsuir-schedule-6201c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:398803956815:android:a15fd14832eff40fbe263a",
+        "android_client_info": {
+          "package_name": "com.pechuro.bsuirschedule"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "398803956815-vuoos6jh9cmh49cerfl0rq6h5njmo8b2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9UYgrrL2QKs6KWYFdcNtiRbr_3vhMjs8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "398803956815-vuoos6jh9cmh49cerfl0rq6h5njmo8b2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:398803956815:android:5ca3d123adfb6ea7be263a",
+        "android_client_info": {
+          "package_name": "com.pechuro.bsuirschedule.beta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "398803956815-vuoos6jh9cmh49cerfl0rq6h5njmo8b2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9UYgrrL2QKs6KWYFdcNtiRbr_3vhMjs8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "398803956815-vuoos6jh9cmh49cerfl0rq6h5njmo8b2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:398803956815:android:ac1c03e72daa3cfdbe263a",
+        "android_client_info": {
+          "package_name": "com.pechuro.bsuirschedule.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "398803956815-vuoos6jh9cmh49cerfl0rq6h5njmo8b2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9UYgrrL2QKs6KWYFdcNtiRbr_3vhMjs8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "398803956815-vuoos6jh9cmh49cerfl0rq6h5njmo8b2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
