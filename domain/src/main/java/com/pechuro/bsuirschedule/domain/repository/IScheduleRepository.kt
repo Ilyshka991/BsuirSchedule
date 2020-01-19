@@ -7,9 +7,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface IScheduleRepository {
 
-    suspend fun getAllCachedClasses(): Flow<List<Classes>>
+    suspend fun getAllSchedules(): Flow<List<Schedule>>
 
-    suspend fun getClasses(name: String, vararg type: ScheduleType): List<Classes>
+    suspend fun getAllClasses(): Flow<List<Classes>>
+
+    suspend fun getClasses(name: String, type: ScheduleType): Classes
+
+    suspend fun getClassesList(name: String, types: List<ScheduleType>): List<Classes>
 
     suspend fun updateCache(schedule: Schedule)
 

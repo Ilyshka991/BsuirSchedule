@@ -5,6 +5,9 @@ import com.pechuro.bsuirschedule.feature.edit.EditLessonActivity
 import com.pechuro.bsuirschedule.feature.edit.editlesson.EditLessonFragmentProvider
 import com.pechuro.bsuirschedule.feature.load.InfoLoadActivity
 import com.pechuro.bsuirschedule.feature.main.MainActivity
+import com.pechuro.bsuirschedule.feature.main.addschedule.AddScheduleDialogProvider
+import com.pechuro.bsuirschedule.feature.main.navigationdrawer.NavigationDrawerFragmentProvider
+import com.pechuro.bsuirschedule.feature.main.start.StartFragmentProvider
 import com.pechuro.bsuirschedule.feature.settings.SettingsActivity
 import com.pechuro.bsuirschedule.feature.splash.SplashActivity
 import dagger.Module
@@ -28,7 +31,11 @@ interface AppActivitiesModule {
     fun bindSettingsActivity(): SettingsActivity
 
     @ActivityScope
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [
+        NavigationDrawerFragmentProvider::class,
+        AddScheduleDialogProvider::class,
+        StartFragmentProvider::class
+    ])
     fun bindMainActivity(): MainActivity
 
     @ActivityScope

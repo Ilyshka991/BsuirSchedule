@@ -1,59 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white">
-
-    <TextView
-        android:id="@+id/text_empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/drawer_fragment_msg_no_schedules"
-        android:textSize="24sp"
-        android:visibility="gone" />
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/nav_item_list"
+        android:id="@+id/navDrawerItemRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="32dp"
-        android:fitsSystemWindows="true"
-        app:layout_constraintBottom_toTopOf="@+id/nav_footer_layout"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/navDrawerFooterParentView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/nav_footer_layout"
+        android:id="@+id/navDrawerFooterParentView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/nav_item_list"
-        app:layout_constraintStart_toStartOf="@+id/nav_item_list">
+        app:layout_constraintEnd_toEndOf="@+id/navDrawerItemRecyclerView"
+        app:layout_constraintStart_toStartOf="@+id/navDrawerItemRecyclerView">
 
         <View
-            android:id="@+id/divider"
+            android:id="@+id/navDrawerDivider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />
 
         <Button
-            android:id="@+id/nav_footer_settings"
+            android:id="@+id/navDrawerSettingButton"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/drawer_fragment_action_settings" />
 
         <Button
-            android:id="@+id/nav_footer_add_schedule"
+            android:id="@+id/navDrawerAddButton"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/drawer_fragment_action_add_schedule" />
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,6 +37,8 @@
             android:name=".feature.edit.EditLessonActivity"
             android:label="@string/title_activity_edit" />
 
-        <activity android:name=".feature.main.MainActivity" />
+        <activity
+            android:name=".feature.main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 </manifest>

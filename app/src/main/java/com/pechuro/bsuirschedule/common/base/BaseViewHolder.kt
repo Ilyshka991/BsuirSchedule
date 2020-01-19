@@ -4,12 +4,8 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 
-abstract class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), LayoutContainer {
+abstract class BaseViewHolder<T>(override val containerView: View) :
+        RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    override val containerView: View?
-        get() = itemView
-
-    abstract fun onBind(data: AbstractViewHolderData)
+    abstract fun onBind(data: T)
 }
-
-abstract class AbstractViewHolderData

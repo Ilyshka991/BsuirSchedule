@@ -8,6 +8,7 @@ import com.pechuro.bsuirschedule.common.base.BaseActivity
 class SettingsActivity : BaseActivity() {
 
     companion object {
+
         fun newIntent(context: Context) = Intent(context, SettingsActivity::class.java)
     }
 

@@ -2,14 +2,12 @@ package com.pechuro.bsuirschedule.feature.edit
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.base.BaseActivity
-import com.pechuro.bsuirschedule.ext.transaction
+import com.pechuro.bsuirschedule.common.base.BaseFragmentActivity
 import com.pechuro.bsuirschedule.feature.edit.editlesson.EditLessonFragment
 import kotlinx.android.synthetic.main.activity_container.*
 
-class EditLessonActivity : BaseActivity() {
+class EditLessonActivity : BaseFragmentActivity() {
 
     companion object {
         private const val EXTRA_LESSON_ID = "EXTRA_LESSON_ID"
@@ -20,18 +18,11 @@ class EditLessonActivity : BaseActivity() {
                 }
     }
 
-    override val layoutId: Int
-        get() = R.layout.activity_container
+    override val layoutId: Int = R.layout.activity_container
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (savedInstanceState == null) homeFragment()
+    override val containerId: Int by lazy(LazyThreadSafetyMode.NONE) {
+        fragmentContainer.id
     }
 
-    private fun homeFragment() {
-        val fragment = EditLessonFragment.newInstance()
-        supportFragmentManager.transaction {
-            replace(fragmentContainer.id, fragment)
-        }
-    }
+    override fun getHomeFragment() = EditLessonFragment.newInstance()
 }

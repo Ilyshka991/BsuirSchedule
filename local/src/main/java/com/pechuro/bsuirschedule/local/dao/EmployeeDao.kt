@@ -26,7 +26,7 @@ interface EmployeeDao {
     suspend fun getById(id: Long): EmployeeCached
 
     @Query("SELECT abbreviation FROM employee")
-    suspend fun getAllNames(): List<String>
+    fun getAllNames(): Flow<List<String>>
 
     @Query("SELECT EXISTS(SELECT 1 FROM employee)")
     suspend fun isNotEmpty(): Boolean

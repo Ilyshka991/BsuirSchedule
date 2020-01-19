@@ -10,7 +10,6 @@ import com.pechuro.bsuirschedule.local.dao.SpecialityDao
 import com.pechuro.bsuirschedule.remote.api.StaffApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.coroutineContext
 
@@ -20,15 +19,17 @@ class GroupRepositoryImpl(
         private val api: StaffApi
 ) : BaseRepository(), IGroupRepository {
 
-    override suspend fun getAll(forceUpdate: Boolean): Flow<List<Group>> {
+    override suspend fun getAll(): Flow<List<Group>> {
         withContext(coroutineContext) {
-            launch {
-                if (forceUpdate || !isCached()) {
-                    updateCache()
-                }
+            if (!isCached()) {
+                updateCache()
             }
         }
         return getGroupsFromDao()
+    }
+
+    override suspend fun getAllNumbers(): Flow<List<String>> {
+        return performDaoCall { groupDao.getAllNumbers() }
     }
 
     override suspend fun getById(id: Long): Group {

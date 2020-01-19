@@ -5,7 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface IGroupRepository {
 
-    suspend fun getAll(forceUpdate: Boolean = false): Flow<List<Group>>
+    suspend fun getAll(): Flow<List<Group>>
+
+    suspend fun getAllNumbers(): Flow<List<String>>
 
     suspend fun getById(id: Long): Group
 

@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.pechuro.bsuirschedule.common.ViewModelFactory
 import com.pechuro.bsuirschedule.di.annotations.ViewModelKey
 import com.pechuro.bsuirschedule.feature.load.InfoLoadActivityViewModel
+import com.pechuro.bsuirschedule.feature.main.addschedule.AddScheduleViewModel
+import com.pechuro.bsuirschedule.feature.main.navigationdrawer.NavigationDrawerFragmentViewModel
 import com.pechuro.bsuirschedule.feature.splash.SplashActivityViewModel
 import dagger.Binds
 import dagger.Module
@@ -23,6 +25,16 @@ interface AppViewModelsModule {
 
     @Binds
     @IntoMap
+    @ViewModelKey(NavigationDrawerFragmentViewModel::class)
+    fun navigationDrawer(viewModel: NavigationDrawerFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
     @ViewModelKey(SplashActivityViewModel::class)
     fun splash(viewModel: SplashActivityViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AddScheduleViewModel::class)
+    fun addSchedule(viewModel: AddScheduleViewModel): ViewModel
 }

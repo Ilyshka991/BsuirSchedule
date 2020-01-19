@@ -9,24 +9,21 @@ import com.pechuro.bsuirschedule.local.dao.EmployeeDao
 import com.pechuro.bsuirschedule.remote.api.StaffApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlin.coroutines.coroutineContext
 
 class EmployeeRepositoryImpl(
         private val dao: EmployeeDao,
         private val api: StaffApi
 ) : BaseRepository(), IEmployeeRepository {
 
-    override suspend fun getAll(forceUpdate: Boolean): Flow<List<Employee>> {
-        withContext(coroutineContext) {
-            launch {
-                if (forceUpdate || !isCached()) {
-                    updateCache()
-                }
-            }
+    override suspend fun getAll(): Flow<List<Employee>> {
+        if (!isCached()) {
+            updateCache()
         }
         return getEmployeesFromDao()
+    }
+
+    override suspend fun getAllNames(): Flow<List<String>> {
+        return performDaoCall { dao.getAllNames() }
     }
 
     override suspend fun getById(id: Long): Employee =

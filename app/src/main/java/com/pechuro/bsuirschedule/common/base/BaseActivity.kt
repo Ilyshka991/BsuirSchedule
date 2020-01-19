@@ -5,7 +5,6 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
@@ -32,7 +31,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
     override fun supportFragmentInjector() = fragmentDispatchingAndroidInjector
 
     protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>) =
-            ViewModelProviders.of(this, viewModelFactory).get(clazz.java)
+            ViewModelProvider(this, viewModelFactory).get(clazz.java)
 
     private fun performDI() = AndroidInjection.inject(this)
 }
