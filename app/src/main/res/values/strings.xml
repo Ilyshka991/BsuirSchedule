@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bsuir Schedule(For test)</string>
+    <string name="app_name">Bsuir Schedule</string>
 
     <string name="nav_drawer_action_open">Open navigation drawer</string>
     <string name="nav_drawer_action_close">Close navigation drawer</string>
