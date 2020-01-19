@@ -17,8 +17,10 @@ def libraryVersions = [
         dagger          : '2.21',
 
         junit           : '4.12',
-        testRunner      : '1.2.0-alpha03',
+        testRunner      : '1.2.0',
+        androidXTestCore: '1.2.0',
         espresso        : '3.2.0-alpha03',
+        junitExtVersion : '1.1.1',
 
         leekcanary      : '2.1',
 
@@ -32,7 +34,7 @@ def libraryVersions = [
         moshi           : '1.9.2',
 
         crashlytics     : '17.0.0-beta01',
-        analytics       : '17.2.0'
+        analytics       : '17.2.0',
 ]
 
 ext {
@@ -84,7 +86,10 @@ ext {
 
     androidTestDependencies = [
             testRunner: "androidx.test:runner:${libraryVersions.testRunner}",
-            espresso  : "androidx.test.espresso:espresso-core:${libraryVersions.espresso}"
+            espresso  : "androidx.test.espresso:espresso-core:${libraryVersions.espresso}",
+            core      : "androidx.test:core:${libraryVersions.androidXTestCore}",
+            rules     : "androidx.test:rules:${libraryVersions.androidXTestCore}",
+            junitExt  : "androidx.test.ext:junit:${libraryVersions.junitExtVersion}"
     ]
 
     room = [
