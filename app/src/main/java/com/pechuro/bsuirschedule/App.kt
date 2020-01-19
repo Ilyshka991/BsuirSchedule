@@ -30,6 +30,4 @@ class App : Application(), HasActivityInjector {
         val appComponent = DaggerAppComponent.builder().application(this).build()
         appComponent.inject(this)
     }
-
-
 }
