@@ -11,11 +11,11 @@ import com.pechuro.bsuirschedule.feature.main.start.StartFragmentProvider
 import com.pechuro.bsuirschedule.feature.settings.SettingsActivity
 import com.pechuro.bsuirschedule.feature.splash.SplashActivity
 import dagger.Module
+import dagger.android.AndroidInjectionModule
 import dagger.android.ContributesAndroidInjector
-import dagger.android.support.AndroidSupportInjectionModule
 
 @Suppress("unused")
-@Module(includes = [AndroidSupportInjectionModule::class])
+@Module(includes = [AndroidInjectionModule::class])
 interface AppActivitiesModule {
 
     @ActivityScope

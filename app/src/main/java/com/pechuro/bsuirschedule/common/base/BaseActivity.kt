@@ -3,18 +3,17 @@ package com.pechuro.bsuirschedule.common.base
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
+abstract class BaseActivity : AppCompatActivity(), HasAndroidInjector {
 
     @Inject
-    protected lateinit var fragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+    protected lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
     @Inject
     protected lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -28,7 +27,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
         setContentView(layoutId)
     }
 
-    override fun supportFragmentInjector() = fragmentDispatchingAndroidInjector
+    override fun androidInjector() = androidInjector
 
     protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>) =
             ViewModelProvider(this, viewModelFactory).get(clazz.java)

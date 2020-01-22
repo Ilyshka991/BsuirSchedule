@@ -1,18 +1,18 @@
 package com.pechuro.bsuirschedule
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context
 import androidx.multidex.MultiDex
 import com.pechuro.bsuirschedule.di.component.DaggerAppComponent
+import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
+import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
-class App : Application(), HasActivityInjector {
+open class App : Application(), HasAndroidInjector {
 
     @Inject
-    lateinit var activityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
@@ -24,9 +24,9 @@ class App : Application(), HasActivityInjector {
         initDI()
     }
 
-    override fun activityInjector() = activityDispatchingAndroidInjector
+    override fun androidInjector(): AndroidInjector<Any> = androidInjector
 
-    private fun initDI() {
+    protected open fun initDI() {
         val appComponent = DaggerAppComponent.builder().application(this).build()
         appComponent.inject(this)
     }

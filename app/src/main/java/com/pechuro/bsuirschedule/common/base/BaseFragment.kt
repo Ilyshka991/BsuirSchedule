@@ -9,22 +9,21 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
-import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-abstract class BaseFragment : Fragment(), HasSupportFragmentInjector {
+abstract class BaseFragment : Fragment(), HasAndroidInjector {
 
     @Inject
-    protected lateinit var fragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+    protected lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
     @Inject
     protected lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @get:LayoutRes
     protected abstract val layoutId: Int
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         performDI()
@@ -38,7 +37,7 @@ abstract class BaseFragment : Fragment(), HasSupportFragmentInjector {
             savedInstanceState: Bundle?
     ): View? = inflater.inflate(layoutId, container, false)
 
-    override fun supportFragmentInjector() = fragmentDispatchingAndroidInjector
+    override fun androidInjector() = androidInjector
 
     protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>, shared: Boolean = false): T {
         val owner: ViewModelStoreOwner = if (shared) requireActivity() else this

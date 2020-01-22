@@ -61,6 +61,10 @@ dependencies {
     kapt archComponentsProcessorDependencies.values()
     implementation firebaseDependencies.values()
 
+    androidTestImplementation androidTestDependencies.values()
+    testImplementation testDependencies.values()
+    kaptAndroidTest daggerProcessorDependencies.values()
+
     implementation ktxDependencies.values()
 
     implementation daggerDependencies.values()
