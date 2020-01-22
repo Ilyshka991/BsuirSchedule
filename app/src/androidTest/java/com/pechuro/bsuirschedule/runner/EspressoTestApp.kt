@@ -2,17 +2,16 @@ package com.pechuro.bsuirschedule.runner
 
 import com.pechuro.bsuirschedule.App
 import com.pechuro.bsuirschedule.common.IEspressoIdlingResource
-import com.pechuro.bsuirschedule.common.SimpleBinaryIdlingResource
-import com.pechuro.bsuirschedule.common.SimpleCountingIdlingResource
+import com.pechuro.bsuirschedule.di.component.DaggerEspressoAppComponent
+import javax.inject.Inject
 
 class EspressoTestApp : App() {
 
-    val countingIdlingResource: IEspressoIdlingResource by lazy {
-        SimpleCountingIdlingResource("Global counting")
-    }
+    @Inject
+    lateinit var idlingResource: IEspressoIdlingResource
 
-    val binaryIdlingResource: IEspressoIdlingResource by lazy {
-        SimpleBinaryIdlingResource("Global binary")
+    override fun initDI() {
+        val appComponent = DaggerEspressoAppComponent.builder().application(this).build()
+        appComponent.inject(this)
     }
 }
-

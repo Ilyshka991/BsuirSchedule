@@ -13,20 +13,21 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.runner.RunWith
 import java.util.concurrent.TimeUnit
+import kotlin.reflect.KClass
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-abstract class AbstractScreenTest {
+abstract class AbstractScreenTest<T : BaseActivity> {
 
     companion object {
         private const val IDLING_RESOURCE_TIMEOUT_MS = 30 * 1000L
     }
 
-    abstract val activity: BaseActivity
+    abstract val activityClass: KClass<T>
 
     @get:Rule
     val activityRule by lazy(LazyThreadSafetyMode.NONE) {
-        ActivityTestRule(activity::class.java)
+        ActivityTestRule(activityClass.java)
     }
 
     protected val app: EspressoTestApp
@@ -35,14 +36,12 @@ abstract class AbstractScreenTest {
     @Before
     fun registerIdlingResource() {
         IdlingPolicies.setIdlingResourceTimeout(IDLING_RESOURCE_TIMEOUT_MS, TimeUnit.MILLISECONDS)
-        IdlingRegistry.getInstance().register(app.countingIdlingResource)
-        IdlingRegistry.getInstance().register(app.binaryIdlingResource)
+        IdlingRegistry.getInstance().register(app.idlingResource)
     }
 
     @After
     fun unregisterIdlingResource() {
-        IdlingRegistry.getInstance().unregister(app.countingIdlingResource)
-        IdlingRegistry.getInstance().unregister(app.binaryIdlingResource)
+        IdlingRegistry.getInstance().unregister(app.idlingResource)
     }
 }
 

@@ -14,7 +14,7 @@ def libraryVersions = [
 
         ktx             : '1.1.0',
 
-        dagger          : '2.21',
+        dagger          : '2.25.4',
 
         junit           : '4.12',
         testRunner      : '1.2.0',
