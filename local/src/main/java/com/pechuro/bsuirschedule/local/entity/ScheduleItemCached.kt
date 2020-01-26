@@ -1,30 +1,30 @@
 package com.pechuro.bsuirschedule.local.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 
 @Entity(
         tableName = "schedule_item",
         foreignKeys = [
             ForeignKey(
                     entity = ScheduleCached::class,
-                    parentColumns = ["id"],
-                    childColumns = ["schedule_id"],
+                    parentColumns = ["name", "type"],
+                    childColumns = ["schedule_name", "schedule_type"],
                     onDelete = ForeignKey.CASCADE)
-        ]
+        ],
+        indices = [Index(value = ["schedule_name", "schedule_type"])]
 )
 data class ScheduleItemCached(
         @PrimaryKey(autoGenerate = true)
         @ColumnInfo(name = "id")
         var id: Long = 0,
-        @ColumnInfo(name = "schedule_id", index = true)
-        val scheduleId: Long,
+        @ColumnInfo(name = "schedule_name")
+        val scheduleName: String,
+        @ColumnInfo(name = "schedule_type")
+        val scheduleType: Int,
         @ColumnInfo(name = "subject")
         val subject: String?,
         @ColumnInfo(name = "week_number")
-        val weekNumber: String?,
+        val weekNumbers: List<Int>?,
         @ColumnInfo(name = "subgroup_number")
         val subgroupNumber: Int?,
         @ColumnInfo(name = "lesson_type")
@@ -32,9 +32,9 @@ data class ScheduleItemCached(
         @ColumnInfo(name = "note")
         val note: String?,
         @ColumnInfo(name = "start_time")
-        val startTime: String?,
+        val startTime: String,
         @ColumnInfo(name = "end_time")
-        val endTime: String?,
+        val endTime: String,
         @ColumnInfo(name = "week_day")
-        val weekDay: String
+        val weekDay: Int
 )

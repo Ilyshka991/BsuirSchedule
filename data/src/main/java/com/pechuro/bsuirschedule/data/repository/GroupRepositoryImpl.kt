@@ -42,7 +42,6 @@ class GroupRepositoryImpl(
 
     override suspend fun updateCache() {
         val loadedGroups = loadGroupsFromApi()
-        deleteAll()
         storeGroups(loadedGroups)
     }
 

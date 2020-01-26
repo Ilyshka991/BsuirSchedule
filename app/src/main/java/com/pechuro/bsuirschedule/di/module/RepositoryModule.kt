@@ -3,14 +3,8 @@ package com.pechuro.bsuirschedule.di.module
 import com.pechuro.bsuirschedule.data.repository.*
 import com.pechuro.bsuirschedule.di.annotations.AppScope
 import com.pechuro.bsuirschedule.domain.repository.*
-import com.pechuro.bsuirschedule.local.dao.BuildingDao
-import com.pechuro.bsuirschedule.local.dao.EmployeeDao
-import com.pechuro.bsuirschedule.local.dao.GroupDao
-import com.pechuro.bsuirschedule.local.dao.SpecialityDao
-import com.pechuro.bsuirschedule.remote.api.AnnouncementApi
-import com.pechuro.bsuirschedule.remote.api.BuildingApi
-import com.pechuro.bsuirschedule.remote.api.SpecialityApi
-import com.pechuro.bsuirschedule.remote.api.StaffApi
+import com.pechuro.bsuirschedule.local.dao.*
+import com.pechuro.bsuirschedule.remote.api.*
 import dagger.Module
 import dagger.Provides
 
@@ -41,7 +35,19 @@ class RepositoryModule {
 
     @Provides
     @AppScope
-    fun provideScheduleRepository(): IScheduleRepository = ScheduleRepositoryImpl()
+    fun provideScheduleRepository(
+            scheduleApi: ScheduleApi,
+            scheduleDao: ScheduleDao,
+            employeeRepository: IEmployeeRepository,
+            groupRepository: IGroupRepository,
+            buildingRepository: IBuildingRepository
+    ): IScheduleRepository = ScheduleRepositoryImpl(
+            scheduleApi = scheduleApi,
+            scheduleDao = scheduleDao,
+            employeeRepository = employeeRepository,
+            groupRepository = groupRepository,
+            buildingRepository = buildingRepository
+    )
 
     @Provides
     @AppScope

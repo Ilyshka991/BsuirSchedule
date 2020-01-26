@@ -29,9 +29,11 @@ class EmployeeRepositoryImpl(
     override suspend fun getById(id: Long): Employee =
             performDaoCall { dao.getById(id) }.toDomainEntity()
 
+    override suspend fun getIdByName(name: String): Long =
+            performDaoCall { dao.getIdByName(name) }
+
     override suspend fun updateCache() {
         val loadedEmployees = loadEmployeesFromApi()
-        deleteAll()
         storeEmployees(loadedEmployees)
     }
 

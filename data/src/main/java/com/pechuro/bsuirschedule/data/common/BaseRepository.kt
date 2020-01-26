@@ -12,11 +12,21 @@ import java.net.UnknownHostException
 
 abstract class BaseRepository {
 
+    suspend inline fun <T> performApiCallCatching(
+            defaultValue: T,
+            crossinline call: suspend () -> T
+    ) = try {
+        performApiCall(call)
+    } catch (e: Exception) {
+        defaultValue
+    }
+
     suspend inline fun <T> performApiCall(crossinline call: suspend () -> T) = try {
         withContext(Dispatchers.IO) {
             call()
         }
     } catch (e: Exception) {
+        e.printStackTrace()
         val exception = when (e) {
             is ConnectException, is NetworkUnavailableException -> DataSourceException.NoDataSourceConnection
             is JsonDataException -> DataSourceException.InvalidData

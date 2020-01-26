@@ -70,15 +70,6 @@ internal fun Group.toDatabaseEntity() = run {
     )
 }
 
-internal fun Schedule.toDatabaseEntity() = run {
-    ScheduleCached(
-            id = id,
-            name = name,
-            type = type.value,
-            lastUpdate = lastUpdated
-    )
-}
-
 internal fun Speciality.toDatabaseEntity() = run {
     SpecialityCached(
             id = id,
@@ -95,5 +86,59 @@ internal fun Faculty.toDatabaseEntity() = run {
             id = id,
             abbreviation = abbreviation,
             name = name
+    )
+}
+
+internal fun Classes.toDatabaseEntity() = run {
+    val scheduleCached = schedule.toDatabaseEntity()
+    val items = items.map {
+        it.toDatabaseEntity(scheduleCached)
+    }
+    ClassesCached(
+            schedule = scheduleCached,
+            items = items
+    )
+}
+
+internal fun Schedule.toDatabaseEntity() = run {
+    ScheduleCached(
+            name = name,
+            type = type.value,
+            lastUpdate = lastUpdated
+    )
+}
+
+internal fun ScheduleItem.toDatabaseEntity(schedule: ScheduleCached) = run {
+    val scheduleItem = ScheduleItemCached(
+            scheduleName = schedule.name,
+            scheduleType = schedule.type,
+            subject = subject,
+            weekNumbers = weekNumbers,
+            subgroupNumber = subgroupNumber,
+            lessonType = lessonType,
+            note = note,
+            startTime = startTime,
+            endTime = endTime,
+            weekDay = weekDay.index
+    )
+    val employees = employees?.map { it.toDatabaseEntity() }
+    val auditories = auditories?.map {
+        val auditoryTypeCached = it.auditoryType.toDatabaseEntity()
+        val departmentCached = it.department?.toDatabaseEntity()
+        val buildingCached = it.building.toDatabaseEntity()
+        it.toDatabaseEntity(
+                auditoryType = auditoryTypeCached,
+                building = buildingCached,
+                department = departmentCached
+        )
+    }
+    val groups = studentGroups?.map {
+        it.toDatabaseEntity()
+    }
+    ScheduleItemComplex(
+            scheduleItem = scheduleItem,
+            employees = employees,
+            auditories = auditories,
+            groups = groups
     )
 }

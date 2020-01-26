@@ -5,28 +5,24 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class LessonDTO(
-        @Json(name = "id")
-        val id: Long,
-        @Json(name = "scheduleId")
-        val scheduleId: Long,
         @Json(name = "subject")
-        val subject: String?,
+        val subject: String,
         @Json(name = "weekNumber")
-        val weekNumber: String?,
-        @Json(name = "subgroupNumber")
-        val subgroupNumber: Int?,
+        val weekNumber: List<Int>,
+        @Json(name = "numSubgroup")
+        val subgroupNumber: Int,
         @Json(name = "lessonType")
-        val lessonType: String?,
-        @Json(name = "auditories")
+        val lessonType: String,
+        @Json(name = "auditory")
         val auditories: List<String>?,
         @Json(name = "note")
         val note: String?,
-        @Json(name = "startTime")
-        val startTime: String?,
-        @Json(name = "endTime")
-        val endTime: String?,
-        @Json(name = "weekDay")
-        val weekDay: String,
-        @Json(name = "employees")
-        val employees: List<EmployeeDTO>?
+        @Json(name = "startLessonTime")
+        val startTime: String,
+        @Json(name = "endLessonTime")
+        val endTime: String,
+        @Json(name = "employee")
+        val employees: List<EmployeeDTO>?,
+        @Json(name = "studentGroup")
+        val studentGroups: List<String>?
 )
