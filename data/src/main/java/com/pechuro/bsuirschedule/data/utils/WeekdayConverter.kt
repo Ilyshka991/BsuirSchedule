@@ -10,5 +10,5 @@ fun getWeekdayFor(value: String) = when (value) {
     "Пятница" -> WeekDay.FRIDAY
     "Суббота" -> WeekDay.SATURDAY
     "Воскресение" -> WeekDay.SUNDAY
-    else -> WeekDay.SUNDAY
+    else -> throw IllegalArgumentException("Illegal value: $value")
 }

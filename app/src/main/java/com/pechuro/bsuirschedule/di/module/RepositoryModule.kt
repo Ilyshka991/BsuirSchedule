@@ -25,25 +25,25 @@ class RepositoryModule {
     @AppScope
     fun provideGroupRepository(
             api: StaffApi,
-            groupDao: GroupDao,
-            specialityDao: SpecialityDao
+            dao: GroupDao,
+            specialityRepository: ISpecialityRepository
     ): IGroupRepository = GroupRepositoryImpl(
             api = api,
-            groupDao = groupDao,
-            specialityDao = specialityDao
+            dao = dao,
+            specialityRepository = specialityRepository
     )
 
     @Provides
     @AppScope
     fun provideScheduleRepository(
-            scheduleApi: ScheduleApi,
-            scheduleDao: ScheduleDao,
+            api: ScheduleApi,
+            dao: ScheduleDao,
             employeeRepository: IEmployeeRepository,
             groupRepository: IGroupRepository,
             buildingRepository: IBuildingRepository
     ): IScheduleRepository = ScheduleRepositoryImpl(
-            scheduleApi = scheduleApi,
-            scheduleDao = scheduleDao,
+            scheduleApi = api,
+            scheduleDao = dao,
             employeeRepository = employeeRepository,
             groupRepository = groupRepository,
             buildingRepository = buildingRepository
@@ -63,12 +63,12 @@ class RepositoryModule {
     @AppScope
     fun provideBuildingRepository(
             api: BuildingApi,
-            buildingDao: BuildingDao,
-            specialityDao: SpecialityDao
+            dao: BuildingDao,
+            specialityRepository: ISpecialityRepository
     ): IBuildingRepository = BuildingRepositoryImpl(
             api = api,
-            buildingDao = buildingDao,
-            specialityDao = specialityDao
+            dao = dao,
+            specialityRepository = specialityRepository
     )
 
     @Provides

@@ -12,7 +12,7 @@ import java.net.UnknownHostException
 
 abstract class BaseRepository {
 
-    suspend inline fun <T> performApiCallCatching(
+    protected suspend inline fun <T> performApiCallCatching(
             defaultValue: T,
             crossinline call: suspend () -> T
     ) = try {
@@ -21,12 +21,11 @@ abstract class BaseRepository {
         defaultValue
     }
 
-    suspend inline fun <T> performApiCall(crossinline call: suspend () -> T) = try {
+    protected suspend inline fun <T> performApiCall(crossinline call: suspend () -> T) = try {
         withContext(Dispatchers.IO) {
             call()
         }
     } catch (e: Exception) {
-        e.printStackTrace()
         val exception = when (e) {
             is ConnectException, is NetworkUnavailableException -> DataSourceException.NoDataSourceConnection
             is JsonDataException -> DataSourceException.InvalidData
@@ -36,7 +35,7 @@ abstract class BaseRepository {
         throw exception
     }
 
-    suspend inline fun <T> performDaoCall(crossinline call: suspend () -> T) = try {
+    protected suspend inline fun <T> performDaoCall(crossinline call: suspend () -> T) = try {
         withContext(Dispatchers.IO) {
             call()
         }

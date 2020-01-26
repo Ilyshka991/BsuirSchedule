@@ -51,9 +51,9 @@ class EmployeeRepositoryImpl(
                     }
 
     private suspend fun getEmployeesFromDao() = performDaoCall { dao.getAll() }
-            .map { list ->
-                list.map { employeeDb ->
-                    employeeDb.toDomainEntity()
+            .map { cachedList ->
+                cachedList.map { employeeCached ->
+                    employeeCached.toDomainEntity()
                 }
             }
 

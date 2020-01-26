@@ -11,6 +11,8 @@ abstract class BaseInteractor<out Type, in Params> {
 
     suspend fun execute(params: Params): Result<Type> = runCatching {
         run(params)
+    }.onFailure {
+        it.printStackTrace()
     }
 
     suspend fun executeAsync(params: Params, context: CoroutineContext): Deferred<Result<Type>> =

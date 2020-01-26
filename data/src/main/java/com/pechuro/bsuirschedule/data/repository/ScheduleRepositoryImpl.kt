@@ -12,7 +12,6 @@ import com.pechuro.bsuirschedule.domain.repository.IGroupRepository
 import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
 import com.pechuro.bsuirschedule.local.dao.ScheduleDao
 import com.pechuro.bsuirschedule.remote.api.ScheduleApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -26,17 +25,7 @@ class ScheduleRepositoryImpl(
 ) : BaseRepository(), IScheduleRepository {
 
     override suspend fun getAllSchedules(): Flow<List<Schedule>> {
-        return flow {
-            emit(listOf(Schedule("7535", ScheduleType.EMPLOYEE_EXAMS, null),
-                    Schedule("235", ScheduleType.EMPLOYEE_EXAMS, null),
-                    Schedule("75666666635", ScheduleType.EMPLOYEE_EXAMS, null),
-                    Schedule("36", ScheduleType.EMPLOYEE_CLASSES, null)))
-            delay(4000)
-            emit(listOf(Schedule("666", ScheduleType.EMPLOYEE_EXAMS, null),
-                    Schedule("75365", ScheduleType.EMPLOYEE_EXAMS, null),
-                    Schedule("753345", ScheduleType.EMPLOYEE_EXAMS, null),
-                    Schedule("364636", ScheduleType.EMPLOYEE_CLASSES, null)))
-        }
+        return flow {}
     }
 
     override suspend fun getCurrentWeek(): Int {

@@ -87,6 +87,18 @@ class SpecialityRepositoryImpl(
         }
     }
 
+    override suspend fun add(department: Department) {
+        performDaoCall { dao.insert(department.toDatabaseEntity()) }
+    }
+
+    override suspend fun getDepartmentById(id: Long): Department = performDaoCall {
+        dao.getDepartmentById(id)
+    }.toDomainEntity()
+
+    override suspend fun getFacultyById(id: Long): Faculty? = performDaoCall {
+        dao.getFacultyById(id)
+    }?.toDomainEntity()
+
     private suspend fun loadSpecialitiesFromApi(): List<Speciality> =
             performApiCall { api.getAllSpecialities() }
                     .map { dto ->
@@ -112,14 +124,14 @@ class SpecialityRepositoryImpl(
 
     private suspend fun getSpecialitiesFromDao() = performDaoCall { dao.getAllSpecialities() }
             .map { list ->
-                list.map { specialityDB ->
-                    val faculty = specialityDB.facultyId?.let {
+                list.map { specialityCached ->
+                    val faculty = specialityCached.facultyId?.let {
                         performDaoCall { dao.getFacultyById(it) }
                     }
                     val educationForm = performDaoCall {
-                        dao.getEducationFormById(specialityDB.educationFormId)
+                        dao.getEducationFormById(specialityCached.educationFormId)
                     }
-                    specialityDB.toDomainEntity(
+                    specialityCached.toDomainEntity(
                             faculty = faculty?.toDomainEntity(),
                             educationForm = educationForm.toDomainEntity()
                     )
@@ -128,15 +140,15 @@ class SpecialityRepositoryImpl(
 
     private suspend fun getFacultiesFromDao() = performDaoCall { dao.getAllFaculties() }
             .map { list ->
-                list.map { facultyDB ->
-                    facultyDB.toDomainEntity()
+                list.map { facultyCached ->
+                    facultyCached.toDomainEntity()
                 }
             }
 
     private suspend fun getDepartmentsFromDao() = performDaoCall { dao.getAllDepartments() }
             .map { list ->
-                list.map { departmentDB ->
-                    departmentDB.toDomainEntity()
+                list.map { departmentCached ->
+                    departmentCached.toDomainEntity()
                 }
             }
 

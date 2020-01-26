@@ -19,10 +19,10 @@ class LoadInfo @Inject constructor(
 ) : BaseInteractor<Unit, BaseInteractor.NoParams>() {
 
     override suspend fun run(params: NoParams) = withContext(coroutineContext) {
+        specialityRepository.updateCache()
         listOf(
                 async { employeeRepository.updateCache() },
                 async { groupRepository.updateCache() },
-                async { specialityRepository.updateCache() },
                 async { buildingRepository.updateCache() }
         )
                 .awaitAll()
