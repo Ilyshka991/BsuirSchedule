@@ -15,5 +15,5 @@
     <color name="ic_type_pz_background">#623DA6</color>
     <color name="ic_type_unknown_background">#55DC7D</color>
 
-    <color name="ic_launcher_background">#F44336</color>
+    <color name="app_icon_background">#CC493C</color>
 </resources>
