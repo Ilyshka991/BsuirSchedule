@@ -3,6 +3,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 apply from: '../dependencies.gradle'
 apply from: '../configuration.gradle'
@@ -17,6 +19,7 @@ android {
         versionCode configuration.versionCode
         versionName configuration.versionName
         testInstrumentationRunner configuration.androidJUnitRunner
+        multiDexEnabled true
     }
 
     signingConfigs {
@@ -56,6 +59,11 @@ dependencies {
     implementation androidFrameworkDependencies.values()
     implementation archComponentsDependencies.values()
     kapt archComponentsProcessorDependencies.values()
+    implementation firebaseDependencies.values()
+
+    androidTestImplementation androidTestDependencies.values()
+    testImplementation testDependencies.values()
+    kaptAndroidTest daggerProcessorDependencies.values()
 
     implementation ktxDependencies.values()
 

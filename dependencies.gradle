@@ -8,16 +8,19 @@ def libraryVersions = [
         constraintLayout: '1.1.3',
         materialDesign  : '1.1.0-alpha05',
         recyclerView    : '1.1.0-alpha05',
+        multidex        : '2.0.1',
 
         archComponents  : '2.2.0-rc03',
 
         ktx             : '1.1.0',
 
-        dagger          : '2.21',
+        dagger          : '2.25.4',
 
         junit           : '4.12',
-        testRunner      : '1.2.0-alpha03',
+        testRunner      : '1.2.0',
+        androidXTestCore: '1.2.0',
         espresso        : '3.2.0-alpha03',
+        junitExtVersion : '1.1.1',
 
         leekcanary      : '2.1',
 
@@ -30,7 +33,8 @@ def libraryVersions = [
         moshiAdapter    : '2.5.0',
         moshi           : '1.9.2',
 
-        timber          : '4.7.1'
+        crashlytics     : '17.0.0-beta01',
+        analytics       : '17.2.0',
 ]
 
 ext {
@@ -49,7 +53,8 @@ ext {
             appCompat       : "androidx.appcompat:appcompat:${libraryVersions.appCompat}",
             constraintlayout: "androidx.constraintlayout:constraintlayout:${libraryVersions.constraintLayout}",
             materialDesign  : "com.google.android.material:material:${libraryVersions.materialDesign}",
-            recyclerView    : "androidx.recyclerview:recyclerview:${libraryVersions.recyclerView}"
+            recyclerView    : "androidx.recyclerview:recyclerview:${libraryVersions.recyclerView}",
+            multidex        : "androidx.multidex:multidex:${libraryVersions.multidex}"
     ]
 
     archComponentsDependencies = [
@@ -81,7 +86,10 @@ ext {
 
     androidTestDependencies = [
             testRunner: "androidx.test:runner:${libraryVersions.testRunner}",
-            espresso  : "androidx.test.espresso:espresso-core:${libraryVersions.espresso}"
+            espresso  : "androidx.test.espresso:espresso-core:${libraryVersions.espresso}",
+            core      : "androidx.test:core:${libraryVersions.androidXTestCore}",
+            rules     : "androidx.test:rules:${libraryVersions.androidXTestCore}",
+            junitExt  : "androidx.test.ext:junit:${libraryVersions.junitExtVersion}"
     ]
 
     room = [
@@ -108,5 +116,10 @@ ext {
             moshiAdapter: "com.squareup.retrofit2:converter-moshi:${libraryVersions.moshiAdapter}",
             log         : "com.squareup.okhttp3:logging-interceptor:${libraryVersions.okHttp}",
             okHttp      : "com.squareup.okhttp3:okhttp:${libraryVersions.okHttp}"
+    ]
+
+    firebaseDependencies = [
+            crashlythics: "com.google.firebase:firebase-crashlytics:${libraryVersions.crashlytics}",
+            analytics   : "com.google.firebase:firebase-analytics:${libraryVersions.analytics}"
     ]
 }

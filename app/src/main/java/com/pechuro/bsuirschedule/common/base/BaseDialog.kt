@@ -7,19 +7,18 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
-import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-abstract class BaseDialog : DialogFragment(), HasSupportFragmentInjector {
+abstract class BaseDialog : DialogFragment(), HasAndroidInjector {
 
     @Inject
-    protected lateinit var fragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+    protected lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
     @Inject
     protected lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -42,7 +41,7 @@ abstract class BaseDialog : DialogFragment(), HasSupportFragmentInjector {
         return view
     }
 
-    override fun supportFragmentInjector() = fragmentDispatchingAndroidInjector
+    override fun androidInjector() = androidInjector
 
     protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>, shared: Boolean = false): T {
         val owner: ViewModelStoreOwner = if (shared) requireActivity() else this
