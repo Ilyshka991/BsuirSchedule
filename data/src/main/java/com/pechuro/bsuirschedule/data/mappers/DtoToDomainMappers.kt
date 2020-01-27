@@ -1,6 +1,5 @@
 package com.pechuro.bsuirschedule.data.mappers
 
-import com.pechuro.bsuirschedule.data.utils.getWeekdayFor
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.domain.exception.DataSourceException
 import com.pechuro.bsuirschedule.remote.dto.*
@@ -156,7 +155,7 @@ internal fun List<ScheduleItemDTO>.toDomainEntity(
                     note = lesson.note,
                     startTime = lesson.startTime,
                     endTime = lesson.endTime,
-                    weekDay = getWeekdayFor(scheduleItem.weekDay),
+                    weekDay = scheduleItem.weekDay,
                     employees = lessonEmployees,
                     studentGroups = lessonGroups
             )

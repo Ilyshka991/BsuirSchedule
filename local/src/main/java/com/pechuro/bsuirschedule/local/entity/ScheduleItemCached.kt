@@ -32,9 +32,9 @@ data class ScheduleItemCached(
         @ColumnInfo(name = "note")
         val note: String?,
         @ColumnInfo(name = "start_time")
-        val startTime: String,
+        val startTime: String?,
         @ColumnInfo(name = "end_time")
-        val endTime: String,
+        val endTime: String?,
         @ColumnInfo(name = "week_day")
-        val weekDay: Int
+        val weekDay: String?
 )

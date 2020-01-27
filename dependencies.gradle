@@ -28,7 +28,9 @@ def libraryVersions = [
         retrofit        : '2.6.3',
         okHttp          : '3.14.1',
         moshiAdapter    : '2.5.0',
-        moshi           : '1.9.2'
+        moshi           : '1.9.2',
+
+        timber          : '4.7.1'
 ]
 
 ext {

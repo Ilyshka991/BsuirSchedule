@@ -119,7 +119,7 @@ internal fun ScheduleItem.toDatabaseEntity(schedule: ScheduleCached) = run {
             note = note,
             startTime = startTime,
             endTime = endTime,
-            weekDay = weekDay.index
+            weekDay = weekDay
     )
     val employees = employees?.map { it.toDatabaseEntity() }
     val auditories = auditories?.map {

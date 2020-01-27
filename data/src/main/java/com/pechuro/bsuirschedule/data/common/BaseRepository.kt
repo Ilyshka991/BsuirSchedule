@@ -1,5 +1,6 @@
 package com.pechuro.bsuirschedule.data.common
 
+import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.exception.DataSourceException
 import com.pechuro.bsuirschedule.remote.common.NetworkUnavailableException
 import com.squareup.moshi.JsonDataException
@@ -26,10 +27,11 @@ abstract class BaseRepository {
             call()
         }
     } catch (e: Exception) {
+        Logger.e(e)
         val exception = when (e) {
             is ConnectException, is NetworkUnavailableException -> DataSourceException.NoDataSourceConnection
-            is JsonDataException -> DataSourceException.InvalidData
-            is UnknownHostException, is IOException, is HttpException -> DataSourceException.DataSourceUnavailable
+            is JsonDataException, is IOException -> DataSourceException.InvalidData
+            is UnknownHostException, is HttpException -> DataSourceException.DataSourceUnavailable
             else -> DataSourceException.UnknownException
         }
         throw exception
@@ -40,6 +42,7 @@ abstract class BaseRepository {
             call()
         }
     } catch (e: Exception) {
+        Logger.e(e)
         throw DataSourceException.UnknownException
     }
 }
