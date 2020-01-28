@@ -10,10 +10,12 @@ import com.pechuro.bsuirschedule.domain.entity.Speciality
 import com.pechuro.bsuirschedule.domain.repository.ISpecialityRepository
 import com.pechuro.bsuirschedule.local.dao.SpecialityDao
 import com.pechuro.bsuirschedule.remote.api.SpecialityApi
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlin.coroutines.coroutineContext
+import kotlinx.coroutines.withContext
 
 class SpecialityRepositoryImpl(
         private val api: SpecialityApi,
@@ -21,46 +23,28 @@ class SpecialityRepositoryImpl(
 ) : BaseRepository(), ISpecialityRepository {
 
     override suspend fun getAllFaculties(forceUpdate: Boolean): Flow<List<Faculty>> {
-        withContext(coroutineContext) {
-            launch {
-                if (performDaoCall { !dao.isFacultiesNotEmpty() }) {
-                    val faculties = loadFacultiesFromApi()
-                    storeFaculties(faculties)
-                }
-                if (forceUpdate) {
-                    updateCache()
-                }
-            }
+        val isFacultiesCached = performDaoCall { dao.isFacultiesNotEmpty() }
+        if (forceUpdate || !isFacultiesCached) {
+            val faculties = loadFacultiesFromApi()
+            storeFaculties(faculties)
         }
         return getFacultiesFromDao()
     }
 
     override suspend fun getAllDepartments(forceUpdate: Boolean): Flow<List<Department>> {
-        withContext(coroutineContext) {
-            launch {
-                if (performDaoCall { !dao.isDepartmentsNotEmpty() }) {
-                    val departments = loadDepartmentsFromApi()
-                    storeDepartments(departments)
-                }
-                if (forceUpdate) {
-                    updateCache()
-                }
-            }
+        val isDepartmentsCached = performDaoCall { dao.isDepartmentsNotEmpty() }
+        if (forceUpdate || !isDepartmentsCached) {
+            val departments = loadDepartmentsFromApi()
+            storeDepartments(departments)
         }
         return getDepartmentsFromDao()
     }
 
     override suspend fun getAllSpecialities(forceUpdate: Boolean): Flow<List<Speciality>> {
-        withContext(coroutineContext) {
-            launch {
-                if (performDaoCall { !dao.isSpecialitiesNotEmpty() }) {
-                    val specialities = loadSpecialitiesFromApi()
-                    storeSpecialities(specialities)
-                }
-                if (forceUpdate) {
-                    updateCache()
-                }
-            }
+        val isSpecialitiesCached = performDaoCall { dao.isSpecialitiesNotEmpty() }
+        if (forceUpdate || !isSpecialitiesCached) {
+            val specialities = loadSpecialitiesFromApi()
+            storeSpecialities(specialities)
         }
         return getSpecialitiesFromDao()
     }

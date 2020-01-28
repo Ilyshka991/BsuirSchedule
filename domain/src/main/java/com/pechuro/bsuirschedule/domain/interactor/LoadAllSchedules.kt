@@ -21,17 +21,17 @@ class LoadAllSchedules @Inject constructor(
 ) : BaseInteractor<Unit, BaseInteractor.NoParams>() {
 
     override suspend fun run(params: NoParams) {
-        val groupsResult = loadAllGroupsSchedule()
+        val groupsResult = tryLoadAllGroupSchedule()
         groupsResult.mapValues { it.value.map { it.number } }.forEach {
             Logger.d("ERROR GROUPS: ${it.key} - ${it.value.joinToString()}")
         }
-        val employeeResult = loadAllEmployeesSchedule()
+        val employeeResult = tryLoadAllEmployeesSchedule()
         employeeResult.mapValues { it.value.map { it.abbreviation } }.forEach {
             Logger.d("ERROR EMPLOYEES: ${it.key} - ${it.value.joinToString()}")
         }
     }
 
-    private suspend fun loadAllGroupsSchedule(): Map<Class<out Throwable>, List<Group>> {
+    private suspend fun tryLoadAllGroupSchedule(): Map<Class<out Throwable>, List<Group>> {
         val groups = groupRepository.getAll().first()
         val errorGroups = mutableListOf<Pair<Throwable, Group>>()
         withContext(coroutineContext) {
@@ -53,7 +53,7 @@ class LoadAllSchedules @Inject constructor(
                 .mapValues { it.value.map { it.second } }
     }
 
-    private suspend fun loadAllEmployeesSchedule(): Map<Class<out Throwable>, List<Employee>> {
+    private suspend fun tryLoadAllEmployeesSchedule(): Map<Class<out Throwable>, List<Employee>> {
         val employees = employeeRepository.getAll().first()
         val errorEmployees = mutableListOf<Pair<Throwable, Employee>>()
         withContext(coroutineContext) {
