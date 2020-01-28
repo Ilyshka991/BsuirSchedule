@@ -17,7 +17,7 @@ interface ISpecialityRepository {
 
     suspend fun isCached(): Boolean
 
-    suspend fun add(department: Department)
+    suspend fun addDepartment(department: Department)
 
     suspend fun getDepartmentById(id: Long): Department
 

@@ -87,7 +87,7 @@ class SpecialityRepositoryImpl(
         }
     }
 
-    override suspend fun add(department: Department) {
+    override suspend fun addDepartment(department: Department) {
         performDaoCall { dao.insert(department.toDatabaseEntity()) }
     }
 

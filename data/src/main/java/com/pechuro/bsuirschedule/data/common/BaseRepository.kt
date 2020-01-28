@@ -7,7 +7,7 @@ import com.squareup.moshi.JsonDataException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import java.io.IOException
+import java.io.EOFException
 import java.net.ConnectException
 import java.net.UnknownHostException
 
@@ -30,7 +30,7 @@ abstract class BaseRepository {
         Logger.e(e)
         val exception = when (e) {
             is ConnectException, is NetworkUnavailableException -> DataSourceException.NoDataSourceConnection
-            is JsonDataException, is IOException -> DataSourceException.InvalidData
+            is JsonDataException, is EOFException -> DataSourceException.InvalidData
             is UnknownHostException, is HttpException -> DataSourceException.DataSourceUnavailable
             else -> DataSourceException.UnknownException
         }

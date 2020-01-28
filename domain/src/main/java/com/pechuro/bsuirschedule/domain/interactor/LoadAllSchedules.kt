@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.domain.interactor
 
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
+import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.entity.Employee
 import com.pechuro.bsuirschedule.domain.entity.Group
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
@@ -22,11 +23,11 @@ class LoadAllSchedules @Inject constructor(
     override suspend fun run(params: NoParams) {
         val groupsResult = loadAllGroupsSchedule()
         groupsResult.mapValues { it.value.map { it.number } }.forEach {
-            println("ERROR GROUPS: ${it.key} - ${it.value.joinToString()}")
+            Logger.d("ERROR GROUPS: ${it.key} - ${it.value.joinToString()}")
         }
         val employeeResult = loadAllEmployeesSchedule()
         employeeResult.mapValues { it.value.map { it.abbreviation } }.forEach {
-            println("ERROR EMPLOYEES: ${it.key} - ${it.value.joinToString()}")
+            Logger.d("ERROR EMPLOYEES: ${it.key} - ${it.value.joinToString()}")
         }
     }
 
