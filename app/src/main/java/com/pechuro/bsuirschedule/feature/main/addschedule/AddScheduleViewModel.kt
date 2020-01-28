@@ -9,7 +9,6 @@ import com.pechuro.bsuirschedule.domain.common.onSuccess
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.domain.interactor.GetEmployeeNames
 import com.pechuro.bsuirschedule.domain.interactor.GetGroupNumbers
-import com.pechuro.bsuirschedule.domain.interactor.LoadAllSchedules
 import com.pechuro.bsuirschedule.domain.interactor.LoadSchedule
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
@@ -18,8 +17,7 @@ import javax.inject.Inject
 class AddScheduleViewModel @Inject constructor(
         private val getGroupNumbers: GetGroupNumbers,
         private val getEmployeeNames: GetEmployeeNames,
-        private val loadSchedule: LoadSchedule,
-        private val loadAllSchedules: LoadAllSchedules
+        private val loadSchedule: LoadSchedule
 ) : BaseViewModel() {
 
     val state = MutableLiveData<State>(State.Idle)
@@ -35,12 +33,6 @@ class AddScheduleViewModel @Inject constructor(
             emitAll(it)
         }
     }.asLiveData()
-
-    init {
-        launchCoroutine {
-            loadAllSchedules.execute(BaseInteractor.NoParams)
-        }
-    }
 
     fun loadSchedule(name: String, types: List<ScheduleType>) {
         if (name.isEmpty() || types.isEmpty()) return
