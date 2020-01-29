@@ -11,9 +11,9 @@ interface IScheduleRepository {
 
     suspend fun getAllClasses(): Flow<List<Classes>>
 
-    suspend fun getClasses(name: String, type: ScheduleType): Classes
+    suspend fun getClasses(name: String, type: ScheduleType): Flow<Classes>
 
-    suspend fun getClassesList(name: String, types: List<ScheduleType>): List<Classes>
+    suspend fun loadClasses(name: String, types: List<ScheduleType>)
 
     suspend fun updateCache(schedule: Schedule)
 

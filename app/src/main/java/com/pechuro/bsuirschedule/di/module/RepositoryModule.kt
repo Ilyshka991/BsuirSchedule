@@ -3,14 +3,8 @@ package com.pechuro.bsuirschedule.di.module
 import com.pechuro.bsuirschedule.data.repository.*
 import com.pechuro.bsuirschedule.di.annotations.AppScope
 import com.pechuro.bsuirschedule.domain.repository.*
-import com.pechuro.bsuirschedule.local.dao.BuildingDao
-import com.pechuro.bsuirschedule.local.dao.EmployeeDao
-import com.pechuro.bsuirschedule.local.dao.GroupDao
-import com.pechuro.bsuirschedule.local.dao.SpecialityDao
-import com.pechuro.bsuirschedule.remote.api.AnnouncementApi
-import com.pechuro.bsuirschedule.remote.api.BuildingApi
-import com.pechuro.bsuirschedule.remote.api.SpecialityApi
-import com.pechuro.bsuirschedule.remote.api.StaffApi
+import com.pechuro.bsuirschedule.local.dao.*
+import com.pechuro.bsuirschedule.remote.api.*
 import dagger.Module
 import dagger.Provides
 
@@ -31,17 +25,29 @@ class RepositoryModule {
     @AppScope
     fun provideGroupRepository(
             api: StaffApi,
-            groupDao: GroupDao,
-            specialityDao: SpecialityDao
+            dao: GroupDao,
+            specialityRepository: ISpecialityRepository
     ): IGroupRepository = GroupRepositoryImpl(
             api = api,
-            groupDao = groupDao,
-            specialityDao = specialityDao
+            dao = dao,
+            specialityRepository = specialityRepository
     )
 
     @Provides
     @AppScope
-    fun provideScheduleRepository(): IScheduleRepository = ScheduleRepositoryImpl()
+    fun provideScheduleRepository(
+            api: ScheduleApi,
+            dao: ScheduleDao,
+            employeeRepository: IEmployeeRepository,
+            groupRepository: IGroupRepository,
+            buildingRepository: IBuildingRepository
+    ): IScheduleRepository = ScheduleRepositoryImpl(
+            scheduleApi = api,
+            scheduleDao = dao,
+            employeeRepository = employeeRepository,
+            groupRepository = groupRepository,
+            buildingRepository = buildingRepository
+    )
 
     @Provides
     @AppScope
@@ -57,12 +63,12 @@ class RepositoryModule {
     @AppScope
     fun provideBuildingRepository(
             api: BuildingApi,
-            buildingDao: BuildingDao,
-            specialityDao: SpecialityDao
+            dao: BuildingDao,
+            specialityRepository: ISpecialityRepository
     ): IBuildingRepository = BuildingRepositoryImpl(
             api = api,
-            buildingDao = buildingDao,
-            specialityDao = specialityDao
+            dao = dao,
+            specialityRepository = specialityRepository
     )
 
     @Provides

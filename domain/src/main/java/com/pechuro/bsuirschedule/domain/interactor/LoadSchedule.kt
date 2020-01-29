@@ -10,7 +10,7 @@ class LoadSchedule @Inject constructor(
 ) : BaseInteractor<Unit, LoadSchedule.Params>() {
 
     override suspend fun run(params: Params) {
-        scheduleRepository.getClassesList(params.name, params.types)
+        scheduleRepository.loadClasses(params.name, params.types)
     }
 
     data class Params(

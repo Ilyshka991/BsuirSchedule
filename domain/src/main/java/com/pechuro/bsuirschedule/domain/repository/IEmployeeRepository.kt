@@ -11,6 +11,8 @@ interface IEmployeeRepository {
 
     suspend fun getById(id: Long): Employee
 
+    suspend fun getIdByName(name: String): Long
+
     suspend fun deleteAll()
 
     suspend fun isCached(): Boolean

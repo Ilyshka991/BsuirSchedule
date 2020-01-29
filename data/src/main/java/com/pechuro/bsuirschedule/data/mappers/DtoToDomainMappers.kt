@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.data.mappers
 
 import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.exception.DataSourceException
 import com.pechuro.bsuirschedule.remote.dto.*
 
 internal fun BuildingDTO.toDomainEntity() = run {
@@ -94,4 +95,72 @@ internal fun SpecialityDTO.toDomainEntity(faculty: Faculty?) = run {
             educationForm = educationForm.toDomainEntity(),
             code = code
     )
+}
+
+internal fun ScheduleDTO.toDomainEntity(
+        scheduleType: ScheduleType,
+        lastUpdated: String?,
+        groups: List<Group>,
+        auditories: List<Auditory>
+): Classes = run {
+    val scheduleName = when (scheduleType) {
+        ScheduleType.STUDENT_CLASSES, ScheduleType.STUDENT_EXAMS ->
+            studentGroup?.number
+        ScheduleType.EMPLOYEE_CLASSES, ScheduleType.EMPLOYEE_EXAMS ->
+            employee?.abbreviation
+    } ?: throw DataSourceException.InvalidData
+    val schedule = Schedule(
+            name = scheduleName,
+            type = scheduleType,
+            lastUpdated = lastUpdated
+    )
+    val dtoItemList = when (scheduleType) {
+        ScheduleType.STUDENT_CLASSES, ScheduleType.EMPLOYEE_CLASSES -> this.schedule
+        ScheduleType.STUDENT_EXAMS, ScheduleType.EMPLOYEE_EXAMS -> this.exam
+    } ?: throw DataSourceException.InvalidData
+    Classes(
+            schedule = schedule,
+            items = dtoItemList.toDomainEntity(
+                    schedule = schedule,
+                    groups = groups,
+                    auditories = auditories
+            )
+    )
+}
+
+internal fun List<ScheduleItemDTO>.toDomainEntity(
+        schedule: Schedule,
+        groups: List<Group>,
+        auditories: List<Auditory>
+): List<ScheduleItem> {
+    val resultList = mutableListOf<ScheduleItem>()
+    forEach { scheduleItem ->
+        scheduleItem.classes.map { lesson ->
+            val lessonAuditories = lesson.auditories?.let { lessonAuditories ->
+                auditories.filter { "${it.name}-${it.building.name}" in lessonAuditories }
+            }
+            val lessonGroups = lesson.studentGroups?.let { lessonGroups ->
+                groups.filter { it.number in lessonGroups }
+            }
+            val lessonEmployees = lesson.employees?.map { it.toDomainEntity() }
+            val mappedScheduleItem = ScheduleItem(
+                    //This ID will be generated later
+                    id = 0,
+                    schedule = schedule,
+                    subject = lesson.subject,
+                    weekNumbers = lesson.weekNumber,
+                    subgroupNumber = lesson.subgroupNumber,
+                    lessonType = lesson.lessonType,
+                    auditories = lessonAuditories,
+                    note = lesson.note,
+                    startTime = lesson.startTime,
+                    endTime = lesson.endTime,
+                    weekDay = scheduleItem.weekDay,
+                    employees = lessonEmployees,
+                    studentGroups = lessonGroups
+            )
+            resultList.add(mappedScheduleItem)
+        }
+    }
+    return resultList
 }
