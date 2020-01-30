@@ -8,6 +8,8 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
+import com.pechuro.bsuirschedule.domain.entity.Employee
+import com.pechuro.bsuirschedule.domain.entity.Group
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.main.addschedule.AddScheduleContainerDialogPagerAdapter.FragmentType
@@ -108,41 +110,41 @@ class AddScheduleFragment : BaseFragment() {
             }
         }
 
-        val suggestionsData = when (scheduleType) {
-            FragmentType.STUDENT -> viewModel.allGroupNames
-            FragmentType.EMPLOYEE -> viewModel.allEmployeeNames
-        }
-        suggestionsData.observeNonNull(viewLifecycleOwner) {
-            addSuggestions(it)
+        when (scheduleType) {
+            FragmentType.STUDENT -> {
+                viewModel.allGroupNames.observeNonNull(viewLifecycleOwner) {
+                    addGroupSuggestions(it)
+                }
+            }
+            FragmentType.EMPLOYEE -> {
+                viewModel.allEmployeeNames.observeNonNull(viewLifecycleOwner) {
+                    addEmployeeSuggestions(it)
+                }
+            }
         }
     }
 
-    private fun addSuggestions(suggestions: List<String>) {
+    private fun addGroupSuggestions(suggestions: List<Group>) {
         suggestionsAdapter.apply {
             clear()
-            addAll(suggestions)
+            addAll(suggestions.map { it.number })
+        }
+    }
+
+    private fun addEmployeeSuggestions(suggestions: List<Employee>) {
+        suggestionsAdapter.apply {
+            clear()
+            addAll(suggestions.map { it.abbreviation })
         }
     }
 
     private fun loadSchedule() {
         val scheduleName = addScheduleNameInput.text.toString()
+        val scheduleTypes = sequence {
+            if (addScheduleChipClasses.isChecked) yield(ScheduleType.CLASSES)
+            if (addScheduleChipExams.isChecked) yield(ScheduleType.EXAMS)
+        }.toList()
 
-        val scheduleTypes = mutableListOf<ScheduleType>()
-        if (addScheduleChipClasses.isChecked) {
-            val classesType = when (scheduleType) {
-                FragmentType.STUDENT -> ScheduleType.STUDENT_CLASSES
-                FragmentType.EMPLOYEE -> ScheduleType.EMPLOYEE_CLASSES
-            }
-            scheduleTypes.add(classesType)
-        }
-        if (addScheduleChipExams.isChecked) {
-            val examsType = when (scheduleType) {
-                FragmentType.STUDENT -> ScheduleType.STUDENT_EXAMS
-                FragmentType.EMPLOYEE -> ScheduleType.EMPLOYEE_EXAMS
-            }
-            scheduleTypes.add(examsType)
-        }
-
-        viewModel.loadSchedule(scheduleName, scheduleTypes)
+       // viewModel.loadSchedule(scheduleName, scheduleTypes)
     }
 }

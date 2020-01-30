@@ -5,24 +5,24 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 
 @Entity(
-        tableName = "schedule_item_group_join",
-        primaryKeys = ["schedule_item_id", "group_id"],
+        tableName = "group_schedule_item_employee_join",
+        primaryKeys = ["schedule_item_id", "employee_id"],
         foreignKeys = [
             ForeignKey(
-                    entity = ScheduleItemCached::class,
+                    entity = GroupScheduleItemCached::class,
                     parentColumns = ["id"],
                     childColumns = ["schedule_item_id"],
                     onDelete = ForeignKey.CASCADE),
             ForeignKey(
-                    entity = GroupCached::class,
+                    entity = EmployeeCached::class,
                     parentColumns = ["id"],
-                    childColumns = ["group_id"],
-                    onDelete = ForeignKey.CASCADE)
+                    childColumns = ["employee_id"],
+                    onDelete = ForeignKey.NO_ACTION)
         ]
 )
-data class ScheduleItemGroupCrossRef(
+data class GroupScheduleItemEmployeeCrossRef(
         @ColumnInfo(name = "schedule_item_id", index = true)
         val scheduleItemId: Long,
-        @ColumnInfo(name = "group_id", index = true)
-        val groupId: Long
+        @ColumnInfo(name = "employee_id", index = true)
+        val employeeId: Long
 )

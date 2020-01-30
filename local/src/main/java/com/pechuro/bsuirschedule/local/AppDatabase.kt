@@ -12,8 +12,10 @@ import com.pechuro.bsuirschedule.local.entity.*
         entities = [
             GroupCached::class,
             EmployeeCached::class,
-            ScheduleCached::class,
-            ScheduleItemCached::class,
+            GroupScheduleCached::class,
+            EmployeeScheduleCached::class,
+            GroupScheduleItemCached::class,
+            EmployeeScheduleItemCached::class,
             AuditoryCached::class,
             AuditoryTypeCached::class,
             BuildingCached::class,
@@ -21,9 +23,10 @@ import com.pechuro.bsuirschedule.local.entity.*
             FacultyCached::class,
             SpecialityCached::class,
             EducationFormCached::class,
-            ScheduleItemAuditoryCrossRef::class,
-            ScheduleItemEmployeeCrossRef::class,
-            ScheduleItemGroupCrossRef::class
+            GroupScheduleItemAuditoryCrossRef::class,
+            GroupScheduleItemEmployeeCrossRef::class,
+            EmployeeScheduleItemGroupCrossRef::class,
+            EmployeeScheduleItemAuditoryCrossRef::class
         ],
         exportSchema = false,
         version = BuildConfig.DATABASE_VERSION)

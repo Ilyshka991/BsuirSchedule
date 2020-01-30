@@ -71,14 +71,6 @@ internal fun GroupCached.toDomainEntity(faculty: Faculty?) = run {
     )
 }
 
-internal fun ScheduleCached.toDomainEntity() = run {
-    Schedule(
-            name = name,
-            type = ScheduleType.getOrException(type),
-            lastUpdated = lastUpdate
-    )
-}
-
 internal fun EducationFormCached.toDomainEntity() = run {
     EducationForm(
             id = id,

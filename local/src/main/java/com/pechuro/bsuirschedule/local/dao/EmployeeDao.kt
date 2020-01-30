@@ -25,9 +25,6 @@ interface EmployeeDao {
     @Query("SELECT * FROM employee WHERE id = :id")
     suspend fun getById(id: Long): EmployeeCached
 
-    @Query("SELECT id FROM employee WHERE abbreviation = :name")
-    suspend fun getIdByName(name: String): Long
-
     @Query("SELECT abbreviation FROM employee")
     fun getAllNames(): Flow<List<String>>
 
