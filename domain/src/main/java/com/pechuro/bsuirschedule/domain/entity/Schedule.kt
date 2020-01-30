@@ -1,26 +1,38 @@
 package com.pechuro.bsuirschedule.domain.entity
 
+import java.util.*
+
 sealed class Schedule(
-        val name: String,
-        val type: ScheduleType
+        val name: String
 ) {
 
-    class GroupSchedule(
+    class GroupClasses(
             name: String,
-            type: ScheduleType,
-            val lastUpdated: String?,
+            val lastUpdated: Date,
             val group: Group
     ) : Schedule(
-            name = name,
-            type = type
+            name = name
     )
 
-    class EmployeeSchedule(
+    class GroupExams(
             name: String,
-            type: ScheduleType,
+            val lastUpdated: Date,
+            val group: Group
+    ) : Schedule(
+            name = name
+    )
+
+    class EmployeeClasses(
+            name: String,
             val employee: Employee
     ) : Schedule(
-            name = name,
-            type = type
+            name = name
+    )
+
+    class EmployeeExams(
+            name: String,
+            val employee: Employee
+    ) : Schedule(
+            name = name
     )
 }

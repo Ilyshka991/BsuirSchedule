@@ -4,10 +4,10 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.pechuro.bsuirschedule.local.entity.DepartmentCached
-import com.pechuro.bsuirschedule.local.entity.EducationFormCached
-import com.pechuro.bsuirschedule.local.entity.FacultyCached
-import com.pechuro.bsuirschedule.local.entity.SpecialityCached
+import com.pechuro.bsuirschedule.local.entity.education.DepartmentCached
+import com.pechuro.bsuirschedule.local.entity.education.EducationFormCached
+import com.pechuro.bsuirschedule.local.entity.education.FacultyCached
+import com.pechuro.bsuirschedule.local.entity.education.SpecialityCached
 import kotlinx.coroutines.flow.Flow
 
 @Dao

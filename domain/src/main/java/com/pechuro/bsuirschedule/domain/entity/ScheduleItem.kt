@@ -1,67 +1,114 @@
 package com.pechuro.bsuirschedule.domain.entity
 
-sealed class ScheduleItem(
+import java.util.*
+
+sealed class ScheduleItem<T : Schedule>(
         val id: Long,
-        val subject: String?,
-        val weekNumbers: List<Int>,
+        val schedule: T,
+        val subject: String,
         val subgroupNumber: Int,
-        val lessonType: String?,
-        val note: String?,
-        val startTime: String?,
-        val endTime: String?,
-        val weekDay: String?,
-        val auditories: List<Auditory>?
+        val lessonType: String,
+        val note: String,
+        val startTime: String,
+        val endTime: String,
+        val auditories: List<Auditory>
 ) {
 
-    class EmployeeScheduleItem(
+    class GroupLesson(
             id: Long,
-            subject: String?,
-            weekNumbers: List<Int>,
+            schedule: Schedule.GroupClasses,
+            subject: String,
             subgroupNumber: Int,
-            lessonType: String?,
-            note: String?,
-            startTime: String?,
-            endTime: String?,
-            weekDay: String?,
-            auditories: List<Auditory>?,
-            val schedule: Schedule.EmployeeSchedule,
-            val studentGroups: List<Group>?
-    ) : ScheduleItem(
+            lessonType: String,
+            note: String,
+            startTime: String,
+            endTime: String,
+            auditories: List<Auditory>,
+            val weekDay: WeekDay,
+            val weekNumbers: List<Int>,
+            val employees: List<Employee>
+    ) : ScheduleItem<Schedule.GroupClasses>(
             id = id,
+            schedule = schedule,
             subject = subject,
-            weekNumbers = weekNumbers,
             subgroupNumber = subgroupNumber,
             lessonType = lessonType,
             note = note,
             startTime = startTime,
             endTime = endTime,
-            weekDay = weekDay,
             auditories = auditories
     )
 
-    class GroupScheduleItem(
+    class GroupExam(
             id: Long,
-            subject: String?,
-            weekNumbers: List<Int>,
+            schedule: Schedule.GroupExams,
+            subject: String,
             subgroupNumber: Int,
-            lessonType: String?,
-            note: String?,
-            startTime: String?,
-            endTime: String?,
-            weekDay: String?,
-            auditories: List<Auditory>?,
-            val schedule: Schedule.GroupSchedule,
-            val employees: List<Employee>?
-    ) : ScheduleItem(
+            lessonType: String,
+            note: String,
+            startTime: String,
+            endTime: String,
+            auditories: List<Auditory>,
+            val date: Date,
+            val employees: List<Employee>
+    ) : ScheduleItem<Schedule.GroupExams>(
             id = id,
+            schedule = schedule,
             subject = subject,
-            weekNumbers = weekNumbers,
             subgroupNumber = subgroupNumber,
             lessonType = lessonType,
             note = note,
             startTime = startTime,
             endTime = endTime,
-            weekDay = weekDay,
+            auditories = auditories
+    )
+
+    class EmployeeLesson(
+            id: Long,
+            schedule: Schedule.EmployeeClasses,
+            subject: String,
+            subgroupNumber: Int,
+            lessonType: String,
+            note: String,
+            startTime: String,
+            endTime: String,
+            auditories: List<Auditory>,
+            val weekDay: WeekDay,
+            val weekNumbers: List<Int>,
+            val studentGroups: List<Group>
+    ) : ScheduleItem<Schedule.EmployeeClasses>(
+            id = id,
+            schedule = schedule,
+            subject = subject,
+            subgroupNumber = subgroupNumber,
+            lessonType = lessonType,
+            note = note,
+            startTime = startTime,
+            endTime = endTime,
+            auditories = auditories
+    )
+
+    class EmployeeExam(
+            id: Long,
+            schedule: Schedule.EmployeeExams,
+            subject: String,
+            subgroupNumber: Int,
+            lessonType: String,
+            note: String,
+            startTime: String,
+            endTime: String,
+            auditories: List<Auditory>,
+            val date: Date,
+            val studentGroups: List<Group>
+    ) : ScheduleItem<Schedule.EmployeeExams>(
+            id = id,
+            schedule = schedule,
+            subject = subject,
+            subgroupNumber = subgroupNumber,
+            lessonType = lessonType,
+            note = note,
+            startTime = startTime,
+            endTime = endTime,
             auditories = auditories
     )
 }

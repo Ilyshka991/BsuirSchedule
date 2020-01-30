@@ -1,15 +1,17 @@
-package com.pechuro.bsuirschedule.local.entity
+package com.pechuro.bsuirschedule.local.entity.schedule.crossref
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import com.pechuro.bsuirschedule.local.entity.building.AuditoryCached
+import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeExamCached
 
 @Entity(
-        tableName = "employee_schedule_item_auditory_join",
+        tableName = "employee_exam_auditory_join",
         primaryKeys = ["schedule_item_id", "auditory_id"],
         foreignKeys = [
             ForeignKey(
-                    entity = EmployeeScheduleItemCached::class,
+                    entity = EmployeeExamCached::class,
                     parentColumns = ["id"],
                     childColumns = ["schedule_item_id"],
                     onDelete = ForeignKey.CASCADE),
@@ -17,10 +19,10 @@ import androidx.room.ForeignKey
                     entity = AuditoryCached::class,
                     parentColumns = ["id"],
                     childColumns = ["auditory_id"],
-                    onDelete = ForeignKey.CASCADE)
+                    onDelete = ForeignKey.NO_ACTION)
         ]
 )
-data class EmployeeScheduleItemAuditoryCrossRef(
+data class EmployeeExamAuditoryCrossRef(
         @ColumnInfo(name = "schedule_item_id", index = true)
         val scheduleItemId: Long,
         @ColumnInfo(name = "auditory_id", index = true)

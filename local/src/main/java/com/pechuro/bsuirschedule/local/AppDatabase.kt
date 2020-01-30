@@ -6,27 +6,51 @@ import androidx.room.TypeConverters
 import com.pechuro.bsuirschedule.local.converters.DateConverter
 import com.pechuro.bsuirschedule.local.converters.ListConverter
 import com.pechuro.bsuirschedule.local.dao.*
-import com.pechuro.bsuirschedule.local.entity.*
+import com.pechuro.bsuirschedule.local.entity.building.AuditoryCached
+import com.pechuro.bsuirschedule.local.entity.building.AuditoryTypeCached
+import com.pechuro.bsuirschedule.local.entity.building.BuildingCached
+import com.pechuro.bsuirschedule.local.entity.education.DepartmentCached
+import com.pechuro.bsuirschedule.local.entity.education.EducationFormCached
+import com.pechuro.bsuirschedule.local.entity.education.FacultyCached
+import com.pechuro.bsuirschedule.local.entity.education.SpecialityCached
+import com.pechuro.bsuirschedule.local.entity.schedule.*
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.*
+import com.pechuro.bsuirschedule.local.entity.staff.EmployeeCached
+import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
 
 @Database(
         entities = [
-            GroupCached::class,
-            EmployeeCached::class,
-            GroupScheduleCached::class,
-            EmployeeScheduleCached::class,
-            GroupScheduleItemCached::class,
-            EmployeeScheduleItemCached::class,
             AuditoryCached::class,
             AuditoryTypeCached::class,
             BuildingCached::class,
+
             DepartmentCached::class,
+            EducationFormCached::class,
             FacultyCached::class,
             SpecialityCached::class,
-            EducationFormCached::class,
-            GroupScheduleItemAuditoryCrossRef::class,
-            GroupScheduleItemEmployeeCrossRef::class,
-            EmployeeScheduleItemGroupCrossRef::class,
-            EmployeeScheduleItemAuditoryCrossRef::class
+
+            GroupCached::class,
+            EmployeeCached::class,
+
+            EmployeeScheduleExamsCached::class,
+            EmployeeExamCached::class,
+            EmployeeScheduleClassesCached::class,
+            EmployeeLessonCached::class,
+
+            GroupScheduleClassesCached::class,
+            GroupLessonCached::class,
+            GroupScheduleExamsCached::class,
+            GroupExamCached::class,
+
+            EmployeeExamAuditoryCrossRef::class,
+            EmployeeExamGroupCrossRef::class,
+            EmployeeLessonAuditoryCrossRef::class,
+            EmployeeLessonGroupCrossRef::class,
+
+            GroupExamAuditoryCrossRef::class,
+            GroupExamEmployeeCrossRef::class,
+            GroupLessonAuditoryCrossRef::class,
+            GroupLessonEmployeeCrossRef::class
         ],
         exportSchema = false,
         version = BuildConfig.DATABASE_VERSION)

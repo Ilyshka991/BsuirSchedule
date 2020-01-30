@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.local.entity
+package com.pechuro.bsuirschedule.local.entity.staff
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -14,11 +14,11 @@ data class EmployeeCached(
         @ColumnInfo(name = "last_name")
         val lastName: String,
         @ColumnInfo(name = "middle_name")
-        val middleName: String?,
+        val middleName: String,
         @ColumnInfo(name = "abbreviation")
         val abbreviation: String,
         @ColumnInfo(name = "photo_link")
-        val photoLink: String?,
+        val photoLink: String,
         @ColumnInfo(name = "rank")
-        val rank: String?
+        val rank: String
 )

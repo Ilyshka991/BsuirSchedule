@@ -1,11 +1,11 @@
-package com.pechuro.bsuirschedule.local.entity
+package com.pechuro.bsuirschedule.local.entity.education
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "auditory_type")
-data class AuditoryTypeCached(
+@Entity(tableName = "faculty")
+data class FacultyCached(
         @PrimaryKey
         @ColumnInfo(name = "id")
         val id: Long,

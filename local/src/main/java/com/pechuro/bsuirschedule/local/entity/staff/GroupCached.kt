@@ -1,9 +1,10 @@
-package com.pechuro.bsuirschedule.local.entity
+package com.pechuro.bsuirschedule.local.entity.staff
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.pechuro.bsuirschedule.local.entity.education.FacultyCached
 
 @Entity(
         tableName = "group",
@@ -24,5 +25,5 @@ data class GroupCached(
         @ColumnInfo(name = "faculty_id", index = true)
         val facultyId: Long?,
         @ColumnInfo(name = "course")
-        val course: Int?
+        val course: Int
 )

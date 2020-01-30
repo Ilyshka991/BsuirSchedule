@@ -1,9 +1,7 @@
 package com.pechuro.bsuirschedule.data.repository
 
 import com.pechuro.bsuirschedule.data.common.BaseRepository
-import com.pechuro.bsuirschedule.data.mappers.toDatabaseEntity
-import com.pechuro.bsuirschedule.data.mappers.toEmployeeScheduleItems
-import com.pechuro.bsuirschedule.data.mappers.toGroupScheduleItems
+import com.pechuro.bsuirschedule.data.mappers.*
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.domain.repository.IBuildingRepository
 import com.pechuro.bsuirschedule.domain.repository.IGroupRepository
@@ -13,6 +11,7 @@ import com.pechuro.bsuirschedule.remote.api.ScheduleApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import java.util.*
 
 class ScheduleRepositoryImpl(
         private val dao: ScheduleDao,
@@ -25,21 +24,75 @@ class ScheduleRepositoryImpl(
         return flow {}
     }
 
-    override suspend fun getScheduleItems(schedule: Schedule): Flow<ScheduleItem> {
+    override suspend fun <T : Schedule> getScheduleItems(schedule: T): Flow<ScheduleItem<T>> {
         TODO("not implemented")
     }
 
     override suspend fun loadGroupSchedule(group: Group, types: List<ScheduleType>) {
-        val schedules = loadGroupScheduleFromApi(group, types)
-        schedules.forEach { (schedule, items) ->
-            storeSchedule(schedule, items)
+        val auditories = buildingRepository.getAllAuditories().first()
+
+        val scheduleDTO = performApiCall { api.getStudentSchedule(group.id) }
+        val lastUpdatedDate: Date = performApiCallCatching(Date(0)) {
+            api.getLastUpdateDate(group.number).toDomainEntity()
+        }
+
+        types.forEach { type ->
+            when (type) {
+                ScheduleType.CLASSES -> {
+                    val itemsDTOList = scheduleDTO.schedule ?: emptyList()
+                    val schedule = Schedule.GroupClasses(
+                            name = group.number,
+                            lastUpdated = lastUpdatedDate,
+                            group = group
+                    )
+                    val items = itemsDTOList.toGroupLessons(schedule, auditories)
+
+                    storeSchedule(schedule, items)
+                }
+                ScheduleType.EXAMS -> {
+                    val itemsDTOList = scheduleDTO.exam ?: emptyList()
+                    val schedule = Schedule.GroupExams(
+                            name = group.number,
+                            lastUpdated = lastUpdatedDate,
+                            group = group
+                    )
+                    val items = itemsDTOList.toGroupExams(schedule, auditories)
+
+                    storeSchedule(schedule, items)
+                }
+            }
         }
     }
 
     override suspend fun loadEmployeeSchedule(employee: Employee, types: List<ScheduleType>) {
-        val schedules = loadEmployeeScheduleFromApi(employee, types)
-        schedules.forEach { (schedule, items) ->
-            storeSchedule(schedule, items)
+        val groups = groupRepository.getAll().first()
+        val auditories = buildingRepository.getAllAuditories().first()
+
+        val scheduleDTO = performApiCall { api.getEmployeeSchedule(employee.id) }
+
+        types.forEach { type ->
+            when (type) {
+                ScheduleType.CLASSES -> {
+                    val itemsDTOList = scheduleDTO.schedule ?: emptyList()
+                    val schedule = Schedule.EmployeeClasses(
+                            name = employee.abbreviation,
+                            employee = employee
+                    )
+                    val items = itemsDTOList.toEmployeeLessons(schedule, groups, auditories)
+
+                    storeSchedule(schedule, items)
+                }
+                ScheduleType.EXAMS -> {
+                    val itemsDTOList = scheduleDTO.exam ?: emptyList()
+                    val schedule = Schedule.EmployeeExams(
+                            name = employee.abbreviation,
+                            employee = employee
+                    )
+                    val items = itemsDTOList.toEmployeeExams(schedule, groups, auditories)
+
+                    storeSchedule(schedule, items)
+                }
+            }
         }
     }
 
@@ -67,81 +120,35 @@ class ScheduleRepositoryImpl(
         TODO("not implemented")
     }
 
-    private suspend fun loadGroupScheduleFromApi(
-            group: Group,
-            types: List<ScheduleType>
-    ): List<Pair<Schedule.GroupSchedule, List<ScheduleItem.GroupScheduleItem>>> {
-        val auditories = buildingRepository.getAllAuditories().first()
-
-        val scheduleDTO = performApiCall { api.getStudentSchedule(group.id) }
-        val lastUpdatedDate: String? = performApiCallCatching(null) {
-            api.getLastUpdateDate(group.number).lastUpdateDate
-        }
-
-        return types.map { type ->
-            val itemsDTOList = when (type) {
-                ScheduleType.CLASSES -> scheduleDTO.schedule
-                ScheduleType.EXAMS -> scheduleDTO.exam
-            } ?: emptyList()
-
-            val schedule = Schedule.GroupSchedule(
-                    name = group.number,
-                    type = type,
-                    lastUpdated = lastUpdatedDate,
-                    group = group
-            )
-            val items = itemsDTOList.toGroupScheduleItems(schedule, auditories)
-
-            schedule to items
-        }
-
-    }
-
-    private suspend fun loadEmployeeScheduleFromApi(
-            employee: Employee,
-            types: List<ScheduleType>
-    ): List<Pair<Schedule.EmployeeSchedule, List<ScheduleItem.EmployeeScheduleItem>>> {
-        val groups = groupRepository.getAll().first()
-        val auditories = buildingRepository.getAllAuditories().first()
-
-        val scheduleDTO = performApiCall { api.getEmployeeSchedule(employee.id) }
-
-        return types.map { type ->
-            val itemsDTOList = when (type) {
-                ScheduleType.CLASSES -> scheduleDTO.schedule
-                ScheduleType.EXAMS -> scheduleDTO.exam
-            } ?: emptyList()
-
-            val schedule = Schedule.EmployeeSchedule(
-                    name = employee.abbreviation,
-                    type = type,
-                    employee = employee
-            )
-            val items = itemsDTOList.toEmployeeScheduleItems(schedule, groups, auditories)
-
-            schedule to items
-        }
-    }
-
-    private suspend fun storeSchedule(
-            schedule: Schedule.GroupSchedule,
-            items: List<ScheduleItem.GroupScheduleItem>
-    ) {
+    private suspend fun storeSchedule(schedule: Schedule.GroupClasses, items: List<ScheduleItem.GroupLesson>) {
         val cachedSchedule = schedule.toDatabaseEntity()
         val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }
         performDaoCall {
-            dao.insertGroupSchedule(cachedSchedule, cachedItems)
+            dao.insertGroupClassesSchedule(cachedSchedule, cachedItems)
         }
     }
 
-    private suspend fun storeSchedule(
-            schedule: Schedule.EmployeeSchedule,
-            items: List<ScheduleItem.EmployeeScheduleItem>
-    ) {
+    private suspend fun storeSchedule(schedule: Schedule.GroupExams, items: List<ScheduleItem.GroupExam>) {
         val cachedSchedule = schedule.toDatabaseEntity()
         val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }
         performDaoCall {
-            dao.insertEmployeeSchedule(cachedSchedule, cachedItems)
+            dao.insertGroupExamsSchedule(cachedSchedule, cachedItems)
+        }
+    }
+
+    private suspend fun storeSchedule(schedule: Schedule.EmployeeClasses, items: List<ScheduleItem.EmployeeLesson>) {
+        val cachedSchedule = schedule.toDatabaseEntity()
+        val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }
+        performDaoCall {
+            dao.insertEmployeeClassesSchedule(cachedSchedule, cachedItems)
+        }
+    }
+
+    private suspend fun storeSchedule(schedule: Schedule.EmployeeExams, items: List<ScheduleItem.EmployeeExam>) {
+        val cachedSchedule = schedule.toDatabaseEntity()
+        val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }
+        performDaoCall {
+            dao.insertEmployeeExamsSchedule(cachedSchedule, cachedItems)
         }
     }
 }

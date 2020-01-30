@@ -7,7 +7,7 @@ interface IScheduleRepository {
 
     suspend fun getAllSchedules(): Flow<List<Schedule>>
 
-    suspend fun getScheduleItems(schedule: Schedule): Flow<ScheduleItem>
+    suspend fun <T : Schedule> getScheduleItems(schedule: T): Flow<ScheduleItem<T>>
 
     suspend fun loadGroupSchedule(group: Group, types: List<ScheduleType>)
 

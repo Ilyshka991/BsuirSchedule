@@ -1,9 +1,10 @@
-package com.pechuro.bsuirschedule.local.entity
+package com.pechuro.bsuirschedule.local.entity.building
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.pechuro.bsuirschedule.local.entity.education.DepartmentCached
 
 @Entity(tableName = "auditory",
         foreignKeys = [
@@ -37,7 +38,7 @@ data class AuditoryCached(
         @ColumnInfo(name = "name")
         val name: String,
         @ColumnInfo(name = "note")
-        val note: String?,
+        val note: String,
         @ColumnInfo(name = "capacity")
-        val capacity: Int?
+        val capacity: Int
 )

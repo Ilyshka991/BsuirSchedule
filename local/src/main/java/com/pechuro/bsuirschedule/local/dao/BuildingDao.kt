@@ -1,9 +1,9 @@
 package com.pechuro.bsuirschedule.local.dao
 
 import androidx.room.*
-import com.pechuro.bsuirschedule.local.entity.AuditoryCached
-import com.pechuro.bsuirschedule.local.entity.AuditoryTypeCached
-import com.pechuro.bsuirschedule.local.entity.BuildingCached
+import com.pechuro.bsuirschedule.local.entity.building.AuditoryCached
+import com.pechuro.bsuirschedule.local.entity.building.AuditoryTypeCached
+import com.pechuro.bsuirschedule.local.entity.building.BuildingCached
 import kotlinx.coroutines.flow.Flow
 
 @Dao
