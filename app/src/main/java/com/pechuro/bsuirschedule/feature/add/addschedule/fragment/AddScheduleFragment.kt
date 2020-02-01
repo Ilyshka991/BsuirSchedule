@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.main.addschedule.fragment
+package com.pechuro.bsuirschedule.feature.add.addschedule.fragment
 
 import android.os.Bundle
 import android.text.InputType
@@ -12,9 +12,9 @@ import com.pechuro.bsuirschedule.domain.entity.Employee
 import com.pechuro.bsuirschedule.domain.entity.Group
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.ext.*
-import com.pechuro.bsuirschedule.feature.main.addschedule.AddScheduleContainerDialogPagerAdapter.FragmentType
-import com.pechuro.bsuirschedule.feature.main.addschedule.AddScheduleViewModel
-import com.pechuro.bsuirschedule.feature.main.addschedule.AddScheduleViewModel.State
+import com.pechuro.bsuirschedule.feature.add.addschedule.AddScheduleContainerPagerAdapter.FragmentType
+import com.pechuro.bsuirschedule.feature.add.addschedule.AddScheduleViewModel
+import com.pechuro.bsuirschedule.feature.add.addschedule.AddScheduleViewModel.State
 import kotlinx.android.synthetic.main.fragment_add_schedule.*
 
 class AddScheduleFragment : BaseFragment() {

@@ -10,7 +10,7 @@ import com.pechuro.bsuirschedule.common.BaseEvent
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.common.base.BaseFragmentActivity
-import com.pechuro.bsuirschedule.feature.main.addschedule.AddScheduleContainerDialog
+import com.pechuro.bsuirschedule.feature.add.AddScheduleActivity
 import com.pechuro.bsuirschedule.feature.main.navigationdrawer.NavigationDrawerEvent
 import com.pechuro.bsuirschedule.feature.main.start.StartFragment
 import com.pechuro.bsuirschedule.feature.main.start.StartFragmentEvent
@@ -65,9 +65,8 @@ class MainActivity : BaseFragmentActivity() {
     }
 
     private fun openAddSchedule() {
-        doOnNavDrawerClosed {
-            showDialog(AddScheduleContainerDialog.newInstance(), AddScheduleContainerDialog.TAG)
-        }
+        val intent = AddScheduleActivity.newIntent(this)
+        startActivity(intent)
     }
 
     private inline fun doOnNavDrawerClosed(crossinline action: () -> Unit) {

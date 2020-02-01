@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.main.addschedule
+package com.pechuro.bsuirschedule.feature.add.addschedule
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData

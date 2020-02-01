@@ -1,13 +1,13 @@
-package com.pechuro.bsuirschedule.feature.main.addschedule
+package com.pechuro.bsuirschedule.feature.add.addschedule
 
 import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
-import com.pechuro.bsuirschedule.feature.main.addschedule.fragment.AddScheduleFragment
+import com.pechuro.bsuirschedule.feature.add.addschedule.fragment.AddScheduleFragment
 
-class AddScheduleContainerDialogPagerAdapter(
+class AddScheduleContainerPagerAdapter(
         fragmentManager: FragmentManager
 ) : FragmentStatePagerAdapter(
         fragmentManager,
