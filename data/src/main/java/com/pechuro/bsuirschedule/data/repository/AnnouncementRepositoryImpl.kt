@@ -12,7 +12,7 @@ class AnnouncementRepositoryImpl(
 
     override suspend fun getActualFromEmployee(employeeId: Long): List<Announcement> {
         return performApiCall { api.getFromEmployee(employeeId) }
-                .map { announcementItem ->
+                 .map { announcementItem ->
                     announcementItem.toDomainEntity()
                 }
     }
