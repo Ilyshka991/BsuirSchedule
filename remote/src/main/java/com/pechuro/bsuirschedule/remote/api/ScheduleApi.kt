@@ -22,7 +22,7 @@ interface ScheduleApi {
 
     @GET("portal/employeeSchedule")
     suspend fun getEmployeeSchedule(
-            @Query(value = "id") employeeId: String
+            @Query(value = "employeeId") employeeId: Long
     ): ScheduleDTO
 
     @GET("studentGroup/lastUpdateDate")

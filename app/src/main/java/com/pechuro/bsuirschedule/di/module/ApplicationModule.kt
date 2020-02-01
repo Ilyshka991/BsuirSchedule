@@ -2,8 +2,10 @@ package com.pechuro.bsuirschedule.di.module
 
 import android.content.Context
 import com.pechuro.bsuirschedule.App
+import com.pechuro.bsuirschedule.common.AndroidLoggerTree
 import com.pechuro.bsuirschedule.common.NetworkAvailabilityCheckerImpl
 import com.pechuro.bsuirschedule.di.annotations.AppScope
+import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.remote.common.NetworkAvailabilityChecker
 import dagger.Module
 import dagger.Provides
@@ -19,4 +21,8 @@ class ApplicationModule {
     @AppScope
     fun provideNetworkAvailabilityChecker(context: Context): NetworkAvailabilityChecker =
             NetworkAvailabilityCheckerImpl(context)
+
+    @Provides
+    @AppScope
+    fun provideLoggerTree(): Logger.Tree = AndroidLoggerTree()
 }
