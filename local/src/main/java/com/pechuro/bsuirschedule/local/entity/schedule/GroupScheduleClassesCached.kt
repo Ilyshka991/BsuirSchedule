@@ -14,7 +14,7 @@ import java.util.*
                     entity = GroupCached::class,
                     parentColumns = ["id"],
                     childColumns = ["group_id"],
-                    onDelete = ForeignKey.NO_ACTION)
+                    onDelete = ForeignKey.CASCADE)
         ]
 )
 data class GroupScheduleClassesCached(

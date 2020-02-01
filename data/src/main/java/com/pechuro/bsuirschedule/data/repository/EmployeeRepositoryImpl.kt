@@ -58,7 +58,7 @@ class EmployeeRepositoryImpl(
         employees.map {
             it.toDatabaseEntity()
         }.run {
-            performDaoCall { dao.insert(this) }
+            performDaoCall { dao.insertOrUpdate(this) }
         }
     }
 }

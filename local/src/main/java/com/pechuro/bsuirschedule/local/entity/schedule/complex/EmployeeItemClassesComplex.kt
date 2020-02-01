@@ -4,14 +4,14 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 import com.pechuro.bsuirschedule.local.entity.building.AuditoryCached
-import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeLessonCached
+import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeItemClassesCached
 import com.pechuro.bsuirschedule.local.entity.schedule.crossref.EmployeeLessonGroupCrossRef
 import com.pechuro.bsuirschedule.local.entity.schedule.crossref.GroupLessonAuditoryCrossRef
 import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
 
-data class EmployeeLessonComplex(
+data class EmployeeItemClassesComplex(
         @Embedded
-        val scheduleItem: EmployeeLessonCached,
+        val scheduleItem: EmployeeItemClassesCached,
         @Relation(
                 parentColumn = "schedule_item_id",
                 entityColumn = "auditory_id",

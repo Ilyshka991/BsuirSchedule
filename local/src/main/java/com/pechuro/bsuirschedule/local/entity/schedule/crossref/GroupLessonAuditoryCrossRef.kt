@@ -4,14 +4,14 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import com.pechuro.bsuirschedule.local.entity.building.AuditoryCached
-import com.pechuro.bsuirschedule.local.entity.schedule.GroupLessonCached
+import com.pechuro.bsuirschedule.local.entity.schedule.GroupItemClassesCached
 
 @Entity(
-        tableName = "group_lesson_auditory_join",
+        tableName = "join_group_lesson_auditory",
         primaryKeys = ["schedule_item_id", "auditory_id"],
         foreignKeys = [
             ForeignKey(
-                    entity = GroupLessonCached::class,
+                    entity = GroupItemClassesCached::class,
                     parentColumns = ["id"],
                     childColumns = ["schedule_item_id"],
                     onDelete = ForeignKey.CASCADE),
@@ -19,7 +19,7 @@ import com.pechuro.bsuirschedule.local.entity.schedule.GroupLessonCached
                     entity = AuditoryCached::class,
                     parentColumns = ["id"],
                     childColumns = ["auditory_id"],
-                    onDelete = ForeignKey.NO_ACTION)
+                    onDelete = ForeignKey.CASCADE)
         ]
 )
 data class GroupLessonAuditoryCrossRef(

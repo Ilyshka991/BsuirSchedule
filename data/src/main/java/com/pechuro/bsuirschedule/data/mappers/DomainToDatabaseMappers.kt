@@ -9,10 +9,10 @@ import com.pechuro.bsuirschedule.local.entity.education.EducationFormCached
 import com.pechuro.bsuirschedule.local.entity.education.FacultyCached
 import com.pechuro.bsuirschedule.local.entity.education.SpecialityCached
 import com.pechuro.bsuirschedule.local.entity.schedule.*
-import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeExamComplex
-import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeLessonComplex
-import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupExamComplex
-import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupLessonComplex
+import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeItemExamComplex
+import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeItemClassesComplex
+import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupItemExamComplex
+import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupItemClassesComplex
 import com.pechuro.bsuirschedule.local.entity.staff.EmployeeCached
 import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
 
@@ -122,7 +122,7 @@ internal fun Schedule.GroupClasses.toDatabaseEntity() = run {
 }
 
 internal fun Schedule.GroupExams.toDatabaseEntity() = run {
-    GroupScheduleExamsCached(
+    GroupScheduleExamCached(
             name = name,
             lastUpdate = lastUpdated,
             groupId = group.id
@@ -131,7 +131,7 @@ internal fun Schedule.GroupExams.toDatabaseEntity() = run {
 
 
 internal fun ScheduleItem.GroupLesson.toDatabaseEntity(schedule: GroupScheduleClassesCached) = run {
-    val scheduleItem = GroupLessonCached(
+    val scheduleItem = GroupItemClassesCached(
             scheduleName = schedule.name,
             subject = subject,
             subgroupNumber = subgroupNumber,
@@ -140,19 +140,19 @@ internal fun ScheduleItem.GroupLesson.toDatabaseEntity(schedule: GroupScheduleCl
             startTime = startTime,
             endTime = endTime,
             weekDay = weekDay.index,
-            weekNumbers = weekNumbers
+            weekNumber = weekNumber
     )
     val employees = employees.map { it.toDatabaseEntity() }
     val auditories = auditories.toDatabaseEntity()
-    GroupLessonComplex(
+    GroupItemClassesComplex(
             scheduleItem = scheduleItem,
             employees = employees,
             auditories = auditories
     )
 }
 
-internal fun ScheduleItem.GroupExam.toDatabaseEntity(schedule: GroupScheduleExamsCached) = run {
-    val scheduleItem = GroupExamCached(
+internal fun ScheduleItem.GroupExam.toDatabaseEntity(schedule: GroupScheduleExamCached) = run {
+    val scheduleItem = GroupItemExamCached(
             scheduleName = schedule.name,
             subject = subject,
             subgroupNumber = subgroupNumber,
@@ -164,7 +164,7 @@ internal fun ScheduleItem.GroupExam.toDatabaseEntity(schedule: GroupScheduleExam
     )
     val employees = employees.map { it.toDatabaseEntity() }
     val auditories = auditories.toDatabaseEntity()
-    GroupExamComplex(
+    GroupItemExamComplex(
             scheduleItem = scheduleItem,
             employees = employees,
             auditories = auditories
@@ -179,17 +179,17 @@ internal fun Schedule.EmployeeClasses.toDatabaseEntity() = run {
 }
 
 internal fun Schedule.EmployeeExams.toDatabaseEntity() = run {
-    EmployeeScheduleExamsCached(
+    EmployeeScheduleExamCached(
             name = name,
             employeeId = employee.id
     )
 }
 
 internal fun ScheduleItem.EmployeeLesson.toDatabaseEntity(schedule: EmployeeScheduleClassesCached) = run {
-    val scheduleItem = EmployeeLessonCached(
+    val scheduleItem = EmployeeItemClassesCached(
             scheduleName = schedule.name,
             subject = subject,
-            weekNumbers = weekNumbers,
+            weekNumber = weekNumber,
             subgroupNumber = subgroupNumber,
             lessonType = lessonType,
             note = note,
@@ -199,15 +199,15 @@ internal fun ScheduleItem.EmployeeLesson.toDatabaseEntity(schedule: EmployeeSche
     )
     val groups = studentGroups.map { it.toDatabaseEntity() }
     val auditories = auditories.toDatabaseEntity()
-    EmployeeLessonComplex(
+    EmployeeItemClassesComplex(
             scheduleItem = scheduleItem,
             groups = groups,
             auditories = auditories
     )
 }
 
-internal fun ScheduleItem.EmployeeExam.toDatabaseEntity(schedule: EmployeeScheduleExamsCached) = run {
-    val scheduleItem = EmployeeExamCached(
+internal fun ScheduleItem.EmployeeExam.toDatabaseEntity(schedule: EmployeeScheduleExamCached) = run {
+    val scheduleItem = EmployeeItemExamCached(
             scheduleName = schedule.name,
             subject = subject,
             subgroupNumber = subgroupNumber,
@@ -219,7 +219,7 @@ internal fun ScheduleItem.EmployeeExam.toDatabaseEntity(schedule: EmployeeSchedu
     )
     val groups = studentGroups.map { it.toDatabaseEntity() }
     val auditories = auditories.toDatabaseEntity()
-    EmployeeExamComplex(
+    EmployeeItemExamComplex(
             scheduleItem = scheduleItem,
             groups = groups,
             auditories = auditories

@@ -8,16 +8,16 @@ import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
 import java.util.*
 
 @Entity(
-        tableName = "group_schedule_exams",
+        tableName = "group_schedule_exam",
         foreignKeys = [
             ForeignKey(
                     entity = GroupCached::class,
                     parentColumns = ["id"],
                     childColumns = ["group_id"],
-                    onDelete = ForeignKey.NO_ACTION)
+                    onDelete = ForeignKey.CASCADE)
         ]
 )
-data class GroupScheduleExamsCached(
+data class GroupScheduleExamCached(
         @PrimaryKey
         @ColumnInfo(name = "name")
         val name: String,

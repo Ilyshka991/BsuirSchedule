@@ -13,7 +13,7 @@ import com.pechuro.bsuirschedule.local.entity.staff.EmployeeCached
                     entity = EmployeeCached::class,
                     parentColumns = ["id"],
                     childColumns = ["employee_id"],
-                    onDelete = ForeignKey.NO_ACTION)
+                    onDelete = ForeignKey.CASCADE)
         ]
 )
 data class EmployeeScheduleClassesCached(

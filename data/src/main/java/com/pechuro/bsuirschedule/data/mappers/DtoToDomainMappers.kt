@@ -2,7 +2,7 @@ package com.pechuro.bsuirschedule.data.mappers
 
 import android.annotation.SuppressLint
 import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.domain.ext.parseDateOrDefault
+import com.pechuro.bsuirschedule.domain.ext.parseOrDefault
 import com.pechuro.bsuirschedule.remote.dto.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -38,7 +38,7 @@ internal fun AuditoryDTO.toDomainEntity() = run {
             id = id,
             name = name,
             note = note ?: "",
-            capacity = capacity ?: 0,
+            capacity = capacity ?: -1,
             building = building,
             auditoryType = auditoryType,
             department = department
@@ -62,7 +62,7 @@ internal fun GroupDTO.toDomainEntity(faculty: Faculty?) = run {
             id = id,
             number = number,
             faculty = faculty,
-            course = course ?: 1
+            course = course ?: -1
     )
 }
 
@@ -93,7 +93,7 @@ internal fun SpecialityDTO.toDomainEntity(faculty: Faculty?) = run {
 }
 
 internal fun LastUpdateDTO.toDomainEntity() = run {
-    dateFormatter.parseDateOrDefault(lastUpdateDate, Date(0))
+    dateFormatter.parseOrDefault(lastUpdateDate, Date(0))
 }
 
 internal fun List<ScheduleItemDTO>.toGroupLessons(
@@ -107,22 +107,24 @@ internal fun List<ScheduleItemDTO>.toGroupLessons(
                 auditories.filter { "${it.name}-${it.building.name}" in lessonAuditories }
             }
             val lessonEmployees = lesson.employees?.map { it.toDomainEntity() }
-            val mappedScheduleItem = ScheduleItem.GroupLesson(
-                    //This ID will be generated later
-                    id = 0,
-                    schedule = schedule,
-                    subject = lesson.subject ?: "",
-                    subgroupNumber = lesson.subgroupNumber,
-                    lessonType = lesson.lessonType ?: "",
-                    auditories = lessonAuditories ?: emptyList(),
-                    note = lesson.note ?: "",
-                    startTime = lesson.startTime ?: "",
-                    endTime = lesson.endTime ?: "",
-                    employees = lessonEmployees ?: emptyList(),
-                    weekDay = getWeekDayFor(scheduleItem.weekDay),
-                    weekNumbers = lesson.weekNumber
-            )
-            resultList.add(mappedScheduleItem)
+            getResultWeekNumbers(lesson.weekNumber).forEach { weekNumber ->
+                val mappedScheduleItem = ScheduleItem.GroupLesson(
+                        //This ID will be generated later
+                        id = 0,
+                        schedule = schedule,
+                        subject = lesson.subject ?: "",
+                        subgroupNumber = lesson.subgroupNumber,
+                        lessonType = lesson.lessonType ?: "",
+                        auditories = lessonAuditories ?: emptyList(),
+                        note = lesson.note ?: "",
+                        startTime = lesson.startTime ?: "",
+                        endTime = lesson.endTime ?: "",
+                        employees = lessonEmployees ?: emptyList(),
+                        weekDay = getWeekDayFor(scheduleItem.weekDay),
+                        weekNumber = weekNumber
+                )
+                resultList.add(mappedScheduleItem)
+            }
         }
     }
     return resultList
@@ -151,7 +153,7 @@ internal fun List<ScheduleItemDTO>.toGroupExams(
                     startTime = lesson.startTime ?: "",
                     endTime = lesson.endTime ?: "",
                     employees = lessonEmployees ?: emptyList(),
-                    date = dateFormatter.parseDateOrDefault(scheduleItem.weekDay, Date())
+                    date = dateFormatter.parseOrDefault(scheduleItem.weekDay, Date())
             )
             resultList.add(mappedScheduleItem)
         }
@@ -173,22 +175,24 @@ internal fun List<ScheduleItemDTO>.toEmployeeLessons(
             val lessonGroups = lesson.studentGroups?.let { lessonGroups ->
                 groups.filter { it.number in lessonGroups }
             }
-            val mappedScheduleItem = ScheduleItem.EmployeeLesson(
-                    //This ID will be generated later
-                    id = 0,
-                    schedule = schedule,
-                    subject = lesson.subject ?: "",
-                    weekNumbers = lesson.weekNumber,
-                    subgroupNumber = lesson.subgroupNumber,
-                    lessonType = lesson.lessonType ?: "",
-                    auditories = lessonAuditories ?: emptyList(),
-                    note = lesson.note ?: "",
-                    startTime = lesson.startTime ?: "",
-                    endTime = lesson.endTime ?: "",
-                    weekDay = getWeekDayFor(scheduleItem.weekDay),
-                    studentGroups = lessonGroups ?: emptyList()
-            )
-            resultList.add(mappedScheduleItem)
+            getResultWeekNumbers(lesson.weekNumber).forEach { weekNumber ->
+                val mappedScheduleItem = ScheduleItem.EmployeeLesson(
+                        //This ID will be generated later
+                        id = 0,
+                        schedule = schedule,
+                        subject = lesson.subject ?: "",
+                        weekNumber = weekNumber,
+                        subgroupNumber = lesson.subgroupNumber,
+                        lessonType = lesson.lessonType ?: "",
+                        auditories = lessonAuditories ?: emptyList(),
+                        note = lesson.note ?: "",
+                        startTime = lesson.startTime ?: "",
+                        endTime = lesson.endTime ?: "",
+                        weekDay = getWeekDayFor(scheduleItem.weekDay),
+                        studentGroups = lessonGroups ?: emptyList()
+                )
+                resultList.add(mappedScheduleItem)
+            }
         }
     }
     return resultList
@@ -220,7 +224,7 @@ internal fun List<ScheduleItemDTO>.toEmployeeExams(
                     startTime = lesson.startTime ?: "",
                     endTime = lesson.endTime ?: "",
                     studentGroups = lessonGroups ?: emptyList(),
-                    date = dateFormatter.parseDateOrDefault(scheduleItem.weekDay, Date())
+                    date = dateFormatter.parseOrDefault(scheduleItem.weekDay, Date())
             )
             resultList.add(mappedScheduleItem)
         }
@@ -243,3 +247,9 @@ private fun getWeekDayFor(value: String) = when (value.toLowerCase()) {
 
 @SuppressLint("SimpleDateFormat")
 private val dateFormatter = SimpleDateFormat("dd.MM.yyyy")
+
+private fun getResultWeekNumbers(source: List<Int>) = if (source.contains(0)) {
+    source.filter { it != 0 }.union(listOf(1, 2, 3, 4))
+} else {
+    source
+}

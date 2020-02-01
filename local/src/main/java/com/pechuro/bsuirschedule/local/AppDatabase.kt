@@ -4,7 +4,6 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.pechuro.bsuirschedule.local.converters.DateConverter
-import com.pechuro.bsuirschedule.local.converters.ListConverter
 import com.pechuro.bsuirschedule.local.dao.*
 import com.pechuro.bsuirschedule.local.entity.building.AuditoryCached
 import com.pechuro.bsuirschedule.local.entity.building.AuditoryTypeCached
@@ -32,15 +31,15 @@ import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
             GroupCached::class,
             EmployeeCached::class,
 
-            EmployeeScheduleExamsCached::class,
-            EmployeeExamCached::class,
+            EmployeeScheduleExamCached::class,
+            EmployeeItemExamCached::class,
             EmployeeScheduleClassesCached::class,
-            EmployeeLessonCached::class,
+            EmployeeItemClassesCached::class,
 
             GroupScheduleClassesCached::class,
-            GroupLessonCached::class,
-            GroupScheduleExamsCached::class,
-            GroupExamCached::class,
+            GroupItemClassesCached::class,
+            GroupScheduleExamCached::class,
+            GroupItemExamCached::class,
 
             EmployeeExamAuditoryCrossRef::class,
             EmployeeExamGroupCrossRef::class,
@@ -54,7 +53,7 @@ import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
         ],
         exportSchema = false,
         version = BuildConfig.DATABASE_VERSION)
-@TypeConverters(DateConverter::class, ListConverter::class)
+@TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun groupDao(): GroupDao

@@ -4,17 +4,17 @@ import androidx.room.*
 import java.util.*
 
 @Entity(
-        tableName = "group_exam",
+        tableName = "group_item_exam",
         foreignKeys = [
             ForeignKey(
-                    entity = GroupScheduleExamsCached::class,
+                    entity = GroupScheduleExamCached::class,
                     parentColumns = ["name"],
                     childColumns = ["schedule_name"],
                     onDelete = ForeignKey.CASCADE)
         ],
         indices = [Index(value = ["schedule_name"])]
 )
-data class GroupExamCached(
+data class GroupItemExamCached(
         @PrimaryKey(autoGenerate = true)
         @ColumnInfo(name = "id")
         var id: Long = 0,

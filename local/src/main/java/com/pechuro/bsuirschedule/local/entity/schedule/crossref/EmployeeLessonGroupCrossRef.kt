@@ -3,15 +3,15 @@ package com.pechuro.bsuirschedule.local.entity.schedule.crossref
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeLessonCached
+import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeItemClassesCached
 import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
 
 @Entity(
-        tableName = "employee_lesson_group_join",
+        tableName = "join_employee_lesson_group",
         primaryKeys = ["schedule_item_id", "group_id"],
         foreignKeys = [
             ForeignKey(
-                    entity = EmployeeLessonCached::class,
+                    entity = EmployeeItemClassesCached::class,
                     parentColumns = ["id"],
                     childColumns = ["schedule_item_id"],
                     onDelete = ForeignKey.CASCADE),
@@ -19,7 +19,7 @@ import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
                     entity = GroupCached::class,
                     parentColumns = ["id"],
                     childColumns = ["group_id"],
-                    onDelete = ForeignKey.NO_ACTION)
+                    onDelete = ForeignKey.CASCADE)
         ]
 )
 data class EmployeeLessonGroupCrossRef(

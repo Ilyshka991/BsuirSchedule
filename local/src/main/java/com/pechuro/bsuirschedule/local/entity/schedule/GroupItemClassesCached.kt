@@ -3,26 +3,26 @@ package com.pechuro.bsuirschedule.local.entity.schedule
 import androidx.room.*
 
 @Entity(
-        tableName = "employee_lesson",
+        tableName = "group_item_classes",
         foreignKeys = [
             ForeignKey(
-                    entity = EmployeeScheduleClassesCached::class,
+                    entity = GroupScheduleClassesCached::class,
                     parentColumns = ["name"],
                     childColumns = ["schedule_name"],
                     onDelete = ForeignKey.CASCADE)
         ],
         indices = [Index(value = ["schedule_name"])]
 )
-data class EmployeeLessonCached(
+data class GroupItemClassesCached(
         @PrimaryKey(autoGenerate = true)
         @ColumnInfo(name = "id")
         var id: Long = 0,
         @ColumnInfo(name = "schedule_name")
         val scheduleName: String,
         @ColumnInfo(name = "subject")
-        val subject: String?,
+        val subject: String,
         @ColumnInfo(name = "week_number")
-        val weekNumbers: List<Int>,
+        val weekNumber: Int,
         @ColumnInfo(name = "subgroup_number")
         val subgroupNumber: Int,
         @ColumnInfo(name = "lesson_type")

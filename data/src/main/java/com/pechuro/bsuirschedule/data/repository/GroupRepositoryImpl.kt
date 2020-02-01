@@ -68,7 +68,7 @@ class GroupRepositoryImpl(
         groups.map {
             it.toDatabaseEntity()
         }.run {
-            performDaoCall { dao.insert(this) }
+            performDaoCall { dao.insertOrUpdate(this) }
         }
     }
 }
