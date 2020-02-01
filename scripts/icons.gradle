@@ -1,0 +1,101 @@
+import java.awt.Color
+import java.awt.Font
+import java.awt.Graphics2D
+import java.awt.RenderingHints
+import java.awt.font.FontRenderContext
+import java.awt.geom.Rectangle2D
+import java.awt.image.BufferedImage
+import javax.imageio.ImageIO
+
+def icon_names = ["app_icon", "app_icon_round"]
+def baseOutputDir = file("${buildDir}/generated/icons/res")
+
+project.afterEvaluate {
+    android.applicationVariants.all { variant ->
+        if (variant.name.toLowerCase().contains("release")) return
+
+        def outputDir = new File(baseOutputDir, variant.name)
+        android.sourceSets.findByName(variant.name).res.srcDir(outputDir)
+
+        def topText = variant.name.toLowerCase().contains("debug") ? "Dev" : "Beta"
+        def textColor = "#FFFFFF"
+        def bcgColor = "#4CAF50"
+        def textSizeMultiplier = 0.13f
+
+        variant.sourceSets.stream()
+                .flatMap { it.resDirectories.stream() }
+                .filter { it != outputDir }
+                .forEach { resDir ->
+                    icon_names.forEach { name ->
+                        project.fileTree(
+                                dir: resDir,
+                                include: "mipmap*/${name}.*",
+                                exclude: "**/*.xml",
+                        ).forEach { File inputFile ->
+                            def basename = inputFile.name
+                            def resType = inputFile.parentFile.name
+                            def outputFile = file("${outputDir}/${resType}/${basename}")
+                            outputFile.parentFile.mkdirs()
+
+                            BufferedImage image = ImageIO.read(inputFile)
+
+                            addBottomText(image, topText, textColor, bcgColor, textSizeMultiplier)
+
+                            outputFile.parentFile.mkdirs()
+                            ImageIO.write(image, "png", outputFile)
+                        }
+                    }
+
+                }
+    }
+}
+
+void addTopText(BufferedImage image, String text, String textColor, String bcgColor, float textSizeMultiplier) {
+    int textSize = (int) (image.height * textSizeMultiplier)
+    Rectangle2D textBounds = getTextBounds(g, text, textSize)
+    int padding = textBounds.height / 5
+
+    int x = (image.width / 2) - ((int) textBounds.width / 2)
+    int y = image.height / 13
+
+    drawText(image.graphics, text, bcgColor, textColor, x, y, textSize, padding)
+}
+
+void addBottomText(BufferedImage image, String text, String textColor, String bcgColor, float textSizeMultiplier) {
+    int textSize = (int) (image.height * textSizeMultiplier)
+    Rectangle2D textBounds = getTextBounds(image.graphics, text, textSize)
+    int padding = textBounds.height / 5
+    int textHeight = textBounds.height + padding * 2
+
+    int x = (image.width / 2) - ((int) textBounds.width / 2)
+    int y = image.height - textHeight - image.height / 13
+
+    drawText(image.graphics, text, bcgColor, textColor, x, y, textSize, padding)
+}
+
+Rectangle2D getTextBounds(Graphics2D g, String text, int textSize) {
+    FontRenderContext frc = new FontRenderContext(g.transform, true, true)
+    g.setFont(new Font("DEFAULT", Font.PLAIN, textSize))
+    return g.font.getStringBounds(text, frc)
+}
+
+void drawText(Graphics2D g, String text, String bcgColor, String textColor, int x, int y, int textSize, int padding) {
+    Rectangle2D textBounds = getTextBounds(g, text, textSize)
+
+    int textHeight = (int) textBounds.height
+    int textWidth = (int) textBounds.width
+
+    g.setColor(Color.decode(bcgColor))
+    int round = textHeight / 2
+    g.fillRoundRect(
+            (int) (x - padding / 2), (int) (y - padding / 2),
+            textWidth + padding * 2, textHeight + padding * 2,
+            round, round
+    )
+    
+    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+    g.setColor(Color.decode(textColor))
+    g.drawString(text, x, y + g.fontMetrics.ascent)
+
+    g.dispose()
+}

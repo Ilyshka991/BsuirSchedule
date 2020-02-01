@@ -9,6 +9,9 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply from: '../dependencies.gradle'
 apply from: '../configuration.gradle'
 
+apply from: "../scripts/icons.gradle"
+apply from: "../scripts/signing.gradle"
+
 android {
     compileSdkVersion configuration.compileSdkVersion
 
