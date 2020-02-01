@@ -6,7 +6,7 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.onSuccess
-import com.pechuro.bsuirschedule.domain.entity.ScheduleType
+import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.interactor.GetAllSchedules
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
@@ -31,21 +31,19 @@ class NavigationDrawerFragmentViewModel @Inject constructor(
                     return@map resultList
                 }
 
-                val studentClasses = allScheduleList.filter { it.type == ScheduleType.STUDENT_CLASSES }
-                val employeeClasses = allScheduleList.filter { it.type == ScheduleType.EMPLOYEE_CLASSES }
-                if (studentClasses.isNotEmpty() || employeeClasses.isNotEmpty()) {
+                val allClasses = allScheduleList
+                        .filter { it is Schedule.GroupClasses || it is Schedule.EmployeeClasses }
+                if (allClasses.isNotEmpty()) {
                     resultList += NavigationDrawerItemInformation.Title(context.getString(R.string.msg_classes))
-                    resultList += studentClasses.map { NavigationDrawerItemInformation.Content(it) }
-                    resultList += employeeClasses.map { NavigationDrawerItemInformation.Content(it) }
+                    resultList += allClasses.map { NavigationDrawerItemInformation.Content(it) }
                     resultList += NavigationDrawerItemInformation.Divider
                 }
 
-                val studentExams = allScheduleList.filter { it.type == ScheduleType.STUDENT_EXAMS }
-                val employeeExams = allScheduleList.filter { it.type == ScheduleType.EMPLOYEE_EXAMS }
-                if (studentExams.isNotEmpty() || employeeExams.isNotEmpty()) {
+                val allExams = allScheduleList
+                        .filter { it is Schedule.GroupExams || it is Schedule.EmployeeExams }
+                if (allExams.isNotEmpty()) {
                     resultList += NavigationDrawerItemInformation.Title(context.getString(R.string.msg_exams))
-                    resultList += studentExams.map { NavigationDrawerItemInformation.Content(it) }
-                    resultList += employeeExams.map { NavigationDrawerItemInformation.Content(it) }
+                    resultList += allExams.map { NavigationDrawerItemInformation.Content(it) }
                 }
                 resultList
             }

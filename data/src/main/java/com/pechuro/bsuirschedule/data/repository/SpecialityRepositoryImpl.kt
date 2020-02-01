@@ -51,13 +51,10 @@ class SpecialityRepositoryImpl(
 
     override suspend fun updateCache() {
         val departments = loadDepartmentsFromApi()
-        performDaoCall { dao.deleteAllDepartments() }
         storeDepartments(departments)
         val faculties = loadFacultiesFromApi()
-        performDaoCall { dao.deleteAllFaculties() }
         storeFaculties(faculties)
         val specialities = loadSpecialitiesFromApi()
-        performDaoCall { dao.deleteAllSpecialities() }
         storeSpecialities(specialities)
     }
 
@@ -72,7 +69,7 @@ class SpecialityRepositoryImpl(
     }
 
     override suspend fun addDepartment(department: Department) {
-        performDaoCall { dao.insert(department.toDatabaseEntity()) }
+        performDaoCall { dao.insertOrUpdate(department.toDatabaseEntity()) }
     }
 
     override suspend fun getDepartmentById(id: Long): Department = performDaoCall {
@@ -140,7 +137,7 @@ class SpecialityRepositoryImpl(
         groups.map {
             it.toDatabaseEntity()
         }.run {
-            performDaoCall { dao.insertFaculties(this) }
+            performDaoCall { dao.insertOrUpdateFaculties(this) }
         }
     }
 
@@ -148,7 +145,7 @@ class SpecialityRepositoryImpl(
         groups.map {
             it.toDatabaseEntity()
         }.run {
-            performDaoCall { dao.insertDepartments(this) }
+            performDaoCall { dao.insertOrUpdateDepartments(this) }
         }
     }
 
@@ -156,11 +153,11 @@ class SpecialityRepositoryImpl(
         groups.map {
             it.toDatabaseEntity()
         }.run {
-            performDaoCall { dao.insertSpecialities(this) }
+            performDaoCall { dao.insertOrUpdateSpecialities(this) }
         }
     }
 
     private suspend fun storeEducationForm(educationForm: EducationForm) {
-        performDaoCall { dao.insert(educationForm.toDatabaseEntity()) }
+        performDaoCall { dao.insertOrUpdate(educationForm.toDatabaseEntity()) }
     }
 }

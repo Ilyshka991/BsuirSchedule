@@ -1,20 +1,42 @@
 package com.pechuro.bsuirschedule.local.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import com.pechuro.bsuirschedule.local.entity.GroupCached
+import androidx.room.*
+import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface GroupDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(vararg group: GroupCached)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(group: GroupCached): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(groups: List<GroupCached>)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(groups: List<GroupCached>): List<Long>
+
+
+    @Update
+    suspend fun update(group: GroupCached)
+
+    @Update
+    suspend fun update(groups: List<GroupCached>)
+
+
+    @Transaction
+    suspend fun insertOrUpdate(group: GroupCached) {
+        val id = insert(group)
+        if (id == -1L) update(group)
+    }
+
+    @Transaction
+    suspend fun insertOrUpdate(groups: List<GroupCached>) {
+        val insertResult = insert(groups)
+        val updateList = mutableListOf<GroupCached>()
+        for (i in insertResult.indices) {
+            if (insertResult[i] == -1L) updateList.add(groups[i])
+        }
+        if (updateList.isNotEmpty()) update(updateList)
+    }
+
 
     @Query("DELETE FROM `group`")
     suspend fun deleteAll()

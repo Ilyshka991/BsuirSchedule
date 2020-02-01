@@ -38,13 +38,11 @@ class RepositoryModule {
     fun provideScheduleRepository(
             api: ScheduleApi,
             dao: ScheduleDao,
-            employeeRepository: IEmployeeRepository,
             groupRepository: IGroupRepository,
             buildingRepository: IBuildingRepository
     ): IScheduleRepository = ScheduleRepositoryImpl(
-            scheduleApi = api,
-            scheduleDao = dao,
-            employeeRepository = employeeRepository,
+            api = api,
+            dao = dao,
             groupRepository = groupRepository,
             buildingRepository = buildingRepository
     )

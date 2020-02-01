@@ -82,9 +82,9 @@ class BuildingRepositoryImpl(
                     department = departmentCached
             )
             performDaoCall {
-                dao.insert(auditoryTypeCached)
-                dao.insert(buildingCached)
-                dao.insert(auditoryCached)
+                dao.insertOrUpdate(auditoryTypeCached)
+                dao.insertOrUpdate(buildingCached)
+                dao.insertOrUpdate(auditoryCached)
             }
         }
     }

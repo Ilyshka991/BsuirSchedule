@@ -38,9 +38,9 @@ class LoadAllSchedules @Inject constructor(
             groups.forEach { group ->
                 launch {
                     runCatching {
-                        scheduleRepository.loadClasses(
-                                group.number,
-                                listOf(ScheduleType.STUDENT_EXAMS, ScheduleType.STUDENT_CLASSES)
+                        scheduleRepository.loadGroupSchedule(
+                                group,
+                                listOf(ScheduleType.EXAMS, ScheduleType.CLASSES)
                         )
                     }.onFailure {
                         errorGroups += it to group
@@ -60,9 +60,9 @@ class LoadAllSchedules @Inject constructor(
             employees.forEach { employee ->
                 launch {
                     runCatching {
-                        scheduleRepository.loadClasses(
-                                employee.abbreviation,
-                                listOf(ScheduleType.EMPLOYEE_CLASSES, ScheduleType.EMPLOYEE_EXAMS)
+                        scheduleRepository.loadEmployeeSchedule(
+                                employee,
+                                listOf(ScheduleType.EXAMS, ScheduleType.CLASSES)
                         )
                     }.onFailure {
                         errorEmployees += it to employee

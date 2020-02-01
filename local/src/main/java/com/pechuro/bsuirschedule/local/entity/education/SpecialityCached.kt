@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.local.entity
+package com.pechuro.bsuirschedule.local.entity.education
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

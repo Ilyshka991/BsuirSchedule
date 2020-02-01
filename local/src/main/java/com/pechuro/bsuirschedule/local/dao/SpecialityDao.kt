@@ -1,41 +1,89 @@
 package com.pechuro.bsuirschedule.local.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import com.pechuro.bsuirschedule.local.entity.DepartmentCached
-import com.pechuro.bsuirschedule.local.entity.EducationFormCached
-import com.pechuro.bsuirschedule.local.entity.FacultyCached
-import com.pechuro.bsuirschedule.local.entity.SpecialityCached
+import androidx.room.*
+import com.pechuro.bsuirschedule.local.entity.education.DepartmentCached
+import com.pechuro.bsuirschedule.local.entity.education.EducationFormCached
+import com.pechuro.bsuirschedule.local.entity.education.FacultyCached
+import com.pechuro.bsuirschedule.local.entity.education.SpecialityCached
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SpecialityDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(vararg department: DepartmentCached)
+    suspend fun insert(department: DepartmentCached): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(vararg speciality: SpecialityCached)
+    suspend fun insert(educationForm: EducationFormCached): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(vararg faculty: FacultyCached)
+    suspend fun insertDepartments(departments: List<DepartmentCached>): List<Long>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(vararg educationForm: EducationFormCached)
+    suspend fun insertSpecialities(specialities: List<SpecialityCached>): List<Long>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertDepartments(departments: List<DepartmentCached>)
+    suspend fun insertFaculties(faculties: List<FacultyCached>): List<Long>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertSpecialities(specialities: List<SpecialityCached>)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertFaculties(faculties: List<FacultyCached>)
+    @Update
+    suspend fun update(department: DepartmentCached)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertEducationForms(educationForms: List<EducationFormCached>)
+    @Update
+    suspend fun update(educationForm: EducationFormCached)
+
+    @Update
+    suspend fun updateDepartments(departments: List<DepartmentCached>)
+
+    @Update
+    suspend fun updateSpecialities(specialities: List<SpecialityCached>)
+
+    @Update
+    suspend fun updateFaculties(faculties: List<FacultyCached>)
+
+
+    @Transaction
+    suspend fun insertOrUpdate(department: DepartmentCached) {
+        val id = insert(department)
+        if (id == -1L) update(department)
+    }
+
+    @Transaction
+    suspend fun insertOrUpdate(educationForm: EducationFormCached) {
+        val id = insert(educationForm)
+        if (id == -1L) update(educationForm)
+    }
+
+    @Transaction
+    suspend fun insertOrUpdateDepartments(departments: List<DepartmentCached>) {
+        val insertResult = insertDepartments(departments)
+        val updateList = mutableListOf<DepartmentCached>()
+        for (i in insertResult.indices) {
+            if (insertResult[i] == -1L) updateList.add(departments[i])
+        }
+        if (updateList.isNotEmpty()) updateDepartments(updateList)
+    }
+
+    @Transaction
+    suspend fun insertOrUpdateSpecialities(specialities: List<SpecialityCached>) {
+        val insertResult = insertSpecialities(specialities)
+        val updateList = mutableListOf<SpecialityCached>()
+        for (i in insertResult.indices) {
+            if (insertResult[i] == -1L) updateList.add(specialities[i])
+        }
+        if (updateList.isNotEmpty()) updateSpecialities(updateList)
+    }
+
+    @Transaction
+    suspend fun insertOrUpdateFaculties(faculties: List<FacultyCached>) {
+        val insertResult = insertFaculties(faculties)
+        val updateList = mutableListOf<FacultyCached>()
+        for (i in insertResult.indices) {
+            if (insertResult[i] == -1L) updateList.add(faculties[i])
+        }
+        if (updateList.isNotEmpty()) updateFaculties(updateList)
+    }
+
 
     @Query("DELETE FROM speciality")
     suspend fun deleteAllSpecialities()

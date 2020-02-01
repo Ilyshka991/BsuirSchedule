@@ -1,29 +1,25 @@
 package com.pechuro.bsuirschedule.domain.repository
 
-import com.pechuro.bsuirschedule.domain.entity.Classes
-import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.domain.entity.ScheduleType
+import com.pechuro.bsuirschedule.domain.entity.*
 import kotlinx.coroutines.flow.Flow
 
 interface IScheduleRepository {
 
     suspend fun getAllSchedules(): Flow<List<Schedule>>
 
-    suspend fun getAllClasses(): Flow<List<Classes>>
+    suspend fun <T : Schedule> getScheduleItems(schedule: T): Flow<ScheduleItem<T>>
 
-    suspend fun getClasses(name: String, type: ScheduleType): Flow<Classes>
+    suspend fun loadGroupSchedule(group: Group, types: List<ScheduleType>)
 
-    suspend fun loadClasses(name: String, types: List<ScheduleType>)
+    suspend fun loadEmployeeSchedule(employee: Employee, types: List<ScheduleType>)
 
-    suspend fun updateCache(schedule: Schedule)
+    suspend fun updateAll()
 
-    suspend fun updateCached()
+    suspend fun update(schedule: Schedule)
 
-    suspend fun isUpdateAvailable(schedule: Schedule): Flow<Boolean>
+    suspend fun isUpdateAvailable(schedule: Schedule): Boolean
 
-    suspend fun delete(name: String, type: ScheduleType)
-
-    suspend fun deleteByType(vararg type: ScheduleType)
+    suspend fun delete(schedule: Schedule)
 
     suspend fun deleteAll()
 

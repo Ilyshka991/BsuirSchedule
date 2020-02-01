@@ -1,7 +1,15 @@
 package com.pechuro.bsuirschedule.data.mappers
 
 import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.local.entity.*
+import com.pechuro.bsuirschedule.local.entity.building.AuditoryCached
+import com.pechuro.bsuirschedule.local.entity.building.AuditoryTypeCached
+import com.pechuro.bsuirschedule.local.entity.building.BuildingCached
+import com.pechuro.bsuirschedule.local.entity.education.DepartmentCached
+import com.pechuro.bsuirschedule.local.entity.education.EducationFormCached
+import com.pechuro.bsuirschedule.local.entity.education.FacultyCached
+import com.pechuro.bsuirschedule.local.entity.education.SpecialityCached
+import com.pechuro.bsuirschedule.local.entity.staff.EmployeeCached
+import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
 
 internal fun FacultyCached.toDomainEntity() = run {
     Faculty(
@@ -68,14 +76,6 @@ internal fun GroupCached.toDomainEntity(faculty: Faculty?) = run {
             number = number,
             faculty = faculty,
             course = course
-    )
-}
-
-internal fun ScheduleCached.toDomainEntity() = run {
-    Schedule(
-            name = name,
-            type = ScheduleType.getOrException(type),
-            lastUpdated = lastUpdate
     )
 }
 

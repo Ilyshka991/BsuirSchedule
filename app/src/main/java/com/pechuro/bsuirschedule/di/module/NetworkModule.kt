@@ -1,8 +1,7 @@
 package com.pechuro.bsuirschedule.di.module
 
-import android.util.Log
-import com.pechuro.bsuirschedule.BuildConfig
 import com.pechuro.bsuirschedule.di.annotations.AppScope
+import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.remote.ApiConfig.BASE_URL
 import com.pechuro.bsuirschedule.remote.ApiConfig.CONNECT_TIMEOUT
 import com.pechuro.bsuirschedule.remote.api.*
@@ -12,7 +11,7 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
+import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -42,7 +41,7 @@ class NetworkModule {
             OkHttpClient.Builder()
                     .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
                     .writeTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
-                   // .addInterceptor(loggingInterceptor)
+                    .addInterceptor(loggingInterceptor)
                     .addInterceptor(networkAvailabilityInterceptor)
                     .build()
 
@@ -50,10 +49,8 @@ class NetworkModule {
     @AppScope
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         val interceptor = HttpLoggingInterceptor(
-                HttpLoggingInterceptor.Logger { Log.i("Retrofit", it) })
-        if (BuildConfig.DEBUG) {
-            interceptor.level = BODY
-        }
+                HttpLoggingInterceptor.Logger { Logger.tag("Retrofit").i(it) })
+        interceptor.level = BASIC
         return interceptor
     }
 

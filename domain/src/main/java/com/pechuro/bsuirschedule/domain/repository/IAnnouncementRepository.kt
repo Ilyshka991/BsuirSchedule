@@ -1,10 +1,12 @@
 package com.pechuro.bsuirschedule.domain.repository
 
 import com.pechuro.bsuirschedule.domain.entity.Announcement
+import com.pechuro.bsuirschedule.domain.entity.Department
+import com.pechuro.bsuirschedule.domain.entity.Employee
 
 interface IAnnouncementRepository {
 
-    suspend fun getActualFromEmployee(employeeId: Long): List<Announcement>
+    suspend fun getActualFromEmployee(employee: Employee): List<Announcement.EmployeeAnnouncement>
 
-    suspend fun getActualFromDepartment(departmentId: Long): List<Announcement>
+    suspend fun getActualFromDepartment(department: Department): List<Announcement.DepartmentAnnouncement>
 }
