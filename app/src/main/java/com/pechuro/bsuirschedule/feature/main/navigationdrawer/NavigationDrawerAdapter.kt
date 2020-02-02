@@ -4,28 +4,67 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.ext.autoNotify
-import kotlin.properties.Delegates
+import com.pechuro.bsuirschedule.domain.entity.ScheduleType
+import com.pechuro.bsuirschedule.feature.main.navigationdrawer.NavigationDrawerItemInformation.*
 
-class NavigationDrawerAdapter : RecyclerView.Adapter<BaseViewHolder<NavigationDrawerItemInformation>>() {
+private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NavigationDrawerItemInformation>() {
 
-    var scheduleList: List<NavigationDrawerItemInformation> by Delegates.observable(emptyList()) { _, old, new ->
-        autoNotify(
-                old, new,
-                compareInstance = { o, n -> o === n },
-                compareContent = { o, n -> o == n }
-        )
+    override fun areItemsTheSame(
+            oldItem: NavigationDrawerItemInformation,
+            newItem: NavigationDrawerItemInformation
+    ) = oldItem === newItem
+
+    override fun areContentsTheSame(
+            oldItem: NavigationDrawerItemInformation,
+            newItem: NavigationDrawerItemInformation
+    ) = when {
+        oldItem is Empty && newItem is Empty -> true
+        oldItem is Divider && newItem is Divider -> true
+        oldItem is Title && newItem is Title -> newItem.scheduleType == oldItem.scheduleType
+        oldItem is Content && newItem is Content -> newItem.schedule.name == oldItem.schedule.name
+        else -> false
     }
 
-    var onScheduleClick: (Schedule) -> Unit = {}
+}
+
+class NavigationDrawerAdapter : ListAdapter<NavigationDrawerItemInformation, BaseViewHolder<NavigationDrawerItemInformation>>(DIFF_CALLBACK) {
+
+    interface ActionCallback {
+
+        fun onScheduleClicked(schedule: Schedule)
+
+        fun onScheduleLongClicked(schedule: Schedule)
+
+        fun onTitleClicked(scheduleType: ScheduleType)
+
+        fun onTitleLongClicked(scheduleType: ScheduleType)
+    }
+
+    var actionCallback: ActionCallback? = null
 
     private val scheduleClickListener = View.OnClickListener {
         val schedule = it.tag as? Schedule ?: return@OnClickListener
-        onScheduleClick(schedule)
+        actionCallback?.onScheduleClicked(schedule)
+    }
+    private val scheduleLongClickListener = View.OnLongClickListener {
+        val schedule = it.tag as? Schedule ?: return@OnLongClickListener false
+        actionCallback?.onScheduleLongClicked(schedule)
+        true
+    }
+
+    private val titleClickListener = View.OnClickListener {
+        val scheduleType = it.tag as? ScheduleType ?: return@OnClickListener
+        actionCallback?.onTitleClicked(scheduleType)
+    }
+    private val titleLongClickListener = View.OnLongClickListener {
+        val scheduleType = it.tag as? ScheduleType ?: return@OnLongClickListener false
+        actionCallback?.onTitleLongClicked(scheduleType)
+        true
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<NavigationDrawerItemInformation> {
@@ -47,18 +86,16 @@ class NavigationDrawerAdapter : RecyclerView.Adapter<BaseViewHolder<NavigationDr
                 val view = layoutInflater.inflate(R.layout.item_navigation_drawer_empty, parent, false)
                 EmptyViewHolder(view)
             }
-            else -> throw IllegalStateException()
+            else -> throw IllegalStateException("Not supported type: $viewType")
         }
     }
 
-    override fun getItemViewType(position: Int) = scheduleList[position].id
-
-    override fun getItemCount() = scheduleList.size
+    override fun getItemViewType(position: Int) = getItem(position).id
 
     override fun onBindViewHolder(
             holder: BaseViewHolder<NavigationDrawerItemInformation>,
             position: Int
-    ) = holder.onBind(scheduleList[position])
+    ) = holder.onBind(getItem(position))
 
     private class DividerViewHolder(view: View) : BaseViewHolder<NavigationDrawerItemInformation>(view) {
 
@@ -70,22 +107,31 @@ class NavigationDrawerAdapter : RecyclerView.Adapter<BaseViewHolder<NavigationDr
         override fun onBind(data: NavigationDrawerItemInformation) {}
     }
 
-    private class TitleViewHolder(private val view: View) : BaseViewHolder<NavigationDrawerItemInformation>(view) {
+    private inner class TitleViewHolder(view: View) : BaseViewHolder<NavigationDrawerItemInformation>(view) {
 
         override fun onBind(data: NavigationDrawerItemInformation) {
-            if (data !is NavigationDrawerItemInformation.Title) return
-            (view as? TextView)?.text = data.title
+            if (data !is Title) return
+            val titleRes = when (data.scheduleType) {
+                ScheduleType.CLASSES -> R.string.msg_classes
+                ScheduleType.EXAMS -> R.string.msg_exams
+            }
+            (containerView as TextView).apply {
+                setText(titleRes)
+                setOnClickListener(titleClickListener)
+                setOnLongClickListener(titleLongClickListener)
+            }
         }
     }
 
-    private inner class ContentViewHolder(private val view: View) : BaseViewHolder<NavigationDrawerItemInformation>(view) {
+    private inner class ContentViewHolder(view: View) : BaseViewHolder<NavigationDrawerItemInformation>(view) {
 
         override fun onBind(data: NavigationDrawerItemInformation) {
-            if (data !is NavigationDrawerItemInformation.Content) return
-            (view as? TextView)?.apply {
+            if (data !is Content) return
+            (containerView as TextView).apply {
                 text = data.schedule.name
                 tag = data.schedule
                 setOnClickListener(scheduleClickListener)
+                setOnLongClickListener(scheduleLongClickListener)
             }
         }
     }

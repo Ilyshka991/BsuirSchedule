@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.feature.main.navigationdrawer
 
 import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 
 sealed class NavigationDrawerItemInformation(val id: Int) {
 
@@ -15,7 +16,7 @@ sealed class NavigationDrawerItemInformation(val id: Int) {
 
     object Empty : NavigationDrawerItemInformation(ID_EMPTY)
 
-    data class Title(val title: String) : NavigationDrawerItemInformation(ID_TITLE)
+    data class Title(val scheduleType: ScheduleType) : NavigationDrawerItemInformation(ID_TITLE)
 
     data class Content(val schedule: Schedule) : NavigationDrawerItemInformation(ID_CONTENT)
 }

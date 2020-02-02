@@ -4,25 +4,56 @@ import com.pechuro.bsuirschedule.data.common.BaseRepository
 import com.pechuro.bsuirschedule.data.mappers.*
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.domain.repository.IBuildingRepository
+import com.pechuro.bsuirschedule.domain.repository.IEmployeeRepository
 import com.pechuro.bsuirschedule.domain.repository.IGroupRepository
 import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
 import com.pechuro.bsuirschedule.local.dao.ScheduleDao
 import com.pechuro.bsuirschedule.remote.api.ScheduleApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import java.util.*
 
 class ScheduleRepositoryImpl(
         private val dao: ScheduleDao,
         private val api: ScheduleApi,
         private val groupRepository: IGroupRepository,
+        private val employeeRepository: IEmployeeRepository,
         private val buildingRepository: IBuildingRepository
 ) : BaseRepository(), IScheduleRepository {
 
-    override suspend fun getAllSchedules(): Flow<List<Schedule>> {
-        return flow {}
-    }
+    override suspend fun getAllSchedules(): Flow<List<Schedule>> = flowOf(
+            performDaoCall {
+                dao.getAllGroupClassesSchedules().map { list ->
+                    list.map { item ->
+                        val group = groupRepository.getById(item.groupId)
+                        item.toDomainEntity(group)
+                    }
+                }
+            },
+            performDaoCall {
+                dao.getAllGroupExamsSchedules().map { list ->
+                    list.map { item ->
+                        val group = groupRepository.getById(item.groupId)
+                        item.toDomainEntity(group)
+                    }
+                }
+            },
+            performDaoCall {
+                dao.getAllEmployeeClassesSchedules().map { list ->
+                    list.map { item ->
+                        val employee = employeeRepository.getById(item.employeeId)
+                        item.toDomainEntity(employee)
+                    }
+                }
+            },
+            performDaoCall {
+                dao.getAllEmployeeExamsSchedules().map { list ->
+                    list.map { item ->
+                        val employee = employeeRepository.getById(item.employeeId)
+                        item.toDomainEntity(employee)
+                    }
+                }
+            }
+    ).flattenMerge(4)
 
     override suspend fun <T : Schedule> getScheduleItems(schedule: T): Flow<ScheduleItem<T>> {
         TODO("not implemented")

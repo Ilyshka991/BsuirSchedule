@@ -6,7 +6,7 @@ import androidx.room.*
         tableName = "employee_item_classes",
         foreignKeys = [
             ForeignKey(
-                    entity = EmployeeScheduleClassesCached::class,
+                    entity = EmployeeClassesScheduleCached::class,
                     parentColumns = ["name"],
                     childColumns = ["schedule_name"],
                     onDelete = ForeignKey.CASCADE)

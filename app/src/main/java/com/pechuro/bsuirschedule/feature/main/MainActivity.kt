@@ -53,11 +53,11 @@ class MainActivity : BaseFragmentActivity() {
     private fun receiveEvents() {
         EventBus.receive<BaseEvent>(lifecycleScope) {
             when (it) {
-                is StartFragmentEvent.AddSchedule, is NavigationDrawerEvent.AddSchedule -> openAddSchedule()
-                is NavigationDrawerEvent.OpenSettings -> {
+                is StartFragmentEvent.AddSchedule, is NavigationDrawerEvent.OnAddSchedule -> openAddSchedule()
+                is NavigationDrawerEvent.OnOpenSettings -> {
 
                 }
-                is NavigationDrawerEvent.OpenSchedule -> {
+                is NavigationDrawerEvent.OnScheduleClick -> {
 
                 }
             }

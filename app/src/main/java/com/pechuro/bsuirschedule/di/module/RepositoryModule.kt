@@ -39,11 +39,13 @@ class RepositoryModule {
             api: ScheduleApi,
             dao: ScheduleDao,
             groupRepository: IGroupRepository,
+            employeeRepository: IEmployeeRepository,
             buildingRepository: IBuildingRepository
     ): IScheduleRepository = ScheduleRepositoryImpl(
             api = api,
             dao = dao,
             groupRepository = groupRepository,
+            employeeRepository = employeeRepository,
             buildingRepository = buildingRepository
     )
 

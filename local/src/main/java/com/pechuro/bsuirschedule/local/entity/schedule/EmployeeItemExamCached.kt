@@ -7,7 +7,7 @@ import java.util.*
         tableName = "employee_item_exam",
         foreignKeys = [
             ForeignKey(
-                    entity = EmployeeScheduleExamCached::class,
+                    entity = EmployeeExamScheduleCached::class,
                     parentColumns = ["name"],
                     childColumns = ["schedule_name"],
                     onDelete = ForeignKey.CASCADE)

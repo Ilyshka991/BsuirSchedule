@@ -8,6 +8,10 @@ import com.pechuro.bsuirschedule.local.entity.education.DepartmentCached
 import com.pechuro.bsuirschedule.local.entity.education.EducationFormCached
 import com.pechuro.bsuirschedule.local.entity.education.FacultyCached
 import com.pechuro.bsuirschedule.local.entity.education.SpecialityCached
+import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeClassesScheduleCached
+import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeExamScheduleCached
+import com.pechuro.bsuirschedule.local.entity.schedule.GroupClassesScheduleCached
+import com.pechuro.bsuirschedule.local.entity.schedule.GroupExamScheduleCached
 import com.pechuro.bsuirschedule.local.entity.staff.EmployeeCached
 import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
 
@@ -97,5 +101,35 @@ internal fun SpecialityCached.toDomainEntity(
             educationForm = educationForm,
             abbreviation = abbreviation,
             code = code
+    )
+}
+
+internal fun GroupClassesScheduleCached.toDomainEntity(group: Group) = run {
+    Schedule.GroupClasses(
+            name = name,
+            lastUpdated = lastUpdate,
+            group = group
+    )
+}
+
+internal fun GroupExamScheduleCached.toDomainEntity(group: Group) = run {
+    Schedule.GroupExams(
+            name = name,
+            lastUpdated = lastUpdate,
+            group = group
+    )
+}
+
+internal fun EmployeeClassesScheduleCached.toDomainEntity(employee: Employee) = run {
+    Schedule.EmployeeClasses(
+            name = name,
+            employee = employee
+    )
+}
+
+internal fun EmployeeExamScheduleCached.toDomainEntity(employee: Employee) = run {
+    Schedule.EmployeeExams(
+            name = name,
+            employee = employee
     )
 }
