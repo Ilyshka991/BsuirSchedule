@@ -10,7 +10,7 @@ def libraryVersions = [
         recyclerView    : '1.1.0-alpha05',
         multidex        : '2.0.1',
 
-        archComponents  : '2.2.0-rc03',
+        archComponents  : '2.2.0',
 
         ktx             : '1.1.0',
 
@@ -61,7 +61,9 @@ ext {
             lifeCycle     : "androidx.lifecycle:lifecycle-extensions:${libraryVersions.archComponents}",
             lifeCycleKtx  : "androidx.lifecycle:lifecycle-runtime-ktx:${libraryVersions.archComponents}",
             liveDataKtx   : "androidx.lifecycle:lifecycle-livedata-ktx:${libraryVersions.archComponents}",
-            viewModelScope: "androidx.lifecycle:lifecycle-viewmodel-ktx:${libraryVersions.archComponents}"
+            viewModelScope: "androidx.lifecycle:lifecycle-viewmodel-ktx:${libraryVersions.archComponents}",
+            navigation    : "androidx.navigation:navigation-fragment-ktx:${libraryVersions.archComponents}",
+            navigationUI  : "androidx.navigation:navigation-ui-ktx:${libraryVersions.archComponents}"
     ]
     archComponentsProcessorDependencies = [
             lifeCycleProcessor: "androidx.lifecycle:lifecycle-compiler:${libraryVersions.archComponents}"
@@ -73,11 +75,9 @@ ext {
 
     daggerDependencies = [
             dagger       : "com.google.dagger:dagger:${libraryVersions.dagger}",
-            daggerAndroid: "com.google.dagger:dagger-android-support:${libraryVersions.dagger}"
     ]
     daggerProcessorDependencies = [
-            daggerProcessor       : "com.google.dagger:dagger-compiler:${libraryVersions.dagger}",
-            daggerAndroidProcessor: "com.google.dagger:dagger-android-processor:${libraryVersions.dagger}"
+            daggerProcessor       : "com.google.dagger:dagger-compiler:${libraryVersions.dagger}"
     ]
 
     testDependencies = [

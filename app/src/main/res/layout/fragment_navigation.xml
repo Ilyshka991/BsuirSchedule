@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigationDrawerParentView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".feature.navigation.NavigationActivity">
+
+        <FrameLayout
+            android:id="@+id/fragmentHostView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="?attr/actionBarSize"
+            tools:context=".feature.navigation.NavigationActivity" />
+
+        <com.pechuro.bsuirschedule.widget.BottomAppBar
+            android:id="@+id/bottomBarParentView"
+            style="@style/Widget.MaterialComponents.BottomAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="bottom"
+            app:backgroundTint="@android:color/darker_gray"
+            app:contentInsetStartWithNavigation="0dp"
+            app:fabAlignmentMode="end"
+            app:fabCradleRoundedCornerRadius="16dp">
+
+            <Button
+                android:id="@+id/bottomBarClassesOptionsButton"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:icon="@drawable/ic_info"
+                app:iconGravity="textStart" />
+
+            <Button
+                android:id="@+id/bottomBarClassesDayChooseButton"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:icon="@drawable/ic_navigate_next"
+                app:iconGravity="textStart" />
+
+            <Button
+                android:id="@+id/bottomBarExamsAddButton"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:icon="@drawable/ic_add"
+                app:iconGravity="textStart"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </com.pechuro.bsuirschedule.widget.BottomAppBar>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/bottomBarBackFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_fab_back"
+            app:layout_anchor="@+id/bottomBarParentView" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationDrawerView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        android:visibility="visible"
+        app:insetForeground="#4000">
+
+        <fragment
+            android:id="@+id/navigationDrawerFragment"
+            android:name="com.pechuro.bsuirschedule.feature.navigation.drawer.NavigationDrawerFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="24dp" />
+    </com.google.android.material.navigation.NavigationView>
+</androidx.drawerlayout.widget.DrawerLayout>

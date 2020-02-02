@@ -8,9 +8,7 @@ inline fun FragmentManager.transaction(
         allowStateLoss: Boolean = false,
         body: FragmentTransaction.() -> Unit
 ) {
-    val transaction = beginTransaction().apply {
-        setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_in)
-    }
+    val transaction = beginTransaction()
     transaction.body()
     if (now) {
         if (allowStateLoss) {

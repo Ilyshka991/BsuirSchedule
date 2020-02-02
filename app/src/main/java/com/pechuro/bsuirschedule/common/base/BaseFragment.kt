@@ -1,5 +1,6 @@
 package com.pechuro.bsuirschedule.common.base
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,16 +9,11 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
-import dagger.android.support.AndroidSupportInjection
+import com.pechuro.bsuirschedule.ext.app
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-abstract class BaseFragment : Fragment(), HasAndroidInjector {
-
-    @Inject
-    protected lateinit var androidInjector: DispatchingAndroidInjector<Any>
+abstract class BaseFragment : Fragment() {
 
     @Inject
     protected lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -25,8 +21,14 @@ abstract class BaseFragment : Fragment(), HasAndroidInjector {
     @get:LayoutRes
     protected abstract val layoutId: Int
 
+    open fun onBackPressed(): Boolean = false
+
+    override fun onAttach(context: Context) {
+        context.app.appComponent.inject(this)
+        super.onAttach(context)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        performDI()
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
@@ -37,8 +39,6 @@ abstract class BaseFragment : Fragment(), HasAndroidInjector {
             savedInstanceState: Bundle?
     ): View? = inflater.inflate(layoutId, container, false)
 
-    override fun androidInjector() = androidInjector
-
     protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>, shared: Boolean = false): T {
         val owner: ViewModelStoreOwner = if (shared) requireActivity() else this
         return initViewModel(clazz, owner)
@@ -47,6 +47,4 @@ abstract class BaseFragment : Fragment(), HasAndroidInjector {
     protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>, owner: ViewModelStoreOwner): T {
         return ViewModelProvider(owner, viewModelFactory).get(clazz.java)
     }
-
-    private fun performDI() = AndroidSupportInjection.inject(this)
 }
