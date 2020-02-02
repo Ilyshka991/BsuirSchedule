@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/suggestionEmployeePhoto"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_photo_load_progress" />
+
+    <TextView
+        android:id="@+id/suggestionEmployeeFirstName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintStart_toEndOf="@+id/suggestionEmployeePhoto"
+        app:layout_constraintTop_toTopOf="@+id/suggestionEmployeePhoto"
+        tools:text="Иван" />
+
+    <TextView
+        android:id="@+id/suggestionEmployeeMiddleName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/suggestionEmployeeFirstName"
+        app:layout_constraintStart_toEndOf="@+id/suggestionEmployeeFirstName"
+        tools:text="Иванович" />
+
+    <TextView
+        android:id="@+id/suggestionEmployeeLastName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/suggestionEmployeePhoto"
+        app:layout_constraintStart_toEndOf="@+id/suggestionEmployeePhoto"
+        tools:text="Глецевич" />
+
+    <TextView
+        android:id="@+id/suggestionEmployeeDepartmentAbbreviation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/suggestionEmployeePhoto"
+        app:layout_constraintTop_toBottomOf="@+id/suggestionEmployeePhoto"
+        tools:text="ЭВМ" />
+
+    <TextView
+        android:id="@+id/suggestionEmployeeRank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/suggestionEmployeeDepartmentAbbreviation"
+        app:layout_constraintStart_toEndOf="@+id/suggestionEmployeeDepartmentAbbreviation"
+        tools:text="Опущенный" />
+</androidx.constraintlayout.widget.ConstraintLayout>

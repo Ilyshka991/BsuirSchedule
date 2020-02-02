@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.main.addschedule.fragment
+package com.pechuro.bsuirschedule.feature.add.addschedule.fragment
 
 import com.pechuro.bsuirschedule.di.annotations.ChildFragmentScope
 import dagger.Module

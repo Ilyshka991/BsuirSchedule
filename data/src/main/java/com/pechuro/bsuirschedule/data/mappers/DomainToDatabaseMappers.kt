@@ -9,10 +9,10 @@ import com.pechuro.bsuirschedule.local.entity.education.EducationFormCached
 import com.pechuro.bsuirschedule.local.entity.education.FacultyCached
 import com.pechuro.bsuirschedule.local.entity.education.SpecialityCached
 import com.pechuro.bsuirschedule.local.entity.schedule.*
-import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeItemExamComplex
 import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeItemClassesComplex
-import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupItemExamComplex
+import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeItemExamComplex
 import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupItemClassesComplex
+import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupItemExamComplex
 import com.pechuro.bsuirschedule.local.entity.staff.EmployeeCached
 import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
 
@@ -74,7 +74,8 @@ internal fun Employee.toDatabaseEntity() = run {
             lastName = lastName,
             abbreviation = abbreviation,
             photoLink = photoLink,
-            rank = rank
+            rank = rank,
+            departmentId = department.id
     )
 }
 
@@ -89,8 +90,9 @@ internal fun Group.toDatabaseEntity() = run {
     GroupCached(
             id = id,
             number = number,
-            facultyId = faculty?.id,
-            course = course
+            facultyId = faculty.id,
+            course = course,
+            specialityId = speciality.id
     )
 }
 

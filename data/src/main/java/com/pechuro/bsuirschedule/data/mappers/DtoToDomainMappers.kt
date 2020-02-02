@@ -2,6 +2,7 @@ package com.pechuro.bsuirschedule.data.mappers
 
 import android.annotation.SuppressLint
 import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.exception.DataSourceException
 import com.pechuro.bsuirschedule.domain.ext.parseOrDefault
 import com.pechuro.bsuirschedule.remote.dto.*
 import java.text.SimpleDateFormat
@@ -45,7 +46,7 @@ internal fun AuditoryDTO.toDomainEntity() = run {
     )
 }
 
-internal fun EmployeeDTO.toDomainEntity() = run {
+internal fun EmployeeDTO.toDomainEntity(department: Department) = run {
     Employee(
             id = id,
             firstName = firstName,
@@ -53,16 +54,18 @@ internal fun EmployeeDTO.toDomainEntity() = run {
             lastName = lastName,
             abbreviation = abbreviation,
             photoLink = photoLink ?: "",
-            rank = rank ?: ""
+            rank = rank ?: "",
+            department = department
     )
 }
 
-internal fun GroupDTO.toDomainEntity(faculty: Faculty?) = run {
+internal fun GroupDTO.toDomainEntity(faculty: Faculty, speciality: Speciality) = run {
     Group(
             id = id,
             number = number,
             faculty = faculty,
-            course = course ?: -1
+            course = course ?: -1,
+            speciality = speciality
     )
 }
 
@@ -98,7 +101,8 @@ internal fun LastUpdateDTO.toDomainEntity() = run {
 
 internal fun List<ScheduleItemDTO>.toGroupLessons(
         schedule: Schedule.GroupClasses,
-        auditories: List<Auditory>
+        auditories: List<Auditory>,
+        departments: List<Department>
 ): List<ScheduleItem.GroupLesson> {
     val resultList = mutableListOf<ScheduleItem.GroupLesson>()
     forEach { scheduleItem ->
@@ -106,7 +110,12 @@ internal fun List<ScheduleItemDTO>.toGroupLessons(
             val lessonAuditories = lesson.auditories?.let { lessonAuditories ->
                 auditories.filter { "${it.name}-${it.building.name}" in lessonAuditories }
             }
-            val lessonEmployees = lesson.employees?.map { it.toDomainEntity() }
+            val lessonEmployees = lesson.employees?.map { employeeDto ->
+                val department = departments.find {
+                    it.abbreviation == employeeDto.departmentAbbreviation.firstOrNull()
+                } ?: throw DataSourceException.InvalidData
+                employeeDto.toDomainEntity(department)
+            }
             getResultWeekNumbers(lesson.weekNumber).forEach { weekNumber ->
                 val mappedScheduleItem = ScheduleItem.GroupLesson(
                         //This ID will be generated later
@@ -132,7 +141,8 @@ internal fun List<ScheduleItemDTO>.toGroupLessons(
 
 internal fun List<ScheduleItemDTO>.toGroupExams(
         schedule: Schedule.GroupExams,
-        auditories: List<Auditory>
+        auditories: List<Auditory>,
+        departments: List<Department>
 ): List<ScheduleItem.GroupExam> {
     val resultList = mutableListOf<ScheduleItem.GroupExam>()
     forEach { scheduleItem ->
@@ -140,7 +150,12 @@ internal fun List<ScheduleItemDTO>.toGroupExams(
             val lessonAuditories = lesson.auditories?.let { lessonAuditories ->
                 auditories.filter { "${it.name}-${it.building.name}" in lessonAuditories }
             }
-            val lessonEmployees = lesson.employees?.map { it.toDomainEntity() }
+            val lessonEmployees = lesson.employees?.map { employeeDto ->
+                val department = departments.find {
+                    it.abbreviation == employeeDto.departmentAbbreviation.firstOrNull()
+                } ?: throw DataSourceException.InvalidData
+                employeeDto.toDomainEntity(department)
+            }
             val mappedScheduleItem = ScheduleItem.GroupExam(
                     //This ID will be generated later
                     id = 0,

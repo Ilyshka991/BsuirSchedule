@@ -24,6 +24,7 @@
     <string name="bottom_sheet_action_show_by_days">Show by days</string>
 
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_add_schedule">Add new schedule</string>
     <string name="title_activity_info_loading">Info loading</string>
     <string name="title_activity_edit">Edit</string>
     <string name="title_choose_action">Choose action:</string>

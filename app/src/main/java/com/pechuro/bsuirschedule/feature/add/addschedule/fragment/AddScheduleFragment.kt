@@ -1,20 +1,21 @@
-package com.pechuro.bsuirschedule.feature.main.addschedule.fragment
+package com.pechuro.bsuirschedule.feature.add.addschedule.fragment
 
 import android.os.Bundle
 import android.text.InputType
 import android.view.View
-import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
-import com.pechuro.bsuirschedule.domain.entity.Employee
-import com.pechuro.bsuirschedule.domain.entity.Group
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.ext.*
-import com.pechuro.bsuirschedule.feature.main.addschedule.AddScheduleContainerDialogPagerAdapter.FragmentType
-import com.pechuro.bsuirschedule.feature.main.addschedule.AddScheduleViewModel
-import com.pechuro.bsuirschedule.feature.main.addschedule.AddScheduleViewModel.State
+import com.pechuro.bsuirschedule.feature.add.addschedule.AddScheduleContainerPagerAdapter.FragmentType
+import com.pechuro.bsuirschedule.feature.add.addschedule.AddScheduleViewModel
+import com.pechuro.bsuirschedule.feature.add.addschedule.AddScheduleViewModel.State
+import com.pechuro.bsuirschedule.feature.add.addschedule.fragment.SuggestionItemInformation.EmployeeInfo
+import com.pechuro.bsuirschedule.feature.add.addschedule.fragment.SuggestionItemInformation.GroupInfo
 import kotlinx.android.synthetic.main.fragment_add_schedule.*
 
 class AddScheduleFragment : BaseFragment() {
@@ -41,11 +42,7 @@ class AddScheduleFragment : BaseFragment() {
     }
 
     private val suggestionsAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        ArrayAdapter<String>(
-                requireContext(),
-                R.layout.item_autocomplete_adapter,
-                mutableListOf()
-        )
+        AddScheduleSuggestionsAdapter()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,23 +59,32 @@ class AddScheduleFragment : BaseFragment() {
             }
             this.inputType = inputType
 
-            setAdapter(suggestionsAdapter)
-
             addTextListener {
-                addScheduleDoneButton.isEnabled = suggestionsAdapter.getPosition(it) != -1
-            }
-
-            onKeyboardClose = {
-                viewModel.complete()
+                when (scheduleType) {
+                    FragmentType.STUDENT -> viewModel.filterGroups(it)
+                    FragmentType.EMPLOYEE -> viewModel.filterEmployees(it)
+                }
             }
         }
 
-        addScheduleDoneButton.setOnClickListener {
-            loadSchedule()
+        addScheduleSuggestionsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            adapter = suggestionsAdapter.apply {
+                onItemClicked = {
+                    addScheduleSuggestionsRecyclerView.tag = it
+                    loadSchedule(it)
+                }
+            }
+            itemAnimator = null
         }
 
         addScheduleRetryButton.setOnClickListener {
-            loadSchedule()
+            val info = addScheduleSuggestionsRecyclerView.tag as? SuggestionItemInformation
+            if (info != null) {
+                loadSchedule(info)
+            } else {
+                viewModel.cancel()
+            }
         }
 
         addScheduleCancelButton.setOnClickListener {
@@ -90,6 +96,7 @@ class AddScheduleFragment : BaseFragment() {
         viewModel.state.observeNonNull(viewLifecycleOwner) {
             when (it) {
                 is State.Idle -> {
+                    addScheduleSuggestionsRecyclerView.tag = null
                     addScheduleProgressBar.isVisible = false
                     addScheduleErrorParentView.isVisible = false
                     addScheduleParamsParentView.isVisibleOrInvisible = true
@@ -112,39 +119,30 @@ class AddScheduleFragment : BaseFragment() {
 
         when (scheduleType) {
             FragmentType.STUDENT -> {
-                viewModel.allGroupNames.observeNonNull(viewLifecycleOwner) {
-                    addGroupSuggestions(it)
+                viewModel.allGroupsData.observeNonNull(viewLifecycleOwner) {
+                    suggestionsAdapter.submitList(it)
                 }
             }
             FragmentType.EMPLOYEE -> {
-                viewModel.allEmployeeNames.observeNonNull(viewLifecycleOwner) {
-                    addEmployeeSuggestions(it)
+                viewModel.allEmployeesData.observeNonNull(viewLifecycleOwner) {
+                    suggestionsAdapter.submitList(it)
                 }
             }
         }
     }
 
-    private fun addGroupSuggestions(suggestions: List<Group>) {
-        suggestionsAdapter.apply {
-            clear()
-            addAll(suggestions.map { it.number })
-        }
-    }
-
-    private fun addEmployeeSuggestions(suggestions: List<Employee>) {
-        suggestionsAdapter.apply {
-            clear()
-            addAll(suggestions.map { it.abbreviation })
-        }
-    }
-
-    private fun loadSchedule() {
-        val scheduleName = addScheduleNameInput.text.toString()
+    private fun loadSchedule(info: SuggestionItemInformation) {
         val scheduleTypes = sequence {
             if (addScheduleChipClasses.isChecked) yield(ScheduleType.CLASSES)
             if (addScheduleChipExams.isChecked) yield(ScheduleType.EXAMS)
         }.toList()
-
-       // viewModel.loadSchedule(scheduleName, scheduleTypes)
+        when (info) {
+            is GroupInfo -> {
+                viewModel.loadSchedule(info.group, scheduleTypes)
+            }
+            is EmployeeInfo -> {
+                viewModel.loadSchedule(info.employee, scheduleTypes)
+            }
+        }
     }
 }

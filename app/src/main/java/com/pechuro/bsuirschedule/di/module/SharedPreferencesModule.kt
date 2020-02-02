@@ -13,7 +13,7 @@ class SharedPreferencesModule {
     @AppScope
     fun provideDefaultPrefs(context: Context): SharedPreferences =
             context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE).apply {
-                registerOnSharedPreferenceChangeListener { _, key ->
+                registerOnSharedPreferenceChangeListener { _, _ ->
 
                 }
             }
