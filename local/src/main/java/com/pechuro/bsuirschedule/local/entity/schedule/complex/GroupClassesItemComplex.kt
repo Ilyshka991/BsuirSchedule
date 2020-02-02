@@ -9,7 +9,7 @@ import com.pechuro.bsuirschedule.local.entity.schedule.crossref.GroupLessonAudit
 import com.pechuro.bsuirschedule.local.entity.schedule.crossref.GroupLessonEmployeeCrossRef
 import com.pechuro.bsuirschedule.local.entity.staff.EmployeeCached
 
-data class GroupItemClassesComplex(
+data class GroupClassesItemComplex(
         @Embedded
         val scheduleItem: GroupItemClassesCached,
         @Relation(

@@ -4,11 +4,15 @@ import com.pechuro.bsuirschedule.data.common.BaseRepository
 import com.pechuro.bsuirschedule.data.mappers.toDatabaseEntity
 import com.pechuro.bsuirschedule.data.mappers.toDomainEntity
 import com.pechuro.bsuirschedule.domain.entity.Group
+import com.pechuro.bsuirschedule.domain.exception.DataSourceException
 import com.pechuro.bsuirschedule.domain.repository.IGroupRepository
 import com.pechuro.bsuirschedule.domain.repository.ISpecialityRepository
 import com.pechuro.bsuirschedule.local.dao.GroupDao
 import com.pechuro.bsuirschedule.remote.api.StaffApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
 class GroupRepositoryImpl(
@@ -25,7 +29,7 @@ class GroupRepositoryImpl(
     }
 
     override suspend fun getAllNumbers(): Flow<List<String>> {
-        return performDaoCall { dao.getAllNumbers() }
+        return dao.getAllNumbers().flowOn(Dispatchers.IO)
     }
 
     override suspend fun getById(id: Long): Group {
@@ -60,17 +64,22 @@ class GroupRepositoryImpl(
                         )
                     }
 
-    private suspend fun getGroupsFromDao() = performDaoCall { dao.getAll() }
+    private suspend fun getGroupsFromDao() = dao.getAll()
             .map { cachedList ->
+                val allFaculties = specialityRepository.getAllFaculties().first()
+                val allSpecialities = specialityRepository.getAllSpecialities().first()
                 cachedList.map { groupCached ->
-                    val faculty = specialityRepository.getFacultyById(groupCached.facultyId)
-                    val speciality = specialityRepository.getSpecialityById(groupCached.specialityId)
+                    val faculty = allFaculties.find { it.id == groupCached.facultyId }
+                            ?: throw DataSourceException.InvalidData
+                    val speciality = allSpecialities.find { it.id == groupCached.specialityId }
+                            ?: throw DataSourceException.InvalidData
                     groupCached.toDomainEntity(
                             faculty = faculty,
                             speciality = speciality
                     )
                 }
             }
+            .flowOn(Dispatchers.IO)
 
     private suspend fun storeGroups(groups: List<Group>) {
         groups.map {

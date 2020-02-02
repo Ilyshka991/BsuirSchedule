@@ -4,25 +4,22 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
-import java.util.*
+import com.pechuro.bsuirschedule.local.entity.staff.EmployeeCached
 
 @Entity(
-        tableName = "group_schedule_classes",
+        tableName = "employee_schedule_classes",
         foreignKeys = [
             ForeignKey(
-                    entity = GroupCached::class,
+                    entity = EmployeeCached::class,
                     parentColumns = ["id"],
-                    childColumns = ["group_id"],
+                    childColumns = ["employee_id"],
                     onDelete = ForeignKey.CASCADE)
         ]
 )
-data class GroupScheduleClassesCached(
+data class EmployeeClassesScheduleCached(
         @PrimaryKey
         @ColumnInfo(name = "name")
         val name: String,
-        @ColumnInfo(name = "group_id", index = true)
-        val groupId: Long,
-        @ColumnInfo(name = "last_update")
-        val lastUpdate: Date
+        @ColumnInfo(name = "employee_id", index = true)
+        val employeeId: Long
 )

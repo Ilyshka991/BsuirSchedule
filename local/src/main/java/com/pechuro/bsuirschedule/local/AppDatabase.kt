@@ -31,14 +31,14 @@ import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
             GroupCached::class,
             EmployeeCached::class,
 
-            EmployeeScheduleExamCached::class,
+            EmployeeExamScheduleCached::class,
             EmployeeItemExamCached::class,
-            EmployeeScheduleClassesCached::class,
+            EmployeeClassesScheduleCached::class,
             EmployeeItemClassesCached::class,
 
-            GroupScheduleClassesCached::class,
+            GroupClassesScheduleCached::class,
             GroupItemClassesCached::class,
-            GroupScheduleExamCached::class,
+            GroupExamScheduleCached::class,
             GroupItemExamCached::class,
 
             EmployeeExamAuditoryCrossRef::class,

@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
+import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.ext.observeNonNull
 import kotlinx.android.synthetic.main.fragment_drawer.*
 
@@ -13,10 +15,26 @@ class NavigationDrawerFragment : BaseFragment() {
 
     override val layoutId: Int = R.layout.fragment_drawer
 
-    private val adapter = NavigationDrawerAdapter().apply {
-        onScheduleClick = {
-            EventBus.send(NavigationDrawerEvent.OpenSchedule(it))
+    private val adapterActionCallback = object : NavigationDrawerAdapter.ActionCallback {
+
+        override fun onScheduleClicked(schedule: Schedule) {
+            EventBus.send(NavigationDrawerEvent.OnScheduleClick(schedule))
         }
+
+        override fun onScheduleLongClicked(schedule: Schedule) {
+            EventBus.send(NavigationDrawerEvent.OnScheduleLongClick(schedule))
+        }
+
+        override fun onTitleClicked(scheduleType: ScheduleType) {
+            EventBus.send(NavigationDrawerEvent.OnTitleClick(scheduleType))
+        }
+
+        override fun onTitleLongClicked(scheduleType: ScheduleType) {
+            EventBus.send(NavigationDrawerEvent.OnTitleLongClick(scheduleType))
+        }
+    }
+    private val adapter = NavigationDrawerAdapter().apply {
+        actionCallback = adapterActionCallback
     }
 
     private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
@@ -36,17 +54,17 @@ class NavigationDrawerFragment : BaseFragment() {
             itemAnimator = null
         }
         navDrawerSettingButton.setOnClickListener {
-            EventBus.send(NavigationDrawerEvent.OpenSettings)
+            EventBus.send(NavigationDrawerEvent.OnOpenSettings)
 
         }
         navDrawerAddButton.setOnClickListener {
-            EventBus.send(NavigationDrawerEvent.AddSchedule)
+            EventBus.send(NavigationDrawerEvent.OnAddSchedule)
         }
     }
 
     private fun observeData() {
         viewModel.schedules.observeNonNull(viewLifecycleOwner) {
-            adapter.scheduleList = it
+            adapter.submitList(it)
         }
     }
 }

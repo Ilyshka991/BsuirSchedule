@@ -1,21 +1,19 @@
 package com.pechuro.bsuirschedule.local.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Transaction
+import androidx.room.*
 import com.pechuro.bsuirschedule.local.entity.schedule.*
-import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeItemExamComplex
-import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeItemClassesComplex
-import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupItemExamComplex
-import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupItemClassesComplex
+import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeClassesItemComplex
+import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeExamItemComplex
+import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupClassesItemComplex
+import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupExamItemComplex
 import com.pechuro.bsuirschedule.local.entity.schedule.crossref.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ScheduleDao {
 
     @Transaction
-    suspend fun insertGroupClassesSchedule(schedule: GroupScheduleClassesCached, items: List<GroupItemClassesComplex>) {
+    suspend fun insertGroupClassesSchedule(schedule: GroupClassesScheduleCached, items: List<GroupClassesItemComplex>) {
         insert(schedule)
         items.forEach {
             val scheduleItemId = insert(it.scheduleItem)
@@ -31,7 +29,7 @@ interface ScheduleDao {
     }
 
     @Transaction
-    suspend fun insertGroupExamsSchedule(schedule: GroupScheduleExamCached, items: List<GroupItemExamComplex>) {
+    suspend fun insertGroupExamsSchedule(schedule: GroupExamScheduleCached, items: List<GroupExamItemComplex>) {
         insert(schedule)
         items.forEach {
             val scheduleItemId = insert(it.scheduleItem)
@@ -47,7 +45,7 @@ interface ScheduleDao {
     }
 
     @Transaction
-    suspend fun insertEmployeeClassesSchedule(schedule: EmployeeScheduleClassesCached, items: List<EmployeeItemClassesComplex>) {
+    suspend fun insertEmployeeClassesSchedule(schedule: EmployeeClassesScheduleCached, items: List<EmployeeClassesItemComplex>) {
         insert(schedule)
         items.forEach {
             val scheduleItemId = insert(it.scheduleItem)
@@ -63,7 +61,7 @@ interface ScheduleDao {
     }
 
     @Transaction
-    suspend fun insertEmployeeExamsSchedule(schedule: EmployeeScheduleExamCached, items: List<EmployeeItemExamComplex>) {
+    suspend fun insertEmployeeExamsSchedule(schedule: EmployeeExamScheduleCached, items: List<EmployeeExamItemComplex>) {
         insert(schedule)
         items.forEach {
             val scheduleItemId = insert(it.scheduleItem)
@@ -80,7 +78,7 @@ interface ScheduleDao {
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(value: GroupScheduleClassesCached)
+    suspend fun insert(value: GroupClassesScheduleCached)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(value: GroupItemClassesCached): Long
@@ -93,7 +91,7 @@ interface ScheduleDao {
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(value: GroupScheduleExamCached)
+    suspend fun insert(value: GroupExamScheduleCached)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(value: GroupItemExamCached): Long
@@ -106,7 +104,7 @@ interface ScheduleDao {
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(value: EmployeeScheduleClassesCached)
+    suspend fun insert(value: EmployeeClassesScheduleCached)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(value: EmployeeItemClassesCached): Long
@@ -119,7 +117,7 @@ interface ScheduleDao {
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(value: EmployeeScheduleExamCached)
+    suspend fun insert(value: EmployeeExamScheduleCached)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(value: EmployeeItemExamCached): Long
@@ -129,4 +127,43 @@ interface ScheduleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(value: EmployeeExamGroupCrossRef)
+
+
+    @Query("SELECT * FROM group_schedule_classes")
+    fun getAllGroupClassesSchedules(): Flow<List<GroupClassesScheduleCached>>
+
+    @Query("SELECT * FROM group_schedule_exam")
+    fun getAllGroupExamSchedules(): Flow<List<GroupExamScheduleCached>>
+
+    @Query("SELECT * FROM employee_schedule_classes")
+    fun getAllEmployeeClassesSchedules(): Flow<List<EmployeeClassesScheduleCached>>
+
+    @Query("SELECT * FROM employee_schedule_exam")
+    fun getAllEmployeeExamSchedules(): Flow<List<EmployeeExamScheduleCached>>
+
+
+    @Query("DELETE FROM group_schedule_classes WHERE name = :name")
+    suspend fun deleteGroupClassesSchedule(name: String)
+
+    @Query("DELETE FROM group_schedule_exam WHERE name = :name")
+    suspend fun deleteGroupExamSchedule(name: String)
+
+    @Query("DELETE FROM employee_schedule_classes WHERE name = :name")
+    suspend fun deleteEmployeeClassesSchedule(name: String)
+
+    @Query("DELETE FROM employee_schedule_exam WHERE name = :name")
+    suspend fun deleteEmployeeExamSchedule(name: String)
+
+
+    @Query("DELETE FROM group_schedule_classes")
+    suspend fun deleteAllGroupClassesSchedules()
+
+    @Query("DELETE FROM group_schedule_exam")
+    suspend fun deleteAllGroupExamSchedules()
+
+    @Query("DELETE FROM employee_schedule_classes")
+    suspend fun deleteAllEmployeeClassesSchedules()
+
+    @Query("DELETE FROM employee_schedule_exam")
+    suspend fun deleteAllEmployeeExamSchedules()
 }

@@ -42,13 +42,15 @@ class RepositoryModule {
             dao: ScheduleDao,
             groupRepository: IGroupRepository,
             buildingRepository: IBuildingRepository,
-            specialityRepository: ISpecialityRepository
+            specialityRepository: ISpecialityRepository,
+            employeeRepository: IEmployeeRepository
     ): IScheduleRepository = ScheduleRepositoryImpl(
             api = api,
             dao = dao,
             groupRepository = groupRepository,
-            buildingRepository = buildingRepository,
-            specialityRepository = specialityRepository
+            specialityRepository = specialityRepository,
+            employeeRepository = employeeRepository,
+            buildingRepository = buildingRepository
     )
 
     @Provides
