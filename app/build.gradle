@@ -55,6 +55,10 @@ android {
     }
 }
 
+androidExtensions {
+    experimental = true
+}
+
 dependencies {
     implementation kotlin
     implementation coroutines.values()

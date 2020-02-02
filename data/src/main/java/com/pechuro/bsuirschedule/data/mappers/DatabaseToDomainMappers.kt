@@ -23,7 +23,9 @@ internal fun FacultyCached.toDomainEntity() = run {
     )
 }
 
-internal fun EmployeeCached.toDomainEntity() = run {
+internal fun EmployeeCached.toDomainEntity(
+        department: Department
+) = run {
     Employee(
             id = id,
             firstName = firstName,
@@ -31,7 +33,8 @@ internal fun EmployeeCached.toDomainEntity() = run {
             lastName = lastName,
             abbreviation = abbreviation,
             photoLink = photoLink,
-            rank = rank
+            rank = rank,
+            department = department
     )
 }
 
@@ -74,12 +77,16 @@ internal fun BuildingCached.toDomainEntity() = run {
     )
 }
 
-internal fun GroupCached.toDomainEntity(faculty: Faculty?) = run {
+internal fun GroupCached.toDomainEntity(
+        faculty: Faculty,
+        speciality: Speciality
+) = run {
     Group(
             id = id,
             number = number,
             faculty = faculty,
-            course = course
+            course = course,
+            speciality = speciality
     )
 }
 

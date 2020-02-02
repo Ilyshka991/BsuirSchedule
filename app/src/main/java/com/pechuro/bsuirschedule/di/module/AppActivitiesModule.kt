@@ -1,11 +1,12 @@
 package com.pechuro.bsuirschedule.di.module
 
 import com.pechuro.bsuirschedule.di.annotations.ActivityScope
+import com.pechuro.bsuirschedule.feature.add.AddScheduleActivity
+import com.pechuro.bsuirschedule.feature.add.addschedule.AddScheduleContainerProvider
 import com.pechuro.bsuirschedule.feature.edit.EditLessonActivity
 import com.pechuro.bsuirschedule.feature.edit.editlesson.EditLessonFragmentProvider
 import com.pechuro.bsuirschedule.feature.load.InfoLoadActivity
 import com.pechuro.bsuirschedule.feature.main.MainActivity
-import com.pechuro.bsuirschedule.feature.main.addschedule.AddScheduleDialogProvider
 import com.pechuro.bsuirschedule.feature.main.navigationdrawer.NavigationDrawerFragmentProvider
 import com.pechuro.bsuirschedule.feature.main.start.StartFragmentProvider
 import com.pechuro.bsuirschedule.feature.settings.SettingsActivity
@@ -33,7 +34,6 @@ interface AppActivitiesModule {
     @ActivityScope
     @ContributesAndroidInjector(modules = [
         NavigationDrawerFragmentProvider::class,
-        AddScheduleDialogProvider::class,
         StartFragmentProvider::class
     ])
     fun bindMainActivity(): MainActivity
@@ -43,4 +43,10 @@ interface AppActivitiesModule {
         EditLessonFragmentProvider::class
     ])
     fun bindEditLessonActivity(): EditLessonActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [
+        AddScheduleContainerProvider::class
+    ])
+    fun bindAddScheduleActivity(): AddScheduleActivity
 }

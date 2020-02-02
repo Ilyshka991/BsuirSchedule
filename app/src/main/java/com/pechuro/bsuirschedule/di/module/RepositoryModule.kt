@@ -15,10 +15,12 @@ class RepositoryModule {
     @AppScope
     fun provideEmployeeRepository(
             api: StaffApi,
-            dao: EmployeeDao
+            dao: EmployeeDao,
+            specialityRepository: ISpecialityRepository
     ): IEmployeeRepository = EmployeeRepositoryImpl(
             api = api,
-            dao = dao
+            dao = dao,
+            specialityRepository = specialityRepository
     )
 
     @Provides
@@ -39,12 +41,14 @@ class RepositoryModule {
             api: ScheduleApi,
             dao: ScheduleDao,
             groupRepository: IGroupRepository,
-            employeeRepository: IEmployeeRepository,
-            buildingRepository: IBuildingRepository
+            buildingRepository: IBuildingRepository,
+            specialityRepository: ISpecialityRepository
+            employeeRepository: IEmployeeRepository
     ): IScheduleRepository = ScheduleRepositoryImpl(
             api = api,
             dao = dao,
             groupRepository = groupRepository,
+            specialityRepository = specialityRepository
             employeeRepository = employeeRepository,
             buildingRepository = buildingRepository
     )

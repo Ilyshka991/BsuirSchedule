@@ -1,40 +1,33 @@
-package com.pechuro.bsuirschedule.feature.main.addschedule
+package com.pechuro.bsuirschedule.feature.add.addschedule
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.ViewGroup
-import android.view.WindowManager
 import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.base.BaseDialog
+import com.pechuro.bsuirschedule.common.EventBus
+import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.ext.addOnTabSelectedListener
 import com.pechuro.bsuirschedule.ext.observeNonNull
-import com.pechuro.bsuirschedule.feature.main.addschedule.AddScheduleViewModel.State
+import com.pechuro.bsuirschedule.feature.add.addschedule.AddScheduleViewModel.State
 import kotlinx.android.synthetic.main.fragment_viewpager.*
 import javax.inject.Inject
 
-class AddScheduleContainerDialog : BaseDialog() {
+class AddScheduleContainer : BaseFragment() {
 
     companion object {
 
         const val TAG = "AddScheduleContainerDialog"
 
-        fun newInstance() = AddScheduleContainerDialog()
+        fun newInstance() = AddScheduleContainer()
     }
 
     override val layoutId: Int = R.layout.fragment_viewpager
 
     @Inject
-    protected lateinit var pagerAdapter: AddScheduleContainerDialogPagerAdapter
+    protected lateinit var pagerAdapter: AddScheduleContainerPagerAdapter
 
     private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
         initViewModel(AddScheduleViewModel::class, owner = this)
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return super.onCreateDialog(savedInstanceState).apply {
-            window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -50,7 +43,7 @@ class AddScheduleContainerDialog : BaseDialog() {
             addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         }
         tabLayout.apply {
-            AddScheduleContainerDialogPagerAdapter.FragmentType.values().forEach {
+            AddScheduleContainerPagerAdapter.FragmentType.values().forEach {
                 val tab = newTab().setText(getString(it.titleRes))
                 addTab(tab)
             }
@@ -72,11 +65,10 @@ class AddScheduleContainerDialog : BaseDialog() {
     }
 
     private fun onComplete() {
-        dismiss()
+        EventBus.send(AddScheduleEvent.Complete)
     }
 
     private fun setActionsEnabled(enabled: Boolean) {
-        isCancelable = enabled
         viewPager.isSwipeEnabled = enabled
         tabLayout.setClickEnabled(enabled)
     }

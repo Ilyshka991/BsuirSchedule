@@ -18,5 +18,7 @@ data class EmployeeDTO(
         @Json(name = "photoLink")
         val photoLink: String?,
         @Json(name = "rank")
-        val rank: String?
+        val rank: String?,
+        @Json(name = "academicDepartment")
+        val departmentAbbreviation: List<String>
 )

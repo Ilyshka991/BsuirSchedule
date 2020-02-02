@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.pechuro.bsuirschedule.local.entity.education.FacultyCached
+import com.pechuro.bsuirschedule.local.entity.education.SpecialityCached
 
 @Entity(
         tableName = "group",
@@ -13,7 +14,12 @@ import com.pechuro.bsuirschedule.local.entity.education.FacultyCached
                     entity = FacultyCached::class,
                     parentColumns = ["id"],
                     childColumns = ["faculty_id"],
-                    onDelete = ForeignKey.CASCADE)
+                    onDelete = ForeignKey.CASCADE),
+                ForeignKey(
+                        entity = SpecialityCached::class,
+                        parentColumns = ["id"],
+                        childColumns = ["speciality_id"],
+                        onDelete = ForeignKey.CASCADE)
         ]
 )
 data class GroupCached(
@@ -23,7 +29,9 @@ data class GroupCached(
         @ColumnInfo(name = "number")
         val number: String,
         @ColumnInfo(name = "faculty_id", index = true)
-        val facultyId: Long?,
+        val facultyId: Long,
+        @ColumnInfo(name = "speciality_id", index = true)
+        val specialityId: Long,
         @ColumnInfo(name = "course")
         val course: Int
 )

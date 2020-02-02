@@ -2,9 +2,18 @@ package com.pechuro.bsuirschedule.local.entity.staff
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.pechuro.bsuirschedule.local.entity.education.DepartmentCached
 
-@Entity(tableName = "employee")
+@Entity(tableName = "employee",
+        foreignKeys = [
+                ForeignKey(
+                        entity = DepartmentCached::class,
+                        parentColumns = ["id"],
+                        childColumns = ["department_id"],
+                        onDelete = ForeignKey.CASCADE)
+        ])
 data class EmployeeCached(
         @PrimaryKey
         @ColumnInfo(name = "id")
@@ -19,6 +28,8 @@ data class EmployeeCached(
         val abbreviation: String,
         @ColumnInfo(name = "photo_link")
         val photoLink: String,
+        @ColumnInfo(name = "department_id", index = true)
+        val departmentId: Long,
         @ColumnInfo(name = "rank")
         val rank: String
 )

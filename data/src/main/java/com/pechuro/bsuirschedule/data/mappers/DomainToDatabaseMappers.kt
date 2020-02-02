@@ -74,7 +74,8 @@ internal fun Employee.toDatabaseEntity() = run {
             lastName = lastName,
             abbreviation = abbreviation,
             photoLink = photoLink,
-            rank = rank
+            rank = rank,
+            departmentId = department.id
     )
 }
 
@@ -89,8 +90,9 @@ internal fun Group.toDatabaseEntity() = run {
     GroupCached(
             id = id,
             number = number,
-            facultyId = faculty?.id,
-            course = course
+            facultyId = faculty.id,
+            course = course,
+            specialityId = speciality.id
     )
 }
 

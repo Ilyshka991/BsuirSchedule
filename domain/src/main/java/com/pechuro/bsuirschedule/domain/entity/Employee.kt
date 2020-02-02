@@ -7,5 +7,6 @@ data class Employee(
         val middleName: String,
         val abbreviation: String,
         val photoLink: String,
-        val rank: String
+        val rank: String,
+        val department: Department
 )

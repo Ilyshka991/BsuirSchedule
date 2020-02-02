@@ -30,8 +30,12 @@ class GroupRepositoryImpl(
 
     override suspend fun getById(id: Long): Group {
         val groupCached = performDaoCall { dao.getById(id) }
-        val faculty = groupCached.facultyId?.let { specialityRepository.getFacultyById(it) }
-        return groupCached.toDomainEntity(faculty = faculty)
+        val faculty = specialityRepository.getFacultyById(groupCached.facultyId)
+        val speciality = specialityRepository.getSpecialityById(groupCached.specialityId)
+        return groupCached.toDomainEntity(
+                faculty = faculty,
+                speciality = speciality
+        )
     }
 
     override suspend fun updateCache() {
@@ -48,18 +52,22 @@ class GroupRepositoryImpl(
     private suspend fun loadGroupsFromApi(): List<Group> =
             performApiCall { api.getAllGroups() }
                     .map { dto ->
-                        val faculty = dto.facultyId?.let { specialityRepository.getFacultyById(it) }
+                        val faculty = specialityRepository.getFacultyById(dto.facultyId)
+                        val speciality = specialityRepository.getSpecialityById(dto.specialityId)
                         dto.toDomainEntity(
-                                faculty = faculty
+                                faculty = faculty,
+                                speciality = speciality
                         )
                     }
 
     private suspend fun getGroupsFromDao() = performDaoCall { dao.getAll() }
             .map { cachedList ->
                 cachedList.map { groupCached ->
-                    val faculty = groupCached.facultyId?.let { specialityRepository.getFacultyById(it) }
+                    val faculty = specialityRepository.getFacultyById(groupCached.facultyId)
+                    val speciality = specialityRepository.getSpecialityById(groupCached.specialityId)
                     groupCached.toDomainEntity(
-                            faculty = faculty
+                            faculty = faculty,
+                            speciality = speciality
                     )
                 }
             }

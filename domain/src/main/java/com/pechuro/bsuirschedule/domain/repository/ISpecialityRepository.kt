@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.domain.repository
 
 import com.pechuro.bsuirschedule.domain.entity.Department
+import com.pechuro.bsuirschedule.domain.entity.EducationForm
 import com.pechuro.bsuirschedule.domain.entity.Faculty
 import com.pechuro.bsuirschedule.domain.entity.Speciality
 import kotlinx.coroutines.flow.Flow
@@ -21,5 +22,9 @@ interface ISpecialityRepository {
 
     suspend fun getDepartmentById(id: Long): Department
 
-    suspend fun getFacultyById(id: Long): Faculty?
+    suspend fun getFacultyById(id: Long): Faculty
+
+    suspend fun getEducationFormById(id: Long): EducationForm?
+
+    suspend fun getSpecialityById(id: Long): Speciality
 }
