@@ -4,15 +4,19 @@ import com.pechuro.bsuirschedule.data.common.BaseRepository
 import com.pechuro.bsuirschedule.data.mappers.toDatabaseEntity
 import com.pechuro.bsuirschedule.data.mappers.toDomainEntity
 import com.pechuro.bsuirschedule.domain.entity.Employee
+import com.pechuro.bsuirschedule.domain.exception.DataSourceException
 import com.pechuro.bsuirschedule.domain.repository.IEmployeeRepository
+import com.pechuro.bsuirschedule.domain.repository.ISpecialityRepository
 import com.pechuro.bsuirschedule.local.dao.EmployeeDao
 import com.pechuro.bsuirschedule.remote.api.StaffApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class EmployeeRepositoryImpl(
         private val dao: EmployeeDao,
-        private val api: StaffApi
+        private val api: StaffApi,
+        private val specialityRepository: ISpecialityRepository
 ) : BaseRepository(), IEmployeeRepository {
 
     override suspend fun getAll(): Flow<List<Employee>> {
@@ -26,8 +30,11 @@ class EmployeeRepositoryImpl(
         return performDaoCall { dao.getAllNames() }
     }
 
-    override suspend fun getById(id: Long): Employee =
-            performDaoCall { dao.getById(id) }.toDomainEntity()
+    override suspend fun getById(id: Long): Employee {
+        val employeeCached = performDaoCall { dao.getById(id) }
+        val department = specialityRepository.getDepartmentById(employeeCached.departmentId)
+        return employeeCached.toDomainEntity(department)
+    }
 
     override suspend fun updateCache() {
         val loadedEmployees = loadEmployeesFromApi()
@@ -41,16 +48,25 @@ class EmployeeRepositoryImpl(
     override suspend fun isCached(): Boolean =
             performDaoCall { dao.isNotEmpty() }
 
-    private suspend fun loadEmployeesFromApi(): List<Employee> =
-            performApiCall { api.getAllEmployees() }
-                    .map { dto ->
-                        dto.toDomainEntity()
-                    }
+    private suspend fun loadEmployeesFromApi(): List<Employee> {
+        val allDepartments = specialityRepository.getAllDepartments().first()
+        return performApiCall { api.getAllEmployees() }
+                .map { dto ->
+                    val department = allDepartments.find {
+                        it.abbreviation == dto.departmentAbbreviation.firstOrNull()
+                    } ?: throw DataSourceException.InvalidData
+                    dto.toDomainEntity(
+                            department = department
+                    )
+                }
+    }
+
 
     private suspend fun getEmployeesFromDao() = performDaoCall { dao.getAll() }
             .map { cachedList ->
                 cachedList.map { employeeCached ->
-                    employeeCached.toDomainEntity()
+                    val department = specialityRepository.getDepartmentById(employeeCached.departmentId)
+                    employeeCached.toDomainEntity(department)
                 }
             }
 

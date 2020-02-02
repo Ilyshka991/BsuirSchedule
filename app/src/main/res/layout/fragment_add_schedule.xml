@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <ProgressBar
         android:id="@+id/addScheduleProgressBar"
@@ -64,17 +64,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/addScheduleParamsParentView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingTop="16dp"
-        android:paddingRight="16dp">
+        android:layout_height="match_parent"
+        android:paddingTop="16dp">
 
         <LinearLayout
             android:id="@+id/addScheduleTypesParentView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -112,27 +110,26 @@
 
         </LinearLayout>
 
-        <com.pechuro.bsuirschedule.widget.KeyboardClosableAutoCompleteTextView
+        <EditText
             android:id="@+id/addScheduleNameInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:completionThreshold="1"
-            android:dropDownHeight="100dp"
             android:hint="@string/add_fragment_hint_enter_schedule"
             app:layout_constraintEnd_toEndOf="@+id/addScheduleTypesParentView"
             app:layout_constraintStart_toStartOf="@+id/addScheduleTypesParentView"
-            app:layout_constraintTop_toBottomOf="@+id/addScheduleTypesParentView" />
+            app:layout_constraintTop_toBottomOf="@+id/addScheduleTypesParentView">
 
-        <Button
-            android:id="@+id/addScheduleDoneButton"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:enabled="false"
-            android:text="@string/action_ok"
-            app:layout_constraintEnd_toEndOf="@+id/addScheduleNameInput"
+            <requestFocus />
+        </EditText>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/addScheduleSuggestionsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/addScheduleTypesParentView"
+            app:layout_constraintStart_toStartOf="@+id/addScheduleTypesParentView"
             app:layout_constraintTop_toBottomOf="@+id/addScheduleNameInput" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

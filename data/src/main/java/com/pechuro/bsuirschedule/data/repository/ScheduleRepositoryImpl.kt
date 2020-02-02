@@ -6,6 +6,7 @@ import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.domain.repository.IBuildingRepository
 import com.pechuro.bsuirschedule.domain.repository.IGroupRepository
 import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
+import com.pechuro.bsuirschedule.domain.repository.ISpecialityRepository
 import com.pechuro.bsuirschedule.local.dao.ScheduleDao
 import com.pechuro.bsuirschedule.remote.api.ScheduleApi
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +18,8 @@ class ScheduleRepositoryImpl(
         private val dao: ScheduleDao,
         private val api: ScheduleApi,
         private val groupRepository: IGroupRepository,
-        private val buildingRepository: IBuildingRepository
+        private val buildingRepository: IBuildingRepository,
+        private val specialityRepository: ISpecialityRepository
 ) : BaseRepository(), IScheduleRepository {
 
     override suspend fun getAllSchedules(): Flow<List<Schedule>> {
@@ -30,6 +32,7 @@ class ScheduleRepositoryImpl(
 
     override suspend fun loadGroupSchedule(group: Group, types: List<ScheduleType>) {
         val auditories = buildingRepository.getAllAuditories().first()
+        val departments = specialityRepository.getAllDepartments().first()
 
         val scheduleDTO = performApiCall { api.getStudentSchedule(group.id) }
         val lastUpdatedDate: Date = performApiCallCatching(Date(0)) {
@@ -45,7 +48,7 @@ class ScheduleRepositoryImpl(
                             lastUpdated = lastUpdatedDate,
                             group = group
                     )
-                    val items = itemsDTOList.toGroupLessons(schedule, auditories)
+                    val items = itemsDTOList.toGroupLessons(schedule, auditories, departments)
 
                     storeSchedule(schedule, items)
                 }
@@ -56,7 +59,7 @@ class ScheduleRepositoryImpl(
                             lastUpdated = lastUpdatedDate,
                             group = group
                     )
-                    val items = itemsDTOList.toGroupExams(schedule, auditories)
+                    val items = itemsDTOList.toGroupExams(schedule, auditories, departments)
 
                     storeSchedule(schedule, items)
                 }
