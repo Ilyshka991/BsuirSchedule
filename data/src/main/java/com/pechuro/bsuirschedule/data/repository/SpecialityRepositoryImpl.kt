@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
@@ -118,7 +119,7 @@ class SpecialityRepositoryImpl(
                         dto.toDomainEntity()
                     }
 
-    private suspend fun getSpecialitiesFromDao() = performDaoCall { dao.getAllSpecialities() }
+    private suspend fun getSpecialitiesFromDao() = dao.getAllSpecialities()
             .map { list ->
                 list.map { specialityCached ->
                     val faculty = specialityCached.facultyId?.let {
@@ -133,20 +134,23 @@ class SpecialityRepositoryImpl(
                     )
                 }
             }
+            .flowOn(Dispatchers.IO)
 
-    private suspend fun getFacultiesFromDao() = performDaoCall { dao.getAllFaculties() }
+    private suspend fun getFacultiesFromDao() = dao.getAllFaculties()
             .map { list ->
                 list.map { facultyCached ->
                     facultyCached.toDomainEntity()
                 }
             }
+            .flowOn(Dispatchers.IO)
 
-    private suspend fun getDepartmentsFromDao() = performDaoCall { dao.getAllDepartments() }
+    private suspend fun getDepartmentsFromDao() = dao.getAllDepartments()
             .map { list ->
                 list.map { departmentCached ->
                     departmentCached.toDomainEntity()
                 }
             }
+            .flowOn(Dispatchers.IO)
 
     private suspend fun storeFaculties(groups: List<Faculty>) {
         groups.map {

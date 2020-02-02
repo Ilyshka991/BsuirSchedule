@@ -108,8 +108,7 @@ class AddScheduleSuggestionsAdapter : ListAdapter<SuggestionItemInformation, Bas
                 error(R.drawable.ic_photo_load_error)
                 circleCrop()
             }
-            Glide
-                    .with(this)
+            Glide.with(this)
                     .load(url)
                     .apply(glideOptions)
                     .into(this)

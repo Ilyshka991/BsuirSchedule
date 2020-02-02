@@ -6,16 +6,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.BaseEvent
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.common.base.BaseFragmentActivity
+import com.pechuro.bsuirschedule.domain.interactor.DeleteSchedule
 import com.pechuro.bsuirschedule.feature.add.AddScheduleActivity
 import com.pechuro.bsuirschedule.feature.main.navigationdrawer.NavigationDrawerEvent
 import com.pechuro.bsuirschedule.feature.main.start.StartFragment
 import com.pechuro.bsuirschedule.feature.main.start.StartFragmentEvent
 import com.pechuro.bsuirschedule.widget.DefaultDrawerListener
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class MainActivity : BaseFragmentActivity() {
 
@@ -23,6 +25,9 @@ class MainActivity : BaseFragmentActivity() {
 
         fun newIntent(context: Context) = Intent(context, MainActivity::class.java)
     }
+
+    @Inject
+    lateinit var deleteSchedule: DeleteSchedule
 
     override val layoutId: Int = R.layout.activity_main
 
@@ -51,13 +56,29 @@ class MainActivity : BaseFragmentActivity() {
     }
 
     private fun receiveEvents() {
-        EventBus.receive<BaseEvent>(lifecycleScope) {
-            when (it) {
-                is StartFragmentEvent.AddSchedule, is NavigationDrawerEvent.OnAddSchedule -> openAddSchedule()
+        EventBus.receive<StartFragmentEvent>(lifecycleScope) { event ->
+            when (event) {
+                is StartFragmentEvent.AddSchedule -> openAddSchedule()
+            }
+        }
+        EventBus.receive<NavigationDrawerEvent>(lifecycleScope) { event ->
+            when (event) {
+                is NavigationDrawerEvent.OnAddSchedule -> openAddSchedule()
                 is NavigationDrawerEvent.OnOpenSettings -> {
 
                 }
                 is NavigationDrawerEvent.OnScheduleClick -> {
+
+                }
+                is NavigationDrawerEvent.OnScheduleLongClick -> {
+                    lifecycleScope.launch {
+                        deleteSchedule.execute(DeleteSchedule.Params(event.schedule))
+                    }
+                }
+                is NavigationDrawerEvent.OnTitleClick -> {
+
+                }
+                is NavigationDrawerEvent.OnTitleLongClick -> {
 
                 }
             }

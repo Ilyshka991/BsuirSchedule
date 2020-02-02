@@ -9,7 +9,9 @@ import com.pechuro.bsuirschedule.domain.repository.IBuildingRepository
 import com.pechuro.bsuirschedule.domain.repository.ISpecialityRepository
 import com.pechuro.bsuirschedule.local.dao.BuildingDao
 import com.pechuro.bsuirschedule.remote.api.BuildingApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
 class BuildingRepositoryImpl(
@@ -29,12 +31,13 @@ class BuildingRepositoryImpl(
         if (!isCached()) {
             updateCache()
         }
-        return performDaoCall { dao.getAllAuditoryTypes() }
+        return dao.getAllAuditoryTypes()
                 .map { cachedList ->
                     cachedList.map { auditoryTypeCached ->
                         auditoryTypeCached.toDomainEntity()
                     }
                 }
+                .flowOn(Dispatchers.IO)
     }
 
     override suspend fun updateCache() {
@@ -52,7 +55,7 @@ class BuildingRepositoryImpl(
                     }
 
     private suspend fun getAllAuditoriesFromDao(): Flow<List<Auditory>> =
-            performDaoCall { dao.getAllAuditories() }
+            dao.getAllAuditories()
                     .map {
                         it.map { auditoryCached ->
                             val auditoryType = performDaoCall { dao.getAuditoryTypeById(auditoryCached.auditoryTypeId) }
@@ -67,6 +70,7 @@ class BuildingRepositoryImpl(
                             )
                         }
                     }
+                    .flowOn(Dispatchers.IO)
 
     private suspend fun storeAuditories(auditories: List<Auditory>) {
         auditories.forEach {

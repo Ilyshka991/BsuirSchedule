@@ -133,11 +133,37 @@ interface ScheduleDao {
     fun getAllGroupClassesSchedules(): Flow<List<GroupClassesScheduleCached>>
 
     @Query("SELECT * FROM group_schedule_exam")
-    fun getAllGroupExamsSchedules(): Flow<List<GroupExamScheduleCached>>
+    fun getAllGroupExamSchedules(): Flow<List<GroupExamScheduleCached>>
 
     @Query("SELECT * FROM employee_schedule_classes")
     fun getAllEmployeeClassesSchedules(): Flow<List<EmployeeClassesScheduleCached>>
 
     @Query("SELECT * FROM employee_schedule_exam")
-    fun getAllEmployeeExamsSchedules(): Flow<List<EmployeeExamScheduleCached>>
+    fun getAllEmployeeExamSchedules(): Flow<List<EmployeeExamScheduleCached>>
+
+
+    @Query("DELETE FROM group_schedule_classes WHERE name = :name")
+    suspend fun deleteGroupClassesSchedule(name: String)
+
+    @Query("DELETE FROM group_schedule_exam WHERE name = :name")
+    suspend fun deleteGroupExamSchedule(name: String)
+
+    @Query("DELETE FROM employee_schedule_classes WHERE name = :name")
+    suspend fun deleteEmployeeClassesSchedule(name: String)
+
+    @Query("DELETE FROM employee_schedule_exam WHERE name = :name")
+    suspend fun deleteEmployeeExamSchedule(name: String)
+
+
+    @Query("DELETE FROM group_schedule_classes")
+    suspend fun deleteAllGroupClassesSchedules()
+
+    @Query("DELETE FROM group_schedule_exam")
+    suspend fun deleteAllGroupExamSchedules()
+
+    @Query("DELETE FROM employee_schedule_classes")
+    suspend fun deleteAllEmployeeClassesSchedules()
+
+    @Query("DELETE FROM employee_schedule_exam")
+    suspend fun deleteAllEmployeeExamSchedules()
 }

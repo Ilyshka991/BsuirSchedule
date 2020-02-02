@@ -9,8 +9,10 @@ import com.pechuro.bsuirschedule.domain.repository.IEmployeeRepository
 import com.pechuro.bsuirschedule.domain.repository.ISpecialityRepository
 import com.pechuro.bsuirschedule.local.dao.EmployeeDao
 import com.pechuro.bsuirschedule.remote.api.StaffApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
 class EmployeeRepositoryImpl(
@@ -27,7 +29,7 @@ class EmployeeRepositoryImpl(
     }
 
     override suspend fun getAllNames(): Flow<List<String>> {
-        return performDaoCall { dao.getAllNames() }
+        return dao.getAllNames().flowOn(Dispatchers.IO)
     }
 
     override suspend fun getById(id: Long): Employee {
@@ -62,13 +64,14 @@ class EmployeeRepositoryImpl(
     }
 
 
-    private suspend fun getEmployeesFromDao() = performDaoCall { dao.getAll() }
+    private suspend fun getEmployeesFromDao() = dao.getAll()
             .map { cachedList ->
                 cachedList.map { employeeCached ->
                     val department = specialityRepository.getDepartmentById(employeeCached.departmentId)
                     employeeCached.toDomainEntity(department)
                 }
             }
+            .flowOn(Dispatchers.IO)
 
     private suspend fun storeEmployees(employees: List<Employee>) {
         employees.map {
