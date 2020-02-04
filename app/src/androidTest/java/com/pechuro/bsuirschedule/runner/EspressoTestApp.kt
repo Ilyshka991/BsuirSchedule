@@ -11,7 +11,8 @@ class EspressoTestApp : App() {
     lateinit var idlingResource: IEspressoIdlingResource
 
     override fun initDI() {
-        val appComponent = DaggerEspressoAppComponent.builder().application(this).build()
-        appComponent.inject(this)
+        appComponent = DaggerEspressoAppComponent.builder().application(this).build().also {
+            it.inject(this)
+        }
     }
 }

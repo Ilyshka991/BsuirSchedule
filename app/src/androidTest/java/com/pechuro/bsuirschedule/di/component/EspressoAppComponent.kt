@@ -10,7 +10,6 @@ import dagger.Component
 @AppScope
 @Component(modules = [
     ApplicationModule::class,
-    AppActivitiesModule::class,
     AppViewModelsEspressoModule::class,
     NetworkModule::class,
     SharedPreferencesModule::class,
@@ -18,7 +17,7 @@ import dagger.Component
     RepositoryModule::class,
     IdlingResourceModule::class
 ])
-interface EspressoAppComponent {
+interface EspressoAppComponent : AppComponent {
 
     fun inject(app: EspressoTestApp)
 

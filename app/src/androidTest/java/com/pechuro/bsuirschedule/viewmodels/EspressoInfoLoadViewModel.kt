@@ -3,13 +3,13 @@ package com.pechuro.bsuirschedule.viewmodels
 import androidx.lifecycle.Observer
 import com.pechuro.bsuirschedule.common.IEspressoIdlingResource
 import com.pechuro.bsuirschedule.domain.interactor.LoadInfo
-import com.pechuro.bsuirschedule.feature.load.InfoLoadActivityViewModel
+import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoViewModel
 import javax.inject.Inject
 
 class EspressoInfoLoadViewModel @Inject constructor(
         loadInfo: LoadInfo,
         private val espressoIdlingResource: IEspressoIdlingResource
-) : InfoLoadActivityViewModel(loadInfo) {
+) : LoadInfoViewModel(loadInfo) {
 
     private val espressoIdlingResourceObserver = Observer<Status> {
         when (it) {

@@ -13,11 +13,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/app_icon_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name=".feature.splash.SplashActivity"
+            android:name=".feature.MainActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,26 +24,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".feature.load.InfoLoadActivity"
-            android:label="@string/title_activity_info_loading" />
-
-        <activity
-            android:name=".feature.settings.SettingsActivity"
-            android:label="@string/title_activity_settings" />
-
-        <activity
-            android:name=".feature.edit.EditLessonActivity"
-            android:label="@string/title_activity_edit" />
-
-        <activity
-            android:name=".feature.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name=".feature.add.AddScheduleActivity"
-            android:label="@string/title_activity_add_schedule"
-            android:parentActivityName=".feature.main.MainActivity" />
     </application>
 </manifest>
