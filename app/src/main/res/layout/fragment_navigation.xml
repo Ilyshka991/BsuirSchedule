@@ -4,20 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigationDrawerParentView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".feature.navigation.NavigationActivity">
 
-        <FrameLayout
-            android:id="@+id/fragmentHostView"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/navigationFragmentHost"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="?attr/actionBarSize"
-            tools:context=".feature.navigation.NavigationActivity" />
+            android:layout_marginBottom="?attr/actionBarSize" />
 
         <com.pechuro.bsuirschedule.widget.BottomAppBar
             android:id="@+id/bottomBarParentView"

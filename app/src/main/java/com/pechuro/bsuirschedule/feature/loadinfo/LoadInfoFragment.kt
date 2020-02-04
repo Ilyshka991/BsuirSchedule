@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.ext.observeNonNull
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoViewModel.Status
@@ -46,7 +47,7 @@ class LoadInfoFragment : BaseFragment() {
     }
 
     private fun handleComplete() {
-
+        EventBus.send(LoadInfoEvent.OnComplete)
     }
 
     private fun handleError() {

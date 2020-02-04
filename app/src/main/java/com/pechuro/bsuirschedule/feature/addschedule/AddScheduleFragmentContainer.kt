@@ -9,18 +9,16 @@ import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.ext.addOnTabSelectedListener
 import com.pechuro.bsuirschedule.ext.observeNonNull
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel.State
-import kotlinx.android.synthetic.main.fragment_viewpager.*
+import kotlinx.android.synthetic.main.fragment_add_schedule_container.*
 
 class AddScheduleFragmentContainer : BaseFragment() {
 
     companion object {
 
-        const val TAG = "AddScheduleContainerDialog"
-
         fun newInstance() = AddScheduleFragmentContainer()
     }
 
-    override val layoutId: Int = R.layout.fragment_viewpager
+    override val layoutId: Int = R.layout.fragment_add_schedule_container
 
 
     private val pagerAdapter: AddScheduleContainerPagerAdapter by lazy(LazyThreadSafetyMode.NONE) {
@@ -38,18 +36,18 @@ class AddScheduleFragmentContainer : BaseFragment() {
     }
 
     private fun initView() {
-        viewPager.apply {
+        addScheduleContainerViewPager.apply {
             adapter = pagerAdapter
             layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-            addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+            addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(addScheduleContainerTabLayout))
         }
-        tabLayout.apply {
+        addScheduleContainerTabLayout.apply {
             AddScheduleContainerPagerAdapter.FragmentType.values().forEach {
                 val tab = newTab().setText(getString(it.titleRes))
                 addTab(tab)
             }
             addOnTabSelectedListener(onTabSelected = {
-                viewPager.currentItem = it.position
+                addScheduleContainerViewPager.currentItem = it.position
             })
         }
     }
@@ -70,8 +68,8 @@ class AddScheduleFragmentContainer : BaseFragment() {
     }
 
     private fun setActionsEnabled(enabled: Boolean) {
-        viewPager.isSwipeEnabled = enabled
-        tabLayout.setClickEnabled(enabled)
+        addScheduleContainerViewPager.isSwipeEnabled = enabled
+        addScheduleContainerTabLayout.setClickEnabled(enabled)
     }
 }
 
