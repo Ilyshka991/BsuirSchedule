@@ -9,6 +9,8 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import com.pechuro.bsuirschedule.common.BaseEvent
+import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.ext.app
 import javax.inject.Inject
 import kotlin.reflect.KClass
@@ -39,6 +41,11 @@ abstract class BaseFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? = inflater.inflate(layoutId, container, false)
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        EventBus.send(OnViewCreated)
+        super.onViewCreated(view, savedInstanceState)
+    }
+
     protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>, shared: Boolean = false): T {
         val owner: ViewModelStoreOwner = if (shared) requireActivity() else this
         return initViewModel(clazz, owner)
@@ -47,4 +54,6 @@ abstract class BaseFragment : Fragment() {
     protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>, owner: ViewModelStoreOwner): T {
         return ViewModelProvider(owner, viewModelFactory).get(clazz.java)
     }
+
+    object OnViewCreated : BaseEvent()
 }

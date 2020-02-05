@@ -6,7 +6,7 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.ext.commit
 import com.pechuro.bsuirschedule.ext.currentFragment
 import com.pechuro.bsuirschedule.ext.thisTag
-import com.pechuro.bsuirschedule.feature.flow.FlowFragment
+import com.pechuro.bsuirschedule.feature.navigation.NavigationFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -16,18 +16,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
-            supportFragmentManager.commit {
-                replace(
-                        mainContainer.id,
-                        FlowFragment.newInstance(),
-                        FlowFragment.thisTag
-                )
-            }
+            showNavigationFragment()
         }
     }
 
     override fun onBackPressed() {
         if (supportFragmentManager.currentFragment?.onBackPressed() == true) return
         super.onBackPressed()
+    }
+
+    private fun showNavigationFragment() {
+        supportFragmentManager.commit {
+            val fragment = NavigationFragment()
+            replace(activityHostFragment.id, fragment, fragment.thisTag)
+        }
     }
 }

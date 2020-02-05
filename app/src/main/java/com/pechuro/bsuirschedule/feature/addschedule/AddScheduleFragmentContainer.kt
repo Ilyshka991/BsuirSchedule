@@ -2,6 +2,7 @@ package com.pechuro.bsuirschedule.feature.addschedule
 
 import android.os.Bundle
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.EventBus
@@ -13,13 +14,7 @@ import kotlinx.android.synthetic.main.fragment_add_schedule_container.*
 
 class AddScheduleFragmentContainer : BaseFragment() {
 
-    companion object {
-
-        fun newInstance() = AddScheduleFragmentContainer()
-    }
-
     override val layoutId: Int = R.layout.fragment_add_schedule_container
-
 
     private val pagerAdapter: AddScheduleContainerPagerAdapter by lazy(LazyThreadSafetyMode.NONE) {
         AddScheduleContainerPagerAdapter(childFragmentManager)
@@ -64,12 +59,12 @@ class AddScheduleFragmentContainer : BaseFragment() {
     }
 
     private fun onComplete() {
-        EventBus.send(AddScheduleEvent.Complete)
+        EventBus.send(AddScheduleComplete)
     }
 
     private fun setActionsEnabled(enabled: Boolean) {
         addScheduleContainerViewPager.isSwipeEnabled = enabled
-        addScheduleContainerTabLayout.setClickEnabled(enabled)
+        addScheduleContainerTabLayout.isVisible = enabled
     }
 }
 
