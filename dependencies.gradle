@@ -61,7 +61,9 @@ ext {
             lifeCycle     : "androidx.lifecycle:lifecycle-extensions:${libraryVersions.archComponents}",
             lifeCycleKtx  : "androidx.lifecycle:lifecycle-runtime-ktx:${libraryVersions.archComponents}",
             liveDataKtx   : "androidx.lifecycle:lifecycle-livedata-ktx:${libraryVersions.archComponents}",
-            viewModelScope: "androidx.lifecycle:lifecycle-viewmodel-ktx:${libraryVersions.archComponents}"
+            viewModelScope: "androidx.lifecycle:lifecycle-viewmodel-ktx:${libraryVersions.archComponents}",
+            navigation    : "androidx.navigation:navigation-fragment-ktx:${libraryVersions.archComponents}",
+            navigationUI  : "androidx.navigation:navigation-ui-ktx:${libraryVersions.archComponents}"
     ]
     archComponentsProcessorDependencies = [
             lifeCycleProcessor: "androidx.lifecycle:lifecycle-compiler:${libraryVersions.archComponents}"

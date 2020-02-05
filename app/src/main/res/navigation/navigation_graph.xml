@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/startDestination">
+
+    <fragment
+        android:id="@+id/loadInfoDestination"
+        android:name="com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoFragment"
+        android:label="LoadInfoFragment"
+        tools:layout="@layout/fragment_info_load"/>
+
+    <fragment
+        android:id="@+id/startDestination"
+        android:name="com.pechuro.bsuirschedule.feature.start.StartFragment"
+        android:label="StartFragment"
+        tools:layout="@layout/fragment_start">
+
+        <action
+            android:id="@+id/addScheduleAction"
+            app:destination="@id/addScheduleDestination"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/addScheduleDestination"
+        tools:layout="@layout/fragment_add_schedule"
+        android:name="com.pechuro.bsuirschedule.feature.addschedule.AddScheduleFragmentContainer"
+        android:label="AddScheduleFragmentContainer" />
+</navigation>

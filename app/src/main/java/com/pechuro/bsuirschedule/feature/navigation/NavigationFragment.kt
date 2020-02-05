@@ -2,37 +2,41 @@ package com.pechuro.bsuirschedule.feature.navigation
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.BaseEvent
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
-import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.ext.commit
-import com.pechuro.bsuirschedule.ext.thisTag
+import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleComplete
+import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoComplete
 import com.pechuro.bsuirschedule.feature.navigation.drawer.NavigationDrawerEvent
-import com.pechuro.bsuirschedule.feature.start.StartFragment
-import com.pechuro.bsuirschedule.widget.DefaultDrawerListener
+import com.pechuro.bsuirschedule.feature.start.StartFragmentDirections
 import kotlinx.android.synthetic.main.fragment_navigation.*
 
 class NavigationFragment : BaseFragment() {
 
-    companion object {
+    override val layoutId: Int = R.layout.fragment_navigation
 
-        fun newInstance() = NavigationFragment()
+    private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
+        initViewModel(NavigationViewModel::class)
     }
 
-    override val layoutId: Int = R.layout.fragment_navigation
+    private val navController: NavController by lazy(LazyThreadSafetyMode.NONE) {
+        Navigation.findNavController(requireActivity(), R.id.navigationFragmentHost)
+    }
 
     private val isNavigationDrawerOpen: Boolean
         get() = navigationDrawerParentView.isDrawerOpen(navigationDrawerView)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (savedInstanceState == null) {
-            val fragment = getHomeFragment()
-            replaceFragment(fragment)
-        }
+        initNavigation()
         receiveEvents()
+        if (!viewModel.isInfoLoaded()) openLoadInfo()
     }
 
     override fun onBackPressed(): Boolean {
@@ -40,55 +44,63 @@ class NavigationFragment : BaseFragment() {
             closeNavigationDrawer()
             return true
         }
+        when (navController.currentDestination?.id) {
+            R.id.loadInfoDestination -> return false
+        }
+        if (navController.navigateUp()) return true
         return false
     }
 
-    private fun receiveEvents() {
-        EventBus.receive<NavigationDrawerEvent>(lifecycleScope) { event ->
-            when (event) {
-                is NavigationDrawerEvent.OnScheduleClick -> openScheduleFragment(event.schedule)
-                is NavigationDrawerEvent.OnTitleClick -> {
+    private fun initNavigation() {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            val isControlsVisible = when (destination.id) {
+                R.id.addScheduleDestination -> false
+                R.id.loadInfoDestination -> false
+                else -> true
+            }
+            bottomBarBackFab.isVisible = isControlsVisible
+            bottomBarParentView.isVisible = isControlsVisible
+            val drawerLockMode = if (isControlsVisible) {
+                DrawerLayout.LOCK_MODE_UNLOCKED
+            } else {
+                DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+            }
+            navigationDrawerParentView.setDrawerLockMode(drawerLockMode)
+        }
+    }
 
+    private fun receiveEvents() {
+        EventBus.receive<BaseEvent>(lifecycleScope) { event ->
+            when (event) {
+                is OnViewCreated -> closeNavigationDrawer()
+                is LoadInfoComplete -> popFragment()
+                is AddScheduleComplete -> popFragment()
+                is NavigationDrawerEvent.OnAddSchedule -> openAddSchedule()
+                is NavigationDrawerEvent.OnScheduleClick -> {
+                }
+                is NavigationDrawerEvent.OnTitleClick -> {
+                }
+                is NavigationDrawerEvent.OnOpenSettings -> {
+                }
+                is NavigationDrawerEvent.OnScheduleLongClick -> {
+                }
+                is NavigationDrawerEvent.OnTitleLongClick -> {
                 }
             }
         }
     }
 
-    private fun getHomeFragment() = StartFragment.newInstance()
-
-    private fun openScheduleFragment(schedule: Schedule) {
-
+    private fun openLoadInfo() {
+        navController.navigate(R.id.loadInfoDestination)
     }
 
-    private fun openStartFragment() {
-        replaceFragment(StartFragment.newInstance())
+    private fun openAddSchedule() {
+        navController.navigate(StartFragmentDirections.addScheduleAction())
     }
 
-    private fun replaceFragment(
-            fragment: BaseFragment,
-            isAddToBackStack: Boolean = true
-    ) {
-        childFragmentManager.commit {
-            replace(navigationFragmentHost.id, fragment, fragment.thisTag)
-            if (isAddToBackStack) addToBackStack(fragment.thisTag)
-        }
-    }
-
-    private inline fun doOnNavigationDrawerClosed(crossinline action: () -> Unit) {
-        if (isNavigationDrawerOpen) {
-            navigationDrawerParentView.addDrawerListener(object : DefaultDrawerListener {
-                override fun onDrawerClosed(drawerView: View) {
-                    action()
-                    navigationDrawerParentView.removeDrawerListener(this)
-                }
-            })
-            closeNavigationDrawer()
-        } else {
-            action()
-        }
-    }
+    private fun popFragment() = navController.popBackStack()
 
     private fun closeNavigationDrawer() {
-        navigationDrawerParentView.closeDrawers()
+        navigationDrawerParentView.post { navigationDrawerParentView.closeDrawers() }
     }
 }

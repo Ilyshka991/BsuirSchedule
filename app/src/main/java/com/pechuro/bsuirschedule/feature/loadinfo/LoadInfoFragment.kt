@@ -12,11 +12,6 @@ import kotlinx.android.synthetic.main.fragment_info_load.*
 
 class LoadInfoFragment : BaseFragment() {
 
-    companion object {
-
-        fun newInstance() = LoadInfoFragment()
-    }
-
     override val layoutId: Int
         get() = R.layout.fragment_info_load
 
@@ -47,7 +42,7 @@ class LoadInfoFragment : BaseFragment() {
     }
 
     private fun handleComplete() {
-        EventBus.send(LoadInfoEvent.OnComplete)
+        EventBus.send(LoadInfoComplete)
     }
 
     private fun handleError() {

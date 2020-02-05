@@ -11,11 +11,14 @@
         android:layout_height="match_parent"
         tools:context=".feature.navigation.NavigationActivity">
 
-        <androidx.fragment.app.FragmentContainerView
+        <fragment
             android:id="@+id/navigationFragmentHost"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="?attr/actionBarSize" />
+            app:defaultNavHost="true"
+            app:layout_anchor="@+id/bottomBarParentView"
+            app:navGraph="@navigation/navigation_graph" />
 
         <com.pechuro.bsuirschedule.widget.BottomAppBar
             android:id="@+id/bottomBarParentView"

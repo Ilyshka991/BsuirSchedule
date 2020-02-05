@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.pechuro.bsuirschedule.common.ViewModelFactory
 import com.pechuro.bsuirschedule.di.annotations.ViewModelKey
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel
-import com.pechuro.bsuirschedule.feature.flow.FlowViewModel
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoViewModel
+import com.pechuro.bsuirschedule.feature.navigation.NavigationViewModel
 import com.pechuro.bsuirschedule.feature.navigation.drawer.NavigationDrawerViewModel
 import dagger.Binds
 import dagger.Module
@@ -35,6 +35,6 @@ interface AppViewModelsModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(FlowViewModel::class)
-    fun flow(viewModel: FlowViewModel): ViewModel
+    @ViewModelKey(NavigationViewModel::class)
+    fun navigation(viewModel: NavigationViewModel): ViewModel
 }
