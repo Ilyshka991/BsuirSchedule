@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.pechuro.bsuirschedule.common.ViewModelFactory
 import com.pechuro.bsuirschedule.di.annotations.ViewModelKey
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel
-import com.pechuro.bsuirschedule.feature.navigation.NavigationViewModel
+import com.pechuro.bsuirschedule.feature.flow.FlowViewModel
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoViewModel
-import com.pechuro.bsuirschedule.feature.navigation.drawer.NavigationDrawerViewModel
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetViewModel
 import com.pechuro.bsuirschedule.viewmodels.EspressoInfoLoadViewModel
 import dagger.Binds
 import dagger.Module
@@ -26,8 +26,8 @@ interface AppViewModelsEspressoModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(NavigationDrawerViewModel::class)
-    fun navigationDrawer(viewModel: NavigationDrawerViewModel): ViewModel
+    @ViewModelKey(NavigationSheetViewModel::class)
+    fun navigationDrawer(viewModel: NavigationSheetViewModel): ViewModel
 
     @Binds
     @IntoMap
@@ -36,6 +36,6 @@ interface AppViewModelsEspressoModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(NavigationViewModel::class)
-    fun flow(viewModel: NavigationViewModel): ViewModel
+    @ViewModelKey(FlowViewModel::class)
+    fun flow(viewModel: FlowViewModel): ViewModel
 }

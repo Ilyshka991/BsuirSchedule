@@ -1,7 +1,7 @@
 package com.pechuro.bsuirschedule.di.component
 
 import com.pechuro.bsuirschedule.App
-import com.pechuro.bsuirschedule.common.base.BaseDialog
+import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.di.annotations.AppScope
 import com.pechuro.bsuirschedule.di.module.*
@@ -23,7 +23,7 @@ interface AppComponent {
 
     fun inject(fragment: BaseFragment)
 
-    fun inject(dialog: BaseDialog)
+    fun inject(dialog: BaseBottomSheetDialog)
 
     @Component.Builder
     interface Builder {

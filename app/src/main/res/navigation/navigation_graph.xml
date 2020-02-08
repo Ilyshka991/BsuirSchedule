@@ -32,4 +32,10 @@
         tools:layout="@layout/fragment_add_schedule"
         android:name="com.pechuro.bsuirschedule.feature.addschedule.AddScheduleFragmentContainer"
         android:label="AddScheduleFragmentContainer" />
+
+    <dialog
+        android:id="@+id/navigationSheetDestination"
+        tools:layout="@layout/fragment_navigation_sheet"
+        android:name="com.pechuro.bsuirschedule.feature.navigation.NavigationSheet"
+        android:label="NavigationSheet" />
 </navigation>

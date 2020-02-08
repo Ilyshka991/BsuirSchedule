@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.navigation.drawer
+package com.pechuro.bsuirschedule.feature.navigation
 
 import androidx.lifecycle.asLiveData
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class NavigationDrawerViewModel @Inject constructor(
+class NavigationSheetViewModel @Inject constructor(
         private val getAllSchedules: GetAllSchedules
 ) : BaseViewModel() {
 
@@ -22,26 +22,26 @@ class NavigationDrawerViewModel @Inject constructor(
         }
     }
             .map { allScheduleList ->
-                val resultList = mutableListOf<NavigationDrawerItemInformation>()
+                val resultList = mutableListOf<NavigationSheetItemInformation>()
 
                 if (allScheduleList.isEmpty()) {
-                    resultList += NavigationDrawerItemInformation.Empty
+                    resultList += NavigationSheetItemInformation.Empty
                     return@map resultList
                 }
 
                 val allClasses = allScheduleList
                         .filter { it is Schedule.GroupClasses || it is Schedule.EmployeeClasses }
                 if (allClasses.isNotEmpty()) {
-                    resultList += NavigationDrawerItemInformation.Title(ScheduleType.CLASSES)
-                    resultList += allClasses.map { NavigationDrawerItemInformation.Content(it) }
-                    resultList += NavigationDrawerItemInformation.Divider
+                    resultList += NavigationSheetItemInformation.Title(ScheduleType.CLASSES)
+                    resultList += allClasses.map { NavigationSheetItemInformation.Content(it) }
+                    resultList += NavigationSheetItemInformation.Divider
                 }
 
                 val allExams = allScheduleList
                         .filter { it is Schedule.GroupExams || it is Schedule.EmployeeExams }
                 if (allExams.isNotEmpty()) {
-                    resultList += NavigationDrawerItemInformation.Title(ScheduleType.EXAMS)
-                    resultList += allExams.map { NavigationDrawerItemInformation.Content(it) }
+                    resultList += NavigationSheetItemInformation.Title(ScheduleType.EXAMS)
+                    resultList += allExams.map { NavigationSheetItemInformation.Content(it) }
                 }
                 resultList.toList()
             }
