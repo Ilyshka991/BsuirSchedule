@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/navigationFragmentHost"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:layout_anchor="@+id/bottomBarParentView"
+        app:navGraph="@navigation/navigation_graph" />
+
+    <com.pechuro.bsuirschedule.widget.BottomAppBar
+        android:id="@+id/bottomBarParentView"
+        style="@style/Widget.MaterialComponents.BottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="bottom"
+        app:backgroundTint="@android:color/darker_gray"
+        app:contentInsetStartWithNavigation="0dp"
+        app:fabAlignmentMode="end"
+        app:fabCradleRoundedCornerRadius="16dp">
+
+        <Button
+            android:id="@+id/bottomBarMenuButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:icon="@drawable/ic_menu" />
+    </com.pechuro.bsuirschedule.widget.BottomAppBar>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

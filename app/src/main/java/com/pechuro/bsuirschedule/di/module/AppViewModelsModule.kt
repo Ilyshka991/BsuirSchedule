@@ -6,8 +6,8 @@ import com.pechuro.bsuirschedule.common.ViewModelFactory
 import com.pechuro.bsuirschedule.di.annotations.ViewModelKey
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoViewModel
-import com.pechuro.bsuirschedule.feature.navigation.NavigationViewModel
-import com.pechuro.bsuirschedule.feature.navigation.drawer.NavigationDrawerViewModel
+import com.pechuro.bsuirschedule.feature.flow.FlowViewModel
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -25,8 +25,8 @@ interface AppViewModelsModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(NavigationDrawerViewModel::class)
-    fun navigationDrawer(viewModel: NavigationDrawerViewModel): ViewModel
+    @ViewModelKey(NavigationSheetViewModel::class)
+    fun navigationDrawer(viewModel: NavigationSheetViewModel): ViewModel
 
     @Binds
     @IntoMap
@@ -35,6 +35,6 @@ interface AppViewModelsModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(NavigationViewModel::class)
-    fun navigation(viewModel: NavigationViewModel): ViewModel
+    @ViewModelKey(FlowViewModel::class)
+    fun navigation(viewModel: FlowViewModel): ViewModel
 }

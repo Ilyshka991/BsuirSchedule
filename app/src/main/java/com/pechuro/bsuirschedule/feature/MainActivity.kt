@@ -6,7 +6,7 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.ext.commit
 import com.pechuro.bsuirschedule.ext.currentFragment
 import com.pechuro.bsuirschedule.ext.thisTag
-import com.pechuro.bsuirschedule.feature.navigation.NavigationFragment
+import com.pechuro.bsuirschedule.feature.flow.FlowFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showNavigationFragment() {
         supportFragmentManager.commit {
-            val fragment = NavigationFragment()
+            val fragment = FlowFragment()
             replace(activityHostFragment.id, fragment, fragment.thisTag)
         }
     }

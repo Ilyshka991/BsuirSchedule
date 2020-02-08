@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.navigation
+package com.pechuro.bsuirschedule.feature.flow
 
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
@@ -7,7 +7,7 @@ import com.pechuro.bsuirschedule.domain.interactor.CheckInfo
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
-class NavigationViewModel @Inject constructor(
+class FlowViewModel @Inject constructor(
         private val checkInfo: CheckInfo
 ) : BaseViewModel() {
 

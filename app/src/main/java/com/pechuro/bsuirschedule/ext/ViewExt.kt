@@ -4,7 +4,7 @@ import android.view.View
 import com.pechuro.bsuirschedule.common.ClickInterval
 import com.pechuro.bsuirschedule.common.OneFirePerIntervalClickListener
 
-inline fun View.setOneFirePerIntervalClickListener(
+inline fun View.setSafeClickListener(
         interval: ClickInterval = ClickInterval.NORMAL,
         crossinline onClick: (View) -> Unit
 ) {

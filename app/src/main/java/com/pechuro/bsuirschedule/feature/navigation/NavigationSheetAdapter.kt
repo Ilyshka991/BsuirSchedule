@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.navigation.drawer
+package com.pechuro.bsuirschedule.feature.navigation
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,18 +10,18 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
-import com.pechuro.bsuirschedule.feature.navigation.drawer.NavigationDrawerItemInformation.*
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.*
 
-private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NavigationDrawerItemInformation>() {
+private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NavigationSheetItemInformation>() {
 
     override fun areItemsTheSame(
-            oldItem: NavigationDrawerItemInformation,
-            newItem: NavigationDrawerItemInformation
+            oldItem: NavigationSheetItemInformation,
+            newItem: NavigationSheetItemInformation
     ) = oldItem === newItem
 
     override fun areContentsTheSame(
-            oldItem: NavigationDrawerItemInformation,
-            newItem: NavigationDrawerItemInformation
+            oldItem: NavigationSheetItemInformation,
+            newItem: NavigationSheetItemInformation
     ) = when {
         oldItem is Empty && newItem is Empty -> true
         oldItem is Divider && newItem is Divider -> true
@@ -32,7 +32,7 @@ private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NavigationDrawerItemI
 
 }
 
-class NavigationDrawerAdapter : ListAdapter<NavigationDrawerItemInformation, BaseViewHolder<NavigationDrawerItemInformation>>(DIFF_CALLBACK) {
+class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, BaseViewHolder<NavigationSheetItemInformation>>(DIFF_CALLBACK) {
 
     interface ActionCallback {
 
@@ -67,23 +67,23 @@ class NavigationDrawerAdapter : ListAdapter<NavigationDrawerItemInformation, Bas
         true
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<NavigationDrawerItemInformation> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<NavigationSheetItemInformation> {
         val layoutInflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            NavigationDrawerItemInformation.ID_DIVIDER -> {
-                val view = layoutInflater.inflate(R.layout.item_navigation_drawer_divider, parent, false)
+            NavigationSheetItemInformation.ID_DIVIDER -> {
+                val view = layoutInflater.inflate(R.layout.item_navigation_sheet_divider, parent, false)
                 DividerViewHolder(view)
             }
-            NavigationDrawerItemInformation.ID_TITLE -> {
-                val view = layoutInflater.inflate(R.layout.item_navigation_drawer_title, parent, false)
+            NavigationSheetItemInformation.ID_TITLE -> {
+                val view = layoutInflater.inflate(R.layout.item_navigation_sheet_title, parent, false)
                 TitleViewHolder(view)
             }
-            NavigationDrawerItemInformation.ID_CONTENT -> {
-                val view = layoutInflater.inflate(R.layout.item_navigation_drawer_content, parent, false)
+            NavigationSheetItemInformation.ID_CONTENT -> {
+                val view = layoutInflater.inflate(R.layout.item_navigation_sheet_content, parent, false)
                 ContentViewHolder(view)
             }
-            NavigationDrawerItemInformation.ID_EMPTY -> {
-                val view = layoutInflater.inflate(R.layout.item_navigation_drawer_empty, parent, false)
+            NavigationSheetItemInformation.ID_EMPTY -> {
+                val view = layoutInflater.inflate(R.layout.item_navigation_sheet_empty, parent, false)
                 EmptyViewHolder(view)
             }
             else -> throw IllegalStateException("Not supported type: $viewType")
@@ -93,23 +93,23 @@ class NavigationDrawerAdapter : ListAdapter<NavigationDrawerItemInformation, Bas
     override fun getItemViewType(position: Int) = getItem(position).id
 
     override fun onBindViewHolder(
-            holder: BaseViewHolder<NavigationDrawerItemInformation>,
+            holder: BaseViewHolder<NavigationSheetItemInformation>,
             position: Int
     ) = holder.onBind(getItem(position))
 
-    private class DividerViewHolder(view: View) : BaseViewHolder<NavigationDrawerItemInformation>(view) {
+    private class DividerViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(view) {
 
-        override fun onBind(data: NavigationDrawerItemInformation) {}
+        override fun onBind(data: NavigationSheetItemInformation) {}
     }
 
-    private class EmptyViewHolder(view: View) : BaseViewHolder<NavigationDrawerItemInformation>(view) {
+    private class EmptyViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(view) {
 
-        override fun onBind(data: NavigationDrawerItemInformation) {}
+        override fun onBind(data: NavigationSheetItemInformation) {}
     }
 
-    private inner class TitleViewHolder(view: View) : BaseViewHolder<NavigationDrawerItemInformation>(view) {
+    private inner class TitleViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(view) {
 
-        override fun onBind(data: NavigationDrawerItemInformation) {
+        override fun onBind(data: NavigationSheetItemInformation) {
             if (data !is Title) return
             val titleRes = when (data.scheduleType) {
                 ScheduleType.CLASSES -> R.string.msg_classes
@@ -123,9 +123,9 @@ class NavigationDrawerAdapter : ListAdapter<NavigationDrawerItemInformation, Bas
         }
     }
 
-    private inner class ContentViewHolder(view: View) : BaseViewHolder<NavigationDrawerItemInformation>(view) {
+    private inner class ContentViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(view) {
 
-        override fun onBind(data: NavigationDrawerItemInformation) {
+        override fun onBind(data: NavigationSheetItemInformation) {
             if (data !is Content) return
             (containerView as TextView).apply {
                 text = data.schedule.name

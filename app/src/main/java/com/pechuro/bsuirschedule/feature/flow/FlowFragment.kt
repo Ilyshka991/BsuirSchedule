@@ -1,9 +1,8 @@
-package com.pechuro.bsuirschedule.feature.navigation
+package com.pechuro.bsuirschedule.feature.flow
 
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -11,39 +10,34 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.BaseEvent
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
+import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleComplete
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoComplete
-import com.pechuro.bsuirschedule.feature.navigation.drawer.NavigationDrawerEvent
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
 import com.pechuro.bsuirschedule.feature.start.StartFragmentDirections
-import kotlinx.android.synthetic.main.fragment_navigation.*
+import kotlinx.android.synthetic.main.fragment_flow.*
 
-class NavigationFragment : BaseFragment() {
+class FlowFragment : BaseFragment() {
 
-    override val layoutId: Int = R.layout.fragment_navigation
+    override val layoutId: Int = R.layout.fragment_flow
 
     private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
-        initViewModel(NavigationViewModel::class)
+        initViewModel(FlowViewModel::class)
     }
 
     private val navController: NavController by lazy(LazyThreadSafetyMode.NONE) {
         Navigation.findNavController(requireActivity(), R.id.navigationFragmentHost)
     }
 
-    private val isNavigationDrawerOpen: Boolean
-        get() = navigationDrawerParentView.isDrawerOpen(navigationDrawerView)
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initNavigation()
-        receiveEvents()
         if (!viewModel.isInfoLoaded()) openLoadInfo()
+        initViews()
+        receiveEvents()
     }
 
     override fun onBackPressed(): Boolean {
-        if (isNavigationDrawerOpen) {
-            closeNavigationDrawer()
-            return true
-        }
         when (navController.currentDestination?.id) {
             R.id.loadInfoDestination -> return false
         }
@@ -58,36 +52,38 @@ class NavigationFragment : BaseFragment() {
                 R.id.loadInfoDestination -> false
                 else -> true
             }
-            bottomBarBackFab.isVisible = isControlsVisible
             bottomBarParentView.isVisible = isControlsVisible
-            val drawerLockMode = if (isControlsVisible) {
-                DrawerLayout.LOCK_MODE_UNLOCKED
-            } else {
-                DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-            }
-            navigationDrawerParentView.setDrawerLockMode(drawerLockMode)
+        }
+    }
+
+    private fun initViews() {
+        bottomBarMenuButton.setSafeClickListener {
+            openNavigationSheet()
         }
     }
 
     private fun receiveEvents() {
         EventBus.receive<BaseEvent>(lifecycleScope) { event ->
             when (event) {
-                is OnViewCreated -> closeNavigationDrawer()
                 is LoadInfoComplete -> popFragment()
                 is AddScheduleComplete -> popFragment()
-                is NavigationDrawerEvent.OnAddSchedule -> openAddSchedule()
-                is NavigationDrawerEvent.OnScheduleClick -> {
+                is NavigationSheetEvent.OnAddSchedule -> openAddSchedule()
+                is NavigationSheetEvent.OnScheduleClick -> {
                 }
-                is NavigationDrawerEvent.OnTitleClick -> {
+                is NavigationSheetEvent.OnTitleClick -> {
                 }
-                is NavigationDrawerEvent.OnOpenSettings -> {
+                is NavigationSheetEvent.OnOpenSettings -> {
                 }
-                is NavigationDrawerEvent.OnScheduleLongClick -> {
+                is NavigationSheetEvent.OnScheduleLongClick -> {
                 }
-                is NavigationDrawerEvent.OnTitleLongClick -> {
+                is NavigationSheetEvent.OnTitleLongClick -> {
                 }
             }
         }
+    }
+
+    private fun openNavigationSheet() {
+        navController.navigate(R.id.navigationSheetDestination)
     }
 
     private fun openLoadInfo() {
@@ -95,12 +91,9 @@ class NavigationFragment : BaseFragment() {
     }
 
     private fun openAddSchedule() {
+        popFragment()
         navController.navigate(StartFragmentDirections.addScheduleAction())
     }
 
     private fun popFragment() = navController.popBackStack()
-
-    private fun closeNavigationDrawer() {
-        navigationDrawerParentView.post { navigationDrawerParentView.closeDrawers() }
-    }
 }

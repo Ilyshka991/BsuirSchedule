@@ -1,5 +1,6 @@
 package com.pechuro.bsuirschedule.common.base
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,14 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.annotation.LayoutRes
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.pechuro.bsuirschedule.ext.app
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-abstract class BaseDialog : DialogFragment() {
+abstract class BaseBottomSheetDialog : BottomSheetDialogFragment() {
 
     @Inject
     protected lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -27,14 +28,18 @@ abstract class BaseDialog : DialogFragment() {
         super.onAttach(context)
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState).apply {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+        }
+    }
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(layoutId, container, false)
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        return view
+        return inflater.inflate(layoutId, container, false)
     }
 
     protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>, shared: Boolean = false): T {
