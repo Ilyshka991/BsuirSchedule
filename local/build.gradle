@@ -28,8 +28,8 @@ android {
 
 dependencies {
     implementation kotlin
-    implementation coroutines.values()
+    implementation coroutinesDependencies.values()
 
-    implementation room.values()
-    kapt roomProcessor.values()
+    implementation roomDependencies.values()
+    kapt roomProcessor
 }

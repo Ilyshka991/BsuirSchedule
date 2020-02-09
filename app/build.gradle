@@ -23,7 +23,7 @@ android {
         versionCode configuration.versionCode
         versionName configuration.versionName
         testInstrumentationRunner configuration.androidJUnitRunner
-        multiDexEnabled true
+        multiDexEnabled configuration.multiDexEnabled
     }
 
     signingConfigs {
@@ -54,6 +54,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
 }
 
 androidExtensions {
@@ -62,26 +66,29 @@ androidExtensions {
 
 dependencies {
     implementation kotlin
-    implementation coroutines.values()
+    implementation coroutinesDependencies.values()
 
     implementation androidFrameworkDependencies.values()
+    implementation androidViewDependencies.values()
+
     implementation archComponentsDependencies.values()
-    kapt archComponentsProcessorDependencies.values()
+    kapt archComponentsProcessor
+
     implementation firebaseDependencies.values()
 
     androidTestImplementation androidTestDependencies.values()
     testImplementation testDependencies.values()
-    kaptAndroidTest daggerProcessorDependencies.values()
+
+    kaptAndroidTest daggerProcessor
 
     implementation ktxDependencies.values()
+    implementation glide
 
-    implementation daggerDependencies.values()
-    kapt daggerProcessorDependencies.values()
+    implementation dagger
+    kapt daggerProcessor
 
-    implementation glide.values()
-
-    implementation room.values()
-    kapt roomProcessor.values()
+    implementation roomDependencies.values()
+    kapt roomProcessor
 
     implementation networkDependencies.values()
 

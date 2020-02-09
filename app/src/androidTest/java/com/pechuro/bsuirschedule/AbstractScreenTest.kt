@@ -41,4 +41,3 @@ abstract class AbstractScreenTest {
         IdlingRegistry.getInstance().unregister(app.idlingResource)
     }
 }
-
