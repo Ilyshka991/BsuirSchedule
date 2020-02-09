@@ -31,6 +31,11 @@ class AddScheduleFragmentContainer : BaseFragment() {
     }
 
     private fun initView() {
+        addScheduleContainerToolbar.apply {
+            setNavigationOnClickListener {
+                onComplete()
+            }
+        }
         addScheduleContainerViewPager.apply {
             adapter = pagerAdapter
             layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT

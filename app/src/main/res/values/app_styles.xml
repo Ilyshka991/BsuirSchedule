@@ -4,6 +4,7 @@
         <item name="colorPrimary">?attr/primaryColor</item>
         <item name="colorPrimaryDark">?attr/primaryDarkColor</item>
         <item name="colorAccent">?attr/accentColor</item>
+        <item name="colorControlHighlight">?attr/rippleColor</item>
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -18,11 +19,14 @@
         <item name="accentColor">@color/pink_600</item>
 
         <item name="backgroundColor">@color/white</item>
+        <item name="rippleColor">@color/grey_300</item>
 
         <item name="buttonTextColor">@color/grey_600</item>
-        <item name="buttonRippleColor">@color/grey_300</item>
 
-        <item name="textMessage">@color/grey_600</item>
+        <item name="textDefaultColor">@color/grey_600</item>
+        <item name="titleColor">@color/grey_700</item>
+        <item name="textSelectedColor">?attr/textDefaultColor</item>
+        <item name="textUnselectedColor">@color/grey_400</item>
     </style>
 
     <style name="SplashTheme" parent="AppTheme">

@@ -5,18 +5,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/addScheduleContainerToolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:title="@string/title_activity_add_schedule" />
+        android:layout_height="wrap_content"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="@string/title_activity_add_schedule"
+        app:titleTextAppearance="@style/TitleTextAppearance"
+        app:titleTextColor="?attr/titleColor" />
 
-    <com.pechuro.bsuirschedule.widget.TabLayout
+    <com.pechuro.bsuirschedule.widget.ClickControlTabLayout
         android:id="@+id/addScheduleContainerTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabMode="fixed" />
+        app:tabIndicatorColor="?attr/titleColor"
+        app:tabMode="fixed"
+        app:tabRippleColor="?attr/rippleColor"
+        app:tabTextAppearance="@style/TabTextAppearance"
+        app:tabTextColor="@color/tab_color" />
 
-    <com.pechuro.bsuirschedule.widget.ViewPager
+    <com.pechuro.bsuirschedule.widget.SwipeControlViewPager
         android:id="@+id/addScheduleContainerViewPager"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />

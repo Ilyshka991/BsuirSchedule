@@ -1,17 +1,28 @@
 <resources>
 
     <!-- Button styles -->
+
     <style name="TextButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textSize">18sp</item>
         <item name="android:padding">8dp</item>
         <item name="android:textColor">?attr/buttonTextColor</item>
-        <item name="rippleColor">?attr/buttonRippleColor</item>
+        <item name="rippleColor">?attr/rippleColor</item>
     </style>
 
     <!-- Text styles -->
+
     <style name="MessageText" parent="Widget.MaterialComponents.TextView">
         <item name="android:gravity">center</item>
-        <item name="android:textColor">?attr/textMessage</item>
+        <item name="android:textColor">?attr/textDefaultColor</item>
         <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="TitleTextAppearance">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TabTextAppearance">
+        <item name="android:textSize">20sp</item>
     </style>
 </resources>

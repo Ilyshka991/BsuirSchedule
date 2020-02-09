@@ -7,7 +7,9 @@
     <attr name="backgroundColor" format="color" />
 
     <attr name="buttonTextColor" format="color" />
-    <attr name="buttonRippleColor" format="color" />
 
-    <attr name="textMessage" format="color" />
+    <attr name="textDefaultColor" format="color" />
+    <attr name="titleColor" format="color" />
+    <attr name="textSelectedColor" format="color" />
+    <attr name="textUnselectedColor" format="color" />
 </resources>

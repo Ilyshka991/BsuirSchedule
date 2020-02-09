@@ -20,7 +20,7 @@
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/animation_loader" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/loaderMessageText"
         style="@style/MessageText"
         android:layout_width="0dp"

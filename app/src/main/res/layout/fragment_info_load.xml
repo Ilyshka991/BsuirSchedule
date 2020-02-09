@@ -19,7 +19,7 @@
         android:visibility="gone"
         tools:visibility="visible">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/infoLoadErrorText"
             style="@style/MessageText"
             android:layout_width="wrap_content"
@@ -34,7 +34,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/infoLoadErrorButton"
             style="@style/TextButton"
             android:layout_width="wrap_content"
