@@ -1,10 +1,12 @@
 package com.pechuro.bsuirschedule.feature.addschedule.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.text.InputType
 import android.view.View
+import android.view.WindowManager
+import androidx.core.animation.doOnEnd
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
@@ -45,10 +47,30 @@ class AddScheduleFragment : BaseFragment() {
         AddScheduleSuggestionsAdapter()
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        activity?.window?.clearFlags(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
         observeData()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        context?.showKeyboard(addScheduleNameInput)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        context?.hideKeyboard(addScheduleNameInput.windowToken)
     }
 
     private fun initView() {
@@ -74,11 +96,12 @@ class AddScheduleFragment : BaseFragment() {
                     addScheduleSuggestionsRecyclerView.tag = it
                     loadSchedule(it)
                 }
+                setHasStableIds(true)
             }
-            itemAnimator = null
+            setHasFixedSize(true)
         }
 
-        addScheduleRetryButton.setOnClickListener {
+        addScheduleRetryButton.setSafeClickListener {
             val info = addScheduleSuggestionsRecyclerView.tag as? SuggestionItemInformation
             if (info != null) {
                 loadSchedule(info)
@@ -87,7 +110,7 @@ class AddScheduleFragment : BaseFragment() {
             }
         }
 
-        addScheduleCancelButton.setOnClickListener {
+        addScheduleCancelButton.setSafeClickListener {
             viewModel.cancel()
         }
     }
@@ -97,22 +120,26 @@ class AddScheduleFragment : BaseFragment() {
             when (it) {
                 is State.Idle -> {
                     addScheduleSuggestionsRecyclerView.tag = null
-                    addScheduleProgressBar.isVisible = false
-                    addScheduleErrorParentView.isVisible = false
-                    addScheduleParamsParentView.isVisibleOrInvisible = true
+                    addScheduleProgressBar.setVisibleWithAlpha(false)
+                    addScheduleErrorParentView.setVisibleWithAlpha(false)
+                    addScheduleParamsParentView.setVisibleWithAlpha(true)
+                            .doOnEnd {
+                                context?.showKeyboard(addScheduleNameInput)
+                            }
                     addScheduleNameInput.requestFocus()
-                    context?.showKeyboard(addScheduleNameInput)
                 }
                 is State.Loading -> {
-                    addScheduleProgressBar.isVisible = true
-                    addScheduleErrorParentView.isVisible = false
-                    addScheduleParamsParentView.isVisibleOrInvisible = false
                     context?.hideKeyboard(addScheduleNameInput.windowToken)
+                    addScheduleErrorParentView.setVisibleWithAlpha(false)
+                    addScheduleParamsParentView.setVisibleWithAlpha(false)
+                            .doOnEnd {
+                                addScheduleProgressBar.setVisibleWithAlpha(true)
+                            }
                 }
                 is State.Error -> {
-                    addScheduleProgressBar.isVisible = false
-                    addScheduleErrorParentView.isVisible = true
-                    addScheduleParamsParentView.isVisibleOrInvisible = false
+                    addScheduleProgressBar.setVisibleWithAlpha(false)
+                    addScheduleErrorParentView.setVisibleWithAlpha(true)
+                    addScheduleParamsParentView.setVisibleWithAlpha(false)
                 }
             }
         }

@@ -7,7 +7,7 @@ import com.google.android.material.R
 import com.google.android.material.tabs.TabLayout
 
 
-class TabLayout @JvmOverloads constructor(
+class ClickControlTabLayout @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = R.attr.tabStyle

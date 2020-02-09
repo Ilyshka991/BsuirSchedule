@@ -16,10 +16,10 @@ class AddScheduleContainerPagerAdapter(
 
     enum class FragmentType(@StringRes val titleRes: Int) {
 
-        STUDENT(R.string.add_dialog_tab_item_students) {
+        STUDENT(R.string.add_schedule_tab_students) {
             override fun provideFragment() = AddScheduleFragment.newInstance(this)
         },
-        EMPLOYEE(R.string.add_dialog_tab_item_employees) {
+        EMPLOYEE(R.string.add_schedule_tab_employees) {
             override fun provideFragment() = AddScheduleFragment.newInstance(this)
         };
 

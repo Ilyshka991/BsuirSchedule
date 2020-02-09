@@ -1,0 +1,42 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">?attr/primaryColor</item>
+        <item name="colorPrimaryDark">?attr/primaryDarkColor</item>
+        <item name="colorAccent">?attr/accentColor</item>
+        <item name="colorControlHighlight">?attr/rippleColor</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="android:background">@color/transparent</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogStyle</item>
+    </style>
+
+    <style name="LightTheme" parent="AppTheme">
+        <item name="primaryColor">@color/grey_400</item>
+        <item name="primaryDarkColor">@color/grey_600</item>
+        <item name="accentColor">@color/pink_600</item>
+
+        <item name="backgroundColor">@color/white</item>
+        <item name="rippleColor">@color/grey_300</item>
+
+        <item name="buttonDefaultTextColor">@color/grey_600</item>
+        <item name="buttonCheckedColor">@color/grey_300</item>
+        <item name="buttonUncheckedColor">@color/grey_100</item>
+
+        <item name="textDefaultColor">@color/grey_600</item>
+        <item name="titleColor">@color/grey_700</item>
+        <item name="textSelectedColor">?attr/textDefaultColor</item>
+        <item name="textUnselectedColor">@color/grey_400</item>
+    </style>
+
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:background">@drawable/background_splash</item>
+    </style>
+
+    <style name="BottomSheetDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:statusBarColor" tools:targetApi="21">@color/transparent</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+</resources>

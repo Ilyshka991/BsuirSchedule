@@ -12,11 +12,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme_NoActionBar)
+        setTheme(R.style.LightTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
-            showNavigationFragment()
+            showFlowFragment()
         }
     }
 
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         super.onBackPressed()
     }
 
-    private fun showNavigationFragment() {
+    private fun showFlowFragment() {
         supportFragmentManager.commit {
             val fragment = FlowFragment()
             replace(activityHostFragment.id, fragment, fragment.thisTag)

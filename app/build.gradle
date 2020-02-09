@@ -83,6 +83,7 @@ dependencies {
 
     implementation ktxDependencies.values()
     implementation glide
+    implementation lottie
 
     implementation dagger
     kapt daggerProcessor

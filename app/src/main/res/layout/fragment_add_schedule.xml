@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clipToPadding="false">
 
-    <ProgressBar
+    <com.pechuro.bsuirschedule.widget.LoaderView
         android:id="@+id/addScheduleProgressBar"
-        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
         tools:visibility="gone" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,10 +20,16 @@
         android:layout_gravity="center"
         android:paddingLeft="16dp"
         android:paddingTop="16dp"
-        android:paddingRight="16dp">
+        android:paddingRight="16dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="gone">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/addScheduleLoadingErrorText"
+            style="@style/DefaultText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -32,32 +38,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/addScheduleCancelButton"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:text="@string/action_cancel"
+            app:layout_constraintBaseline_toBaselineOf="@+id/addScheduleRetryButton"
             app:layout_constraintEnd_toStartOf="@+id/addScheduleRetryButton"
-            app:layout_constraintStart_toStartOf="@+id/addScheduleLoadingErrorText"
-            app:layout_constraintTop_toTopOf="@+id/addScheduleRetryButton" />
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/addScheduleRetryButton"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="32dp"
             android:text="@string/action_retry"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/addScheduleLoadingErrorText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/addScheduleCancelButton"
             app:layout_constraintTop_toBottomOf="@+id/addScheduleLoadingErrorText" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -65,7 +70,9 @@
         android:id="@+id/addScheduleParamsParentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="16dp">
+        android:paddingTop="16dp"
+        android:visibility="visible"
+        tools:visibility="visible">
 
         <LinearLayout
             android:id="@+id/addScheduleTypesParentView"
@@ -73,63 +80,73 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
-                android:text="@string/title_type"
-                android:textSize="18sp" />
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/DefaultText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/add_schedule_msg_type"
+                android:textSize="20sp" />
 
             <com.pechuro.bsuirschedule.widget.MultipleSelectionChipGroup
                 android:id="@+id/addScheduleChipGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
                 app:chipSpacingHorizontal="8dp"
                 app:singleLine="true">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/addScheduleChipClasses"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checkable="true"
+                    style="@style/ChipStyle"
                     android:checked="true"
-                    android:text="@string/msg_classes" />
+                    android:text="@string/navigation_title_classes" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/addScheduleChipExams"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checkable="true"
-                    android:text="@string/msg_exams" />
+                    style="@style/ChipStyle"
+                    android:text="@string/navigation_title_exams" />
             </com.pechuro.bsuirschedule.widget.MultipleSelectionChipGroup>
-
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/addScheduleNameInput"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/addScheduleNameInputLayout"
+            style="@style/OutlinedTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/add_fragment_hint_enter_schedule"
+            android:layout_marginTop="16dp"
+            android:hint="@string/add_schedule_hint_enter_schedule"
             app:layout_constraintEnd_toEndOf="@+id/addScheduleTypesParentView"
             app:layout_constraintStart_toStartOf="@+id/addScheduleTypesParentView"
             app:layout_constraintTop_toBottomOf="@+id/addScheduleTypesParentView">
 
-            <requestFocus />
-        </EditText>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/addScheduleNameInput"
+                style="@style/TextInput"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <requestFocus />
+            </com.google.android.material.textfield.TextInputEditText>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/addScheduleSuggestionsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
+            android:clipToPadding="false"
+            android:overScrollMode="ifContentScrolls"
+            android:paddingBottom="16dp"
+            android:scrollbars="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/addScheduleTypesParentView"
             app:layout_constraintStart_toStartOf="@+id/addScheduleTypesParentView"
-            app:layout_constraintTop_toBottomOf="@+id/addScheduleNameInput" />
+            app:layout_constraintTop_toBottomOf="@+id/addScheduleNameInputLayout"
+            tools:listitem="@layout/item_suggestion_group" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

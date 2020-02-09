@@ -6,15 +6,15 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.navOptions
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.BaseEvent
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
-import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleComplete
-import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoComplete
+import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleCompleteEvent
+import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoCompleteEvent
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
-import com.pechuro.bsuirschedule.feature.start.StartFragmentDirections
 import kotlinx.android.synthetic.main.fragment_flow.*
 
 class FlowFragment : BaseFragment() {
@@ -27,6 +27,14 @@ class FlowFragment : BaseFragment() {
 
     private val navController: NavController by lazy(LazyThreadSafetyMode.NONE) {
         Navigation.findNavController(requireActivity(), R.id.navigationFragmentHost)
+    }
+    private val defaultNavOptions = navOptions {
+        anim {
+            enter = R.anim.fragment_open_enter
+            exit = R.anim.fragment_open_exit
+            popEnter = R.anim.fragment_close_enter
+            popExit = R.anim.fragment_close_exit
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,6 +54,7 @@ class FlowFragment : BaseFragment() {
     }
 
     private fun initNavigation() {
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val isControlsVisible = when (destination.id) {
                 R.id.addScheduleDestination -> false
@@ -65,8 +74,8 @@ class FlowFragment : BaseFragment() {
     private fun receiveEvents() {
         EventBus.receive<BaseEvent>(lifecycleScope) { event ->
             when (event) {
-                is LoadInfoComplete -> popFragment()
-                is AddScheduleComplete -> popFragment()
+                is LoadInfoCompleteEvent -> popFragment()
+                is AddScheduleCompleteEvent -> popFragment()
                 is NavigationSheetEvent.OnAddSchedule -> openAddSchedule()
                 is NavigationSheetEvent.OnScheduleClick -> {
                 }
@@ -87,12 +96,12 @@ class FlowFragment : BaseFragment() {
     }
 
     private fun openLoadInfo() {
-        navController.navigate(R.id.loadInfoDestination)
+        navController.navigate(R.id.loadInfoDestination, null, defaultNavOptions)
     }
 
     private fun openAddSchedule() {
         popFragment()
-        navController.navigate(StartFragmentDirections.addScheduleAction())
+        navController.navigate(R.id.addScheduleDestination, null, defaultNavOptions)
     }
 
     private fun popFragment() = navController.popBackStack()

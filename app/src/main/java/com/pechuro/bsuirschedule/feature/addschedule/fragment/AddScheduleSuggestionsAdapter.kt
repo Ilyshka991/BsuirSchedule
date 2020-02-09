@@ -10,7 +10,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
+import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation.Companion.TYPE_EMPLOYEE
+import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation.Companion.TYPE_EMPTY
 import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation.Companion.TYPE_GROUP
 import kotlinx.android.synthetic.main.item_suggestion_employee.*
 import kotlinx.android.synthetic.main.item_suggestion_group.*
@@ -32,6 +34,9 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<SuggestionItemInformation>() 
         oldItem is SuggestionItemInformation.GroupInfo && newItem is SuggestionItemInformation.GroupInfo -> {
             oldItem.group == newItem.group
         }
+        oldItem is SuggestionItemInformation.Empty && newItem is SuggestionItemInformation.Empty -> {
+            true
+        }
         else -> false
     }
 }
@@ -40,10 +45,9 @@ class AddScheduleSuggestionsAdapter : ListAdapter<SuggestionItemInformation, Bas
 
     var onItemClicked: (SuggestionItemInformation) -> Unit = {}
 
-    private val onClickListener = View.OnClickListener {
+    private val onClickListener: (View) -> Unit = {
         val info = it.tag as? SuggestionItemInformation
-                ?: return@OnClickListener
-        onItemClicked(info)
+        info?.let { onItemClicked(info) }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<SuggestionItemInformation> {
@@ -57,6 +61,10 @@ class AddScheduleSuggestionsAdapter : ListAdapter<SuggestionItemInformation, Bas
                 val view = layoutInflater.inflate(R.layout.item_suggestion_employee, parent, false)
                 EmployeeViewHolder(view)
             }
+            TYPE_EMPTY -> {
+                val view = layoutInflater.inflate(R.layout.item_suggestion_empty, parent, false)
+                EmptyViewHolder(view)
+            }
             else -> throw IllegalArgumentException("Not supported type: $viewType")
         }
     }
@@ -65,6 +73,12 @@ class AddScheduleSuggestionsAdapter : ListAdapter<SuggestionItemInformation, Bas
 
     override fun onBindViewHolder(holder: BaseViewHolder<SuggestionItemInformation>, position: Int) {
         holder.onBind(getItem(position))
+    }
+
+    override fun getItemId(position: Int) = when (val item = getItem(position)) {
+        is SuggestionItemInformation.GroupInfo -> item.group.id
+        is SuggestionItemInformation.EmployeeInfo -> item.employee.id
+        else -> -1
     }
 
     private inner class GroupViewHolder(view: View) : BaseViewHolder<SuggestionItemInformation>(view) {
@@ -77,11 +91,14 @@ class AddScheduleSuggestionsAdapter : ListAdapter<SuggestionItemInformation, Bas
                 suggestionGroupFacultyAbbreviation.text = faculty.abbreviation
                 suggestionGroupSpecialityAbbreviation.text = speciality.abbreviation
                 suggestionGroupEducationForm.text = speciality.educationForm.name
-                suggestionGroupCourse.text = course.toString()
+                suggestionGroupCourse.text = itemView.context.getString(
+                        R.string.add_schedule_msg_suggestion_group_course,
+                        course
+                )
             }
 
             itemView.tag = data
-            itemView.setOnClickListener(onClickListener)
+            itemView.setSafeClickListener(onClick = onClickListener)
         }
     }
 
@@ -95,12 +112,15 @@ class AddScheduleSuggestionsAdapter : ListAdapter<SuggestionItemInformation, Bas
                 suggestionEmployeeFirstName.text = firstName
                 suggestionEmployeeMiddleName.text = middleName
                 suggestionEmployeeLastName.text = lastName
-                suggestionEmployeeDepartmentAbbreviation.text = department.abbreviation
+                suggestionEmployeeDepartmentAbbreviation.text = itemView.context.getString(
+                        R.string.add_schedule_msg_suggestion_employee_department,
+                        department.abbreviation
+                )
                 suggestionEmployeeRank.text = rank
             }
 
             itemView.tag = data
-            itemView.setOnClickListener(onClickListener)
+            itemView.setSafeClickListener(onClick = onClickListener)
         }
 
         private fun ImageView.loadPhoto(url: String) {
@@ -114,5 +134,10 @@ class AddScheduleSuggestionsAdapter : ListAdapter<SuggestionItemInformation, Bas
                     .apply(glideOptions)
                     .into(this)
         }
+    }
+
+    private class EmptyViewHolder(view: View) : BaseViewHolder<SuggestionItemInformation>(view) {
+
+        override fun onBind(data: SuggestionItemInformation) {}
     }
 }

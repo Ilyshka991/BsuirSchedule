@@ -2,7 +2,8 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor">
 
     <fragment
         android:id="@+id/navigationFragmentHost"
@@ -13,7 +14,7 @@
         app:layout_anchor="@+id/bottomBarParentView"
         app:navGraph="@navigation/navigation_graph" />
 
-    <com.pechuro.bsuirschedule.widget.BottomAppBar
+    <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomBarParentView"
         style="@style/Widget.MaterialComponents.BottomAppBar"
         android:layout_width="match_parent"
@@ -24,11 +25,11 @@
         app:fabAlignmentMode="end"
         app:fabCradleRoundedCornerRadius="16dp">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/bottomBarMenuButton"
             style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Icon"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             app:icon="@drawable/ic_menu" />
-    </com.pechuro.bsuirschedule.widget.BottomAppBar>
+    </com.google.android.material.bottomappbar.BottomAppBar>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
