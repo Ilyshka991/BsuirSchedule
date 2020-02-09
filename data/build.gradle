@@ -24,10 +24,10 @@ android {
 
 dependencies {
     implementation kotlin
-    implementation coroutines.values()
+    implementation coroutinesDependencies.values()
 
-    implementation jsonSerializer.values()
     implementation networkDependencies.values()
+    implementation jsonSerializer
 
     api project(path: ':local')
     api project(path: ':remote')

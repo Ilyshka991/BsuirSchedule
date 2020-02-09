@@ -8,10 +8,9 @@ apply from: '../configuration.gradle'
 
 dependencies {
     implementation kotlin
-    implementation coroutines.values()
+    implementation coroutinesDependencies.values()
 
     implementation networkDependencies.values()
-
-    implementation jsonSerializer.values()
-    kapt jsonSerializerProcessor.values()
+    implementation jsonSerializer
+    kapt jsonSerializerProcessor
 }
