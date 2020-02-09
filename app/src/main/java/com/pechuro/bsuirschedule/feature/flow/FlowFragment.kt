@@ -12,7 +12,6 @@ import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleComplete
-import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoComplete
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
 import com.pechuro.bsuirschedule.feature.start.StartFragmentDirections
 import kotlinx.android.synthetic.main.fragment_flow.*
@@ -32,7 +31,8 @@ class FlowFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initNavigation()
-        if (!viewModel.isInfoLoaded()) openLoadInfo()
+
+        openLoadInfo()
         initViews()
         receiveEvents()
     }
@@ -65,7 +65,7 @@ class FlowFragment : BaseFragment() {
     private fun receiveEvents() {
         EventBus.receive<BaseEvent>(lifecycleScope) { event ->
             when (event) {
-                is LoadInfoComplete -> popFragment()
+               // is LoadInfoComplete -> popFragment()
                 is AddScheduleComplete -> popFragment()
                 is NavigationSheetEvent.OnAddSchedule -> openAddSchedule()
                 is NavigationSheetEvent.OnScheduleClick -> {

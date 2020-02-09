@@ -2,11 +2,11 @@ package com.pechuro.bsuirschedule.feature.loadinfo
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.ext.observeNonNull
+import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoViewModel.Status
 import kotlinx.android.synthetic.main.fragment_info_load.*
 
@@ -46,12 +46,12 @@ class LoadInfoFragment : BaseFragment() {
     }
 
     private fun handleError() {
-        infoLoadProgressParentView.isVisible = false
-        infoLoadErrorParentView.isVisible = true
+        infoLoadLoaderView.setVisibleWithAlpha(false)
+        infoLoadErrorParentView.setVisibleWithAlpha(true)
     }
 
     private fun handleLoading() {
-        infoLoadProgressParentView.isVisible = true
-        infoLoadErrorParentView.isVisible = false
+        infoLoadLoaderView.setVisibleWithAlpha(true)
+        infoLoadErrorParentView.setVisibleWithAlpha(false)
     }
 }

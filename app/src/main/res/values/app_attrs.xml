@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="primaryColor" format="color" />
+    <attr name="primaryDarkColor" format="color" />
+    <attr name="accentColor" format="color" />
+
+    <attr name="backgroundColor" format="color" />
+
+    <attr name="buttonTextColor" format="color" />
+    <attr name="buttonRippleColor" format="color" />
+
+    <attr name="textMessage" format="color" />
+</resources>

@@ -30,9 +30,9 @@
     <string name="title_choose_action">Choose action:</string>
     <string name="title_type">Type:</string>
 
-    <string name="info_load_activity_text">Information is loading, please wait</string>
+    <string name="info_load_activity_text">Information is loading,\nplease wait</string>
 
-    <string name="error_loading">Something went wrong, retry later</string>
+    <string name="error_loading">Something went wrong,\nretry later</string>
 
     <string name="action_retry">Retry</string>
     <string name="action_cancel">Cancel</string>

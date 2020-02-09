@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
-        android:background="@color/gray"
+        android:background="@color/grey_500"
         app:layout_constraintTop_toBottomOf="@+id/navigationSheetItemRecyclerView" />
 
     <Button
@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="@color/gray"
+        android:textColor="@color/grey_500"
         android:text="@string/drawer_fragment_action_settings"
         app:layout_constraintTop_toBottomOf="@+id/navigationSheetItemRecyclerView" />
 
@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:textColor="@color/gray"
+        android:textColor="@color/grey_500"
         android:layout_marginBottom="24dp"
         android:text="@string/drawer_fragment_action_add_schedule"
         app:layout_constraintBottom_toBottomOf="parent"
