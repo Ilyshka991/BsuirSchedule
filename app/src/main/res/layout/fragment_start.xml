@@ -4,9 +4,9 @@
     android:layout_height="match_parent">
 
     <TextView
+        style="@style/MessageText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:text="@string/start_fragment_text"
         android:textSize="32sp" />
 </FrameLayout>
