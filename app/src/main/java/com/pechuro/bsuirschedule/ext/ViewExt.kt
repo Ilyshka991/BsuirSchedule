@@ -24,7 +24,7 @@ inline var View.isVisibleOrInvisible: Boolean
         visibility = if (value) View.VISIBLE else View.INVISIBLE
     }
 
-fun View.setVisibleWithAlpha(isVisible: Boolean) {
+fun View.setVisibleWithAlpha(isVisible: Boolean): Animator {
     val previousAnimator = getTag(R.id.tagCurrentAnimator) as? Animator
     previousAnimator?.cancel()
     val animator = if (isVisible) {
@@ -37,4 +37,5 @@ fun View.setVisibleWithAlpha(isVisible: Boolean) {
         }
     }
     animator.start()
+    return animator
 }

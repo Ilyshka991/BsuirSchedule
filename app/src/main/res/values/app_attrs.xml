@@ -6,7 +6,9 @@
 
     <attr name="backgroundColor" format="color" />
 
-    <attr name="buttonTextColor" format="color" />
+    <attr name="buttonDefaultTextColor" format="color" />
+    <attr name="buttonCheckedColor" format="color" />
+    <attr name="buttonUncheckedColor" format="color" />
 
     <attr name="textDefaultColor" format="color" />
     <attr name="titleColor" format="color" />

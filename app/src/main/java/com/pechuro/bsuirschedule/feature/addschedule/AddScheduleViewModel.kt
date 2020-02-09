@@ -15,8 +15,8 @@ import com.pechuro.bsuirschedule.domain.interactor.GetEmployees
 import com.pechuro.bsuirschedule.domain.interactor.GetGroups
 import com.pechuro.bsuirschedule.domain.interactor.LoadEmployeeSchedule
 import com.pechuro.bsuirschedule.domain.interactor.LoadGroupSchedule
-import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation.EmployeeInfo
-import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation.GroupInfo
+import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation
+import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
@@ -38,14 +38,19 @@ class AddScheduleViewModel @Inject constructor(
             emitAll(it)
         }
     }.asLiveData()
-    val allGroupsData: LiveData<List<GroupInfo>> = MediatorLiveData<List<GroupInfo>>().apply {
+    val allGroupsData: LiveData<List<SuggestionItemInformation>> = MediatorLiveData<List<SuggestionItemInformation>>().apply {
         addSource(allGroupsFilter) { number ->
             launchCoroutine {
                 val resultList = withContext(Dispatchers.IO) {
                     val currentList = allGroupsList.value ?: emptyList()
-                    currentList.filter {
+                    val filteredList = currentList.filter {
                         it.number.startsWith(number)
                     }.map { GroupInfo(it) }
+                    if (filteredList.isEmpty() && number.isNotEmpty()) {
+                        filteredList.plusElement(Empty)
+                    } else {
+                        filteredList
+                    }
                 }
                 value = resultList
             }
@@ -54,9 +59,10 @@ class AddScheduleViewModel @Inject constructor(
             launchCoroutine {
                 val resultList = withContext(Dispatchers.IO) {
                     val filterNumber = allGroupsFilter.value ?: ""
-                    newList.filter {
+                    val filteredList = newList.filter {
                         it.number.startsWith(filterNumber)
                     }.map { GroupInfo(it) }
+                    if (filteredList.isEmpty()) filteredList.plusElement(Empty) else filteredList
                 }
                 value = resultList
             }
@@ -69,14 +75,19 @@ class AddScheduleViewModel @Inject constructor(
             emitAll(it)
         }
     }.asLiveData()
-    val allEmployeesData: LiveData<List<EmployeeInfo>> = MediatorLiveData<List<EmployeeInfo>>().apply {
-        addSource(allEmployeesFilter) { number ->
+    val allEmployeesData: LiveData<List<SuggestionItemInformation>> = MediatorLiveData<List<SuggestionItemInformation>>().apply {
+        addSource(allEmployeesFilter) { abbreviation ->
             launchCoroutine {
                 val resultList = withContext(Dispatchers.IO) {
                     val currentList = allEmployeesList.value ?: emptyList()
-                    currentList.filter {
-                        it.abbreviation.startsWith(number, ignoreCase = true)
+                    val filteredList = currentList.filter {
+                        it.abbreviation.startsWith(abbreviation, ignoreCase = true)
                     }.map { EmployeeInfo(it) }
+                    if (filteredList.isEmpty() && abbreviation.isNotEmpty()) {
+                        filteredList.plusElement(Empty)
+                    } else {
+                        filteredList
+                    }
                 }
                 value = resultList
             }
@@ -85,9 +96,10 @@ class AddScheduleViewModel @Inject constructor(
             launchCoroutine {
                 val resultList = withContext(Dispatchers.IO) {
                     val filterNumber = allEmployeesFilter.value ?: ""
-                    newList.filter {
+                    val filteredList = newList.filter {
                         it.abbreviation.startsWith(filterNumber, ignoreCase = true)
                     }.map { EmployeeInfo(it) }
+                    if (filteredList.isEmpty()) filteredList.plusElement(Empty) else filteredList
                 }
                 value = resultList
             }

@@ -9,7 +9,7 @@
         android:id="@+id/infoLoadLoaderView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:message="@string/info_load_activity_text"
+        app:message="@string/info_load_message"
         tools:visibility="gone" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +21,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/infoLoadErrorText"
-            style="@style/MessageText"
+            style="@style/DefaultText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"

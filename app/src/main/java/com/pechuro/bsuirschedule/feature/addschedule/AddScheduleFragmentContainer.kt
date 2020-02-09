@@ -2,13 +2,13 @@ package com.pechuro.bsuirschedule.feature.addschedule
 
 import android.os.Bundle
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.ext.addOnTabSelectedListener
 import com.pechuro.bsuirschedule.ext.observeNonNull
+import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel.State
 import kotlinx.android.synthetic.main.fragment_add_schedule_container.*
 
@@ -64,12 +64,12 @@ class AddScheduleFragmentContainer : BaseFragment() {
     }
 
     private fun onComplete() {
-        EventBus.send(AddScheduleComplete)
+        EventBus.send(AddScheduleCompleteEvent)
     }
 
     private fun setActionsEnabled(enabled: Boolean) {
         addScheduleContainerViewPager.isSwipeEnabled = enabled
-        addScheduleContainerTabLayout.isVisible = enabled
+        addScheduleContainerTabLayout.setVisibleWithAlpha(enabled)
     }
 }
 

@@ -21,7 +21,9 @@
         <item name="backgroundColor">@color/white</item>
         <item name="rippleColor">@color/grey_300</item>
 
-        <item name="buttonTextColor">@color/grey_600</item>
+        <item name="buttonDefaultTextColor">@color/grey_600</item>
+        <item name="buttonCheckedColor">@color/grey_300</item>
+        <item name="buttonUncheckedColor">@color/grey_100</item>
 
         <item name="textDefaultColor">@color/grey_600</item>
         <item name="titleColor">@color/grey_700</item>

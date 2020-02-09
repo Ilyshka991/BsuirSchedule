@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:navigationIcon="@drawable/ic_arrow_back"
-        app:title="@string/title_activity_add_schedule"
+        app:title="@string/add_schedule_title"
         app:titleTextAppearance="@style/TitleTextAppearance"
         app:titleTextColor="?attr/titleColor" />
 

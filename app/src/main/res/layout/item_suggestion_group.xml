@@ -3,30 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    tools:context=".feature.add.AddScheduleActivity"
     android:layout_height="wrap_content">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/suggestionGroupNumber"
+        style="@style/DefaultText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="750502" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/suggestionGroupFacultyAbbreviation"
+        style="@style/DefaultText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginRight="24dp"
         android:ellipsize="end"
+        android:gravity="start"
         android:maxLines="1"
         android:textSize="18sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/suggestionGroupNumber"
@@ -35,43 +37,39 @@
         app:layout_constraintStart_toEndOf="@+id/suggestionGroupNumber"
         tools:text="ФКСиС" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/suggestionGroupSpecialityAbbreviation"
+        style="@style/DefaultText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/suggestionGroupNumber"
         app:layout_constraintTop_toBottomOf="@+id/suggestionGroupNumber"
         tools:text="ВМСиС" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/suggestionGroupEducationForm"
+        style="@style/DefaultText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/suggestionGroupSpecialityAbbreviation"
         app:layout_constraintStart_toEndOf="@+id/suggestionGroupSpecialityAbbreviation"
-        app:layout_constraintTop_toBottomOf="@+id/suggestionGroupNumber"
         tools:text="Очная" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/suggestionGroupCourse"
+        style="@style/DefaultText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/suggestionGroupEducationForm"
         app:layout_constraintStart_toEndOf="@+id/suggestionGroupEducationForm"
-        app:layout_constraintTop_toBottomOf="@+id/suggestionGroupNumber"
         tools:text="Course: 3" />
 </androidx.constraintlayout.widget.ConstraintLayout>

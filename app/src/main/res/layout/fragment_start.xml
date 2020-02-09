@@ -4,9 +4,9 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.textview.MaterialTextView
-        style="@style/MessageText"
+        style="@style/DefaultText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/start_fragment_text"
+        android:text="@string/start_message"
         android:textSize="32sp" />
 </FrameLayout>

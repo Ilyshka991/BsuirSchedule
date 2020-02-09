@@ -3,15 +3,26 @@
     <!-- Button styles -->
 
     <style name="TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">18sp</item>
         <item name="android:padding">8dp</item>
-        <item name="android:textColor">?attr/buttonTextColor</item>
+        <item name="android:textColor">?attr/buttonDefaultTextColor</item>
         <item name="rippleColor">?attr/rippleColor</item>
+    </style>
+
+    <style name="ChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="android:checkable">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="chipBackgroundColor">@color/chip_color</item>
+        <item name="android:textColor">?attr/buttonDefaultTextColor</item>
+        <item name="android:textAppearance">@style/ChipTextAppearance</item>
     </style>
 
     <!-- Text styles -->
 
-    <style name="MessageText" parent="Widget.MaterialComponents.TextView">
+    <style name="DefaultText" parent="Widget.MaterialComponents.TextView">
         <item name="android:gravity">center</item>
         <item name="android:textColor">?attr/textDefaultColor</item>
         <item name="android:textSize">24sp</item>
@@ -24,5 +35,19 @@
 
     <style name="TabTextAppearance">
         <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="ChipTextAppearance">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="OutlinedTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintTextColor">?attr/textDefaultColor</item>
+        <item name="boxStrokeColor">?attr/textDefaultColor</item>
+    </style>
+
+    <style name="TextInput" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">?attr/textDefaultColor</item>
+        <item name="android:textSize">18sp</item>
     </style>
 </resources>

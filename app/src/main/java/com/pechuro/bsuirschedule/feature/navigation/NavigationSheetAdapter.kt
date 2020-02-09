@@ -112,8 +112,8 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
         override fun onBind(data: NavigationSheetItemInformation) {
             if (data !is Title) return
             val titleRes = when (data.scheduleType) {
-                ScheduleType.CLASSES -> R.string.msg_classes
-                ScheduleType.EXAMS -> R.string.msg_exams
+                ScheduleType.CLASSES -> R.string.navigation_title_classes
+                ScheduleType.EXAMS -> R.string.navigation_title_exams
             }
             (containerView as TextView).apply {
                 setText(titleRes)
