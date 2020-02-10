@@ -2,6 +2,7 @@ package com.pechuro.bsuirschedule.ext
 
 import android.animation.Animator
 import android.view.View
+import androidx.annotation.Px
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import com.pechuro.bsuirschedule.R
@@ -38,4 +39,9 @@ fun View.setVisibleWithAlpha(isVisible: Boolean): Animator {
     }
     animator.start()
     return animator
+}
+
+fun View.setHeight(@Px height: Int) = apply {
+    layoutParams.height = height
+    requestLayout()
 }

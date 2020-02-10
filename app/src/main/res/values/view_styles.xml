@@ -11,6 +11,13 @@
         <item name="rippleColor">?attr/rippleColor</item>
     </style>
 
+    <style name="NavigationButton" parent="TextButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
     <style name="ChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="android:checkable">true</item>
         <item name="android:layout_width">wrap_content</item>

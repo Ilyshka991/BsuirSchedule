@@ -1,47 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigationSheetParentView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_navigation_sheet"
+    android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/navigationSheetItemRecyclerView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="20dp"
+        android:clipToPadding="false"
+        android:paddingTop="12dp"
+        tools:itemCount="60"
+        tools:listitem="@layout/item_navigation_sheet_content" />
 
     <View
         android:id="@+id/navigationSheetDivider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/grey_500"
-        app:layout_constraintTop_toBottomOf="@+id/navigationSheetItemRecyclerView" />
+        android:background="?attr/dividerColor" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/navigationSheetSettingButton"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/grey_500"
-        android:text="@string/navigation_action_settings"
-        app:layout_constraintTop_toBottomOf="@+id/navigationSheetItemRecyclerView" />
+        style="@style/NavigationButton"
+        android:text="@string/navigation_action_settings" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/navigationSheetAddButton"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textColor="@color/grey_500"
-        android:layout_marginBottom="24dp"
-        android:text="@string/navigation_action_add_schedule"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navigationSheetSettingButton"
-        app:layout_constraintVertical_bias="0.0" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        style="@style/NavigationButton"
+        android:text="@string/navigation_action_add_schedule" />
+</LinearLayout>

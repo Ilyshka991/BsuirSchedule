@@ -5,6 +5,9 @@
     <attr name="accentColor" format="color" />
 
     <attr name="backgroundColor" format="color" />
+    <attr name="backgroundDarkColor" format="color" />
+
+    <attr name="dividerColor" format="color" />
 
     <attr name="buttonDefaultTextColor" format="color" />
     <attr name="buttonCheckedColor" format="color" />

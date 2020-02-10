@@ -34,7 +34,7 @@ class NavigationSheetViewModel @Inject constructor(
                 if (allClasses.isNotEmpty()) {
                     resultList += NavigationSheetItemInformation.Title(ScheduleType.CLASSES)
                     resultList += allClasses.map { NavigationSheetItemInformation.Content(it) }
-                    resultList += NavigationSheetItemInformation.Divider
+                 //   resultList += NavigationSheetItemInformation.Divider
                 }
 
                 val allExams = allScheduleList
