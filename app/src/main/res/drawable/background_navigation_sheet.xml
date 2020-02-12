@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <item>
+    <item android:id="@+id/backgroundNavigationSheetTopLayer">
         <shape android:shape="rectangle">
             <solid
                 android:color="?attr/backgroundDarkColor"
                 tools:color="@color/grey_700" />
             <corners
-                android:topLeftRadius="16dp"
-                android:topRightRadius="16dp" />
+                android:topLeftRadius="@dimen/navigation_sheet_top_corner_radius"
+                android:topRightRadius="@dimen/navigation_sheet_top_corner_radius" />
         </shape>
     </item>
     <item
