@@ -2,8 +2,11 @@ package com.pechuro.bsuirschedule.ext
 
 import android.animation.Animator
 import android.view.View
+import android.view.ViewGroup
+import androidx.annotation.Px
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
+import androidx.core.view.*
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.ClickInterval
 import com.pechuro.bsuirschedule.common.OneFirePerIntervalClickListener
@@ -38,4 +41,22 @@ fun View.setVisibleWithAlpha(isVisible: Boolean): Animator {
     }
     animator.start()
     return animator
+}
+
+fun View.setHeight(@Px height: Int) = apply {
+    layoutParams.height = height
+    requestLayout()
+}
+
+fun View.updateMargin(
+        @Px left: Int = marginLeft,
+        @Px top: Int = marginTop,
+        @Px right: Int = marginRight,
+        @Px bottom: Int = marginBottom
+) {
+    if (layoutParams is ViewGroup.MarginLayoutParams) {
+        updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            setMargins(left, top, right, bottom)
+        }
+    }
 }

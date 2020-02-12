@@ -19,7 +19,9 @@
         <item name="accentColor">@color/pink_600</item>
 
         <item name="backgroundColor">@color/white</item>
+        <item name="backgroundDarkColor">@color/grey_800</item>
         <item name="rippleColor">@color/grey_300</item>
+        <item name="dividerColor">@color/grey_400</item>
 
         <item name="buttonDefaultTextColor">@color/grey_600</item>
         <item name="buttonCheckedColor">@color/grey_300</item>
@@ -38,5 +40,10 @@
     <style name="BottomSheetDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="android:statusBarColor" tools:targetApi="21">@color/transparent</item>
         <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
+    </style>
+
+    <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@color/transparent</item>
     </style>
 </resources>
