@@ -6,14 +6,18 @@ import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.onSuccess
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
+import com.pechuro.bsuirschedule.domain.interactor.DeleteSchedule
 import com.pechuro.bsuirschedule.domain.interactor.GetAllSchedules
+import com.pechuro.bsuirschedule.domain.interactor.UpdateSchedule
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class NavigationSheetViewModel @Inject constructor(
-        private val getAllSchedules: GetAllSchedules
+        private val getAllSchedules: GetAllSchedules,
+        private val deleteSchedule: DeleteSchedule,
+        private val updateSchedule: UpdateSchedule
 ) : BaseViewModel() {
 
     val schedules = flow {
@@ -34,7 +38,7 @@ class NavigationSheetViewModel @Inject constructor(
                 if (allClasses.isNotEmpty()) {
                     resultList += NavigationSheetItemInformation.Title(ScheduleType.CLASSES)
                     resultList += allClasses.map { NavigationSheetItemInformation.Content(it) }
-                 //   resultList += NavigationSheetItemInformation.Divider
+                    //   resultList += NavigationSheetItemInformation.Divider
                 }
 
                 val allExams = allScheduleList
@@ -46,4 +50,16 @@ class NavigationSheetViewModel @Inject constructor(
                 resultList.toList()
             }
             .asLiveData()
+
+    fun updateSchedule(schedule: Schedule) {
+        launchCoroutine {
+            updateSchedule.execute(UpdateSchedule.Params(schedule))
+        }
+    }
+
+    fun deleteSchedule(schedule: Schedule) {
+        launchCoroutine {
+            deleteSchedule.execute(DeleteSchedule.Params(schedule))
+        }
+    }
 }

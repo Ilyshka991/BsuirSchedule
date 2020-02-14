@@ -97,6 +97,8 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
             position: Int
     ) = holder.onBind(getItem(position))
 
+    fun getItemAt(position: Int): NavigationSheetItemInformation = getItem(position)
+
     private class DividerViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(view) {
 
         override fun onBind(data: NavigationSheetItemInformation) {}
@@ -123,7 +125,10 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
         }
     }
 
-    private inner class ContentViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(view) {
+    private inner class ContentViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(
+            view,
+            isSwipeAllowed = true
+    ) {
 
         override fun onBind(data: NavigationSheetItemInformation) {
             if (data !is Content) return
