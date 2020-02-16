@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
+import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.common.onSuccess
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
@@ -36,18 +37,18 @@ class NavigationSheetViewModel @Inject constructor(
 
     val navigationInfoData = MediatorLiveData<List<NavigationSheetItemInformation>>().apply {
         addSource(allScheduleListData) { scheduleList ->
-            value = transformScheduleListToNavInfoList(scheduleList)
+            val currentSchedulesUpdateState = schedulesUpdateState.value ?: emptyMap()
+            value = transformScheduleListToNavInfoList(scheduleList, currentSchedulesUpdateState)
         }
         addSource(schedulesUpdateState) {
             val currentScheduleList = allScheduleListData.value ?: emptyList()
-            value = transformScheduleListToNavInfoList(currentScheduleList)
+            value = transformScheduleListToNavInfoList(currentScheduleList, it)
         }
     }
 
     fun updateSchedule(schedule: Schedule) {
         launchCoroutine {
-            val currentSchedulesUpdateState = schedulesUpdateState.value ?: emptyMap()
-            schedulesUpdateState.value = currentSchedulesUpdateState + (schedule to UpdateState.IN_PROGRESS)
+            setUpdateState(schedule, UpdateState.IN_PROGRESS)
             val result = updateSchedule.execute(UpdateSchedule.Params(schedule))
             val resultState = if (result.isSuccess) UpdateState.SUCCESS else UpdateState.ERROR
             setUpdateState(schedule, resultState)
@@ -62,7 +63,11 @@ class NavigationSheetViewModel @Inject constructor(
         }
     }
 
-    private fun transformScheduleListToNavInfoList(scheduleList: List<Schedule>): List<NavigationSheetItemInformation> {
+    private fun transformScheduleListToNavInfoList(
+            scheduleList: List<Schedule>,
+            updateStates: Map<Schedule, UpdateState>
+    ): List<NavigationSheetItemInformation> {
+        Logger.e(updateStates.toString())
         val resultList = mutableListOf<NavigationSheetItemInformation>()
 
         if (scheduleList.isEmpty()) {
@@ -70,14 +75,12 @@ class NavigationSheetViewModel @Inject constructor(
             return resultList
         }
 
-        val currentSchedulesUpdateState = schedulesUpdateState.value ?: emptyMap()
-
         val allClasses = scheduleList
                 .filter { it is Schedule.GroupClasses || it is Schedule.EmployeeClasses }
         if (allClasses.isNotEmpty()) {
             resultList += NavigationSheetItemInformation.Title(ScheduleType.CLASSES)
             resultList += allClasses.map {
-                val updateState = currentSchedulesUpdateState[it] ?: UpdateState.IDLE
+                val updateState = updateStates[it] ?: UpdateState.IDLE
                 NavigationSheetItemInformation.Content(it, updateState)
             }
         }
@@ -87,7 +90,7 @@ class NavigationSheetViewModel @Inject constructor(
         if (allExams.isNotEmpty()) {
             resultList += NavigationSheetItemInformation.Title(ScheduleType.EXAMS)
             resultList += allExams.map {
-                val updateState = currentSchedulesUpdateState[it] ?: UpdateState.IDLE
+                val updateState = updateStates[it] ?: UpdateState.IDLE
                 NavigationSheetItemInformation.Content(it, updateState)
             }
         }
