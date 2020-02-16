@@ -166,7 +166,7 @@ class NavigationSheet : BaseBottomSheetDialog() {
     }
 
     private fun observeData() {
-        viewModel.schedules.observeNonNull(viewLifecycleOwner) {
+        viewModel.navigationInfoData.observeNonNull(viewLifecycleOwner) {
             adapter.submitList(it)
         }
     }

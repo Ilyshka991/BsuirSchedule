@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
+import androidx.core.view.isVisible
 import com.pechuro.bsuirschedule.R
 import kotlinx.android.synthetic.main.view_loader.view.*
 
@@ -19,6 +20,7 @@ class LoaderView @JvmOverloads constructor(
         context.obtainStyledAttributes(attrs, R.styleable.LoaderView).use {
             val message = it.getString(R.styleable.LoaderView_message) ?: ""
             loaderMessageText.text = message
+            loaderMessageText.isVisible = message.isNotEmpty()
         }
     }
 }

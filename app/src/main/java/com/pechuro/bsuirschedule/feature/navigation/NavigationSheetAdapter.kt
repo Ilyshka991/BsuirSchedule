@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.pechuro.bsuirschedule.R
@@ -11,6 +12,7 @@ import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.*
+import kotlinx.android.synthetic.main.item_navigation_sheet_content.*
 
 private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NavigationSheetItemInformation>() {
 
@@ -125,18 +127,20 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
         }
     }
 
-    private inner class ContentViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(
-            view,
-            isSwipeAllowed = true
-    ) {
+    private inner class ContentViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(view) {
 
         override fun onBind(data: NavigationSheetItemInformation) {
             if (data !is Content) return
-            (containerView as TextView).apply {
-                text = data.schedule.name
-                tag = data.schedule
+            navigationDrawerItemContentText.text = data.schedule.name
+            navigationDrawerItemContentUpdateParentView.isVisible = data.updateState != Content.UpdateState.IDLE
+            navigationDrawerItemContentUpdateLoaderView.isVisible = data.updateState == Content.UpdateState.IN_PROGRESS
+            navigationDrawerItemContentUpdateSuccessText.isVisible = data.updateState == Content.UpdateState.SUCCESS
+            navigationDrawerItemContentUpdateErrorText.isVisible = data.updateState == Content.UpdateState.ERROR
+            isSwipeAllowed = data.updateState == Content.UpdateState.IDLE
+            itemView.apply {
                 setOnClickListener(scheduleClickListener)
                 setOnLongClickListener(scheduleLongClickListener)
+                tag = data.schedule
             }
         }
     }
