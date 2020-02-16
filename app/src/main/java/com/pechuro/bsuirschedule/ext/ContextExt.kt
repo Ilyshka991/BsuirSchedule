@@ -2,8 +2,14 @@ package com.pechuro.bsuirschedule.ext
 
 import android.content.Context
 import android.os.IBinder
+import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import com.pechuro.bsuirschedule.App
 
 inline val Context.inputMethodManager: InputMethodManager
@@ -19,3 +25,17 @@ fun Context.hideKeyboard(windowToken: IBinder?) {
 
 inline val Context.app: App
     get() = applicationContext as App
+
+fun Context.dimen(@DimenRes idRes: Int) = resources.getDimension(idRes)
+
+fun Context.dimenPx(@DimenRes idRes: Int) = resources.getDimensionPixelOffset(idRes)
+
+fun Context.drawable(@DrawableRes idRes: Int) = ContextCompat.getDrawable(this, idRes)
+
+fun Context.color(@ColorRes idRes: Int) = ContextCompat.getColor(this, idRes)
+
+fun Context.colorFromAttr(@AttrRes idRes: Int): Int {
+    val typedValue = TypedValue()
+    theme.resolveAttribute(idRes, typedValue, true)
+    return typedValue.data
+}

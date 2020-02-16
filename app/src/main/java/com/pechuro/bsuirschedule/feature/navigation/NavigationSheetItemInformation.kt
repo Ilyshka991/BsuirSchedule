@@ -18,5 +18,13 @@ sealed class NavigationSheetItemInformation(val id: Int) {
 
     data class Title(val scheduleType: ScheduleType) : NavigationSheetItemInformation(ID_TITLE)
 
-    data class Content(val schedule: Schedule) : NavigationSheetItemInformation(ID_CONTENT)
+    data class Content(
+            val schedule: Schedule,
+            var updateState: UpdateState = UpdateState.IDLE
+    ) : NavigationSheetItemInformation(ID_CONTENT) {
+
+        enum class UpdateState {
+            IDLE, IN_PROGRESS, SUCCESS, ERROR
+        }
+    }
 }

@@ -3,34 +3,34 @@ package com.pechuro.bsuirschedule.domain.entity
 import java.util.*
 
 sealed class Schedule(
-        val name: String
+        open val name: String
 ) {
 
-    class GroupClasses(
-            name: String,
+    data class GroupClasses(
+            override val name: String,
+            val lastUpdateDate: Date,
+            val group: Group
+    ) : Schedule(
+            name = name
+    )
+
+    data class GroupExams(
+            override val name: String,
             val lastUpdated: Date,
             val group: Group
     ) : Schedule(
             name = name
     )
 
-    class GroupExams(
-            name: String,
-            val lastUpdated: Date,
-            val group: Group
-    ) : Schedule(
-            name = name
-    )
-
-    class EmployeeClasses(
-            name: String,
+    data class EmployeeClasses(
+            override val name: String,
             val employee: Employee
     ) : Schedule(
             name = name
     )
 
-    class EmployeeExams(
-            name: String,
+    data class EmployeeExams(
+            override val name: String,
             val employee: Employee
     ) : Schedule(
             name = name

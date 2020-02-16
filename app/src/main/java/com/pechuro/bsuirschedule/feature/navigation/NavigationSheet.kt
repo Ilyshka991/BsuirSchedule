@@ -1,14 +1,19 @@
 package com.pechuro.bsuirschedule.feature.navigation
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.View
 import android.view.Window
 import androidx.core.view.children
 import androidx.core.view.marginBottom
 import androidx.core.view.marginTop
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -29,12 +34,17 @@ class NavigationSheet : BaseBottomSheetDialog() {
 
     companion object {
         private const val PEEK_HEIGHT_PERCENT = 0.4
+        private const val ACTION_VIBRATION_DURATION_MS = 2L
     }
 
     override val layoutId: Int = R.layout.fragment_navigation_sheet
 
     private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
         initViewModel(NavigationSheetViewModel::class)
+    }
+
+    private val vibrator by lazy(LazyThreadSafetyMode.NONE) {
+        requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
     private val maxHeight by lazy(LazyThreadSafetyMode.NONE) {
@@ -96,6 +106,14 @@ class NavigationSheet : BaseBottomSheetDialog() {
         actionCallback = adapterActionCallback
     }
 
+    private val itemTouchHelper = ItemTouchHelper(
+            NavigationItemTouchCallback(
+                    onDelete = ::deleteItemAt,
+                    onUpdate = ::updateItemAt,
+                    onActionReadyToPerform = ::makeActionVibration
+            )
+    )
+
     private val sheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
         override fun onSlide(bottomSheet: View, slideOffset: Float) {
             if (slideOffset >= 0) changeViewsPositions(slideOffset)
@@ -135,6 +153,7 @@ class NavigationSheet : BaseBottomSheetDialog() {
         navigationSheetItemRecyclerView.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = this@NavigationSheet.adapter
+            itemTouchHelper.attachToRecyclerView(this)
             itemAnimator = null
         }
         navigationSheetSettingButton.setSafeClickListener {
@@ -147,7 +166,7 @@ class NavigationSheet : BaseBottomSheetDialog() {
     }
 
     private fun observeData() {
-        viewModel.schedules.observeNonNull(viewLifecycleOwner) {
+        viewModel.navigationInfoData.observeNonNull(viewLifecycleOwner) {
             adapter.submitList(it)
         }
     }
@@ -167,5 +186,37 @@ class NavigationSheet : BaseBottomSheetDialog() {
                 }
 
         topBackgroundGradientDrawable?.cornerRadius = (1 - slideOffset) * initialTopCornersRadius
+    }
+
+    private fun deleteItemAt(position: Int) {
+        val scheduleInfo = adapter.getItemAt(position) as? NavigationSheetItemInformation.Content
+        if (scheduleInfo != null) {
+            viewModel.deleteSchedule(scheduleInfo.schedule)
+        } else {
+            Logger.w("Try to delete item, which is not a subtype of NavigationSheetItemInformation.Content")
+        }
+    }
+
+    private fun updateItemAt(position: Int) {
+        resetSwipedItems()
+        val scheduleInfo = adapter.getItemAt(position) as? NavigationSheetItemInformation.Content
+        if (scheduleInfo != null) {
+            viewModel.updateSchedule(scheduleInfo.schedule)
+        } else {
+            Logger.w("Try to update item, which is not a subtype of NavigationSheetItemInformation.Content")
+        }
+    }
+
+    private fun resetSwipedItems() {
+        itemTouchHelper.attachToRecyclerView(null)
+        itemTouchHelper.attachToRecyclerView(navigationSheetItemRecyclerView)
+    }
+
+    private fun makeActionVibration() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(ACTION_VIBRATION_DURATION_MS, VibrationEffect.EFFECT_TICK))
+        } else {
+            vibrator.vibrate(ACTION_VIBRATION_DURATION_MS)
+        }
     }
 }

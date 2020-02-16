@@ -65,6 +65,9 @@ class ScheduleRepositoryImpl(
                 resultMap
             }
             .map { map -> map.flatMap { it.value } }
+            .map {
+                it.asReversed()
+            }
             .flowOn(Dispatchers.IO)
 
     override suspend fun <T : Schedule> getScheduleItems(schedule: T): Flow<ScheduleItem<T>> {
@@ -86,7 +89,7 @@ class ScheduleRepositoryImpl(
                     val itemsDTOList = scheduleDTO.schedule ?: emptyList()
                     val schedule = Schedule.GroupClasses(
                             name = group.number,
-                            lastUpdated = lastUpdatedDate,
+                            lastUpdateDate = lastUpdatedDate,
                             group = group
                     )
                     val items = itemsDTOList.toGroupLessons(schedule, auditories, departments)
@@ -141,15 +144,30 @@ class ScheduleRepositoryImpl(
     }
 
     override suspend fun updateAll() {
-        TODO("not implemented")
+        getAllSchedules().first().forEach {
+            update(it)
+        }
     }
 
     override suspend fun update(schedule: Schedule) {
-        TODO("not implemented")
+        when (schedule) {
+            is Schedule.GroupClasses -> loadGroupSchedule(schedule.group, listOf(ScheduleType.CLASSES))
+            is Schedule.GroupExams -> loadGroupSchedule(schedule.group, listOf(ScheduleType.EXAMS))
+            is Schedule.EmployeeClasses -> loadEmployeeSchedule(schedule.employee, listOf(ScheduleType.CLASSES))
+            is Schedule.EmployeeExams -> loadEmployeeSchedule(schedule.employee, listOf(ScheduleType.EXAMS))
+        }
     }
 
-    override suspend fun isUpdateAvailable(schedule: Schedule): Boolean {
-        TODO("not implemented")
+    override suspend fun isUpdateAvailable(schedule: Schedule) = when (schedule) {
+        is Schedule.GroupClasses -> {
+            val newLastUpdateDate = performApiCall { api.getLastUpdateDate(schedule.group.number) }.toDomainEntity()
+            schedule.lastUpdateDate < newLastUpdateDate
+        }
+        is Schedule.GroupExams -> {
+            val newLastUpdate = performApiCall { api.getLastUpdateDate(schedule.group.number) }.toDomainEntity()
+            schedule.lastUpdated < newLastUpdate
+        }
+        else -> false
     }
 
     override suspend fun delete(schedule: Schedule) {

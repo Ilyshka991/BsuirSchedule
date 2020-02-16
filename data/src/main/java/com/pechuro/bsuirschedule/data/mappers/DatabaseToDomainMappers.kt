@@ -114,7 +114,7 @@ internal fun SpecialityCached.toDomainEntity(
 internal fun GroupClassesScheduleCached.toDomainEntity(group: Group) = run {
     Schedule.GroupClasses(
             name = name,
-            lastUpdated = lastUpdate,
+            lastUpdateDate = lastUpdate,
             group = group
     )
 }

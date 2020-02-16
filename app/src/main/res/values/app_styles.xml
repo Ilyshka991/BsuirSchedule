@@ -16,12 +16,13 @@
     <style name="LightTheme" parent="AppTheme">
         <item name="primaryColor">@color/grey_400</item>
         <item name="primaryDarkColor">@color/grey_600</item>
-        <item name="accentColor">@color/pink_600</item>
+        <item name="accentColor">@color/amber_200</item>
 
         <item name="backgroundColor">@color/white</item>
         <item name="backgroundDarkColor">@color/grey_800</item>
         <item name="rippleColor">@color/grey_300</item>
         <item name="dividerColor">@color/grey_400</item>
+        <item name="backgroundNavigationSwipeActionColor">@color/amber_100</item>
 
         <item name="buttonDefaultTextColor">@color/grey_600</item>
         <item name="buttonCheckedColor">@color/grey_300</item>

@@ -118,7 +118,7 @@ internal fun Faculty.toDatabaseEntity() = run {
 internal fun Schedule.GroupClasses.toDatabaseEntity() = run {
     GroupClassesScheduleCached(
             name = name,
-            lastUpdate = lastUpdated,
+            lastUpdate = lastUpdateDate,
             groupId = group.id
     )
 }

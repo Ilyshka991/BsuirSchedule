@@ -6,6 +6,7 @@
 
     <attr name="backgroundColor" format="color" />
     <attr name="backgroundDarkColor" format="color" />
+    <attr name="backgroundNavigationSwipeActionColor" format="color" />
 
     <attr name="dividerColor" format="color" />
 
