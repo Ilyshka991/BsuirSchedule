@@ -187,12 +187,10 @@ class ScheduleRepositoryImpl(
         is Schedule.GroupClasses -> {
             val newLastUpdateDate = performApiCall { api.getLastUpdateDate(schedule.group.number) }.toDomainEntity()
             schedule.lastUpdatedDate < newLastUpdateDate
-            true
         }
         is Schedule.GroupExams -> {
             val newLastUpdate = performApiCall { api.getLastUpdateDate(schedule.group.number) }.toDomainEntity()
             schedule.lastUpdatedDate < newLastUpdate
-            true
         }
         else -> false
     }

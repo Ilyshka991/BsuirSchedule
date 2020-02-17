@@ -111,7 +111,9 @@ class FlowFragment : BaseFragment() {
     }
 
     private fun openUpdateSchedules(schedules: List<Schedule>) {
-        if (navController.currentDestination?.id == R.id.navigationSheetDestination) return
+        val currentDestinationId = navController.currentDestination?.id
+        if (currentDestinationId == R.id.navigationSheetDestination ||
+                currentDestinationId == R.id.updateScheduleSheetDestination) return
         navController.navigate(
                 R.id.updateScheduleSheetDestination,
                 UpdateScheduleSheetArgs(schedules.toTypedArray()).toBundle(),
