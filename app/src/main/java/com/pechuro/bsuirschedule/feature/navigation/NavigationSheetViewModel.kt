@@ -2,10 +2,8 @@ package com.pechuro.bsuirschedule.feature.navigation
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asLiveData
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
-import com.pechuro.bsuirschedule.domain.common.onSuccess
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.domain.interactor.DeleteSchedule
@@ -15,8 +13,6 @@ import com.pechuro.bsuirschedule.domain.interactor.GetAvailableForUpdateSchedule
 import com.pechuro.bsuirschedule.domain.interactor.UpdateSchedule
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class NavigationSheetViewModel @Inject constructor(
@@ -30,16 +26,12 @@ class NavigationSheetViewModel @Inject constructor(
         private const val DELAY_AFTER_UPDATE_DURATION_MS = 2000L
     }
 
-    private val allScheduleListData = flow {
-        getAllSchedules.execute(BaseInteractor.NoParams).onSuccess {
-            emitAll(it)
-        }
-    }.asLiveData()
-    private var availableForUpdateScheduleListData = flow {
-        getAvailableForUpdateSchedules.execute(Params(includeAll = true)).onSuccess {
-            emitAll(it)
-        }
-    }.asLiveData()
+    private val allScheduleListData = liveDataFlow {
+        getAllSchedules.execute(BaseInteractor.NoParams).getOrNull()
+    }
+    private var availableForUpdateScheduleListData = liveDataFlow {
+        getAvailableForUpdateSchedules.execute(Params(includeAll = true)).getOrNull()
+    }
     private val schedulesUpdateState = MutableLiveData(emptyMap<Schedule, UpdateState>())
 
     val navigationInfoData = MediatorLiveData<List<NavigationSheetItemInformation>>().apply {

@@ -44,7 +44,7 @@ class FlowFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initNavigation()
-        if (!viewModel.isInfoLoaded()) openLoadInfo()
+        if (viewModel.isInfoLoaded()) openLoadInfo()
         initViews()
         observeData()
         receiveEvents()
