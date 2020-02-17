@@ -12,7 +12,8 @@ import com.pechuro.bsuirschedule.common.BaseEvent
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.ext.observeNonNull
+import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleCompleteEvent
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoCompleteEvent
@@ -76,7 +77,7 @@ class FlowFragment : BaseFragment() {
     }
 
     private fun observeData() {
-        viewModel.availableForUpdateScheduleListData.observeNonNull(viewLifecycleOwner) {
+        viewModel.availableForUpdateScheduleListData.nonNull().observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) openUpdateSchedules(it)
         }
     }

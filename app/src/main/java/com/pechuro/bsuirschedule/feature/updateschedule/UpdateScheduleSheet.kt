@@ -6,10 +6,7 @@ import androidx.navigation.fragment.navArgs
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.ext.observeNonNull
-import com.pechuro.bsuirschedule.ext.setSafeClickListener
-import com.pechuro.bsuirschedule.ext.setVisibleOrInvisibleWithAlpha
-import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
+import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetViewModel.State
 import kotlinx.android.synthetic.main.sheet_update_schedule.*
 
@@ -50,7 +47,7 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
     }
 
     private fun observeData() {
-        viewModel.currentScheduleData.observeNonNull(viewLifecycleOwner) { schedule ->
+        viewModel.currentScheduleData.nonNull().observe(viewLifecycleOwner) { schedule ->
             val titleRes = when (schedule) {
                 is Schedule.GroupClasses, is Schedule.EmployeeClasses -> R.string.update_schedule_classes_title
                 is Schedule.GroupExams, is Schedule.EmployeeExams -> R.string.update_schedule_exams_title
@@ -58,7 +55,7 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
             updateScheduleSheetTitle.text = getString(titleRes, schedule.name)
             updateScheduleSheetUpdateButton.isChecked = false
         }
-        viewModel.state.observeNonNull(viewLifecycleOwner) { state ->
+        viewModel.state.nonNull().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is State.Idle -> {
                     updateScheduleSheetInfoParentView.setVisibleOrInvisibleWithAlpha(true)
