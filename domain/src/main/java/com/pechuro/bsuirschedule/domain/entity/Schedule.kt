@@ -1,27 +1,34 @@
 package com.pechuro.bsuirschedule.domain.entity
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 sealed class Schedule(
         open val name: String
-) {
+) : Parcelable {
 
+    @Parcelize
     data class GroupClasses(
             override val name: String,
-            val lastUpdateDate: Date,
-            val group: Group
+            val lastUpdatedDate: Date,
+            val group: Group,
+            val notRemindForUpdates: Boolean
     ) : Schedule(
             name = name
     )
 
+    @Parcelize
     data class GroupExams(
             override val name: String,
-            val lastUpdated: Date,
-            val group: Group
+            val lastUpdatedDate: Date,
+            val group: Group,
+            val notRemindForUpdates: Boolean
     ) : Schedule(
             name = name
     )
 
+    @Parcelize
     data class EmployeeClasses(
             override val name: String,
             val employee: Employee
@@ -29,6 +36,7 @@ sealed class Schedule(
             name = name
     )
 
+    @Parcelize
     data class EmployeeExams(
             override val name: String,
             val employee: Employee

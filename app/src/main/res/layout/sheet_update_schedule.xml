@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_update_schedule_sheet">
+
+    <com.pechuro.bsuirschedule.widget.LoaderView
+        android:id="@+id/updateScheduleSheetProgressParentView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/updateScheduleSheetInfoParentView"
+        app:layout_constraintEnd_toEndOf="@+id/updateScheduleSheetInfoParentView"
+        app:layout_constraintStart_toStartOf="@+id/updateScheduleSheetInfoParentView"
+        app:layout_constraintTop_toTopOf="@+id/updateScheduleSheetInfoParentView"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/updateScheduleSheetErrorParentView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/updateScheduleSheetInfoParentView"
+        app:layout_constraintEnd_toEndOf="@+id/updateScheduleSheetInfoParentView"
+        app:layout_constraintStart_toStartOf="@+id/updateScheduleSheetInfoParentView"
+        app:layout_constraintTop_toTopOf="@+id/updateScheduleSheetInfoParentView"
+        tools:visibility="gone">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/updateScheduleLoadingErrorText"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/error_loading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/updateScheduleErrorCancelButton"
+            style="@style/TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/action_cancel"
+            app:layout_constraintBaseline_toBaselineOf="@+id/updateScheduleErrorRetryButton"
+            app:layout_constraintEnd_toStartOf="@+id/updateScheduleErrorRetryButton"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/updateScheduleErrorRetryButton"
+            style="@style/TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/action_retry"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/updateScheduleErrorCancelButton"
+            app:layout_constraintTop_toBottomOf="@+id/updateScheduleLoadingErrorText" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/updateScheduleSheetInfoParentView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/updateScheduleSheetTitle"
+            style="@style/DefaultText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Update for 750502 is available" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/updateScheduleSheetNotRemindCheckbox"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/update_schedule_action_not_remind"
+            android:textSize="18sp"
+            app:buttonTint="?attr/accentColor"
+            app:layout_constraintStart_toStartOf="@+id/updateScheduleSheetTitle"
+            app:layout_constraintTop_toBottomOf="@+id/updateScheduleSheetTitle" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/updateScheduleSheetCancelButton"
+            style="@style/TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/action_cancel"
+            app:layout_constraintBaseline_toBaselineOf="@+id/updateScheduleSheetUpdateButton"
+            app:layout_constraintEnd_toStartOf="@+id/updateScheduleSheetUpdateButton"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/updateScheduleSheetUpdateButton"
+            style="@style/TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/update_schedule_action_update"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/updateScheduleSheetCancelButton"
+            app:layout_constraintTop_toBottomOf="@+id/updateScheduleSheetNotRemindCheckbox" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,12 +10,14 @@
 
     <attr name="dividerColor" format="color" />
 
-    <attr name="buttonDefaultTextColor" format="color" />
-    <attr name="buttonCheckedColor" format="color" />
-    <attr name="buttonUncheckedColor" format="color" />
+    <attr name="buttonEnabledTextColor" format="color" />
+    <attr name="buttonDisabledTextColor" format="color" />
+
+    <attr name="chipCheckedColor" format="color" />
+    <attr name="chipUncheckedColor" format="color" />
 
     <attr name="textDefaultColor" format="color" />
     <attr name="titleColor" format="color" />
-    <attr name="textSelectedColor" format="color" />
-    <attr name="textUnselectedColor" format="color" />
+    <attr name="tabSelectedColor" format="color" />
+    <attr name="tabUnselectedColor" format="color" />
 </resources>

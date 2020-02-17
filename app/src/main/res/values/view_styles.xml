@@ -7,7 +7,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">18sp</item>
         <item name="android:padding">8dp</item>
-        <item name="android:textColor">?attr/buttonDefaultTextColor</item>
+        <item name="android:textColor">@color/text_button_color</item>
         <item name="rippleColor">?attr/rippleColor</item>
     </style>
 
@@ -23,7 +23,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="chipBackgroundColor">@color/chip_color</item>
-        <item name="android:textColor">?attr/buttonDefaultTextColor</item>
+        <item name="android:textColor">?attr/buttonEnabledTextColor</item>
         <item name="android:textAppearance">@style/ChipTextAppearance</item>
     </style>
 

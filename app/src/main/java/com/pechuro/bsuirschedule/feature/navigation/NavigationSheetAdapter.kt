@@ -12,6 +12,7 @@ import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.*
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState.*
 import kotlinx.android.synthetic.main.item_navigation_sheet_content.*
 
 private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NavigationSheetItemInformation>() {
@@ -132,11 +133,12 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
         override fun onBind(data: NavigationSheetItemInformation) {
             if (data !is Content) return
             navigationDrawerItemContentText.text = data.schedule.name
-            navigationDrawerItemContentUpdateParentView.isVisible = data.updateState != Content.UpdateState.IDLE
-            navigationDrawerItemContentUpdateLoaderView.isVisible = data.updateState == Content.UpdateState.IN_PROGRESS
-            navigationDrawerItemContentUpdateSuccessText.isVisible = data.updateState == Content.UpdateState.SUCCESS
-            navigationDrawerItemContentUpdateErrorText.isVisible = data.updateState == Content.UpdateState.ERROR
-            isSwipeAllowed = data.updateState == Content.UpdateState.IDLE
+            navigationDrawerItemContentUpdateParentView.isVisible = data.updateState != NOT_AVAILABLE
+            navigationDrawerItemContentUpdateLoaderView.isVisible = data.updateState == IN_PROGRESS
+            navigationDrawerItemContentUpdateSuccessText.isVisible = data.updateState == SUCCESS
+            navigationDrawerItemContentUpdateErrorText.isVisible = data.updateState == ERROR
+            navigationDrawerItemContentUpdateAvailableText.isVisible = data.updateState == AVAILABLE
+            isSwipeAllowed = data.updateState == NOT_AVAILABLE || data.updateState == AVAILABLE
             itemView.apply {
                 setOnClickListener(scheduleClickListener)
                 setOnLongClickListener(scheduleLongClickListener)

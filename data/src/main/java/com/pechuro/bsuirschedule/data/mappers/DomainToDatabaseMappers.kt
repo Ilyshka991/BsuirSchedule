@@ -9,10 +9,10 @@ import com.pechuro.bsuirschedule.local.entity.education.EducationFormCached
 import com.pechuro.bsuirschedule.local.entity.education.FacultyCached
 import com.pechuro.bsuirschedule.local.entity.education.SpecialityCached
 import com.pechuro.bsuirschedule.local.entity.schedule.*
-import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeExamItemComplex
 import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeClassesItemComplex
-import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupExamItemComplex
+import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeExamItemComplex
 import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupClassesItemComplex
+import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupExamItemComplex
 import com.pechuro.bsuirschedule.local.entity.staff.EmployeeCached
 import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
 
@@ -118,16 +118,18 @@ internal fun Faculty.toDatabaseEntity() = run {
 internal fun Schedule.GroupClasses.toDatabaseEntity() = run {
     GroupClassesScheduleCached(
             name = name,
-            lastUpdate = lastUpdateDate,
-            groupId = group.id
+            lastUpdate = lastUpdatedDate,
+            groupId = group.id,
+            notRemindForUpdates = notRemindForUpdates
     )
 }
 
 internal fun Schedule.GroupExams.toDatabaseEntity() = run {
     GroupExamScheduleCached(
             name = name,
-            lastUpdate = lastUpdated,
-            groupId = group.id
+            lastUpdate = lastUpdatedDate,
+            groupId = group.id,
+            notRemindForUpdates = notRemindForUpdates
     )
 }
 

@@ -9,24 +9,34 @@
         android:id="@+id/loadInfoDestination"
         android:name="com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoFragment"
         android:label="LoadInfoFragment"
-        tools:layout="@layout/fragment_info_load"/>
+        tools:layout="@layout/fragment_info_load" />
 
     <fragment
         android:id="@+id/startDestination"
         android:name="com.pechuro.bsuirschedule.feature.start.StartFragment"
         android:label="StartFragment"
-        tools:layout="@layout/fragment_start">
-    </fragment>
+        tools:layout="@layout/fragment_start" />
 
     <fragment
         android:id="@+id/addScheduleDestination"
-        tools:layout="@layout/fragment_add_schedule"
         android:name="com.pechuro.bsuirschedule.feature.addschedule.AddScheduleFragmentContainer"
-        android:label="AddScheduleFragmentContainer" />
+        android:label="AddScheduleFragmentContainer"
+        tools:layout="@layout/fragment_add_schedule" />
 
     <dialog
         android:id="@+id/navigationSheetDestination"
-        tools:layout="@layout/fragment_navigation_sheet"
         android:name="com.pechuro.bsuirschedule.feature.navigation.NavigationSheet"
-        android:label="NavigationSheet" />
+        android:label="NavigationSheet"
+        tools:layout="@layout/sheet_navigation" />
+
+    <dialog
+        android:id="@+id/updateScheduleSheetDestination"
+        android:name="com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheet"
+        android:label="UpdateScheduleSheet"
+        tools:layout="@layout/sheet_update_schedule">
+
+        <argument
+            android:name="scheduleArray"
+            app:argType="com.pechuro.bsuirschedule.domain.entity.Schedule[]" />
+    </dialog>
 </navigation>

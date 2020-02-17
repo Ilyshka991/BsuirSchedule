@@ -58,5 +58,14 @@
             android:text="@string/navigation_msg_schedule_update_error"
             android:textSize="16sp"
             android:visibility="gone" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/navigationDrawerItemContentUpdateAvailableText"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/navigation_msg_schedule_update_available"
+            android:textSize="16sp"
+            android:visibility="gone" />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

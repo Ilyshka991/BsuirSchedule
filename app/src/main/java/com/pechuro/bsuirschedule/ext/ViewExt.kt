@@ -43,6 +43,23 @@ fun View.setVisibleWithAlpha(isVisible: Boolean): Animator {
     return animator
 }
 
+
+fun View.setVisibleOrInvisibleWithAlpha(isVisible: Boolean): Animator {
+    val previousAnimator = getTag(R.id.tagCurrentAnimator) as? Animator
+    previousAnimator?.cancel()
+    val animator = if (isVisible) {
+        animateAlpha(alpha, 1F).apply {
+            doOnStart { visibility = View.VISIBLE }
+        }
+    } else {
+        animateAlpha(alpha, 0F).apply {
+            doOnEnd { visibility = View.INVISIBLE }
+        }
+    }
+    animator.start()
+    return animator
+}
+
 fun View.setHeight(@Px height: Int) = apply {
     layoutParams.height = height
     requestLayout()

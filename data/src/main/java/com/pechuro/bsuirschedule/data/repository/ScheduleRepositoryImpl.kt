@@ -89,8 +89,9 @@ class ScheduleRepositoryImpl(
                     val itemsDTOList = scheduleDTO.schedule ?: emptyList()
                     val schedule = Schedule.GroupClasses(
                             name = group.number,
-                            lastUpdateDate = lastUpdatedDate,
-                            group = group
+                            lastUpdatedDate = lastUpdatedDate,
+                            group = group,
+                            notRemindForUpdates = false
                     )
                     val items = itemsDTOList.toGroupLessons(schedule, auditories, departments)
 
@@ -100,8 +101,9 @@ class ScheduleRepositoryImpl(
                     val itemsDTOList = scheduleDTO.exam ?: emptyList()
                     val schedule = Schedule.GroupExams(
                             name = group.number,
-                            lastUpdated = lastUpdatedDate,
-                            group = group
+                            lastUpdatedDate = lastUpdatedDate,
+                            group = group,
+                            notRemindForUpdates = false
                     )
                     val items = itemsDTOList.toGroupExams(schedule, auditories, departments)
 
@@ -158,14 +160,39 @@ class ScheduleRepositoryImpl(
         }
     }
 
+    override suspend fun setNotRemindForUpdates(schedule: Schedule, notRemind: Boolean) {
+        when (schedule) {
+            is Schedule.GroupClasses -> {
+                val newSchedule = Schedule.GroupClasses(
+                        name = schedule.name,
+                        group = schedule.group,
+                        lastUpdatedDate = schedule.lastUpdatedDate,
+                        notRemindForUpdates = notRemind
+                ).toDatabaseEntity()
+                performDaoCall { dao.update(newSchedule) }
+            }
+            is Schedule.GroupExams -> {
+                val newSchedule = Schedule.GroupExams(
+                        name = schedule.name,
+                        group = schedule.group,
+                        lastUpdatedDate = schedule.lastUpdatedDate,
+                        notRemindForUpdates = notRemind
+                ).toDatabaseEntity()
+                performDaoCall { dao.update(newSchedule) }
+            }
+        }
+    }
+
     override suspend fun isUpdateAvailable(schedule: Schedule) = when (schedule) {
         is Schedule.GroupClasses -> {
             val newLastUpdateDate = performApiCall { api.getLastUpdateDate(schedule.group.number) }.toDomainEntity()
-            schedule.lastUpdateDate < newLastUpdateDate
+            schedule.lastUpdatedDate < newLastUpdateDate
+            true
         }
         is Schedule.GroupExams -> {
             val newLastUpdate = performApiCall { api.getLastUpdateDate(schedule.group.number) }.toDomainEntity()
-            schedule.lastUpdated < newLastUpdate
+            schedule.lastUpdatedDate < newLastUpdate
+            true
         }
         else -> false
     }

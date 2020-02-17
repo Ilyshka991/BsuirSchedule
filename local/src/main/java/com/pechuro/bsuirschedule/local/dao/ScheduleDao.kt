@@ -80,6 +80,9 @@ interface ScheduleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(value: GroupClassesScheduleCached)
 
+    @Update
+    suspend fun update(value: GroupClassesScheduleCached)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(value: GroupItemClassesCached): Long
 
@@ -92,6 +95,9 @@ interface ScheduleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(value: GroupExamScheduleCached)
+
+    @Update
+    suspend fun update(value: GroupExamScheduleCached)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(value: GroupItemExamCached): Long
