@@ -5,6 +5,7 @@ import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.domain.exception.DataSourceException
 import com.pechuro.bsuirschedule.domain.ext.parseOrDefault
 import com.pechuro.bsuirschedule.remote.dto.*
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -260,8 +261,10 @@ private fun getWeekDayFor(value: String) = when (value.toLowerCase()) {
     else -> WeekDay.SUNDAY
 }
 
-@SuppressLint("SimpleDateFormat")
-private val dateFormatter = SimpleDateFormat("dd.MM.yyyy")
+private val dateFormatter: DateFormat
+    get() = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).apply {
+        isLenient = false
+    }
 
 private fun getResultWeekNumbers(source: List<Int>) = if (source.contains(0)) {
     source.filter { it != 0 }.union(listOf(1, 2, 3, 4))
