@@ -1,6 +1,10 @@
 package com.pechuro.bsuirschedule.domain.entity
 
-enum class WeekDay(val index: Int) {
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+enum class WeekDay(val index: Int) : Parcelable {
     MONDAY(1),
     TUESDAY(2),
     WEDNESDAY(3),

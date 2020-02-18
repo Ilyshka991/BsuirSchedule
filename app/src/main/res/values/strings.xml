@@ -29,7 +29,14 @@
     <string name="navigation_msg_no_schedules">No Schedules</string>
     <string name="navigation_msg_schedule_update_in_progress">Updating</string>
     <string name="navigation_msg_schedule_update_error">Not updated</string>
+    <string name="navigation_msg_schedule_update_available">Update is available</string>
     <string name="navigation_msg_schedule_update_success">Updated</string>
+
+    <string name="update_schedule_classes_title">Update classes for %1$s is available!</string>
+    <string name="update_schedule_exams_title">Update exams for %1$s is available!</string>
+    <string name="update_schedule_action_update">Update</string>
+    <string name="update_schedule_action_cancel">Cancel</string>
+    <string name="update_schedule_action_not_remind">Don\'t remind</string>
 
     <string name="start_message">Hello</string>
 

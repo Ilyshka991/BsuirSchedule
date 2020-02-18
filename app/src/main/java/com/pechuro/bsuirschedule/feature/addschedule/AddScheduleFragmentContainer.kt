@@ -7,7 +7,8 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.ext.addOnTabSelectedListener
-import com.pechuro.bsuirschedule.ext.observeNonNull
+import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel.State
 import kotlinx.android.synthetic.main.fragment_add_schedule_container.*
@@ -53,7 +54,7 @@ class AddScheduleFragmentContainer : BaseFragment() {
     }
 
     private fun observeData() {
-        viewModel.state.observeNonNull(viewLifecycleOwner) { state ->
+        viewModel.state.nonNull().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is State.Complete -> onComplete()
                 is State.Loading -> setActionsEnabled(false)

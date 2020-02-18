@@ -24,5 +24,7 @@ data class GroupExamScheduleCached(
         @ColumnInfo(name = "group_id", index = true)
         val groupId: Long,
         @ColumnInfo(name = "last_update")
-        val lastUpdate: Date
+        val lastUpdate: Date,
+        @ColumnInfo(name = "not_remind_for_updates")
+        val notRemindForUpdates: Boolean
 )

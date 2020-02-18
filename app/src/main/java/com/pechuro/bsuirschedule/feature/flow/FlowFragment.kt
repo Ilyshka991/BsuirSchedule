@@ -11,10 +11,14 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.BaseEvent
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
+import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleCompleteEvent
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoCompleteEvent
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
+import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetArgs
 import kotlinx.android.synthetic.main.fragment_flow.*
 
 class FlowFragment : BaseFragment() {
@@ -42,6 +46,7 @@ class FlowFragment : BaseFragment() {
         initNavigation()
         if (!viewModel.isInfoLoaded()) openLoadInfo()
         initViews()
+        observeData()
         receiveEvents()
     }
 
@@ -71,6 +76,12 @@ class FlowFragment : BaseFragment() {
         }
     }
 
+    private fun observeData() {
+        viewModel.availableForUpdateScheduleListData.nonNull().observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) openUpdateSchedules(it)
+        }
+    }
+
     private fun receiveEvents() {
         EventBus.receive<BaseEvent>(lifecycleScope) { event ->
             when (event) {
@@ -97,6 +108,17 @@ class FlowFragment : BaseFragment() {
 
     private fun openLoadInfo() {
         navController.navigate(R.id.loadInfoDestination, null, defaultNavOptions)
+    }
+
+    private fun openUpdateSchedules(schedules: List<Schedule>) {
+        val currentDestinationId = navController.currentDestination?.id
+        if (currentDestinationId == R.id.navigationSheetDestination ||
+                currentDestinationId == R.id.updateScheduleSheetDestination) return
+        navController.navigate(
+                R.id.updateScheduleSheetDestination,
+                UpdateScheduleSheetArgs(schedules.toTypedArray()).toBundle(),
+                defaultNavOptions
+        )
     }
 
     private fun openAddSchedule() {

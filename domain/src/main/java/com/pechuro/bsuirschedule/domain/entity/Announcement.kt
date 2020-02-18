@@ -1,23 +1,28 @@
 package com.pechuro.bsuirschedule.domain.entity
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 sealed class Announcement(
-        val date: Date,
-        val content: String
-) {
+        open val date: Date,
+        open val content: String
+) : Parcelable {
+
+    @Parcelize
     class EmployeeAnnouncement(
-            date: Date,
-            content: String,
+            override val date: Date,
+            override val content: String,
             val employee: Employee
     ) : Announcement(
             date = date,
             content = content
     )
 
+    @Parcelize
     class DepartmentAnnouncement(
-            date: Date,
-            content: String,
+            override val date: Date,
+            override val content: String,
             val employee: Department
     ) : Announcement(
             date = date,

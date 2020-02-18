@@ -17,6 +17,8 @@ interface IScheduleRepository {
 
     suspend fun update(schedule: Schedule)
 
+    suspend fun setNotRemindForUpdates(schedule: Schedule, notRemind: Boolean)
+
     suspend fun isUpdateAvailable(schedule: Schedule): Boolean
 
     suspend fun delete(schedule: Schedule)

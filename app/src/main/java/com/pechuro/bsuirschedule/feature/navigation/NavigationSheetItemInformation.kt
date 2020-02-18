@@ -20,11 +20,11 @@ sealed class NavigationSheetItemInformation(val id: Int) {
 
     data class Content(
             val schedule: Schedule,
-            var updateState: UpdateState = UpdateState.IDLE
+            var updateState: UpdateState = UpdateState.NOT_AVAILABLE
     ) : NavigationSheetItemInformation(ID_CONTENT) {
 
         enum class UpdateState {
-            IDLE, IN_PROGRESS, SUCCESS, ERROR
+            NOT_AVAILABLE, AVAILABLE, IN_PROGRESS, SUCCESS, ERROR
         }
     }
 }

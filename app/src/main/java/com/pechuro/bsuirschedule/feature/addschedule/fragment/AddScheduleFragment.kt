@@ -116,7 +116,7 @@ class AddScheduleFragment : BaseFragment() {
     }
 
     private fun observeData() {
-        viewModel.state.observeNonNull(viewLifecycleOwner) {
+        viewModel.state.nonNull().observe(viewLifecycleOwner) {
             when (it) {
                 is State.Idle -> {
                     addScheduleSuggestionsRecyclerView.tag = null
@@ -146,12 +146,12 @@ class AddScheduleFragment : BaseFragment() {
 
         when (scheduleType) {
             FragmentType.STUDENT -> {
-                viewModel.allGroupsData.observeNonNull(viewLifecycleOwner) {
+                viewModel.allGroupsData.nonNull().observe(viewLifecycleOwner) {
                     suggestionsAdapter.submitList(it)
                 }
             }
             FragmentType.EMPLOYEE -> {
-                viewModel.allEmployeesData.observeNonNull(viewLifecycleOwner) {
+                viewModel.allEmployeesData.nonNull().observe(viewLifecycleOwner) {
                     suggestionsAdapter.submitList(it)
                 }
             }

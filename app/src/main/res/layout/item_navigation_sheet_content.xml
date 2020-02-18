@@ -27,6 +27,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
         android:animateLayoutChanges="true"
+        android:paddingBottom="8dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/navigationDrawerItemContentText"
@@ -56,6 +57,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/navigation_msg_schedule_update_error"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/navigationDrawerItemContentUpdateAvailableText"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/navigation_msg_schedule_update_available"
             android:textSize="16sp"
             android:visibility="gone" />
     </FrameLayout>

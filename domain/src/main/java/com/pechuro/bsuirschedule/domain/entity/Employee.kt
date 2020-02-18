@@ -1,5 +1,9 @@
 package com.pechuro.bsuirschedule.domain.entity
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Employee(
         val id: Long,
         val firstName: String,
@@ -9,4 +13,4 @@ data class Employee(
         val photoLink: String,
         val rank: String,
         val department: Department
-)
+) : Parcelable

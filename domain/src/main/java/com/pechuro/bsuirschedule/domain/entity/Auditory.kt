@@ -1,5 +1,9 @@
 package com.pechuro.bsuirschedule.domain.entity
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Auditory(
         val id: Long,
         val name: String,
@@ -8,4 +12,4 @@ data class Auditory(
         val building: Building,
         val auditoryType: AuditoryType,
         val department: Department?
-)
+) : Parcelable

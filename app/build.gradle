@@ -13,6 +13,10 @@ apply from: '../configuration.gradle'
 apply from: "../scripts/icons.gradle"
 apply from: "../scripts/signing.gradle"
 
+androidExtensions {
+    experimental = true
+}
+
 android {
     compileSdkVersion configuration.compileSdkVersion
 
@@ -58,10 +62,6 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
     }
-}
-
-androidExtensions {
-    experimental = true
 }
 
 dependencies {
