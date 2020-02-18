@@ -36,7 +36,7 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
         updateScheduleErrorRetryButton.setSafeClickListener(onClick = onUpdateClickAction)
 
         val onCancelClickAction: (View) -> Unit = {
-            viewModel.cancelUpdate(updateScheduleSheetUpdateButton.isChecked)
+            viewModel.cancelUpdate(updateScheduleSheetNotRemindCheckbox.isChecked)
         }
         updateScheduleSheetCancelButton.setSafeClickListener(onClick = onCancelClickAction)
         updateScheduleErrorCancelButton.setSafeClickListener(onClick = onCancelClickAction)
@@ -61,7 +61,7 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
             is Schedule.GroupExams, is Schedule.EmployeeExams -> R.string.update_schedule_exams_title
         }
         updateScheduleSheetTitle.text = getString(titleRes, schedule.name)
-        updateScheduleSheetUpdateButton.isChecked = false
+        updateScheduleSheetNotRemindCheckbox.isChecked = false
     }
 
     private fun setState(state: State) {
