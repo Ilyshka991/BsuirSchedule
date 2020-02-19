@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.common
+package com.pechuro.bsuirschedule.common.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

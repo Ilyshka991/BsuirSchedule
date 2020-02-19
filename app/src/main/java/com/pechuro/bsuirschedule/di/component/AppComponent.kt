@@ -11,11 +11,12 @@ import dagger.Component
 @AppScope
 @Component(modules = [
     ApplicationModule::class,
-    AppViewModelsModule::class,
+    ViewModelModule::class,
     NetworkModule::class,
     SharedPreferencesModule::class,
     DatabaseModule::class,
-    RepositoryModule::class
+    RepositoryModule::class,
+    WorkerModule::class
 ])
 interface AppComponent {
 
