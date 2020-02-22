@@ -1,5 +1,7 @@
 package com.pechuro.bsuirschedule.feature
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.pechuro.bsuirschedule.R
@@ -10,6 +12,11 @@ import com.pechuro.bsuirschedule.feature.flow.FlowFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+
+        fun newIntent(context: Context) = Intent(context, MainActivity::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.LightTheme)

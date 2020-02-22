@@ -2,7 +2,7 @@ package com.pechuro.bsuirschedule.di.module
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.pechuro.bsuirschedule.common.ViewModelFactory
+import com.pechuro.bsuirschedule.common.factory.ViewModelFactory
 import com.pechuro.bsuirschedule.di.annotations.ViewModelKey
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel
 import com.pechuro.bsuirschedule.feature.flow.FlowViewModel
@@ -14,7 +14,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 
 @Module
-interface AppViewModelsModule {
+interface ViewModelModule {
 
     @Binds
     fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

@@ -76,7 +76,8 @@ ext {
             workManager        : "androidx.work:work-runtime-ktx:${libraryVersions.workManager}",
             liveData           : "androidx.lifecycle:lifecycle-livedata-ktx:${libraryVersions.lifeCycle}",
             viewModel          : "androidx.lifecycle:lifecycle-viewmodel-ktx:${libraryVersions.lifeCycle}",
-            viewModelSavedState: "androidx.lifecycle:lifecycle-viewmodel-savedstate:${libraryVersions.lifeCycle}"
+            viewModelSavedState: "androidx.lifecycle:lifecycle-viewmodel-savedstate:${libraryVersions.lifeCycle}",
+            extenssions        : "androidx.lifecycle:lifecycle-extensions:${libraryVersions.lifeCycle}"
     ]
     archComponentsProcessor = "androidx.lifecycle:lifecycle-compiler:${libraryVersions.lifeCycle}"
 

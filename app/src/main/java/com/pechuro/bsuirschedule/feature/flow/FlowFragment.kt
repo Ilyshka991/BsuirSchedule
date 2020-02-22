@@ -12,14 +12,13 @@ import com.pechuro.bsuirschedule.common.BaseEvent
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.ext.nonNull
-import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleCompleteEvent
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoCompleteEvent
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
 import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetArgs
 import kotlinx.android.synthetic.main.fragment_flow.*
+import kotlinx.coroutines.launch
 
 class FlowFragment : BaseFragment() {
 
@@ -46,7 +45,7 @@ class FlowFragment : BaseFragment() {
         initNavigation()
         if (!viewModel.isInfoLoaded()) openLoadInfo()
         initViews()
-        observeData()
+        checkScheduleUpdates()
         receiveEvents()
     }
 
@@ -76,9 +75,12 @@ class FlowFragment : BaseFragment() {
         }
     }
 
-    private fun observeData() {
-        viewModel.availableForUpdateScheduleListData.nonNull().observe(viewLifecycleOwner) {
-            if (it.isNotEmpty()) openUpdateSchedules(it)
+    private fun checkScheduleUpdates() {
+        lifecycleScope.launch {
+            val availableForUpdateSchedules = viewModel.getAvailableForUpdateSchedules()
+            if (availableForUpdateSchedules.isNotEmpty()) {
+                openUpdateSchedules(availableForUpdateSchedules)
+            }
         }
     }
 
