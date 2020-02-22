@@ -3,16 +3,22 @@ package com.pechuro.bsuirschedule
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
-import androidx.work.*
+import androidx.work.Configuration
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.WorkManager
+import androidx.work.WorkerFactory
 import com.pechuro.bsuirschedule.di.component.AppComponent
 import com.pechuro.bsuirschedule.di.component.DaggerAppComponent
 import com.pechuro.bsuirschedule.domain.common.Logger
-import com.pechuro.bsuirschedule.worker.UpdateScheduleWorker
+import com.pechuro.bsuirschedule.worker.CheckScheduleUpdatesWorker
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-open class App : Application(), Configuration.Provider {
+open class App : Application(), Configuration.Provider, LifecycleObserver {
 
     @Inject
     protected lateinit var loggerTree: Logger.Tree
@@ -20,6 +26,12 @@ open class App : Application(), Configuration.Provider {
     protected lateinit var workerFactory: WorkerFactory
 
     lateinit var appComponent: AppComponent
+
+    val isInForeground: Boolean
+        get() = ProcessLifecycleOwner.get()
+                .lifecycle
+                .currentState
+                .isAtLeast(Lifecycle.State.STARTED)
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
@@ -30,7 +42,7 @@ open class App : Application(), Configuration.Provider {
         super.onCreate()
         initDI()
         initLogger()
-        startWorkers()
+        startCheckScheduleUpdatesWorker()
     }
 
     override fun getWorkManagerConfiguration() = Configuration.Builder()
@@ -54,17 +66,15 @@ open class App : Application(), Configuration.Provider {
         }
     }
 
-    private fun startWorkers() {
-        val updateScheduleRequest = PeriodicWorkRequest.Builder(
-                UpdateScheduleWorker::class.java,
-                1, TimeUnit.DAYS
+    private fun startCheckScheduleUpdatesWorker() {
+        val workRequest = CheckScheduleUpdatesWorker.createPeriodicRequest(
+                scheduleAtHour = 20,
+                repeatIntervalMillis = TimeUnit.DAYS.toMillis(1)
         )
-                .addTag(UpdateScheduleWorker.TAG)
-                .build()
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-                UpdateScheduleWorker.TAG,
+                CheckScheduleUpdatesWorker.TAG,
                 ExistingPeriodicWorkPolicy.KEEP,
-                updateScheduleRequest
+                workRequest
         )
     }
 }

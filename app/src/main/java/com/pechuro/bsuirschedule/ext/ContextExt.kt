@@ -1,5 +1,6 @@
 package com.pechuro.bsuirschedule.ext
 
+import android.app.AlarmManager
 import android.content.Context
 import android.os.IBinder
 import android.util.TypedValue
@@ -14,6 +15,9 @@ import com.pechuro.bsuirschedule.App
 
 inline val Context.inputMethodManager: InputMethodManager
     get() = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+inline val Context.alarmManager: AlarmManager
+    get() = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
 fun Context.showKeyboard(view: View) {
     inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)

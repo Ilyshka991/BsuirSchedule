@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Bsuir Schedule</string>
 
+    <string name="notification_group_actions_label">Schedule actions</string>
+    <string name="notification_channel_update_label">Updates</string>
+
+    <string name="notification_update_title">Schedule update for %1$s is available</string>
+    <string name="notification_update_description">Tap for update</string>
+
     <string name="action_retry">Retry</string>
     <string name="action_cancel">Cancel</string>
 

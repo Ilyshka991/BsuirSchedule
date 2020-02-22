@@ -3,7 +3,7 @@ package com.pechuro.bsuirschedule.di.module
 import com.pechuro.bsuirschedule.common.factory.ChildWorkerFactory
 import com.pechuro.bsuirschedule.common.factory.WorkerFactory
 import com.pechuro.bsuirschedule.di.annotations.WorkerKey
-import com.pechuro.bsuirschedule.worker.UpdateScheduleWorker
+import com.pechuro.bsuirschedule.worker.CheckScheduleUpdatesWorker
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -16,6 +16,6 @@ interface WorkerModule {
 
     @Binds
     @IntoMap
-    @WorkerKey(UpdateScheduleWorker::class)
-    fun updateSchedule(viewModel: UpdateScheduleWorker.Factory): ChildWorkerFactory
+    @WorkerKey(CheckScheduleUpdatesWorker::class)
+    fun updateSchedule(viewModel: CheckScheduleUpdatesWorker.Factory): ChildWorkerFactory
 }
