@@ -9,6 +9,7 @@ import com.pechuro.bsuirschedule.domain.common.fold
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.Employee
 import com.pechuro.bsuirschedule.domain.entity.Group
+import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.domain.interactor.GetEmployees
 import com.pechuro.bsuirschedule.domain.interactor.GetGroups
@@ -115,7 +116,7 @@ class AddScheduleViewModel @Inject constructor(
         launchCoroutine {
             loadGroupSchedule.execute(LoadGroupSchedule.Params(group, types)).fold(
                     onSuccess = {
-                        state.value = State.Complete
+                        state.value = State.Complete(it)
                     },
                     onFailure = {
                         state.value = State.Error
@@ -130,17 +131,13 @@ class AddScheduleViewModel @Inject constructor(
         launchCoroutine {
             loadEmployeeSchedule.execute(LoadEmployeeSchedule.Params(employee, types)).fold(
                     onSuccess = {
-                        state.value = State.Complete
+                        state.value = State.Complete(it)
                     },
                     onFailure = {
                         state.value = State.Error
                     }
             )
         }
-    }
-
-    fun complete() {
-        state.value = State.Complete
     }
 
     fun cancel() {
@@ -151,6 +148,6 @@ class AddScheduleViewModel @Inject constructor(
         object Idle : State()
         object Loading : State()
         object Error : State()
-        object Complete : State()
+        data class Complete(val schedules: List<Schedule>) : State()
     }
 }

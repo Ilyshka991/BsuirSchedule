@@ -7,6 +7,7 @@ import com.pechuro.bsuirschedule.remote.ApiConfig.CONNECT_TIMEOUT
 import com.pechuro.bsuirschedule.remote.api.*
 import com.pechuro.bsuirschedule.remote.common.NetworkAvailabilityChecker
 import com.pechuro.bsuirschedule.remote.interceptor.NetworkAvailabilityInterceptor
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -61,8 +62,12 @@ class NetworkModule {
 
     @Provides
     @AppScope
-    fun provideConverterFactory(): Converter.Factory =
-            MoshiConverterFactory.create()
+    fun provideMoshi(): Moshi = Moshi.Builder().build()
+
+    @Provides
+    @AppScope
+    fun provideConverterFactory(moshi: Moshi): Converter.Factory =
+            MoshiConverterFactory.create(moshi)
 
     @Provides
     @AppScope

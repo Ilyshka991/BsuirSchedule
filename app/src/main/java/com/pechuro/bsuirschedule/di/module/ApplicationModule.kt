@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.di.module
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.pechuro.bsuirschedule.App
 import com.pechuro.bsuirschedule.common.AndroidLoggerTree
 import com.pechuro.bsuirschedule.common.NetworkAvailabilityCheckerImpl
@@ -25,4 +26,9 @@ class ApplicationModule {
     @Provides
     @AppScope
     fun provideLoggerTree(): Logger.Tree = AndroidLoggerTree()
+
+    @Provides
+    @AppScope
+    fun provideSharedPrefs(context: Context): SharedPreferences =
+            context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
 }

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigationItemParentView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true">
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/navigationDrawerItemContentText"
+        android:id="@+id/navigationItemContentText"
         style="@style/TextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
-        android:id="@+id/navigationDrawerItemContentUpdateParentView"
+        android:id="@+id/navigationItemContentUpdateParentView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -30,11 +31,11 @@
         android:paddingBottom="8dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/navigationDrawerItemContentText"
-        app:layout_constraintTop_toBottomOf="@+id/navigationDrawerItemContentText">
+        app:layout_constraintStart_toStartOf="@+id/navigationItemContentText"
+        app:layout_constraintTop_toBottomOf="@+id/navigationItemContentText">
 
         <com.pechuro.bsuirschedule.widget.DotAnimatedTextView
-            android:id="@+id/navigationDrawerItemContentUpdateLoaderView"
+            android:id="@+id/navigationItemContentUpdateLoaderView"
             style="@style/DefaultText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,7 +44,7 @@
             android:visibility="gone" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/navigationDrawerItemContentUpdateSuccessText"
+            android:id="@+id/navigationItemContentUpdateSuccessText"
             style="@style/DefaultText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,7 +53,7 @@
             android:visibility="gone" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/navigationDrawerItemContentUpdateErrorText"
+            android:id="@+id/navigationItemContentUpdateErrorText"
             style="@style/DefaultText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -61,7 +62,7 @@
             android:visibility="gone" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/navigationDrawerItemContentUpdateAvailableText"
+            android:id="@+id/navigationItemContentUpdateAvailableText"
             style="@style/DefaultText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

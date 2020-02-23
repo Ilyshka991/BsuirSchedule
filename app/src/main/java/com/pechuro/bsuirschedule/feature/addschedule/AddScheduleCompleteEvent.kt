@@ -1,5 +1,6 @@
 package com.pechuro.bsuirschedule.feature.addschedule
 
 import com.pechuro.bsuirschedule.common.BaseEvent
+import com.pechuro.bsuirschedule.domain.entity.Schedule
 
-object AddScheduleCompleteEvent : BaseEvent()
+data class AddScheduleCompleteEvent(val schedules: List<Schedule>) : BaseEvent()

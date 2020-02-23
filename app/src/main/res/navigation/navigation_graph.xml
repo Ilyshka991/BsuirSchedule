@@ -39,4 +39,15 @@
             android:name="scheduleArray"
             app:argType="com.pechuro.bsuirschedule.domain.entity.Schedule[]" />
     </dialog>
+
+    <fragment
+        android:id="@+id/viewScheduleDestination"
+        android:name="com.pechuro.bsuirschedule.feature.view.ViewScheduleContainer"
+        android:label="ViewScheduleContainer"
+        tools:layout="@layout/fragment_view_schedule">
+
+        <argument
+            android:name="schedule"
+            app:argType="com.pechuro.bsuirschedule.domain.entity.Schedule" />
+    </fragment>
 </navigation>

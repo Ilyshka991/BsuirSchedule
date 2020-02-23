@@ -17,6 +17,7 @@ import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleCompleteEvent
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoCompleteEvent
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
 import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetArgs
+import com.pechuro.bsuirschedule.feature.view.ViewScheduleContainerArgs
 import kotlinx.android.synthetic.main.fragment_flow.*
 import kotlinx.coroutines.launch
 
@@ -38,12 +39,17 @@ class FlowFragment : BaseFragment() {
             popEnter = R.anim.fragment_close_enter
             popExit = R.anim.fragment_close_exit
         }
+        launchSingleTop = true
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initNavigation()
-        if (!viewModel.isInfoLoaded()) openLoadInfo()
+        if (!viewModel.isInfoLoaded()) {
+            openLoadInfo()
+        } else {
+            viewModel.lastOpenedSchedule?.let { setViewScheduleStartDestination(it) }
+        }
         initViews()
         checkScheduleUpdates()
         receiveEvents()
@@ -58,7 +64,6 @@ class FlowFragment : BaseFragment() {
     }
 
     private fun initNavigation() {
-
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val isControlsVisible = when (destination.id) {
                 R.id.addScheduleDestination -> false
@@ -88,17 +93,15 @@ class FlowFragment : BaseFragment() {
         EventBus.receive<BaseEvent>(lifecycleScope) { event ->
             when (event) {
                 is LoadInfoCompleteEvent -> popFragment()
-                is AddScheduleCompleteEvent -> popFragment()
+                is AddScheduleCompleteEvent -> {
+                    event.schedules.firstOrNull()?.let { schedule ->
+                        openViewSchedule(schedule)
+                    }
+                }
                 is NavigationSheetEvent.OnAddSchedule -> openAddSchedule()
-                is NavigationSheetEvent.OnScheduleClick -> {
-                }
-                is NavigationSheetEvent.OnTitleClick -> {
-                }
+                is NavigationSheetEvent.OnScheduleClick -> openViewSchedule(event.schedule)
+                is NavigationSheetEvent.OnScheduleDeleted -> onScheduleDeleted(event.schedule)
                 is NavigationSheetEvent.OnOpenSettings -> {
-                }
-                is NavigationSheetEvent.OnScheduleLongClick -> {
-                }
-                is NavigationSheetEvent.OnTitleLongClick -> {
                 }
             }
         }
@@ -126,6 +129,37 @@ class FlowFragment : BaseFragment() {
     private fun openAddSchedule() {
         popFragment()
         navController.navigate(R.id.addScheduleDestination, null, defaultNavOptions)
+    }
+
+    private fun openViewSchedule(schedule: Schedule) {
+        if (viewModel.lastOpenedSchedule == schedule) {
+            popFragment()
+            return
+        }
+        viewModel.lastOpenedSchedule = schedule
+        setViewScheduleStartDestination(schedule)
+        val arguments = ViewScheduleContainerArgs(schedule).toBundle()
+        navController.navigate(R.id.viewScheduleDestination, arguments, defaultNavOptions)
+    }
+
+    private fun onScheduleDeleted(schedule: Schedule) {
+        if (viewModel.lastOpenedSchedule == schedule) {
+            setDefaultStartDestination()
+            viewModel.lastOpenedSchedule = null
+        }
+    }
+
+    private fun setViewScheduleStartDestination(schedule: Schedule) {
+        val navGraph = navController.navInflater.inflate(R.navigation.navigation_graph)
+        val arguments = ViewScheduleContainerArgs(schedule).toBundle()
+        navGraph.startDestination = R.id.viewScheduleDestination
+        navController.setGraph(navGraph, arguments)
+    }
+
+    private fun setDefaultStartDestination() {
+        val navGraph = navController.navInflater.inflate(R.navigation.navigation_graph)
+        navGraph.startDestination = R.id.startDestination
+        navController.graph = navGraph
     }
 
     private fun popFragment() = navController.popBackStack()

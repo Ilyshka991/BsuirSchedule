@@ -7,11 +7,19 @@ interface IScheduleRepository {
 
     suspend fun getAllSchedules(): Flow<List<Schedule>>
 
+    suspend fun getGroupClassesByName(name: String): Schedule.GroupClasses
+
+    suspend fun getGroupExamsByName(name: String): Schedule.GroupExams
+
+    suspend fun getEmployeeClassesByName(name: String): Schedule.EmployeeClasses
+
+    suspend fun getEmployeeExamsByName(name: String): Schedule.EmployeeExams
+
     suspend fun <T : Schedule> getScheduleItems(schedule: T): Flow<ScheduleItem<T>>
 
-    suspend fun loadGroupSchedule(group: Group, types: List<ScheduleType>)
+    suspend fun loadGroupSchedule(group: Group, types: List<ScheduleType>): List<Schedule>
 
-    suspend fun loadEmployeeSchedule(employee: Employee, types: List<ScheduleType>)
+    suspend fun loadEmployeeSchedule(employee: Employee, types: List<ScheduleType>): List<Schedule>
 
     suspend fun updateAll()
 

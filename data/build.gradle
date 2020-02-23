@@ -25,6 +25,7 @@ dependencies {
 
     implementation networkDependencies.values()
     implementation jsonSerializer
+    kapt jsonSerializerProcessor
 
     api project(path: ':local')
     api project(path: ':remote')

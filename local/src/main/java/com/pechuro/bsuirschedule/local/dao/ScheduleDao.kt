@@ -148,6 +148,19 @@ interface ScheduleDao {
     fun getAllEmployeeExamSchedules(): Flow<List<EmployeeExamScheduleCached>>
 
 
+    @Query("SELECT * FROM group_schedule_classes WHERE name = :name")
+    fun getGroupClassesByName(name: String): GroupClassesScheduleCached
+
+    @Query("SELECT * FROM group_schedule_exam WHERE name = :name")
+    fun getGroupExamsByName(name: String): GroupExamScheduleCached
+
+    @Query("SELECT * FROM employee_schedule_classes WHERE name = :name")
+    fun getEmployeeClassesByName(name: String): EmployeeClassesScheduleCached
+
+    @Query("SELECT * FROM employee_schedule_exam WHERE name = :name")
+    fun getEmployeeExamsByName(name: String): EmployeeExamScheduleCached
+
+
     @Query("DELETE FROM group_schedule_classes WHERE name = :name")
     suspend fun deleteGroupClassesSchedule(name: String)
 
