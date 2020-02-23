@@ -27,5 +27,23 @@ sealed class NavigationSheetItemInformation(val id: Int) {
         enum class UpdateState {
             NOT_AVAILABLE, AVAILABLE, IN_PROGRESS, SUCCESS, ERROR
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as Content
+
+            if (schedule != other.schedule) return false
+            if (isSelected != other.isSelected) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = schedule.hashCode()
+            result = 31 * result + isSelected.hashCode()
+            return result
+        }
     }
 }

@@ -14,6 +14,7 @@ import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.*
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState.*
 import kotlinx.android.synthetic.main.item_navigation_sheet_content.*
+import kotlinx.android.synthetic.main.item_navigation_sheet_empty.*
 
 private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NavigationSheetItemInformation>() {
 
@@ -90,7 +91,12 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
 
     private class EmptyViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(view) {
 
-        override fun onBind(data: NavigationSheetItemInformation) {}
+        override fun onBind(data: NavigationSheetItemInformation) {
+            navigationItemEmptyParentView.isVisible = false
+            itemView.postDelayed({
+                navigationItemEmptyParentView.isVisible = true
+            }, 1000)
+        }
     }
 
     private inner class TitleViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(view) {
