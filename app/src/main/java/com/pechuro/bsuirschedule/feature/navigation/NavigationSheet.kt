@@ -92,6 +92,7 @@ class NavigationSheet : BaseBottomSheetDialog() {
     }
     private val adapter = NavigationDrawerAdapter().apply {
         actionCallback = adapterActionCallback
+        setHasStableIds(true)
     }
 
     private val itemTouchHelper = ItemTouchHelper(
@@ -142,7 +143,6 @@ class NavigationSheet : BaseBottomSheetDialog() {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = this@NavigationSheet.adapter
             itemTouchHelper.attachToRecyclerView(this)
-            itemAnimator = null
         }
         navigationSheetSettingButton.setSafeClickListener {
             EventBus.send(NavigationSheetEvent.OnOpenSettings)

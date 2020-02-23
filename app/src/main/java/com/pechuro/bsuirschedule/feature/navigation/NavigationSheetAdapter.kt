@@ -79,6 +79,8 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
             position: Int
     ) = holder.onBind(getItem(position))
 
+    override fun getItemId(position: Int) = getItem(position).hashCode().toLong()
+
     fun getItemAt(position: Int): NavigationSheetItemInformation = getItem(position)
 
     private class DividerViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(view) {
