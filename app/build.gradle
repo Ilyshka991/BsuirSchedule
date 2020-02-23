@@ -44,7 +44,7 @@ android {
             applicationIdSuffix ".beta"
             versionNameSuffix "-beta"
             minifyEnabled true
-            debuggable false
+            debuggable true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
