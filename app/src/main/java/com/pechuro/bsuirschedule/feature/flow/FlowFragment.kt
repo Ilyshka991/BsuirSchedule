@@ -45,11 +45,8 @@ class FlowFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initNavigation()
-        if (!viewModel.isInfoLoaded()) {
-            openLoadInfo()
-        } else {
-            viewModel.lastOpenedSchedule?.let { setViewScheduleStartDestination(it) }
-        }
+        viewModel.lastOpenedSchedule?.let { setViewScheduleStartDestination(it) }
+        if (!viewModel.isInfoLoaded()) openLoadInfo()
         initViews()
         checkScheduleUpdates()
         receiveEvents()
@@ -132,10 +129,7 @@ class FlowFragment : BaseFragment() {
     }
 
     private fun openViewSchedule(schedule: Schedule) {
-        if (viewModel.lastOpenedSchedule == schedule) {
-            popFragment()
-            return
-        }
+        if (viewModel.lastOpenedSchedule == schedule) return
         viewModel.lastOpenedSchedule = schedule
         setViewScheduleStartDestination(schedule)
         val arguments = ViewScheduleContainerArgs(schedule).toBundle()

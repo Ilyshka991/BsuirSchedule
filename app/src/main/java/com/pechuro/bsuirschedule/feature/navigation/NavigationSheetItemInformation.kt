@@ -20,7 +20,8 @@ sealed class NavigationSheetItemInformation(val id: Int) {
 
     data class Content(
             val schedule: Schedule,
-            var updateState: UpdateState = UpdateState.NOT_AVAILABLE
+            val updateState: UpdateState = UpdateState.NOT_AVAILABLE,
+            val isSelected: Boolean = false
     ) : NavigationSheetItemInformation(ID_CONTENT) {
 
         enum class UpdateState {

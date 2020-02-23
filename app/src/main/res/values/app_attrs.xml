@@ -10,6 +10,8 @@
 
     <attr name="dividerColor" format="color" />
 
+    <attr name="buttonSelectedBackgroundColor" format="color" />
+    <attr name="buttonDefaultBackgroundColor" format="color" />
     <attr name="buttonEnabledTextColor" format="color" />
     <attr name="buttonDisabledTextColor" format="color" />
 

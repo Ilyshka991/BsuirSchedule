@@ -111,6 +111,7 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
                 tag = data.schedule
                 text = data.schedule.name
                 setOnClickListener(scheduleClickListener)
+                isSelected = data.isSelected
             }
             navigationItemContentUpdateParentView.isVisible = data.updateState != NOT_AVAILABLE
             navigationItemContentUpdateLoaderView.isVisible = data.updateState == IN_PROGRESS
