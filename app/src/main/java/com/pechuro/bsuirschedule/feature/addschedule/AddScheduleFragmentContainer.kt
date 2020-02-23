@@ -6,6 +6,7 @@ import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
+import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.ext.addOnTabSelectedListener
 import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.ext.observe
@@ -34,7 +35,7 @@ class AddScheduleFragmentContainer : BaseFragment() {
     private fun initView() {
         addScheduleContainerToolbar.apply {
             setNavigationOnClickListener {
-                onComplete()
+                activity?.onBackPressed()
             }
         }
         addScheduleContainerViewPager.apply {
@@ -56,7 +57,7 @@ class AddScheduleFragmentContainer : BaseFragment() {
     private fun observeData() {
         viewModel.state.nonNull().observe(viewLifecycleOwner) { state ->
             when (state) {
-                is State.Complete -> onComplete()
+                is State.Complete -> onComplete(state.schedules)
                 is State.Loading -> setActionsEnabled(false)
                 is State.Idle -> setActionsEnabled(true)
                 is State.Error -> setActionsEnabled(false)
@@ -64,8 +65,8 @@ class AddScheduleFragmentContainer : BaseFragment() {
         }
     }
 
-    private fun onComplete() {
-        EventBus.send(AddScheduleCompleteEvent)
+    private fun onComplete(schedules: List<Schedule>) {
+        EventBus.send(AddScheduleCompleteEvent(schedules))
     }
 
     private fun setActionsEnabled(enabled: Boolean) {

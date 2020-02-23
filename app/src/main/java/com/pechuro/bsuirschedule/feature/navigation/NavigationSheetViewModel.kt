@@ -7,11 +7,8 @@ import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
-import com.pechuro.bsuirschedule.domain.interactor.DeleteSchedule
-import com.pechuro.bsuirschedule.domain.interactor.GetAllSchedules
-import com.pechuro.bsuirschedule.domain.interactor.GetAvailableForUpdateSchedules
+import com.pechuro.bsuirschedule.domain.interactor.*
 import com.pechuro.bsuirschedule.domain.interactor.GetAvailableForUpdateSchedules.Params
-import com.pechuro.bsuirschedule.domain.interactor.UpdateSchedule
 import com.pechuro.bsuirschedule.ext.flowLiveData
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState
 import kotlinx.coroutines.delay
@@ -22,7 +19,8 @@ class NavigationSheetViewModel @Inject constructor(
         private val getAllSchedules: GetAllSchedules,
         private val deleteSchedule: DeleteSchedule,
         private val updateSchedule: UpdateSchedule,
-        private val getAvailableForUpdateSchedules: GetAvailableForUpdateSchedules
+        private val getAvailableForUpdateSchedules: GetAvailableForUpdateSchedules,
+        private val getLastOpenedSchedule: GetLastOpenedSchedule
 ) : BaseViewModel() {
 
     companion object {
@@ -32,41 +30,19 @@ class NavigationSheetViewModel @Inject constructor(
     private val allScheduleListData = flowLiveData {
         getAllSchedules.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
     }
-    private var availableForUpdateScheduleListData = flowLiveData {
+    private val availableForUpdateScheduleListData = flowLiveData {
         getAvailableForUpdateSchedules.execute(Params(includeAll = true)).getOrDefault(emptyFlow())
+    }
+    private val selectedScheduleData = flowLiveData {
+        getLastOpenedSchedule.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
     }
     private val schedulesUpdateState = MutableLiveData(emptyMap<Schedule, UpdateState>())
 
     val navigationInfoData = MediatorLiveData<List<NavigationSheetItemInformation>>().apply {
-        addSource(allScheduleListData) { scheduleList ->
-            val schedulesUpdateState = schedulesUpdateState.value ?: emptyMap()
-            val availableForUpdateScheduleList = availableForUpdateScheduleListData.value
-                    ?: emptyList()
-            value = transformScheduleListToNavInfoList(
-                    scheduleList = scheduleList,
-                    availableForUpdateScheduleList = availableForUpdateScheduleList,
-                    updateStates = schedulesUpdateState
-            )
-        }
-        addSource(availableForUpdateScheduleListData) { availableForUpdateScheduleList ->
-            val scheduleList = allScheduleListData.value ?: emptyList()
-            val schedulesUpdateState = schedulesUpdateState.value ?: emptyMap()
-            value = transformScheduleListToNavInfoList(
-                    scheduleList = scheduleList,
-                    availableForUpdateScheduleList = availableForUpdateScheduleList,
-                    updateStates = schedulesUpdateState
-            )
-        }
-        addSource(schedulesUpdateState) { schedulesUpdateState ->
-            val scheduleList = allScheduleListData.value ?: emptyList()
-            val availableForUpdateScheduleList = availableForUpdateScheduleListData.value
-                    ?: emptyList()
-            value = transformScheduleListToNavInfoList(
-                    scheduleList = scheduleList,
-                    availableForUpdateScheduleList = availableForUpdateScheduleList,
-                    updateStates = schedulesUpdateState
-            )
-        }
+        addSource(allScheduleListData) { updateNavigationInfo() }
+        addSource(availableForUpdateScheduleListData) { updateNavigationInfo() }
+        addSource(schedulesUpdateState) { updateNavigationInfo() }
+        addSource(selectedScheduleData) { updateNavigationInfo() }
     }
 
     fun updateSchedule(schedule: Schedule) {
@@ -93,10 +69,27 @@ class NavigationSheetViewModel @Inject constructor(
         }
     }
 
+    private fun updateNavigationInfo() {
+        launchCoroutine {
+            val scheduleList = allScheduleListData.value ?: emptyList()
+            val availableForUpdateScheduleList = availableForUpdateScheduleListData.value
+                    ?: emptyList()
+            val schedulesUpdateState = schedulesUpdateState.value ?: emptyMap()
+            val selectedSchedule = selectedScheduleData.value
+            navigationInfoData.value = transformScheduleListToNavInfoList(
+                    scheduleList = scheduleList,
+                    availableForUpdateScheduleList = availableForUpdateScheduleList,
+                    updateStates = schedulesUpdateState,
+                    selectedSchedule = selectedSchedule
+            )
+        }
+    }
+
     private fun transformScheduleListToNavInfoList(
             scheduleList: List<Schedule>,
             availableForUpdateScheduleList: List<Schedule>,
-            updateStates: Map<Schedule, UpdateState>
+            updateStates: Map<Schedule, UpdateState>,
+            selectedSchedule: Schedule?
     ): List<NavigationSheetItemInformation> {
         val resultList = mutableListOf<NavigationSheetItemInformation>()
 
@@ -115,7 +108,8 @@ class NavigationSheetViewModel @Inject constructor(
                     it in availableForUpdateScheduleList -> UpdateState.AVAILABLE
                     else -> UpdateState.NOT_AVAILABLE
                 }
-                NavigationSheetItemInformation.Content(it, updateState)
+                val isSelected = it == selectedSchedule
+                NavigationSheetItemInformation.Content(it, updateState, isSelected)
             }
         }
 
@@ -129,7 +123,8 @@ class NavigationSheetViewModel @Inject constructor(
                     it in availableForUpdateScheduleList -> UpdateState.AVAILABLE
                     else -> UpdateState.NOT_AVAILABLE
                 }
-                NavigationSheetItemInformation.Content(it, updateState)
+                val isSelected = it == selectedSchedule
+                NavigationSheetItemInformation.Content(it, updateState, isSelected)
             }
         }
         return resultList.toList()

@@ -20,11 +20,27 @@ sealed class NavigationSheetItemInformation(val id: Int) {
 
     data class Content(
             val schedule: Schedule,
-            var updateState: UpdateState = UpdateState.NOT_AVAILABLE
+            val updateState: UpdateState = UpdateState.NOT_AVAILABLE,
+            val isSelected: Boolean = false
     ) : NavigationSheetItemInformation(ID_CONTENT) {
 
         enum class UpdateState {
             NOT_AVAILABLE, AVAILABLE, IN_PROGRESS, SUCCESS, ERROR
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as Content
+
+            if (schedule != other.schedule) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            return schedule.hashCode()
         }
     }
 }

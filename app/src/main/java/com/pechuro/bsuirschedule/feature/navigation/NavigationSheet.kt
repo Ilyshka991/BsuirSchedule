@@ -22,7 +22,6 @@ import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.ext.setHeight
@@ -41,7 +40,7 @@ class NavigationSheet : BaseBottomSheetDialog() {
     override val layoutId: Int = R.layout.sheet_navigation
 
     private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
-        initViewModel(NavigationSheetViewModel::class)
+        initViewModel(NavigationSheetViewModel::class, shared = true)
     }
 
     private val vibrator by lazy(LazyThreadSafetyMode.NONE) {
@@ -90,21 +89,10 @@ class NavigationSheet : BaseBottomSheetDialog() {
         override fun onScheduleClicked(schedule: Schedule) {
             EventBus.send(NavigationSheetEvent.OnScheduleClick(schedule))
         }
-
-        override fun onScheduleLongClicked(schedule: Schedule) {
-            EventBus.send(NavigationSheetEvent.OnScheduleLongClick(schedule))
-        }
-
-        override fun onTitleClicked(scheduleType: ScheduleType) {
-            EventBus.send(NavigationSheetEvent.OnTitleClick(scheduleType))
-        }
-
-        override fun onTitleLongClicked(scheduleType: ScheduleType) {
-            EventBus.send(NavigationSheetEvent.OnTitleLongClick(scheduleType))
-        }
     }
     private val adapter = NavigationDrawerAdapter().apply {
         actionCallback = adapterActionCallback
+        setHasStableIds(true)
     }
 
     private val itemTouchHelper = ItemTouchHelper(
@@ -155,7 +143,6 @@ class NavigationSheet : BaseBottomSheetDialog() {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = this@NavigationSheet.adapter
             itemTouchHelper.attachToRecyclerView(this)
-            itemAnimator = null
         }
         navigationSheetSettingButton.setSafeClickListener {
             EventBus.send(NavigationSheetEvent.OnOpenSettings)
@@ -192,6 +179,7 @@ class NavigationSheet : BaseBottomSheetDialog() {
     private fun deleteItemAt(position: Int) {
         val scheduleInfo = adapter.getItemAt(position) as? NavigationSheetItemInformation.Content
         if (scheduleInfo != null) {
+            EventBus.send(NavigationSheetEvent.OnScheduleDeleted(scheduleInfo.schedule))
             viewModel.deleteSchedule(scheduleInfo.schedule)
         } else {
             Logger.w("Try to delete item, which is not a subtype of NavigationSheetItemInformation.Content")
@@ -214,7 +202,7 @@ class NavigationSheet : BaseBottomSheetDialog() {
     }
 
     private fun makeActionVibration() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             vibrator.vibrate(VibrationEffect.createOneShot(ACTION_VIBRATION_DURATION_MS, VibrationEffect.EFFECT_TICK))
         } else {
             vibrator.vibrate(ACTION_VIBRATION_DURATION_MS)

@@ -14,6 +14,7 @@ import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.*
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState.*
 import kotlinx.android.synthetic.main.item_navigation_sheet_content.*
+import kotlinx.android.synthetic.main.item_navigation_sheet_empty.*
 
 private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NavigationSheetItemInformation>() {
 
@@ -40,12 +41,6 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
     interface ActionCallback {
 
         fun onScheduleClicked(schedule: Schedule)
-
-        fun onScheduleLongClicked(schedule: Schedule)
-
-        fun onTitleClicked(scheduleType: ScheduleType)
-
-        fun onTitleLongClicked(scheduleType: ScheduleType)
     }
 
     var actionCallback: ActionCallback? = null
@@ -53,21 +48,6 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
     private val scheduleClickListener = View.OnClickListener {
         val schedule = it.tag as? Schedule ?: return@OnClickListener
         actionCallback?.onScheduleClicked(schedule)
-    }
-    private val scheduleLongClickListener = View.OnLongClickListener {
-        val schedule = it.tag as? Schedule ?: return@OnLongClickListener false
-        actionCallback?.onScheduleLongClicked(schedule)
-        true
-    }
-
-    private val titleClickListener = View.OnClickListener {
-        val scheduleType = it.tag as? ScheduleType ?: return@OnClickListener
-        actionCallback?.onTitleClicked(scheduleType)
-    }
-    private val titleLongClickListener = View.OnLongClickListener {
-        val scheduleType = it.tag as? ScheduleType ?: return@OnLongClickListener false
-        actionCallback?.onTitleLongClicked(scheduleType)
-        true
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<NavigationSheetItemInformation> {
@@ -100,6 +80,8 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
             position: Int
     ) = holder.onBind(getItem(position))
 
+    override fun getItemId(position: Int) = getItem(position).hashCode().toLong()
+
     fun getItemAt(position: Int): NavigationSheetItemInformation = getItem(position)
 
     private class DividerViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(view) {
@@ -109,7 +91,12 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
 
     private class EmptyViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(view) {
 
-        override fun onBind(data: NavigationSheetItemInformation) {}
+        override fun onBind(data: NavigationSheetItemInformation) {
+            navigationItemEmptyParentView.isVisible = false
+            itemView.postDelayed({
+                navigationItemEmptyParentView.isVisible = true
+            }, 1000)
+        }
     }
 
     private inner class TitleViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(view) {
@@ -120,11 +107,7 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
                 ScheduleType.CLASSES -> R.string.navigation_title_classes
                 ScheduleType.EXAMS -> R.string.navigation_title_exams
             }
-            (containerView as TextView).apply {
-                setText(titleRes)
-                setOnClickListener(titleClickListener)
-                setOnLongClickListener(titleLongClickListener)
-            }
+            (containerView as? TextView)?.setText(titleRes)
         }
     }
 
@@ -132,18 +115,18 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
 
         override fun onBind(data: NavigationSheetItemInformation) {
             if (data !is Content) return
-            navigationDrawerItemContentText.text = data.schedule.name
-            navigationDrawerItemContentUpdateParentView.isVisible = data.updateState != NOT_AVAILABLE
-            navigationDrawerItemContentUpdateLoaderView.isVisible = data.updateState == IN_PROGRESS
-            navigationDrawerItemContentUpdateSuccessText.isVisible = data.updateState == SUCCESS
-            navigationDrawerItemContentUpdateErrorText.isVisible = data.updateState == ERROR
-            navigationDrawerItemContentUpdateAvailableText.isVisible = data.updateState == AVAILABLE
-            isSwipeAllowed = data.updateState == NOT_AVAILABLE || data.updateState == AVAILABLE
-            itemView.apply {
-                setOnClickListener(scheduleClickListener)
-                setOnLongClickListener(scheduleLongClickListener)
+            navigationItemContentText.apply {
                 tag = data.schedule
+                text = data.schedule.name
+                setOnClickListener(scheduleClickListener)
+                isSelected = data.isSelected
             }
+            navigationItemContentUpdateParentView.isVisible = data.updateState != NOT_AVAILABLE
+            navigationItemContentUpdateLoaderView.isVisible = data.updateState == IN_PROGRESS
+            navigationItemContentUpdateSuccessText.isVisible = data.updateState == SUCCESS
+            navigationItemContentUpdateErrorText.isVisible = data.updateState == ERROR
+            navigationItemContentUpdateAvailableText.isVisible = data.updateState == AVAILABLE
+            isSwipeAllowed = data.updateState == NOT_AVAILABLE || data.updateState == AVAILABLE
         }
     }
 }

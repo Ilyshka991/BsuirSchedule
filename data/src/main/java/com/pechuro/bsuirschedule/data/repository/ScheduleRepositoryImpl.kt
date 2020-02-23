@@ -70,11 +70,35 @@ class ScheduleRepositoryImpl(
             }
             .flowOn(Dispatchers.IO)
 
+    override suspend fun getGroupClassesByName(name: String): Schedule.GroupClasses {
+        val schedule = performDaoCall { dao.getGroupClassesByName(name) }
+        val group = groupRepository.getById(schedule.groupId)
+        return schedule.toDomainEntity(group)
+    }
+
+    override suspend fun getGroupExamsByName(name: String): Schedule.GroupExams {
+        val schedule = performDaoCall { dao.getGroupExamsByName(name) }
+        val group = groupRepository.getById(schedule.groupId)
+        return schedule.toDomainEntity(group)
+    }
+
+    override suspend fun getEmployeeClassesByName(name: String): Schedule.EmployeeClasses {
+        val schedule = performDaoCall { dao.getEmployeeClassesByName(name) }
+        val employee = employeeRepository.getById(schedule.employeeId)
+        return schedule.toDomainEntity(employee)
+    }
+
+    override suspend fun getEmployeeExamsByName(name: String): Schedule.EmployeeExams {
+        val schedule = performDaoCall { dao.getEmployeeExamsByName(name) }
+        val employee = employeeRepository.getById(schedule.employeeId)
+        return schedule.toDomainEntity(employee)
+    }
+
     override suspend fun <T : Schedule> getScheduleItems(schedule: T): Flow<ScheduleItem<T>> {
         TODO("not implemented")
     }
 
-    override suspend fun loadGroupSchedule(group: Group, types: List<ScheduleType>) {
+    override suspend fun loadGroupSchedule(group: Group, types: List<ScheduleType>): List<Schedule> {
         val auditories = buildingRepository.getAllAuditories().first()
         val departments = specialityRepository.getAllDepartments().first()
 
@@ -83,7 +107,7 @@ class ScheduleRepositoryImpl(
             api.getLastUpdateDate(group.number).toDomainEntity()
         }
 
-        types.forEach { type ->
+        return types.map { type ->
             when (type) {
                 ScheduleType.CLASSES -> {
                     val itemsDTOList = scheduleDTO.schedule ?: emptyList()
@@ -96,6 +120,7 @@ class ScheduleRepositoryImpl(
                     val items = itemsDTOList.toGroupLessons(schedule, auditories, departments)
 
                     storeSchedule(schedule, items)
+                    schedule
                 }
                 ScheduleType.EXAMS -> {
                     val itemsDTOList = scheduleDTO.exam ?: emptyList()
@@ -108,18 +133,19 @@ class ScheduleRepositoryImpl(
                     val items = itemsDTOList.toGroupExams(schedule, auditories, departments)
 
                     storeSchedule(schedule, items)
+                    schedule
                 }
             }
         }
     }
 
-    override suspend fun loadEmployeeSchedule(employee: Employee, types: List<ScheduleType>) {
+    override suspend fun loadEmployeeSchedule(employee: Employee, types: List<ScheduleType>): List<Schedule> {
         val groups = groupRepository.getAll().first()
         val auditories = buildingRepository.getAllAuditories().first()
 
         val scheduleDTO = performApiCall { api.getEmployeeSchedule(employee.id) }
 
-        types.forEach { type ->
+        return types.map { type ->
             when (type) {
                 ScheduleType.CLASSES -> {
                     val itemsDTOList = scheduleDTO.schedule ?: emptyList()
@@ -130,6 +156,7 @@ class ScheduleRepositoryImpl(
                     val items = itemsDTOList.toEmployeeLessons(schedule, groups, auditories)
 
                     storeSchedule(schedule, items)
+                    schedule
                 }
                 ScheduleType.EXAMS -> {
                     val itemsDTOList = scheduleDTO.exam ?: emptyList()
@@ -140,6 +167,7 @@ class ScheduleRepositoryImpl(
                     val items = itemsDTOList.toEmployeeExams(schedule, groups, auditories)
 
                     storeSchedule(schedule, items)
+                    schedule
                 }
             }
         }

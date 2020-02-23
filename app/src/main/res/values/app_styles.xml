@@ -24,6 +24,8 @@
         <item name="dividerColor">@color/grey_400</item>
         <item name="backgroundNavigationSwipeActionColor">@color/amber_100</item>
 
+        <item name="buttonDefaultBackgroundColor">@color/transparent</item>
+        <item name="buttonSelectedBackgroundColor">@color/grey_100</item>
         <item name="buttonEnabledTextColor">@color/grey_600</item>
         <item name="buttonDisabledTextColor">@color/grey_300</item>
         <item name="chipCheckedColor">@color/grey_300</item>

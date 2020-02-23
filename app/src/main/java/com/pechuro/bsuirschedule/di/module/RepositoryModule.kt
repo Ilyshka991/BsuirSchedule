@@ -4,6 +4,7 @@ import com.pechuro.bsuirschedule.data.repository.*
 import com.pechuro.bsuirschedule.di.annotations.AppScope
 import com.pechuro.bsuirschedule.domain.repository.*
 import com.pechuro.bsuirschedule.local.dao.*
+import com.pechuro.bsuirschedule.local.sharedprefs.SharedPreferencesManager
 import com.pechuro.bsuirschedule.remote.api.*
 import dagger.Module
 import dagger.Provides
@@ -79,4 +80,14 @@ class RepositoryModule {
     @AppScope
     fun provideAnnouncementRepository(api: AnnouncementApi): IAnnouncementRepository =
             AnnouncementRepositoryImpl(api)
+
+    @Provides
+    @AppScope
+    fun provideSessionRepository(
+            sharedPreferencesManager: SharedPreferencesManager,
+            scheduleRepository: IScheduleRepository
+    ): ISessionRepository = SessionRepositoryImpl(
+            sharedPreferencesManager = sharedPreferencesManager,
+            scheduleRepository = scheduleRepository
+    )
 }

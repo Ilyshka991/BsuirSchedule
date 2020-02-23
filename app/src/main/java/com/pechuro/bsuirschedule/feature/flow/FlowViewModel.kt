@@ -8,6 +8,8 @@ import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.interactor.CheckInfo
 import com.pechuro.bsuirschedule.domain.interactor.GetAvailableForUpdateSchedules
 import com.pechuro.bsuirschedule.domain.interactor.GetAvailableForUpdateSchedules.Params
+import com.pechuro.bsuirschedule.domain.interactor.GetLastOpenedSchedule
+import com.pechuro.bsuirschedule.domain.interactor.SetLastOpenedSchedule
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -17,8 +19,16 @@ import javax.inject.Inject
 class FlowViewModel @Inject constructor(
         private val checkInfo: CheckInfo,
         private val getAvailableForUpdateSchedules: GetAvailableForUpdateSchedules,
-        private val notificationManager: NotificationManager
+        private val notificationManager: NotificationManager,
+        private val getLastOpenedSchedule: GetLastOpenedSchedule,
+        private val setLastOpenedSchedule: SetLastOpenedSchedule
 ) : BaseViewModel() {
+
+    var lastOpenedSchedule: Schedule?
+        get() = runBlocking { getLastOpenedSchedule.execute(BaseInteractor.NoParams).getOrNull()?.first() }
+        set(value) {
+            launchCoroutine { setLastOpenedSchedule.execute(SetLastOpenedSchedule.Params(value)) }
+        }
 
     fun isInfoLoaded(): Boolean = runBlocking {
         checkInfo.execute(BaseInteractor.NoParams).getOrDefault(false)

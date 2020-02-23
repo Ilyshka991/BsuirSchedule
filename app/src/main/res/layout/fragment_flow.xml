@@ -10,9 +10,7 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:layout_anchor="@+id/bottomBarParentView"
-        app:navGraph="@navigation/navigation_graph" />
+        app:layout_anchor="@+id/bottomBarParentView"/>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomBarParentView"
