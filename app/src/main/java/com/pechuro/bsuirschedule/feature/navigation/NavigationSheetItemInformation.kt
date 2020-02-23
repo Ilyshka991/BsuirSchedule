@@ -35,15 +35,12 @@ sealed class NavigationSheetItemInformation(val id: Int) {
             other as Content
 
             if (schedule != other.schedule) return false
-            if (isSelected != other.isSelected) return false
 
             return true
         }
 
         override fun hashCode(): Int {
-            var result = schedule.hashCode()
-            result = 31 * result + isSelected.hashCode()
-            return result
+            return schedule.hashCode()
         }
     }
 }

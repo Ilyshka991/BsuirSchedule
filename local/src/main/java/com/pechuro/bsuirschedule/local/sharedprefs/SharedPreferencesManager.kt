@@ -2,6 +2,11 @@ package com.pechuro.bsuirschedule.local.sharedprefs
 
 import android.content.SharedPreferences
 import com.squareup.moshi.Moshi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class SharedPreferencesManager @Inject constructor(
@@ -15,15 +20,23 @@ class SharedPreferencesManager @Inject constructor(
 
     private val openedScheduleJsonAdapter = moshi.adapter(LastOpenedSchedule::class.java)
 
-    var lastOpenedSchedule: LastOpenedSchedule?
-        set(value) {
-            val jsonString = openedScheduleJsonAdapter.toJson(value)
-            put(KEY_OPENED_SCHEDULE, jsonString)
+    fun getLastOpenedSchedule(): Flow<LastOpenedSchedule?> = callbackFlow {
+        val jsonString = get(KEY_OPENED_SCHEDULE, "")
+        if (!isClosedForSend) offer(openedScheduleJsonAdapter.fromJson(jsonString))
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == KEY_OPENED_SCHEDULE) {
+                val jsonString = get(KEY_OPENED_SCHEDULE, "")
+                if (!isClosedForSend) offer(openedScheduleJsonAdapter.fromJson(jsonString))
+            }
         }
-        get() {
-            val jsonString = get(KEY_OPENED_SCHEDULE, "")
-            return openedScheduleJsonAdapter.fromJson(jsonString)
-        }
+        preferences.registerOnSharedPreferenceChangeListener(listener)
+        awaitClose { preferences.unregisterOnSharedPreferenceChangeListener(listener) }
+    }.flowOn(Dispatchers.IO)
+
+    fun setLastOpenedSchedule(schedule: LastOpenedSchedule?) {
+        val jsonString = openedScheduleJsonAdapter.toJson(schedule)
+        put(KEY_OPENED_SCHEDULE, jsonString)
+    }
 
     @Suppress("UNCHECKED_CAST")
     private fun <T> get(key: String, defaultValue: T) = with(preferences) {

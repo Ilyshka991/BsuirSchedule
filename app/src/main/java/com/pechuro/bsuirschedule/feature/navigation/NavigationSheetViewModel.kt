@@ -30,8 +30,11 @@ class NavigationSheetViewModel @Inject constructor(
     private val allScheduleListData = flowLiveData {
         getAllSchedules.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
     }
-    private var availableForUpdateScheduleListData = flowLiveData {
+    private val availableForUpdateScheduleListData = flowLiveData {
         getAvailableForUpdateSchedules.execute(Params(includeAll = true)).getOrDefault(emptyFlow())
+    }
+    private val selectedScheduleData = flowLiveData {
+        getLastOpenedSchedule.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
     }
     private val schedulesUpdateState = MutableLiveData(emptyMap<Schedule, UpdateState>())
 
@@ -39,6 +42,7 @@ class NavigationSheetViewModel @Inject constructor(
         addSource(allScheduleListData) { updateNavigationInfo() }
         addSource(availableForUpdateScheduleListData) { updateNavigationInfo() }
         addSource(schedulesUpdateState) { updateNavigationInfo() }
+        addSource(selectedScheduleData) { updateNavigationInfo() }
     }
 
     fun updateSchedule(schedule: Schedule) {
@@ -68,9 +72,10 @@ class NavigationSheetViewModel @Inject constructor(
     private fun updateNavigationInfo() {
         launchCoroutine {
             val scheduleList = allScheduleListData.value ?: emptyList()
-            val availableForUpdateScheduleList = availableForUpdateScheduleListData.value ?: emptyList()
+            val availableForUpdateScheduleList = availableForUpdateScheduleListData.value
+                    ?: emptyList()
             val schedulesUpdateState = schedulesUpdateState.value ?: emptyMap()
-            val selectedSchedule = getLastOpenedSchedule.execute(BaseInteractor.NoParams).getOrNull()
+            val selectedSchedule = selectedScheduleData.value
             navigationInfoData.value = transformScheduleListToNavInfoList(
                     scheduleList = scheduleList,
                     availableForUpdateScheduleList = availableForUpdateScheduleList,

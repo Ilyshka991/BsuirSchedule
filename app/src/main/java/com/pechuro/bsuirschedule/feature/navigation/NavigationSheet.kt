@@ -40,7 +40,7 @@ class NavigationSheet : BaseBottomSheetDialog() {
     override val layoutId: Int = R.layout.sheet_navigation
 
     private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
-        initViewModel(NavigationSheetViewModel::class)
+        initViewModel(NavigationSheetViewModel::class, shared = true)
     }
 
     private val vibrator by lazy(LazyThreadSafetyMode.NONE) {

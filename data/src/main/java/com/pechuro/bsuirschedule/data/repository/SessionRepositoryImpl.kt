@@ -7,22 +7,24 @@ import com.pechuro.bsuirschedule.domain.repository.ISessionRepository
 import com.pechuro.bsuirschedule.local.sharedprefs.LastOpenedSchedule
 import com.pechuro.bsuirschedule.local.sharedprefs.LastOpenedSchedule.ScheduleType.*
 import com.pechuro.bsuirschedule.local.sharedprefs.SharedPreferencesManager
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class SessionRepositoryImpl(
         private val sharedPreferencesManager: SharedPreferencesManager,
         private val scheduleRepository: IScheduleRepository
 ) : BaseRepository(), ISessionRepository {
 
-    override suspend fun getLastOpenedSchedule(): Schedule? {
-        val prefsValue = sharedPreferencesManager.lastOpenedSchedule
-        return when (prefsValue?.type) {
-            GROUP_CLASSES -> scheduleRepository.getGroupClassesByName(prefsValue.name)
-            GROUP_EXAMS -> scheduleRepository.getGroupExamsByName(prefsValue.name)
-            EMPLOYEE_CLASSES -> scheduleRepository.getEmployeeClassesByName(prefsValue.name)
-            EMPLOYEE_EXAMS -> scheduleRepository.getEmployeeExamsByName(prefsValue.name)
-            else -> null
-        }
-    }
+    override suspend fun getLastOpenedSchedule(): Flow<Schedule?> =
+            sharedPreferencesManager.getLastOpenedSchedule().map {
+                when (it?.type) {
+                    GROUP_CLASSES -> scheduleRepository.getGroupClassesByName(it.name)
+                    GROUP_EXAMS -> scheduleRepository.getGroupExamsByName(it.name)
+                    EMPLOYEE_CLASSES -> scheduleRepository.getEmployeeClassesByName(it.name)
+                    EMPLOYEE_EXAMS -> scheduleRepository.getEmployeeExamsByName(it.name)
+                    else -> null
+                }
+            }
 
     override suspend fun setLastOpenedSchedule(schedule: Schedule?) {
         val prefsValue = schedule?.run {
@@ -34,6 +36,6 @@ class SessionRepositoryImpl(
             }
             LastOpenedSchedule(name, scheduleType)
         }
-        sharedPreferencesManager.lastOpenedSchedule = prefsValue
+        sharedPreferencesManager.setLastOpenedSchedule(prefsValue)
     }
 }

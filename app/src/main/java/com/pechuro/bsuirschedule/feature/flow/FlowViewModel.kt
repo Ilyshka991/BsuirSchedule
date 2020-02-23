@@ -25,7 +25,7 @@ class FlowViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     var lastOpenedSchedule: Schedule?
-        get() = runBlocking { getLastOpenedSchedule.execute(BaseInteractor.NoParams).getOrNull() }
+        get() = runBlocking { getLastOpenedSchedule.execute(BaseInteractor.NoParams).getOrNull()?.first() }
         set(value) {
             launchCoroutine { setLastOpenedSchedule.execute(SetLastOpenedSchedule.Params(value)) }
         }

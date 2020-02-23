@@ -11,6 +11,7 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.BaseEvent
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
+import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleCompleteEvent
@@ -44,9 +45,9 @@ class FlowFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setStartDestination()
+        if (savedInstanceState == null && !viewModel.isInfoLoaded()) openLoadInfo()
         initNavigation()
-        viewModel.lastOpenedSchedule?.let { setViewScheduleStartDestination(it) }
-        if (!viewModel.isInfoLoaded()) openLoadInfo()
         initViews()
         checkScheduleUpdates()
         receiveEvents()
@@ -143,17 +144,36 @@ class FlowFragment : BaseFragment() {
         }
     }
 
+    private fun setStartDestination() {
+        val lastOpenedSchedule = viewModel.lastOpenedSchedule
+        if (lastOpenedSchedule == null) {
+            setDefaultStartDestination()
+        } else {
+            setViewScheduleStartDestination(lastOpenedSchedule)
+        }
+    }
+
     private fun setViewScheduleStartDestination(schedule: Schedule) {
         val navGraph = navController.navInflater.inflate(R.navigation.navigation_graph)
         val arguments = ViewScheduleContainerArgs(schedule).toBundle()
         navGraph.startDestination = R.id.viewScheduleDestination
-        navController.setGraph(navGraph, arguments)
+        try {
+            navController.setGraph(navGraph, arguments)
+        } catch (e: IllegalStateException) {
+            Logger.e(e)
+            //TODO: Possible bug: DialogFragment doesn't exist in the FragmentManager
+        }
     }
 
     private fun setDefaultStartDestination() {
         val navGraph = navController.navInflater.inflate(R.navigation.navigation_graph)
         navGraph.startDestination = R.id.startDestination
-        navController.graph = navGraph
+        try {
+            navController.graph = navGraph
+        } catch (e: IllegalStateException) {
+            Logger.e(e)
+            //TODO: Possible bug: DialogFragment doesn't exist in the FragmentManager
+        }
     }
 
     private fun popFragment() = navController.popBackStack()
