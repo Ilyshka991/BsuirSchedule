@@ -21,13 +21,14 @@ class SharedPreferencesManager @Inject constructor(
     private val openedScheduleJsonAdapter = moshi.adapter(LastOpenedSchedule::class.java)
 
     fun getLastOpenedSchedule(): Flow<LastOpenedSchedule?> = callbackFlow {
-        val jsonString = get(KEY_OPENED_SCHEDULE, "")
-        if (!isClosedForSend) offer(openedScheduleJsonAdapter.fromJson(jsonString))
+        val sendNewValueCallback = {
+            val defaultValue = openedScheduleJsonAdapter.toJson(null)
+            val jsonString = get(KEY_OPENED_SCHEDULE, defaultValue)
+            if (!isClosedForSend) offer(openedScheduleJsonAdapter.fromJson(jsonString))
+        }
+        sendNewValueCallback()
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            if (key == KEY_OPENED_SCHEDULE) {
-                val jsonString = get(KEY_OPENED_SCHEDULE, "")
-                if (!isClosedForSend) offer(openedScheduleJsonAdapter.fromJson(jsonString))
-            }
+            if (key == KEY_OPENED_SCHEDULE) sendNewValueCallback()
         }
         preferences.registerOnSharedPreferenceChangeListener(listener)
         awaitClose { preferences.unregisterOnSharedPreferenceChangeListener(listener) }
