@@ -267,7 +267,7 @@ private val dateFormatter: DateFormat
     }
 
 private fun getResultWeekNumbers(source: List<Int>) = if (source.contains(0)) {
-    source.filter { it != 0 }.union(listOf(1, 2, 3, 4))
+    WeekNumber.values().toList()
 } else {
-    source
+    source.map { WeekNumber.getForIndex(it + 1) }
 }

@@ -25,7 +25,7 @@ sealed class ScheduleItem<T : Schedule>(
             endTime: String,
             auditories: List<Auditory>,
             val weekDay: WeekDay,
-            val weekNumber: Int,
+            val weekNumber: WeekNumber,
             val employees: List<Employee>
     ) : ScheduleItem<Schedule.GroupClasses>(
             id = id,
@@ -74,7 +74,7 @@ sealed class ScheduleItem<T : Schedule>(
             endTime: String,
             auditories: List<Auditory>,
             val weekDay: WeekDay,
-            val weekNumber: Int,
+            val weekNumber: WeekNumber,
             val studentGroups: List<Group>
     ) : ScheduleItem<Schedule.EmployeeClasses>(
             id = id,

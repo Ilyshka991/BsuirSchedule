@@ -15,10 +15,10 @@ import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleCompleteEvent
+import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleContainerArgs
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoCompleteEvent
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
 import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetArgs
-import com.pechuro.bsuirschedule.feature.view.ViewScheduleContainerArgs
 import kotlinx.android.synthetic.main.fragment_flow.*
 import kotlinx.coroutines.launch
 
@@ -133,7 +133,7 @@ class FlowFragment : BaseFragment() {
         if (viewModel.lastOpenedSchedule == schedule) return
         viewModel.lastOpenedSchedule = schedule
         setViewScheduleStartDestination(schedule)
-        val arguments = ViewScheduleContainerArgs(schedule).toBundle()
+        val arguments = DisplayScheduleContainerArgs(schedule).toBundle()
         navController.navigate(R.id.viewScheduleDestination, arguments, defaultNavOptions)
     }
 
@@ -155,7 +155,7 @@ class FlowFragment : BaseFragment() {
 
     private fun setViewScheduleStartDestination(schedule: Schedule) {
         val navGraph = navController.navInflater.inflate(R.navigation.navigation_graph)
-        val arguments = ViewScheduleContainerArgs(schedule).toBundle()
+        val arguments = DisplayScheduleContainerArgs(schedule).toBundle()
         navGraph.startDestination = R.id.viewScheduleDestination
         try {
             navController.setGraph(navGraph, arguments)
