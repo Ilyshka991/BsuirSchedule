@@ -94,8 +94,49 @@ class ScheduleRepositoryImpl(
         return schedule.toDomainEntity(employee)
     }
 
-    override suspend fun <T : Schedule> getScheduleItems(schedule: T): Flow<ScheduleItem<T>> {
-        TODO("not implemented")
+    override suspend fun getScheduleItems(schedule: Schedule): Flow<List<ScheduleItem>> {
+        return when (schedule) {
+            is Schedule.GroupClasses -> dao.getGroupClassesItems(schedule.name).map { list ->
+                list.map { item ->
+                    val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
+                    val employees = item.employees.map { employeeRepository.getById(it.id) }
+                    item.toDomainEntity(
+                            auditories = auditories,
+                            employees = employees
+                    )
+                }
+            }
+            is Schedule.GroupExams -> dao.getGroupExamItems(schedule.name).map { list ->
+                list.map { item ->
+                    val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
+                    val employees = item.employees.map { employeeRepository.getById(it.id) }
+                    item.toDomainEntity(
+                            auditories = auditories,
+                            employees = employees
+                    )
+                }
+            }
+            is Schedule.EmployeeClasses -> dao.getEmployeeClassesItems(schedule.name).map { list ->
+                list.map { item ->
+                    val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
+                    val groups = item.groups.map { groupRepository.getById(it.id) }
+                    item.toDomainEntity(
+                            auditories = auditories,
+                            groups = groups
+                    )
+                }
+            }
+            is Schedule.EmployeeExams -> dao.getEmployeeExamItems(schedule.name).map { list ->
+                list.map { item ->
+                    val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
+                    val groups = item.groups.map { groupRepository.getById(it.id) }
+                    item.toDomainEntity(
+                            auditories = auditories,
+                            groups = groups
+                    )
+                }
+            }
+        }
     }
 
     override suspend fun loadGroupSchedule(group: Group, types: List<ScheduleType>): List<Schedule> {
@@ -117,7 +158,7 @@ class ScheduleRepositoryImpl(
                             group = group,
                             notRemindForUpdates = false
                     )
-                    val items = itemsDTOList.toGroupLessons(schedule, auditories, departments)
+                    val items = itemsDTOList.toGroupLessons(auditories, departments)
 
                     storeSchedule(schedule, items)
                     schedule
@@ -130,7 +171,7 @@ class ScheduleRepositoryImpl(
                             group = group,
                             notRemindForUpdates = false
                     )
-                    val items = itemsDTOList.toGroupExams(schedule, auditories, departments)
+                    val items = itemsDTOList.toGroupExams(auditories, departments)
 
                     storeSchedule(schedule, items)
                     schedule
@@ -153,7 +194,7 @@ class ScheduleRepositoryImpl(
                             name = employee.abbreviation,
                             employee = employee
                     )
-                    val items = itemsDTOList.toEmployeeLessons(schedule, groups, auditories)
+                    val items = itemsDTOList.toEmployeeLessons(groups, auditories)
 
                     storeSchedule(schedule, items)
                     schedule
@@ -164,7 +205,7 @@ class ScheduleRepositoryImpl(
                             name = employee.abbreviation,
                             employee = employee
                     )
-                    val items = itemsDTOList.toEmployeeExams(schedule, groups, auditories)
+                    val items = itemsDTOList.toEmployeeExams(groups, auditories)
 
                     storeSchedule(schedule, items)
                     schedule

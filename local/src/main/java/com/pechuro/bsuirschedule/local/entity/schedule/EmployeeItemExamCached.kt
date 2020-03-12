@@ -27,7 +27,7 @@ data class EmployeeItemExamCached(
         @ColumnInfo(name = "lesson_type")
         val lessonType: String,
         @ColumnInfo(name = "note")
-        val note: String?,
+        val note: String,
         @ColumnInfo(name = "start_time")
         val startTime: String,
         @ColumnInfo(name = "end_time")

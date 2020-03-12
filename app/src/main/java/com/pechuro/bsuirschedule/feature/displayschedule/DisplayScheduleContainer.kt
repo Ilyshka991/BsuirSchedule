@@ -34,6 +34,8 @@ class DisplayScheduleContainer : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Force initialize viewModel
+        viewModel
         initView()
     }
 

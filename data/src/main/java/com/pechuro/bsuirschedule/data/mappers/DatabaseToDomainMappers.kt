@@ -12,6 +12,10 @@ import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeClassesScheduleCa
 import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeExamScheduleCached
 import com.pechuro.bsuirschedule.local.entity.schedule.GroupClassesScheduleCached
 import com.pechuro.bsuirschedule.local.entity.schedule.GroupExamScheduleCached
+import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeClassesItemComplex
+import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeExamItemComplex
+import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupClassesItemComplex
+import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupExamItemComplex
 import com.pechuro.bsuirschedule.local.entity.staff.EmployeeCached
 import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
 
@@ -140,5 +144,80 @@ internal fun EmployeeExamScheduleCached.toDomainEntity(employee: Employee) = run
     Schedule.EmployeeExams(
             name = name,
             employee = employee
+    )
+}
+
+internal fun GroupClassesItemComplex.toDomainEntity(
+        auditories: List<Auditory>,
+        employees: List<Employee>
+) = run {
+    ScheduleItem.GroupLesson(
+            id = scheduleItem.id,
+            subject = scheduleItem.subject,
+            subgroupNumber = scheduleItem.subgroupNumber,
+            lessonType = scheduleItem.lessonType,
+            note = scheduleItem.note,
+            startTime = scheduleItem.startTime,
+            endTime = scheduleItem.endTime,
+            weekDay = WeekDay.getForIndex(scheduleItem.weekDay),
+            weekNumber = WeekNumber.getForIndex(scheduleItem.weekNumber),
+            auditories = auditories,
+            employees = employees
+    )
+}
+
+internal fun GroupExamItemComplex.toDomainEntity(
+        auditories: List<Auditory>,
+        employees: List<Employee>
+) = run {
+    ScheduleItem.GroupExam(
+            id = scheduleItem.id,
+            subject = scheduleItem.subject,
+            subgroupNumber = scheduleItem.subgroupNumber,
+            lessonType = scheduleItem.lessonType,
+            note = scheduleItem.note,
+            startTime = scheduleItem.startTime,
+            endTime = scheduleItem.endTime,
+            date = scheduleItem.date,
+            auditories = auditories,
+            employees = employees
+    )
+}
+
+
+internal fun EmployeeClassesItemComplex.toDomainEntity(
+        auditories: List<Auditory>,
+        groups: List<Group>
+) = run {
+    ScheduleItem.EmployeeLesson(
+            id = scheduleItem.id,
+            subject = scheduleItem.subject,
+            subgroupNumber = scheduleItem.subgroupNumber,
+            lessonType = scheduleItem.lessonType,
+            note = scheduleItem.note,
+            startTime = scheduleItem.startTime,
+            endTime = scheduleItem.endTime,
+            weekDay = WeekDay.getForIndex(scheduleItem.weekDay),
+            weekNumber = WeekNumber.getForIndex(scheduleItem.weekNumber),
+            auditories = auditories,
+            studentGroups = groups
+    )
+}
+
+internal fun EmployeeExamItemComplex.toDomainEntity(
+        auditories: List<Auditory>,
+        groups: List<Group>
+) = run {
+    ScheduleItem.EmployeeExam(
+            id = scheduleItem.id,
+            subject = scheduleItem.subject,
+            subgroupNumber = scheduleItem.subgroupNumber,
+            lessonType = scheduleItem.lessonType,
+            note = scheduleItem.note,
+            startTime = scheduleItem.startTime,
+            endTime = scheduleItem.endTime,
+            date = scheduleItem.date,
+            auditories = auditories,
+            studentGroups = groups
     )
 }

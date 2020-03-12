@@ -20,7 +20,7 @@ data class EmployeeItemClassesCached(
         @ColumnInfo(name = "schedule_name")
         val scheduleName: String,
         @ColumnInfo(name = "subject")
-        val subject: String?,
+        val subject: String,
         @ColumnInfo(name = "week_number")
         val weekNumber: Int,
         @ColumnInfo(name = "subgroup_number")

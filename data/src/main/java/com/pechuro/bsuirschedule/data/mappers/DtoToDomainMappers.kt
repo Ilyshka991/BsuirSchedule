@@ -101,7 +101,6 @@ internal fun LastUpdateDTO.toDomainEntity() = run {
 }
 
 internal fun List<ScheduleItemDTO>.toGroupLessons(
-        schedule: Schedule.GroupClasses,
         auditories: List<Auditory>,
         departments: List<Department>
 ): List<ScheduleItem.GroupLesson> {
@@ -121,7 +120,6 @@ internal fun List<ScheduleItemDTO>.toGroupLessons(
                 val mappedScheduleItem = ScheduleItem.GroupLesson(
                         //This ID will be generated later
                         id = 0,
-                        schedule = schedule,
                         subject = lesson.subject ?: "",
                         subgroupNumber = lesson.subgroupNumber,
                         lessonType = lesson.lessonType ?: "",
@@ -141,7 +139,6 @@ internal fun List<ScheduleItemDTO>.toGroupLessons(
 }
 
 internal fun List<ScheduleItemDTO>.toGroupExams(
-        schedule: Schedule.GroupExams,
         auditories: List<Auditory>,
         departments: List<Department>
 ): List<ScheduleItem.GroupExam> {
@@ -160,7 +157,6 @@ internal fun List<ScheduleItemDTO>.toGroupExams(
             val mappedScheduleItem = ScheduleItem.GroupExam(
                     //This ID will be generated later
                     id = 0,
-                    schedule = schedule,
                     subject = lesson.subject ?: "",
                     subgroupNumber = lesson.subgroupNumber,
                     lessonType = lesson.lessonType ?: "",
@@ -178,7 +174,6 @@ internal fun List<ScheduleItemDTO>.toGroupExams(
 }
 
 internal fun List<ScheduleItemDTO>.toEmployeeLessons(
-        schedule: Schedule.EmployeeClasses,
         groups: List<Group>,
         auditories: List<Auditory>
 ): List<ScheduleItem.EmployeeLesson> {
@@ -195,7 +190,6 @@ internal fun List<ScheduleItemDTO>.toEmployeeLessons(
                 val mappedScheduleItem = ScheduleItem.EmployeeLesson(
                         //This ID will be generated later
                         id = 0,
-                        schedule = schedule,
                         subject = lesson.subject ?: "",
                         weekNumber = weekNumber,
                         subgroupNumber = lesson.subgroupNumber,
@@ -215,7 +209,6 @@ internal fun List<ScheduleItemDTO>.toEmployeeLessons(
 }
 
 internal fun List<ScheduleItemDTO>.toEmployeeExams(
-        schedule: Schedule.EmployeeExams,
         groups: List<Group>,
         auditories: List<Auditory>
 ): List<ScheduleItem.EmployeeExam> {
@@ -231,7 +224,6 @@ internal fun List<ScheduleItemDTO>.toEmployeeExams(
             val mappedScheduleItem = ScheduleItem.EmployeeExam(
                     //This ID will be generated later
                     id = 0,
-                    schedule = schedule,
                     subject = lesson.subject ?: "",
                     subgroupNumber = lesson.subgroupNumber,
                     lessonType = lesson.lessonType ?: "",
@@ -269,5 +261,5 @@ private val dateFormatter: DateFormat
 private fun getResultWeekNumbers(source: List<Int>) = if (source.contains(0)) {
     WeekNumber.values().toList()
 } else {
-    source.map { WeekNumber.getForIndex(it + 1) }
+    source.map { WeekNumber.getForIndex(it - 1) }
 }
