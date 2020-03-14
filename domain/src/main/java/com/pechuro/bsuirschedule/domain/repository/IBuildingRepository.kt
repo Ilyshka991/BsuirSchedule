@@ -10,6 +10,8 @@ interface IBuildingRepository {
 
     suspend fun getAllAuditoryTypes(): Flow<List<AuditoryType>>
 
+    suspend fun getAuditoryById(id: Long): Auditory
+
     suspend fun updateCache()
 
     suspend fun isCached(): Boolean

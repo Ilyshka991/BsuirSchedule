@@ -80,6 +80,9 @@ interface BuildingDao {
     @Query("SELECT * FROM auditory_type WHERE id = :id")
     suspend fun getAuditoryTypeById(id: Long): AuditoryTypeCached
 
+    @Query("SELECT * FROM auditory WHERE id = :id")
+    suspend fun getAuditoryById(id: Long): AuditoryCached
+
     @Query("SELECT EXISTS(SELECT 1 FROM auditory)")
     suspend fun isAuditoriesNotEmpty(): Boolean
 }

@@ -40,6 +40,20 @@ class BuildingRepositoryImpl(
                 .flowOn(Dispatchers.IO)
     }
 
+    override suspend fun getAuditoryById(id: Long): Auditory {
+        val auditoryCached = performDaoCall { dao.getAuditoryById(id) }
+        val auditoryType = performDaoCall { dao.getAuditoryTypeById(auditoryCached.auditoryTypeId) }
+        val building = performDaoCall { dao.getBuildingById(auditoryCached.buildingId) }
+        val department = auditoryCached.departmentId?.let { departmentId ->
+            specialityRepository.getDepartmentById(departmentId)
+        }
+        return auditoryCached.toDomainEntity(
+                building = building.toDomainEntity(),
+                auditoryType = auditoryType.toDomainEntity(),
+                department = department
+        )
+    }
+
     override suspend fun updateCache() {
         val loadedAuditories = loadAuditoriesFromApi()
         storeAuditories(loadedAuditories)

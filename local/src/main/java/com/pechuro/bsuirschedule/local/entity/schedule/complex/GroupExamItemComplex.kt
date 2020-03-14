@@ -13,15 +13,23 @@ data class GroupExamItemComplex(
         @Embedded
         val scheduleItem: GroupItemExamCached,
         @Relation(
-                parentColumn = "schedule_item_id",
-                entityColumn = "employee_id",
-                associateBy = Junction(GroupExamEmployeeCrossRef::class)
+                parentColumn = "id",
+                entityColumn = "id",
+                associateBy = Junction(
+                        value = GroupExamEmployeeCrossRef::class,
+                        parentColumn = "schedule_item_id",
+                        entityColumn = "employee_id"
+                )
         )
         val employees: List<EmployeeCached>,
         @Relation(
-                parentColumn = "schedule_item_id",
-                entityColumn = "auditory_id",
-                associateBy = Junction(GroupExamAuditoryCrossRef::class)
+                parentColumn = "id",
+                entityColumn = "id",
+                associateBy = Junction(
+                        value = GroupExamAuditoryCrossRef::class,
+                        parentColumn = "schedule_item_id",
+                        entityColumn = "auditory_id"
+                )
         )
         val auditories: List<AuditoryCached>
 )

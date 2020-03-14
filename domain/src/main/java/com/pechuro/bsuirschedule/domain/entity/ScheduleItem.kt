@@ -2,34 +2,31 @@ package com.pechuro.bsuirschedule.domain.entity
 
 import java.util.*
 
-sealed class ScheduleItem<T : Schedule>(
-        val id: Long,
-        val schedule: T,
-        val subject: String,
-        val subgroupNumber: Int,
-        val lessonType: String,
-        val note: String,
-        val startTime: String,
-        val endTime: String,
-        val auditories: List<Auditory>
+sealed class ScheduleItem(
+        open val id: Long,
+        open val subject: String,
+        open val subgroupNumber: Int,
+        open val lessonType: String,
+        open val note: String,
+        open val startTime: String,
+        open val endTime: String,
+        open val auditories: List<Auditory>
 ) {
 
-    class GroupLesson(
-            id: Long,
-            schedule: Schedule.GroupClasses,
-            subject: String,
-            subgroupNumber: Int,
-            lessonType: String,
-            note: String,
-            startTime: String,
-            endTime: String,
-            auditories: List<Auditory>,
+    data class GroupLesson(
+            override val id: Long,
+            override val subject: String,
+            override val subgroupNumber: Int,
+            override val lessonType: String,
+            override val note: String,
+            override val startTime: String,
+            override val endTime: String,
+            override val auditories: List<Auditory>,
             val weekDay: WeekDay,
-            val weekNumber: Int,
+            val weekNumber: WeekNumber,
             val employees: List<Employee>
-    ) : ScheduleItem<Schedule.GroupClasses>(
+    ) : ScheduleItem(
             id = id,
-            schedule = schedule,
             subject = subject,
             subgroupNumber = subgroupNumber,
             lessonType = lessonType,
@@ -39,21 +36,19 @@ sealed class ScheduleItem<T : Schedule>(
             auditories = auditories
     )
 
-    class GroupExam(
-            id: Long,
-            schedule: Schedule.GroupExams,
-            subject: String,
-            subgroupNumber: Int,
-            lessonType: String,
-            note: String,
-            startTime: String,
-            endTime: String,
-            auditories: List<Auditory>,
+    data class GroupExam(
+            override val id: Long,
+            override val subject: String,
+            override val subgroupNumber: Int,
+            override val lessonType: String,
+            override val note: String,
+            override val startTime: String,
+            override val endTime: String,
+            override val auditories: List<Auditory>,
             val date: Date,
             val employees: List<Employee>
-    ) : ScheduleItem<Schedule.GroupExams>(
+    ) : ScheduleItem(
             id = id,
-            schedule = schedule,
             subject = subject,
             subgroupNumber = subgroupNumber,
             lessonType = lessonType,
@@ -63,22 +58,20 @@ sealed class ScheduleItem<T : Schedule>(
             auditories = auditories
     )
 
-    class EmployeeLesson(
-            id: Long,
-            schedule: Schedule.EmployeeClasses,
-            subject: String,
-            subgroupNumber: Int,
-            lessonType: String,
-            note: String,
-            startTime: String,
-            endTime: String,
-            auditories: List<Auditory>,
+    data class EmployeeLesson(
+            override val id: Long,
+            override val subject: String,
+            override val subgroupNumber: Int,
+            override val lessonType: String,
+            override val note: String,
+            override val startTime: String,
+            override val endTime: String,
+            override val auditories: List<Auditory>,
             val weekDay: WeekDay,
-            val weekNumber: Int,
+            val weekNumber: WeekNumber,
             val studentGroups: List<Group>
-    ) : ScheduleItem<Schedule.EmployeeClasses>(
+    ) : ScheduleItem(
             id = id,
-            schedule = schedule,
             subject = subject,
             subgroupNumber = subgroupNumber,
             lessonType = lessonType,
@@ -88,21 +81,19 @@ sealed class ScheduleItem<T : Schedule>(
             auditories = auditories
     )
 
-    class EmployeeExam(
-            id: Long,
-            schedule: Schedule.EmployeeExams,
-            subject: String,
-            subgroupNumber: Int,
-            lessonType: String,
-            note: String,
-            startTime: String,
-            endTime: String,
-            auditories: List<Auditory>,
+    data class EmployeeExam(
+            override val id: Long,
+            override val subject: String,
+            override val subgroupNumber: Int,
+            override val lessonType: String,
+            override val note: String,
+            override val startTime: String,
+            override val endTime: String,
+            override val auditories: List<Auditory>,
             val date: Date,
             val studentGroups: List<Group>
-    ) : ScheduleItem<Schedule.EmployeeExams>(
+    ) : ScheduleItem(
             id = id,
-            schedule = schedule,
             subject = subject,
             subgroupNumber = subgroupNumber,
             lessonType = lessonType,

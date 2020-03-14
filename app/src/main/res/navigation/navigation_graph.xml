@@ -42,9 +42,9 @@
 
     <fragment
         android:id="@+id/viewScheduleDestination"
-        android:name="com.pechuro.bsuirschedule.feature.view.ViewScheduleContainer"
+        android:name="com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleContainer"
         android:label="ViewScheduleContainer"
-        tools:layout="@layout/fragment_view_schedule">
+        tools:layout="@layout/fragment_display_schedule">
 
         <argument
             android:name="schedule"

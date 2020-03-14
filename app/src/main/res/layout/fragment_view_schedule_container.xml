@@ -5,26 +5,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/viewScheduleContainerText"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/displayScheduleContainerTabLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textSize="24sp" />
+        android:layout_height="wrap_content"
+        app:tabIndicatorColor="?attr/titleColor"
+        app:tabMode="scrollable"
+        app:tabRippleColor="?attr/rippleColor"
+        app:tabTextAppearance="@style/TabTextAppearance"
+        app:tabTextColor="@color/tab_color" />
 
-    <!-- <com.google.android.material.tabs.TabLayout
-         android:id="@+id/viewScheduleContainerTabLayout"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         app:tabIndicatorColor="?attr/titleColor"
-         app:tabMode="fixed"
-         app:tabRippleColor="?attr/rippleColor"
-         app:tabTextAppearance="@style/TabTextAppearance"
-         app:tabTextColor="@color/tab_color" />
-
-     <androidx.viewpager2.widget.ViewPager2
-         android:id="@+id/viewScheduleContainerViewPager"
-         android:layout_width="wrap_content"
-         android:layout_height="match_parent" />-->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/displayScheduleContainerViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

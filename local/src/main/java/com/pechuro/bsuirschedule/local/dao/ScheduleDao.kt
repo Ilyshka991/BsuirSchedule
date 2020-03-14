@@ -185,4 +185,16 @@ interface ScheduleDao {
 
     @Query("DELETE FROM employee_schedule_exam")
     suspend fun deleteAllEmployeeExamSchedules()
+
+    @Query("SELECT * FROM group_item_classes WHERE schedule_name = :scheduleName")
+    fun getGroupClassesItems(scheduleName: String): Flow<List<GroupClassesItemComplex>>
+
+    @Query("SELECT * FROM group_item_exam WHERE schedule_name = :scheduleName")
+    fun getGroupExamItems(scheduleName: String): Flow<List<GroupExamItemComplex>>
+
+    @Query("SELECT * FROM employee_item_classes WHERE schedule_name = :scheduleName")
+    fun getEmployeeClassesItems(scheduleName: String): Flow<List<EmployeeClassesItemComplex>>
+
+    @Query("SELECT * FROM employee_item_exam WHERE schedule_name = :scheduleName")
+    fun getEmployeeExamItems(scheduleName: String): Flow<List<EmployeeExamItemComplex>>
 }

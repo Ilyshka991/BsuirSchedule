@@ -46,9 +46,8 @@ abstract class BaseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>, shared: Boolean = false): T {
-        val owner: ViewModelStoreOwner = if (shared) requireActivity() else this
-        return initViewModel(clazz, owner)
+    protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>): T {
+        return initViewModel(clazz, this)
     }
 
     protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>, owner: ViewModelStoreOwner): T {
