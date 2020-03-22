@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleItem
+import kotlinx.android.synthetic.main.item_display_employee_day_classes.*
 import kotlinx.android.synthetic.main.item_display_group_day_classes.*
 
 val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
@@ -28,12 +29,14 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
 
 
 @LayoutRes private const val GROUP_DAY_CLASSES_VIEW_TYPE = R.layout.item_display_group_day_classes
+@LayoutRes private const val EMPLOYEE_DAY_CLASSES_VIEW_TYPE = R.layout.item_display_employee_day_classes
 
 
 class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHolder<DisplayScheduleItem>>(DIFF_CALLBACK) {
 
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
         is DisplayScheduleItem.GroupDayClasses -> GROUP_DAY_CLASSES_VIEW_TYPE
+        is DisplayScheduleItem.EmployeeDayClasses -> EMPLOYEE_DAY_CLASSES_VIEW_TYPE
         else -> throw IllegalStateException()
     }
 
@@ -42,6 +45,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
         val view = layoutInflater.inflate(viewType, parent, false)
         return when (viewType) {
             GROUP_DAY_CLASSES_VIEW_TYPE -> GroupDayClassesViewHolder(view)
+            EMPLOYEE_DAY_CLASSES_VIEW_TYPE -> EmployeeDayClassesViewHolder(view)
             else -> throw IllegalStateException()
         }
     }
@@ -73,6 +77,37 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
                 displayGroupDayClassesStartTime.text = startTime
                 displayGroupDayClassesEndTime.text = endTime
                 displayGroupDayClassesNotes.apply {
+                    if (note.isNotEmpty() && note.isNotBlank()) {
+                        text = note
+                        visibility = View.VISIBLE
+                    } else {
+                        visibility = View.GONE
+                    }
+                }
+            }
+        }
+    }
+
+    private inner class EmployeeDayClassesViewHolder(view: View) :
+            BaseViewHolder<DisplayScheduleItem.EmployeeDayClasses>(view) {
+
+        override fun onBind(data: DisplayScheduleItem.EmployeeDayClasses) {
+            with(data.scheduleItem) {
+                displayEmployeeDayClassesLessonType.text = lessonType
+                displayEmployeeDayClassesTitle.text = subject
+                displayEmployeeDayClassesAuditories.text = auditories.joinToString(separator = ",") { it.name }
+                displayEmployeeDayClassesSubGroup.apply {
+                    if (subgroupNumber != 0) {
+                        text = context.getString(R.string.display_schedule_item_subgroup, subgroupNumber)
+                        visibility = View.VISIBLE
+                    } else {
+                        visibility = View.GONE
+                    }
+                }
+                displayEmployeeDayClassesGroups.text = studentGroups.joinToString(separator = ",") { it.number }
+                displayEmployeeDayClassesStartTime.text = startTime
+                displayEmployeeDayClassesEndTime.text = endTime
+                displayEmployeeDayClassesNotes.apply {
                     if (note.isNotEmpty() && note.isNotBlank()) {
                         text = note
                         visibility = View.VISIBLE
