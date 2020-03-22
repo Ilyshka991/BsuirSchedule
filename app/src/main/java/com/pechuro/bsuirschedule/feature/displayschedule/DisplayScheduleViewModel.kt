@@ -6,9 +6,11 @@ import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.WeekDay
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 import com.pechuro.bsuirschedule.domain.interactor.GetScheduleItems
 import com.pechuro.bsuirschedule.ext.flowLiveData
+import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleItem
 import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleItemInfo
 import kotlinx.coroutines.flow.emptyFlow
 import java.util.*
@@ -40,21 +42,81 @@ class DisplayScheduleViewModel @Inject constructor(
         return WeekNumber.getForIndex(weekNumberIndex)
     }
 
-    fun getItems(info: DisplayScheduleItemInfo) = scheduleItemList.map {
-        it.filter { scheduleItem ->
-            when (info) {
-                is DisplayScheduleItemInfo.DayClasses -> when (scheduleItem) {
-                    is ScheduleItem.GroupLesson -> scheduleItem.weekDay == info.weekDay && scheduleItem.weekNumber == info.weekNumber
-                    is ScheduleItem.EmployeeLesson -> scheduleItem.weekDay == info.weekDay && scheduleItem.weekNumber == info.weekNumber
-                    else -> false
-                }
-                is DisplayScheduleItemInfo.WeekClasses -> when (scheduleItem) {
-                    is ScheduleItem.GroupLesson -> scheduleItem.weekDay == info.weekDay
-                    is ScheduleItem.EmployeeLesson -> scheduleItem.weekDay == info.weekDay
-                    else -> false
-                }
-                is DisplayScheduleItemInfo.Exams -> true
-            }
-        }
+    fun getItems(info: DisplayScheduleItemInfo) = scheduleItemList.map { it.filterToDisplayScheduleItems(info) }
+
+    private fun List<ScheduleItem>.filterToDisplayScheduleItems(
+            info: DisplayScheduleItemInfo
+    ): List<DisplayScheduleItem> = when {
+        info is DisplayScheduleItemInfo.DayClasses && schedule is Schedule.GroupClasses ->
+            filterToGroupDayClasses(info.weekDay, info.weekNumber)
+        info is DisplayScheduleItemInfo.DayClasses && schedule is Schedule.EmployeeClasses ->
+            filterToEmployeeDayClasses(info.weekDay, info.weekNumber)
+        info is DisplayScheduleItemInfo.WeekClasses && schedule is Schedule.GroupClasses ->
+            filterToGroupWeekClasses(info.weekDay)
+        info is DisplayScheduleItemInfo.WeekClasses && schedule is Schedule.EmployeeClasses ->
+            filterToEmployeeWeekClasses(info.weekDay)
+        info is DisplayScheduleItemInfo.Exams && schedule is Schedule.GroupExams ->
+            filterToGroupExams()
+        info is DisplayScheduleItemInfo.Exams && schedule is Schedule.EmployeeExams ->
+            filterToEmployeeExams()
+        else -> throw IllegalStateException("DisplayScheduleItemInfo $info is incompatible with ${schedule::class.qualifiedName}")
     }
+
+    private fun List<ScheduleItem>.filterToGroupDayClasses(
+            weekDay: WeekDay,
+            weekNumber: WeekNumber
+    ): List<DisplayScheduleItem.GroupDayClasses> = this
+            .asSequence()
+            .filterIsInstance<ScheduleItem.GroupLesson>()
+            .filter { it.weekDay == weekDay && it.weekNumber == weekNumber }
+            .map(DisplayScheduleItem::GroupDayClasses)
+            .toList()
+
+    private fun List<ScheduleItem>.filterToEmployeeDayClasses(
+            weekDay: WeekDay,
+            weekNumber: WeekNumber
+    ): List<DisplayScheduleItem.EmployeeDayClasses> = this
+            .asSequence()
+            .filterIsInstance<ScheduleItem.EmployeeLesson>()
+            .filter { it.weekDay == weekDay && it.weekNumber == weekNumber }
+            .map(DisplayScheduleItem::EmployeeDayClasses)
+            .toList()
+
+    private fun List<ScheduleItem>.filterToGroupWeekClasses(
+            weekDay: WeekDay
+    ): List<DisplayScheduleItem.GroupWeekClasses> = this
+            .asSequence()
+            .filterIsInstance<ScheduleItem.GroupLesson>()
+            .filter { it.weekDay == weekDay }
+            .groupBy { it.subject }
+            .values
+            .map { groupLessons ->
+                val groupLesson = groupLessons.first()
+                val weekNumbers = groupLessons.map { it.weekNumber }.sorted()
+                DisplayScheduleItem.GroupWeekClasses(groupLesson, weekNumbers)
+            }
+            .toList()
+
+    private fun List<ScheduleItem>.filterToEmployeeWeekClasses(
+            weekDay: WeekDay
+    ): List<DisplayScheduleItem.EmployeeWeekClasses> = this
+            .asSequence()
+            .filterIsInstance<ScheduleItem.EmployeeLesson>()
+            .filter { it.weekDay == weekDay }
+            .groupBy { it.subject }
+            .values
+            .map { employeeLessons ->
+                val employeeLesson = employeeLessons.first()
+                val weekNumbers = employeeLessons.map { it.weekNumber }.sorted()
+                DisplayScheduleItem.EmployeeWeekClasses(employeeLesson, weekNumbers)
+            }
+            .toList()
+
+    private fun List<ScheduleItem>.filterToGroupExams(): List<DisplayScheduleItem.GroupExams> = this
+            .filterIsInstance<ScheduleItem.GroupExam>()
+            .map(DisplayScheduleItem::GroupExams)
+
+    private fun List<ScheduleItem>.filterToEmployeeExams(): List<DisplayScheduleItem.EmployeeExams> = this
+            .filterIsInstance<ScheduleItem.EmployeeExam>()
+            .map(DisplayScheduleItem::EmployeeExams)
 }
