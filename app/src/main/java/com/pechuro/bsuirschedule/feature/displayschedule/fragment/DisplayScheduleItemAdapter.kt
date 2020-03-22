@@ -12,6 +12,7 @@ import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleItem
 import kotlinx.android.synthetic.main.item_display_employee_day_classes.*
+import kotlinx.android.synthetic.main.item_display_employee_exams.*
 import kotlinx.android.synthetic.main.item_display_group_day_classes.*
 import kotlinx.android.synthetic.main.item_display_group_day_classes.displayGroupDayClassesLessonType
 import kotlinx.android.synthetic.main.item_display_group_day_classes.displayGroupDayClassesNotes
@@ -40,6 +41,7 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
 @LayoutRes private const val GROUP_EXAMS_VIEW_TYPE = R.layout.item_display_group_exams
 @LayoutRes private const val EMPLOYEE_DAY_CLASSES_VIEW_TYPE = R.layout.item_display_employee_day_classes
 @LayoutRes private const val EMPLOYEE_WEEK_CLASSES_VIEW_TYPE = R.layout.item_display_employee_week_classes
+@LayoutRes private const val EMPLOYEE_EXAMS_VIEW_TYPE = R.layout.item_display_employee_exams
 
 
 class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHolder<DisplayScheduleItem>>(DIFF_CALLBACK) {
@@ -50,7 +52,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
         is DisplayScheduleItem.GroupExams -> GROUP_EXAMS_VIEW_TYPE
         is DisplayScheduleItem.EmployeeDayClasses -> EMPLOYEE_DAY_CLASSES_VIEW_TYPE
         is DisplayScheduleItem.EmployeeWeekClasses -> EMPLOYEE_WEEK_CLASSES_VIEW_TYPE
-        else -> throw IllegalStateException()
+        is DisplayScheduleItem.EmployeeExams -> EMPLOYEE_EXAMS_VIEW_TYPE
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<DisplayScheduleItem> {
@@ -62,7 +64,8 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
             GROUP_EXAMS_VIEW_TYPE -> GroupExamsViewHolder(view)
             EMPLOYEE_DAY_CLASSES_VIEW_TYPE -> EmployeeDayClassesViewHolder(view)
             EMPLOYEE_WEEK_CLASSES_VIEW_TYPE -> EmployeeWeekClassesViewHolder(view)
-            else -> throw IllegalStateException()
+            EMPLOYEE_EXAMS_VIEW_TYPE -> EmployeeExamsViewHolder(view)
+            else -> throw IllegalStateException("Unknown viewType: $viewType")
         }
     }
 
@@ -239,6 +242,37 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
                 displayEmployeeDayClassesStartTime.text = startTime
                 displayEmployeeDayClassesEndTime.text = endTime
                 displayEmployeeDayClassesNotes.apply {
+                    if (note.isNotEmpty() && note.isNotBlank()) {
+                        text = note
+                        visibility = View.VISIBLE
+                    } else {
+                        visibility = View.GONE
+                    }
+                }
+            }
+        }
+    }
+
+    private inner class EmployeeExamsViewHolder(view: View) :
+            BaseViewHolder<DisplayScheduleItem.EmployeeExams>(view) {
+
+        override fun onBind(data: DisplayScheduleItem.EmployeeExams) {
+            with(data.scheduleItem) {
+                displayEmployeeExamsStartTime.text = startTime
+                displayEmployeeExamsAuditories.text = auditories.joinToString(separator = ",") { it.name }
+                displayEmployeeExamsTitle.text = subject
+                displayEmployeeExamsDate.text = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(date)
+                displayEmployeeExamsSubGroup.apply {
+                    if (subgroupNumber != 0) {
+                        text = context.getString(R.string.display_schedule_item_subgroup, subgroupNumber)
+                        visibility = View.VISIBLE
+                    } else {
+                        visibility = View.GONE
+                    }
+                }
+                displayEmployeeExamsLessonType.text = lessonType
+                displayEmployeeExamsGroups.text = studentGroups.joinToString(separator = ",") { it.number }
+                displayEmployeeExamsNotes.apply {
                     if (note.isNotEmpty() && note.isNotBlank()) {
                         text = note
                         visibility = View.VISIBLE
