@@ -33,6 +33,7 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
 @LayoutRes private const val GROUP_DAY_CLASSES_VIEW_TYPE = R.layout.item_display_group_day_classes
 @LayoutRes private const val GROUP_WEEK_CLASSES_VIEW_TYPE = R.layout.item_display_group_week_classes
 @LayoutRes private const val EMPLOYEE_DAY_CLASSES_VIEW_TYPE = R.layout.item_display_employee_day_classes
+@LayoutRes private const val EMPLOYEE_WEEK_CLASSES_VIEW_TYPE = R.layout.item_display_employee_week_classes
 
 
 class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHolder<DisplayScheduleItem>>(DIFF_CALLBACK) {
@@ -41,6 +42,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
         is DisplayScheduleItem.GroupDayClasses -> GROUP_DAY_CLASSES_VIEW_TYPE
         is DisplayScheduleItem.GroupWeekClasses -> GROUP_WEEK_CLASSES_VIEW_TYPE
         is DisplayScheduleItem.EmployeeDayClasses -> EMPLOYEE_DAY_CLASSES_VIEW_TYPE
+        is DisplayScheduleItem.EmployeeWeekClasses -> EMPLOYEE_WEEK_CLASSES_VIEW_TYPE
         else -> throw IllegalStateException()
     }
 
@@ -51,6 +53,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
             GROUP_DAY_CLASSES_VIEW_TYPE -> GroupDayClassesViewHolder(view)
             GROUP_WEEK_CLASSES_VIEW_TYPE -> GroupWeekClassesViewHolder(view)
             EMPLOYEE_DAY_CLASSES_VIEW_TYPE -> EmployeeDayClassesViewHolder(view)
+            EMPLOYEE_WEEK_CLASSES_VIEW_TYPE -> EmployeeWeekClassesViewHolder(view)
             else -> throw IllegalStateException()
         }
     }
@@ -149,6 +152,48 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
                         visibility = View.VISIBLE
                     } else {
                         visibility = View.GONE
+                    }
+                }
+                displayEmployeeDayClassesGroups.text = studentGroups.joinToString(separator = ",") { it.number }
+                displayEmployeeDayClassesStartTime.text = startTime
+                displayEmployeeDayClassesEndTime.text = endTime
+                displayEmployeeDayClassesNotes.apply {
+                    if (note.isNotEmpty() && note.isNotBlank()) {
+                        text = note
+                        visibility = View.VISIBLE
+                    } else {
+                        visibility = View.GONE
+                    }
+                }
+            }
+        }
+    }
+
+    private inner class EmployeeWeekClassesViewHolder(view: View) :
+            BaseViewHolder<DisplayScheduleItem.EmployeeWeekClasses>(view) {
+
+        override fun onBind(data: DisplayScheduleItem.EmployeeWeekClasses) {
+            with(data.scheduleItem) {
+                displayEmployeeDayClassesLessonType.text = lessonType
+                displayEmployeeDayClassesTitle.text = subject
+                displayEmployeeDayClassesAuditories.text = auditories.joinToString(separator = ",") { it.name }
+                displayEmployeeDayClassesSubGroup.apply {
+                    if (subgroupNumber != 0) {
+                        text = context.getString(R.string.display_schedule_item_subgroup, subgroupNumber)
+                        visibility = View.VISIBLE
+                    } else {
+                        visibility = View.GONE
+                    }
+                }
+                displayGroupWeekClassesWeekNumbers.apply {
+                    if (data.weekNumbers.size == WeekNumber.TOTAL_COUNT) {
+                        visibility = View.GONE
+                    } else {
+                        text = context.getString(
+                                R.string.display_schedule_item_week_numbers,
+                                data.weekNumbers.joinToString(separator = ",") { it.index.toString() }
+                        )
+                        visibility = View.VISIBLE
                     }
                 }
                 displayEmployeeDayClassesGroups.text = studentGroups.joinToString(separator = ",") { it.number }
