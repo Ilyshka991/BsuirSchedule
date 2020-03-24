@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
-import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.ext.clearAdapter
 import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleViewModel
@@ -55,5 +55,10 @@ class DisplayScheduleFragment : BaseFragment() {
         viewModel.getItems(itemInfo).nonNull().observe(viewLifecycleOwner) {
             itemsAdapter.submitList(it)
         }
+    }
+
+    override fun onDestroyView() {
+        displayScheduleRecyclerView.clearAdapter()
+        super.onDestroyView()
     }
 }

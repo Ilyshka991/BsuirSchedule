@@ -75,6 +75,11 @@ class AddScheduleFragment : BaseFragment() {
         context?.hideKeyboard(addScheduleNameInput.windowToken)
     }
 
+    override fun onDestroyView() {
+        addScheduleSuggestionsRecyclerView.clearAdapter()
+        super.onDestroyView()
+    }
+
     private fun initView() {
         addScheduleNameInput.apply {
             val inputType = when (scheduleType) {
