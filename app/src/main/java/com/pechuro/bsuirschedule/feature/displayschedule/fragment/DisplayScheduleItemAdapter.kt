@@ -29,6 +29,11 @@ class DisplayScheduleItemAdapter(
         private val onScheduleItemClicked: (ScheduleItem) -> Unit
 ) : ListAdapter<ScheduleItem, BaseViewHolder<ScheduleItem>>(DIFF_CALLBACK) {
 
+    private val onClickListener = View.OnClickListener {
+        val scheduleItem = it.tag as? ScheduleItem? ?: return@OnClickListener
+        onScheduleItemClicked(scheduleItem)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ScheduleItem> {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.item_display_student_classes, parent, false)
@@ -43,9 +48,13 @@ class DisplayScheduleItemAdapter(
 
     private inner class DayClassesViewHolder(view: View) : BaseViewHolder<ScheduleItem>(view) {
 
+        init {
+            view.setOnClickListener(onClickListener)
+        }
+
         override fun onBind(data: ScheduleItem) {
             displayStudentClassesTitle.text = data.subject
-            containerView.setOnClickListener { onScheduleItemClicked(data) }
+            itemView.tag = data
         }
     }
 }
