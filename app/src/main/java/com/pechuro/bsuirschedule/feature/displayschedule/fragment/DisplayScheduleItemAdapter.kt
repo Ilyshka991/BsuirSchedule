@@ -25,13 +25,9 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ScheduleItem>() {
     ) = oldItem == newItem
 }
 
-class DisplayScheduleItemAdapter : ListAdapter<ScheduleItem, BaseViewHolder<ScheduleItem>>(DIFF_CALLBACK) {
-
-    interface ActionCallback {
-        fun onScheduleItemClicked(scheduleItem: ScheduleItem)
-    }
-
-    var actionCallback: ActionCallback? = null
+class DisplayScheduleItemAdapter(
+        private val onScheduleItemClicked: (ScheduleItem) -> Unit
+) : ListAdapter<ScheduleItem, BaseViewHolder<ScheduleItem>>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ScheduleItem> {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -49,7 +45,7 @@ class DisplayScheduleItemAdapter : ListAdapter<ScheduleItem, BaseViewHolder<Sche
 
         override fun onBind(data: ScheduleItem) {
             displayStudentClassesTitle.text = data.subject
-            containerView.setOnClickListener { actionCallback?.onScheduleItemClicked(data) }
+            containerView.setOnClickListener { onScheduleItemClicked(data) }
         }
     }
 }

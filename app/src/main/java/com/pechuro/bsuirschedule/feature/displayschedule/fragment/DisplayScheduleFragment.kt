@@ -26,12 +26,6 @@ class DisplayScheduleFragment : BaseFragment() {
 
     override val layoutId: Int = R.layout.fragment_display_schedule
 
-    private val adapterActionCallback = object : DisplayScheduleItemAdapter.ActionCallback {
-        override fun onScheduleItemClicked(scheduleItem: ScheduleItem) {
-            viewModel.onScheduleItemClicked(scheduleItem)
-        }
-    }
-
     private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
         initViewModel(DisplayScheduleViewModel::class, owner = parentFragment ?: this)
     }
@@ -39,9 +33,7 @@ class DisplayScheduleFragment : BaseFragment() {
         requireArguments().getParcelable<DisplayScheduleItemInfo>(ARG_ITEM_INFO) as DisplayScheduleItemInfo
     }
     private val itemsAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        DisplayScheduleItemAdapter().apply {
-            actionCallback = adapterActionCallback
-        }
+        DisplayScheduleItemAdapter(viewModel::onScheduleItemClicked)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
