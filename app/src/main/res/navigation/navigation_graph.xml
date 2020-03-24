@@ -53,7 +53,7 @@
 
     <fragment
         android:id="@+id/scheduleItemDestination"
-        android:name="com.pechuro.bsuirschedule.feature.scheduleitemdetails.ScheduleItemFragment"
+        android:name="com.pechuro.bsuirschedule.feature.scheduleitemdetails.ScheduleItemDetailsFragment"
         android:label="ScheduleItemFragment"
         tools:layout="@layout/fragment_schedule_item">
 
