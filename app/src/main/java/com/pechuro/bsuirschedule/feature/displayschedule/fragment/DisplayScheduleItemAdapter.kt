@@ -27,6 +27,12 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ScheduleItem>() {
 
 class DisplayScheduleItemAdapter : ListAdapter<ScheduleItem, BaseViewHolder<ScheduleItem>>(DIFF_CALLBACK) {
 
+    interface ActionCallback {
+        fun onScheduleItemClicked(scheduleItem: ScheduleItem)
+    }
+
+    var actionCallback: ActionCallback? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ScheduleItem> {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.item_display_student_classes, parent, false)
@@ -43,6 +49,7 @@ class DisplayScheduleItemAdapter : ListAdapter<ScheduleItem, BaseViewHolder<Sche
 
         override fun onBind(data: ScheduleItem) {
             displayStudentClassesTitle.text = data.subject
+            containerView.setOnClickListener { actionCallback?.onScheduleItemClicked(data) }
         }
     }
 }

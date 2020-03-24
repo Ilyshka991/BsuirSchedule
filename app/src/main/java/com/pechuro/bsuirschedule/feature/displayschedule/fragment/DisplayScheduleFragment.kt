@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleViewModel
@@ -25,6 +26,12 @@ class DisplayScheduleFragment : BaseFragment() {
 
     override val layoutId: Int = R.layout.fragment_display_schedule
 
+    private val adapterActionCallback = object : DisplayScheduleItemAdapter.ActionCallback {
+        override fun onScheduleItemClicked(scheduleItem: ScheduleItem) {
+            println(scheduleItem)
+        }
+    }
+
     private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
         initViewModel(DisplayScheduleViewModel::class, owner = parentFragment ?: this)
     }
@@ -32,7 +39,9 @@ class DisplayScheduleFragment : BaseFragment() {
         requireArguments().getParcelable<DisplayScheduleItemInfo>(ARG_ITEM_INFO) as DisplayScheduleItemInfo
     }
     private val itemsAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        DisplayScheduleItemAdapter()
+        DisplayScheduleItemAdapter().apply {
+            actionCallback = adapterActionCallback
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
