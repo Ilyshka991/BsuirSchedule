@@ -47,9 +47,7 @@ class DisplayScheduleFragment : BaseFragment() {
     private fun initView() {
         displayScheduleRecyclerView.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            adapter = itemsAdapter.apply {
-                setHasStableIds(true)
-            }
+            adapter = itemsAdapter
         }
     }
 
