@@ -32,7 +32,9 @@ class DisplayScheduleFragment : BaseFragment() {
         requireArguments().getParcelable<DisplayScheduleItemInfo>(ARG_ITEM_INFO) as DisplayScheduleItemInfo
     }
     private val itemsAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        DisplayScheduleItemAdapter()
+        DisplayScheduleItemAdapter().also {
+            it.setHasStableIds(true)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,9 +46,7 @@ class DisplayScheduleFragment : BaseFragment() {
     private fun initView() {
         displayScheduleRecyclerView.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            adapter = itemsAdapter.apply {
-                setHasStableIds(true)
-            }
+            adapter = itemsAdapter
         }
     }
 
