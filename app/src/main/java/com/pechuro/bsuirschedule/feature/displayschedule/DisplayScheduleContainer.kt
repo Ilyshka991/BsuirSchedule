@@ -6,8 +6,11 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleViewType
 import kotlinx.android.synthetic.main.fragment_view_schedule_container.*
 import java.text.SimpleDateFormat
@@ -37,6 +40,14 @@ class DisplayScheduleContainer : BaseFragment() {
         // Force initialize viewModel
         viewModel
         initView()
+        observeData()
+    }
+
+    private fun observeData() {
+        viewModel.openScheduleItemDetailsEvent.nonNull().observe(viewLifecycleOwner) {
+            val event = DisplayScheduleEvent.OpenScheduleItem(it)
+            EventBus.send(event)
+        }
     }
 
     private fun initView() {
