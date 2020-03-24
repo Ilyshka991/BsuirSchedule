@@ -1,5 +1,7 @@
 package com.pechuro.bsuirschedule.domain.entity
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 sealed class ScheduleItem(
@@ -11,8 +13,9 @@ sealed class ScheduleItem(
         open val startTime: String,
         open val endTime: String,
         open val auditories: List<Auditory>
-) {
+) : Parcelable {
 
+    @Parcelize
     data class GroupLesson(
             override val id: Long,
             override val subject: String,
@@ -36,6 +39,7 @@ sealed class ScheduleItem(
             auditories = auditories
     )
 
+    @Parcelize
     data class GroupExam(
             override val id: Long,
             override val subject: String,
@@ -58,6 +62,7 @@ sealed class ScheduleItem(
             auditories = auditories
     )
 
+    @Parcelize
     data class EmployeeLesson(
             override val id: Long,
             override val subject: String,
@@ -81,6 +86,7 @@ sealed class ScheduleItem(
             auditories = auditories
     )
 
+    @Parcelize
     data class EmployeeExam(
             override val id: Long,
             override val subject: String,

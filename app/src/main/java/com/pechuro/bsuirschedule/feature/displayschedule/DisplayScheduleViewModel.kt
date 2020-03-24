@@ -2,6 +2,7 @@ package com.pechuro.bsuirschedule.feature.displayschedule
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
+import com.pechuro.bsuirschedule.common.SingleLiveEvent
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.Schedule
@@ -17,6 +18,8 @@ import javax.inject.Inject
 class DisplayScheduleViewModel @Inject constructor(
         private val getScheduleItems: GetScheduleItems
 ) : BaseViewModel() {
+
+    val openScheduleItemDetailsEvent = SingleLiveEvent<ScheduleItem>()
 
     lateinit var schedule: Schedule
 
@@ -56,5 +59,9 @@ class DisplayScheduleViewModel @Inject constructor(
                 is DisplayScheduleItemInfo.Exams -> true
             }
         }
+    }
+
+    fun onScheduleItemClicked(scheduleItem: ScheduleItem) {
+        openScheduleItemDetailsEvent.value = scheduleItem
     }
 }

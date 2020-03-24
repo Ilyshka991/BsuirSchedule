@@ -10,6 +10,7 @@ import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoViewModel
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetViewModel
 import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetViewModel
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleViewModel
+import com.pechuro.bsuirschedule.feature.scheduleitemdetails.ScheduleItemViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -49,4 +50,9 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(DisplayScheduleViewModel::class)
     fun viewSchedule(viewModel: DisplayScheduleViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ScheduleItemViewModel::class)
+    fun scheduleItem(viewModel: ScheduleItemViewModel): ViewModel
 }

@@ -13,11 +13,14 @@ import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleCompleteEvent
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleContainerArgs
+import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleEvent
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoCompleteEvent
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
+import com.pechuro.bsuirschedule.feature.scheduleitemdetails.ScheduleItemFragmentArgs
 import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetArgs
 import kotlinx.android.synthetic.main.fragment_flow.*
 import kotlinx.coroutines.launch
@@ -101,8 +104,14 @@ class FlowFragment : BaseFragment() {
                 is NavigationSheetEvent.OnScheduleDeleted -> onScheduleDeleted(event.schedule)
                 is NavigationSheetEvent.OnOpenSettings -> {
                 }
+                is DisplayScheduleEvent.OpenScheduleItem -> openScheduleItemDetails(event.scheduleItem)
             }
         }
+    }
+
+    private fun openScheduleItemDetails(scheduleItem: ScheduleItem) {
+        val args = ScheduleItemFragmentArgs(scheduleItem).toBundle()
+        navController.navigate(R.id.scheduleItemDestination, args, defaultNavOptions)
     }
 
     private fun openNavigationSheet() {

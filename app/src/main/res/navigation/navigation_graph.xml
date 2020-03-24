@@ -50,4 +50,16 @@
             android:name="schedule"
             app:argType="com.pechuro.bsuirschedule.domain.entity.Schedule" />
     </fragment>
+
+    <fragment
+        android:id="@+id/scheduleItemDestination"
+        android:name="com.pechuro.bsuirschedule.feature.scheduleitemdetails.ScheduleItemFragment"
+        android:label="ScheduleItemFragment"
+        tools:layout="@layout/fragment_schedule_item">
+
+        <argument
+            android:name="schedule"
+            app:argType="com.pechuro.bsuirschedule.domain.entity.ScheduleItem" />
+    </fragment>
+
 </navigation>

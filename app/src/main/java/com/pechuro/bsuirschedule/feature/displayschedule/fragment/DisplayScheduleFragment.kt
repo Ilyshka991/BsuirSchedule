@@ -28,7 +28,7 @@ class DisplayScheduleFragment : BaseFragment() {
 
     private val adapterActionCallback = object : DisplayScheduleItemAdapter.ActionCallback {
         override fun onScheduleItemClicked(scheduleItem: ScheduleItem) {
-            println(scheduleItem)
+            viewModel.onScheduleItemClicked(scheduleItem)
         }
     }
 
