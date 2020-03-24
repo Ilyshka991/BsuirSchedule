@@ -2,7 +2,7 @@ package com.pechuro.bsuirschedule.feature.displayschedule
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
-import com.pechuro.bsuirschedule.common.SingleLiveEvent
+import com.pechuro.bsuirschedule.common.LiveEvent
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.Schedule
@@ -19,7 +19,7 @@ class DisplayScheduleViewModel @Inject constructor(
         private val getScheduleItems: GetScheduleItems
 ) : BaseViewModel() {
 
-    val openScheduleItemDetailsEvent = SingleLiveEvent<ScheduleItem>()
+    val openScheduleItemDetailsEvent = LiveEvent<ScheduleItem>()
 
     lateinit var schedule: Schedule
 
