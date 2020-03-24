@@ -5,7 +5,7 @@ import com.pechuro.bsuirschedule.common.base.BaseFragment
 
 class ScheduleItemDetailsFragment : BaseFragment() {
 
-    private val viewModel by lazy {
+    private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
         initViewModel(ScheduleItemDetailsViewModel::class)
     }
 
