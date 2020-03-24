@@ -16,7 +16,7 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ScheduleItem>() {
     override fun areItemsTheSame(
             oldItem: ScheduleItem,
             newItem: ScheduleItem
-    ) = oldItem === newItem
+    ) = oldItem.id == newItem.id
 
     @SuppressLint("DiffUtilEquals")
     override fun areContentsTheSame(
