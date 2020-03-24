@@ -20,7 +20,7 @@ import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleContaine
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleEvent
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoCompleteEvent
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
-import com.pechuro.bsuirschedule.feature.scheduleitemdetails.ScheduleItemFragmentArgs
+import com.pechuro.bsuirschedule.feature.scheduleitemdetails.ScheduleItemDetailsFragmentArgs
 import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetArgs
 import kotlinx.android.synthetic.main.fragment_flow.*
 import kotlinx.coroutines.launch
@@ -110,7 +110,7 @@ class FlowFragment : BaseFragment() {
     }
 
     private fun openScheduleItemDetails(scheduleItem: ScheduleItem) {
-        val args = ScheduleItemFragmentArgs(scheduleItem).toBundle()
+        val args = ScheduleItemDetailsFragmentArgs(scheduleItem).toBundle()
         navController.navigate(R.id.scheduleItemDestination, args, defaultNavOptions)
     }
 
