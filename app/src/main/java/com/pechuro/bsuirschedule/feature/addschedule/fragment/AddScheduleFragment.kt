@@ -44,7 +44,9 @@ class AddScheduleFragment : BaseFragment() {
     }
 
     private val suggestionsAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        AddScheduleSuggestionsAdapter()
+        AddScheduleSuggestionsAdapter().also {
+            it.setHasStableIds(true)
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -96,7 +98,6 @@ class AddScheduleFragment : BaseFragment() {
                     addScheduleSuggestionsRecyclerView.tag = it
                     loadSchedule(it)
                 }
-                setHasStableIds(true)
             }
             setHasFixedSize(true)
         }
