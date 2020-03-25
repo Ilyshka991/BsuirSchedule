@@ -22,10 +22,9 @@ import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.ext.observe
-import com.pechuro.bsuirschedule.ext.setHeight
-import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import kotlinx.android.synthetic.main.sheet_navigation.*
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -136,6 +135,11 @@ class NavigationSheet : BaseBottomSheetDialog() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         observeData()
+    }
+
+    override fun onDestroyView() {
+        navigationSheetItemRecyclerView.clearAdapter()
+        super.onDestroyView()
     }
 
     private fun initView() {
