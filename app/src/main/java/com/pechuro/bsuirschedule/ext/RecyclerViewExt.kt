@@ -4,7 +4,8 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 /**
- * Should be called on your view destroy
+ * Should be called on your view destroy.
+ * @see <a href="https://stackoverflow.com/questions/35520946/leak-canary-recyclerview-leaking-madapter">StackOverflow</a>
  */
 fun RecyclerView.clearAdapter() {
     addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
