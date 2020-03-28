@@ -5,6 +5,7 @@ import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.di.annotations.AppScope
 import com.pechuro.bsuirschedule.di.module.*
+import com.pechuro.bsuirschedule.feature.displayschedule.fragment.DisplayScheduleFragment
 import dagger.BindsInstance
 import dagger.Component
 
@@ -15,7 +16,8 @@ import dagger.Component
     NetworkModule::class,
     DatabaseModule::class,
     RepositoryModule::class,
-    WorkerModule::class
+    WorkerModule::class,
+    RecyclerViewModule::class
 ])
 interface AppComponent {
 
@@ -24,6 +26,8 @@ interface AppComponent {
     fun inject(fragment: BaseFragment)
 
     fun inject(dialog: BaseBottomSheetDialog)
+
+    fun inject(displayScheduleFragment: DisplayScheduleFragment)
 
     @Component.Builder
     interface Builder {

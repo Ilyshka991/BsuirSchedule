@@ -144,7 +144,8 @@ internal fun ScheduleItem.GroupLesson.toDatabaseEntity(schedule: GroupClassesSch
             startTime = startTime,
             endTime = endTime,
             weekDay = weekDay.index,
-            weekNumber = weekNumber.index
+            weekNumber = weekNumber.index,
+            priority = priority.value
     )
     val employees = employees.map { it.toDatabaseEntity() }
     val auditories = auditories.toDatabaseEntity()
@@ -199,7 +200,8 @@ internal fun ScheduleItem.EmployeeLesson.toDatabaseEntity(schedule: EmployeeClas
             note = note,
             startTime = startTime,
             endTime = endTime,
-            weekDay = weekDay.index
+            weekDay = weekDay.index,
+            priority = priority.value
     )
     val groups = studentGroups.map { it.toDatabaseEntity() }
     val auditories = auditories.toDatabaseEntity()

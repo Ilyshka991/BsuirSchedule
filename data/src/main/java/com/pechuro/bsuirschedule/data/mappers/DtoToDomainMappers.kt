@@ -117,6 +117,7 @@ internal fun List<ScheduleItemDTO>.toGroupLessons(
                 employeeDto.toDomainEntity(department)
             }
             getResultWeekNumbers(lesson.weekNumber).forEach { weekNumber ->
+                val lessonType = lesson.lessonType?.toUpperCase(Locale.getDefault()) ?: ""
                 val mappedScheduleItem = ScheduleItem.GroupLesson(
                         //This ID will be generated later
                         id = 0,
@@ -129,7 +130,8 @@ internal fun List<ScheduleItemDTO>.toGroupLessons(
                         endTime = lesson.endTime ?: "",
                         employees = lessonEmployees ?: emptyList(),
                         weekDay = getWeekDayFor(scheduleItem.weekDay),
-                        weekNumber = weekNumber
+                        weekNumber = weekNumber,
+                        priority = LessonPriority.getDefaultForLessonType(lessonType)
                 )
                 resultList.add(mappedScheduleItem)
             }
@@ -187,19 +189,21 @@ internal fun List<ScheduleItemDTO>.toEmployeeLessons(
                 groups.filter { it.number in lessonGroups }
             }
             getResultWeekNumbers(lesson.weekNumber).forEach { weekNumber ->
+                val lessonType = lesson.lessonType?.toUpperCase(Locale.getDefault()) ?: ""
                 val mappedScheduleItem = ScheduleItem.EmployeeLesson(
                         //This ID will be generated later
                         id = 0,
                         subject = lesson.subject ?: "",
                         weekNumber = weekNumber,
                         subgroupNumber = lesson.subgroupNumber,
-                        lessonType = lesson.lessonType ?: "",
+                        lessonType = lessonType,
                         auditories = lessonAuditories ?: emptyList(),
                         note = lesson.note ?: "",
                         startTime = lesson.startTime ?: "",
                         endTime = lesson.endTime ?: "",
                         weekDay = getWeekDayFor(scheduleItem.weekDay),
-                        studentGroups = lessonGroups ?: emptyList()
+                        studentGroups = lessonGroups ?: emptyList(),
+                        priority = LessonPriority.getDefaultForLessonType(lessonType)
                 )
                 resultList.add(mappedScheduleItem)
             }

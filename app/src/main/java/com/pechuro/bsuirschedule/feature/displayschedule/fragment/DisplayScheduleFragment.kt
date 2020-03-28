@@ -1,5 +1,6 @@
 package com.pechuro.bsuirschedule.feature.displayschedule.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
@@ -7,12 +8,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
+import com.pechuro.bsuirschedule.ext.app
 import com.pechuro.bsuirschedule.ext.clearAdapter
 import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleViewModel
 import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleItemInfo
 import kotlinx.android.synthetic.main.fragment_display_schedule.*
+import javax.inject.Inject
 
 class DisplayScheduleFragment : BaseFragment() {
 
@@ -26,6 +29,9 @@ class DisplayScheduleFragment : BaseFragment() {
 
     override val layoutId: Int = R.layout.fragment_display_schedule
 
+    @Inject
+    protected lateinit var sharedRecycledViewPool: RecyclerView.RecycledViewPool
+
     private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
         initViewModel(DisplayScheduleViewModel::class, owner = parentFragment ?: this)
     }
@@ -38,6 +44,11 @@ class DisplayScheduleFragment : BaseFragment() {
         }
     }
 
+    override fun onAttach(context: Context) {
+        context.app.appComponent.inject(this)
+        super.onAttach(context)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
@@ -46,7 +57,11 @@ class DisplayScheduleFragment : BaseFragment() {
 
     private fun initView() {
         displayScheduleRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            setRecycledViewPool(sharedRecycledViewPool)
+            val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false).apply {
+                recycleChildrenOnDetach = true
+            }
+            this.layoutManager = layoutManager
             adapter = itemsAdapter
         }
     }
@@ -59,6 +74,7 @@ class DisplayScheduleFragment : BaseFragment() {
 
     override fun onDestroyView() {
         displayScheduleRecyclerView.clearAdapter()
+        displayScheduleRecyclerView.setRecycledViewPool(null)
         super.onDestroyView()
     }
 }

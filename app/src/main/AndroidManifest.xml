@@ -30,7 +30,5 @@
             android:name="androidx.work.impl.WorkManagerInitializer"
             android:authorities="${applicationId}.workmanager-init"
             tools:node="remove" />
-
-        <service android:name=".service.CheckSchedulesUpdatesService" />
     </application>
 </manifest>

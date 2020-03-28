@@ -34,5 +34,7 @@ data class EmployeeItemClassesCached(
         @ColumnInfo(name = "end_time")
         val endTime: String,
         @ColumnInfo(name = "week_day")
-        val weekDay: Int
+        val weekDay: Int,
+        @ColumnInfo(name = "priority")
+        val priority: Int
 )
