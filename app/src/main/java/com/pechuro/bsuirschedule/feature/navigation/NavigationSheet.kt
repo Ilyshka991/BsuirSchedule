@@ -16,6 +16,7 @@ import androidx.core.view.marginTop
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.EventBus
@@ -145,6 +146,10 @@ class NavigationSheet : BaseBottomSheetDialog() {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = this@NavigationSheet.adapter
             itemTouchHelper.attachToRecyclerView(this)
+            val animator = itemAnimator as? SimpleItemAnimator
+            animator?.apply {
+                addDuration = 0L
+            }
         }
         navigationSheetSettingButton.setSafeClickListener {
             EventBus.send(NavigationSheetEvent.OnOpenSettings)

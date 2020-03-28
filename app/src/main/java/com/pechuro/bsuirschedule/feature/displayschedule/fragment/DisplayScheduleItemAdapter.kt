@@ -113,7 +113,7 @@ class DisplayScheduleItemAdapter(
                 displayGroupDayClassesNotes.isVisible = note.isNotEmpty() && note.isNotBlank()
                 displayGroupDayClassesNotes.text = note
             }
-            itemView.tag = data
+            itemView.tag = data.scheduleItem
         }
     }
 
@@ -147,7 +147,7 @@ class DisplayScheduleItemAdapter(
                 displayGroupWeekClassesNotes.text = note
                 displayGroupWeekClassesNotes.isVisible = note.isNotEmpty() && note.isNotBlank()
             }
-            itemView.tag = data
+            itemView.tag = data.scheduleItem
         }
     }
 
@@ -174,7 +174,7 @@ class DisplayScheduleItemAdapter(
                 displayGroupExamsNotes.isVisible = note.isNotEmpty() && note.isNotBlank()
                 displayGroupExamsNotes.text = note
             }
-            itemView.tag = data
+            itemView.tag = data.scheduleItem
         }
     }
 
@@ -203,7 +203,7 @@ class DisplayScheduleItemAdapter(
                 displayEmployeeDayClassesNotes.isVisible = note.isNotEmpty() && note.isNotBlank()
                 displayEmployeeDayClassesNotes.text = note
             }
-            itemView.tag = data
+            itemView.tag = data.scheduleItem
         }
     }
 
@@ -237,7 +237,7 @@ class DisplayScheduleItemAdapter(
                 displayEmployeeDayClassesNotes.isVisible = note.isNotEmpty() && note.isNotBlank()
                 displayEmployeeDayClassesNotes.text = note
             }
-            itemView.tag = data
+            itemView.tag = data.scheduleItem
         }
     }
 
@@ -264,7 +264,7 @@ class DisplayScheduleItemAdapter(
                 displayEmployeeExamsNotes.isVisible = note.isNotEmpty() && note.isNotBlank()
                 displayEmployeeExamsNotes.text = note
             }
-            itemView.tag = data
+            itemView.tag = data.scheduleItem
         }
     }
 

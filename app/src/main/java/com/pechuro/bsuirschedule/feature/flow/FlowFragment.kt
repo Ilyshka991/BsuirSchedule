@@ -2,6 +2,7 @@ package com.pechuro.bsuirschedule.feature.flow
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -48,9 +49,9 @@ class FlowFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initNavigation()
         setStartDestination()
         if (savedInstanceState == null && !viewModel.isInfoLoaded()) openLoadInfo()
-        initNavigation()
         initViews()
         checkScheduleUpdates()
         receiveEvents()
@@ -67,11 +68,12 @@ class FlowFragment : BaseFragment() {
     private fun initNavigation() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val isControlsVisible = when (destination.id) {
-                R.id.addScheduleDestination -> false
+                R.id.addScheduleDestination,
+                R.id.scheduleItemDestination,
                 R.id.loadInfoDestination -> false
                 else -> true
             }
-            bottomBarParentView.isVisible = isControlsVisible
+            updateLayoutState(isControlsVisible)
         }
     }
 
@@ -105,6 +107,13 @@ class FlowFragment : BaseFragment() {
                 is NavigationSheetEvent.OnOpenSettings -> {
                 }
                 is DisplayScheduleEvent.OpenScheduleItem -> openScheduleItemDetails(event.scheduleItem)
+                is DisplayScheduleEvent.OnPositionChanged -> {
+                    if (event.position != 0) {
+                        bottomBarFab.show()
+                    } else {
+                        bottomBarFab.hide()
+                    }
+                }
             }
         }
     }
@@ -148,8 +157,8 @@ class FlowFragment : BaseFragment() {
 
     private fun onScheduleDeleted(schedule: Schedule) {
         if (viewModel.lastOpenedSchedule == schedule) {
-            setDefaultStartDestination()
             viewModel.lastOpenedSchedule = null
+            setDefaultStartDestination()
         }
     }
 
@@ -172,6 +181,7 @@ class FlowFragment : BaseFragment() {
             Logger.e(e)
             //TODO: Possible bug: DialogFragment doesn't exist in the FragmentManager
         }
+        updateLayoutState(isControlsVisible = true)
     }
 
     private fun setDefaultStartDestination() {
@@ -183,7 +193,31 @@ class FlowFragment : BaseFragment() {
             Logger.e(e)
             //TODO: Possible bug: DialogFragment doesn't exist in the FragmentManager
         }
+        updateLayoutState(isControlsVisible = true)
     }
 
     private fun popFragment() = navController.popBackStack()
+
+    private fun updateLayoutState(isControlsVisible: Boolean) {
+        bottomBarParentView.isVisible = isControlsVisible
+        updateFabState()
+        if (!isControlsVisible) bottomBarFab.hide()
+    }
+
+    private fun updateFabState() {
+        val fabState = when (viewModel.lastOpenedSchedule) {
+            is Schedule.EmployeeClasses, is Schedule.GroupClasses -> FabActionState.DISPLAY_SCHEDULE_BACK
+            is Schedule.EmployeeExams, is Schedule.GroupExams -> FabActionState.ADD_EXAM
+            else -> FabActionState.ADD_SCHEDULE
+        }
+        if (fabState != FabActionState.DISPLAY_SCHEDULE_BACK) bottomBarFab.show()
+        bottomBarFab.setImageDrawable(ContextCompat.getDrawable(requireContext(), fabState.iconRes))
+        bottomBarFab.setOnClickListener {
+            when (fabState) {
+                FabActionState.ADD_EXAM -> EventBus.send(FlowFragmentEvent.DisplayScheduleExamsAddExam)
+                FabActionState.DISPLAY_SCHEDULE_BACK -> EventBus.send(FlowFragmentEvent.DisplayScheduleLessonsSetFirstDay)
+                FabActionState.ADD_SCHEDULE -> openAddSchedule()
+            }
+        }
+    }
 }
