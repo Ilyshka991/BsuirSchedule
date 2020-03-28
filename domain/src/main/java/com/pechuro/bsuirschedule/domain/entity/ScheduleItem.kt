@@ -25,6 +25,7 @@ sealed class ScheduleItem(
             override val startTime: String,
             override val endTime: String,
             override val auditories: List<Auditory>,
+            val priority: LessonPriority,
             val weekDay: WeekDay,
             val weekNumber: WeekNumber,
             val employees: List<Employee>
@@ -72,6 +73,7 @@ sealed class ScheduleItem(
             override val startTime: String,
             override val endTime: String,
             override val auditories: List<Auditory>,
+            val priority: LessonPriority,
             val weekDay: WeekDay,
             val weekNumber: WeekNumber,
             val studentGroups: List<Group>

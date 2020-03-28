@@ -12,6 +12,8 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
+import com.pechuro.bsuirschedule.ext.color
+import com.pechuro.bsuirschedule.ext.colorRes
 import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleItem
 import kotlinx.android.synthetic.main.item_display_schedule_employee_day_classes.*
 import kotlinx.android.synthetic.main.item_display_schedule_employee_exams.*
@@ -99,6 +101,8 @@ class DisplayScheduleItemAdapter(
         override fun onBind(data: DisplayScheduleItem.GroupDayClasses) {
             data.scheduleItem.run {
                 displayGroupDayClassesLessonType.text = lessonType
+                val lessonTypeColor = itemView.context.color(priority.colorRes)
+                displayGroupDayClassesLessonType.setTextColor(lessonTypeColor)
                 displayGroupDayClassesTitle.text = subject
                 displayGroupDayClassesAuditories.text = auditories.joinToString(separator = ",") { it.name }
                 displayGroupDayClassesSubGroup.isVisible = subgroupNumber != 0
@@ -123,6 +127,8 @@ class DisplayScheduleItemAdapter(
         override fun onBind(data: DisplayScheduleItem.GroupWeekClasses) {
             data.scheduleItem.run {
                 displayGroupWeekClassesLessonType.text = lessonType
+                val lessonTypeColor = itemView.context.color(priority.colorRes)
+                displayGroupWeekClassesLessonType.setTextColor(lessonTypeColor)
                 displayGroupWeekClassesTitle.text = subject
                 displayGroupWeekClassesAuditories.text = auditories.joinToString(separator = ",") { it.name }
                 displayGroupWeekClassesSubGroup.isVisible = subgroupNumber != 0
@@ -182,6 +188,8 @@ class DisplayScheduleItemAdapter(
         override fun onBind(data: DisplayScheduleItem.EmployeeDayClasses) {
             data.scheduleItem.run {
                 displayEmployeeDayClassesLessonType.text = lessonType
+                val lessonTypeColor = itemView.context.color(priority.colorRes)
+                displayEmployeeDayClassesLessonType.setTextColor(lessonTypeColor)
                 displayEmployeeDayClassesTitle.text = subject
                 displayEmployeeDayClassesAuditories.text = auditories.joinToString(separator = ",") { it.name }
                 displayEmployeeDayClassesSubGroup.isVisible = subgroupNumber != 0
@@ -209,6 +217,8 @@ class DisplayScheduleItemAdapter(
         override fun onBind(data: DisplayScheduleItem.EmployeeWeekClasses) {
             data.scheduleItem.run {
                 displayEmployeeDayClassesLessonType.text = lessonType
+                val lessonTypeColor = itemView.context.color(priority.colorRes)
+                displayEmployeeDayClassesLessonType.setTextColor(lessonTypeColor)
                 displayEmployeeDayClassesTitle.text = subject
                 displayEmployeeDayClassesAuditories.text = auditories.joinToString(separator = ",") { it.name }
                 displayEmployeeDayClassesSubGroup.isVisible = subgroupNumber != 0

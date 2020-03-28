@@ -162,7 +162,8 @@ internal fun GroupClassesItemComplex.toDomainEntity(
             weekDay = WeekDay.getForIndex(scheduleItem.weekDay),
             weekNumber = WeekNumber.getForIndex(scheduleItem.weekNumber),
             auditories = auditories,
-            employees = employees
+            employees = employees,
+            priority = LessonPriority.getForValue(scheduleItem.priority)
     )
 }
 
@@ -200,7 +201,8 @@ internal fun EmployeeClassesItemComplex.toDomainEntity(
             weekDay = WeekDay.getForIndex(scheduleItem.weekDay),
             weekNumber = WeekNumber.getForIndex(scheduleItem.weekNumber),
             auditories = auditories,
-            studentGroups = groups
+            studentGroups = groups,
+            priority = LessonPriority.getForValue(scheduleItem.priority)
     )
 }
 
