@@ -96,7 +96,7 @@ class FlowFragment : BaseFragment() {
                 is LoadInfoCompleteEvent -> popFragment()
                 is AddScheduleCompleteEvent -> {
                     event.schedules.firstOrNull()?.let { schedule ->
-                        openViewSchedule(schedule)
+                        openViewSchedule(schedule, skipIfOpened = false)
                     }
                 }
                 is NavigationSheetEvent.OnAddSchedule -> openAddSchedule()
@@ -138,8 +138,8 @@ class FlowFragment : BaseFragment() {
         navController.navigate(R.id.addScheduleDestination, null, defaultNavOptions)
     }
 
-    private fun openViewSchedule(schedule: Schedule) {
-        if (viewModel.lastOpenedSchedule == schedule) return
+    private fun openViewSchedule(schedule: Schedule, skipIfOpened: Boolean = true) {
+        if (skipIfOpened && viewModel.lastOpenedSchedule == schedule) return
         viewModel.lastOpenedSchedule = schedule
         setViewScheduleStartDestination(schedule)
         val arguments = DisplayScheduleContainerArgs(schedule).toBundle()

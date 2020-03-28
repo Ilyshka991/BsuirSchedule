@@ -6,6 +6,7 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.ext.app
@@ -63,6 +64,10 @@ class DisplayScheduleFragment : BaseFragment() {
             }
             this.layoutManager = layoutManager
             adapter = itemsAdapter
+            val animator = itemAnimator as? SimpleItemAnimator
+            animator?.apply {
+                addDuration = 0L
+            }
         }
     }
 
