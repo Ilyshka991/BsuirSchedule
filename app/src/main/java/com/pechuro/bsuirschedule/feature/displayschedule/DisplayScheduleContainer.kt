@@ -31,6 +31,7 @@ class DisplayScheduleContainer : BaseFragment() {
     private lateinit var viewModel: DisplayScheduleViewModel
 
     private val tabDateFormatter = SimpleDateFormat(TAB_DATE_FORMAT, Locale.getDefault())
+    private var tabLayoutMediator: TabLayoutMediator? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,6 +44,7 @@ class DisplayScheduleContainer : BaseFragment() {
 
     override fun onDestroyView() {
         displayScheduleContainerViewPager.clearAdapter()
+        tabLayoutMediator?.detach()
         super.onDestroyView()
     }
 
@@ -63,7 +65,7 @@ class DisplayScheduleContainer : BaseFragment() {
             setCurrentItem(pagerAdapter.getStartPosition(), false)
         }
         if (pagerAdapter.itemCount > 1) {
-            TabLayoutMediator(
+            tabLayoutMediator = TabLayoutMediator(
                     displayScheduleContainerTabLayout,
                     displayScheduleContainerViewPager
             ) { tab, position ->
@@ -71,7 +73,9 @@ class DisplayScheduleContainer : BaseFragment() {
                 val weekNumber = pagerAdapter.getWeekNumberAt(position).index + 1
                 val title = getString(R.string.display_schedule_tab_title, formattedDate, weekNumber)
                 tab.text = title
-            }.attach()
+            }.also {
+                it.attach()
+            }
         } else {
             displayScheduleContainerTabLayout.isVisible = false
             displayScheduleContainerViewPager.isUserInputEnabled = false

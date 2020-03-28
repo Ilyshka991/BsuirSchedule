@@ -4,20 +4,20 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleItem
-import kotlinx.android.synthetic.main.item_display_employee_day_classes.*
-import kotlinx.android.synthetic.main.item_display_employee_exams.*
-import kotlinx.android.synthetic.main.item_display_group_day_classes.*
-import kotlinx.android.synthetic.main.item_display_group_day_classes.displayGroupDayClassesLessonType
-import kotlinx.android.synthetic.main.item_display_group_day_classes.displayGroupDayClassesNotes
-import kotlinx.android.synthetic.main.item_display_group_exams.*
-import kotlinx.android.synthetic.main.item_display_group_week_classes.*
+import kotlinx.android.synthetic.main.item_display_schedule_employee_day_classes.*
+import kotlinx.android.synthetic.main.item_display_schedule_employee_exams.*
+import kotlinx.android.synthetic.main.item_display_schedule_group_day_classes.*
+import kotlinx.android.synthetic.main.item_display_schedule_group_exams.*
+import kotlinx.android.synthetic.main.item_display_schedule_group_week_classes.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,7 +26,7 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
     override fun areItemsTheSame(
             oldItem: DisplayScheduleItem,
             newItem: DisplayScheduleItem
-    ) = oldItem.id == newItem.id
+    ) = oldItem.scheduleItem?.id == newItem.scheduleItem?.id
 
     @SuppressLint("DiffUtilEquals")
     override fun areContentsTheSame(
@@ -35,21 +35,28 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
     ) = oldItem == newItem
 }
 
-@LayoutRes private const val GROUP_DAY_CLASSES_VIEW_TYPE = R.layout.item_display_group_day_classes
-@LayoutRes private const val GROUP_WEEK_CLASSES_VIEW_TYPE = R.layout.item_display_group_week_classes
-@LayoutRes private const val GROUP_EXAMS_VIEW_TYPE = R.layout.item_display_group_exams
-@LayoutRes private const val EMPLOYEE_DAY_CLASSES_VIEW_TYPE = R.layout.item_display_employee_day_classes
-@LayoutRes private const val EMPLOYEE_WEEK_CLASSES_VIEW_TYPE = R.layout.item_display_employee_week_classes
-@LayoutRes private const val EMPLOYEE_EXAMS_VIEW_TYPE = R.layout.item_display_employee_exams
-
 class DisplayScheduleItemAdapter(
         private val onScheduleItemClicked: (ScheduleItem) -> Unit
 ) : ListAdapter<DisplayScheduleItem, BaseViewHolder<DisplayScheduleItem>>(DIFF_CALLBACK) {
+
+    companion object {
+        private const val DATE_FORMAT_PATTERN = "dd.MM.yyyy"
+
+        private const val GROUP_DAY_CLASSES_VIEW_TYPE = R.layout.item_display_schedule_group_day_classes
+        private const val GROUP_WEEK_CLASSES_VIEW_TYPE = R.layout.item_display_schedule_group_week_classes
+        private const val GROUP_EXAMS_VIEW_TYPE = R.layout.item_display_schedule_group_exams
+        private const val EMPLOYEE_DAY_CLASSES_VIEW_TYPE = R.layout.item_display_schedule_employee_day_classes
+        private const val EMPLOYEE_WEEK_CLASSES_VIEW_TYPE = R.layout.item_display_schedule_employee_week_classes
+        private const val EMPLOYEE_EXAMS_VIEW_TYPE = R.layout.item_display_schedule_employee_exams
+        private const val EMPTY_VIEW_TYPE = R.layout.item_display_schedule_empty
+    }
 
     private val onClickListener = View.OnClickListener {
         val scheduleItem = it.tag as? ScheduleItem? ?: return@OnClickListener
         onScheduleItemClicked(scheduleItem)
     }
+
+    private val dateFormatter = SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.getDefault())
 
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
         is DisplayScheduleItem.GroupDayClasses -> GROUP_DAY_CLASSES_VIEW_TYPE
@@ -58,6 +65,7 @@ class DisplayScheduleItemAdapter(
         is DisplayScheduleItem.EmployeeDayClasses -> EMPLOYEE_DAY_CLASSES_VIEW_TYPE
         is DisplayScheduleItem.EmployeeWeekClasses -> EMPLOYEE_WEEK_CLASSES_VIEW_TYPE
         is DisplayScheduleItem.EmployeeExams -> EMPLOYEE_EXAMS_VIEW_TYPE
+        is DisplayScheduleItem.Empty -> EMPTY_VIEW_TYPE
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<DisplayScheduleItem> {
@@ -70,6 +78,7 @@ class DisplayScheduleItemAdapter(
             EMPLOYEE_DAY_CLASSES_VIEW_TYPE -> EmployeeDayClassesViewHolder(view)
             EMPLOYEE_WEEK_CLASSES_VIEW_TYPE -> EmployeeWeekClassesViewHolder(view)
             EMPLOYEE_EXAMS_VIEW_TYPE -> EmployeeExamsViewHolder(view)
+            EMPTY_VIEW_TYPE -> EmptyViewHolder(view)
             else -> throw IllegalStateException("Unknown viewType: $viewType")
         }
     }
@@ -78,79 +87,61 @@ class DisplayScheduleItemAdapter(
         holder.onBind(getItem(position))
     }
 
-    override fun getItemId(position: Int) = getItem(position).scheduleItem.id
-
+    override fun getItemId(position: Int) = getItem(position).scheduleItem?.id ?: RecyclerView.NO_ID
 
     private inner class GroupDayClassesViewHolder(view: View) :
             BaseViewHolder<DisplayScheduleItem.GroupDayClasses>(view) {
 
+        init {
+            itemView.setOnClickListener(onClickListener)
+        }
+
         override fun onBind(data: DisplayScheduleItem.GroupDayClasses) {
-            with(data.scheduleItem) {
+            data.scheduleItem.run {
                 displayGroupDayClassesLessonType.text = lessonType
                 displayGroupDayClassesTitle.text = subject
                 displayGroupDayClassesAuditories.text = auditories.joinToString(separator = ",") { it.name }
-                displayGroupDayClassesSubGroup.apply {
-                    if (subgroupNumber != 0) {
-                        text = context.getString(R.string.display_schedule_item_subgroup, subgroupNumber)
-                        visibility = View.VISIBLE
-                    } else {
-                        visibility = View.GONE
-                    }
-                }
+                displayGroupDayClassesSubGroup.isVisible = subgroupNumber != 0
+                displayGroupDayClassesSubGroup.text = itemView.context.getString(R.string.display_schedule_item_msg_subgroup, subgroupNumber)
                 displayGroupDayClassesEmployees.text = employees.joinToString(separator = ",") { it.abbreviation }
                 displayGroupDayClassesStartTime.text = startTime
                 displayGroupDayClassesEndTime.text = endTime
-                displayGroupDayClassesNotes.apply {
-                    if (note.isNotEmpty() && note.isNotBlank()) {
-                        text = note
-                        visibility = View.VISIBLE
-                    } else {
-                        visibility = View.GONE
-                    }
-                }
+                displayGroupDayClassesNotes.isVisible = note.isNotEmpty() && note.isNotBlank()
+                displayGroupDayClassesNotes.text = note
             }
+            itemView.tag = data
         }
     }
 
     private inner class GroupWeekClassesViewHolder(view: View) :
             BaseViewHolder<DisplayScheduleItem.GroupWeekClasses>(view) {
 
+        init {
+            itemView.setOnClickListener(onClickListener)
+        }
+
         override fun onBind(data: DisplayScheduleItem.GroupWeekClasses) {
-            with(data.scheduleItem) {
+            data.scheduleItem.run {
                 displayGroupWeekClassesLessonType.text = lessonType
                 displayGroupWeekClassesTitle.text = subject
                 displayGroupWeekClassesAuditories.text = auditories.joinToString(separator = ",") { it.name }
-                displayGroupWeekClassesSubGroup.apply {
-                    if (subgroupNumber != 0) {
-                        text = context.getString(R.string.display_schedule_item_subgroup, subgroupNumber)
-                        visibility = View.VISIBLE
-                    } else {
-                        visibility = View.GONE
-                    }
-                }
-                displayGroupWeekClassesWeekNumbers.apply {
-                    if (data.weekNumbers.size == WeekNumber.TOTAL_COUNT) {
-                        visibility = View.GONE
-                    } else {
-                        text = context.getString(
-                                R.string.display_schedule_item_week_numbers,
-                                data.weekNumbers.joinToString(separator = ",") { it.index.toString() }
-                        )
-                        visibility = View.VISIBLE
-                    }
-                }
+                displayGroupWeekClassesSubGroup.isVisible = subgroupNumber != 0
+                displayGroupWeekClassesSubGroup.text = itemView.context.getString(
+                        R.string.display_schedule_item_msg_subgroup,
+                        subgroupNumber
+                )
+                displayGroupWeekClassesWeekNumbers.isVisible = data.weekNumbers.size != WeekNumber.TOTAL_COUNT
+                displayGroupWeekClassesWeekNumbers.text = itemView.context.getString(
+                        R.string.display_schedule_item_msg_week_numbers,
+                        data.weekNumbers.joinToString(separator = ",") { it.index.toString() }
+                )
                 displayGroupWeekClassesEmployees.text = employees.joinToString(separator = ",") { it.abbreviation }
                 displayGroupWeekClassesStartTime.text = startTime
                 displayGroupWeekClassesEndTime.text = endTime
-                displayGroupWeekClassesNotes.apply {
-                    if (note.isNotEmpty() && note.isNotBlank()) {
-                        text = note
-                        visibility = View.VISIBLE
-                    } else {
-                        visibility = View.GONE
-                    }
-                }
+                displayGroupWeekClassesNotes.text = note
+                displayGroupWeekClassesNotes.isVisible = note.isNotEmpty() && note.isNotBlank()
             }
+            itemView.tag = data
         }
     }
 
@@ -158,33 +149,24 @@ class DisplayScheduleItemAdapter(
             BaseViewHolder<DisplayScheduleItem.GroupExams>(view) {
 
         init {
-            view.setOnClickListener(onClickListener)
+            itemView.setOnClickListener(onClickListener)
         }
 
         override fun onBind(data: DisplayScheduleItem.GroupExams) {
-            with(data.scheduleItem) {
+            data.scheduleItem.run {
                 displayGroupExamsStartTime.text = startTime
                 displayGroupExamsAuditories.text = auditories.joinToString(separator = ",") { it.name }
                 displayGroupExamsTitle.text = subject
-                displayGroupExamsDate.text = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(date)
-                displayGroupExamsSubGroup.apply {
-                    if (subgroupNumber != 0) {
-                        text = context.getString(R.string.display_schedule_item_subgroup, subgroupNumber)
-                        visibility = View.VISIBLE
-                    } else {
-                        visibility = View.GONE
-                    }
-                }
+                displayGroupExamsDate.text = dateFormatter.format(date)
+                displayGroupExamsSubGroup.isVisible = subgroupNumber != 0
+                displayGroupExamsSubGroup.text = itemView.context.getString(
+                        R.string.display_schedule_item_msg_subgroup,
+                        subgroupNumber
+                )
                 displayGroupExamsLessonType.text = lessonType
                 displayGroupExamsEmployees.text = employees.joinToString(separator = ",") { it.abbreviation }
-                displayGroupExamsNotes.apply {
-                    if (note.isNotEmpty() && note.isNotBlank()) {
-                        text = note
-                        visibility = View.VISIBLE
-                    } else {
-                        visibility = View.GONE
-                    }
-                }
+                displayGroupExamsNotes.isVisible = note.isNotEmpty() && note.isNotBlank()
+                displayGroupExamsNotes.text = note
             }
             itemView.tag = data
         }
@@ -193,104 +175,91 @@ class DisplayScheduleItemAdapter(
     private inner class EmployeeDayClassesViewHolder(view: View) :
             BaseViewHolder<DisplayScheduleItem.EmployeeDayClasses>(view) {
 
+        init {
+            itemView.setOnClickListener(onClickListener)
+        }
+
         override fun onBind(data: DisplayScheduleItem.EmployeeDayClasses) {
-            with(data.scheduleItem) {
+            data.scheduleItem.run {
                 displayEmployeeDayClassesLessonType.text = lessonType
                 displayEmployeeDayClassesTitle.text = subject
                 displayEmployeeDayClassesAuditories.text = auditories.joinToString(separator = ",") { it.name }
-                displayEmployeeDayClassesSubGroup.apply {
-                    if (subgroupNumber != 0) {
-                        text = context.getString(R.string.display_schedule_item_subgroup, subgroupNumber)
-                        visibility = View.VISIBLE
-                    } else {
-                        visibility = View.GONE
-                    }
-                }
+                displayEmployeeDayClassesSubGroup.isVisible = subgroupNumber != 0
+                displayEmployeeDayClassesSubGroup.text = itemView.context.getString(
+                        R.string.display_schedule_item_msg_subgroup,
+                        subgroupNumber
+                )
                 displayEmployeeDayClassesGroups.text = studentGroups.joinToString(separator = ",") { it.number }
                 displayEmployeeDayClassesStartTime.text = startTime
                 displayEmployeeDayClassesEndTime.text = endTime
-                displayEmployeeDayClassesNotes.apply {
-                    if (note.isNotEmpty() && note.isNotBlank()) {
-                        text = note
-                        visibility = View.VISIBLE
-                    } else {
-                        visibility = View.GONE
-                    }
-                }
+                displayEmployeeDayClassesNotes.isVisible = note.isNotEmpty() && note.isNotBlank()
+                displayEmployeeDayClassesNotes.text = note
             }
+            itemView.tag = data
         }
     }
 
     private inner class EmployeeWeekClassesViewHolder(view: View) :
             BaseViewHolder<DisplayScheduleItem.EmployeeWeekClasses>(view) {
 
+        init {
+            itemView.setOnClickListener(onClickListener)
+        }
+
         override fun onBind(data: DisplayScheduleItem.EmployeeWeekClasses) {
-            with(data.scheduleItem) {
+            data.scheduleItem.run {
                 displayEmployeeDayClassesLessonType.text = lessonType
                 displayEmployeeDayClassesTitle.text = subject
                 displayEmployeeDayClassesAuditories.text = auditories.joinToString(separator = ",") { it.name }
-                displayEmployeeDayClassesSubGroup.apply {
-                    if (subgroupNumber != 0) {
-                        text = context.getString(R.string.display_schedule_item_subgroup, subgroupNumber)
-                        visibility = View.VISIBLE
-                    } else {
-                        visibility = View.GONE
-                    }
-                }
-                displayGroupWeekClassesWeekNumbers.apply {
-                    if (data.weekNumbers.size == WeekNumber.TOTAL_COUNT) {
-                        visibility = View.GONE
-                    } else {
-                        text = context.getString(
-                                R.string.display_schedule_item_week_numbers,
-                                data.weekNumbers.joinToString(separator = ",") { it.index.toString() }
-                        )
-                        visibility = View.VISIBLE
-                    }
-                }
+                displayEmployeeDayClassesSubGroup.isVisible = subgroupNumber != 0
+                displayEmployeeDayClassesSubGroup.text = itemView.context.getString(
+                        R.string.display_schedule_item_msg_subgroup,
+                        subgroupNumber
+                )
+                displayGroupWeekClassesWeekNumbers.isVisible = data.weekNumbers.size != WeekNumber.TOTAL_COUNT
+                displayGroupWeekClassesWeekNumbers.text = itemView.context.getString(
+                        R.string.display_schedule_item_msg_week_numbers,
+                        data.weekNumbers.joinToString(separator = ",") { it.index.toString() }
+                )
                 displayEmployeeDayClassesGroups.text = studentGroups.joinToString(separator = ",") { it.number }
                 displayEmployeeDayClassesStartTime.text = startTime
                 displayEmployeeDayClassesEndTime.text = endTime
-                displayEmployeeDayClassesNotes.apply {
-                    if (note.isNotEmpty() && note.isNotBlank()) {
-                        text = note
-                        visibility = View.VISIBLE
-                    } else {
-                        visibility = View.GONE
-                    }
-                }
+                displayEmployeeDayClassesNotes.isVisible = note.isNotEmpty() && note.isNotBlank()
+                displayEmployeeDayClassesNotes.text = note
             }
+            itemView.tag = data
         }
     }
 
     private inner class EmployeeExamsViewHolder(view: View) :
             BaseViewHolder<DisplayScheduleItem.EmployeeExams>(view) {
 
+        init {
+            itemView.setOnClickListener(onClickListener)
+        }
+
         override fun onBind(data: DisplayScheduleItem.EmployeeExams) {
-            with(data.scheduleItem) {
+            data.scheduleItem.run {
                 displayEmployeeExamsStartTime.text = startTime
                 displayEmployeeExamsAuditories.text = auditories.joinToString(separator = ",") { it.name }
                 displayEmployeeExamsTitle.text = subject
-                displayEmployeeExamsDate.text = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(date)
-                displayEmployeeExamsSubGroup.apply {
-                    if (subgroupNumber != 0) {
-                        text = context.getString(R.string.display_schedule_item_subgroup, subgroupNumber)
-                        visibility = View.VISIBLE
-                    } else {
-                        visibility = View.GONE
-                    }
-                }
+                displayEmployeeExamsDate.text = dateFormatter.format(date)
+                displayEmployeeExamsSubGroup.isVisible = subgroupNumber != 0
+                displayEmployeeExamsSubGroup.text = itemView.context.getString(
+                        R.string.display_schedule_item_msg_subgroup,
+                        subgroupNumber
+                )
                 displayEmployeeExamsLessonType.text = lessonType
                 displayEmployeeExamsGroups.text = studentGroups.joinToString(separator = ",") { it.number }
-                displayEmployeeExamsNotes.apply {
-                    if (note.isNotEmpty() && note.isNotBlank()) {
-                        text = note
-                        visibility = View.VISIBLE
-                    } else {
-                        visibility = View.GONE
-                    }
-                }
+                displayEmployeeExamsNotes.isVisible = note.isNotEmpty() && note.isNotBlank()
+                displayEmployeeExamsNotes.text = note
             }
+            itemView.tag = data
+        }
     }
-}
+
+    private inner class EmptyViewHolder(view: View) : BaseViewHolder<DisplayScheduleItem.Empty>(view) {
+
+        override fun onBind(data: DisplayScheduleItem.Empty) {}
+    }
 }

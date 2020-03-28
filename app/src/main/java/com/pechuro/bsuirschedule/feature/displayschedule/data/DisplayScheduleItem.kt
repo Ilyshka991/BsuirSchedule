@@ -4,7 +4,7 @@ import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 
 sealed class DisplayScheduleItem(
-        open val scheduleItem: ScheduleItem
+        open val scheduleItem: ScheduleItem?
 ) {
 
     data class GroupDayClasses(
@@ -13,13 +13,9 @@ sealed class DisplayScheduleItem(
 
     data class GroupWeekClasses(
             override val scheduleItem: ScheduleItem.GroupLesson,
+            val itemsIdList: List<Long>,
             val weekNumbers: List<WeekNumber>
-    ) : DisplayScheduleItem(scheduleItem) {
-
-        init {
-            check(weekNumbers.size <= WeekNumber.TOTAL_COUNT)
-        }
-    }
+    ) : DisplayScheduleItem(scheduleItem)
 
     data class GroupExams(
             override val scheduleItem: ScheduleItem.GroupExam
@@ -31,15 +27,13 @@ sealed class DisplayScheduleItem(
 
     data class EmployeeWeekClasses(
             override val scheduleItem: ScheduleItem.EmployeeLesson,
+            val itemsIdList: List<Long>,
             val weekNumbers: List<WeekNumber>
-    ) : DisplayScheduleItem(scheduleItem) {
-
-        init {
-            check(weekNumbers.size <= WeekNumber.TOTAL_COUNT)
-        }
-    }
+    ) : DisplayScheduleItem(scheduleItem)
 
     data class EmployeeExams(
             override val scheduleItem: ScheduleItem.EmployeeExam
     ) : DisplayScheduleItem(scheduleItem)
+
+    object Empty : DisplayScheduleItem(null)
 }
