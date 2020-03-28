@@ -44,7 +44,9 @@ class AddScheduleFragment : BaseFragment() {
     }
 
     private val suggestionsAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        AddScheduleSuggestionsAdapter()
+        AddScheduleSuggestionsAdapter().also {
+            it.setHasStableIds(true)
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -73,6 +75,11 @@ class AddScheduleFragment : BaseFragment() {
         context?.hideKeyboard(addScheduleNameInput.windowToken)
     }
 
+    override fun onDestroyView() {
+        addScheduleSuggestionsRecyclerView.clearAdapter()
+        super.onDestroyView()
+    }
+
     private fun initView() {
         addScheduleNameInput.apply {
             val inputType = when (scheduleType) {
@@ -96,7 +103,6 @@ class AddScheduleFragment : BaseFragment() {
                     addScheduleSuggestionsRecyclerView.tag = it
                     loadSchedule(it)
                 }
-                setHasStableIds(true)
             }
             setHasFixedSize(true)
         }

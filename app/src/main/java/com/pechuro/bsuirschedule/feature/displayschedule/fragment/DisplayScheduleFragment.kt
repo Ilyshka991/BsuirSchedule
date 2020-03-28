@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
+import com.pechuro.bsuirschedule.ext.clearAdapter
 import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleViewModel
@@ -32,7 +33,9 @@ class DisplayScheduleFragment : BaseFragment() {
         requireArguments().getParcelable<DisplayScheduleItemInfo>(ARG_ITEM_INFO) as DisplayScheduleItemInfo
     }
     private val itemsAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        DisplayScheduleItemAdapter()
+        DisplayScheduleItemAdapter(viewModel::onScheduleItemClicked).also {
+            it.setHasStableIds(true)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,9 +47,7 @@ class DisplayScheduleFragment : BaseFragment() {
     private fun initView() {
         displayScheduleRecyclerView.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            adapter = itemsAdapter.apply {
-                setHasStableIds(true)
-            }
+            adapter = itemsAdapter
         }
     }
 
@@ -54,5 +55,10 @@ class DisplayScheduleFragment : BaseFragment() {
         viewModel.getItems(itemInfo).nonNull().observe(viewLifecycleOwner) {
             itemsAdapter.submitList(it)
         }
+    }
+
+    override fun onDestroyView() {
+        displayScheduleRecyclerView.clearAdapter()
+        super.onDestroyView()
     }
 }

@@ -26,7 +26,7 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
     override fun areItemsTheSame(
             oldItem: DisplayScheduleItem,
             newItem: DisplayScheduleItem
-    ) = oldItem === newItem
+    ) = oldItem.id == newItem.id
 
     @SuppressLint("DiffUtilEquals")
     override fun areContentsTheSame(
@@ -35,7 +35,6 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
     ) = oldItem == newItem
 }
 
-
 @LayoutRes private const val GROUP_DAY_CLASSES_VIEW_TYPE = R.layout.item_display_group_day_classes
 @LayoutRes private const val GROUP_WEEK_CLASSES_VIEW_TYPE = R.layout.item_display_group_week_classes
 @LayoutRes private const val GROUP_EXAMS_VIEW_TYPE = R.layout.item_display_group_exams
@@ -43,8 +42,14 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
 @LayoutRes private const val EMPLOYEE_WEEK_CLASSES_VIEW_TYPE = R.layout.item_display_employee_week_classes
 @LayoutRes private const val EMPLOYEE_EXAMS_VIEW_TYPE = R.layout.item_display_employee_exams
 
+class DisplayScheduleItemAdapter(
+        private val onScheduleItemClicked: (ScheduleItem) -> Unit
+) : ListAdapter<DisplayScheduleItem, BaseViewHolder<DisplayScheduleItem>>(DIFF_CALLBACK) {
 
-class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHolder<DisplayScheduleItem>>(DIFF_CALLBACK) {
+    private val onClickListener = View.OnClickListener {
+        val scheduleItem = it.tag as? ScheduleItem? ?: return@OnClickListener
+        onScheduleItemClicked(scheduleItem)
+    }
 
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
         is DisplayScheduleItem.GroupDayClasses -> GROUP_DAY_CLASSES_VIEW_TYPE
@@ -152,6 +157,10 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
     private inner class GroupExamsViewHolder(view: View) :
             BaseViewHolder<DisplayScheduleItem.GroupExams>(view) {
 
+        init {
+            view.setOnClickListener(onClickListener)
+        }
+
         override fun onBind(data: DisplayScheduleItem.GroupExams) {
             with(data.scheduleItem) {
                 displayGroupExamsStartTime.text = startTime
@@ -177,6 +186,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
                     }
                 }
             }
+            itemView.tag = data
         }
     }
 
@@ -281,6 +291,6 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
                     }
                 }
             }
-        }
     }
+}
 }
