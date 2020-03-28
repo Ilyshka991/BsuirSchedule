@@ -33,7 +33,7 @@ class DisplayScheduleFragment : BaseFragment() {
         requireArguments().getParcelable<DisplayScheduleItemInfo>(ARG_ITEM_INFO) as DisplayScheduleItemInfo
     }
     private val itemsAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        DisplayScheduleItemAdapter(viewModel::onScheduleItemClicked).also {
+        DisplayScheduleItemAdapter(onScheduleItemClicked = viewModel::onScheduleItemClicked).also {
             it.setHasStableIds(true)
         }
     }

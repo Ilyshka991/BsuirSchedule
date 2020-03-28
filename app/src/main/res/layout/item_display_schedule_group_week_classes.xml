@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:minHeight="65dp"
+    app:cardCornerRadius="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/displayGroupWeekClassesLessonType"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/amber_500"
+            android:textSize="26sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="ЛК" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/displayGroupWeekClassesTitle"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/grey_800"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@id/displayGroupWeekClassesLessonType"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="ОАиП" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/displayGroupWeekClassesAuditories"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLength="12"
+            android:textColor="@color/grey_800"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/displayGroupWeekClassesTitle"
+            app:layout_constraintTop_toBottomOf="@id/displayGroupWeekClassesTitle"
+            tools:text="505-5, 506-5" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/displayGroupWeekClassesSubGroup"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:textColor="@color/grey_700"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/displayGroupWeekClassesTitle"
+            app:layout_constraintStart_toEndOf="@id/displayGroupWeekClassesTitle"
+            tools:text="1 Подгруппа" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/displayGroupWeekClassesWeekNumbers"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:textColor="@color/grey_700"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/displayGroupWeekClassesSubGroup"
+            app:layout_constraintStart_toEndOf="@id/displayGroupWeekClassesSubGroup"
+            tools:text="Недели 1,3" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/displayGroupWeekClassesEmployees"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:ellipsize="end"
+            android:maxLength="20"
+            android:textColor="@color/grey_700"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/displayGroupWeekClassesAuditories"
+            app:layout_constraintStart_toEndOf="@id/displayGroupWeekClassesAuditories"
+            tools:text="Луцик Юрий, Искра Наталья" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/displayGroupWeekClassesStartTime"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:textColor="@color/grey_800"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@id/displayGroupWeekClassesTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="16:55" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/displayGroupWeekClassesEndTime"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/grey_800"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@id/displayGroupWeekClassesNotes"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/displayGroupWeekClassesStartTime"
+            tools:text="18:10" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/displayGroupWeekClassesNotes"
+            style="@style/DefaultText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="2"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@id/displayGroupWeekClassesEndTime"
+            app:layout_constraintStart_toStartOf="@id/displayGroupWeekClassesLessonType"
+            app:layout_constraintTop_toBottomOf="@id/displayGroupWeekClassesAuditories"
+            tools:text="Это заметка" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
