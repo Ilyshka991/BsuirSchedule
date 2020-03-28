@@ -35,6 +35,9 @@
         <item name="titleColor">@color/grey_700</item>
         <item name="tabSelectedColor">?attr/textDefaultColor</item>
         <item name="tabUnselectedColor">@color/grey_400</item>
+
+        <item name="fabIconColor">?attr/backgroundColor</item>
+        <item name="fabBackgroundColor">@color/amber_500</item>
     </style>
 
     <style name="SplashTheme" parent="AppTheme">

@@ -4,5 +4,8 @@ import com.pechuro.bsuirschedule.common.BaseEvent
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 
 sealed class DisplayScheduleEvent : BaseEvent() {
+
     data class OpenScheduleItem(val scheduleItem: ScheduleItem) : DisplayScheduleEvent()
+
+    data class OnPositionChanged(val position: Int) : DisplayScheduleEvent()
 }

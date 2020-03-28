@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor">
 
-    <fragment
-        android:id="@+id/navigationFragmentHost"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+    <FrameLayout
+        android:id="@+id/navigationFragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_anchor="@+id/bottomBarParentView"/>
+        android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/navigationFragmentHost"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomBarParentView"
@@ -21,7 +27,10 @@
         app:backgroundTint="@android:color/darker_gray"
         app:contentInsetStartWithNavigation="0dp"
         app:fabAlignmentMode="end"
-        app:fabCradleRoundedCornerRadius="16dp">
+        app:fabCradleRoundedCornerRadius="16dp"
+        app:hideOnScroll="true"
+        app:layout_scrollFlags="scroll|enterAlways"
+        tools:layout_height="40dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/bottomBarMenuButton"
@@ -30,4 +39,12 @@
             android:layout_height="match_parent"
             app:icon="@drawable/ic_menu" />
     </com.google.android.material.bottomappbar.BottomAppBar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/bottomBarFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:backgroundTint="?attr/fabBackgroundColor"
+        app:layout_anchor="@+id/bottomBarParentView"
+        app:tint="?attr/fabIconColor" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
