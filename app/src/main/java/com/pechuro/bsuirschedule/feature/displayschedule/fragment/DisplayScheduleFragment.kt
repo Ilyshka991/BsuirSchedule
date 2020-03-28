@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.ext.clearAdapter
@@ -48,6 +49,10 @@ class DisplayScheduleFragment : BaseFragment() {
         displayScheduleRecyclerView.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = itemsAdapter
+            val animator = itemAnimator as? SimpleItemAnimator
+            animator?.apply {
+                addDuration = 0L
+            }
         }
     }
 

@@ -7,12 +7,14 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
-import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.*
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState.*
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Title
 import kotlinx.android.synthetic.main.item_navigation_sheet_content.*
 import kotlinx.android.synthetic.main.item_navigation_sheet_empty.*
 
@@ -26,14 +28,7 @@ private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NavigationSheetItemIn
     override fun areContentsTheSame(
             oldItem: NavigationSheetItemInformation,
             newItem: NavigationSheetItemInformation
-    ) = when {
-        oldItem is Empty && newItem is Empty -> true
-        oldItem is Divider && newItem is Divider -> true
-        oldItem is Title && newItem is Title -> newItem.scheduleType == oldItem.scheduleType
-        oldItem is Content && newItem is Content -> newItem.schedule.name == oldItem.schedule.name
-        else -> false
-    }
-
+    ) = oldItem == newItem
 }
 
 class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, BaseViewHolder<NavigationSheetItemInformation>>(DIFF_CALLBACK) {

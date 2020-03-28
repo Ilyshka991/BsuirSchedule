@@ -11,8 +11,11 @@ import com.pechuro.bsuirschedule.domain.interactor.*
 import com.pechuro.bsuirschedule.domain.interactor.GetAvailableForUpdateSchedules.Params
 import com.pechuro.bsuirschedule.ext.flowLiveData
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class NavigationSheetViewModel @Inject constructor(
@@ -45,6 +48,8 @@ class NavigationSheetViewModel @Inject constructor(
         addSource(selectedScheduleData) { updateNavigationInfo() }
     }
 
+    private var updateInfoJob: Job? = null
+
     fun updateSchedule(schedule: Schedule) {
         launchCoroutine {
             setUpdateState(schedule, UpdateState.IN_PROGRESS)
@@ -70,18 +75,22 @@ class NavigationSheetViewModel @Inject constructor(
     }
 
     private fun updateNavigationInfo() {
-        launchCoroutine {
+        updateInfoJob?.cancel()
+        updateInfoJob = launchCoroutine {
             val scheduleList = allScheduleListData.value ?: emptyList()
             val availableForUpdateScheduleList = availableForUpdateScheduleListData.value
                     ?: emptyList()
             val schedulesUpdateState = schedulesUpdateState.value ?: emptyMap()
             val selectedSchedule = selectedScheduleData.value
-            navigationInfoData.value = transformScheduleListToNavInfoList(
-                    scheduleList = scheduleList,
-                    availableForUpdateScheduleList = availableForUpdateScheduleList,
-                    updateStates = schedulesUpdateState,
-                    selectedSchedule = selectedSchedule
-            )
+            val newInfo = withContext(Dispatchers.IO) {
+                transformScheduleListToNavInfoList(
+                        scheduleList = scheduleList,
+                        availableForUpdateScheduleList = availableForUpdateScheduleList,
+                        updateStates = schedulesUpdateState,
+                        selectedSchedule = selectedSchedule
+                )
+            }
+            navigationInfoData.value = newInfo
         }
     }
 

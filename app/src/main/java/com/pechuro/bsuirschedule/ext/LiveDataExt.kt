@@ -1,7 +1,9 @@
 package com.pechuro.bsuirschedule.ext
 
 import androidx.lifecycle.*
+import com.pechuro.bsuirschedule.domain.common.Logger
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 
@@ -22,5 +24,7 @@ internal inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, crossinline o
 }
 
 internal inline fun <T> flowLiveData(crossinline block: suspend () -> Flow<T>): LiveData<T> = flow {
-    emitAll(block())
+    emitAll(block().catch {
+        Logger.e(it)
+    })
 }.asLiveData()
