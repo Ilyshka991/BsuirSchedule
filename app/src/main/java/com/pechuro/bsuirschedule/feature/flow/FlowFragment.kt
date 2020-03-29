@@ -219,7 +219,9 @@ class FlowFragment : BaseFragment() {
     private fun updateLayoutState() {
         val isControlsVisible = when (navController.currentDestination?.id) {
             R.id.addScheduleDestination,
-            R.id.loadInfoDestination -> false
+            R.id.loadInfoDestination,
+            R.id.lessonDetailsDestination,
+            R.id.examDetailsDestination -> false
             else -> true
         }
         bottomBarParentView.isVisible = isControlsVisible
