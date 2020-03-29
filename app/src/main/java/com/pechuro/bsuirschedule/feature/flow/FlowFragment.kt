@@ -83,7 +83,7 @@ class FlowFragment : BaseFragment() {
             openNavigationSheet()
         }
         bottomBarDisplayOptionsButton.setSafeClickListener {
-            openDisplayScheduleDetails()
+            openDisplayScheduleOptions()
         }
         bottomBarGoToDateButton.setSafeClickListener {
             //TODO: implement
@@ -151,7 +151,7 @@ class FlowFragment : BaseFragment() {
         navController.navigate(R.id.addScheduleDestination, null, defaultNavOptions)
     }
 
-    private fun openDisplayScheduleDetails() {
+    private fun openDisplayScheduleOptions() {
         navController.navigate(R.id.displayScheduleOptionsDestination, null, defaultNavOptions)
     }
 
@@ -224,7 +224,7 @@ class FlowFragment : BaseFragment() {
         bottomBarFab.setOnClickListener {
             when (fabState) {
                 FabActionState.ADD_EXAM -> EventBus.send(FlowFragmentEvent.DisplayScheduleAddItem)
-                FabActionState.DISPLAY_SCHEDULE_BACK -> EventBus.send(FlowFragmentEvent.DisplayScheduleSetFirstDay)
+                FabActionState.DISPLAY_SCHEDULE_BACK -> EventBus.send(FlowFragmentEvent.DisplayScheduleSetToday)
                 FabActionState.ADD_SCHEDULE -> openAddSchedule()
             }
         }

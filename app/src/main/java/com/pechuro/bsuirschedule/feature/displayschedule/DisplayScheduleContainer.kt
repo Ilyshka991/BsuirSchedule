@@ -45,7 +45,6 @@ class DisplayScheduleContainer : BaseFragment() {
     private var pagerAdapter: DisplaySchedulePagerAdapter? = null
     private val pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
-            super.onPageSelected(position)
             onPositionChanged()
         }
     }
@@ -73,7 +72,7 @@ class DisplayScheduleContainer : BaseFragment() {
     private fun observeData() {
         EventBus.receive<FlowFragmentEvent>(lifecycleScope) {
             when (it) {
-                is FlowFragmentEvent.DisplayScheduleSetFirstDay -> setFirstDay()
+                is FlowFragmentEvent.DisplayScheduleSetToday -> setFirstDay()
                 is FlowFragmentEvent.DisplayScheduleAddItem -> {
                     //TODO: Implement
                 }
@@ -104,18 +103,7 @@ class DisplayScheduleContainer : BaseFragment() {
 
         if (pagerAdapter.itemCount > 1) {
             val tabConfigurationStrategy = TabLayoutMediator.TabConfigurationStrategy { tab, position ->
-                val title = when (viewType) {
-                    is DisplayScheduleViewType.DayClasses -> {
-                        val formattedDate = tabDayDateFormatter.format(pagerAdapter.getCalendarAt(position).time)
-                        val weekNumber = pagerAdapter.getWeekNumberAt(position).index + 1
-                        getString(R.string.display_schedule_tab_title, formattedDate, weekNumber)
-                    }
-                    is DisplayScheduleViewType.WeekClasses -> {
-                        tabWeekDateFormatter.format(pagerAdapter.getCalendarAt(position).time)
-                    }
-                    else -> throw IllegalArgumentException("Unsupported view type: $viewType")
-                }
-                tab.text = title
+                tab.text = getTabTitle(viewType, position)
             }
             tabLayoutMediator = TabLayoutMediator(
                     displayScheduleContainerTabLayout,
@@ -158,6 +146,21 @@ class DisplayScheduleContainer : BaseFragment() {
         val pagerAdapter = pagerAdapter ?: return
         val relativePosition = displayScheduleContainerViewPager.currentItem - pagerAdapter.getStartPosition()
         EventBus.send(DisplayScheduleEvent.OnPositionChanged(relativePosition))
+    }
+
+    private fun getTabTitle(viewType: DisplayScheduleViewType, position: Int): String {
+        val pagerAdapter = pagerAdapter ?: return ""
+        return when (viewType) {
+            is DisplayScheduleViewType.DayClasses -> {
+                val formattedDate = tabDayDateFormatter.format(pagerAdapter.getCalendarAt(position).time)
+                val weekNumber = pagerAdapter.getWeekNumberAt(position).index + 1
+                getString(R.string.display_schedule_tab_title, formattedDate, weekNumber)
+            }
+            is DisplayScheduleViewType.WeekClasses -> {
+                tabWeekDateFormatter.format(pagerAdapter.getCalendarAt(position).time)
+            }
+            else -> throw IllegalArgumentException("Unsupported view type: $viewType")
+        }
     }
 
     private fun setFirstDay() {
