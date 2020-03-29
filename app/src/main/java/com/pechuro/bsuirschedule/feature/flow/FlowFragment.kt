@@ -117,13 +117,7 @@ class FlowFragment : BaseFragment() {
                 is NavigationSheetEvent.OnOpenSettings -> {
                 }
                 is DisplayScheduleEvent.OpenScheduleItem -> openScheduleItemDetails(event.scheduleItem)
-                is DisplayScheduleEvent.OnPositionChanged -> {
-                    if (event.position != 0) {
-                        bottomBarFab.show()
-                    } else {
-                        bottomBarFab.hide()
-                    }
-                }
+                is DisplayScheduleEvent.OnPositionChanged -> onDisplaySchedulePositionChanged(event.position)
             }
         }
     }
@@ -240,14 +234,22 @@ class FlowFragment : BaseFragment() {
         when (viewModel.getLastOpenedSchedule()) {
             is Schedule.EmployeeClasses, is Schedule.GroupClasses -> {
                 bottomBarDisplayOptionsButton.isVisible = true
-                bottomBarGoToDateButton.isVisible = viewModel.scheduleDisplayType == ScheduleDisplayType.DAYS
-                bottomBarDisplayAddButton.isVisible = viewModel.scheduleDisplayType == ScheduleDisplayType.DAYS
+                bottomBarGoToDateButton.isVisible = viewModel.getScheduleDisplayType() == ScheduleDisplayType.DAYS
+                bottomBarDisplayAddButton.isVisible = viewModel.getScheduleDisplayType() == ScheduleDisplayType.DAYS
             }
             else -> {
                 bottomBarDisplayOptionsButton.isVisible = false
                 bottomBarGoToDateButton.isVisible = false
                 bottomBarDisplayAddButton.isVisible = false
             }
+        }
+    }
+
+    private fun onDisplaySchedulePositionChanged(position: Int) {
+        if (position != 0) {
+            bottomBarFab.show()
+        } else {
+            bottomBarFab.hide()
         }
     }
 }

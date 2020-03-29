@@ -24,10 +24,9 @@ class FlowViewModel @Inject constructor(
     private var lastOpenedSchedule: Schedule? = runBlocking {
         getLastOpenedSchedule.execute(BaseInteractor.NoParams).getOrNull()?.first()
     }
-    var scheduleDisplayType: ScheduleDisplayType = runBlocking {
+    private var scheduleDisplayType: ScheduleDisplayType = runBlocking {
         getScheduleDisplayType.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow()).first()
     }
-        private set
 
     init {
         launchCoroutine {
@@ -46,12 +45,14 @@ class FlowViewModel @Inject constructor(
         checkInfo.execute(BaseInteractor.NoParams).getOrDefault(false)
     }
 
-    fun getLastOpenedSchedule() = lastOpenedSchedule
+    fun getLastOpenedSchedule(): Schedule? = lastOpenedSchedule
 
     fun setLastOpenedSchedule(schedule: Schedule?) {
         lastOpenedSchedule = schedule
         launchCoroutine { setLastOpenedSchedule.execute(SetLastOpenedSchedule.Params(schedule)) }
     }
+
+    fun getScheduleDisplayType(): ScheduleDisplayType = scheduleDisplayType
 
     suspend fun getAvailableForUpdateSchedules() =
             getAvailableForUpdateSchedules.execute(Params(includeAll = false))
