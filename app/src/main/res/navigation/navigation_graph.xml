@@ -51,17 +51,6 @@
             app:argType="com.pechuro.bsuirschedule.domain.entity.Schedule" />
     </fragment>
 
-    <fragment
-        android:id="@+id/scheduleItemDestination"
-        android:name="com.pechuro.bsuirschedule.feature.scheduleitemdetails.ScheduleItemDetailsFragment"
-        android:label="ScheduleItemFragment"
-        tools:layout="@layout/fragment_schedule_item">
-
-        <argument
-            android:name="schedule"
-            app:argType="com.pechuro.bsuirschedule.domain.entity.ScheduleItem" />
-    </fragment>
-
     <dialog
         android:id="@+id/displayScheduleOptionsDestination"
         android:name="com.pechuro.bsuirschedule.feature.displayscheduleoptions.DisplayScheduleOptionsSheet"

@@ -215,7 +215,6 @@ class FlowFragment : BaseFragment() {
     private fun updateLayoutState() {
         val isControlsVisible = when (navController.currentDestination?.id) {
             R.id.addScheduleDestination,
-            R.id.scheduleItemDestination,
             R.id.loadInfoDestination -> false
             else -> true
         }
