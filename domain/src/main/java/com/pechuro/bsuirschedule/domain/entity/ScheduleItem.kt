@@ -18,8 +18,8 @@ sealed class ScheduleItem : IScheduleItem {
             override val priority: LessonPriority,
             override val weekDay: WeekDay,
             override val weekNumber: WeekNumber,
-            val employees: List<Employee>
-    ) : ScheduleItem(), ILesson
+            override val employees: List<Employee>
+    ) : ScheduleItem(), ILesson, IGroupEvent
 
     @Parcelize
     data class GroupExam(
@@ -32,8 +32,8 @@ sealed class ScheduleItem : IScheduleItem {
             override val endTime: String,
             override val auditories: List<Auditory>,
             override val date: Date,
-            val employees: List<Employee>
-    ) : ScheduleItem(), IExam
+            override val employees: List<Employee>
+    ) : ScheduleItem(), IExam, IGroupEvent
 
     @Parcelize
     data class EmployeeLesson(
@@ -48,8 +48,8 @@ sealed class ScheduleItem : IScheduleItem {
             override val priority: LessonPriority,
             override val weekDay: WeekDay,
             override val weekNumber: WeekNumber,
-            val studentGroups: List<Group>
-    ) : ScheduleItem(), ILesson
+            override val studentGroups: List<Group>
+    ) : ScheduleItem(), ILesson, IEmployeeEvent
 
     @Parcelize
     data class EmployeeExam(
@@ -62,6 +62,6 @@ sealed class ScheduleItem : IScheduleItem {
             override val endTime: String,
             override val auditories: List<Auditory>,
             override val date: Date,
-            val studentGroups: List<Group>
-    ) : ScheduleItem(), IExam
+            override val studentGroups: List<Group>
+    ) : ScheduleItem(), IExam, IEmployeeEvent
 }
