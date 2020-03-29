@@ -13,9 +13,7 @@ import com.pechuro.bsuirschedule.common.BaseEvent
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.common.Logger
-import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
-import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleCompleteEvent
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleContainerArgs
@@ -122,8 +120,18 @@ class FlowFragment : BaseFragment() {
     }
 
     private fun openScheduleItemDetails(scheduleItem: ScheduleItem) {
-        val args = ScheduleItemDetailsFragmentArgs(scheduleItem).toBundle()
-        navController.navigate(R.id.scheduleItemDestination, args, defaultNavOptions)
+        when (scheduleItem) {
+            is ILesson -> openScheduleLessonDetails(scheduleItem)
+            is IExam -> openScheduleExamDetails(scheduleItem)
+        }
+    }
+
+    private fun openScheduleExamDetails(exam: IExam) {
+        TODO("Not yet implemented")
+    }
+
+    private fun openScheduleLessonDetails(lesson: ILesson) {
+        TODO("Not yet implemented")
     }
 
     private fun openNavigationSheet() {
