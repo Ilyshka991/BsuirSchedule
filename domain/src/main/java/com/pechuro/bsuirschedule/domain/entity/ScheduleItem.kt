@@ -1,19 +1,9 @@
 package com.pechuro.bsuirschedule.domain.entity
 
-import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
-sealed class ScheduleItem(
-        open val id: Long,
-        open val subject: String,
-        open val subgroupNumber: SubgroupNumber,
-        open val lessonType: String,
-        open val note: String,
-        open val startTime: String,
-        open val endTime: String,
-        open val auditories: List<Auditory>
-) : Parcelable {
+sealed class ScheduleItem : IScheduleItem {
 
     @Parcelize
     data class GroupLesson(
@@ -25,20 +15,11 @@ sealed class ScheduleItem(
             override val startTime: String,
             override val endTime: String,
             override val auditories: List<Auditory>,
-            val priority: LessonPriority,
-            val weekDay: WeekDay,
-            val weekNumber: WeekNumber,
+            override val priority: LessonPriority,
+            override val weekDay: WeekDay,
+            override val weekNumber: WeekNumber,
             val employees: List<Employee>
-    ) : ScheduleItem(
-            id = id,
-            subject = subject,
-            subgroupNumber = subgroupNumber,
-            lessonType = lessonType,
-            note = note,
-            startTime = startTime,
-            endTime = endTime,
-            auditories = auditories
-    )
+    ) : ScheduleItem(), ILesson
 
     @Parcelize
     data class GroupExam(
@@ -50,18 +31,9 @@ sealed class ScheduleItem(
             override val startTime: String,
             override val endTime: String,
             override val auditories: List<Auditory>,
-            val date: Date,
+            override val date: Date,
             val employees: List<Employee>
-    ) : ScheduleItem(
-            id = id,
-            subject = subject,
-            subgroupNumber = subgroupNumber,
-            lessonType = lessonType,
-            note = note,
-            startTime = startTime,
-            endTime = endTime,
-            auditories = auditories
-    )
+    ) : ScheduleItem(), IExam
 
     @Parcelize
     data class EmployeeLesson(
@@ -73,20 +45,11 @@ sealed class ScheduleItem(
             override val startTime: String,
             override val endTime: String,
             override val auditories: List<Auditory>,
-            val priority: LessonPriority,
-            val weekDay: WeekDay,
-            val weekNumber: WeekNumber,
+            override val priority: LessonPriority,
+            override val weekDay: WeekDay,
+            override val weekNumber: WeekNumber,
             val studentGroups: List<Group>
-    ) : ScheduleItem(
-            id = id,
-            subject = subject,
-            subgroupNumber = subgroupNumber,
-            lessonType = lessonType,
-            note = note,
-            startTime = startTime,
-            endTime = endTime,
-            auditories = auditories
-    )
+    ) : ScheduleItem(), ILesson
 
     @Parcelize
     data class EmployeeExam(
@@ -98,16 +61,7 @@ sealed class ScheduleItem(
             override val startTime: String,
             override val endTime: String,
             override val auditories: List<Auditory>,
-            val date: Date,
+            override val date: Date,
             val studentGroups: List<Group>
-    ) : ScheduleItem(
-            id = id,
-            subject = subject,
-            subgroupNumber = subgroupNumber,
-            lessonType = lessonType,
-            note = note,
-            startTime = startTime,
-            endTime = endTime,
-            auditories = auditories
-    )
+    ) : ScheduleItem(), IExam
 }

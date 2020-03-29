@@ -13,16 +13,15 @@ import com.pechuro.bsuirschedule.common.BaseEvent
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.common.Logger
-import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
-import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleCompleteEvent
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleContainerArgs
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleEvent
+import com.pechuro.bsuirschedule.feature.examdetails.ExamDetailsFragmentArgs
+import com.pechuro.bsuirschedule.feature.lessondetails.LessonDetailsFragmentArgs
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoCompleteEvent
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
-import com.pechuro.bsuirschedule.feature.scheduleitemdetails.ScheduleItemDetailsFragmentArgs
 import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetArgs
 import kotlinx.android.synthetic.main.fragment_flow.*
 import kotlinx.coroutines.launch
@@ -122,8 +121,20 @@ class FlowFragment : BaseFragment() {
     }
 
     private fun openScheduleItemDetails(scheduleItem: ScheduleItem) {
-        val args = ScheduleItemDetailsFragmentArgs(scheduleItem).toBundle()
-        navController.navigate(R.id.scheduleItemDestination, args, defaultNavOptions)
+        when (scheduleItem) {
+            is ILesson -> openScheduleLessonDetails(scheduleItem)
+            is IExam -> openScheduleExamDetails(scheduleItem)
+        }
+    }
+
+    private fun openScheduleExamDetails(exam: IExam) {
+        val arguments = ExamDetailsFragmentArgs(exam).toBundle()
+        navController.navigate(R.id.examDetailsDestination, arguments, defaultNavOptions)
+    }
+
+    private fun openScheduleLessonDetails(lesson: ILesson) {
+        val arguments = LessonDetailsFragmentArgs(lesson).toBundle()
+        navController.navigate(R.id.lessonDetailsDestination, arguments, defaultNavOptions)
     }
 
     private fun openNavigationSheet() {
@@ -208,7 +219,6 @@ class FlowFragment : BaseFragment() {
     private fun updateLayoutState() {
         val isControlsVisible = when (navController.currentDestination?.id) {
             R.id.addScheduleDestination,
-            R.id.scheduleItemDestination,
             R.id.loadInfoDestination -> false
             else -> true
         }
