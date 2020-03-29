@@ -123,33 +123,8 @@ class AddScheduleFragment : BaseFragment() {
 
     private fun observeData() {
         viewModel.state.nonNull().observe(viewLifecycleOwner) {
-            when (it) {
-                is State.Idle -> {
-                    addScheduleSuggestionsRecyclerView.tag = null
-                    addScheduleProgressBar.setVisibleWithAlpha(false)
-                    addScheduleErrorParentView.setVisibleWithAlpha(false)
-                    addScheduleParamsParentView.setVisibleWithAlpha(true)
-                            .doOnEnd {
-                                context?.showKeyboard(addScheduleNameInput)
-                            }
-                    addScheduleNameInput.requestFocus()
-                }
-                is State.Loading -> {
-                    context?.hideKeyboard(addScheduleNameInput.windowToken)
-                    addScheduleErrorParentView.setVisibleWithAlpha(false)
-                    addScheduleParamsParentView.setVisibleWithAlpha(false)
-                            .doOnEnd {
-                                addScheduleProgressBar.setVisibleWithAlpha(true)
-                            }
-                }
-                is State.Error -> {
-                    addScheduleProgressBar.setVisibleWithAlpha(false)
-                    addScheduleErrorParentView.setVisibleWithAlpha(true)
-                    addScheduleParamsParentView.setVisibleWithAlpha(false)
-                }
-            }
+            updateLayoutState(it)
         }
-
         when (scheduleType) {
             FragmentType.STUDENT -> {
                 viewModel.allGroupsData.nonNull().observe(viewLifecycleOwner) {
@@ -175,6 +150,34 @@ class AddScheduleFragment : BaseFragment() {
             }
             is EmployeeInfo -> {
                 viewModel.loadSchedule(info.employee, scheduleTypes)
+            }
+        }
+    }
+
+    private fun updateLayoutState(state: State) {
+        when (state) {
+            is State.Idle -> {
+                addScheduleSuggestionsRecyclerView.tag = null
+                addScheduleProgressBar.setVisibleWithAlpha(false)
+                addScheduleErrorParentView.setVisibleWithAlpha(false)
+                addScheduleParamsParentView.setVisibleWithAlpha(true)
+                        .doOnEnd {
+                            context?.showKeyboard(addScheduleNameInput)
+                        }
+                addScheduleNameInput.requestFocus()
+            }
+            is State.Loading -> {
+                context?.hideKeyboard(addScheduleNameInput.windowToken)
+                addScheduleErrorParentView.setVisibleWithAlpha(false)
+                addScheduleParamsParentView.setVisibleWithAlpha(false)
+                        .doOnEnd {
+                            addScheduleProgressBar.setVisibleWithAlpha(true)
+                        }
+            }
+            is State.Error -> {
+                addScheduleProgressBar.setVisibleWithAlpha(false)
+                addScheduleErrorParentView.setVisibleWithAlpha(true)
+                addScheduleParamsParentView.setVisibleWithAlpha(false)
             }
         }
     }

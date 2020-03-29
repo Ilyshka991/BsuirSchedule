@@ -78,10 +78,6 @@ class DisplayScheduleContainer : BaseFragment() {
                 }
             }
         }
-        viewModel.openScheduleItemDetailsEvent.nonNull().observe(viewLifecycleOwner) {
-            val event = DisplayScheduleEvent.OpenScheduleItem(it)
-            EventBus.send(event)
-        }
         viewModel.displayTypeData.nonNull().observe(viewLifecycleOwner) {
             val viewType = getViewType()
             if (pagerAdapter?.viewType == viewType) return@observe

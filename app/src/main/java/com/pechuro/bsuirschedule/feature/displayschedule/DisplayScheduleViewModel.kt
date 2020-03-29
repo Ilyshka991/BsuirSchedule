@@ -2,7 +2,6 @@ package com.pechuro.bsuirschedule.feature.displayschedule
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.pechuro.bsuirschedule.common.LiveEvent
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.Logger
@@ -32,8 +31,6 @@ class DisplayScheduleViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     lateinit var schedule: Schedule
-
-    val openScheduleItemDetailsEvent = LiveEvent<ScheduleItem>()
 
     val displayTypeData = MediatorLiveData<ScheduleDisplayType>().apply {
         value = runBlocking {
@@ -83,10 +80,6 @@ class DisplayScheduleViewModel @Inject constructor(
         }
         addSource(scheduleItemList) { transformFunction() }
         addSource(displaySubgroupNumber) { transformFunction() }
-    }
-
-    fun onScheduleItemClicked(scheduleItem: ScheduleItem) {
-        openScheduleItemDetailsEvent.value = scheduleItem
     }
 
     private fun mapToDisplayScheduleItems(

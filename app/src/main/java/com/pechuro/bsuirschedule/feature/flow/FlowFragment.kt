@@ -58,6 +58,11 @@ class FlowFragment : BaseFragment() {
         receiveEvents()
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateLayoutState()
+    }
+
     override fun onBackPressed(): Boolean {
         when (navController.currentDestination?.id) {
             R.id.loadInfoDestination -> return false
@@ -67,14 +72,8 @@ class FlowFragment : BaseFragment() {
     }
 
     private fun initNavigation() {
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            val isControlsVisible = when (destination.id) {
-                R.id.addScheduleDestination,
-                R.id.scheduleItemDestination,
-                R.id.loadInfoDestination -> false
-                else -> true
-            }
-            updateLayoutState(isControlsVisible)
+        navController.addOnDestinationChangedListener { _, _, _ ->
+            updateLayoutState()
         }
     }
 
@@ -189,7 +188,7 @@ class FlowFragment : BaseFragment() {
             Logger.e(e)
             //TODO: Possible bug: DialogFragment doesn't exist in the FragmentManager
         }
-        updateLayoutState(isControlsVisible = true)
+        updateLayoutState()
     }
 
     private fun setDefaultStartDestination() {
@@ -201,12 +200,18 @@ class FlowFragment : BaseFragment() {
             Logger.e(e)
             //TODO: Possible bug: DialogFragment doesn't exist in the FragmentManager
         }
-        updateLayoutState(isControlsVisible = true)
+        updateLayoutState()
     }
 
     private fun popFragment() = navController.popBackStack()
 
-    private fun updateLayoutState(isControlsVisible: Boolean) {
+    private fun updateLayoutState() {
+        val isControlsVisible = when (navController.currentDestination?.id) {
+            R.id.addScheduleDestination,
+            R.id.scheduleItemDestination,
+            R.id.loadInfoDestination -> false
+            else -> true
+        }
         bottomBarParentView.isVisible = isControlsVisible
         updateFabState()
         if (!isControlsVisible) bottomBarFab.hide()
