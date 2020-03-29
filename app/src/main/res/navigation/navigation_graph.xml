@@ -56,4 +56,28 @@
         android:name="com.pechuro.bsuirschedule.feature.displayscheduleoptions.DisplayScheduleOptionsSheet"
         android:label="DisplayScheduleOptions"
         tools:layout="@layout/sheet_display_schedule_options" />
+
+    <fragment
+        android:id="@+id/lessonDetailsDestination"
+        android:name="com.pechuro.bsuirschedule.feature.lessondetails.LessonDetailsFragment"
+        android:label="LessonDetailsFragment"
+        tools:layout="@layout/fragment_lesson_details">
+
+        <argument
+            android:name="lesson"
+            app:argType="com.pechuro.bsuirschedule.domain.entity.ILesson" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/examDetailsDestination"
+        android:name="com.pechuro.bsuirschedule.feature.examdetails.ExamDetailsFragment"
+        android:label="ExamDetailsFragment"
+        tools:layout="@layout/fragment_exam_details">
+
+        <argument
+            android:name="exam"
+            app:argType="com.pechuro.bsuirschedule.domain.entity.IExam" />
+    </fragment>
+
+
 </navigation>

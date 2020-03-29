@@ -18,6 +18,8 @@ import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleCompleteEvent
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleContainerArgs
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleEvent
+import com.pechuro.bsuirschedule.feature.examdetails.ExamDetailsFragmentArgs
+import com.pechuro.bsuirschedule.feature.lessondetails.LessonDetailsFragmentArgs
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoCompleteEvent
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
 import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetArgs
@@ -126,11 +128,13 @@ class FlowFragment : BaseFragment() {
     }
 
     private fun openScheduleExamDetails(exam: IExam) {
-        TODO("Not yet implemented")
+        val arguments = ExamDetailsFragmentArgs(exam).toBundle()
+        navController.navigate(R.id.examDetailsDestination, arguments, defaultNavOptions)
     }
 
     private fun openScheduleLessonDetails(lesson: ILesson) {
-        TODO("Not yet implemented")
+        val arguments = LessonDetailsFragmentArgs(lesson).toBundle()
+        navController.navigate(R.id.lessonDetailsDestination, arguments, defaultNavOptions)
     }
 
     private fun openNavigationSheet() {
