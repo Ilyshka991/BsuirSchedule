@@ -16,6 +16,7 @@ import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 import com.pechuro.bsuirschedule.ext.color
 import com.pechuro.bsuirschedule.ext.colorRes
+import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleEvent
 import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleItem
 import kotlinx.android.synthetic.main.item_display_schedule_employee_day_classes.*
@@ -94,7 +95,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
         }
 
         init {
-            itemView.setOnClickListener(onClickListener)
+            itemView.setSafeClickListener(onClickListener = onClickListener)
         }
 
         override fun onBind(data: DisplayScheduleItem.GroupDayClasses) {
@@ -125,7 +126,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
         }
 
         init {
-            itemView.setOnClickListener(onClickListener)
+            itemView.setSafeClickListener(onClickListener = onClickListener)
         }
 
         override fun onBind(data: DisplayScheduleItem.GroupWeekClasses) {
@@ -165,7 +166,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
         private val dateFormatter = SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.getDefault())
 
         init {
-            itemView.setOnClickListener(onClickListener)
+            itemView.setSafeClickListener(onClickListener = onClickListener)
         }
 
         override fun onBind(data: DisplayScheduleItem.GroupExams) {
@@ -197,7 +198,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
         }
 
         init {
-            itemView.setOnClickListener(onClickListener)
+            itemView.setSafeClickListener(onClickListener = onClickListener)
         }
 
         override fun onBind(data: DisplayScheduleItem.EmployeeDayClasses) {
@@ -231,7 +232,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
         }
 
         init {
-            itemView.setOnClickListener(onClickListener)
+            itemView.setSafeClickListener(onClickListener = onClickListener)
         }
 
         override fun onBind(data: DisplayScheduleItem.EmployeeWeekClasses) {
@@ -271,7 +272,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
         private val dateFormatter = SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.getDefault())
 
         init {
-            itemView.setOnClickListener(onClickListener)
+            itemView.setSafeClickListener(onClickListener = onClickListener)
         }
 
         override fun onBind(data: DisplayScheduleItem.EmployeeExams) {

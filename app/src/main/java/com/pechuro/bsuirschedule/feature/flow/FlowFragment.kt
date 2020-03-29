@@ -226,7 +226,7 @@ class FlowFragment : BaseFragment() {
         }
         if (fabState != FabActionState.DISPLAY_SCHEDULE_BACK) bottomBarFab.show()
         bottomBarFab.setImageDrawable(ContextCompat.getDrawable(requireContext(), fabState.iconRes))
-        bottomBarFab.setOnClickListener {
+        bottomBarFab.setSafeClickListener {
             when (fabState) {
                 FabActionState.ADD_EXAM -> EventBus.send(FlowFragmentEvent.DisplayScheduleAddItem)
                 FabActionState.DISPLAY_SCHEDULE_BACK -> EventBus.send(FlowFragmentEvent.DisplayScheduleSetToday)
