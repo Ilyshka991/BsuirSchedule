@@ -20,7 +20,6 @@ import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleContaine
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleEvent
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoCompleteEvent
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
-import com.pechuro.bsuirschedule.feature.scheduleitemdetails.ScheduleItemDetailsFragmentArgs
 import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetArgs
 import kotlinx.android.synthetic.main.fragment_flow.*
 import kotlinx.coroutines.launch
