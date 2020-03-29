@@ -9,12 +9,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 import com.pechuro.bsuirschedule.ext.color
 import com.pechuro.bsuirschedule.ext.colorRes
+import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleEvent
 import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleItem
 import kotlinx.android.synthetic.main.item_display_schedule_employee_day_classes.*
 import kotlinx.android.synthetic.main.item_display_schedule_employee_exams.*
@@ -38,9 +40,7 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
     ) = oldItem == newItem
 }
 
-class DisplayScheduleItemAdapter(
-        private val onScheduleItemClicked: (ScheduleItem) -> Unit
-) : ListAdapter<DisplayScheduleItem, BaseViewHolder<DisplayScheduleItem>>(DIFF_CALLBACK) {
+class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHolder<DisplayScheduleItem>>(DIFF_CALLBACK) {
 
     companion object {
         private const val DATE_FORMAT_PATTERN = "dd.MM.yyyy"
@@ -53,13 +53,6 @@ class DisplayScheduleItemAdapter(
         private const val EMPLOYEE_EXAMS_VIEW_TYPE = R.layout.item_display_schedule_employee_exams
         private const val EMPTY_VIEW_TYPE = R.layout.item_display_schedule_empty
     }
-
-    private val onClickListener = View.OnClickListener {
-        val scheduleItem = it.tag as? ScheduleItem? ?: return@OnClickListener
-        onScheduleItemClicked(scheduleItem)
-    }
-
-    private val dateFormatter = SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.getDefault())
 
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
         is DisplayScheduleItem.GroupDayClasses -> GROUP_DAY_CLASSES_VIEW_TYPE
@@ -92,8 +85,13 @@ class DisplayScheduleItemAdapter(
 
     override fun getItemId(position: Int) = getItem(position).scheduleItem?.id ?: RecyclerView.NO_ID
 
-    private inner class GroupDayClassesViewHolder(view: View) :
+    private class GroupDayClassesViewHolder(view: View) :
             BaseViewHolder<DisplayScheduleItem.GroupDayClasses>(view) {
+
+        private val onClickListener = View.OnClickListener {
+            val scheduleItem = it.tag as? ScheduleItem? ?: return@OnClickListener
+            EventBus.send(DisplayScheduleEvent.OpenScheduleItem(scheduleItem))
+        }
 
         init {
             itemView.setOnClickListener(onClickListener)
@@ -118,8 +116,13 @@ class DisplayScheduleItemAdapter(
         }
     }
 
-    private inner class GroupWeekClassesViewHolder(view: View) :
+    private class GroupWeekClassesViewHolder(view: View) :
             BaseViewHolder<DisplayScheduleItem.GroupWeekClasses>(view) {
+
+        private val onClickListener = View.OnClickListener {
+            val scheduleItem = it.tag as? ScheduleItem? ?: return@OnClickListener
+            EventBus.send(DisplayScheduleEvent.OpenScheduleItem(scheduleItem))
+        }
 
         init {
             itemView.setOnClickListener(onClickListener)
@@ -152,8 +155,14 @@ class DisplayScheduleItemAdapter(
         }
     }
 
-    private inner class GroupExamsViewHolder(view: View) :
+    private class GroupExamsViewHolder(view: View) :
             BaseViewHolder<DisplayScheduleItem.GroupExams>(view) {
+
+        private val onClickListener = View.OnClickListener {
+            val scheduleItem = it.tag as? ScheduleItem? ?: return@OnClickListener
+            EventBus.send(DisplayScheduleEvent.OpenScheduleItem(scheduleItem))
+        }
+        private val dateFormatter = SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.getDefault())
 
         init {
             itemView.setOnClickListener(onClickListener)
@@ -179,8 +188,13 @@ class DisplayScheduleItemAdapter(
         }
     }
 
-    private inner class EmployeeDayClassesViewHolder(view: View) :
+    private class EmployeeDayClassesViewHolder(view: View) :
             BaseViewHolder<DisplayScheduleItem.EmployeeDayClasses>(view) {
+
+        private val onClickListener = View.OnClickListener {
+            val scheduleItem = it.tag as? ScheduleItem? ?: return@OnClickListener
+            EventBus.send(DisplayScheduleEvent.OpenScheduleItem(scheduleItem))
+        }
 
         init {
             itemView.setOnClickListener(onClickListener)
@@ -208,8 +222,13 @@ class DisplayScheduleItemAdapter(
         }
     }
 
-    private inner class EmployeeWeekClassesViewHolder(view: View) :
+    private class EmployeeWeekClassesViewHolder(view: View) :
             BaseViewHolder<DisplayScheduleItem.EmployeeWeekClasses>(view) {
+
+        private val onClickListener = View.OnClickListener {
+            val scheduleItem = it.tag as? ScheduleItem? ?: return@OnClickListener
+            EventBus.send(DisplayScheduleEvent.OpenScheduleItem(scheduleItem))
+        }
 
         init {
             itemView.setOnClickListener(onClickListener)
@@ -242,8 +261,14 @@ class DisplayScheduleItemAdapter(
         }
     }
 
-    private inner class EmployeeExamsViewHolder(view: View) :
+    private class EmployeeExamsViewHolder(view: View) :
             BaseViewHolder<DisplayScheduleItem.EmployeeExams>(view) {
+
+        private val onClickListener = View.OnClickListener {
+            val scheduleItem = it.tag as? ScheduleItem? ?: return@OnClickListener
+            EventBus.send(DisplayScheduleEvent.OpenScheduleItem(scheduleItem))
+        }
+        private val dateFormatter = SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.getDefault())
 
         init {
             itemView.setOnClickListener(onClickListener)
