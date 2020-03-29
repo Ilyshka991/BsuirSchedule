@@ -14,7 +14,7 @@ import kotlin.math.floor
 
 class DisplaySchedulePagerAdapter(
         hostFragment: Fragment,
-        private val viewType: DisplayScheduleViewType
+        val viewType: DisplayScheduleViewType
 ) : FragmentStateAdapter(hostFragment) {
 
     private val calendar = Calendar.getInstance()

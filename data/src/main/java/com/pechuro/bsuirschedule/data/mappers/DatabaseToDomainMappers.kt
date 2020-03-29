@@ -154,7 +154,7 @@ internal fun GroupClassesItemComplex.toDomainEntity(
     ScheduleItem.GroupLesson(
             id = scheduleItem.id,
             subject = scheduleItem.subject,
-            subgroupNumber = scheduleItem.subgroupNumber,
+            subgroupNumber = SubgroupNumber.getForValue(scheduleItem.subgroupNumber),
             lessonType = scheduleItem.lessonType,
             note = scheduleItem.note,
             startTime = scheduleItem.startTime,
@@ -174,7 +174,7 @@ internal fun GroupExamItemComplex.toDomainEntity(
     ScheduleItem.GroupExam(
             id = scheduleItem.id,
             subject = scheduleItem.subject,
-            subgroupNumber = scheduleItem.subgroupNumber,
+            subgroupNumber = SubgroupNumber.getForValue(scheduleItem.subgroupNumber),
             lessonType = scheduleItem.lessonType,
             note = scheduleItem.note,
             startTime = scheduleItem.startTime,
@@ -193,7 +193,7 @@ internal fun EmployeeClassesItemComplex.toDomainEntity(
     ScheduleItem.EmployeeLesson(
             id = scheduleItem.id,
             subject = scheduleItem.subject,
-            subgroupNumber = scheduleItem.subgroupNumber,
+            subgroupNumber = SubgroupNumber.getForValue(scheduleItem.subgroupNumber),
             lessonType = scheduleItem.lessonType,
             note = scheduleItem.note,
             startTime = scheduleItem.startTime,
@@ -213,7 +213,7 @@ internal fun EmployeeExamItemComplex.toDomainEntity(
     ScheduleItem.EmployeeExam(
             id = scheduleItem.id,
             subject = scheduleItem.subject,
-            subgroupNumber = scheduleItem.subgroupNumber,
+            subgroupNumber = SubgroupNumber.getForValue(scheduleItem.subgroupNumber),
             lessonType = scheduleItem.lessonType,
             note = scheduleItem.note,
             startTime = scheduleItem.startTime,

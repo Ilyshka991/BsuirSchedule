@@ -4,7 +4,7 @@ import com.pechuro.bsuirschedule.common.BaseEvent
 
 sealed class FlowFragmentEvent : BaseEvent() {
 
-    object DisplayScheduleLessonsSetFirstDay : FlowFragmentEvent()
+    object DisplayScheduleSetToday : FlowFragmentEvent()
 
-    object DisplayScheduleExamsAddExam : FlowFragmentEvent()
+    object DisplayScheduleAddItem : FlowFragmentEvent()
 }

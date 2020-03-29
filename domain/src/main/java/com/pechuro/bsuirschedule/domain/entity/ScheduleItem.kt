@@ -7,7 +7,7 @@ import java.util.*
 sealed class ScheduleItem(
         open val id: Long,
         open val subject: String,
-        open val subgroupNumber: Int,
+        open val subgroupNumber: SubgroupNumber,
         open val lessonType: String,
         open val note: String,
         open val startTime: String,
@@ -19,7 +19,7 @@ sealed class ScheduleItem(
     data class GroupLesson(
             override val id: Long,
             override val subject: String,
-            override val subgroupNumber: Int,
+            override val subgroupNumber: SubgroupNumber,
             override val lessonType: String,
             override val note: String,
             override val startTime: String,
@@ -44,7 +44,7 @@ sealed class ScheduleItem(
     data class GroupExam(
             override val id: Long,
             override val subject: String,
-            override val subgroupNumber: Int,
+            override val subgroupNumber: SubgroupNumber,
             override val lessonType: String,
             override val note: String,
             override val startTime: String,
@@ -67,7 +67,7 @@ sealed class ScheduleItem(
     data class EmployeeLesson(
             override val id: Long,
             override val subject: String,
-            override val subgroupNumber: Int,
+            override val subgroupNumber: SubgroupNumber,
             override val lessonType: String,
             override val note: String,
             override val startTime: String,
@@ -92,7 +92,7 @@ sealed class ScheduleItem(
     data class EmployeeExam(
             override val id: Long,
             override val subject: String,
-            override val subgroupNumber: Int,
+            override val subgroupNumber: SubgroupNumber,
             override val lessonType: String,
             override val note: String,
             override val startTime: String,

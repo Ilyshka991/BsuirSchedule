@@ -4,7 +4,7 @@
     android:id="@+id/navigationSheetParentView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_navigation_sheet"
+    android:background="@drawable/background_sheet"
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView

@@ -23,6 +23,6 @@
     <attr name="tabSelectedColor" format="color" />
     <attr name="tabUnselectedColor" format="color" />
 
-    <attr name="fabIconColor" format="color" />
+    <attr name="menuIconColor" format="color" />
     <attr name="fabBackgroundColor" format="color" />
 </resources>

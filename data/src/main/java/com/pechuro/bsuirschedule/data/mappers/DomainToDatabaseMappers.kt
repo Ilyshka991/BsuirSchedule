@@ -138,7 +138,7 @@ internal fun ScheduleItem.GroupLesson.toDatabaseEntity(schedule: GroupClassesSch
     val scheduleItem = GroupItemClassesCached(
             scheduleName = schedule.name,
             subject = subject,
-            subgroupNumber = subgroupNumber,
+            subgroupNumber = subgroupNumber.value,
             lessonType = lessonType,
             note = note,
             startTime = startTime,
@@ -160,7 +160,7 @@ internal fun ScheduleItem.GroupExam.toDatabaseEntity(schedule: GroupExamSchedule
     val scheduleItem = GroupItemExamCached(
             scheduleName = schedule.name,
             subject = subject,
-            subgroupNumber = subgroupNumber,
+            subgroupNumber = subgroupNumber.value,
             lessonType = lessonType,
             note = note,
             startTime = startTime,
@@ -195,7 +195,7 @@ internal fun ScheduleItem.EmployeeLesson.toDatabaseEntity(schedule: EmployeeClas
             scheduleName = schedule.name,
             subject = subject,
             weekNumber = weekNumber.index,
-            subgroupNumber = subgroupNumber,
+            subgroupNumber = subgroupNumber.value,
             lessonType = lessonType,
             note = note,
             startTime = startTime,
@@ -216,7 +216,7 @@ internal fun ScheduleItem.EmployeeExam.toDatabaseEntity(schedule: EmployeeExamSc
     val scheduleItem = EmployeeItemExamCached(
             scheduleName = schedule.name,
             subject = subject,
-            subgroupNumber = subgroupNumber,
+            subgroupNumber = subgroupNumber.value,
             lessonType = lessonType,
             note = note,
             startTime = startTime,

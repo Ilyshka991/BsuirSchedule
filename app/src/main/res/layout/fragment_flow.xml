@@ -32,12 +32,25 @@
         app:layout_scrollFlags="scroll|enterAlways"
         tools:layout_height="40dp">
 
-        <com.google.android.material.button.MaterialButton
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/bottomBarMenuButton"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:icon="@drawable/ic_menu" />
+            style="@style/IconButton"
+            android:src="@drawable/ic_menu" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/bottomBarDisplayOptionsButton"
+            style="@style/IconButton"
+            android:src="@drawable/ic_display_options" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/bottomBarGoToDateButton"
+            style="@style/IconButton"
+            android:src="@drawable/ic_schedule_go_to_date" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/bottomBarDisplayAddButton"
+            style="@style/IconButton"
+            android:src="@drawable/ic_add" />
     </com.google.android.material.bottomappbar.BottomAppBar>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -46,5 +59,5 @@
         android:layout_height="wrap_content"
         app:backgroundTint="?attr/fabBackgroundColor"
         app:layout_anchor="@+id/bottomBarParentView"
-        app:tint="?attr/fabIconColor" />
+        app:tint="?attr/menuIconColor" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
