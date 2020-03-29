@@ -1,18 +1,16 @@
 package com.pechuro.bsuirschedule.feature.displayschedule
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
-import androidx.lifecycle.switchMap
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.MediatorLiveData
 import com.pechuro.bsuirschedule.common.LiveEvent
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
+import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
-import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.domain.entity.Schedule.*
-import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
-import com.pechuro.bsuirschedule.domain.entity.WeekDay
-import com.pechuro.bsuirschedule.domain.entity.WeekNumber
+import com.pechuro.bsuirschedule.domain.interactor.GetScheduleDisplaySubgroupNumber
+import com.pechuro.bsuirschedule.domain.interactor.GetScheduleDisplayType
 import com.pechuro.bsuirschedule.domain.interactor.GetScheduleItems
 import com.pechuro.bsuirschedule.ext.flowLiveData
 import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleItem
@@ -21,19 +19,37 @@ import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleIte
 import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleItemInfo.WeekClasses
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
 
 class DisplayScheduleViewModel @Inject constructor(
-        private val getScheduleItems: GetScheduleItems
+        private val getScheduleItems: GetScheduleItems,
+        private val getScheduleDisplayType: GetScheduleDisplayType,
+        private val getScheduleDisplaySubgroupNumber: GetScheduleDisplaySubgroupNumber
 ) : BaseViewModel() {
-
-    val openScheduleItemDetailsEvent = LiveEvent<ScheduleItem>()
 
     lateinit var schedule: Schedule
 
+    val openScheduleItemDetailsEvent = LiveEvent<ScheduleItem>()
+
+    val displayTypeData = MediatorLiveData<ScheduleDisplayType>().apply {
+        value = runBlocking {
+            getScheduleDisplayType.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow()).first()
+        }
+        val displayTypeFlowData = flowLiveData {
+            getScheduleDisplayType.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
+        }
+        addSource(displayTypeFlowData) { value = it }
+    }
+
     private val scheduleItemList: LiveData<List<ScheduleItem>> = flowLiveData {
         getScheduleItems.execute(GetScheduleItems.Params(schedule)).getOrDefault(emptyFlow())
+    }
+    private val displaySubgroupNumber = flowLiveData {
+        getScheduleDisplaySubgroupNumber.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
     }
 
     fun getCurrentWeekNumber(): WeekNumber {
@@ -52,36 +68,49 @@ class DisplayScheduleViewModel @Inject constructor(
         return WeekNumber.getForIndex(weekNumberIndex)
     }
 
-    fun getItems(info: DisplayScheduleItemInfo) = scheduleItemList.switchMap {
-        liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
-            emit(it.mapToDisplayScheduleItems(info))
+    fun getItems(info: DisplayScheduleItemInfo) = MediatorLiveData<List<DisplayScheduleItem>>().apply {
+        val transformFunction: () -> Unit = {
+            launchCoroutine {
+                val resultList = withContext(Dispatchers.IO) {
+                    mapToDisplayScheduleItems(
+                            scheduleItems = scheduleItemList.value ?: emptyList(),
+                            info = info,
+                            subgroupNumber = displaySubgroupNumber.value ?: SubgroupNumber.ALL
+                    )
+                }
+                value = resultList
+            }
         }
+        addSource(scheduleItemList) { transformFunction() }
+        addSource(displaySubgroupNumber) { transformFunction() }
     }
 
     fun onScheduleItemClicked(scheduleItem: ScheduleItem) {
         openScheduleItemDetailsEvent.value = scheduleItem
     }
 
-    private fun List<ScheduleItem>.mapToDisplayScheduleItems(
-            info: DisplayScheduleItemInfo
+    private fun mapToDisplayScheduleItems(
+            scheduleItems: List<ScheduleItem>,
+            info: DisplayScheduleItemInfo,
+            subgroupNumber: SubgroupNumber
     ): List<DisplayScheduleItem> = when {
         info is DayClasses && schedule is GroupClasses -> {
-            mapToGroupDayClasses(info.weekDay, info.weekNumber)
+            scheduleItems.mapToGroupDayClasses(info.weekDay, info.weekNumber, subgroupNumber)
         }
         info is DayClasses && schedule is EmployeeClasses -> {
-            mapToEmployeeDayClasses(info.weekDay, info.weekNumber)
+            scheduleItems.mapToEmployeeDayClasses(info.weekDay, info.weekNumber)
         }
         info is WeekClasses && schedule is GroupClasses -> {
-            mapToGroupWeekClasses(info.weekDay)
+            scheduleItems.mapToGroupWeekClasses(info.weekDay, subgroupNumber)
         }
         info is WeekClasses && schedule is EmployeeClasses -> {
-            mapToEmployeeWeekClasses(info.weekDay)
+            scheduleItems.mapToEmployeeWeekClasses(info.weekDay)
         }
         info is DisplayScheduleItemInfo.Exams && schedule is GroupExams -> {
-            mapToGroupExams()
+            scheduleItems.mapToGroupExams()
         }
         info is DisplayScheduleItemInfo.Exams && schedule is EmployeeExams -> {
-            mapToEmployeeExams()
+            scheduleItems.mapToEmployeeExams()
         }
         else -> {
             Logger.e("DisplayScheduleItemInfo $info is incompatible with ${schedule::class.java.simpleName}")
@@ -93,11 +122,21 @@ class DisplayScheduleViewModel @Inject constructor(
 
     private fun List<ScheduleItem>.mapToGroupDayClasses(
             weekDay: WeekDay,
-            weekNumber: WeekNumber
+            weekNumber: WeekNumber,
+            subgroupNumber: SubgroupNumber
     ): List<DisplayScheduleItem.GroupDayClasses> = this
             .asSequence()
             .filterIsInstance<ScheduleItem.GroupLesson>()
-            .filter { it.weekDay == weekDay && it.weekNumber == weekNumber }
+            .filter {
+                it.weekDay == weekDay && it.weekNumber == weekNumber
+            }
+            .filter {
+                when {
+                    subgroupNumber == SubgroupNumber.ALL -> true
+                    it.subgroupNumber == SubgroupNumber.ALL -> true
+                    else -> it.subgroupNumber == subgroupNumber
+                }
+            }
             .map(DisplayScheduleItem::GroupDayClasses)
             .toList()
 
@@ -112,11 +151,19 @@ class DisplayScheduleViewModel @Inject constructor(
             .toList()
 
     private fun List<ScheduleItem>.mapToGroupWeekClasses(
-            weekDay: WeekDay
+            weekDay: WeekDay,
+            subgroupNumber: SubgroupNumber
     ): List<DisplayScheduleItem.GroupWeekClasses> = this
             .asSequence()
             .filterIsInstance<ScheduleItem.GroupLesson>()
             .filter { it.weekDay == weekDay }
+            .filter {
+                when {
+                    subgroupNumber == SubgroupNumber.ALL -> true
+                    it.subgroupNumber == SubgroupNumber.ALL -> true
+                    else -> it.subgroupNumber == subgroupNumber
+                }
+            }
             .groupBy { it.subject }
             .values
             .map { groupLessons ->

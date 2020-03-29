@@ -122,7 +122,7 @@ internal fun List<ScheduleItemDTO>.toGroupLessons(
                         //This ID will be generated later
                         id = 0,
                         subject = lesson.subject ?: "",
-                        subgroupNumber = lesson.subgroupNumber,
+                        subgroupNumber = SubgroupNumber.getForValue(lesson.subgroupNumber),
                         lessonType = lesson.lessonType ?: "",
                         auditories = lessonAuditories ?: emptyList(),
                         note = lesson.note ?: "",
@@ -160,7 +160,7 @@ internal fun List<ScheduleItemDTO>.toGroupExams(
                     //This ID will be generated later
                     id = 0,
                     subject = lesson.subject ?: "",
-                    subgroupNumber = lesson.subgroupNumber,
+                    subgroupNumber = SubgroupNumber.getForValue(lesson.subgroupNumber),
                     lessonType = lesson.lessonType ?: "",
                     auditories = lessonAuditories ?: emptyList(),
                     note = lesson.note ?: "",
@@ -195,7 +195,7 @@ internal fun List<ScheduleItemDTO>.toEmployeeLessons(
                         id = 0,
                         subject = lesson.subject ?: "",
                         weekNumber = weekNumber,
-                        subgroupNumber = lesson.subgroupNumber,
+                        subgroupNumber = SubgroupNumber.getForValue(lesson.subgroupNumber),
                         lessonType = lessonType,
                         auditories = lessonAuditories ?: emptyList(),
                         note = lesson.note ?: "",
@@ -229,7 +229,7 @@ internal fun List<ScheduleItemDTO>.toEmployeeExams(
                     //This ID will be generated later
                     id = 0,
                     subject = lesson.subject ?: "",
-                    subgroupNumber = lesson.subgroupNumber,
+                    subgroupNumber = SubgroupNumber.getForValue(lesson.subgroupNumber),
                     lessonType = lesson.lessonType ?: "",
                     auditories = lessonAuditories ?: emptyList(),
                     note = lesson.note ?: "",

@@ -5,12 +5,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.pechuro.bsuirschedule.common.factory.ViewModelFactory
 import com.pechuro.bsuirschedule.di.annotations.ViewModelKey
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel
+import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleViewModel
+import com.pechuro.bsuirschedule.feature.displayscheduleoptions.DisplayScheduleOptionsViewModel
 import com.pechuro.bsuirschedule.feature.flow.FlowViewModel
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoViewModel
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetViewModel
-import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetViewModel
-import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleViewModel
 import com.pechuro.bsuirschedule.feature.scheduleitemdetails.ScheduleItemDetailsViewModel
+import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -55,4 +56,9 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(ScheduleItemDetailsViewModel::class)
     fun scheduleItem(viewModel: ScheduleItemDetailsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DisplayScheduleOptionsViewModel::class)
+    fun displayOptions(viewModel: DisplayScheduleOptionsViewModel): ViewModel
 }

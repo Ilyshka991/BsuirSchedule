@@ -36,7 +36,7 @@
         <item name="tabSelectedColor">?attr/textDefaultColor</item>
         <item name="tabUnselectedColor">@color/grey_400</item>
 
-        <item name="fabIconColor">?attr/backgroundColor</item>
+        <item name="menuIconColor">?attr/backgroundColor</item>
         <item name="fabBackgroundColor">@color/amber_500</item>
     </style>
 

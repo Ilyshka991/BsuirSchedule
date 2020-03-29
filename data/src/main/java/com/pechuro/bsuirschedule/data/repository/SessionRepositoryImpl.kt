@@ -2,6 +2,8 @@ package com.pechuro.bsuirschedule.data.repository
 
 import com.pechuro.bsuirschedule.data.common.BaseRepository
 import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
 import com.pechuro.bsuirschedule.domain.repository.ISessionRepository
 import com.pechuro.bsuirschedule.local.sharedprefs.LastOpenedSchedule
@@ -37,5 +39,25 @@ class SessionRepositoryImpl(
             LastOpenedSchedule(name, scheduleType)
         }
         sharedPreferencesManager.setLastOpenedSchedule(prefsValue)
+    }
+
+    override suspend fun getScheduleDisplayType(): Flow<ScheduleDisplayType> = sharedPreferencesManager
+            .getDisplayType(ScheduleDisplayType.DEFAULT.value)
+            .map {
+                ScheduleDisplayType.getForValue(it)
+            }
+
+    override suspend fun setScheduleDisplayType(type: ScheduleDisplayType) {
+        sharedPreferencesManager.setDisplayType(type.value)
+    }
+
+    override suspend fun getScheduleDisplaySubgroupNumber(): Flow<SubgroupNumber> = sharedPreferencesManager
+            .getSubgroupNumber(SubgroupNumber.ALL.value)
+            .map {
+                SubgroupNumber.getForValue(it)
+            }
+
+    override suspend fun setScheduleDisplaySubgroupNumber(number: SubgroupNumber) {
+        sharedPreferencesManager.setSubgroupNumber(number.value)
     }
 }

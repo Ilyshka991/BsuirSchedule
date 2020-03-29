@@ -27,6 +27,17 @@
         <item name="android:textAppearance">@style/ChipTextAppearance</item>
     </style>
 
+    <style name="IconButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:padding">6dp</item>
+        <item name="android:background">?selectableItemBackgroundBorderless</item>
+        <item name="android:tint">?attr/menuIconColor</item>
+        <item name="rippleColor">?attr/rippleColor</item>
+    </style>
+
     <!-- Text styles -->
 
     <style name="DefaultText" parent="Widget.MaterialComponents.TextView">

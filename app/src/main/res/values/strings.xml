@@ -53,4 +53,10 @@
     <string name="display_schedule_item_msg_subgroup">%1$d Subgroup</string>
     <string name="display_schedule_item_msg_week_numbers">Weeks %1$s</string>
     <string name="display_schedule_item_msg_empty_list">Nothing there</string>
+
+    <string name="display_options_sheet_title_type">Display by: %1$s</string>
+    <string name="display_options_sheet_msg_type_weeks">weeks</string>
+    <string name="display_options_sheet_msg_type_days">days</string>
+    <string name="display_options_sheet_title_subgroup">Display %1$d subgroup</string>
+    <string name="display_options_sheet_title_all_group">Display all group</string>
 </resources>

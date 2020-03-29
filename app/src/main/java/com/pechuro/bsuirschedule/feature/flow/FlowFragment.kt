@@ -14,6 +14,7 @@ import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleCompleteEvent
@@ -81,6 +82,15 @@ class FlowFragment : BaseFragment() {
         bottomBarMenuButton.setSafeClickListener {
             openNavigationSheet()
         }
+        bottomBarDisplayOptionsButton.setSafeClickListener {
+            openDisplayScheduleDetails()
+        }
+        bottomBarGoToDateButton.setSafeClickListener {
+            //TODO: implement
+        }
+        bottomBarDisplayAddButton.setSafeClickListener {
+            EventBus.send(FlowFragmentEvent.DisplayScheduleAddItem)
+        }
     }
 
     private fun checkScheduleUpdates() {
@@ -147,23 +157,27 @@ class FlowFragment : BaseFragment() {
         navController.navigate(R.id.addScheduleDestination, null, defaultNavOptions)
     }
 
+    private fun openDisplayScheduleDetails() {
+        navController.navigate(R.id.displayScheduleOptionsDestination, null, defaultNavOptions)
+    }
+
     private fun openViewSchedule(schedule: Schedule, skipIfOpened: Boolean = true) {
-        if (skipIfOpened && viewModel.lastOpenedSchedule == schedule) return
-        viewModel.lastOpenedSchedule = schedule
+        if (skipIfOpened && viewModel.getLastOpenedSchedule() == schedule) return
+        viewModel.setLastOpenedSchedule(schedule)
         setViewScheduleStartDestination(schedule)
         val arguments = DisplayScheduleContainerArgs(schedule).toBundle()
         navController.navigate(R.id.viewScheduleDestination, arguments, defaultNavOptions)
     }
 
     private fun onScheduleDeleted(schedule: Schedule) {
-        if (viewModel.lastOpenedSchedule == schedule) {
-            viewModel.lastOpenedSchedule = null
+        if (viewModel.getLastOpenedSchedule() == schedule) {
+            viewModel.setLastOpenedSchedule(null)
             setDefaultStartDestination()
         }
     }
 
     private fun setStartDestination() {
-        val lastOpenedSchedule = viewModel.lastOpenedSchedule
+        val lastOpenedSchedule = viewModel.getLastOpenedSchedule()
         if (lastOpenedSchedule == null) {
             setDefaultStartDestination()
         } else {
@@ -202,10 +216,11 @@ class FlowFragment : BaseFragment() {
         bottomBarParentView.isVisible = isControlsVisible
         updateFabState()
         if (!isControlsVisible) bottomBarFab.hide()
+        updateBottomBarState()
     }
 
     private fun updateFabState() {
-        val fabState = when (viewModel.lastOpenedSchedule) {
+        val fabState = when (viewModel.getLastOpenedSchedule()) {
             is Schedule.EmployeeClasses, is Schedule.GroupClasses -> FabActionState.DISPLAY_SCHEDULE_BACK
             is Schedule.EmployeeExams, is Schedule.GroupExams -> FabActionState.ADD_EXAM
             else -> FabActionState.ADD_SCHEDULE
@@ -214,9 +229,24 @@ class FlowFragment : BaseFragment() {
         bottomBarFab.setImageDrawable(ContextCompat.getDrawable(requireContext(), fabState.iconRes))
         bottomBarFab.setOnClickListener {
             when (fabState) {
-                FabActionState.ADD_EXAM -> EventBus.send(FlowFragmentEvent.DisplayScheduleExamsAddExam)
-                FabActionState.DISPLAY_SCHEDULE_BACK -> EventBus.send(FlowFragmentEvent.DisplayScheduleLessonsSetFirstDay)
+                FabActionState.ADD_EXAM -> EventBus.send(FlowFragmentEvent.DisplayScheduleAddItem)
+                FabActionState.DISPLAY_SCHEDULE_BACK -> EventBus.send(FlowFragmentEvent.DisplayScheduleSetFirstDay)
                 FabActionState.ADD_SCHEDULE -> openAddSchedule()
+            }
+        }
+    }
+
+    private fun updateBottomBarState() {
+        when (viewModel.getLastOpenedSchedule()) {
+            is Schedule.EmployeeClasses, is Schedule.GroupClasses -> {
+                bottomBarDisplayOptionsButton.isVisible = true
+                bottomBarGoToDateButton.isVisible = viewModel.scheduleDisplayType == ScheduleDisplayType.DAYS
+                bottomBarDisplayAddButton.isVisible = viewModel.scheduleDisplayType == ScheduleDisplayType.DAYS
+            }
+            else -> {
+                bottomBarDisplayOptionsButton.isVisible = false
+                bottomBarGoToDateButton.isVisible = false
+                bottomBarDisplayAddButton.isVisible = false
             }
         }
     }

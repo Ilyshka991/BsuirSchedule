@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 import com.pechuro.bsuirschedule.ext.color
 import com.pechuro.bsuirschedule.ext.colorRes
@@ -105,8 +106,8 @@ class DisplayScheduleItemAdapter(
                 displayGroupDayClassesLessonType.setTextColor(lessonTypeColor)
                 displayGroupDayClassesTitle.text = subject
                 displayGroupDayClassesAuditories.text = auditories.joinToString(separator = ",") { it.name }
-                displayGroupDayClassesSubGroup.isVisible = subgroupNumber != 0
-                displayGroupDayClassesSubGroup.text = itemView.context.getString(R.string.display_schedule_item_msg_subgroup, subgroupNumber)
+                displayGroupDayClassesSubGroup.isVisible = subgroupNumber != SubgroupNumber.ALL
+                displayGroupDayClassesSubGroup.text = itemView.context.getString(R.string.display_schedule_item_msg_subgroup, subgroupNumber.value)
                 displayGroupDayClassesEmployees.text = employees.joinToString(separator = ",") { it.abbreviation }
                 displayGroupDayClassesStartTime.text = startTime
                 displayGroupDayClassesEndTime.text = endTime
@@ -131,10 +132,10 @@ class DisplayScheduleItemAdapter(
                 displayGroupWeekClassesLessonType.setTextColor(lessonTypeColor)
                 displayGroupWeekClassesTitle.text = subject
                 displayGroupWeekClassesAuditories.text = auditories.joinToString(separator = ",") { it.name }
-                displayGroupWeekClassesSubGroup.isVisible = subgroupNumber != 0
+                displayGroupWeekClassesSubGroup.isVisible = subgroupNumber != SubgroupNumber.ALL
                 displayGroupWeekClassesSubGroup.text = itemView.context.getString(
                         R.string.display_schedule_item_msg_subgroup,
-                        subgroupNumber
+                        subgroupNumber.value
                 )
                 displayGroupWeekClassesWeekNumbers.isVisible = data.weekNumbers.size != WeekNumber.TOTAL_COUNT
                 displayGroupWeekClassesWeekNumbers.text = itemView.context.getString(
@@ -164,10 +165,10 @@ class DisplayScheduleItemAdapter(
                 displayGroupExamsAuditories.text = auditories.joinToString(separator = ",") { it.name }
                 displayGroupExamsTitle.text = subject
                 displayGroupExamsDate.text = dateFormatter.format(date)
-                displayGroupExamsSubGroup.isVisible = subgroupNumber != 0
+                displayGroupExamsSubGroup.isVisible = subgroupNumber != SubgroupNumber.ALL
                 displayGroupExamsSubGroup.text = itemView.context.getString(
                         R.string.display_schedule_item_msg_subgroup,
-                        subgroupNumber
+                        subgroupNumber.value
                 )
                 displayGroupExamsLessonType.text = lessonType
                 displayGroupExamsEmployees.text = employees.joinToString(separator = ",") { it.abbreviation }
@@ -192,10 +193,10 @@ class DisplayScheduleItemAdapter(
                 displayEmployeeDayClassesLessonType.setTextColor(lessonTypeColor)
                 displayEmployeeDayClassesTitle.text = subject
                 displayEmployeeDayClassesAuditories.text = auditories.joinToString(separator = ",") { it.name }
-                displayEmployeeDayClassesSubGroup.isVisible = subgroupNumber != 0
+                displayEmployeeDayClassesSubGroup.isVisible = subgroupNumber != SubgroupNumber.ALL
                 displayEmployeeDayClassesSubGroup.text = itemView.context.getString(
                         R.string.display_schedule_item_msg_subgroup,
-                        subgroupNumber
+                        subgroupNumber.value
                 )
                 displayEmployeeDayClassesGroups.text = studentGroups.joinToString(separator = ",") { it.number }
                 displayEmployeeDayClassesStartTime.text = startTime
@@ -221,10 +222,10 @@ class DisplayScheduleItemAdapter(
                 displayEmployeeDayClassesLessonType.setTextColor(lessonTypeColor)
                 displayEmployeeDayClassesTitle.text = subject
                 displayEmployeeDayClassesAuditories.text = auditories.joinToString(separator = ",") { it.name }
-                displayEmployeeDayClassesSubGroup.isVisible = subgroupNumber != 0
+                displayEmployeeDayClassesSubGroup.isVisible = subgroupNumber != SubgroupNumber.ALL
                 displayEmployeeDayClassesSubGroup.text = itemView.context.getString(
                         R.string.display_schedule_item_msg_subgroup,
-                        subgroupNumber
+                        subgroupNumber.value
                 )
                 displayGroupWeekClassesWeekNumbers.isVisible = data.weekNumbers.size != WeekNumber.TOTAL_COUNT
                 displayGroupWeekClassesWeekNumbers.text = itemView.context.getString(
@@ -254,10 +255,10 @@ class DisplayScheduleItemAdapter(
                 displayEmployeeExamsAuditories.text = auditories.joinToString(separator = ",") { it.name }
                 displayEmployeeExamsTitle.text = subject
                 displayEmployeeExamsDate.text = dateFormatter.format(date)
-                displayEmployeeExamsSubGroup.isVisible = subgroupNumber != 0
+                displayEmployeeExamsSubGroup.isVisible = subgroupNumber != SubgroupNumber.ALL
                 displayEmployeeExamsSubGroup.text = itemView.context.getString(
                         R.string.display_schedule_item_msg_subgroup,
-                        subgroupNumber
+                        subgroupNumber.value
                 )
                 displayEmployeeExamsLessonType.text = lessonType
                 displayEmployeeExamsGroups.text = studentGroups.joinToString(separator = ",") { it.number }
