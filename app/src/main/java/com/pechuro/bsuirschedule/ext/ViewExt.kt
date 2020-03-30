@@ -3,7 +3,6 @@ package com.pechuro.bsuirschedule.ext
 import android.animation.Animator
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
 import androidx.annotation.Px
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
@@ -11,7 +10,6 @@ import androidx.core.view.*
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.ClickInterval
 import com.pechuro.bsuirschedule.common.OneFirePerIntervalClickListener
-import java.util.*
 
 inline fun View.setSafeClickListener(
         interval: ClickInterval = ClickInterval.NORMAL,
@@ -78,10 +76,4 @@ fun View.updateMargin(
             setMargins(left, top, right, bottom)
         }
     }
-}
-
-fun DatePicker.getDate(): Date {
-    val calendar = Calendar.getInstance()
-    calendar.set(year, month, dayOfMonth)
-    return calendar.time
 }
