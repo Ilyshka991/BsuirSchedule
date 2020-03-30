@@ -49,6 +49,14 @@ class DisplaySchedulePagerAdapter(
         is DisplayScheduleViewType.Exams -> 0
     }
 
+    fun getPositionForDate(date: Date): Int? {
+        val firstPositionDate = getCalendarAt(0).time
+        val diff = date.time - firstPositionDate.time
+        val position = diff / 1000 / 60 / 60 / 24 + 1
+        if (position < 0 || position > itemCount) return null
+        return position.toInt()
+    }
+
     fun getCalendarAt(position: Int) = getCurrentCalendar().addDays(position - getStartPosition())
 
     fun getWeekNumberAt(position: Int): WeekNumber {
