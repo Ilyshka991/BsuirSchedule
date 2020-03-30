@@ -98,22 +98,28 @@ class DisplayScheduleContainer : BaseFragment() {
         displayScheduleContainerViewPager.adapter = pagerAdapter
 
         if (pagerAdapter.itemCount > 1) {
-            val tabConfigurationStrategy = TabLayoutMediator.TabConfigurationStrategy { tab, position ->
-                tab.text = getTabTitle(viewType, position)
-            }
-            tabLayoutMediator = TabLayoutMediator(
-                    displayScheduleContainerTabLayout,
-                    displayScheduleContainerViewPager,
-                    tabConfigurationStrategy
-            ).also {
-                it.attach()
-            }
+            initTabLayoutMediator(viewType)
+            displayScheduleContainerViewPager.setCurrentItem(
+                    pagerAdapter.getStartPosition(),
+                    false
+            )
         } else {
             displayScheduleContainerTabLayout.isVisible = false
             displayScheduleContainerViewPager.isUserInputEnabled = false
         }
+    }
 
-        displayScheduleContainerViewPager.setCurrentItem(pagerAdapter.getStartPosition(), false)
+    private fun initTabLayoutMediator(viewType: DisplayScheduleViewType): TabLayoutMediator {
+        val tabConfigurationStrategy = TabLayoutMediator.TabConfigurationStrategy { tab, position ->
+            tab.text = getTabTitle(viewType, position)
+        }
+        return TabLayoutMediator(
+                displayScheduleContainerTabLayout,
+                displayScheduleContainerViewPager,
+                tabConfigurationStrategy
+        ).also {
+            it.attach()
+        }
     }
 
     private fun destroyView() {
@@ -128,7 +134,7 @@ class DisplayScheduleContainer : BaseFragment() {
         is Schedule.GroupClasses, is Schedule.EmployeeClasses -> {
             when (val type = viewModel.displayTypeData.value) {
                 ScheduleDisplayType.DAYS -> DisplayScheduleViewType.DayClasses(
-                        startWeekNumber = viewModel.getCurrentWeekNumber()
+                        startWeekNumber = viewModel.currentWeekNumber
                 )
                 ScheduleDisplayType.WEEKS -> DisplayScheduleViewType.WeekClasses
                 else -> throw IllegalArgumentException("Unknown display type: $type")
