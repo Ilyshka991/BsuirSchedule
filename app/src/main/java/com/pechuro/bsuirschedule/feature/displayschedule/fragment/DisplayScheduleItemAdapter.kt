@@ -143,7 +143,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
                 displayGroupWeekClassesWeekNumbers.isVisible = data.weekNumbers.size != WeekNumber.TOTAL_COUNT
                 displayGroupWeekClassesWeekNumbers.text = itemView.context.getString(
                         R.string.display_schedule_item_msg_week_numbers,
-                        data.weekNumbers.joinToString(separator = ",") { it.index.toString() }
+                        data.weekNumbers.joinToString(separator = ",") { it.index.plus(1).toString() }
                 )
                 displayGroupWeekClassesEmployees.text = employees.joinToString(separator = ",") { it.abbreviation }
                 displayGroupWeekClassesStartTime.text = startTime
@@ -249,7 +249,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
                 displayGroupWeekClassesWeekNumbers.isVisible = data.weekNumbers.size != WeekNumber.TOTAL_COUNT
                 displayGroupWeekClassesWeekNumbers.text = itemView.context.getString(
                         R.string.display_schedule_item_msg_week_numbers,
-                        data.weekNumbers.joinToString(separator = ",") { it.index.toString() }
+                        data.weekNumbers.joinToString(separator = ",") {  it.index.plus(1).toString() }
                 )
                 displayEmployeeDayClassesGroups.text = studentGroups.joinToString(separator = ",") { it.number }
                 displayEmployeeDayClassesStartTime.text = startTime
