@@ -18,6 +18,8 @@ import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleCompleteEvent
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleContainerArgs
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleEvent
+import com.pechuro.bsuirschedule.feature.displayscheduledatepicker.DisplayScheduleDatePickerSheetArgs
+import com.pechuro.bsuirschedule.feature.displayscheduledatepicker.ScheduleDatePickedEvent
 import com.pechuro.bsuirschedule.feature.examdetails.ExamDetailsFragmentArgs
 import com.pechuro.bsuirschedule.feature.lessondetails.LessonDetailsFragmentArgs
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoCompleteEvent
@@ -25,6 +27,7 @@ import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
 import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetArgs
 import kotlinx.android.synthetic.main.fragment_flow.*
 import kotlinx.coroutines.launch
+import java.util.*
 
 class FlowFragment : BaseFragment() {
 
@@ -84,7 +87,7 @@ class FlowFragment : BaseFragment() {
             openDisplayScheduleOptions()
         }
         bottomBarGoToDateButton.setSafeClickListener {
-            //TODO: implement
+            EventBus.send(FlowFragmentEvent.DisplayScheduleGoToDate)
         }
         bottomBarDisplayAddButton.setSafeClickListener {
             EventBus.send(FlowFragmentEvent.DisplayScheduleAddItem)
@@ -116,6 +119,8 @@ class FlowFragment : BaseFragment() {
                 }
                 is DisplayScheduleEvent.OpenScheduleItem -> openScheduleItemDetails(event.scheduleItem)
                 is DisplayScheduleEvent.OnPositionChanged -> onDisplaySchedulePositionChanged(event.position)
+                is DisplayScheduleEvent.OpenDatePicker -> openDatePicker(event.startDate, event.endDate, event.currentDate)
+                is ScheduleDatePickedEvent -> popFragment()
             }
         }
     }
@@ -135,6 +140,15 @@ class FlowFragment : BaseFragment() {
     private fun openScheduleLessonDetails(lesson: ILesson) {
         val arguments = LessonDetailsFragmentArgs(lesson).toBundle()
         navController.navigate(R.id.lessonDetailsDestination, arguments, defaultNavOptions)
+    }
+
+    private fun openDatePicker(
+            startDate: Date,
+            endDate: Date,
+            currentDate: Date
+    ) {
+        val arguments = DisplayScheduleDatePickerSheetArgs(startDate, endDate, currentDate).toBundle()
+        navController.navigate(R.id.displayScheduleDatePickerDestination, arguments, defaultNavOptions)
     }
 
     private fun openNavigationSheet() {

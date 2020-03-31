@@ -8,6 +8,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.BaseEvent
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Schedule
@@ -16,6 +17,7 @@ import com.pechuro.bsuirschedule.ext.clearAdapter
 import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleViewType
+import com.pechuro.bsuirschedule.feature.displayscheduledatepicker.ScheduleDatePickedEvent
 import com.pechuro.bsuirschedule.feature.flow.FlowFragmentEvent
 import kotlinx.android.synthetic.main.fragment_view_schedule_container.*
 import java.text.SimpleDateFormat
@@ -70,9 +72,11 @@ class DisplayScheduleContainer : BaseFragment() {
     }
 
     private fun observeData() {
-        EventBus.receive<FlowFragmentEvent>(lifecycleScope) {
-            when (it) {
+        EventBus.receive<BaseEvent>(lifecycleScope) { event ->
+            when (event) {
                 is FlowFragmentEvent.DisplayScheduleSetToday -> setFirstDay()
+                is FlowFragmentEvent.DisplayScheduleGoToDate -> openDatePicker()
+                is ScheduleDatePickedEvent -> setDate(event.date)
                 is FlowFragmentEvent.DisplayScheduleAddItem -> {
                     //TODO: Implement
                 }
@@ -159,15 +163,32 @@ class DisplayScheduleContainer : BaseFragment() {
         }
     }
 
-    private fun setFirstDay() {
+    private fun openDatePicker() {
         val pagerAdapter = pagerAdapter ?: return
-        val startPosition = pagerAdapter.getStartPosition()
+        EventBus.send(DisplayScheduleEvent.OpenDatePicker(
+                startDate = pagerAdapter.getCalendarAt(0).time,
+                endDate = pagerAdapter.getCalendarAt(pagerAdapter.itemCount - 1).time,
+                currentDate = pagerAdapter.getCalendarAt(displayScheduleContainerViewPager.currentItem).time
+        ))
+    }
+
+    private fun setFirstDay() {
+        val startPosition = pagerAdapter?.getStartPosition() ?: return
+        setPosition(startPosition)
+    }
+
+    private fun setDate(date: Date) {
+        val position = pagerAdapter?.getPositionForDate(date) ?: return
+        setPosition(position)
+    }
+
+    private fun setPosition(position: Int) {
         displayScheduleContainerViewPager.setCurrentItem(
-                startPosition,
+                position,
                 true
         )
         onPositionChanged()
-        val startTab = displayScheduleContainerTabLayout.getTabAt(startPosition)
+        val startTab = displayScheduleContainerTabLayout.getTabAt(position)
         startTab?.select()
     }
 }

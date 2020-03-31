@@ -79,5 +79,22 @@
             app:argType="com.pechuro.bsuirschedule.domain.entity.IExam" />
     </fragment>
 
+    <dialog
+        android:id="@+id/displayScheduleDatePickerDestination"
+        android:name="com.pechuro.bsuirschedule.feature.displayscheduledatepicker.DisplayScheduleDatePickerSheet"
+        android:label="DisplayScheduleDatePicker"
+        tools:layout="@layout/sheet_display_schedule_date_picker">
 
+        <argument
+            android:name="startDate"
+            app:argType="java.util.Date" />
+
+        <argument
+            android:name="endDate"
+            app:argType="java.util.Date" />
+
+        <argument
+            android:name="currentDate"
+            app:argType="java.util.Date" />
+    </dialog>
 </navigation>
