@@ -11,11 +11,13 @@ import com.pechuro.bsuirschedule.domain.entity.Schedule.*
 import com.pechuro.bsuirschedule.domain.interactor.GetScheduleDisplaySubgroupNumber
 import com.pechuro.bsuirschedule.domain.interactor.GetScheduleDisplayType
 import com.pechuro.bsuirschedule.domain.interactor.GetScheduleItems
+import com.pechuro.bsuirschedule.ext.addIfEmpty
 import com.pechuro.bsuirschedule.ext.flowLiveData
 import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleItem
 import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleItemInfo
 import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleItemInfo.DayClasses
 import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleItemInfo.WeekClasses
+import com.pechuro.bsuirschedule.feature.displayschedule.data.toGroupKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
@@ -68,9 +70,10 @@ class DisplayScheduleViewModel @Inject constructor(
     fun getItems(info: DisplayScheduleItemInfo) = MediatorLiveData<List<DisplayScheduleItem>>().apply {
         val transformFunction: () -> Unit = {
             launchCoroutine {
+                val scheduleItems = scheduleItemList.value ?: return@launchCoroutine
                 val resultList = withContext(Dispatchers.IO) {
                     mapToDisplayScheduleItems(
-                            scheduleItems = scheduleItemList.value ?: emptyList(),
+                            scheduleItems = scheduleItems,
                             info = info,
                             subgroupNumber = displaySubgroupNumber.value ?: SubgroupNumber.ALL
                     )
@@ -109,9 +112,7 @@ class DisplayScheduleViewModel @Inject constructor(
             Logger.e("DisplayScheduleItemInfo $info is incompatible with ${schedule::class.java.simpleName}")
             emptyList()
         }
-    }.run {
-        if (isEmpty()) listOf(DisplayScheduleItem.Empty) else this
-    }
+    }.addIfEmpty(DisplayScheduleItem.Empty)
 
     private fun List<ScheduleItem>.mapToGroupDayClasses(
             weekDay: WeekDay,
@@ -157,14 +158,15 @@ class DisplayScheduleViewModel @Inject constructor(
                     else -> it.subgroupNumber == subgroupNumber
                 }
             }
-            .groupBy { it.subject }
+            .groupBy { it.toGroupKey() }
             .values
             .map { groupLessons ->
                 val groupLesson = groupLessons.first()
                 val weekNumbers = groupLessons.map { it.weekNumber }.sorted()
+                val ids = groupLessons.map { it.id }
                 DisplayScheduleItem.GroupWeekClasses(
                         scheduleItem = groupLesson,
-                        itemsIdList = groupLessons.map { it.id },
+                        itemsIdList = ids,
                         weekNumbers = weekNumbers
                 )
             }
@@ -176,14 +178,15 @@ class DisplayScheduleViewModel @Inject constructor(
             .asSequence()
             .filterIsInstance<ScheduleItem.EmployeeLesson>()
             .filter { it.weekDay == weekDay }
-            .groupBy { it.subject }
+            .groupBy { it.toGroupKey() }
             .values
             .map { employeeLessons ->
                 val employeeLesson = employeeLessons.first()
                 val weekNumbers = employeeLessons.map { it.weekNumber }.sorted()
+                val ids = employeeLessons.map { it.id }
                 DisplayScheduleItem.EmployeeWeekClasses(
                         scheduleItem = employeeLesson,
-                        itemsIdList = employeeLessons.map { it.id },
+                        itemsIdList = ids,
                         weekNumbers = weekNumbers
                 )
             }.toList()
