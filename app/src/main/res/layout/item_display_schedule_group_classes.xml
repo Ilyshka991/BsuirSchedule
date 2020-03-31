@@ -58,7 +58,7 @@
             android:paddingBottom="4dp"
             android:textColor="?attr/textSemiBoldColor"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/displayClassesNotes"
+            app:layout_constraintBottom_toTopOf="@+id/displayClassesNote"
             app:layout_constraintStart_toStartOf="@id/displayClassesTitle"
             app:layout_constraintTop_toBottomOf="@+id/displayClassesTitle"
             app:layout_goneMarginBottom="0dp"
@@ -139,7 +139,7 @@
             tools:text="18:10" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/displayClassesNotes"
+            android:id="@+id/displayClassesNote"
             style="@style/DefaultText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

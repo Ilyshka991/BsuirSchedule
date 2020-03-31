@@ -94,8 +94,8 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
                 displayClassesSubgroup.text = itemView.context.getString(R.string.display_schedule_item_msg_subgroup, subgroupNumber.value)
                 displayClassesStartTime.text = startTime
                 displayClassesEndTime.text = endTime
-                displayClassesNotes.isVisible = note.isNotEmpty() && note.isNotBlank()
-                displayClassesNotes.text = note
+                displayClassesNote.isVisible = note.isNotEmpty() && note.isNotBlank()
+                displayClassesNote.text = note
                 if (data is DisplayScheduleItem.WeekClasses) {
                     displayClassesWeeks.isVisible = data.weekNumbers.size != WeekNumber.TOTAL_COUNT
                     displayClassesWeeks.text = itemView.context.getString(
