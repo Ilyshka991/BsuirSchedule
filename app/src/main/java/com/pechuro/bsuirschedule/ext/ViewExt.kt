@@ -21,6 +21,14 @@ inline fun View.setSafeClickListener(
     setOnClickListener(safeClickListener)
 }
 
+inline fun View.setSafeClickListener(
+        interval: ClickInterval = ClickInterval.NORMAL,
+        onClickListener: View.OnClickListener
+) {
+    val safeClickListener = OneFirePerIntervalClickListener(interval.milliseconds, onClickListener::onClick)
+    setOnClickListener(safeClickListener)
+}
+
 inline var View.isVisibleOrInvisible: Boolean
     get() = visibility == View.VISIBLE
     set(value) {

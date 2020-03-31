@@ -57,6 +57,7 @@
         android:id="@+id/bottomBarFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         app:backgroundTint="?attr/fabBackgroundColor"
         app:layout_anchor="@+id/bottomBarParentView"
         app:tint="?attr/menuIconColor" />

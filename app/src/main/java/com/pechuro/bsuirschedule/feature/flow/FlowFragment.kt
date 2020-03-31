@@ -26,6 +26,7 @@ import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoCompleteEvent
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
 import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetArgs
 import kotlinx.android.synthetic.main.fragment_flow.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -54,15 +55,17 @@ class FlowFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initNavigation()
         setStartDestination()
-        if (savedInstanceState == null && !viewModel.isInfoLoaded()) openLoadInfo()
+        lifecycleScope.launch(Dispatchers.IO) {
+            if (savedInstanceState == null && !viewModel.isInfoLoaded()) openLoadInfo()
+            checkScheduleUpdates()
+        }
         initViews()
-        checkScheduleUpdates()
         receiveEvents()
     }
 
     override fun onResume() {
         super.onResume()
-        updateLayoutState()
+        requireView().post { updateLayoutState() }
     }
 
     override fun onBackPressed(): Boolean {
@@ -75,7 +78,7 @@ class FlowFragment : BaseFragment() {
 
     private fun initNavigation() {
         navController.addOnDestinationChangedListener { _, _, _ ->
-            updateLayoutState()
+            requireView().post { updateLayoutState() }
         }
     }
 
@@ -94,12 +97,10 @@ class FlowFragment : BaseFragment() {
         }
     }
 
-    private fun checkScheduleUpdates() {
-        lifecycleScope.launch {
-            val availableForUpdateSchedules = viewModel.getAvailableForUpdateSchedules()
-            if (availableForUpdateSchedules.isNotEmpty()) {
-                openUpdateSchedules(availableForUpdateSchedules)
-            }
+    private suspend fun checkScheduleUpdates() {
+        val availableForUpdateSchedules = viewModel.getAvailableForUpdateSchedules()
+        if (availableForUpdateSchedules.isNotEmpty()) {
+            openUpdateSchedules(availableForUpdateSchedules)
         }
     }
 
@@ -213,7 +214,8 @@ class FlowFragment : BaseFragment() {
             Logger.e(e)
             //TODO: Possible bug: DialogFragment doesn't exist in the FragmentManager
         }
-        updateLayoutState()
+        requireView().post { updateLayoutState() }
+
     }
 
     private fun setDefaultStartDestination() {
@@ -225,7 +227,7 @@ class FlowFragment : BaseFragment() {
             Logger.e(e)
             //TODO: Possible bug: DialogFragment doesn't exist in the FragmentManager
         }
-        updateLayoutState()
+        requireView().post { updateLayoutState() }
     }
 
     private fun popFragment() = navController.popBackStack()
@@ -236,10 +238,10 @@ class FlowFragment : BaseFragment() {
             R.id.loadInfoDestination -> false
             else -> true
         }
-        bottomBarParentView.isVisible = isControlsVisible
         updateFabState()
         if (!isControlsVisible) bottomBarFab.hide()
         updateBottomBarState()
+        bottomBarParentView.isVisible = isControlsVisible
     }
 
     private fun updateFabState() {
@@ -250,7 +252,7 @@ class FlowFragment : BaseFragment() {
         }
         if (fabState != FabActionState.DISPLAY_SCHEDULE_BACK) bottomBarFab.show()
         bottomBarFab.setImageDrawable(ContextCompat.getDrawable(requireContext(), fabState.iconRes))
-        bottomBarFab.setOnClickListener {
+        bottomBarFab.setSafeClickListener {
             when (fabState) {
                 FabActionState.ADD_EXAM -> EventBus.send(FlowFragmentEvent.DisplayScheduleAddItem)
                 FabActionState.DISPLAY_SCHEDULE_BACK -> EventBus.send(FlowFragmentEvent.DisplayScheduleSetToday)

@@ -8,6 +8,7 @@ import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
 import com.pechuro.bsuirschedule.domain.interactor.*
 import com.pechuro.bsuirschedule.domain.interactor.GetAvailableForUpdateSchedules.Params
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -41,8 +42,8 @@ class FlowViewModel @Inject constructor(
         }
     }
 
-    fun isInfoLoaded(): Boolean = runBlocking {
-        checkInfo.execute(BaseInteractor.NoParams).getOrDefault(false)
+    suspend fun isInfoLoaded(): Boolean {
+        return checkInfo.execute(BaseInteractor.NoParams).getOrDefault(false)
     }
 
     fun getLastOpenedSchedule(): Schedule? = lastOpenedSchedule
@@ -58,6 +59,7 @@ class FlowViewModel @Inject constructor(
             getAvailableForUpdateSchedules.execute(Params(includeAll = false))
                     .getOrDefault(flowOf(emptyList()))
                     .debounce(1000)
+                    .flowOn(Dispatchers.IO)
                     .first()
                     .also {
                         clearUpdateNotifications(it)
