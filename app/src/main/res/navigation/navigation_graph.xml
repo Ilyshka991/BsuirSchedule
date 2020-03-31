@@ -55,7 +55,12 @@
         android:id="@+id/displayScheduleOptionsDestination"
         android:name="com.pechuro.bsuirschedule.feature.displayscheduleoptions.DisplayScheduleOptionsSheet"
         android:label="DisplayScheduleOptions"
-        tools:layout="@layout/sheet_display_schedule_options" />
+        tools:layout="@layout/sheet_display_schedule_options" >
+
+        <argument
+            android:name="schedule"
+            app:argType="com.pechuro.bsuirschedule.domain.entity.Schedule" />
+    </dialog>
 
     <fragment
         android:id="@+id/lessonDetailsDestination"
@@ -65,7 +70,7 @@
 
         <argument
             android:name="lesson"
-            app:argType="com.pechuro.bsuirschedule.domain.entity.ILesson" />
+            app:argType="com.pechuro.bsuirschedule.domain.entity.Lesson" />
     </fragment>
 
     <fragment
@@ -76,7 +81,7 @@
 
         <argument
             android:name="exam"
-            app:argType="com.pechuro.bsuirschedule.domain.entity.IExam" />
+            app:argType="com.pechuro.bsuirschedule.domain.entity.Exam" />
     </fragment>
 
     <dialog

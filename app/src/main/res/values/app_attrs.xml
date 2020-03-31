@@ -19,10 +19,13 @@
     <attr name="chipUncheckedColor" format="color" />
 
     <attr name="textDefaultColor" format="color" />
+    <attr name="textSemiBoldColor" format="color" />
     <attr name="titleColor" format="color" />
     <attr name="tabSelectedColor" format="color" />
     <attr name="tabUnselectedColor" format="color" />
 
     <attr name="menuIconColor" format="color" />
     <attr name="fabBackgroundColor" format="color" />
+
+    <attr name="schedule_item_background_color" format="color"/>
 </resources>

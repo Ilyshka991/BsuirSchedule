@@ -7,4 +7,4 @@
     android:gravity="center"
     android:textSize="48sp"
     tools:itemCount="5"
-    tools:listitem="@layout/item_display_schedule_group_day_classes" />
+    tools:listitem="@layout/item_display_schedule_group_classes" />

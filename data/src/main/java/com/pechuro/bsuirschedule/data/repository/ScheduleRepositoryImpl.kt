@@ -291,7 +291,7 @@ class ScheduleRepositoryImpl(
         TODO("not implemented")
     }
 
-    private suspend fun storeSchedule(schedule: Schedule.GroupClasses, items: List<ScheduleItem.GroupLesson>) {
+    private suspend fun storeSchedule(schedule: Schedule.GroupClasses, items: List<Lesson.GroupLesson>) {
         val cachedSchedule = schedule.toDatabaseEntity()
         val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }
         performDaoCall {
@@ -299,7 +299,7 @@ class ScheduleRepositoryImpl(
         }
     }
 
-    private suspend fun storeSchedule(schedule: Schedule.GroupExams, items: List<ScheduleItem.GroupExam>) {
+    private suspend fun storeSchedule(schedule: Schedule.GroupExams, items: List<Exam.GroupExam>) {
         val cachedSchedule = schedule.toDatabaseEntity()
         val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }
         performDaoCall {
@@ -307,7 +307,7 @@ class ScheduleRepositoryImpl(
         }
     }
 
-    private suspend fun storeSchedule(schedule: Schedule.EmployeeClasses, items: List<ScheduleItem.EmployeeLesson>) {
+    private suspend fun storeSchedule(schedule: Schedule.EmployeeClasses, items: List<Lesson.EmployeeLesson>) {
         val cachedSchedule = schedule.toDatabaseEntity()
         val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }
         performDaoCall {
@@ -315,7 +315,7 @@ class ScheduleRepositoryImpl(
         }
     }
 
-    private suspend fun storeSchedule(schedule: Schedule.EmployeeExams, items: List<ScheduleItem.EmployeeExam>) {
+    private suspend fun storeSchedule(schedule: Schedule.EmployeeExams, items: List<Exam.EmployeeExam>) {
         val cachedSchedule = schedule.toDatabaseEntity()
         val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }
         performDaoCall {

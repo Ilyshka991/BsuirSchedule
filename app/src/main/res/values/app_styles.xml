@@ -32,12 +32,15 @@
         <item name="chipUncheckedColor">@color/grey_100</item>
 
         <item name="textDefaultColor">@color/grey_600</item>
+        <item name="textSemiBoldColor">@color/grey_800</item>
         <item name="titleColor">@color/grey_700</item>
         <item name="tabSelectedColor">?attr/textDefaultColor</item>
         <item name="tabUnselectedColor">@color/grey_400</item>
 
         <item name="menuIconColor">?attr/backgroundColor</item>
         <item name="fabBackgroundColor">@color/amber_500</item>
+
+        <item name="schedule_item_background_color">?attr/backgroundColor</item>
     </style>
 
     <style name="SplashTheme" parent="AppTheme">

@@ -14,7 +14,8 @@ import kotlin.math.floor
 
 class DisplaySchedulePagerAdapter(
         hostFragment: Fragment,
-        val viewType: DisplayScheduleViewType
+        val viewType: DisplayScheduleViewType,
+        private val startWeekNumber: WeekNumber
 ) : FragmentStateAdapter(hostFragment) {
 
     companion object {
@@ -23,18 +24,18 @@ class DisplaySchedulePagerAdapter(
     }
 
     override fun getItemCount() = when (viewType) {
-        is DisplayScheduleViewType.Exams -> 1
-        is DisplayScheduleViewType.WeekClasses -> WeekDay.TOTAL_COUNT
-        is DisplayScheduleViewType.DayClasses -> DAY_CLASSES_TOTAL_COUNT
+        DisplayScheduleViewType.EXAMS -> 1
+        DisplayScheduleViewType.WEEK_CLASSES -> WeekDay.TOTAL_COUNT
+        DisplayScheduleViewType.DAY_CLASSES -> DAY_CLASSES_TOTAL_COUNT
     }
 
     override fun createFragment(position: Int): Fragment {
         val itemInfo = when (viewType) {
-            is DisplayScheduleViewType.Exams -> DisplayScheduleItemInfo.Exams
-            is DisplayScheduleViewType.WeekClasses -> DisplayScheduleItemInfo.WeekClasses(
+            DisplayScheduleViewType.EXAMS -> DisplayScheduleItemInfo.Exams
+            DisplayScheduleViewType.WEEK_CLASSES -> DisplayScheduleItemInfo.WeekClasses(
                     weekDay = getWeekdayAt(position)
             )
-            is DisplayScheduleViewType.DayClasses -> DisplayScheduleItemInfo.DayClasses(
+            DisplayScheduleViewType.DAY_CLASSES -> DisplayScheduleItemInfo.DayClasses(
                     weekDay = getWeekdayAt(position),
                     weekNumber = getWeekNumberAt(position)
             )
@@ -43,16 +44,16 @@ class DisplaySchedulePagerAdapter(
     }
 
     fun getStartPosition(): Int = when (viewType) {
-        is DisplayScheduleViewType.DayClasses -> DAY_CLASSES_BACK_COUNT
-        is DisplayScheduleViewType.WeekClasses -> getCurrentCalendar().getWeekDay().index
-        is DisplayScheduleViewType.Exams -> 0
+        DisplayScheduleViewType.DAY_CLASSES -> DAY_CLASSES_BACK_COUNT
+        DisplayScheduleViewType.WEEK_CLASSES -> getCurrentCalendar().getWeekDay().index
+        DisplayScheduleViewType.EXAMS -> 0
     }
 
     fun getPositionForDate(date: Date): Int? {
         val firstPositionDate = getCalendarAt(0).time
         val diff = date.time - firstPositionDate.time
-        val position = diff / 1000 / 60 / 60 / 24 + 1
-        if (position < 0 || position > itemCount) return null
+        val position = diff / 1000 / 60 / 60 / 24
+        if (position < 0 || position > itemCount - 1) return null
         return position.toInt()
     }
 
@@ -62,7 +63,7 @@ class DisplaySchedulePagerAdapter(
         val startWeekPosition = getStartPosition() - getWeekdayAt(getStartPosition()).index
         val weeksCount = floor((position.toFloat() - startWeekPosition) / WeekDay.TOTAL_COUNT).toInt()
         val startWeekNumber = when (viewType) {
-            is DisplayScheduleViewType.DayClasses -> viewType.startWeekNumber
+            DisplayScheduleViewType.DAY_CLASSES -> startWeekNumber
             else -> throw UnsupportedOperationException()
         }
         val weekNumberIndex = (startWeekNumber.index + weeksCount) % WeekNumber.TOTAL_COUNT
@@ -70,7 +71,11 @@ class DisplaySchedulePagerAdapter(
         return WeekNumber.getForIndex(normalizedIndex)
     }
 
-    private fun getCurrentCalendar() = Calendar.getInstance()
+    private fun getCurrentCalendar() = Calendar.getInstance().apply {
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+    }
 
     private fun getWeekdayAt(position: Int) = getCalendarAt(position).getWeekDay()
 }

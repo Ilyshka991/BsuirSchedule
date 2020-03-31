@@ -1,5 +1,7 @@
 package com.pechuro.bsuirschedule.feature.displayschedule.data
 
+import com.pechuro.bsuirschedule.domain.entity.Exam
+import com.pechuro.bsuirschedule.domain.entity.Lesson
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 
@@ -7,32 +9,18 @@ sealed class DisplayScheduleItem(
         open val scheduleItem: ScheduleItem?
 ) {
 
-    data class GroupDayClasses(
-            override val scheduleItem: ScheduleItem.GroupLesson
+    data class DayClasses(
+            override val scheduleItem: Lesson
     ) : DisplayScheduleItem(scheduleItem)
 
-    data class GroupWeekClasses(
-            override val scheduleItem: ScheduleItem.GroupLesson,
+    data class WeekClasses(
+            override val scheduleItem: Lesson,
             val itemsIdList: List<Long>,
             val weekNumbers: List<WeekNumber>
     ) : DisplayScheduleItem(scheduleItem)
 
-    data class GroupExams(
-            override val scheduleItem: ScheduleItem.GroupExam
-    ) : DisplayScheduleItem(scheduleItem)
-
-    data class EmployeeDayClasses(
-            override val scheduleItem: ScheduleItem.EmployeeLesson
-    ) : DisplayScheduleItem(scheduleItem)
-
-    data class EmployeeWeekClasses(
-            override val scheduleItem: ScheduleItem.EmployeeLesson,
-            val itemsIdList: List<Long>,
-            val weekNumbers: List<WeekNumber>
-    ) : DisplayScheduleItem(scheduleItem)
-
-    data class EmployeeExams(
-            override val scheduleItem: ScheduleItem.EmployeeExam
+    data class Exams(
+            override val scheduleItem: Exam
     ) : DisplayScheduleItem(scheduleItem)
 
     object Empty : DisplayScheduleItem(null)
