@@ -12,6 +12,9 @@ import androidx.lifecycle.ViewModelStoreOwner
 import com.pechuro.bsuirschedule.common.BaseEvent
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.ext.app
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -22,6 +25,9 @@ abstract class BaseFragment : Fragment() {
 
     @get:LayoutRes
     protected abstract val layoutId: Int
+
+    protected lateinit var eventCoroutineScope: CoroutineScope
+        private set
 
     open fun onBackPressed(): Boolean = false
 
@@ -39,11 +45,17 @@ abstract class BaseFragment : Fragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? = inflater.inflate(layoutId, container, false)
+    ): View = inflater.inflate(layoutId, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        eventCoroutineScope = CoroutineScope(Dispatchers.Main.immediate)
         EventBus.send(OnViewCreated)
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        eventCoroutineScope.cancel()
     }
 
     protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>): T {

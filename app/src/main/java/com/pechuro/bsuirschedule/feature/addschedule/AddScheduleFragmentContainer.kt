@@ -35,7 +35,7 @@ class AddScheduleFragmentContainer : BaseFragment() {
     private fun initView() {
         addScheduleContainerToolbar.apply {
             setNavigationOnClickListener {
-                activity?.onBackPressed()
+                onComplete(emptyList())
             }
         }
         addScheduleContainerViewPager.apply {
