@@ -6,7 +6,9 @@ import java.util.*
 
 sealed class DisplayScheduleEvent : BaseEvent() {
 
-    data class OpenScheduleItem(val scheduleItem: ScheduleItem) : DisplayScheduleEvent()
+    data class OpenScheduleItemDetails(val scheduleItem: ScheduleItem) : DisplayScheduleEvent()
+
+    data class OpenScheduleItemOptions(val scheduleItem: ScheduleItem) : DisplayScheduleEvent()
 
     data class OnPositionChanged(val position: Int) : DisplayScheduleEvent()
 

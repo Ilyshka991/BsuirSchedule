@@ -79,7 +79,9 @@ class DisplayScheduleViewModel @Inject constructor(
         is DayClasses -> scheduleItems.mapToDayClasses(info.weekDay, info.weekNumber, subgroupNumber)
         is WeekClasses -> scheduleItems.mapToWeekClasses(info.weekDay, subgroupNumber)
         is DisplayScheduleItemInfo.Exams -> scheduleItems.mapToExams()
-    }.addIfEmpty(DisplayScheduleItem.Empty)
+    }
+            .sortedBy { it.scheduleItem?.startTime }
+            .addIfEmpty(DisplayScheduleItem.Empty)
 
     private fun List<ScheduleItem>.mapToDayClasses(
             weekDay: WeekDay,

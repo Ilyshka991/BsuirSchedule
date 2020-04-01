@@ -59,4 +59,8 @@
     <string name="display_options_sheet_msg_type_days">days</string>
     <string name="display_options_sheet_title_subgroup">Display %1$d subgroup</string>
     <string name="display_options_sheet_title_all_group">Display all group</string>
+
+    <string name="schedule_item_options_sheet_title">Actions for %1$s:</string>
+    <string name="schedule_item_options_sheet_action_edit">Edit</string>
+    <string name="schedule_item_options_sheet_action_delete">Delete</string>
 </resources>

@@ -18,10 +18,11 @@ abstract class BaseRepository {
             crossinline call: suspend () -> T
     ) = try {
         performApiCall(call)
-    } catch (e: Exception) {
+    } catch (e: DataSourceException) {
         defaultValue
     }
 
+    @Throws(DataSourceException::class)
     protected suspend inline fun <T> performApiCall(crossinline call: suspend () -> T) = try {
         withContext(Dispatchers.IO) {
             call()

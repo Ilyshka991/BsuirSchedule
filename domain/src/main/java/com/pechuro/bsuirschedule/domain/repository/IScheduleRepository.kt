@@ -29,9 +29,9 @@ interface IScheduleRepository {
 
     suspend fun isUpdateAvailable(schedule: Schedule): Boolean
 
-    suspend fun delete(schedule: Schedule)
+    suspend fun deleteSchedule(schedule: Schedule)
 
-    suspend fun deleteAll()
+    suspend fun deleteScheduleItem(scheduleItem: ScheduleItem)
 
-    suspend fun getCurrentWeek(): Int
+    suspend fun deleteAllSchedules()
 }

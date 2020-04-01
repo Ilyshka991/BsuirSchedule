@@ -77,9 +77,6 @@ class DisplayScheduleContainer : BaseFragment() {
                 is FlowFragmentEvent.DisplayScheduleSetToday -> setFirstDay()
                 is FlowFragmentEvent.DisplayScheduleGoToDate -> openDatePicker()
                 is ScheduleDatePickedEvent -> setDate(event.date)
-                is FlowFragmentEvent.DisplayScheduleAddItem -> {
-                    //TODO: Implement
-                }
             }
         }
         viewModel.displayTypeData.nonNull().observe(viewLifecycleOwner) {

@@ -145,7 +145,8 @@ internal fun Lesson.GroupLesson.toDatabaseEntity(schedule: GroupClassesScheduleC
             endTime = endTime,
             weekDay = weekDay.index,
             weekNumber = weekNumber.index,
-            priority = priority.value
+            priority = priority.value,
+            isAddedByUser = isAddedByUser
     )
     val employees = employees.map { it.toDatabaseEntity() }
     val auditories = auditories.toDatabaseEntity()
@@ -165,7 +166,8 @@ internal fun Exam.GroupExam.toDatabaseEntity(schedule: GroupExamScheduleCached) 
             note = note,
             startTime = startTime,
             endTime = endTime,
-            date = date
+            date = date,
+            isAddedByUser = isAddedByUser
     )
     val employees = employees.map { it.toDatabaseEntity() }
     val auditories = auditories.toDatabaseEntity()
@@ -201,7 +203,8 @@ internal fun Lesson.EmployeeLesson.toDatabaseEntity(schedule: EmployeeClassesSch
             startTime = startTime,
             endTime = endTime,
             weekDay = weekDay.index,
-            priority = priority.value
+            priority = priority.value,
+            isAddedByUser = isAddedByUser
     )
     val groups = studentGroups.map { it.toDatabaseEntity() }
     val auditories = auditories.toDatabaseEntity()
@@ -221,7 +224,8 @@ internal fun Exam.EmployeeExam.toDatabaseEntity(schedule: EmployeeExamScheduleCa
             note = note,
             startTime = startTime,
             endTime = endTime,
-            date = date
+            date = date,
+            isAddedByUser = isAddedByUser
     )
     val groups = studentGroups.map { it.toDatabaseEntity() }
     val auditories = auditories.toDatabaseEntity()

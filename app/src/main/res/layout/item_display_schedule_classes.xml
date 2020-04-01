@@ -80,14 +80,17 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/displayClassesWeeks"
             style="@style/DefaultText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
+            android:ellipsize="end"
             android:maxLines="1"
             android:textSize="16sp"
+            android:gravity="start"
             android:visibility="gone"
             app:layout_constraintBaseline_toBaselineOf="@+id/displayClassesTitle"
+            app:layout_constraintEnd_toStartOf="@id/displayClassesStartTime"
             app:layout_constraintStart_toEndOf="@id/displayClassesSubgroup"
             tools:text="Weeks: 1, 2" />
 

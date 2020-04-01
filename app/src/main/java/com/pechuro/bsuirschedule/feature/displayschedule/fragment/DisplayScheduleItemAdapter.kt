@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -18,8 +19,8 @@ import com.pechuro.bsuirschedule.ext.colorRes
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleEvent
 import com.pechuro.bsuirschedule.feature.displayschedule.data.DisplayScheduleItem
+import kotlinx.android.synthetic.main.item_display_schedule_classes.*
 import kotlinx.android.synthetic.main.item_display_schedule_exam.*
-import kotlinx.android.synthetic.main.item_display_schedule_group_classes.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -37,14 +38,22 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
     ) = oldItem == newItem
 }
 
-private class OnScheduleItemCLickListener : View.OnClickListener {
+private class OnScheduleItemClickListener : View.OnClickListener {
     override fun onClick(view: View) {
         val scheduleItem = view.tag as? ScheduleItem? ?: return
-        EventBus.send(DisplayScheduleEvent.OpenScheduleItem(scheduleItem))
+        EventBus.send(DisplayScheduleEvent.OpenScheduleItemDetails(scheduleItem))
     }
 }
 
-private const val CLASSES_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_group_classes
+private class OnScheduleItemLongClickListener : View.OnLongClickListener {
+    override fun onLongClick(view: View): Boolean {
+        val scheduleItem = view.tag as? ScheduleItem? ?: return false
+        EventBus.send(DisplayScheduleEvent.OpenScheduleItemOptions(scheduleItem))
+        return true
+    }
+}
+
+private const val CLASSES_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_classes
 private const val EXAMS_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_exam
 private const val EMPTY_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_empty
 
@@ -78,7 +87,8 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
     private class ClassesViewHolder(view: View) : BaseViewHolder<DisplayScheduleItem>(view) {
 
         init {
-            itemView.setSafeClickListener(onClickListener = OnScheduleItemCLickListener())
+            itemView.setSafeClickListener(onClickListener = OnScheduleItemClickListener())
+            itemView.setOnLongClickListener(OnScheduleItemLongClickListener())
         }
 
         override fun onBind(data: DisplayScheduleItem) {
@@ -87,7 +97,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
             scheduleItem.run {
                 displayClassesLessonType.text = lessonType
                 val lessonTypeColor = itemView.context.color(priority.colorRes)
-                displayClassesLessonType.supportBackgroundTintList = ColorStateList.valueOf(lessonTypeColor)
+                ViewCompat.setBackgroundTintList(displayClassesLessonType, ColorStateList.valueOf(lessonTypeColor))
                 displayClassesTitle.text = subject
                 displayClassesAuditories.text = auditories.joinToString(separator = ",") { "${it.name}-${it.building.name}" }
                 displayClassesSubgroup.isVisible = subgroupNumber != SubgroupNumber.ALL
@@ -119,7 +129,8 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
         private val dateFormatter = SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.getDefault())
 
         init {
-            itemView.setSafeClickListener(onClickListener = OnScheduleItemCLickListener())
+            itemView.setSafeClickListener(onClickListener = OnScheduleItemClickListener())
+            itemView.setOnLongClickListener(OnScheduleItemLongClickListener())
         }
 
         override fun onBind(data: DisplayScheduleItem.Exams) {

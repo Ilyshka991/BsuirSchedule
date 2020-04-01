@@ -62,6 +62,17 @@
             app:argType="com.pechuro.bsuirschedule.domain.entity.Schedule" />
     </dialog>
 
+    <dialog
+        android:id="@+id/scheduleItemOptionsDestination"
+        android:name="com.pechuro.bsuirschedule.feature.scheduleitemoptions.ScheduleItemOptionsSheet"
+        android:label="ScheduleItemOptionsSheet"
+        tools:layout="@layout/sheet_schedule_item_options" >
+
+        <argument
+            android:name="scheduleItem"
+            app:argType="com.pechuro.bsuirschedule.domain.entity.ScheduleItem" />
+    </dialog>
+
     <fragment
         android:id="@+id/lessonDetailsDestination"
         android:name="com.pechuro.bsuirschedule.feature.lessondetails.LessonDetailsFragment"
