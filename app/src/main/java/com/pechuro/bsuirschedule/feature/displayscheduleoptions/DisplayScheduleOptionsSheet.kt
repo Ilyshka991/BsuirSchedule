@@ -2,8 +2,11 @@ package com.pechuro.bsuirschedule.feature.displayscheduleoptions
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
+import androidx.navigation.fragment.navArgs
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
+import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
 import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 import com.pechuro.bsuirschedule.ext.nonNull
@@ -19,6 +22,8 @@ class DisplayScheduleOptionsSheet : BaseBottomSheetDialog() {
         initViewModel(DisplayScheduleOptionsViewModel::class)
     }
 
+    private val args: DisplayScheduleOptionsSheetArgs by navArgs()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeData()
@@ -26,6 +31,12 @@ class DisplayScheduleOptionsSheet : BaseBottomSheetDialog() {
     }
 
     private fun initView() {
+        when (args.schedule) {
+            is Schedule.EmployeeClasses -> {
+                displayOptionsSheetSubgroupButton.isVisible = false
+            }
+        }
+
         displayOptionsSheetTypeButton.setSafeClickListener {
             viewModel.setNextDisplayType()
         }

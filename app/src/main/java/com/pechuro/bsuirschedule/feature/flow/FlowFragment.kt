@@ -20,6 +20,7 @@ import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleContaine
 import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleEvent
 import com.pechuro.bsuirschedule.feature.displayscheduledatepicker.DisplayScheduleDatePickerSheetArgs
 import com.pechuro.bsuirschedule.feature.displayscheduledatepicker.ScheduleDatePickedEvent
+import com.pechuro.bsuirschedule.feature.displayscheduleoptions.DisplayScheduleOptionsSheetArgs
 import com.pechuro.bsuirschedule.feature.examdetails.ExamDetailsFragmentArgs
 import com.pechuro.bsuirschedule.feature.lessondetails.LessonDetailsFragmentArgs
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoCompleteEvent
@@ -87,7 +88,8 @@ class FlowFragment : BaseFragment() {
             openNavigationSheet()
         }
         bottomBarDisplayOptionsButton.setSafeClickListener {
-            openDisplayScheduleOptions()
+            val schedule = viewModel.getLastOpenedSchedule() ?: return@setSafeClickListener
+            openDisplayScheduleOptions(schedule)
         }
         bottomBarGoToDateButton.setSafeClickListener {
             EventBus.send(FlowFragmentEvent.DisplayScheduleGoToDate)
@@ -128,17 +130,17 @@ class FlowFragment : BaseFragment() {
 
     private fun openScheduleItemDetails(scheduleItem: ScheduleItem) {
         when (scheduleItem) {
-            is ILesson -> openScheduleLessonDetails(scheduleItem)
-            is IExam -> openScheduleExamDetails(scheduleItem)
+            is Lesson -> openScheduleLessonDetails(scheduleItem)
+            is Exam -> openScheduleExamDetails(scheduleItem)
         }
     }
 
-    private fun openScheduleExamDetails(exam: IExam) {
+    private fun openScheduleExamDetails(exam: Exam) {
         val arguments = ExamDetailsFragmentArgs(exam).toBundle()
         navController.navigate(R.id.examDetailsDestination, arguments, defaultNavOptions)
     }
 
-    private fun openScheduleLessonDetails(lesson: ILesson) {
+    private fun openScheduleLessonDetails(lesson: Lesson) {
         val arguments = LessonDetailsFragmentArgs(lesson).toBundle()
         navController.navigate(R.id.lessonDetailsDestination, arguments, defaultNavOptions)
     }
@@ -176,8 +178,9 @@ class FlowFragment : BaseFragment() {
         navController.navigate(R.id.addScheduleDestination, null, defaultNavOptions)
     }
 
-    private fun openDisplayScheduleOptions() {
-        navController.navigate(R.id.displayScheduleOptionsDestination, null, defaultNavOptions)
+    private fun openDisplayScheduleOptions(schedule: Schedule) {
+        val arguments = DisplayScheduleOptionsSheetArgs(schedule).toBundle()
+        navController.navigate(R.id.displayScheduleOptionsDestination, arguments, defaultNavOptions)
     }
 
     private fun openViewSchedule(schedule: Schedule, skipIfOpened: Boolean = true) {

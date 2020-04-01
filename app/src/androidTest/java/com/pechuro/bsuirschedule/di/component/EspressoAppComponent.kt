@@ -12,10 +12,11 @@ import dagger.Component
     ApplicationModule::class,
     AppViewModelsEspressoModule::class,
     NetworkModule::class,
-    SharedPreferencesModule::class,
     DatabaseModule::class,
     RepositoryModule::class,
-    IdlingResourceModule::class
+    IdlingResourceModule::class,
+    WorkerModule::class,
+    RecyclerViewModule::class
 ])
 interface EspressoAppComponent : AppComponent {
 

@@ -134,7 +134,7 @@ internal fun Schedule.GroupExams.toDatabaseEntity() = run {
 }
 
 
-internal fun ScheduleItem.GroupLesson.toDatabaseEntity(schedule: GroupClassesScheduleCached) = run {
+internal fun Lesson.GroupLesson.toDatabaseEntity(schedule: GroupClassesScheduleCached) = run {
     val scheduleItem = GroupItemClassesCached(
             scheduleName = schedule.name,
             subject = subject,
@@ -156,7 +156,7 @@ internal fun ScheduleItem.GroupLesson.toDatabaseEntity(schedule: GroupClassesSch
     )
 }
 
-internal fun ScheduleItem.GroupExam.toDatabaseEntity(schedule: GroupExamScheduleCached) = run {
+internal fun Exam.GroupExam.toDatabaseEntity(schedule: GroupExamScheduleCached) = run {
     val scheduleItem = GroupItemExamCached(
             scheduleName = schedule.name,
             subject = subject,
@@ -190,7 +190,7 @@ internal fun Schedule.EmployeeExams.toDatabaseEntity() = run {
     )
 }
 
-internal fun ScheduleItem.EmployeeLesson.toDatabaseEntity(schedule: EmployeeClassesScheduleCached) = run {
+internal fun Lesson.EmployeeLesson.toDatabaseEntity(schedule: EmployeeClassesScheduleCached) = run {
     val scheduleItem = EmployeeItemClassesCached(
             scheduleName = schedule.name,
             subject = subject,
@@ -212,7 +212,7 @@ internal fun ScheduleItem.EmployeeLesson.toDatabaseEntity(schedule: EmployeeClas
     )
 }
 
-internal fun ScheduleItem.EmployeeExam.toDatabaseEntity(schedule: EmployeeExamScheduleCached) = run {
+internal fun Exam.EmployeeExam.toDatabaseEntity(schedule: EmployeeExamScheduleCached) = run {
     val scheduleItem = EmployeeItemExamCached(
             scheduleName = schedule.name,
             subject = subject,

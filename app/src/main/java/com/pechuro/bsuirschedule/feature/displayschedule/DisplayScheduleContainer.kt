@@ -96,7 +96,8 @@ class DisplayScheduleContainer : BaseFragment() {
         displayScheduleContainerViewPager.registerOnPageChangeCallback(pageChangeCallback)
         val pagerAdapter = DisplaySchedulePagerAdapter(
                 hostFragment = this,
-                viewType = viewType
+                viewType = viewType,
+                startWeekNumber = viewModel.currentWeekNumber
         )
         this.pagerAdapter = pagerAdapter
         displayScheduleContainerViewPager.adapter = pagerAdapter
@@ -137,14 +138,12 @@ class DisplayScheduleContainer : BaseFragment() {
     private fun getViewType() = when (args.schedule) {
         is Schedule.GroupClasses, is Schedule.EmployeeClasses -> {
             when (val type = viewModel.displayTypeData.value) {
-                ScheduleDisplayType.DAYS -> DisplayScheduleViewType.DayClasses(
-                        startWeekNumber = viewModel.currentWeekNumber
-                )
-                ScheduleDisplayType.WEEKS -> DisplayScheduleViewType.WeekClasses
+                ScheduleDisplayType.DAYS -> DisplayScheduleViewType.DAY_CLASSES
+                ScheduleDisplayType.WEEKS -> DisplayScheduleViewType.WEEK_CLASSES
                 else -> throw IllegalArgumentException("Unknown display type: $type")
             }
         }
-        is Schedule.EmployeeExams, is Schedule.GroupExams -> DisplayScheduleViewType.Exams
+        is Schedule.EmployeeExams, is Schedule.GroupExams -> DisplayScheduleViewType.EXAMS
     }
 
     private fun onPositionChanged() {
@@ -157,12 +156,12 @@ class DisplayScheduleContainer : BaseFragment() {
     private fun getTabTitle(viewType: DisplayScheduleViewType, position: Int): String {
         val pagerAdapter = pagerAdapter ?: return ""
         return when (viewType) {
-            is DisplayScheduleViewType.DayClasses -> {
+            DisplayScheduleViewType.DAY_CLASSES -> {
                 val formattedDate = tabDayDateFormatter.format(pagerAdapter.getCalendarAt(position).time)
                 val weekNumber = pagerAdapter.getWeekNumberAt(position).index + 1
                 getString(R.string.display_schedule_tab_title, formattedDate, weekNumber)
             }
-            is DisplayScheduleViewType.WeekClasses -> {
+            DisplayScheduleViewType.WEEK_CLASSES -> {
                 tabWeekDateFormatter.format(pagerAdapter.getCalendarAt(position).time)
             }
             else -> throw IllegalArgumentException("Unsupported view type: $viewType")
