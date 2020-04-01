@@ -25,6 +25,8 @@ import com.pechuro.bsuirschedule.feature.examdetails.ExamDetailsFragmentArgs
 import com.pechuro.bsuirschedule.feature.lessondetails.LessonDetailsFragmentArgs
 import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoCompleteEvent
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
+import com.pechuro.bsuirschedule.feature.scheduleitemoptions.EditScheduleItemEvent
+import com.pechuro.bsuirschedule.feature.scheduleitemoptions.ScheduleItemOptionsSheetArgs
 import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetArgs
 import kotlinx.android.synthetic.main.fragment_flow.*
 import kotlinx.coroutines.Dispatchers
@@ -94,8 +96,9 @@ class FlowFragment : BaseFragment() {
         bottomBarGoToDateButton.setSafeClickListener {
             EventBus.send(FlowFragmentEvent.DisplayScheduleGoToDate)
         }
-        bottomBarDisplayAddButton.setSafeClickListener {
-            EventBus.send(FlowFragmentEvent.DisplayScheduleAddItem)
+        bottomBarAddScheduleItemButton.setSafeClickListener {
+            val schedule = viewModel.getLastOpenedSchedule() ?: return@setSafeClickListener
+            openAddScheduleItem(schedule)
         }
     }
 
@@ -120,12 +123,31 @@ class FlowFragment : BaseFragment() {
                 is NavigationSheetEvent.OnScheduleDeleted -> onScheduleDeleted(event.schedule)
                 is NavigationSheetEvent.OnOpenSettings -> {
                 }
-                is DisplayScheduleEvent.OpenScheduleItem -> openScheduleItemDetails(event.scheduleItem)
+                is DisplayScheduleEvent.OpenScheduleItemDetails -> openScheduleItemDetails(event.scheduleItem)
+                is DisplayScheduleEvent.OpenScheduleItemOptions -> openScheduleItemOptions(event.scheduleItem)
                 is DisplayScheduleEvent.OnPositionChanged -> onDisplaySchedulePositionChanged(event.position)
                 is DisplayScheduleEvent.OpenDatePicker -> openDatePicker(event.startDate, event.endDate, event.currentDate)
                 is ScheduleDatePickedEvent -> popFragment()
+                is EditScheduleItemEvent -> {
+                    popFragment()
+                    val schedule = viewModel.getLastOpenedSchedule() ?: return@receive
+                    openEditScheduleItem(schedule, event.scheduleItem)
+                }
             }
         }
+    }
+
+    private fun openScheduleItemOptions(scheduleItem: ScheduleItem) {
+        val arguments = ScheduleItemOptionsSheetArgs(scheduleItem).toBundle()
+        navController.navigate(R.id.scheduleItemOptionsDestination, arguments, defaultNavOptions)
+    }
+
+    private fun openAddScheduleItem(schedule: Schedule) {
+        //TODO: implement
+    }
+
+    private fun openEditScheduleItem(schedule: Schedule, scheduleItem: ScheduleItem) {
+        //TODO: implement
     }
 
     private fun openScheduleItemDetails(scheduleItem: ScheduleItem) {
@@ -250,17 +272,24 @@ class FlowFragment : BaseFragment() {
     private fun updateFabState() {
         val fabState = when (viewModel.getLastOpenedSchedule()) {
             is Schedule.EmployeeClasses, is Schedule.GroupClasses -> FabActionState.DISPLAY_SCHEDULE_BACK
-            is Schedule.EmployeeExams, is Schedule.GroupExams -> FabActionState.ADD_EXAM
-            else -> FabActionState.ADD_SCHEDULE
+            null -> FabActionState.ADD_SCHEDULE
+            else -> null
         }
-        if (fabState != FabActionState.DISPLAY_SCHEDULE_BACK) bottomBarFab.show()
-        bottomBarFab.setImageDrawable(ContextCompat.getDrawable(requireContext(), fabState.iconRes))
-        bottomBarFab.setSafeClickListener {
-            when (fabState) {
-                FabActionState.ADD_EXAM -> EventBus.send(FlowFragmentEvent.DisplayScheduleAddItem)
-                FabActionState.DISPLAY_SCHEDULE_BACK -> EventBus.send(FlowFragmentEvent.DisplayScheduleSetToday)
-                FabActionState.ADD_SCHEDULE -> openAddSchedule()
+        if (fabState == FabActionState.ADD_SCHEDULE) {
+            bottomBarFab.show()
+        } else {
+            bottomBarFab.hide()
+        }
+        if (fabState != null) {
+            bottomBarFab.setImageDrawable(ContextCompat.getDrawable(requireContext(), fabState.iconRes))
+            bottomBarFab.setSafeClickListener {
+                when (fabState) {
+                    FabActionState.DISPLAY_SCHEDULE_BACK -> EventBus.send(FlowFragmentEvent.DisplayScheduleSetToday)
+                    FabActionState.ADD_SCHEDULE -> openAddSchedule()
+                }
             }
+        } else {
+            bottomBarFab.setOnClickListener(null)
         }
     }
 
@@ -269,12 +298,17 @@ class FlowFragment : BaseFragment() {
             is Schedule.EmployeeClasses, is Schedule.GroupClasses -> {
                 bottomBarDisplayOptionsButton.isVisible = true
                 bottomBarGoToDateButton.isVisible = viewModel.getScheduleDisplayType() == ScheduleDisplayType.DAYS
-                bottomBarDisplayAddButton.isVisible = viewModel.getScheduleDisplayType() == ScheduleDisplayType.DAYS
+                bottomBarAddScheduleItemButton.isVisible = viewModel.getScheduleDisplayType() == ScheduleDisplayType.DAYS
+            }
+            is Schedule.EmployeeExams, is Schedule.GroupExams  -> {
+                bottomBarDisplayOptionsButton.isVisible = false
+                bottomBarGoToDateButton.isVisible = false
+                bottomBarAddScheduleItemButton.isVisible = true
             }
             else -> {
                 bottomBarDisplayOptionsButton.isVisible = false
                 bottomBarGoToDateButton.isVisible = false
-                bottomBarDisplayAddButton.isVisible = false
+                bottomBarAddScheduleItemButton.isVisible = false
             }
         }
     }

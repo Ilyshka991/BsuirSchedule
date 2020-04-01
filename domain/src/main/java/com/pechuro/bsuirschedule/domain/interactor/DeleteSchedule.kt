@@ -9,7 +9,7 @@ class DeleteSchedule @Inject constructor(
         private val scheduleRepository: IScheduleRepository
 ) : BaseInteractor<Unit, DeleteSchedule.Params>() {
 
-    override suspend fun run(params: Params) = scheduleRepository.delete(params.schedule)
+    override suspend fun run(params: Params) = scheduleRepository.deleteSchedule(params.schedule)
 
     data class Params(val schedule: Schedule)
 }

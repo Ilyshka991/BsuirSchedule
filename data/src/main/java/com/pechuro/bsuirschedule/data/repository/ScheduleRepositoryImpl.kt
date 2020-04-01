@@ -140,78 +140,19 @@ class ScheduleRepositoryImpl(
     }
 
     override suspend fun loadGroupSchedule(group: Group, types: List<ScheduleType>): List<Schedule> {
-        val auditories = buildingRepository.getAllAuditories().first()
-        val departments = specialityRepository.getAllDepartments().first()
-
-        val scheduleDTO = performApiCall { api.getStudentSchedule(group.id) }
-        val lastUpdatedDate: Date = performApiCallCatching(Date(0)) {
-            api.getLastUpdateDate(group.number).toDomainEntity()
-        }
-
-        return types.map { type ->
-            when (type) {
-                ScheduleType.CLASSES -> {
-                    val itemsDTOList = scheduleDTO.schedule ?: emptyList()
-                    val schedule = Schedule.GroupClasses(
-                            name = group.number,
-                            lastUpdatedDate = lastUpdatedDate,
-                            group = group,
-                            notRemindForUpdates = false
-                    )
-                    val items = itemsDTOList.toGroupLessons(auditories, departments)
-
-                    storeSchedule(schedule, items)
-                    schedule
-                }
-                ScheduleType.EXAMS -> {
-                    val itemsDTOList = scheduleDTO.exam ?: emptyList()
-                    val schedule = Schedule.GroupExams(
-                            name = group.number,
-                            lastUpdatedDate = lastUpdatedDate,
-                            group = group,
-                            notRemindForUpdates = false
-                    )
-                    val items = itemsDTOList.toGroupExams(auditories, departments)
-
-                    storeSchedule(schedule, items)
-                    schedule
-                }
-            }
-        }
+        return loadGroupScheduleInternal(
+                group = group,
+                types = types,
+                update = false
+        )
     }
 
     override suspend fun loadEmployeeSchedule(employee: Employee, types: List<ScheduleType>): List<Schedule> {
-        val groups = groupRepository.getAll().first()
-        val auditories = buildingRepository.getAllAuditories().first()
-
-        val scheduleDTO = performApiCall { api.getEmployeeSchedule(employee.id) }
-
-        return types.map { type ->
-            when (type) {
-                ScheduleType.CLASSES -> {
-                    val itemsDTOList = scheduleDTO.schedule ?: emptyList()
-                    val schedule = Schedule.EmployeeClasses(
-                            name = employee.abbreviation,
-                            employee = employee
-                    )
-                    val items = itemsDTOList.toEmployeeLessons(groups, auditories)
-
-                    storeSchedule(schedule, items)
-                    schedule
-                }
-                ScheduleType.EXAMS -> {
-                    val itemsDTOList = scheduleDTO.exam ?: emptyList()
-                    val schedule = Schedule.EmployeeExams(
-                            name = employee.abbreviation,
-                            employee = employee
-                    )
-                    val items = itemsDTOList.toEmployeeExams(groups, auditories)
-
-                    storeSchedule(schedule, items)
-                    schedule
-                }
-            }
-        }
+        return loadEmployeeScheduleInternal(
+                employee = employee,
+                types = types,
+                update = false
+        )
     }
 
     override suspend fun updateAll() {
@@ -222,10 +163,26 @@ class ScheduleRepositoryImpl(
 
     override suspend fun update(schedule: Schedule) {
         when (schedule) {
-            is Schedule.GroupClasses -> loadGroupSchedule(schedule.group, listOf(ScheduleType.CLASSES))
-            is Schedule.GroupExams -> loadGroupSchedule(schedule.group, listOf(ScheduleType.EXAMS))
-            is Schedule.EmployeeClasses -> loadEmployeeSchedule(schedule.employee, listOf(ScheduleType.CLASSES))
-            is Schedule.EmployeeExams -> loadEmployeeSchedule(schedule.employee, listOf(ScheduleType.EXAMS))
+            is Schedule.GroupClasses -> loadGroupScheduleInternal(
+                    group = schedule.group,
+                    types = listOf(ScheduleType.CLASSES),
+                    update = true
+            )
+            is Schedule.GroupExams -> loadGroupScheduleInternal(
+                    group = schedule.group,
+                    types = listOf(ScheduleType.EXAMS),
+                    update = true
+            )
+            is Schedule.EmployeeClasses -> loadEmployeeScheduleInternal(
+                    employee = schedule.employee,
+                    types = listOf(ScheduleType.CLASSES),
+                    update = true
+            )
+            is Schedule.EmployeeExams -> loadEmployeeScheduleInternal(
+                    employee = schedule.employee,
+                    types = listOf(ScheduleType.EXAMS),
+                    update = true
+            )
         }
     }
 
@@ -264,7 +221,7 @@ class ScheduleRepositoryImpl(
         else -> false
     }
 
-    override suspend fun delete(schedule: Schedule) {
+    override suspend fun deleteSchedule(schedule: Schedule) {
         performDaoCall {
             when (schedule) {
                 is Schedule.GroupClasses -> dao.deleteGroupClassesSchedule(schedule.name)
@@ -275,7 +232,19 @@ class ScheduleRepositoryImpl(
         }
     }
 
-    override suspend fun deleteAll() {
+    override suspend fun deleteScheduleItem(scheduleItem: ScheduleItem) {
+        performDaoCall {
+            val id = scheduleItem.id
+            when (scheduleItem) {
+                is Lesson.GroupLesson -> dao.deleteGroupClassesItem(id)
+                is Lesson.EmployeeLesson -> dao.deleteEmployeeClassesItem(id)
+                is Exam.GroupExam -> dao.deleteGroupExamItem(id)
+                is Exam.EmployeeExam -> dao.deleteEmployeeExamItem(id)
+            }
+        }
+    }
+
+    override suspend fun deleteAllSchedules() {
         withContext(coroutineContext) {
             listOf(
                     async { performDaoCall { dao.deleteAllGroupClassesSchedules() } },
@@ -284,42 +253,152 @@ class ScheduleRepositoryImpl(
                     async { performDaoCall { dao.deleteAllEmployeeExamSchedules() } }
             ).awaitAll()
         }
-
     }
 
-    override suspend fun getCurrentWeek(): Int {
-        TODO("not implemented")
-    }
+    private suspend fun loadGroupScheduleInternal(
+            group: Group,
+            types: List<ScheduleType>,
+            update: Boolean
+    ): List<Schedule> {
+        val auditories = buildingRepository.getAllAuditories().first()
+        val departments = specialityRepository.getAllDepartments().first()
 
-    private suspend fun storeSchedule(schedule: Schedule.GroupClasses, items: List<Lesson.GroupLesson>) {
-        val cachedSchedule = schedule.toDatabaseEntity()
-        val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }
-        performDaoCall {
-            dao.insertGroupClassesSchedule(cachedSchedule, cachedItems)
+        val scheduleDTO = performApiCall { api.getStudentSchedule(group.id) }
+        val lastUpdatedDate: Date = performApiCallCatching(Date(0)) {
+            api.getLastUpdateDate(group.number).toDomainEntity()
+        }
+
+        return types.map { type ->
+            when (type) {
+                ScheduleType.CLASSES -> {
+                    val itemsDTOList = scheduleDTO.schedule ?: emptyList()
+                    val schedule = Schedule.GroupClasses(
+                            name = group.number,
+                            lastUpdatedDate = lastUpdatedDate,
+                            group = group,
+                            notRemindForUpdates = false
+                    )
+                    val items = itemsDTOList.toGroupLessons(auditories, departments)
+
+                    storeSchedule(schedule, items, update)
+                    schedule
+                }
+                ScheduleType.EXAMS -> {
+                    val itemsDTOList = scheduleDTO.exam ?: emptyList()
+                    val schedule = Schedule.GroupExams(
+                            name = group.number,
+                            lastUpdatedDate = lastUpdatedDate,
+                            group = group,
+                            notRemindForUpdates = false
+                    )
+                    val items = itemsDTOList.toGroupExams(auditories, departments)
+
+                    storeSchedule(schedule, items, update)
+                    schedule
+                }
+            }
         }
     }
 
-    private suspend fun storeSchedule(schedule: Schedule.GroupExams, items: List<Exam.GroupExam>) {
-        val cachedSchedule = schedule.toDatabaseEntity()
-        val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }
-        performDaoCall {
-            dao.insertGroupExamsSchedule(cachedSchedule, cachedItems)
+    private suspend fun loadEmployeeScheduleInternal(
+            employee: Employee,
+            types: List<ScheduleType>,
+            update: Boolean
+    ): List<Schedule> {
+        val groups = groupRepository.getAll().first()
+        val auditories = buildingRepository.getAllAuditories().first()
+
+        val scheduleDTO = performApiCall { api.getEmployeeSchedule(employee.id) }
+
+        return types.map { type ->
+            when (type) {
+                ScheduleType.CLASSES -> {
+                    val itemsDTOList = scheduleDTO.schedule ?: emptyList()
+                    val schedule = Schedule.EmployeeClasses(
+                            name = employee.abbreviation,
+                            employee = employee
+                    )
+                    val items = itemsDTOList.toEmployeeLessons(groups, auditories)
+
+                    storeSchedule(schedule, items, update)
+                    schedule
+                }
+                ScheduleType.EXAMS -> {
+                    val itemsDTOList = scheduleDTO.exam ?: emptyList()
+                    val schedule = Schedule.EmployeeExams(
+                            name = employee.abbreviation,
+                            employee = employee
+                    )
+                    val items = itemsDTOList.toEmployeeExams(groups, auditories)
+
+                    storeSchedule(schedule, items, update)
+                    schedule
+                }
+            }
         }
     }
 
-    private suspend fun storeSchedule(schedule: Schedule.EmployeeClasses, items: List<Lesson.EmployeeLesson>) {
+    private suspend fun storeSchedule(
+            schedule: Schedule.GroupClasses,
+            items: List<Lesson.GroupLesson>,
+            update: Boolean
+    ) {
         val cachedSchedule = schedule.toDatabaseEntity()
         val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }
         performDaoCall {
-            dao.insertEmployeeClassesSchedule(cachedSchedule, cachedItems)
+            if (update) {
+                dao.updateGroupClassesSchedule(cachedSchedule, cachedItems)
+            } else {
+                dao.insertGroupClassesSchedule(cachedSchedule, cachedItems)
+            }
         }
     }
 
-    private suspend fun storeSchedule(schedule: Schedule.EmployeeExams, items: List<Exam.EmployeeExam>) {
+    private suspend fun storeSchedule(
+            schedule: Schedule.GroupExams,
+            items: List<Exam.GroupExam>,
+            update: Boolean
+    ) {
         val cachedSchedule = schedule.toDatabaseEntity()
         val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }
         performDaoCall {
-            dao.insertEmployeeExamsSchedule(cachedSchedule, cachedItems)
+            if (update) {
+                dao.updateGroupExamsSchedule(cachedSchedule, cachedItems)
+            } else {
+                dao.insertGroupExamsSchedule(cachedSchedule, cachedItems)
+            }
+        }
+    }
+
+    private suspend fun storeSchedule(
+            schedule: Schedule.EmployeeClasses,
+            items: List<Lesson.EmployeeLesson>,
+            update: Boolean
+    ) {
+        val cachedSchedule = schedule.toDatabaseEntity()
+        val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }
+        performDaoCall {
+            if (update) {
+                dao.updateEmployeeClassesSchedule(cachedSchedule, cachedItems)
+            } else {
+                dao.insertEmployeeClassesSchedule(cachedSchedule, cachedItems)
+            }
+        }
+    }
+
+    private suspend fun storeSchedule(
+            schedule: Schedule.EmployeeExams,
+            items: List<Exam.EmployeeExam>,
+            update: Boolean
+    ) {
+        val cachedSchedule = schedule.toDatabaseEntity()
+        val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }
+        performDaoCall {
+            if (update) {
+                dao.updateEmployeeExamsSchedule(cachedSchedule, cachedItems)
+            } else {
+                dao.insertEmployeeExamsSchedule(cachedSchedule, cachedItems)
+            }
         }
     }
 }

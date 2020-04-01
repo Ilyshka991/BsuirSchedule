@@ -11,4 +11,5 @@ interface ScheduleItem : Parcelable {
     val startTime: String
     val endTime: String
     val auditories: List<Auditory>
+    val isAddedByUser: Boolean
 }

@@ -163,7 +163,8 @@ internal fun GroupClassesItemComplex.toDomainEntity(
             weekNumber = WeekNumber.getForIndex(scheduleItem.weekNumber),
             auditories = auditories,
             employees = employees,
-            priority = LessonPriority.getForValue(scheduleItem.priority)
+            priority = LessonPriority.getForValue(scheduleItem.priority),
+            isAddedByUser = scheduleItem.isAddedByUser
     )
 }
 
@@ -181,7 +182,8 @@ internal fun GroupExamItemComplex.toDomainEntity(
             endTime = scheduleItem.endTime,
             date = scheduleItem.date,
             auditories = auditories,
-            employees = employees
+            employees = employees,
+            isAddedByUser = scheduleItem.isAddedByUser
     )
 }
 
@@ -202,7 +204,8 @@ internal fun EmployeeClassesItemComplex.toDomainEntity(
             weekNumber = WeekNumber.getForIndex(scheduleItem.weekNumber),
             auditories = auditories,
             studentGroups = groups,
-            priority = LessonPriority.getForValue(scheduleItem.priority)
+            priority = LessonPriority.getForValue(scheduleItem.priority),
+            isAddedByUser = scheduleItem.isAddedByUser
     )
 }
 
@@ -220,6 +223,7 @@ internal fun EmployeeExamItemComplex.toDomainEntity(
             endTime = scheduleItem.endTime,
             date = scheduleItem.date,
             auditories = auditories,
-            studentGroups = groups
+            studentGroups = groups,
+            isAddedByUser = scheduleItem.isAddedByUser
     )
 }

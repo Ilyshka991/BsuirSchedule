@@ -33,5 +33,7 @@ data class GroupItemExamCached(
         @ColumnInfo(name = "end_time")
         val endTime: String,
         @ColumnInfo(name = "week_day")
-        val date: Date
+        val date: Date,
+        @ColumnInfo(name = "is_added_by_user")
+        val isAddedByUser: Boolean
 )

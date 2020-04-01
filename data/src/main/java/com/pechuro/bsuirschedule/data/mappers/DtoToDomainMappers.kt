@@ -131,7 +131,8 @@ internal fun List<ScheduleItemDTO>.toGroupLessons(
                         employees = lessonEmployees ?: emptyList(),
                         weekDay = getWeekDayFor(scheduleItem.weekDay),
                         weekNumber = weekNumber,
-                        priority = LessonPriority.getDefaultForLessonType(lessonType)
+                        priority = LessonPriority.getDefaultForLessonType(lessonType),
+                        isAddedByUser = false
                 )
                 resultList.add(mappedScheduleItem)
             }
@@ -167,7 +168,8 @@ internal fun List<ScheduleItemDTO>.toGroupExams(
                     startTime = lesson.startTime ?: "",
                     endTime = lesson.endTime ?: "",
                     employees = lessonEmployees ?: emptyList(),
-                    date = dateFormatter.parseOrDefault(scheduleItem.weekDay, Date())
+                    date = dateFormatter.parseOrDefault(scheduleItem.weekDay, Date()),
+                    isAddedByUser = false
             )
             resultList.add(mappedScheduleItem)
         }
@@ -203,7 +205,8 @@ internal fun List<ScheduleItemDTO>.toEmployeeLessons(
                         endTime = lesson.endTime ?: "",
                         weekDay = getWeekDayFor(scheduleItem.weekDay),
                         studentGroups = lessonGroups ?: emptyList(),
-                        priority = LessonPriority.getDefaultForLessonType(lessonType)
+                        priority = LessonPriority.getDefaultForLessonType(lessonType),
+                        isAddedByUser = false
                 )
                 resultList.add(mappedScheduleItem)
             }
@@ -236,7 +239,8 @@ internal fun List<ScheduleItemDTO>.toEmployeeExams(
                     startTime = lesson.startTime ?: "",
                     endTime = lesson.endTime ?: "",
                     studentGroups = lessonGroups ?: emptyList(),
-                    date = dateFormatter.parseOrDefault(scheduleItem.weekDay, Date())
+                    date = dateFormatter.parseOrDefault(scheduleItem.weekDay, Date()),
+                    isAddedByUser = false
             )
             resultList.add(mappedScheduleItem)
         }

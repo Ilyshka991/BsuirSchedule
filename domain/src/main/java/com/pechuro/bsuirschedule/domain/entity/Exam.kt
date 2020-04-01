@@ -17,6 +17,7 @@ sealed class Exam(
             override val startTime: String,
             override val endTime: String,
             override val auditories: List<Auditory>,
+            override val isAddedByUser: Boolean,
             override val date: Date,
             val employees: List<Employee>
     ) : Exam(
@@ -33,6 +34,7 @@ sealed class Exam(
             override val startTime: String,
             override val endTime: String,
             override val auditories: List<Auditory>,
+            override val isAddedByUser: Boolean,
             override val date: Date,
             val studentGroups: List<Group>
     ) : Exam(
