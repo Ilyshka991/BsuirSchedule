@@ -110,11 +110,15 @@ class FlowFragment : BaseFragment() {
     }
 
     private fun receiveEvents() {
-        EventBus.receive<BaseEvent>(lifecycleScope) { event ->
+        EventBus.receive<BaseEvent>(eventCoroutineScope) { event ->
             when (event) {
                 is LoadInfoCompleteEvent -> popFragment()
                 is AddScheduleCompleteEvent -> {
-                    event.schedules.firstOrNull()?.let { schedule ->
+                    val schedules = event.schedules
+                    if (schedules.isEmpty()) {
+                        popFragment()
+                    } else {
+                        val schedule = schedules.first()
                         openViewSchedule(schedule, skipIfOpened = false)
                     }
                 }
@@ -300,7 +304,7 @@ class FlowFragment : BaseFragment() {
                 bottomBarGoToDateButton.isVisible = viewModel.getScheduleDisplayType() == ScheduleDisplayType.DAYS
                 bottomBarAddScheduleItemButton.isVisible = viewModel.getScheduleDisplayType() == ScheduleDisplayType.DAYS
             }
-            is Schedule.EmployeeExams, is Schedule.GroupExams  -> {
+            is Schedule.EmployeeExams, is Schedule.GroupExams -> {
                 bottomBarDisplayOptionsButton.isVisible = false
                 bottomBarGoToDateButton.isVisible = false
                 bottomBarAddScheduleItemButton.isVisible = true
@@ -314,10 +318,12 @@ class FlowFragment : BaseFragment() {
     }
 
     private fun onDisplaySchedulePositionChanged(position: Int) {
-        if (position != 0) {
-            bottomBarFab.show()
-        } else {
-            bottomBarFab.hide()
+        requireView().post {
+            if (position != 0) {
+                bottomBarFab.show()
+            } else {
+                bottomBarFab.hide()
+            }
         }
     }
 }

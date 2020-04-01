@@ -3,7 +3,6 @@ package com.pechuro.bsuirschedule.feature.displayschedule
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
@@ -72,7 +71,7 @@ class DisplayScheduleContainer : BaseFragment() {
     }
 
     private fun observeData() {
-        EventBus.receive<BaseEvent>(lifecycleScope) { event ->
+        EventBus.receive<BaseEvent>(eventCoroutineScope) { event ->
             when (event) {
                 is FlowFragmentEvent.DisplayScheduleSetToday -> setFirstDay()
                 is FlowFragmentEvent.DisplayScheduleGoToDate -> openDatePicker()

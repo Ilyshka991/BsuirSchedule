@@ -99,7 +99,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
                 val lessonTypeColor = itemView.context.color(priority.colorRes)
                 ViewCompat.setBackgroundTintList(displayClassesLessonType, ColorStateList.valueOf(lessonTypeColor))
                 displayClassesTitle.text = subject
-                displayClassesAuditories.text = auditories.joinToString(separator = ",") { "${it.name}-${it.building.name}" }
+                displayClassesAuditories.text = auditories.formatAuditories()
                 displayClassesSubgroup.isVisible = subgroupNumber != SubgroupNumber.ALL
                 displayClassesSubgroup.text = itemView.context.getString(R.string.display_schedule_item_msg_subgroup, subgroupNumber.value)
                 displayClassesStartTime.text = startTime
@@ -110,12 +110,12 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
                     displayClassesWeeks.isVisible = data.weekNumbers.size != WeekNumber.TOTAL_COUNT
                     displayClassesWeeks.text = itemView.context.getString(
                             R.string.display_schedule_item_msg_week_numbers,
-                            data.weekNumbers.joinToString(separator = ",") { it.index.plus(1).toString() }
+                            data.weekNumbers.formatWeekNumbers()
                     )
                 }
                 val info = when (scheduleItem) {
-                    is Lesson.GroupLesson -> scheduleItem.employees.joinToString(separator = ",") { it.abbreviation }
-                    is Lesson.EmployeeLesson -> scheduleItem.studentGroups.joinToString(separator = ",") { it.number }
+                    is Lesson.GroupLesson -> scheduleItem.employees.formatEmployees()
+                    is Lesson.EmployeeLesson -> scheduleItem.studentGroups.formatGroupNumbers()
                 }
                 displayClassesInfo.text = info
 
@@ -137,7 +137,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
             val scheduleItem = data.scheduleItem
             data.scheduleItem.run {
                 displayExamStartTime.text = startTime
-                displayExamAuditories.text = auditories.joinToString(separator = ",") { "${it.name}-${it.building.name}" }
+                displayExamAuditories.text = auditories.formatAuditories()
                 displayExamTitle.text = subject
                 displayExamDate.text = dateFormatter.format(date)
                 displayExamSubgroup.isVisible = subgroupNumber != SubgroupNumber.ALL
@@ -149,9 +149,8 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
                 displayExamsNote.isVisible = note.isNotEmpty() && note.isNotBlank()
                 displayExamsNote.text = note
                 val info = when (scheduleItem) {
-                    is Exam.EmployeeExam -> scheduleItem.studentGroups.joinToString(separator = ",") { it.number }
-                    is Exam.GroupExam -> scheduleItem.employees.joinToString(separator = ",") { it.abbreviation }
-                    else -> ""
+                    is Exam.EmployeeExam -> scheduleItem.studentGroups.formatGroupNumbers()
+                    is Exam.GroupExam -> scheduleItem.employees.formatEmployees()
                 }
                 displayExamInfo.text = info
 
@@ -165,3 +164,23 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
         override fun onBind(data: DisplayScheduleItem.Empty) {}
     }
 }
+
+private fun List<WeekNumber>.formatWeekNumbers() = joinToString(separator = ",") { it.index.plus(1).toString() }
+
+private fun List<Auditory>.formatAuditories() = joinToString(separator = ",") { "${it.name}-${it.building.name}" }
+
+private fun List<Employee>.formatEmployees() = joinToString(separator = ",") { it.abbreviation }
+
+private fun List<Group>.formatGroupNumbers() = asSequence()
+        .map { it.number }
+        .filter { it.isNotEmpty() }
+        .map { it.take(it.lastIndex) to it }
+        .groupBy(keySelector = { it.first }, valueTransform = { it.second })
+        .map { (commonPart, groupNumbers) ->
+            if (groupNumbers.size > 1) {
+                "${commonPart}X"
+            } else {
+                groupNumbers.firstOrNull() ?: ""
+            }
+        }
+        .joinToString(separator = ",") { it }
