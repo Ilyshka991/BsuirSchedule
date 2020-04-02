@@ -79,9 +79,7 @@ class DisplayScheduleViewModel @Inject constructor(
         is DayClasses -> scheduleItems.mapToDayClasses(info.weekDay, info.weekNumber, subgroupNumber)
         is WeekClasses -> scheduleItems.mapToWeekClasses(info.weekDay, subgroupNumber)
         is DisplayScheduleItemInfo.Exams -> scheduleItems.mapToExams()
-    }
-            .sortedBy { it.scheduleItem?.startTime }
-            .addIfEmpty(DisplayScheduleItem.Empty)
+    }.addIfEmpty(DisplayScheduleItem.Empty)
 
     private fun List<ScheduleItem>.mapToDayClasses(
             weekDay: WeekDay,
@@ -101,6 +99,7 @@ class DisplayScheduleViewModel @Inject constructor(
                     else -> it.subgroupNumber == subgroupNumber
                 }
             }
+            .sortedBy { it.startTime }
             .map(DisplayScheduleItem::DayClasses)
             .toList()
 
@@ -132,9 +131,11 @@ class DisplayScheduleViewModel @Inject constructor(
                 )
             }
             .toList()
+            .sortedBy { it.scheduleItem.startTime }
 
     private fun List<ScheduleItem>.mapToExams(): List<DisplayScheduleItem.Exams> = this
             .filterIsInstance<Exam>()
+            .sortedBy { it.date }
             .map(DisplayScheduleItem::Exams)
 
     private fun calculateCurrentWeekNumber(): WeekNumber {
