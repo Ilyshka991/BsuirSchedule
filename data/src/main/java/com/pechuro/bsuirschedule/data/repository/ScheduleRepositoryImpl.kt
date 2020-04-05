@@ -97,44 +97,60 @@ class ScheduleRepositoryImpl(
     override suspend fun getScheduleItems(schedule: Schedule): Flow<List<ScheduleItem>> {
         return when (schedule) {
             is Schedule.GroupClasses -> dao.getGroupClassesItems(schedule.name).map { list ->
-                list.map { item ->
-                    val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
-                    val employees = item.employees.map { employeeRepository.getById(it.id) }
-                    item.toDomainEntity(
-                            auditories = auditories,
-                            employees = employees
-                    )
-                }
+                withContext(Dispatchers.IO) {
+                    list.map { item ->
+                        async {
+                            val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
+                            val employees = item.employees.map { employeeRepository.getById(it.id) }
+                            item.toDomainEntity(
+                                    auditories = auditories,
+                                    employees = employees
+                            )
+                        }
+                    }
+                }.awaitAll()
             }
             is Schedule.GroupExams -> dao.getGroupExamItems(schedule.name).map { list ->
-                list.map { item ->
-                    val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
-                    val employees = item.employees.map { employeeRepository.getById(it.id) }
-                    item.toDomainEntity(
-                            auditories = auditories,
-                            employees = employees
-                    )
+                withContext(Dispatchers.IO) {
+                    list.map { item ->
+                        async {
+                            val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
+                            val employees = item.employees.map { employeeRepository.getById(it.id) }
+                            item.toDomainEntity(
+                                    auditories = auditories,
+                                    employees = employees
+                            )
+                        }
+                    }.awaitAll()
                 }
             }
             is Schedule.EmployeeClasses -> dao.getEmployeeClassesItems(schedule.name).map { list ->
-                list.map { item ->
-                    val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
-                    val groups = item.groups.map { groupRepository.getById(it.id) }
-                    item.toDomainEntity(
-                            auditories = auditories,
-                            groups = groups
-                    )
-                }
+                withContext(Dispatchers.IO) {
+                    list.map { item ->
+                        async {
+                            val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
+                            val groups = item.groups.map { groupRepository.getById(it.id) }
+                            item.toDomainEntity(
+                                    auditories = auditories,
+                                    groups = groups
+                            )
+                        }
+                    }
+                }.awaitAll()
             }
             is Schedule.EmployeeExams -> dao.getEmployeeExamItems(schedule.name).map { list ->
-                list.map { item ->
-                    val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
-                    val groups = item.groups.map { groupRepository.getById(it.id) }
-                    item.toDomainEntity(
-                            auditories = auditories,
-                            groups = groups
-                    )
-                }
+                withContext(Dispatchers.IO) {
+                    list.map { item ->
+                        async {
+                            val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
+                            val groups = item.groups.map { groupRepository.getById(it.id) }
+                            item.toDomainEntity(
+                                    auditories = auditories,
+                                    groups = groups
+                            )
+                        }
+                    }
+                }.awaitAll()
             }
         }
     }
@@ -147,7 +163,10 @@ class ScheduleRepositoryImpl(
         )
     }
 
-    override suspend fun loadEmployeeSchedule(employee: Employee, types: List<ScheduleType>): List<Schedule> {
+    override suspend fun loadEmployeeSchedule(
+            employee: Employee,
+            types: List<ScheduleType>
+    ): List<Schedule> {
         return loadEmployeeScheduleInternal(
                 employee = employee,
                 types = types,
@@ -257,9 +276,11 @@ class ScheduleRepositoryImpl(
 
     private suspend fun loadGroupScheduleInternal(
             group: Group,
-            types: List<ScheduleType>,
+            types: List<ScheduleType>
+            ,
             update: Boolean
-    ): List<Schedule> {
+    )
+            : List<Schedule> {
         val auditories = buildingRepository.getAllAuditories().first()
         val departments = specialityRepository.getAllDepartments().first()
 
@@ -339,8 +360,10 @@ class ScheduleRepositoryImpl(
     }
 
     private suspend fun storeSchedule(
-            schedule: Schedule.GroupClasses,
-            items: List<Lesson.GroupLesson>,
+            schedule: Schedule.GroupClasses
+            ,
+            items: List<Lesson.GroupLesson>
+            ,
             update: Boolean
     ) {
         val cachedSchedule = schedule.toDatabaseEntity()
@@ -371,8 +394,10 @@ class ScheduleRepositoryImpl(
     }
 
     private suspend fun storeSchedule(
-            schedule: Schedule.EmployeeClasses,
-            items: List<Lesson.EmployeeLesson>,
+            schedule: Schedule.EmployeeClasses
+            ,
+            items: List<Lesson.EmployeeLesson>
+            ,
             update: Boolean
     ) {
         val cachedSchedule = schedule.toDatabaseEntity()
