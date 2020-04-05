@@ -10,10 +10,13 @@ import com.pechuro.bsuirschedule.domain.repository.ISpecialityRepository
 import com.pechuro.bsuirschedule.local.dao.EmployeeDao
 import com.pechuro.bsuirschedule.remote.api.StaffApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 class EmployeeRepositoryImpl(
         private val dao: EmployeeDao,
@@ -66,10 +69,18 @@ class EmployeeRepositoryImpl(
 
     private suspend fun getEmployeesFromDao() = dao.getAll()
             .map { cachedList ->
-                cachedList.map { employeeCached ->
-                    val department = specialityRepository.getDepartmentById(employeeCached.departmentId)
-                    employeeCached.toDomainEntity(department)
+                withContext(Dispatchers.IO) {
+                    val allDepartments = specialityRepository.getAllDepartments().first()
+                    cachedList.map { employeeCached ->
+                        async {
+                            val department = allDepartments.find { it.id == employeeCached.departmentId }
+                                    ?: return@async null
+                            employeeCached.toDomainEntity(department)
+                        }
+                    }
                 }
+                        .awaitAll()
+                        .filterNotNull()
             }
             .flowOn(Dispatchers.IO)
 
