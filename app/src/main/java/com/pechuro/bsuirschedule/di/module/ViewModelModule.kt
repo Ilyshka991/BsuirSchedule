@@ -6,12 +6,13 @@ import com.pechuro.bsuirschedule.common.factory.ViewModelFactory
 import com.pechuro.bsuirschedule.di.annotations.ViewModelKey
 import com.pechuro.bsuirschedule.feature.addSchedule.AddScheduleViewModel
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel
-import com.pechuro.bsuirschedule.feature.scheduleOptions.DisplayScheduleOptionsViewModel
 import com.pechuro.bsuirschedule.feature.flow.FlowViewModel
+import com.pechuro.bsuirschedule.feature.itemOptions.ScheduleItemOptionsViewModel
 import com.pechuro.bsuirschedule.feature.lessonDetails.LessonDetailsViewModel
 import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoViewModel
+import com.pechuro.bsuirschedule.feature.modifyScheduleItem.ModifyScheduleItemViewModel
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetViewModel
-import com.pechuro.bsuirschedule.feature.itemOptions.ScheduleItemOptionsViewModel
+import com.pechuro.bsuirschedule.feature.scheduleOptions.DisplayScheduleOptionsViewModel
 import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheetViewModel
 import dagger.Binds
 import dagger.Module
@@ -67,4 +68,9 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(ScheduleItemOptionsViewModel::class)
     fun scheduleItemOptions(viewModel: ScheduleItemOptionsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ModifyScheduleItemViewModel::class)
+    fun modifyScheduleItem(viewModel: ModifyScheduleItemViewModel): ViewModel
 }

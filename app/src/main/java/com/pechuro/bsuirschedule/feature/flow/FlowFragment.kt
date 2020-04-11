@@ -16,17 +16,18 @@ import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.addSchedule.AddScheduleCompleteEvent
-import com.pechuro.bsuirschedule.feature.display.DisplayScheduleContainerArgs
-import com.pechuro.bsuirschedule.feature.display.DisplayScheduleEvent
 import com.pechuro.bsuirschedule.feature.datepicker.DisplayScheduleDatePickerSheetArgs
 import com.pechuro.bsuirschedule.feature.datepicker.ScheduleDatePickedEvent
-import com.pechuro.bsuirschedule.feature.scheduleOptions.DisplayScheduleOptionsSheetArgs
+import com.pechuro.bsuirschedule.feature.display.DisplayScheduleContainerArgs
+import com.pechuro.bsuirschedule.feature.display.DisplayScheduleEvent
 import com.pechuro.bsuirschedule.feature.examDetails.ExamDetailsFragmentArgs
-import com.pechuro.bsuirschedule.feature.lessonDetails.LessonDetailsFragmentArgs
-import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoCompleteEvent
-import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
 import com.pechuro.bsuirschedule.feature.itemOptions.EditScheduleItemEvent
 import com.pechuro.bsuirschedule.feature.itemOptions.ScheduleItemOptionsSheetArgs
+import com.pechuro.bsuirschedule.feature.lessonDetails.LessonDetailsFragmentArgs
+import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoCompleteEvent
+import com.pechuro.bsuirschedule.feature.modifyScheduleItem.ModifyScheduleItemFragmentArgs
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
+import com.pechuro.bsuirschedule.feature.scheduleOptions.DisplayScheduleOptionsSheetArgs
 import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheetArgs
 import kotlinx.android.synthetic.main.fragment_flow.*
 import kotlinx.coroutines.Dispatchers
@@ -147,11 +148,19 @@ class FlowFragment : BaseFragment() {
     }
 
     private fun openAddScheduleItem(schedule: Schedule) {
-        //TODO: implement
+        val arguments = ModifyScheduleItemFragmentArgs(
+                schedule = schedule,
+                item = null
+        ).toBundle()
+        navController.navigate(R.id.modifyScheduleItemDestination, arguments, defaultNavOptions)
     }
 
     private fun openEditScheduleItem(schedule: Schedule, scheduleItem: ScheduleItem) {
-        //TODO: implement
+        val arguments = ModifyScheduleItemFragmentArgs(
+                schedule = schedule,
+                item = scheduleItem
+        ).toBundle()
+        navController.navigate(R.id.modifyScheduleItemDestination, arguments, defaultNavOptions)
     }
 
     private fun openScheduleItemDetails(scheduleItem: ScheduleItem) {
@@ -264,6 +273,7 @@ class FlowFragment : BaseFragment() {
     private fun updateLayoutState() {
         val isControlsVisible = when (navController.currentDestination?.id) {
             R.id.addScheduleDestination,
+            R.id.modifyScheduleItemDestination,
             R.id.loadInfoDestination -> false
             else -> true
         }

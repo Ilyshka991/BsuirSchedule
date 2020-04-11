@@ -63,4 +63,9 @@
     <string name="schedule_item_options_sheet_title">Actions for %1$s:</string>
     <string name="schedule_item_options_sheet_action_edit">Edit</string>
     <string name="schedule_item_options_sheet_action_delete">Delete</string>
+
+    <string name="modify_schedule_item_title_edit">Edit %1$s</string>
+    <string name="modify_schedule_item_title_add">Add new %1$s</string>
+    <string name="modify_schedule_item_msg_exam">exam</string>
+    <string name="modify_schedule_item_msg_lesson">lesson</string>
 </resources>
