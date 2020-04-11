@@ -162,7 +162,9 @@ class NavigationSheet : BaseBottomSheetDialog() {
 
     private fun observeData() {
         viewModel.navigationInfoData.nonNull().observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+            adapter.submitList(it) {
+                navigationSheetItemRecyclerView.scrollToPosition(0)
+            }
         }
     }
 
