@@ -9,6 +9,7 @@ import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import kotlinx.android.synthetic.main.fragment_modify_schedule_item.*
+import java.util.*
 
 class ModifyScheduleItemFragment : BaseFragment() {
 
@@ -33,7 +34,11 @@ class ModifyScheduleItemFragment : BaseFragment() {
             }
         }
         modifyScheduleItemDoneButton.setSafeClickListener {
-            viewModel.saveChanges(args.schedule, getResultScheduleItem())
+            val isInputValid = validate()
+            modifyScheduleItemDoneButton.isEnabled = isInputValid
+            if (isInputValid) {
+                viewModel.saveChanges(args.schedule, getResultScheduleItem())
+            }
         }
     }
 
@@ -64,22 +69,77 @@ class ModifyScheduleItemFragment : BaseFragment() {
         }
     }
 
+    private fun validate(): Boolean {
+        return true
+    }
+
     private fun getResultScheduleItem(): ScheduleItem {
-        return Lesson.GroupLesson(
-                id = 0,
-                subject = "",
-                subgroupNumber = SubgroupNumber.ALL,
-                lessonType = "aa",
-                note = "sad",
-                startTime = "13.45",
-                endTime = "13.46",
-                auditories = emptyList(),
-                isAddedByUser = true,
-                priority = LessonPriority.HIGH,
-                weekDay = WeekDay.SATURDAY,
-                weekNumber = WeekNumber.FIRST,
-                employees = emptyList()
-        )
+        val id = args.item?.id ?: 0
+        val subject = ""
+        val subgroupNumber = SubgroupNumber.ALL
+        val lessonType = "aa"
+        val note = "sad"
+        val startTime = "13.45"
+        val endTime = "13.46"
+        val auditories: List<Auditory> = emptyList()
+        val isAddedByUser = args.item == null
+        return when (args.schedule) {
+            is Schedule.GroupClasses -> Lesson.GroupLesson(
+                    id = id,
+                    subject = subject,
+                    subgroupNumber = subgroupNumber,
+                    lessonType = lessonType,
+                    note = note,
+                    startTime = startTime,
+                    endTime = endTime,
+                    auditories = auditories,
+                    isAddedByUser = isAddedByUser,
+                    priority = LessonPriority.HIGH,
+                    weekDay = WeekDay.SATURDAY,
+                    weekNumber = WeekNumber.FIRST,
+                    employees = emptyList()
+            )
+            is Schedule.EmployeeClasses -> Lesson.EmployeeLesson(
+                    id = id,
+                    subject = subject,
+                    subgroupNumber = subgroupNumber,
+                    lessonType = lessonType,
+                    note = note,
+                    startTime = startTime,
+                    endTime = endTime,
+                    auditories = auditories,
+                    isAddedByUser = isAddedByUser,
+                    priority = LessonPriority.HIGH,
+                    weekDay = WeekDay.SATURDAY,
+                    weekNumber = WeekNumber.FIRST,
+                    studentGroups = emptyList()
+            )
+            is Schedule.GroupExams -> Exam.GroupExam(
+                    id = id,
+                    subject = subject,
+                    subgroupNumber = subgroupNumber,
+                    lessonType = lessonType,
+                    note = note,
+                    startTime = startTime,
+                    endTime = endTime,
+                    auditories = auditories,
+                    isAddedByUser = isAddedByUser,
+                    date = Date(),
+                    employees = emptyList()
+            )
+            is Schedule.EmployeeExams -> Exam.EmployeeExam(
+                    id = id,
+                    subject = subject,
+                    subgroupNumber = subgroupNumber,
+                    lessonType = lessonType,
+                    note = note,
+                    startTime = startTime,
+                    endTime = endTime,
+                    auditories = auditories,
+                    isAddedByUser = isAddedByUser,
+                    date = Date(),
+                    studentGroups = emptyList()
+            )
+        }
     }
 }
-
