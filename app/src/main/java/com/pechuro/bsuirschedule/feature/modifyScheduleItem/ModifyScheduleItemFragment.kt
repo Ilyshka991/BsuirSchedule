@@ -4,7 +4,10 @@ import android.os.Bundle
 import androidx.navigation.fragment.navArgs
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
-import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.observe
+import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import kotlinx.android.synthetic.main.fragment_modify_schedule_item.*
 
 class ModifyScheduleItemFragment : BaseFragment() {
@@ -19,6 +22,7 @@ class ModifyScheduleItemFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initView()
+        observeData()
     }
 
     private fun initView() {
@@ -28,7 +32,22 @@ class ModifyScheduleItemFragment : BaseFragment() {
                 activity?.onBackPressed()
             }
         }
+        modifyScheduleItemDoneButton.setSafeClickListener {
+            viewModel.saveChanges(args.schedule, getResultScheduleItem())
+        }
+    }
 
+    private fun observeData() {
+        viewModel.state.nonNull().observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is ModifyScheduleItemViewModel.State.Saving -> {
+                    modifyScheduleItemDoneButton.isEnabled = false
+                }
+                is ModifyScheduleItemViewModel.State.Complete -> {
+                    activity?.onBackPressed()
+                }
+            }
+        }
     }
 
     private fun getToolbarTitle(): String {
@@ -43,6 +62,24 @@ class ModifyScheduleItemFragment : BaseFragment() {
         } else {
             getString(R.string.modify_schedule_item_title_edit, scheduleItem.subject)
         }
+    }
+
+    private fun getResultScheduleItem(): ScheduleItem {
+        return Lesson.GroupLesson(
+                id = 0,
+                subject = "",
+                subgroupNumber = SubgroupNumber.ALL,
+                lessonType = "aa",
+                note = "sad",
+                startTime = "13.45",
+                endTime = "13.46",
+                auditories = emptyList(),
+                isAddedByUser = true,
+                priority = LessonPriority.HIGH,
+                weekDay = WeekDay.SATURDAY,
+                weekNumber = WeekNumber.FIRST,
+                employees = emptyList()
+        )
     }
 }
 
