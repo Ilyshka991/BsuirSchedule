@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.scheduleOptions
+package com.pechuro.bsuirschedule.feature.scheduleoptions
 
 import android.os.Bundle
 import android.view.View

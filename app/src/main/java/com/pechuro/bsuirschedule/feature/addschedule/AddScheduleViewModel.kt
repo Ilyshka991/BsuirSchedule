@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.addSchedule
+package com.pechuro.bsuirschedule.feature.addschedule
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -16,8 +16,8 @@ import com.pechuro.bsuirschedule.domain.interactor.GetGroups
 import com.pechuro.bsuirschedule.domain.interactor.LoadEmployeeSchedule
 import com.pechuro.bsuirschedule.domain.interactor.LoadGroupSchedule
 import com.pechuro.bsuirschedule.ext.flowLiveData
-import com.pechuro.bsuirschedule.feature.addSchedule.fragment.SuggestionItemInformation
-import com.pechuro.bsuirschedule.feature.addSchedule.fragment.SuggestionItemInformation.*
+import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation
+import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.withContext

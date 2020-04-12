@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.itemOptions
+package com.pechuro.bsuirschedule.feature.itemoptions
 
 import android.os.Bundle
 import android.view.View

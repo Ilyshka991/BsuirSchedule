@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.addSchedule.fragment
+package com.pechuro.bsuirschedule.feature.addschedule.fragment
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +11,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
-import com.pechuro.bsuirschedule.feature.addSchedule.fragment.SuggestionItemInformation.Companion.TYPE_EMPLOYEE
-import com.pechuro.bsuirschedule.feature.addSchedule.fragment.SuggestionItemInformation.Companion.TYPE_EMPTY
-import com.pechuro.bsuirschedule.feature.addSchedule.fragment.SuggestionItemInformation.Companion.TYPE_GROUP
+import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation.Companion.TYPE_EMPLOYEE
+import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation.Companion.TYPE_EMPTY
+import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation.Companion.TYPE_GROUP
 import kotlinx.android.synthetic.main.item_suggestion_employee.*
 import kotlinx.android.synthetic.main.item_suggestion_group.*
 

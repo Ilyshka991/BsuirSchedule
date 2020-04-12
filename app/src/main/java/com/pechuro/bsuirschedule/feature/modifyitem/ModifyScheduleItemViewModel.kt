@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.modifyScheduleItem
+package com.pechuro.bsuirschedule.feature.modifyitem
 
 import androidx.lifecycle.MutableLiveData
 import com.pechuro.bsuirschedule.common.base.BaseViewModel

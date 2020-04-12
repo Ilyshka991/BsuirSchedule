@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.addSchedule.fragment
+package com.pechuro.bsuirschedule.feature.addschedule.fragment
 
 import com.pechuro.bsuirschedule.domain.entity.Employee
 import com.pechuro.bsuirschedule.domain.entity.Group

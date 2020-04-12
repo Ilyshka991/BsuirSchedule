@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.addSchedule
+package com.pechuro.bsuirschedule.feature.addschedule
 
 import android.os.Bundle
 import android.view.ViewGroup
@@ -11,7 +11,7 @@ import com.pechuro.bsuirschedule.ext.addOnTabSelectedListener
 import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
-import com.pechuro.bsuirschedule.feature.addSchedule.AddScheduleViewModel.State
+import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel.State
 import kotlinx.android.synthetic.main.fragment_add_schedule_container.*
 
 class AddScheduleFragmentContainer : BaseFragment() {

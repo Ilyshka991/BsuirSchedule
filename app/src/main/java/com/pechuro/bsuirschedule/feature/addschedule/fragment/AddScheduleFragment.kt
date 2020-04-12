@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.addSchedule.fragment
+package com.pechuro.bsuirschedule.feature.addschedule.fragment
 
 import android.content.Context
 import android.os.Bundle
@@ -13,11 +13,11 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.ext.*
-import com.pechuro.bsuirschedule.feature.addSchedule.AddScheduleContainerPagerAdapter.FragmentType
-import com.pechuro.bsuirschedule.feature.addSchedule.AddScheduleViewModel
-import com.pechuro.bsuirschedule.feature.addSchedule.AddScheduleViewModel.State
-import com.pechuro.bsuirschedule.feature.addSchedule.fragment.SuggestionItemInformation.EmployeeInfo
-import com.pechuro.bsuirschedule.feature.addSchedule.fragment.SuggestionItemInformation.GroupInfo
+import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleContainerPagerAdapter.FragmentType
+import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel
+import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel.State
+import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation.EmployeeInfo
+import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation.GroupInfo
 import kotlinx.android.synthetic.main.fragment_add_schedule.*
 
 class AddScheduleFragment : BaseFragment() {

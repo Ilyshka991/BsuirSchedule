@@ -4,4 +4,9 @@
     <declare-styleable name="LoaderView">
         <attr name="message" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="AutoValidateInputText">
+        <attr name="error_text" format="string" />
+        <attr name="validation_expr" format="string" />
+    </declare-styleable>
 </resources>

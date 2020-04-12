@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.examDetails
+package com.pechuro.bsuirschedule.feature.examdetails
 
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment

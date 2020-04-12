@@ -1,10 +1,12 @@
-package com.pechuro.bsuirschedule.feature.modifyScheduleItem
+package com.pechuro.bsuirschedule.feature.modifyitem
 
 import android.os.Bundle
+import android.view.View
 import androidx.navigation.fragment.navArgs
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.ext.hideKeyboard
 import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
@@ -20,10 +22,15 @@ class ModifyScheduleItemFragment : BaseFragment() {
     }
     private val args: ModifyScheduleItemFragmentArgs by navArgs()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initView()
         observeData()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        context?.hideKeyboard(view?.findFocus()?.windowToken)
     }
 
     private fun initView() {

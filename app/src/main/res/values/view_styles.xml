@@ -64,6 +64,23 @@
         <item name="boxStrokeColor">?attr/textDefaultColor</item>
     </style>
 
+    <style name="AutoValidateTextInputLayout" parent="OutlinedTextInputLayout">
+        <item name="errorTextColor">?attr/textErrorColor</item>
+        <item name="errorIconDrawable">@drawable/ic_error</item>
+        <item name="errorIconTint">?attr/textErrorColor</item>
+        <item name="errorTextAppearance">@style/AutoValidateTextErrorAppearance</item>
+        <item name="hintTextAppearance">@style/AutoValidateTextHintAppearance</item>
+        <item name="background">@null</item>
+    </style>
+
+    <style name="AutoValidateTextErrorAppearance">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AutoValidateTextHintAppearance">
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="TextInput" parent="Widget.AppCompat.EditText">
         <item name="android:textColor">?attr/textDefaultColor</item>
         <item name="android:textSize">18sp</item>

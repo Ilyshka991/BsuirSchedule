@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.scheduleOptions
+package com.pechuro.bsuirschedule.feature.scheduleoptions
 
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
