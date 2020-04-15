@@ -3,7 +3,7 @@ package com.pechuro.bsuirschedule.viewmodels
 import androidx.lifecycle.Observer
 import com.pechuro.bsuirschedule.common.IEspressoIdlingResource
 import com.pechuro.bsuirschedule.domain.interactor.LoadInfo
-import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoViewModel
+import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoViewModel
 import javax.inject.Inject
 
 class EspressoInfoLoadViewModel @Inject constructor(

@@ -274,13 +274,39 @@ class ScheduleRepositoryImpl(
         }
     }
 
+    override suspend fun modifyScheduleItem(schedule: Schedule, scheduleItem: ScheduleItem) {
+        performDaoCall {
+            when (scheduleItem) {
+                is Lesson.GroupLesson -> {
+                    val cachedSchedule = (schedule as Schedule.GroupClasses).toDatabaseEntity()
+                    val cachedScheduleItem = scheduleItem.toDatabaseEntity(cachedSchedule)
+                    dao.modifyGroupLesson(cachedScheduleItem)
+                }
+                is Lesson.EmployeeLesson -> {
+                    val cachedSchedule = (schedule as Schedule.EmployeeClasses).toDatabaseEntity()
+                    val cachedScheduleItem = scheduleItem.toDatabaseEntity(cachedSchedule)
+                    dao.modifyEmployeeLesson(cachedScheduleItem)
+                }
+                is Exam.GroupExam -> {
+                    val cachedSchedule = (schedule as Schedule.GroupExams).toDatabaseEntity()
+                    val cachedScheduleItem = scheduleItem.toDatabaseEntity(cachedSchedule)
+                    dao.modifyGroupExam(cachedScheduleItem)
+                }
+                is Exam.EmployeeExam -> {
+                    val cachedSchedule = (schedule as Schedule.EmployeeExams).toDatabaseEntity()
+                    val cachedScheduleItem = scheduleItem.toDatabaseEntity(cachedSchedule)
+                    dao.modifyEmployeeExam(cachedScheduleItem)
+                }
+            }
+            Unit
+        }
+    }
+
     private suspend fun loadGroupScheduleInternal(
             group: Group,
-            types: List<ScheduleType>
-            ,
+            types: List<ScheduleType>,
             update: Boolean
-    )
-            : List<Schedule> {
+    ): List<Schedule> {
         val auditories = buildingRepository.getAllAuditories().first()
         val departments = specialityRepository.getAllDepartments().first()
 
@@ -360,10 +386,8 @@ class ScheduleRepositoryImpl(
     }
 
     private suspend fun storeSchedule(
-            schedule: Schedule.GroupClasses
-            ,
-            items: List<Lesson.GroupLesson>
-            ,
+            schedule: Schedule.GroupClasses,
+            items: List<Lesson.GroupLesson>,
             update: Boolean
     ) {
         val cachedSchedule = schedule.toDatabaseEntity()
@@ -394,10 +418,8 @@ class ScheduleRepositoryImpl(
     }
 
     private suspend fun storeSchedule(
-            schedule: Schedule.EmployeeClasses
-            ,
-            items: List<Lesson.EmployeeLesson>
-            ,
+            schedule: Schedule.EmployeeClasses,
+            items: List<Lesson.EmployeeLesson>,
             update: Boolean
     ) {
         val cachedSchedule = schedule.toDatabaseEntity()

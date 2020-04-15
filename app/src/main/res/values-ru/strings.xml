@@ -1,0 +1,70 @@
+<resources>
+    <string name="notification_group_actions_label">Расписания</string>
+    <string name="notification_channel_update_label">Обновления</string>
+
+    <string name="notification_update_title">Изменено расписание для %1$s</string>
+    <string name="notification_update_description">Нажмите для обновления</string>
+
+    <string name="action_retry">Повторить</string>
+    <string name="action_cancel">Отмена</string>
+
+    <string name="error_loading">Произошла ошибка,\nпопробуйте ещё раз</string>
+
+    <string name="add_schedule_title">Добавить расписание</string>
+    <string name="add_schedule_error_types_not_specified">Выберите тип</string>
+    <string name="add_schedule_error_empty_suggestions">Пожалуйста, обновите информацию</string>
+    <string name="add_schedule_error_blank_schedule_name">Выберите расписание</string>
+    <string name="add_schedule_error_unknown_schedule">Неизвестное расписание</string>
+    <string name="add_schedule_hint_enter_schedule">Начните ввод</string>
+    <string name="add_schedule_tab_employees">Сотрудники</string>
+    <string name="add_schedule_tab_students">Группы</string>
+    <string name="add_schedule_msg_type">Тип:</string>
+    <string name="add_schedule_msg_suggestion_group_course">Курс: %1$d</string>
+    <string name="add_schedule_msg_suggestion_employee_department">Кафедра: %1$s</string>
+    <string name="add_schedule_msg_empty_suggestions">Пусто.</string>
+
+    <string name="info_load_title">Загрузка информации</string>
+    <string name="info_load_message">Загрузка информации,\nподождите</string>
+
+    <string name="navigation_title_classes">Занятия</string>
+    <string name="navigation_title_exams">Экзамены</string>
+    <string name="navigation_action_add_schedule">Добавить расписание</string>
+    <string name="navigation_action_settings">Настройки</string>
+    <string name="navigation_msg_no_schedules">Пусто.</string>
+    <string name="navigation_msg_schedule_update_in_progress">Обновление…</string>
+    <string name="navigation_msg_schedule_update_error">Не обновлено.</string>
+    <string name="navigation_msg_schedule_update_available">Доступно обновление</string>
+    <string name="navigation_msg_schedule_update_success">Обновлено</string>
+
+    <string name="update_schedule_classes_title">Расписание занятий для %1$s изменено!</string>
+    <string name="update_schedule_exams_title">Расписание экзаменов для %1$s изменено!</string>
+    <string name="update_schedule_action_update">Обновить</string>
+    <string name="update_schedule_action_cancel">Отмена</string>
+    <string name="update_schedule_action_not_remind">Не напоминать</string>
+
+    <string name="start_message">Добро пожаловать!</string>
+
+    <string name="settings_title">Настройки</string>
+
+    <string name="display_schedule_tab_title">%1$s, нед. %2$d</string>
+
+    <string name="display_schedule_item_msg_subgroup">%1$d подгруппа</string>
+    <string name="display_schedule_item_msg_week_numbers">Недели %1$s</string>
+    <string name="display_schedule_item_msg_empty_list">Пусто.</string>
+
+    <string name="display_options_sheet_title_type">Отображать по %1$s</string>
+    <string name="display_options_sheet_msg_type_weeks">неделям</string>
+    <string name="display_options_sheet_msg_type_days">дням</string>
+    <string name="display_options_sheet_title_subgroup">%1$d подгруппа</string>
+    <string name="display_options_sheet_title_all_group">Вся группа</string>
+
+    <string name="schedule_item_options_sheet_title">%1$s</string>
+    <string name="schedule_item_options_sheet_action_edit">Изменить</string>
+    <string name="schedule_item_options_sheet_action_delete">Удалить</string>
+
+    <string name="modify_schedule_item_title_edit">Редактировать %1$s</string>
+    <string name="modify_schedule_item_title_add">Добавить %1$s</string>
+    <string name="modify_schedule_item_msg_exam">экзамен</string>
+    <string name="modify_schedule_item_msg_lesson">занятие</string>
+    <string name="modify_schedule_item_action_done">Готово</string>
+</resources>

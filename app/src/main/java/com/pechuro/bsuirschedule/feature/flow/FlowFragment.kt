@@ -16,18 +16,19 @@ import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleCompleteEvent
-import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleContainerArgs
-import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleEvent
-import com.pechuro.bsuirschedule.feature.displayscheduledatepicker.DisplayScheduleDatePickerSheetArgs
-import com.pechuro.bsuirschedule.feature.displayscheduledatepicker.ScheduleDatePickedEvent
-import com.pechuro.bsuirschedule.feature.displayscheduleoptions.DisplayScheduleOptionsSheetArgs
+import com.pechuro.bsuirschedule.feature.datepicker.DisplayScheduleDatePickerSheetArgs
+import com.pechuro.bsuirschedule.feature.datepicker.ScheduleDatePickedEvent
+import com.pechuro.bsuirschedule.feature.display.DisplayScheduleContainerArgs
+import com.pechuro.bsuirschedule.feature.display.DisplayScheduleEvent
 import com.pechuro.bsuirschedule.feature.examdetails.ExamDetailsFragmentArgs
+import com.pechuro.bsuirschedule.feature.itemoptions.EditScheduleItemEvent
+import com.pechuro.bsuirschedule.feature.itemoptions.ScheduleItemOptionsSheetArgs
 import com.pechuro.bsuirschedule.feature.lessondetails.LessonDetailsFragmentArgs
-import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoCompleteEvent
+import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoCompleteEvent
+import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragmentArgs
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
-import com.pechuro.bsuirschedule.feature.scheduleitemoptions.EditScheduleItemEvent
-import com.pechuro.bsuirschedule.feature.scheduleitemoptions.ScheduleItemOptionsSheetArgs
-import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetArgs
+import com.pechuro.bsuirschedule.feature.scheduleoptions.DisplayScheduleOptionsSheetArgs
+import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheetArgs
 import kotlinx.android.synthetic.main.fragment_flow.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -147,11 +148,19 @@ class FlowFragment : BaseFragment() {
     }
 
     private fun openAddScheduleItem(schedule: Schedule) {
-        //TODO: implement
+        val arguments = ModifyScheduleItemFragmentArgs(
+                schedule = schedule,
+                item = null
+        ).toBundle()
+        navController.navigate(R.id.modifyScheduleItemDestination, arguments, defaultNavOptions)
     }
 
     private fun openEditScheduleItem(schedule: Schedule, scheduleItem: ScheduleItem) {
-        //TODO: implement
+        val arguments = ModifyScheduleItemFragmentArgs(
+                schedule = schedule,
+                item = scheduleItem
+        ).toBundle()
+        navController.navigate(R.id.modifyScheduleItemDestination, arguments, defaultNavOptions)
     }
 
     private fun openScheduleItemDetails(scheduleItem: ScheduleItem) {
@@ -264,6 +273,7 @@ class FlowFragment : BaseFragment() {
     private fun updateLayoutState() {
         val isControlsVisible = when (navController.currentDestination?.id) {
             R.id.addScheduleDestination,
+            R.id.modifyScheduleItemDestination,
             R.id.loadInfoDestination -> false
             else -> true
         }

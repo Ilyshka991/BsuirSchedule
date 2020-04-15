@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="com.google.android.material.textfield.TextInputLayout">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/autoValidateEditText"
+        style="@style/TextInput"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:saveEnabled="false" />
+</merge>

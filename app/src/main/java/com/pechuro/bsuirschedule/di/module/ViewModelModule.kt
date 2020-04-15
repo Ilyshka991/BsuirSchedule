@@ -5,14 +5,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.pechuro.bsuirschedule.common.factory.ViewModelFactory
 import com.pechuro.bsuirschedule.di.annotations.ViewModelKey
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel
-import com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleViewModel
-import com.pechuro.bsuirschedule.feature.displayscheduleoptions.DisplayScheduleOptionsViewModel
+import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel
 import com.pechuro.bsuirschedule.feature.flow.FlowViewModel
+import com.pechuro.bsuirschedule.feature.itemoptions.ScheduleItemOptionsViewModel
 import com.pechuro.bsuirschedule.feature.lessondetails.LessonDetailsViewModel
-import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoViewModel
+import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoViewModel
+import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemViewModel
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetViewModel
-import com.pechuro.bsuirschedule.feature.scheduleitemoptions.ScheduleItemOptionsViewModel
-import com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheetViewModel
+import com.pechuro.bsuirschedule.feature.scheduleoptions.DisplayScheduleOptionsViewModel
+import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheetViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -67,4 +68,9 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(ScheduleItemOptionsViewModel::class)
     fun scheduleItemOptions(viewModel: ScheduleItemOptionsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ModifyScheduleItemViewModel::class)
+    fun modifyScheduleItem(viewModel: ModifyScheduleItemViewModel): ViewModel
 }

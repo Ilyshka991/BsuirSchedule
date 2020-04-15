@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loadInfoDestination"
-        android:name="com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoFragment"
+        android:name="com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoFragment"
         android:label="LoadInfoFragment"
         tools:layout="@layout/fragment_info_load" />
 
@@ -31,7 +31,7 @@
 
     <dialog
         android:id="@+id/updateScheduleSheetDestination"
-        android:name="com.pechuro.bsuirschedule.feature.updateschedule.UpdateScheduleSheet"
+        android:name="com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheet"
         android:label="UpdateScheduleSheet"
         tools:layout="@layout/sheet_update_schedule">
 
@@ -42,7 +42,7 @@
 
     <fragment
         android:id="@+id/viewScheduleDestination"
-        android:name="com.pechuro.bsuirschedule.feature.displayschedule.DisplayScheduleContainer"
+        android:name="com.pechuro.bsuirschedule.feature.display.DisplayScheduleContainer"
         android:label="ViewScheduleContainer"
         tools:layout="@layout/fragment_display_schedule">
 
@@ -53,9 +53,9 @@
 
     <dialog
         android:id="@+id/displayScheduleOptionsDestination"
-        android:name="com.pechuro.bsuirschedule.feature.displayscheduleoptions.DisplayScheduleOptionsSheet"
+        android:name="com.pechuro.bsuirschedule.feature.scheduleoptions.DisplayScheduleOptionsSheet"
         android:label="DisplayScheduleOptions"
-        tools:layout="@layout/sheet_display_schedule_options" >
+        tools:layout="@layout/sheet_display_schedule_options">
 
         <argument
             android:name="schedule"
@@ -64,9 +64,9 @@
 
     <dialog
         android:id="@+id/scheduleItemOptionsDestination"
-        android:name="com.pechuro.bsuirschedule.feature.scheduleitemoptions.ScheduleItemOptionsSheet"
+        android:name="com.pechuro.bsuirschedule.feature.itemoptions.ScheduleItemOptionsSheet"
         android:label="ScheduleItemOptionsSheet"
-        tools:layout="@layout/sheet_schedule_item_options" >
+        tools:layout="@layout/sheet_schedule_item_options">
 
         <argument
             android:name="scheduleItem"
@@ -97,7 +97,7 @@
 
     <dialog
         android:id="@+id/displayScheduleDatePickerDestination"
-        android:name="com.pechuro.bsuirschedule.feature.displayscheduledatepicker.DisplayScheduleDatePickerSheet"
+        android:name="com.pechuro.bsuirschedule.feature.datepicker.DisplayScheduleDatePickerSheet"
         android:label="DisplayScheduleDatePicker"
         tools:layout="@layout/sheet_display_schedule_date_picker">
 
@@ -113,4 +113,20 @@
             android:name="currentDate"
             app:argType="java.util.Date" />
     </dialog>
+
+    <fragment
+        android:id="@+id/modifyScheduleItemDestination"
+        android:name="com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragment"
+        android:label="ModifyScheduleItemFragment"
+        tools:layout="@layout/fragment_modify_schedule_item">
+
+        <argument
+            android:name="schedule"
+            app:argType="com.pechuro.bsuirschedule.domain.entity.Schedule" />
+
+        <argument
+            android:name="item"
+            app:argType="com.pechuro.bsuirschedule.domain.entity.ScheduleItem"
+            app:nullable="true" />
+    </fragment>
 </navigation>

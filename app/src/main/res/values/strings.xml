@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bsuir Schedule</string>
+    <string name="app_name" translatable="false">Bsuir Schedule</string>
 
     <string name="notification_group_actions_label">Schedule actions</string>
     <string name="notification_channel_update_label">Updates</string>
@@ -15,15 +15,15 @@
     <string name="add_schedule_title">Add new schedule</string>
     <string name="add_schedule_error_types_not_specified">Please, select type</string>
     <string name="add_schedule_error_empty_suggestions">Please, update information</string>
-    <string name="add_schedule_error_blank_schedule_name">Please, fill in schedule name</string>
+    <string name="add_schedule_error_blank_schedule_name">Please, enter schedule name</string>
     <string name="add_schedule_error_unknown_schedule">Unknown schedule</string>
     <string name="add_schedule_hint_enter_schedule">Enter schedule</string>
     <string name="add_schedule_tab_employees">Employees</string>
     <string name="add_schedule_tab_students">Students</string>
     <string name="add_schedule_msg_type">Type:</string>
-    <string name="add_schedule_msg_suggestion_group_course">course: %1$d</string>
+    <string name="add_schedule_msg_suggestion_group_course">Course: %1$d</string>
     <string name="add_schedule_msg_suggestion_employee_department">Department: %1$s</string>
-    <string name="add_schedule_msg_empty_suggestions">Nothing there</string>
+    <string name="add_schedule_msg_empty_suggestions">Empty.</string>
 
     <string name="info_load_title">Info loading</string>
     <string name="info_load_message">Information is loading,\nplease wait</string>
@@ -38,8 +38,8 @@
     <string name="navigation_msg_schedule_update_available">Update is available</string>
     <string name="navigation_msg_schedule_update_success">Updated</string>
 
-    <string name="update_schedule_classes_title">Update classes for %1$s is available!</string>
-    <string name="update_schedule_exams_title">Update exams for %1$s is available!</string>
+    <string name="update_schedule_classes_title">Classes schedule for %1$s has changed!</string>
+    <string name="update_schedule_exams_title">Exams schedule for %1$s has changed!</string>
     <string name="update_schedule_action_update">Update</string>
     <string name="update_schedule_action_cancel">Cancel</string>
     <string name="update_schedule_action_not_remind">Don\'t remind</string>
@@ -48,19 +48,25 @@
 
     <string name="settings_title">Settings</string>
 
-    <string name="display_schedule_tab_title">%1$s, week: %2$d</string>
+    <string name="display_schedule_tab_title">%1$s, week %2$d</string>
 
     <string name="display_schedule_item_msg_subgroup">%1$d subgroup</string>
-    <string name="display_schedule_item_msg_week_numbers">Weeks: %1$s</string>
+    <string name="display_schedule_item_msg_week_numbers">Weeks %1$s</string>
     <string name="display_schedule_item_msg_empty_list">Nothing there</string>
 
-    <string name="display_options_sheet_title_type">Display by: %1$s</string>
+    <string name="display_options_sheet_title_type">Display by %1$s</string>
     <string name="display_options_sheet_msg_type_weeks">weeks</string>
     <string name="display_options_sheet_msg_type_days">days</string>
     <string name="display_options_sheet_title_subgroup">Display %1$d subgroup</string>
     <string name="display_options_sheet_title_all_group">Display all group</string>
 
-    <string name="schedule_item_options_sheet_title">Actions for %1$s:</string>
+    <string name="schedule_item_options_sheet_title">%1$s</string>
     <string name="schedule_item_options_sheet_action_edit">Edit</string>
     <string name="schedule_item_options_sheet_action_delete">Delete</string>
+
+    <string name="modify_schedule_item_title_edit">Edit %1$s</string>
+    <string name="modify_schedule_item_title_add">Add new %1$s</string>
+    <string name="modify_schedule_item_msg_exam">exam</string>
+    <string name="modify_schedule_item_msg_lesson">class</string>
+    <string name="modify_schedule_item_action_done">Done</string>
 </resources>

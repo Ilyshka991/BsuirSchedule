@@ -11,9 +11,9 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
-import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content
+import com.pechuro.bsuirschedule.ext.setSafeClickListener
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.*
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState.*
-import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Title
 import kotlinx.android.synthetic.main.item_navigation_sheet_content.*
 import kotlinx.android.synthetic.main.item_navigation_sheet_empty.*
 
@@ -35,6 +35,11 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
     interface ActionCallback {
 
         fun onScheduleClicked(schedule: Schedule)
+    }
+
+    companion object {
+
+        private const val EMPTY_VIEW_DISPLAY_DELAY_MS = 1000L
     }
 
     var actionCallback: ActionCallback? = null
@@ -78,25 +83,24 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
 
     fun getItemAt(position: Int): NavigationSheetItemInformation = getItem(position)
 
-    private class DividerViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(view) {
+    private class DividerViewHolder(view: View) : BaseViewHolder<Divider>(view) {
 
-        override fun onBind(data: NavigationSheetItemInformation) {}
+        override fun onBind(data: Divider) {}
     }
 
-    private class EmptyViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(view) {
+    private class EmptyViewHolder(view: View) : BaseViewHolder<Empty>(view) {
 
-        override fun onBind(data: NavigationSheetItemInformation) {
+        override fun onBind(data: Empty) {
             navigationItemEmptyParentView.isVisible = false
             itemView.postDelayed({
                 navigationItemEmptyParentView.isVisible = true
-            }, 1000)
+            }, EMPTY_VIEW_DISPLAY_DELAY_MS)
         }
     }
 
-    private inner class TitleViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(view) {
+    private class TitleViewHolder(view: View) : BaseViewHolder<Title>(view) {
 
-        override fun onBind(data: NavigationSheetItemInformation) {
-            if (data !is Title) return
+        override fun onBind(data: Title) {
             val titleRes = when (data.scheduleType) {
                 ScheduleType.CLASSES -> R.string.navigation_title_classes
                 ScheduleType.EXAMS -> R.string.navigation_title_exams
@@ -105,15 +109,14 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
         }
     }
 
-    private inner class ContentViewHolder(view: View) : BaseViewHolder<NavigationSheetItemInformation>(view) {
+    private inner class ContentViewHolder(view: View) : BaseViewHolder<Content>(view) {
 
-        override fun onBind(data: NavigationSheetItemInformation) {
-            if (data !is Content) return
+        override fun onBind(data: Content) {
             navigationItemContentText.apply {
-                tag = data.schedule
                 text = data.schedule.name
-                setOnClickListener(scheduleClickListener)
                 isSelected = data.isSelected
+                setSafeClickListener(onClickListener = scheduleClickListener)
+                tag = data.schedule
             }
             navigationItemContentUpdateParentView.isVisible = data.updateState != NOT_AVAILABLE
             navigationItemContentUpdateLoaderView.isVisible = data.updateState == IN_PROGRESS

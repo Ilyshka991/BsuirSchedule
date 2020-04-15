@@ -168,6 +168,58 @@ interface ScheduleDao {
         }
     }
 
+    @Transaction
+    suspend fun modifyGroupLesson(item: GroupClassesItemComplex) {
+        val scheduleItemId = insert(item.scheduleItem)
+        item.employees.forEach { employee ->
+            val joinEntity = GroupLessonEmployeeCrossRef(scheduleItemId, employee.id)
+            insert(joinEntity)
+        }
+        item.auditories.forEach { auditory ->
+            val joinEntity = GroupLessonAuditoryCrossRef(scheduleItemId, auditory.id)
+            insert(joinEntity)
+        }
+    }
+
+    @Transaction
+    suspend fun modifyGroupExam(item: GroupExamItemComplex) {
+        val scheduleItemId = insert(item.scheduleItem)
+        item.employees.forEach { employee ->
+            val joinEntity = GroupExamEmployeeCrossRef(scheduleItemId, employee.id)
+            insert(joinEntity)
+        }
+        item.auditories.forEach { auditory ->
+            val joinEntity = GroupExamAuditoryCrossRef(scheduleItemId, auditory.id)
+            insert(joinEntity)
+        }
+    }
+
+    @Transaction
+    suspend fun modifyEmployeeLesson(item: EmployeeClassesItemComplex) {
+        val scheduleItemId = insert(item.scheduleItem)
+        item.groups.forEach { group ->
+            val joinEntity = EmployeeLessonGroupCrossRef(scheduleItemId, group.id)
+            insert(joinEntity)
+        }
+        item.auditories.forEach { auditory ->
+            val joinEntity = EmployeeLessonAuditoryCrossRef(scheduleItemId, auditory.id)
+            insert(joinEntity)
+        }
+    }
+
+    @Transaction
+    suspend fun modifyEmployeeExam(item: EmployeeExamItemComplex) {
+        val scheduleItemId = insert(item.scheduleItem)
+        item.groups.forEach { group ->
+            val joinEntity = EmployeeExamGroupCrossRef(scheduleItemId, group.id)
+            insert(joinEntity)
+        }
+        item.auditories.forEach { auditory ->
+            val joinEntity = EmployeeExamAuditoryCrossRef(scheduleItemId, auditory.id)
+            insert(joinEntity)
+        }
+    }
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(value: GroupClassesScheduleCached)
 
