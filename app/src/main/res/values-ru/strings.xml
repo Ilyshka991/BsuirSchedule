@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">Bsuir Schedule</string>
-
     <string name="notification_group_actions_label">Расписания</string>
     <string name="notification_channel_update_label">Обновления</string>
 
@@ -44,7 +42,7 @@
     <string name="update_schedule_action_cancel">Отмена</string>
     <string name="update_schedule_action_not_remind">Не напоминать</string>
 
-    <string name="start_message">Hello</string>
+    <string name="start_message">Добро пожаловать!</string>
 
     <string name="settings_title">Настройки</string>
 
