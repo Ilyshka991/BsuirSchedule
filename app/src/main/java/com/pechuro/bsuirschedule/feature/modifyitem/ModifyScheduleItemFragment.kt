@@ -65,16 +65,16 @@ class ModifyScheduleItemFragment : BaseFragment() {
             viewModel.saveChanges()
         }
         modifyScheduleItemSubjectText.addTextListener {
-            viewModel.data.subjectData.value = it
+            viewModel.dataProvider.subjectData.value = it
         }
         modifyScheduleItemNoteText.addTextListener {
-            viewModel.data.noteData.value = it
+            viewModel.dataProvider.noteData.value = it
         }
     }
 
     private fun fillParams() {
         val scheduleItems = args.items
-        viewModel.data.init(args.schedule, scheduleItems)
+        viewModel.dataProvider.init(args.schedule, scheduleItems)
         val subject = scheduleItems.firstOrNull()?.subject ?: ""
         modifyScheduleItemSubjectText.setText(subject)
         val note = scheduleItems.firstOrNull()?.note ?: ""
@@ -92,7 +92,7 @@ class ModifyScheduleItemFragment : BaseFragment() {
                 }
             }
         }
-        with(viewModel.data) {
+        with(viewModel.dataProvider) {
             lessonTypeData.nonNull().observe(viewLifecycleOwner) { lessonType ->
                 modifyScheduleItemType.setMessage(lessonType)
             }

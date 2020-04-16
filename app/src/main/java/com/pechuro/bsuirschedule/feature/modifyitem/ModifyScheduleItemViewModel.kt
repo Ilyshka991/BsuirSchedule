@@ -13,18 +13,18 @@ class ModifyScheduleItemViewModel @Inject constructor(
         context: Context
 ) : BaseViewModel() {
 
-    val data = ModifyScheduleItemDataProvider(context)
+    val dataProvider = ModifyScheduleItemDataProvider(context)
     val state = MutableLiveData<State>(State.Idle)
 
     fun saveChanges() {
         launchCoroutine {
             state.value = State.Saving
             deleteScheduleItems.execute(DeleteScheduleItems.Params(
-                    scheduleItems = data.scheduleItems.toList()
+                    scheduleItems = dataProvider.scheduleItems.toList()
             ))
             addScheduleItems.execute(AddScheduleItems.Params(
-                    schedule = data.schedule,
-                    scheduleItems = data.getResultScheduleItem()
+                    schedule = dataProvider.schedule,
+                    scheduleItems = dataProvider.getResultScheduleItem()
             ))
             state.value = State.Complete
         }
