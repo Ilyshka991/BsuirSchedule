@@ -31,9 +31,9 @@ interface IScheduleRepository {
 
     suspend fun deleteSchedule(schedule: Schedule)
 
-    suspend fun deleteScheduleItem(scheduleItem: ScheduleItem)
+    suspend fun deleteScheduleItems(scheduleItems: List<ScheduleItem>)
 
     suspend fun deleteAllSchedules()
 
-    suspend fun modifyScheduleItem(schedule: Schedule, scheduleItem: ScheduleItem)
+    suspend fun addScheduleItems(schedule: Schedule, scheduleItems: List<ScheduleItem>)
 }

@@ -9,4 +9,10 @@
         <attr name="error_text" format="string" />
         <attr name="validation_expr" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="LabeledTextView">
+        <attr name="label_text" format="string" />
+        <attr name="message_text" format="string" />
+        <attr name="text_size" format="dimension" />
+    </declare-styleable>
 </resources>

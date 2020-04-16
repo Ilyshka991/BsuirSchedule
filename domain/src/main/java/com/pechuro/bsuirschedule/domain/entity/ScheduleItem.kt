@@ -13,3 +13,5 @@ interface ScheduleItem : Parcelable {
     val auditories: List<Auditory>
     val isAddedByUser: Boolean
 }
+
+const val SCHEDULE_ITEM_TIME_FORMAT_PATTERN = "HH:mm"

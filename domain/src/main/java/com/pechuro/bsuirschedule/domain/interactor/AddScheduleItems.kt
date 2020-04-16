@@ -6,17 +6,17 @@ import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
 import javax.inject.Inject
 
-class ModifyScheduleItem @Inject constructor(
+class AddScheduleItems @Inject constructor(
         private val scheduleRepository: IScheduleRepository
-) : BaseInteractor<Unit, ModifyScheduleItem.Params>() {
+) : BaseInteractor<Unit, AddScheduleItems.Params>() {
 
-    override suspend fun run(params: Params) = scheduleRepository.modifyScheduleItem(
+    override suspend fun run(params: Params) = scheduleRepository.addScheduleItems(
             params.schedule,
-            params.scheduleItem
+            params.scheduleItems
     )
 
     data class Params(
             val schedule: Schedule,
-            val scheduleItem: ScheduleItem
+            val scheduleItems: List<ScheduleItem>
     )
 }

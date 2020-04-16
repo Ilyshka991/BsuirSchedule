@@ -7,6 +7,7 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
+import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import kotlinx.android.synthetic.main.sheet_schedule_item_options.*
 
 class ScheduleItemOptionsSheet : BaseBottomSheetDialog() {
@@ -27,14 +28,19 @@ class ScheduleItemOptionsSheet : BaseBottomSheetDialog() {
     private fun initView() {
         scheduleItemOptionsTitle.text = getString(
                 R.string.schedule_item_options_sheet_title,
-                args.scheduleItem.subject
+                args.data.scheduleItem?.subject
         )
         scheduleItemOptionsEditButton.setSafeClickListener {
-            EventBus.send(EditScheduleItemEvent(args.scheduleItem))
+            EventBus.send(EditScheduleItemEvent(getScheduleItems()))
         }
         scheduleItemOptionsDeleteButton.setSafeClickListener {
-            viewModel.deleteScheduleItem(args.scheduleItem)
+            viewModel.deleteScheduleItem(getScheduleItems())
             dismiss()
         }
+    }
+
+    private fun getScheduleItems() = when (val data = args.data) {
+        is DisplayScheduleItem.WeekClasses -> data.allScheduleItems
+        else -> listOfNotNull(data.scheduleItem)
     }
 }

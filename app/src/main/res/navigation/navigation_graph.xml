@@ -69,8 +69,8 @@
         tools:layout="@layout/sheet_schedule_item_options">
 
         <argument
-            android:name="scheduleItem"
-            app:argType="com.pechuro.bsuirschedule.domain.entity.ScheduleItem" />
+            android:name="data"
+            app:argType="com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem" />
     </dialog>
 
     <fragment
@@ -125,8 +125,7 @@
             app:argType="com.pechuro.bsuirschedule.domain.entity.Schedule" />
 
         <argument
-            android:name="item"
-            app:argType="com.pechuro.bsuirschedule.domain.entity.ScheduleItem"
-            app:nullable="true" />
+            android:name="items"
+            app:argType="com.pechuro.bsuirschedule.domain.entity.ScheduleItem[]" />
     </fragment>
 </navigation>

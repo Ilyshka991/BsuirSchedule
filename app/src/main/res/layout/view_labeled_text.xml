@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/labeledTextViewLabel"
+        style="@style/DefaultText"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        tools:text="Label:" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/labeledTextViewMessage"
+        style="@style/DefaultText"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="start"
+        android:paddingStart="8dp"
+        android:paddingLeft="8dp"
+        tools:ignore="RtlSymmetry"
+        tools:text="text" />
+</merge>

@@ -251,15 +251,13 @@ class ScheduleRepositoryImpl(
         }
     }
 
-    override suspend fun deleteScheduleItem(scheduleItem: ScheduleItem) {
-        performDaoCall {
-            val id = scheduleItem.id
-            when (scheduleItem) {
-                is Lesson.GroupLesson -> dao.deleteGroupClassesItem(id)
-                is Lesson.EmployeeLesson -> dao.deleteEmployeeClassesItem(id)
-                is Exam.GroupExam -> dao.deleteGroupExamItem(id)
-                is Exam.EmployeeExam -> dao.deleteEmployeeExamItem(id)
-            }
+    override suspend fun deleteScheduleItems(scheduleItems: List<ScheduleItem>) {
+        withContext(Dispatchers.IO) {
+            scheduleItems.map { scheduleItem ->
+                async {
+                    deleteScheduleItem(scheduleItem)
+                }
+            }.awaitAll()
         }
     }
 
@@ -274,31 +272,52 @@ class ScheduleRepositoryImpl(
         }
     }
 
-    override suspend fun modifyScheduleItem(schedule: Schedule, scheduleItem: ScheduleItem) {
+    override suspend fun addScheduleItems(schedule: Schedule, scheduleItems: List<ScheduleItem>) {
+        withContext(Dispatchers.IO) {
+            scheduleItems.map { scheduleItem ->
+                async {
+                    addScheduleItem(schedule, scheduleItem)
+                }
+            }.awaitAll()
+        }
+    }
+
+    private suspend fun addScheduleItem(schedule: Schedule, scheduleItem: ScheduleItem) {
         performDaoCall {
             when (scheduleItem) {
                 is Lesson.GroupLesson -> {
                     val cachedSchedule = (schedule as Schedule.GroupClasses).toDatabaseEntity()
                     val cachedScheduleItem = scheduleItem.toDatabaseEntity(cachedSchedule)
-                    dao.modifyGroupLesson(cachedScheduleItem)
+                    dao.addGroupLesson(cachedScheduleItem)
                 }
                 is Lesson.EmployeeLesson -> {
                     val cachedSchedule = (schedule as Schedule.EmployeeClasses).toDatabaseEntity()
                     val cachedScheduleItem = scheduleItem.toDatabaseEntity(cachedSchedule)
-                    dao.modifyEmployeeLesson(cachedScheduleItem)
+                    dao.addEmployeeLesson(cachedScheduleItem)
                 }
                 is Exam.GroupExam -> {
                     val cachedSchedule = (schedule as Schedule.GroupExams).toDatabaseEntity()
                     val cachedScheduleItem = scheduleItem.toDatabaseEntity(cachedSchedule)
-                    dao.modifyGroupExam(cachedScheduleItem)
+                    dao.addGroupExam(cachedScheduleItem)
                 }
                 is Exam.EmployeeExam -> {
                     val cachedSchedule = (schedule as Schedule.EmployeeExams).toDatabaseEntity()
                     val cachedScheduleItem = scheduleItem.toDatabaseEntity(cachedSchedule)
-                    dao.modifyEmployeeExam(cachedScheduleItem)
+                    dao.addEmployeeExam(cachedScheduleItem)
                 }
             }
-            Unit
+        }
+    }
+
+    private suspend fun deleteScheduleItem(scheduleItem: ScheduleItem) {
+        performDaoCall {
+            val id = scheduleItem.id
+            when (scheduleItem) {
+                is Lesson.GroupLesson -> dao.deleteGroupClassesItem(id)
+                is Lesson.EmployeeLesson -> dao.deleteEmployeeClassesItem(id)
+                is Exam.GroupExam -> dao.deleteGroupExamItem(id)
+                is Exam.EmployeeExam -> dao.deleteEmployeeExamItem(id)
+            }
         }
     }
 

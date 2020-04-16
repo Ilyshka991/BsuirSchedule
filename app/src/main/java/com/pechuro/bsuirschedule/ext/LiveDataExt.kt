@@ -24,3 +24,6 @@ internal inline fun <T> flowLiveData(crossinline block: suspend () -> Flow<T>): 
         Logger.e(it)
     })
 }.asLiveData()
+
+val <T>LiveData<T>.requireValue: T
+    get() = value ?: throw IllegalStateException("Value is null")
