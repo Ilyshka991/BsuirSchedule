@@ -69,4 +69,17 @@
     <string name="modify_schedule_item_msg_exam">exam</string>
     <string name="modify_schedule_item_msg_lesson">class</string>
     <string name="modify_schedule_item_action_done">Done</string>
+    <string name="modify_schedule_item_hint_subject">Subject</string>
+    <string name="modify_schedule_item_label_type">Type:</string>
+    <string name="modify_schedule_item_label_weekday">Day:</string>
+    <string name="modify_schedule_item_label_week_numbers">Weeks:</string>
+    <string name="modify_schedule_item_label_start_time">Start time:</string>
+    <string name="modify_schedule_item_label_end_time">End time:</string>
+    <string name="modify_schedule_item_label_groups">Groups:</string>
+    <string name="modify_schedule_item_label_employees">Employees:</string>
+    <string name="modify_schedule_item_label_subgroup_number">Subgroup:</string>
+    <string name="modify_schedule_item_label_auditories">Auditories:</string>
+    <string name="modify_schedule_item_hint_note">Note</string>
+    <string name="modify_schedule_item_label_priority">Priority:</string>
+    <string name="modify_schedule_item_label_date">Date:</string>
 </resources>

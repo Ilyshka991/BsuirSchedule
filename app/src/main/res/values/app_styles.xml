@@ -19,6 +19,7 @@
         <item name="accentColor">@color/amber_200</item>
 
         <item name="backgroundColor">@color/white</item>
+        <item name="secondBackgroundColor">@color/grey_100</item>
         <item name="backgroundDarkColor">@color/grey_800</item>
         <item name="rippleColor">@color/grey_300</item>
         <item name="dividerColor">@color/grey_400</item>

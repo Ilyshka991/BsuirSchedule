@@ -2,6 +2,7 @@ package com.pechuro.bsuirschedule.feature.modifyitem
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
@@ -47,6 +48,18 @@ class ModifyScheduleItemFragment : BaseFragment() {
                 viewModel.saveChanges(args.schedule, getResultScheduleItem())
             }
         }
+
+        val isClassesSchedule = args.schedule is Schedule.GroupClasses || args.schedule is Schedule.EmployeeClasses
+        modifyScheduleItemPriority.isVisible = isClassesSchedule
+        modifyScheduleItemWeekday.isVisible = isClassesSchedule
+        modifyScheduleItemWeekNumbers.isVisible = isClassesSchedule
+        modifyScheduleItemDate.isVisible = !isClassesSchedule
+
+        val isGroupSchedule = args.schedule is Schedule.GroupClasses || args.schedule is Schedule.GroupExams
+        modifyScheduleItemGroupsLabel.isVisible = !isGroupSchedule
+        modifyScheduleItemGroupsChips.isVisible = !isGroupSchedule
+        modifyScheduleItemEmployeesLabel.isVisible = isGroupSchedule
+        modifyScheduleItemEmployeesChips.isVisible = isGroupSchedule
     }
 
     private fun observeData() {

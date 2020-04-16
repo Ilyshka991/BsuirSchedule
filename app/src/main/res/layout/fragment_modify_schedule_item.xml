@@ -23,17 +23,160 @@
             android:textSize="16sp" />
     </com.google.android.material.appbar.MaterialToolbar>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/dividerColor" />
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:overScrollMode="ifContentScrolls">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="16dp">
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modifyScheduleItemSubjectTextLayout"
+                style="@style/FilledTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/modify_schedule_item_hint_subject">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/modifyScheduleItemSubjectText"
+                    style="@style/TextInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:maxLines="2">
+
+                    <requestFocus />
+                </com.google.android.material.textfield.TextInputEditText>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.pechuro.bsuirschedule.widget.LabeledTextView
+                android:id="@+id/modifyScheduleItemType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:label_text="@string/modify_schedule_item_label_type"
+                app:text_size="22sp" />
+
+            <com.pechuro.bsuirschedule.widget.LabeledTextView
+                android:id="@+id/modifyScheduleItemPriority"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:label_text="@string/modify_schedule_item_label_priority"
+                app:text_size="22sp" />
+
+            <com.pechuro.bsuirschedule.widget.LabeledTextView
+                android:id="@+id/modifyScheduleItemSubgroupNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:label_text="@string/modify_schedule_item_label_subgroup_number"
+                app:text_size="22sp" />
+
+            <com.pechuro.bsuirschedule.widget.LabeledTextView
+                android:id="@+id/modifyScheduleItemStartTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:label_text="@string/modify_schedule_item_label_start_time"
+                app:text_size="22sp" />
+
+            <com.pechuro.bsuirschedule.widget.LabeledTextView
+                android:id="@+id/modifyScheduleItemEndTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:label_text="@string/modify_schedule_item_label_end_time"
+                app:text_size="22sp" />
+
+            <com.pechuro.bsuirschedule.widget.LabeledTextView
+                android:id="@+id/modifyScheduleItemWeekday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:label_text="@string/modify_schedule_item_label_weekday"
+                app:text_size="22sp" />
+
+            <com.pechuro.bsuirschedule.widget.LabeledTextView
+                android:id="@+id/modifyScheduleItemWeekNumbers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:label_text="@string/modify_schedule_item_label_week_numbers"
+                app:text_size="22sp" />
+
+            <com.pechuro.bsuirschedule.widget.LabeledTextView
+                android:id="@+id/modifyScheduleItemDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:label_text="@string/modify_schedule_item_label_date"
+                app:text_size="22sp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/modifyScheduleItemGroupsLabel"
+                style="@style/DefaultText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/modify_schedule_item_label_groups"
+                android:textSize="22sp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/modifyScheduleItemGroupsChips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/modifyScheduleItemEmployeesLabel"
+                style="@style/DefaultText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/modify_schedule_item_label_employees"
+                android:textSize="22sp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/modifyScheduleItemEmployeesChips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/DefaultText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/modify_schedule_item_label_auditories"
+                android:textSize="22sp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/modifyScheduleItemAuditoriesChips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modifyScheduleItemNoteTextLayout"
+                style="@style/FilledTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/modify_schedule_item_hint_note">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/modifyScheduleItemNoteText"
+                    style="@style/TextInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

@@ -64,6 +64,14 @@
         <item name="boxStrokeColor">?attr/textDefaultColor</item>
     </style>
 
+    <style name="FilledTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="hintTextColor">?attr/textDefaultColor</item>
+        <item name="boxBackgroundColor">?attr/secondBackgroundColor</item>
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerRadius">12dp</item>
+    </style>
+
     <style name="AutoValidateTextInputLayout" parent="OutlinedTextInputLayout">
         <item name="errorTextColor">?attr/textErrorColor</item>
         <item name="errorIconDrawable">@drawable/ic_error</item>
