@@ -72,7 +72,7 @@
     <string name="modify_schedule_item_hint_subject">Subject</string>
     <string name="modify_schedule_item_label_type">Type:</string>
     <string name="modify_schedule_item_label_weekday">Day:</string>
-    <string name="modify_schedule_item_label_week_numbers">Weeks:</string>
+    <string name="modify_schedule_item_label_week_numbers">Week:</string>
     <string name="modify_schedule_item_label_start_time">Start time:</string>
     <string name="modify_schedule_item_label_end_time">End time:</string>
     <string name="modify_schedule_item_label_groups">Groups:</string>
@@ -82,4 +82,34 @@
     <string name="modify_schedule_item_hint_note">Note</string>
     <string name="modify_schedule_item_label_priority">Priority:</string>
     <string name="modify_schedule_item_label_date">Date:</string>
+
+    <string-array name="lesson_types">
+        <item>ЛК</item>
+        <item>ПЗ</item>
+        <item>ЛР</item>
+    </string-array>
+
+    <string-array name="exam_types">
+        <item>Экзамен</item>
+        <item>Консультация</item>
+    </string-array>
+
+    <string name="lesson_priotity_lowest">lowest</string>
+    <string name="lesson_priotity_low">low</string>
+    <string name="lesson_priotity_medium">medium</string>
+    <string name="lesson_priotity_high">high</string>
+
+    <string name="subgroup_number_all">all group</string>
+    <string name="subgroup_number_first">first</string>
+    <string name="subgroup_number_second">second</string>
+
+    <string-array name="weekdays">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
 </resources>

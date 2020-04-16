@@ -9,3 +9,5 @@ fun <T> Array<T>.toQueue(): Queue<T> = ArrayDeque<T>().apply {
 }
 
 fun <T> List<T>.addIfEmpty(item: T) = if (isEmpty()) listOf(item) else this
+
+fun <T> List<T>.addIfEmpty(block: () -> T) = if (isEmpty()) listOf(block()) else this

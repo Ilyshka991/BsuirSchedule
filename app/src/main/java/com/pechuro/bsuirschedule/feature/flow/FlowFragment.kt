@@ -20,6 +20,7 @@ import com.pechuro.bsuirschedule.feature.datepicker.DisplayScheduleDatePickerShe
 import com.pechuro.bsuirschedule.feature.datepicker.ScheduleDatePickedEvent
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleContainerArgs
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleEvent
+import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import com.pechuro.bsuirschedule.feature.examdetails.ExamDetailsFragmentArgs
 import com.pechuro.bsuirschedule.feature.itemoptions.EditScheduleItemEvent
 import com.pechuro.bsuirschedule.feature.itemoptions.ScheduleItemOptionsSheetArgs
@@ -128,43 +129,43 @@ class FlowFragment : BaseFragment() {
                 is NavigationSheetEvent.OnScheduleDeleted -> onScheduleDeleted(event.schedule)
                 is NavigationSheetEvent.OnOpenSettings -> {
                 }
-                is DisplayScheduleEvent.OpenScheduleItemDetails -> openScheduleItemDetails(event.scheduleItem)
-                is DisplayScheduleEvent.OpenScheduleItemOptions -> openScheduleItemOptions(event.scheduleItem)
+                is DisplayScheduleEvent.OpenScheduleItemDetails -> openScheduleItemDetails(event.data)
+                is DisplayScheduleEvent.OpenScheduleItemOptions -> openScheduleItemOptions(event.data)
                 is DisplayScheduleEvent.OnPositionChanged -> onDisplaySchedulePositionChanged(event.position)
                 is DisplayScheduleEvent.OpenDatePicker -> openDatePicker(event.startDate, event.endDate, event.currentDate)
                 is ScheduleDatePickedEvent -> popFragment()
                 is EditScheduleItemEvent -> {
                     popFragment()
                     val schedule = viewModel.getLastOpenedSchedule() ?: return@receive
-                    openEditScheduleItem(schedule, event.scheduleItem)
+                    openEditScheduleItem(schedule, event.scheduleItems)
                 }
             }
         }
     }
 
-    private fun openScheduleItemOptions(scheduleItem: ScheduleItem) {
-        val arguments = ScheduleItemOptionsSheetArgs(scheduleItem).toBundle()
+    private fun openScheduleItemOptions(data: DisplayScheduleItem) {
+        val arguments = ScheduleItemOptionsSheetArgs(data).toBundle()
         navController.navigate(R.id.scheduleItemOptionsDestination, arguments, defaultNavOptions)
     }
 
     private fun openAddScheduleItem(schedule: Schedule) {
         val arguments = ModifyScheduleItemFragmentArgs(
                 schedule = schedule,
-                item = null
+                items = emptyArray()
         ).toBundle()
         navController.navigate(R.id.modifyScheduleItemDestination, arguments, defaultNavOptions)
     }
 
-    private fun openEditScheduleItem(schedule: Schedule, scheduleItem: ScheduleItem) {
+    private fun openEditScheduleItem(schedule: Schedule, scheduleItems: List<ScheduleItem>) {
         val arguments = ModifyScheduleItemFragmentArgs(
                 schedule = schedule,
-                item = scheduleItem
+                items = scheduleItems.toTypedArray()
         ).toBundle()
         navController.navigate(R.id.modifyScheduleItemDestination, arguments, defaultNavOptions)
     }
 
-    private fun openScheduleItemDetails(scheduleItem: ScheduleItem) {
-        when (scheduleItem) {
+    private fun openScheduleItemDetails(data: DisplayScheduleItem) {
+        when (val scheduleItem = data.scheduleItem) {
             is Lesson -> openScheduleLessonDetails(scheduleItem)
             is Exam -> openScheduleExamDetails(scheduleItem)
         }

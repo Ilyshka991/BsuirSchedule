@@ -6,6 +6,7 @@ import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.entity.WeekNumber.Companion.calculateCurrentWeekNumber
 import com.pechuro.bsuirschedule.domain.interactor.GetScheduleDisplaySubgroupNumber
 import com.pechuro.bsuirschedule.domain.interactor.GetScheduleDisplayType
 import com.pechuro.bsuirschedule.domain.interactor.GetScheduleItems
@@ -21,7 +22,6 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import java.util.*
 import javax.inject.Inject
 
 class DisplayScheduleViewModel @Inject constructor(
@@ -122,12 +122,9 @@ class DisplayScheduleViewModel @Inject constructor(
             .values
             .map { lessons ->
                 val lesson = lessons.first()
-                val weekNumbers = lessons.map { it.weekNumber }.sorted()
-                val ids = lessons.map { it.id }
                 DisplayScheduleItem.WeekClasses(
                         scheduleItem = lesson,
-                        itemsIdList = ids,
-                        weekNumbers = weekNumbers
+                        allScheduleItems = lessons
                 )
             }
             .toList()
@@ -137,20 +134,4 @@ class DisplayScheduleViewModel @Inject constructor(
             .filterIsInstance<Exam>()
             .sortedBy { it.date }
             .map(DisplayScheduleItem::Exams)
-
-    private fun calculateCurrentWeekNumber(): WeekNumber {
-        val currentCalendar = Calendar.getInstance()
-        var year = currentCalendar.get(Calendar.YEAR)
-        if (currentCalendar.get(Calendar.MONTH) < 8) year--
-        val firstDayCalendar = Calendar.getInstance()
-        firstDayCalendar.set(year, Calendar.SEPTEMBER, 1, 0, 0, 0)
-        val difference = (currentCalendar.timeInMillis - firstDayCalendar.timeInMillis) / 1000 / 60 / 60 / 24
-        var day = firstDayCalendar.get(GregorianCalendar.DAY_OF_WEEK)
-        day -= 2
-        if (day == -1) {
-            day = 6
-        }
-        val weekNumberIndex = ((difference + day).toInt() / 7) % 4
-        return WeekNumber.getForIndex(weekNumberIndex)
-    }
 }

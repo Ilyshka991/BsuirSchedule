@@ -6,12 +6,11 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
-import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.ext.hideKeyboard
-import com.pechuro.bsuirschedule.ext.nonNull
-import com.pechuro.bsuirschedule.ext.observe
-import com.pechuro.bsuirschedule.ext.setSafeClickListener
+import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.feature.display.fragment.SCHEDULE_ITEM_DATE_FORMAT_PATTERN
 import kotlinx.android.synthetic.main.fragment_modify_schedule_item.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 class ModifyScheduleItemFragment : BaseFragment() {
@@ -21,11 +20,15 @@ class ModifyScheduleItemFragment : BaseFragment() {
     private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
         initViewModel(ModifyScheduleItemViewModel::class)
     }
+
     private val args: ModifyScheduleItemFragmentArgs by navArgs()
+
+    private val dateFormatter = SimpleDateFormat(SCHEDULE_ITEM_DATE_FORMAT_PATTERN, Locale.getDefault())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        fillParams()
         observeData()
     }
 
@@ -35,31 +38,47 @@ class ModifyScheduleItemFragment : BaseFragment() {
     }
 
     private fun initView() {
-        modifyScheduleItemToolbar.apply {
-            title = getToolbarTitle()
-            setNavigationOnClickListener {
-                activity?.onBackPressed()
-            }
-        }
-        modifyScheduleItemDoneButton.setSafeClickListener {
-            val isInputValid = validate()
-            modifyScheduleItemDoneButton.isEnabled = isInputValid
-            if (isInputValid) {
-                viewModel.saveChanges(args.schedule, getResultScheduleItem())
-            }
-        }
+        modifyScheduleItemToolbar.title = getToolbarTitle()
+        setParamsVisibility(args.schedule)
+        setListeners()
+    }
 
-        val isClassesSchedule = args.schedule is Schedule.GroupClasses || args.schedule is Schedule.EmployeeClasses
+    private fun setParamsVisibility(schedule: Schedule) {
+        val isClassesSchedule = schedule is Schedule.GroupClasses || schedule is Schedule.EmployeeClasses
         modifyScheduleItemPriority.isVisible = isClassesSchedule
         modifyScheduleItemWeekday.isVisible = isClassesSchedule
         modifyScheduleItemWeekNumbers.isVisible = isClassesSchedule
         modifyScheduleItemDate.isVisible = !isClassesSchedule
 
-        val isGroupSchedule = args.schedule is Schedule.GroupClasses || args.schedule is Schedule.GroupExams
+        val isGroupSchedule = schedule is Schedule.GroupClasses || schedule is Schedule.GroupExams
         modifyScheduleItemGroupsLabel.isVisible = !isGroupSchedule
         modifyScheduleItemGroupsChips.isVisible = !isGroupSchedule
         modifyScheduleItemEmployeesLabel.isVisible = isGroupSchedule
         modifyScheduleItemEmployeesChips.isVisible = isGroupSchedule
+    }
+
+    private fun setListeners() {
+        modifyScheduleItemToolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
+        modifyScheduleItemDoneButton.setSafeClickListener {
+            viewModel.saveChanges()
+        }
+        modifyScheduleItemSubjectText.addTextListener {
+            viewModel.data.subjectData.value = it
+        }
+        modifyScheduleItemNoteText.addTextListener {
+            viewModel.data.noteData.value = it
+        }
+    }
+
+    private fun fillParams() {
+        val scheduleItems = args.items
+        viewModel.data.init(args.schedule, scheduleItems)
+        val subject = scheduleItems.firstOrNull()?.subject ?: ""
+        modifyScheduleItemSubjectText.setText(subject)
+        val note = scheduleItems.firstOrNull()?.note ?: ""
+        modifyScheduleItemNoteText.setText(note)
     }
 
     private fun observeData() {
@@ -73,10 +92,45 @@ class ModifyScheduleItemFragment : BaseFragment() {
                 }
             }
         }
+        with(viewModel.data) {
+            lessonTypeData.nonNull().observe(viewLifecycleOwner) { lessonType ->
+                modifyScheduleItemType.setMessage(lessonType)
+            }
+            subgroupNumberData.nonNull().observe(viewLifecycleOwner) { subgroupNumber ->
+                modifyScheduleItemSubgroupNumber.setMessage(subgroupNumber.formattedStringRes)
+            }
+            startTimeData.nonNull().observe(viewLifecycleOwner) { startTime ->
+                modifyScheduleItemStartTime.setMessage(startTime)
+            }
+            endTimeData.nonNull().observe(viewLifecycleOwner) { endTime ->
+                modifyScheduleItemEndTime.setMessage(endTime)
+            }
+            priorityData.nonNull().observe(viewLifecycleOwner) { priority ->
+                modifyScheduleItemPriority.setMessage(priority.formattedStringRes)
+            }
+            weekDayData.nonNull().observe(viewLifecycleOwner) { weekDay ->
+                modifyScheduleItemWeekday.setMessage(weekDay.getFormattedString(resources))
+            }
+            weekNumberData.nonNull().observe(viewLifecycleOwner) { weekNumbers ->
+                modifyScheduleItemWeekNumbers.setMessage(weekNumbers.joinToString { (it.index + 1).toString() })
+            }
+            dateData.nonNull().observe(viewLifecycleOwner) { date ->
+                modifyScheduleItemDate.setMessage(dateFormatter.format(date))
+            }
+            auditoriesData.nonNull().observe(viewLifecycleOwner) {
+
+            }
+            employeesData.nonNull().observe(viewLifecycleOwner) {
+
+            }
+            studentGroupsData.nonNull().observe(viewLifecycleOwner) {
+
+            }
+        }
     }
 
     private fun getToolbarTitle(): String {
-        val scheduleItem = args.item
+        val scheduleItem = args.items.firstOrNull()
         return if (scheduleItem == null) {
             val scheduleTypeResId = when (args.schedule) {
                 is Schedule.GroupClasses, is Schedule.EmployeeClasses -> R.string.modify_schedule_item_msg_lesson
@@ -86,80 +140,6 @@ class ModifyScheduleItemFragment : BaseFragment() {
             getString(R.string.modify_schedule_item_title_add, scheduleType)
         } else {
             getString(R.string.modify_schedule_item_title_edit, scheduleItem.subject)
-        }
-    }
-
-    private fun validate(): Boolean {
-        return true
-    }
-
-    private fun getResultScheduleItem(): ScheduleItem {
-        val id = args.item?.id ?: 0
-        val subject = ""
-        val subgroupNumber = SubgroupNumber.ALL
-        val lessonType = "aa"
-        val note = "sad"
-        val startTime = "13.45"
-        val endTime = "13.46"
-        val auditories: List<Auditory> = emptyList()
-        val isAddedByUser = args.item == null
-        return when (args.schedule) {
-            is Schedule.GroupClasses -> Lesson.GroupLesson(
-                    id = id,
-                    subject = subject,
-                    subgroupNumber = subgroupNumber,
-                    lessonType = lessonType,
-                    note = note,
-                    startTime = startTime,
-                    endTime = endTime,
-                    auditories = auditories,
-                    isAddedByUser = isAddedByUser,
-                    priority = LessonPriority.HIGH,
-                    weekDay = WeekDay.SATURDAY,
-                    weekNumber = WeekNumber.FIRST,
-                    employees = emptyList()
-            )
-            is Schedule.EmployeeClasses -> Lesson.EmployeeLesson(
-                    id = id,
-                    subject = subject,
-                    subgroupNumber = subgroupNumber,
-                    lessonType = lessonType,
-                    note = note,
-                    startTime = startTime,
-                    endTime = endTime,
-                    auditories = auditories,
-                    isAddedByUser = isAddedByUser,
-                    priority = LessonPriority.HIGH,
-                    weekDay = WeekDay.SATURDAY,
-                    weekNumber = WeekNumber.FIRST,
-                    studentGroups = emptyList()
-            )
-            is Schedule.GroupExams -> Exam.GroupExam(
-                    id = id,
-                    subject = subject,
-                    subgroupNumber = subgroupNumber,
-                    lessonType = lessonType,
-                    note = note,
-                    startTime = startTime,
-                    endTime = endTime,
-                    auditories = auditories,
-                    isAddedByUser = isAddedByUser,
-                    date = Date(),
-                    employees = emptyList()
-            )
-            is Schedule.EmployeeExams -> Exam.EmployeeExam(
-                    id = id,
-                    subject = subject,
-                    subgroupNumber = subgroupNumber,
-                    lessonType = lessonType,
-                    note = note,
-                    startTime = startTime,
-                    endTime = endTime,
-                    auditories = auditories,
-                    isAddedByUser = isAddedByUser,
-                    date = Date(),
-                    studentGroups = emptyList()
-            )
         }
     }
 }

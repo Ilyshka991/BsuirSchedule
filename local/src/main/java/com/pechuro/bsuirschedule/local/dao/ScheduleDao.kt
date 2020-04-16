@@ -169,7 +169,7 @@ interface ScheduleDao {
     }
 
     @Transaction
-    suspend fun modifyGroupLesson(item: GroupClassesItemComplex) {
+    suspend fun addGroupLesson(item: GroupClassesItemComplex) {
         val scheduleItemId = insert(item.scheduleItem)
         item.employees.forEach { employee ->
             val joinEntity = GroupLessonEmployeeCrossRef(scheduleItemId, employee.id)
@@ -182,7 +182,7 @@ interface ScheduleDao {
     }
 
     @Transaction
-    suspend fun modifyGroupExam(item: GroupExamItemComplex) {
+    suspend fun addGroupExam(item: GroupExamItemComplex) {
         val scheduleItemId = insert(item.scheduleItem)
         item.employees.forEach { employee ->
             val joinEntity = GroupExamEmployeeCrossRef(scheduleItemId, employee.id)
@@ -195,7 +195,7 @@ interface ScheduleDao {
     }
 
     @Transaction
-    suspend fun modifyEmployeeLesson(item: EmployeeClassesItemComplex) {
+    suspend fun addEmployeeLesson(item: EmployeeClassesItemComplex) {
         val scheduleItemId = insert(item.scheduleItem)
         item.groups.forEach { group ->
             val joinEntity = EmployeeLessonGroupCrossRef(scheduleItemId, group.id)
@@ -208,7 +208,7 @@ interface ScheduleDao {
     }
 
     @Transaction
-    suspend fun modifyEmployeeExam(item: EmployeeExamItemComplex) {
+    suspend fun addEmployeeExam(item: EmployeeExamItemComplex) {
         val scheduleItemId = insert(item.scheduleItem)
         item.groups.forEach { group ->
             val joinEntity = EmployeeExamGroupCrossRef(scheduleItemId, group.id)

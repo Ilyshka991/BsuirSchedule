@@ -15,7 +15,7 @@ import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.color
-import com.pechuro.bsuirschedule.ext.colorRes
+import com.pechuro.bsuirschedule.ext.formattedColorRes
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleEvent
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
@@ -38,17 +38,16 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
     ) = oldItem == newItem
 }
 
-private class OnScheduleItemClickListener : View.OnClickListener {
-    override fun onClick(view: View) {
-        val scheduleItem = view.tag as? ScheduleItem? ?: return
-        EventBus.send(DisplayScheduleEvent.OpenScheduleItemDetails(scheduleItem))
-    }
-}
+private class OnScheduleItemClickListener : View.OnClickListener, View.OnLongClickListener {
 
-private class OnScheduleItemLongClickListener : View.OnLongClickListener {
+    override fun onClick(view: View) {
+        val data = view.tag as? DisplayScheduleItem? ?: return
+        EventBus.send(DisplayScheduleEvent.OpenScheduleItemDetails(data))
+    }
+
     override fun onLongClick(view: View): Boolean {
-        val scheduleItem = view.tag as? ScheduleItem? ?: return false
-        EventBus.send(DisplayScheduleEvent.OpenScheduleItemOptions(scheduleItem))
+        val data = view.tag as? DisplayScheduleItem? ?: return false
+        EventBus.send(DisplayScheduleEvent.OpenScheduleItemOptions(data))
         return true
     }
 }
@@ -57,7 +56,7 @@ private const val CLASSES_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_c
 private const val EXAMS_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_exam
 private const val EMPTY_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_empty
 
-private const val DATE_FORMAT_PATTERN = "dd.MM.yyyy"
+const val SCHEDULE_ITEM_DATE_FORMAT_PATTERN = "dd.MM.yyyy"
 
 class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHolder<DisplayScheduleItem>>(DIFF_CALLBACK) {
 
@@ -87,8 +86,9 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
     private class ClassesViewHolder(view: View) : BaseViewHolder<DisplayScheduleItem>(view) {
 
         init {
-            itemView.setSafeClickListener(onClickListener = OnScheduleItemClickListener())
-            itemView.setOnLongClickListener(OnScheduleItemLongClickListener())
+            val clickListener = OnScheduleItemClickListener()
+            itemView.setSafeClickListener(onClickListener = clickListener)
+            itemView.setOnLongClickListener(clickListener)
         }
 
         override fun onBind(data: DisplayScheduleItem) {
@@ -96,7 +96,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
             if (scheduleItem !is Lesson) return
             scheduleItem.run {
                 displayClassesLessonType.text = lessonType
-                val lessonTypeColor = itemView.context.color(priority.colorRes)
+                val lessonTypeColor = itemView.context.color(priority.formattedColorRes)
                 ViewCompat.setBackgroundTintList(displayClassesLessonType, ColorStateList.valueOf(lessonTypeColor))
                 displayClassesTitle.text = subject
                 displayClassesAuditories.text = auditories.formatAuditories()
@@ -107,10 +107,11 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
                 displayClassesNote.isVisible = note.isNotEmpty() && note.isNotBlank()
                 displayClassesNote.text = note
                 if (data is DisplayScheduleItem.WeekClasses) {
-                    displayClassesWeeks.isVisible = data.weekNumbers.size != WeekNumber.TOTAL_COUNT
+                    val weekNumbers = data.allScheduleItems.map { it.weekNumber }.sorted()
+                    displayClassesWeeks.isVisible = weekNumbers.size != WeekNumber.TOTAL_COUNT
                     displayClassesWeeks.text = itemView.context.getString(
                             R.string.display_schedule_item_msg_week_numbers,
-                            data.weekNumbers.formatWeekNumbers()
+                            weekNumbers.formatWeekNumbers()
                     )
                 }
                 val info = when (scheduleItem) {
@@ -120,17 +121,18 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
                 displayClassesInfo.text = info
 
             }
-            itemView.tag = scheduleItem
+            itemView.tag = data
         }
     }
 
     private class ExamsViewHolder(view: View) : BaseViewHolder<DisplayScheduleItem.Exams>(view) {
 
-        private val dateFormatter = SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.getDefault())
+        private val dateFormatter = SimpleDateFormat(SCHEDULE_ITEM_DATE_FORMAT_PATTERN, Locale.getDefault())
 
         init {
-            itemView.setSafeClickListener(onClickListener = OnScheduleItemClickListener())
-            itemView.setOnLongClickListener(OnScheduleItemLongClickListener())
+            val clickListener = OnScheduleItemClickListener()
+            itemView.setSafeClickListener(onClickListener = clickListener)
+            itemView.setOnLongClickListener(clickListener)
         }
 
         override fun onBind(data: DisplayScheduleItem.Exams) {
@@ -155,7 +157,7 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
                 displayExamInfo.text = info
 
             }
-            itemView.tag = scheduleItem
+            itemView.tag = data
         }
     }
 
