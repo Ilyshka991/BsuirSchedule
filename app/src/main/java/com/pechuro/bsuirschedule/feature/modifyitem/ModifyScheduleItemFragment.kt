@@ -112,7 +112,8 @@ class ModifyScheduleItemFragment : BaseFragment() {
                 modifyScheduleItemWeekday.setMessage(weekDay.getFormattedString(resources))
             }
             weekNumberData.nonNull().observe(viewLifecycleOwner) { weekNumbers ->
-                modifyScheduleItemWeekNumbers.setMessage(weekNumbers.joinToString { (it.index + 1).toString() })
+                val formattedWeekNumbers = weekNumbers.map { it.index + 1 }.sorted().joinToString { it.toString() }
+                modifyScheduleItemWeekNumbers.setMessage(formattedWeekNumbers)
             }
             dateData.nonNull().observe(viewLifecycleOwner) { date ->
                 modifyScheduleItemDate.setMessage(dateFormatter.format(date))

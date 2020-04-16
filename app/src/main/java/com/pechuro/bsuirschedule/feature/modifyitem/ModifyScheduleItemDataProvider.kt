@@ -58,7 +58,7 @@ class ModifyScheduleItemDataProvider(private val context: Context) {
             is Lesson -> {
                 priority = scheduleItem.priority
                 weekDay = scheduleItem.weekDay
-                val resultWeekNumbers = scheduleItems.filterIsInstance<Lesson>().map { it.weekNumber }.sorted()
+                val resultWeekNumbers = scheduleItems.filterIsInstance<Lesson>().map { it.weekNumber }
                 if (resultWeekNumbers.isNotEmpty()) {
                     weekNumber = resultWeekNumbers
                 }
