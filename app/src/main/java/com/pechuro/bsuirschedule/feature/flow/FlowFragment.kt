@@ -313,7 +313,7 @@ class FlowFragment : BaseFragment() {
             is Schedule.EmployeeClasses, is Schedule.GroupClasses -> {
                 bottomBarDisplayOptionsButton.isVisible = true
                 bottomBarGoToDateButton.isVisible = viewModel.getScheduleDisplayType() == ScheduleDisplayType.DAYS
-                bottomBarAddScheduleItemButton.isVisible = viewModel.getScheduleDisplayType() == ScheduleDisplayType.DAYS
+                bottomBarAddScheduleItemButton.isVisible = true
             }
             is Schedule.EmployeeExams, is Schedule.GroupExams -> {
                 bottomBarDisplayOptionsButton.isVisible = false
