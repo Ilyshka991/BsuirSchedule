@@ -64,11 +64,6 @@ class AddScheduleFragment : BaseFragment() {
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        activity?.window?.clearFlags(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
@@ -88,6 +83,11 @@ class AddScheduleFragment : BaseFragment() {
     override fun onDestroyView() {
         addScheduleSuggestionsRecyclerView.clearAdapter()
         super.onDestroyView()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        activity?.window?.clearFlags(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
     }
 
     private fun initView() {

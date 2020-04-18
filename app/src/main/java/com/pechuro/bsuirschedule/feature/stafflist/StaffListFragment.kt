@@ -9,12 +9,16 @@ import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.ext.*
 import kotlinx.android.synthetic.main.fragment_staff_list.*
 
 class StaffListFragment : BaseFragment() {
+
+    interface ActionCallback {
+
+        fun onStaffListItemSelected(info: StaffItemInformation)
+    }
 
     companion object {
         const val TAG = "StaffListFragment"
@@ -34,7 +38,7 @@ class StaffListFragment : BaseFragment() {
 
     private val staffAdapter by lazy(LazyThreadSafetyMode.NONE) {
         StaffAdapter(onItemClicked = {
-            EventBus.send(StaffListItemSelectedEvent(it))
+            actionCallback?.onStaffListItemSelected(it)
         }).also {
             it.setHasStableIds(true)
         }
@@ -44,14 +48,12 @@ class StaffListFragment : BaseFragment() {
         serializableOrException<StaffType>(BUNDLE_TYPE)
     }
 
+    private var actionCallback: ActionCallback? = null
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        activity?.window?.clearFlags(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        actionCallback = getCallbackOrNull()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,6 +75,12 @@ class StaffListFragment : BaseFragment() {
     override fun onDestroyView() {
         staffListRecyclerView.clearAdapter()
         super.onDestroyView()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        activity?.window?.clearFlags(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        actionCallback = null
     }
 
     private fun initView() {

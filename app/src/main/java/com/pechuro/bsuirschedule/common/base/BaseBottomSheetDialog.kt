@@ -11,17 +11,20 @@ import androidx.annotation.LayoutRes
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.pechuro.bsuirschedule.common.BackPressedHandler
 import com.pechuro.bsuirschedule.ext.app
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-abstract class BaseBottomSheetDialog : BottomSheetDialogFragment() {
+abstract class BaseBottomSheetDialog : BottomSheetDialogFragment(), BackPressedHandler {
 
     @Inject
     protected lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @get:LayoutRes
     protected abstract val layoutId: Int
+
+    override fun onBackPressed(): Boolean = false
 
     override fun onAttach(context: Context) {
         context.app.appComponent.inject(this)

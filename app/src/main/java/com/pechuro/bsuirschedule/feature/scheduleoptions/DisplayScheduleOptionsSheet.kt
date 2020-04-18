@@ -26,7 +26,6 @@ class DisplayScheduleOptionsSheet : BaseBottomSheetDialog() {
         fun newInstance(schedule: Schedule) = DisplayScheduleOptionsSheet().apply {
             arguments = bundleOf(BUNDLE_SCHEDULE to schedule)
         }
-
     }
 
     override val layoutId = R.layout.sheet_display_schedule_options

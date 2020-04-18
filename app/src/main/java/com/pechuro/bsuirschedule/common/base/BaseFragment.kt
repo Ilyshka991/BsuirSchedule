@@ -9,8 +9,7 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import com.pechuro.bsuirschedule.common.BaseEvent
-import com.pechuro.bsuirschedule.common.EventBus
+import com.pechuro.bsuirschedule.common.BackPressedHandler
 import com.pechuro.bsuirschedule.ext.app
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +17,7 @@ import kotlinx.coroutines.cancel
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment : Fragment(), BackPressedHandler {
 
     @Inject
     protected lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -29,7 +28,7 @@ abstract class BaseFragment : Fragment() {
     protected lateinit var eventCoroutineScope: CoroutineScope
         private set
 
-    open fun onBackPressed(): Boolean = false
+    override fun onBackPressed(): Boolean = false
 
     override fun onAttach(context: Context) {
         context.app.appComponent.inject(this)
@@ -49,7 +48,6 @@ abstract class BaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         eventCoroutineScope = CoroutineScope(Dispatchers.Main.immediate)
-        EventBus.send(OnViewCreated)
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -65,6 +63,4 @@ abstract class BaseFragment : Fragment() {
     protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>, owner: ViewModelStoreOwner): T {
         return ViewModelProvider(owner, viewModelFactory).get(clazz.java)
     }
-
-    object OnViewCreated : BaseEvent()
 }

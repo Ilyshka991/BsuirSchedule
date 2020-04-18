@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.entity.Schedule
@@ -29,6 +28,17 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 
 class NavigationSheet : BaseBottomSheetDialog() {
+
+    interface ActionCallback {
+
+        fun onNavigationSettingsClicked()
+
+        fun onNavigationAddScheduleClicked()
+
+        fun onNavigationScheduleSelected(schedule: Schedule)
+
+        fun onNavigationScheduleDeleted(schedule: Schedule)
+    }
 
     companion object {
 
@@ -45,6 +55,8 @@ class NavigationSheet : BaseBottomSheetDialog() {
     private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
         initViewModel(NavigationSheetViewModel::class, owner = requireActivity())
     }
+
+    private var actionCallback: ActionCallback? = null
 
     private val vibrator by lazy(LazyThreadSafetyMode.NONE) {
         requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
@@ -90,7 +102,7 @@ class NavigationSheet : BaseBottomSheetDialog() {
     private val adapterActionCallback = object : NavigationDrawerAdapter.ActionCallback {
 
         override fun onScheduleClicked(schedule: Schedule) {
-            EventBus.send(NavigationSheetEvent.OnScheduleClick(schedule))
+            actionCallback?.onNavigationScheduleSelected(schedule)
         }
     }
     private val adapter = NavigationDrawerAdapter().apply {
@@ -121,6 +133,11 @@ class NavigationSheet : BaseBottomSheetDialog() {
         }
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        actionCallback = getCallbackOrNull()
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?) = super.onCreateDialog(savedInstanceState).apply {
         setOnShowListener {
             findViewById<View>(R.id.design_bottom_sheet)?.let {
@@ -146,6 +163,11 @@ class NavigationSheet : BaseBottomSheetDialog() {
         super.onDestroyView()
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        actionCallback = null
+    }
+
     private fun initView() {
         navigationSheetItemRecyclerView.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -157,11 +179,11 @@ class NavigationSheet : BaseBottomSheetDialog() {
             }
         }
         navigationSheetSettingButton.setSafeClickListener {
-            EventBus.send(NavigationSheetEvent.OnOpenSettings)
+            actionCallback?.onNavigationSettingsClicked()
 
         }
         navigationSheetAddButton.setSafeClickListener {
-            EventBus.send(NavigationSheetEvent.OnAddSchedule)
+            actionCallback?.onNavigationAddScheduleClicked()
         }
     }
 
@@ -193,7 +215,7 @@ class NavigationSheet : BaseBottomSheetDialog() {
     private fun deleteItemAt(position: Int) {
         val scheduleInfo = adapter.getItemAt(position) as? NavigationSheetItemInformation.Content
         if (scheduleInfo != null) {
-            EventBus.send(NavigationSheetEvent.OnScheduleDeleted(scheduleInfo.schedule))
+            actionCallback?.onNavigationScheduleDeleted(scheduleInfo.schedule)
             viewModel.deleteSchedule(scheduleInfo.schedule)
         } else {
             Logger.w("Try to delete item, which is not a subtype of NavigationSheetItemInformation.Content")

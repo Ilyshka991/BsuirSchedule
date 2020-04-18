@@ -14,6 +14,8 @@ import com.pechuro.bsuirschedule.ext.clearAdapter
 import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel
+import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel.Event.OnScheduleItemClicked
+import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel.Event.OnScheduleItemLongClicked
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItemInfo
 import kotlinx.android.synthetic.main.fragment_display_schedule.*
 import javax.inject.Inject
@@ -40,7 +42,14 @@ class DisplayScheduleFragment : BaseFragment() {
         requireArguments().getParcelable<DisplayScheduleItemInfo>(ARG_ITEM_INFO) as DisplayScheduleItemInfo
     }
     private val itemsAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        DisplayScheduleItemAdapter().also {
+        DisplayScheduleItemAdapter(
+                onClickCallback = {
+                    viewModel.eventsData.value = OnScheduleItemClicked(it)
+                },
+                onLongClickCallback = {
+                    viewModel.eventsData.value = OnScheduleItemLongClicked(it)
+                }
+        ).also {
             it.setHasStableIds(true)
         }
     }

@@ -1,17 +1,24 @@
 package com.pechuro.bsuirschedule.feature.itemoptions
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.ext.getCallbackOrNull
 import com.pechuro.bsuirschedule.ext.parcelableOrException
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import kotlinx.android.synthetic.main.sheet_schedule_item_options.*
 
 class ScheduleItemOptionsSheet : BaseBottomSheetDialog() {
+
+    interface ActionCallback {
+
+        fun onScheduleItemOptionsEditClicked(items: List<ScheduleItem>)
+    }
 
     companion object {
 
@@ -24,6 +31,8 @@ class ScheduleItemOptionsSheet : BaseBottomSheetDialog() {
         }
     }
 
+    private var actionCallback: ActionCallback? = null
+
     override val layoutId = R.layout.sheet_schedule_item_options
 
     private val displayItem: DisplayScheduleItem by lazy(LazyThreadSafetyMode.NONE) {
@@ -34,9 +43,19 @@ class ScheduleItemOptionsSheet : BaseBottomSheetDialog() {
         initViewModel(ScheduleItemOptionsViewModel::class)
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        actionCallback = getCallbackOrNull()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        actionCallback = null
     }
 
     private fun initView() {
@@ -45,7 +64,7 @@ class ScheduleItemOptionsSheet : BaseBottomSheetDialog() {
                 displayItem.scheduleItem?.subject
         )
         scheduleItemOptionsEditButton.setSafeClickListener {
-            EventBus.send(EditScheduleItemEvent(getScheduleItems()))
+            actionCallback?.onScheduleItemOptionsEditClicked(getScheduleItems())
         }
         scheduleItemOptionsDeleteButton.setSafeClickListener {
             viewModel.deleteScheduleItem(getScheduleItems())

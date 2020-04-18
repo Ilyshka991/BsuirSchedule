@@ -1,17 +1,23 @@
 package com.pechuro.bsuirschedule.feature.datepicker
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.CalendarView
 import androidx.core.os.bundleOf
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
+import com.pechuro.bsuirschedule.ext.getCallbackOrNull
 import com.pechuro.bsuirschedule.ext.parcelableOrException
 import kotlinx.android.synthetic.main.sheet_display_schedule_date_picker.*
 import java.util.*
 
 class DisplayScheduleDatePickerSheet : BaseBottomSheetDialog() {
+
+    interface ActionCallback {
+
+        fun onDatePickerDatePicked(date: Date)
+    }
 
     companion object {
 
@@ -24,6 +30,8 @@ class DisplayScheduleDatePickerSheet : BaseBottomSheetDialog() {
         }
     }
 
+    private var actionCallback: ActionCallback? = null
+
     override val layoutId = R.layout.sheet_display_schedule_date_picker
 
     private val args: DisplayScheduleDatePickerSheetArgs by lazy(LazyThreadSafetyMode.NONE) {
@@ -34,12 +42,22 @@ class DisplayScheduleDatePickerSheet : BaseBottomSheetDialog() {
         val selectedDate = Calendar.getInstance().apply {
             set(year, month, day)
         }
-        EventBus.send(ScheduleDatePickedEvent(selectedDate.time))
+        actionCallback?.onDatePickerDatePicked(selectedDate.time)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        actionCallback = getCallbackOrNull()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        actionCallback = null
     }
 
     private fun initView() {

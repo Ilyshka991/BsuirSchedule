@@ -5,15 +5,12 @@ import android.os.Parcelable
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.display.fragment.SCHEDULE_ITEM_DATE_FORMAT_PATTERN
-import com.pechuro.bsuirschedule.feature.stafflist.StaffListItemSelectedEvent
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_modify_schedule_item.*
 import java.text.SimpleDateFormat
@@ -109,9 +106,6 @@ class ModifyScheduleItemFragment : BaseFragment() {
     }
 
     private fun observeData() {
-        EventBus.receive<StaffListItemSelectedEvent>(lifecycleScope) {
-
-        }
         viewModel.state.nonNull().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is ModifyScheduleItemViewModel.State.Saving -> {

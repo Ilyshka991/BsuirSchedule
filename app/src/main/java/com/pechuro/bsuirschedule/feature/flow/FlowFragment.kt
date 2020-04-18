@@ -4,32 +4,29 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.BaseEvent
-import com.pechuro.bsuirschedule.common.EventBus
+import com.pechuro.bsuirschedule.common.BackPressedHandler
+import com.pechuro.bsuirschedule.common.FragmentAnimationsResHolder
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.currentFragment
+import com.pechuro.bsuirschedule.ext.displayScheduleFragment
+import com.pechuro.bsuirschedule.ext.removeAllFragmentsImmediate
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
-import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleCompleteEvent
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleFragmentContainer
 import com.pechuro.bsuirschedule.feature.datepicker.DisplayScheduleDatePickerSheet
 import com.pechuro.bsuirschedule.feature.datepicker.DisplayScheduleDatePickerSheetArgs
-import com.pechuro.bsuirschedule.feature.datepicker.ScheduleDatePickedEvent
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleContainer
-import com.pechuro.bsuirschedule.feature.display.DisplayScheduleEvent
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
-import com.pechuro.bsuirschedule.feature.itemoptions.EditScheduleItemEvent
 import com.pechuro.bsuirschedule.feature.itemoptions.ScheduleItemOptionsSheet
-import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoCompleteEvent
 import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoFragment
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragment
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragmentArgs
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheet
-import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
 import com.pechuro.bsuirschedule.feature.scheduleoptions.DisplayScheduleOptionsSheet
 import com.pechuro.bsuirschedule.feature.stafflist.StaffListFragment
 import com.pechuro.bsuirschedule.feature.start.StartFragment
@@ -47,10 +44,12 @@ class FlowFragment : BaseFragment() {
         initViewModel(FlowViewModel::class)
     }
 
+    private val defaultFragmentAnimations = FragmentAnimationsResHolder()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initNavigation()
-        setStartDestination()
+        setStartFragment()
         lifecycleScope.launch(Dispatchers.IO) {
             if (savedInstanceState == null && !viewModel.isInfoLoaded()) openLoadInfo()
             checkScheduleUpdates()
@@ -61,14 +60,12 @@ class FlowFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        requireView().post { updateLayoutState() }
+        updateLayoutState()
     }
 
     override fun onBackPressed(): Boolean {
-        when (childFragmentManager.currentFragment) {
-            is LoadInfoFragment -> return false
-        }
-        if (childFragmentManager.backStackEntryCount > 0) {
+        val currentFragment = childFragmentManager.currentFragment as? BackPressedHandler
+        if (currentFragment?.onBackPressed() == false) {
             popFragment()
             return true
         }
@@ -77,7 +74,7 @@ class FlowFragment : BaseFragment() {
 
     private fun initNavigation() {
         childFragmentManager.addOnBackStackChangedListener {
-            requireView().post { updateLayoutState() }
+            updateLayoutState()
         }
     }
 
@@ -90,7 +87,7 @@ class FlowFragment : BaseFragment() {
             openDisplayScheduleOptions(schedule)
         }
         bottomBarGoToDateButton.setSafeClickListener {
-            EventBus.send(FlowFragmentEvent.DisplayScheduleGoToDate)
+            childFragmentManager.displayScheduleFragment?.openDatePicker()
         }
         bottomBarAddScheduleItemButton.setSafeClickListener {
             val schedule = viewModel.getLastOpenedSchedule() ?: return@setSafeClickListener
@@ -106,7 +103,7 @@ class FlowFragment : BaseFragment() {
     }
 
     private fun receiveEvents() {
-        EventBus.receive<BaseEvent>(eventCoroutineScope) { event ->
+        /*EventBus.receive<BaseEvent>(eventCoroutineScope) { event ->
             when (event) {
                 is LoadInfoCompleteEvent -> popFragment()
                 is AddScheduleCompleteEvent -> {
@@ -134,11 +131,11 @@ class FlowFragment : BaseFragment() {
                     openEditScheduleItem(schedule, event.scheduleItems)
                 }
             }
-        }
+        }*/
     }
 
     private fun openScheduleItemOptions(data: DisplayScheduleItem) {
-        ScheduleItemOptionsSheet.newInstance(data).show(childFragmentManager, ScheduleItemOptionsSheet.TAG)
+        showDialog(ScheduleItemOptionsSheet.newInstance(data), ScheduleItemOptionsSheet.TAG)
     }
 
     private fun openAddScheduleItem(schedule: Schedule) {
@@ -146,14 +143,7 @@ class FlowFragment : BaseFragment() {
                 schedule = schedule,
                 items = emptyList()
         )
-        childFragmentManager.commit {
-            replace(
-                    navigationFragmentContainer.id,
-                    ModifyScheduleItemFragment.newInstance(arguments),
-                    ModifyScheduleItemFragment.TAG
-            )
-            addToBackStack(ModifyScheduleItemFragment.TAG)
-        }
+        openFragment(ModifyScheduleItemFragment.newInstance(arguments), ModifyScheduleItemFragment.TAG)
     }
 
     private fun openEditScheduleItem(schedule: Schedule, scheduleItems: List<ScheduleItem>) {
@@ -161,14 +151,7 @@ class FlowFragment : BaseFragment() {
                 schedule = schedule,
                 items = scheduleItems
         )
-        childFragmentManager.commit {
-            replace(
-                    navigationFragmentContainer.id,
-                    ModifyScheduleItemFragment.newInstance(arguments),
-                    ModifyScheduleItemFragment.TAG
-            )
-            addToBackStack(ModifyScheduleItemFragment.TAG)
-        }
+        openFragment(ModifyScheduleItemFragment.newInstance(arguments), ModifyScheduleItemFragment.TAG)
     }
 
     private fun openScheduleItemDetails(data: DisplayScheduleItem) {
@@ -192,93 +175,68 @@ class FlowFragment : BaseFragment() {
             currentDate: Date
     ) {
         val arguments = DisplayScheduleDatePickerSheetArgs(startDate, endDate, currentDate)
-        DisplayScheduleDatePickerSheet.newInstance(arguments).show(childFragmentManager, DisplayScheduleDatePickerSheet.TAG)
+        showDialog(DisplayScheduleDatePickerSheet.newInstance(arguments), DisplayScheduleDatePickerSheet.TAG)
     }
 
     private fun openNavigationSheet() {
-        NavigationSheet.newInstance().show(childFragmentManager, NavigationSheet.TAG)
+        showDialog(NavigationSheet.newInstance(), NavigationSheet.TAG)
     }
 
     private fun openLoadInfo() {
-        childFragmentManager.commit {
-            replace(
-                    navigationFragmentContainer.id,
-                    LoadInfoFragment.newInstance(),
-                    LoadInfoFragment.TAG
-            )
-            addToBackStack(AddScheduleFragmentContainer.TAG)
-        }
+        openFragment(LoadInfoFragment.newInstance(), LoadInfoFragment.TAG)
     }
 
     private fun openUpdateSchedules(schedules: List<Schedule>) {
         val currentFragment = childFragmentManager.currentFragment
         if (currentFragment is NavigationSheet || currentFragment is UpdateScheduleSheet) return
-        UpdateScheduleSheet.newInstance(schedules.toTypedArray()).show(childFragmentManager, UpdateScheduleSheet.TAG)
+        showDialog(UpdateScheduleSheet.newInstance(schedules.toTypedArray()), UpdateScheduleSheet.TAG)
     }
 
     private fun openAddSchedule() {
-        popFragment()
-        childFragmentManager.commit {
-            replace(
-                    navigationFragmentContainer.id,
-                    AddScheduleFragmentContainer.newInstance(),
-                    AddScheduleFragmentContainer.TAG
-            )
-            addToBackStack(AddScheduleFragmentContainer.TAG)
-        }
+        openFragment(AddScheduleFragmentContainer.newInstance(), AddScheduleFragmentContainer.TAG)
     }
 
     private fun openDisplayScheduleOptions(schedule: Schedule) {
-        DisplayScheduleOptionsSheet.newInstance(schedule).show(childFragmentManager, DisplayScheduleOptionsSheet.TAG)
+        showDialog(DisplayScheduleOptionsSheet.newInstance(schedule), DisplayScheduleOptionsSheet.TAG)
     }
 
     private fun openViewSchedule(schedule: Schedule, skipIfOpened: Boolean = true) {
         if (skipIfOpened && viewModel.getLastOpenedSchedule() == schedule) return
         viewModel.setLastOpenedSchedule(schedule)
-        setViewScheduleStartDestination(schedule)
+        setViewScheduleStartFragment(schedule)
     }
 
     private fun onScheduleDeleted(schedule: Schedule) {
         if (viewModel.getLastOpenedSchedule() == schedule) {
             viewModel.setLastOpenedSchedule(null)
-            setDefaultStartDestination()
+            setDefaultStartFragment()
         }
     }
 
-    private fun setStartDestination() {
+    private fun setStartFragment() {
         val lastOpenedSchedule = viewModel.getLastOpenedSchedule()
         if (lastOpenedSchedule == null) {
-            setDefaultStartDestination()
+            setDefaultStartFragment()
         } else {
-            setViewScheduleStartDestination(lastOpenedSchedule)
+            setViewScheduleStartFragment(lastOpenedSchedule)
         }
     }
 
-    private fun setViewScheduleStartDestination(schedule: Schedule) {
-        childFragmentManager.popBackStack(null, POP_BACK_STACK_INCLUSIVE)
-        childFragmentManager.commit {
-            replace(
-                    navigationFragmentContainer.id,
-                    DisplayScheduleContainer.newInstance(schedule),
-                    StartFragment.TAG
-            )
-        }
-        requireView().post { updateLayoutState() }
+    private fun setViewScheduleStartFragment(schedule: Schedule) {
+        childFragmentManager.removeAllFragmentsImmediate()
+        openFragment(
+                DisplayScheduleContainer.newInstance(schedule),
+                DisplayScheduleContainer.TAG,
+                addToBackStack = false
+        )
+        updateLayoutState()
     }
 
-    private fun setDefaultStartDestination() {
-        childFragmentManager.popBackStack(null, POP_BACK_STACK_INCLUSIVE)
-        childFragmentManager.commit {
-            replace(
-                    navigationFragmentContainer.id,
-                    StartFragment.newInstance(),
-                    StartFragment.TAG
-            )
-        }
-        requireView().post { updateLayoutState() }
+    private fun setDefaultStartFragment() {
+        childFragmentManager.removeAllFragmentsImmediate()
+        openFragment(StartFragment.newInstance(), StartFragment.TAG, addToBackStack = false)
+        updateLayoutState()
     }
-
-    private fun popFragment() = childFragmentManager.popBackStack()
 
     private fun updateLayoutState() {
         val isControlsVisible = when (childFragmentManager.currentFragment) {
@@ -309,7 +267,7 @@ class FlowFragment : BaseFragment() {
             bottomBarFab.setImageDrawable(ContextCompat.getDrawable(requireContext(), fabState.iconRes))
             bottomBarFab.setSafeClickListener {
                 when (fabState) {
-                    FabActionState.DISPLAY_SCHEDULE_BACK -> EventBus.send(FlowFragmentEvent.DisplayScheduleSetToday)
+                    FabActionState.DISPLAY_SCHEDULE_BACK -> setDisplayScheduleFirstDay()
                     FabActionState.ADD_SCHEDULE -> openAddSchedule()
                 }
             }
@@ -338,6 +296,10 @@ class FlowFragment : BaseFragment() {
         }
     }
 
+    private fun setDisplayScheduleFirstDay() {
+        childFragmentManager.displayScheduleFragment?.setFirstDay()
+    }
+
     private fun onDisplaySchedulePositionChanged(position: Int) {
         requireView().post {
             if (position != 0) {
@@ -346,5 +308,29 @@ class FlowFragment : BaseFragment() {
                 bottomBarFab.hide()
             }
         }
+    }
+
+    private fun openFragment(
+            fragment: Fragment,
+            tag: String,
+            addToBackStack: Boolean = true,
+            animations: FragmentAnimationsResHolder = defaultFragmentAnimations
+    ) {
+        childFragmentManager.commit {
+            replace(navigationFragmentContainer.id, fragment, tag)
+            if (addToBackStack) addToBackStack(tag)
+            animations.run {
+                setCustomAnimations(enter, exit, popEnter, popExit)
+            }
+        }
+    }
+
+    private fun popFragment() = childFragmentManager.popBackStack()
+
+    private fun showDialog(
+            fragment: DialogFragment,
+            tag: String
+    ) {
+        fragment.show(childFragmentManager, tag)
     }
 }
