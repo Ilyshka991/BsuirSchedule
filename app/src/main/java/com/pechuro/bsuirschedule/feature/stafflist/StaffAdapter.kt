@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.addschedule.fragment
+package com.pechuro.bsuirschedule.feature.stafflist
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,58 +11,58 @@ import com.bumptech.glide.request.RequestOptions
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
-import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation.Companion.TYPE_EMPLOYEE
-import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation.Companion.TYPE_EMPTY
-import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation.Companion.TYPE_GROUP
-import kotlinx.android.synthetic.main.item_suggestion_employee.*
-import kotlinx.android.synthetic.main.item_suggestion_group.*
+import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.Companion.TYPE_EMPLOYEE
+import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.Companion.TYPE_EMPTY
+import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.Companion.TYPE_GROUP
+import kotlinx.android.synthetic.main.item_staff_employee.*
+import kotlinx.android.synthetic.main.item_staff_group.*
 
-val DIFF_CALLBACK = object : DiffUtil.ItemCallback<SuggestionItemInformation>() {
+val DIFF_CALLBACK = object : DiffUtil.ItemCallback<StaffItemInformation>() {
 
     override fun areItemsTheSame(
-            oldItem: SuggestionItemInformation,
-            newItem: SuggestionItemInformation
+            oldItem: StaffItemInformation,
+            newItem: StaffItemInformation
     ) = oldItem === newItem
 
     override fun areContentsTheSame(
-            oldItem: SuggestionItemInformation,
-            newItem: SuggestionItemInformation
+            oldItem: StaffItemInformation,
+            newItem: StaffItemInformation
     ) = when {
-        oldItem is SuggestionItemInformation.EmployeeInfo && newItem is SuggestionItemInformation.EmployeeInfo -> {
+        oldItem is StaffItemInformation.EmployeeInfo && newItem is StaffItemInformation.EmployeeInfo -> {
             oldItem.employee == newItem.employee
         }
-        oldItem is SuggestionItemInformation.GroupInfo && newItem is SuggestionItemInformation.GroupInfo -> {
+        oldItem is StaffItemInformation.GroupInfo && newItem is StaffItemInformation.GroupInfo -> {
             oldItem.group == newItem.group
         }
-        oldItem is SuggestionItemInformation.Empty && newItem is SuggestionItemInformation.Empty -> {
+        oldItem is StaffItemInformation.Empty && newItem is StaffItemInformation.Empty -> {
             true
         }
         else -> false
     }
 }
 
-class AddScheduleSuggestionsAdapter : ListAdapter<SuggestionItemInformation, BaseViewHolder<SuggestionItemInformation>>(DIFF_CALLBACK) {
-
-    var onItemClicked: (SuggestionItemInformation) -> Unit = {}
+class StaffAdapter(
+        private val onItemClicked: (StaffItemInformation) -> Unit
+) : ListAdapter<StaffItemInformation, BaseViewHolder<StaffItemInformation>>(DIFF_CALLBACK) {
 
     private val onClickListener: (View) -> Unit = {
-        val info = it.tag as? SuggestionItemInformation
+        val info = it.tag as? StaffItemInformation
         info?.let { onItemClicked(info) }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<SuggestionItemInformation> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<StaffItemInformation> {
         val layoutInflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             TYPE_GROUP -> {
-                val view = layoutInflater.inflate(R.layout.item_suggestion_group, parent, false)
+                val view = layoutInflater.inflate(R.layout.item_staff_group, parent, false)
                 GroupViewHolder(view)
             }
             TYPE_EMPLOYEE -> {
-                val view = layoutInflater.inflate(R.layout.item_suggestion_employee, parent, false)
+                val view = layoutInflater.inflate(R.layout.item_staff_employee, parent, false)
                 EmployeeViewHolder(view)
             }
             TYPE_EMPTY -> {
-                val view = layoutInflater.inflate(R.layout.item_suggestion_empty, parent, false)
+                val view = layoutInflater.inflate(R.layout.item_staff_empty, parent, false)
                 EmptyViewHolder(view)
             }
             else -> throw IllegalArgumentException("Not supported type: $viewType")
@@ -71,20 +71,20 @@ class AddScheduleSuggestionsAdapter : ListAdapter<SuggestionItemInformation, Bas
 
     override fun getItemViewType(position: Int) = getItem(position).type
 
-    override fun onBindViewHolder(holder: BaseViewHolder<SuggestionItemInformation>, position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder<StaffItemInformation>, position: Int) {
         holder.onBind(getItem(position))
     }
 
     override fun getItemId(position: Int) = when (val item = getItem(position)) {
-        is SuggestionItemInformation.GroupInfo -> item.group.id
-        is SuggestionItemInformation.EmployeeInfo -> item.employee.id
+        is StaffItemInformation.GroupInfo -> item.group.id
+        is StaffItemInformation.EmployeeInfo -> item.employee.id
         else -> -1
     }
 
-    private inner class GroupViewHolder(view: View) : BaseViewHolder<SuggestionItemInformation>(view) {
+    private inner class GroupViewHolder(view: View) : BaseViewHolder<StaffItemInformation>(view) {
 
-        override fun onBind(data: SuggestionItemInformation) {
-            if (data !is SuggestionItemInformation.GroupInfo) return
+        override fun onBind(data: StaffItemInformation) {
+            if (data !is StaffItemInformation.GroupInfo) return
 
             with(data.group) {
                 suggestionGroupNumber.text = number
@@ -102,10 +102,10 @@ class AddScheduleSuggestionsAdapter : ListAdapter<SuggestionItemInformation, Bas
         }
     }
 
-    private inner class EmployeeViewHolder(view: View) : BaseViewHolder<SuggestionItemInformation>(view) {
+    private inner class EmployeeViewHolder(view: View) : BaseViewHolder<StaffItemInformation>(view) {
 
-        override fun onBind(data: SuggestionItemInformation) {
-            if (data !is SuggestionItemInformation.EmployeeInfo) return
+        override fun onBind(data: StaffItemInformation) {
+            if (data !is StaffItemInformation.EmployeeInfo) return
 
             with(data.employee) {
                 suggestionEmployeePhoto.loadPhoto(photoLink)
@@ -136,8 +136,8 @@ class AddScheduleSuggestionsAdapter : ListAdapter<SuggestionItemInformation, Bas
         }
     }
 
-    private class EmptyViewHolder(view: View) : BaseViewHolder<SuggestionItemInformation>(view) {
+    private class EmptyViewHolder(view: View) : BaseViewHolder<StaffItemInformation>(view) {
 
-        override fun onBind(data: SuggestionItemInformation) {}
+        override fun onBind(data: StaffItemInformation) {}
     }
 }

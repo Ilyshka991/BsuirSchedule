@@ -127,5 +127,20 @@
         <argument
             android:name="items"
             app:argType="com.pechuro.bsuirschedule.domain.entity.ScheduleItem[]" />
+
+        <action
+            android:id="@+id/action_addSchedule_to_staffList"
+            app:destination="@id/staffListItemDestination" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/staffListItemDestination"
+        android:name="com.pechuro.bsuirschedule.feature.stafflist.StaffListFragment"
+        android:label="StaffListFragment"
+        tools:layout="@layout/fragment_staff_list">
+
+        <argument
+            android:name="staffType"
+            app:argType="com.pechuro.bsuirschedule.feature.stafflist.StaffType" />
     </fragment>
 </navigation>

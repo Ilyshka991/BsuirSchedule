@@ -3,12 +3,14 @@ package com.pechuro.bsuirschedule.feature.modifyitem
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.display.fragment.SCHEDULE_ITEM_DATE_FORMAT_PATTERN
+import com.pechuro.bsuirschedule.feature.stafflist.StaffType
 import kotlinx.android.synthetic.main.fragment_modify_schedule_item.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -69,6 +71,9 @@ class ModifyScheduleItemFragment : BaseFragment() {
         }
         modifyScheduleItemNoteText.addTextListener {
             viewModel.dataProvider.noteData.value = it
+        }
+        modifyScheduleItemEmployeesLabel.setSafeClickListener {
+            findNavController().navigate(ModifyScheduleItemFragmentDirections.actionAddScheduleToStaffList(StaffType.GROUP))
         }
     }
 

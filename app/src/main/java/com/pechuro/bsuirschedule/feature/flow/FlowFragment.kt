@@ -275,6 +275,7 @@ class FlowFragment : BaseFragment() {
         val isControlsVisible = when (navController.currentDestination?.id) {
             R.id.addScheduleDestination,
             R.id.modifyScheduleItemDestination,
+            R.id.staffListItemDestination,
             R.id.loadInfoDestination -> false
             else -> true
         }

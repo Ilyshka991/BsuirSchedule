@@ -112,4 +112,7 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
+
+    <string name="staff_list_hint_enter_group_number">Enter group number</string>
+    <string name="staff_list_hint_enter_employee_name">Enter employee name</string>
 </resources>
