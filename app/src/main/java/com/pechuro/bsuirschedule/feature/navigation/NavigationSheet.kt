@@ -31,8 +31,13 @@ import kotlin.math.roundToInt
 class NavigationSheet : BaseBottomSheetDialog() {
 
     companion object {
+
+        const val TAG = "NavigationSheet"
+
         private const val PEEK_HEIGHT_PERCENT = 0.4
         private const val ACTION_VIBRATION_DURATION_MS = 2L
+
+        fun newInstance() = NavigationSheet()
     }
 
     override val layoutId: Int = R.layout.sheet_navigation

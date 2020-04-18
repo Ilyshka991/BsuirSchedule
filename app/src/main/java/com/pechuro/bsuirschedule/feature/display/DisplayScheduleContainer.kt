@@ -2,8 +2,8 @@ package com.pechuro.bsuirschedule.feature.display
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.pechuro.bsuirschedule.R
@@ -15,6 +15,7 @@ import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
 import com.pechuro.bsuirschedule.ext.clearAdapter
 import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.ext.observe
+import com.pechuro.bsuirschedule.ext.parcelableOrException
 import com.pechuro.bsuirschedule.feature.datepicker.ScheduleDatePickedEvent
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleViewType
 import com.pechuro.bsuirschedule.feature.flow.FlowFragmentEvent
@@ -26,13 +27,21 @@ class DisplayScheduleContainer : BaseFragment() {
 
     companion object {
 
+        private const val BUNDLE_SCHEDULE = "BUNDLE_SCHEDULE"
+
         private const val TAB_DATE_FORMAT_DAY = "EEE, dd MMM"
         private const val TAB_DATE_FORMAT_WEEK = "EEEE"
+
+        fun newInstance(schedule: Schedule) = DisplayScheduleContainer().apply {
+            arguments = bundleOf(BUNDLE_SCHEDULE to schedule)
+        }
     }
 
     override val layoutId: Int = R.layout.fragment_view_schedule_container
 
-    private val args: DisplayScheduleContainerArgs by navArgs()
+    private val schedule: Schedule by lazy(LazyThreadSafetyMode.NONE) {
+        parcelableOrException<Schedule>(BUNDLE_SCHEDULE)
+    }
 
     private lateinit var viewModel: DisplayScheduleViewModel
 
@@ -53,7 +62,7 @@ class DisplayScheduleContainer : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = initViewModel(DisplayScheduleViewModel::class, owner = this).apply {
-            schedule = args.schedule
+            schedule = this@DisplayScheduleContainer.schedule
         }
         val viewType = getViewType()
         initView(viewType)
@@ -131,7 +140,7 @@ class DisplayScheduleContainer : BaseFragment() {
         tabLayoutMediator = null
     }
 
-    private fun getViewType() = when (args.schedule) {
+    private fun getViewType() = when (schedule) {
         is Schedule.GroupClasses, is Schedule.EmployeeClasses -> {
             when (val type = viewModel.displayTypeData.value) {
                 ScheduleDisplayType.DAYS -> DisplayScheduleViewType.DAY_CLASSES
@@ -143,7 +152,7 @@ class DisplayScheduleContainer : BaseFragment() {
     }
 
     private fun onPositionChanged() {
-        if (args.schedule is Schedule.GroupExams || args.schedule is Schedule.EmployeeExams) return
+        if (schedule is Schedule.GroupExams || schedule is Schedule.EmployeeExams) return
         val pagerAdapter = pagerAdapter ?: return
         val relativePosition = displayScheduleContainerViewPager.currentItem - pagerAdapter.getStartPosition()
         EventBus.send(DisplayScheduleEvent.OnPositionChanged(relativePosition))

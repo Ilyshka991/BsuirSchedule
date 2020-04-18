@@ -16,6 +16,13 @@ import kotlinx.android.synthetic.main.fragment_add_schedule_container.*
 
 class AddScheduleFragmentContainer : BaseFragment() {
 
+    companion object {
+
+        const val TAG = "AddScheduleFragmentContainer"
+
+        fun newInstance() = AddScheduleFragmentContainer()
+    }
+
     override val layoutId: Int = R.layout.fragment_add_schedule_container
 
     private val pagerAdapter: AddScheduleContainerPagerAdapter by lazy(LazyThreadSafetyMode.NONE) {

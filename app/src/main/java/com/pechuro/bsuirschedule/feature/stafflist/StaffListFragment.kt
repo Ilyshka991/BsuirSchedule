@@ -5,17 +5,26 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.View
 import android.view.WindowManager
-import androidx.navigation.fragment.navArgs
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
-import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.ext.*
 import kotlinx.android.synthetic.main.fragment_staff_list.*
 
 class StaffListFragment : BaseFragment() {
+
+    companion object {
+        const val TAG = "StaffListFragment"
+
+        private const val BUNDLE_TYPE = "BUNDLE_TYPE"
+
+        fun newInstance(type: StaffType) = StaffListFragment().apply {
+            arguments = bundleOf(BUNDLE_TYPE to type)
+        }
+    }
 
     override val layoutId: Int = R.layout.fragment_staff_list
 
@@ -30,7 +39,10 @@ class StaffListFragment : BaseFragment() {
             it.setHasStableIds(true)
         }
     }
-    private val args: StaffListFragmentArgs by navArgs()
+
+    private val staffType: StaffType by lazy(LazyThreadSafetyMode.NONE) {
+        serializableOrException<StaffType>(BUNDLE_TYPE)
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -64,19 +76,19 @@ class StaffListFragment : BaseFragment() {
     }
 
     private fun initView() {
-        val inputType = when (args.staffType) {
+        val inputType = when (staffType) {
             StaffType.GROUP -> InputType.TYPE_CLASS_NUMBER
             StaffType.EMPLOYEE -> InputType.TYPE_TEXT_VARIATION_PERSON_NAME
         }
         staffListNameInput.inputType = inputType
         staffListNameInput.addTextListener {
-            when (args.staffType) {
+            when (staffType) {
                 StaffType.GROUP -> viewModel.filterGroups(it)
                 StaffType.EMPLOYEE -> viewModel.filterEmployees(it)
             }
         }
 
-        val hintRes = when (args.staffType) {
+        val hintRes = when (staffType) {
             StaffType.GROUP -> R.string.staff_list_hint_enter_group_number
             StaffType.EMPLOYEE -> R.string.staff_list_hint_enter_employee_name
         }
@@ -90,7 +102,7 @@ class StaffListFragment : BaseFragment() {
     }
 
     private fun observeData() {
-        when (args.staffType) {
+        when (staffType) {
             StaffType.GROUP -> {
                 viewModel.allGroupsData.nonNull().observe(viewLifecycleOwner) {
                     staffAdapter.submitList(it)

@@ -14,6 +14,13 @@ import kotlinx.android.synthetic.main.fragment_info_load.*
 
 class LoadInfoFragment : BaseFragment() {
 
+    companion object {
+
+        const val TAG = "LoadInfoFragment"
+
+        fun newInstance() = LoadInfoFragment()
+    }
+
     override val layoutId: Int
         get() = R.layout.fragment_info_load
 

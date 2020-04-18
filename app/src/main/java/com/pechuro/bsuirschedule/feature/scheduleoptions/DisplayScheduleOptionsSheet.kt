@@ -2,8 +2,8 @@ package com.pechuro.bsuirschedule.feature.scheduleoptions
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.navigation.fragment.navArgs
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.domain.entity.Schedule
@@ -11,10 +11,23 @@ import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
 import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.ext.observe
+import com.pechuro.bsuirschedule.ext.parcelableOrException
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import kotlinx.android.synthetic.main.sheet_display_schedule_options.*
 
 class DisplayScheduleOptionsSheet : BaseBottomSheetDialog() {
+
+    companion object {
+
+        const val TAG = "DisplayScheduleOptionsSheet"
+
+        private const val BUNDLE_SCHEDULE = "BUNDLE_SCHEDULE"
+
+        fun newInstance(schedule: Schedule) = DisplayScheduleOptionsSheet().apply {
+            arguments = bundleOf(BUNDLE_SCHEDULE to schedule)
+        }
+
+    }
 
     override val layoutId = R.layout.sheet_display_schedule_options
 
@@ -22,7 +35,9 @@ class DisplayScheduleOptionsSheet : BaseBottomSheetDialog() {
         initViewModel(DisplayScheduleOptionsViewModel::class)
     }
 
-    private val args: DisplayScheduleOptionsSheetArgs by navArgs()
+    private val schedule: Schedule by lazy(LazyThreadSafetyMode.NONE) {
+        parcelableOrException<Schedule>(BUNDLE_SCHEDULE)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,7 +46,7 @@ class DisplayScheduleOptionsSheet : BaseBottomSheetDialog() {
     }
 
     private fun initView() {
-        when (args.schedule) {
+        when (schedule) {
             is Schedule.EmployeeClasses -> {
                 displayOptionsSheetSubgroupButton.isVisible = false
             }

@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.addschedule.fragment
+package com.pechuro.bsuirschedule.feature.addschedule
 
 import android.content.Context
 import android.os.Bundle
@@ -14,7 +14,6 @@ import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleContainerPagerAdapter.FragmentType
-import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel.State
 import com.pechuro.bsuirschedule.feature.stafflist.StaffAdapter
 import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation

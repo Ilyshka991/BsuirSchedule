@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.ext.addIfEmpty
+import com.pechuro.bsuirschedule.ext.getWeekDay
+import com.pechuro.bsuirschedule.ext.requireValue
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -28,10 +30,10 @@ class ModifyScheduleItemDataProvider(private val context: Context) {
 
     lateinit var schedule: Schedule
         private set
-    var scheduleItems: Array<ScheduleItem> = emptyArray()
+    var scheduleItems: List<ScheduleItem> = emptyList()
         private set
 
-    fun init(schedule: Schedule, scheduleItems: Array<ScheduleItem>) {
+    fun init(schedule: Schedule, scheduleItems: List<ScheduleItem>) {
         this.schedule = schedule
         this.scheduleItems = scheduleItems
         val scheduleItem = scheduleItems.firstOrNull()

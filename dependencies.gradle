@@ -16,7 +16,6 @@ def libraryVersions = [
         recyclerView      : '1.1.0',
         viewPager2        : '1.0.0',
 
-        navigation        : '2.2.1',
         workManager       : '2.3.1',
         lifeCycle         : '2.2.0',
 
@@ -71,8 +70,6 @@ ext {
             viewPager2        : "androidx.viewpager2:viewpager2:${libraryVersions.viewPager2}"
     ]
     archComponentsDependencies = [
-            navigation         : "androidx.navigation:navigation-fragment-ktx:${libraryVersions.navigation}",
-            navigationUI       : "androidx.navigation:navigation-ui-ktx:${libraryVersions.navigation}",
             workManager        : "androidx.work:work-runtime-ktx:${libraryVersions.workManager}",
             liveData           : "androidx.lifecycle:lifecycle-livedata-ktx:${libraryVersions.lifeCycle}",
             viewModel          : "androidx.lifecycle:lifecycle-viewmodel-ktx:${libraryVersions.lifeCycle}",

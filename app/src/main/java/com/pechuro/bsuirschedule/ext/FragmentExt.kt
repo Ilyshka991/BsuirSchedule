@@ -1,35 +1,10 @@
 package com.pechuro.bsuirschedule.ext
 
+import android.os.Parcelable
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.manager.SupportRequestManagerFragment
-import com.pechuro.bsuirschedule.common.base.BaseFragment
-
-inline fun FragmentManager.commit(
-        allowStateLoss: Boolean = false,
-        body: FragmentTransaction.() -> Unit
-) {
-    val transaction = beginTransaction()
-    transaction.body()
-    if (allowStateLoss) {
-        transaction.commitAllowingStateLoss()
-    } else {
-        transaction.commit()
-    }
-}
-
-inline fun FragmentManager.commitNow(
-        allowStateLoss: Boolean = false,
-        body: FragmentTransaction.() -> Unit
-) {
-    val transaction = beginTransaction()
-    transaction.body()
-    if (allowStateLoss) {
-        transaction.commitNowAllowingStateLoss()
-    } else {
-        transaction.commitNow()
-    }
-}
+import java.io.Serializable
 
 fun FragmentManager.popFragmentByTag(tag: String) =
         popBackStackImmediate(
@@ -37,10 +12,19 @@ fun FragmentManager.popFragmentByTag(tag: String) =
                 FragmentManager.POP_BACK_STACK_INCLUSIVE
         )
 
-val FragmentManager.currentFragment: BaseFragment?
+val FragmentManager.currentFragment: Fragment?
     get() = run {
         val topFragmentTag = fragments.lastOrNull { fragment ->
             fragment !is SupportRequestManagerFragment
         }?.tag ?: ""
-        return findFragmentByTag(topFragmentTag) as? BaseFragment
+        return findFragmentByTag(topFragmentTag)
     }
+
+inline fun <reified T : Parcelable> Fragment.parcelableOrException(key: String): T =
+        requireArguments().parcelableOrException(key)
+
+inline fun <reified T : Serializable> Fragment.serializableOrException(key: String): T =
+        requireArguments().serializableOrException(key)
+
+inline fun <reified T : Parcelable> Fragment.parcelableArrayOrException(key: String): Array<T> =
+        requireArguments().parcelableArrayOrException(key)

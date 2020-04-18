@@ -1,21 +1,42 @@
 package com.pechuro.bsuirschedule.feature.modifyitem
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
+import androidx.lifecycle.lifecycleScope
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.display.fragment.SCHEDULE_ITEM_DATE_FORMAT_PATTERN
-import com.pechuro.bsuirschedule.feature.stafflist.StaffType
+import com.pechuro.bsuirschedule.feature.stafflist.StaffListItemSelectedEvent
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_modify_schedule_item.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+@Parcelize
+data class ModifyScheduleItemFragmentArgs(
+        val schedule: Schedule,
+        val items: List<ScheduleItem>
+) : Parcelable
+
 class ModifyScheduleItemFragment : BaseFragment() {
+
+    companion object {
+
+        const val TAG = "ModifyScheduleItemFragment"
+
+        private const val BUNDLE_ARGS = "BUNDLE_ARGS"
+
+        fun newInstance(args: ModifyScheduleItemFragmentArgs) = ModifyScheduleItemFragment().apply {
+            arguments = bundleOf(BUNDLE_ARGS to args)
+        }
+    }
 
     override val layoutId: Int = R.layout.fragment_modify_schedule_item
 
@@ -23,7 +44,9 @@ class ModifyScheduleItemFragment : BaseFragment() {
         initViewModel(ModifyScheduleItemViewModel::class)
     }
 
-    private val args: ModifyScheduleItemFragmentArgs by navArgs()
+    private val args: ModifyScheduleItemFragmentArgs by lazy(LazyThreadSafetyMode.NONE) {
+        parcelableOrException<ModifyScheduleItemFragmentArgs>(BUNDLE_ARGS)
+    }
 
     private val dateFormatter = SimpleDateFormat(SCHEDULE_ITEM_DATE_FORMAT_PATTERN, Locale.getDefault())
 
@@ -73,7 +96,6 @@ class ModifyScheduleItemFragment : BaseFragment() {
             viewModel.dataProvider.noteData.value = it
         }
         modifyScheduleItemEmployeesLabel.setSafeClickListener {
-            findNavController().navigate(ModifyScheduleItemFragmentDirections.actionAddScheduleToStaffList(StaffType.GROUP))
         }
     }
 
@@ -87,6 +109,9 @@ class ModifyScheduleItemFragment : BaseFragment() {
     }
 
     private fun observeData() {
+        EventBus.receive<StaffListItemSelectedEvent>(lifecycleScope) {
+
+        }
         viewModel.state.nonNull().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is ModifyScheduleItemViewModel.State.Saving -> {
