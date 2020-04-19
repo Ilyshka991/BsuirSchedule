@@ -80,6 +80,7 @@
     <string name="modify_schedule_item_label_priority">Priority:</string>
     <string name="modify_schedule_item_label_date">Date:</string>
     <string name="modify_schedule_item_action_add">add</string>
+    <string name="modify_schedule_item_title_select_type">Select lesson type</string>
 
     <string name="lesson_priotity_lowest">lowest</string>
     <string name="lesson_priotity_low">low</string>
@@ -97,6 +98,8 @@
     <string name="staff_list_msg_employee_department">Department: %1$s</string>
     <string name="staff_list_msg_auditory_capacity">capacity: %1$d</string>
     <string name="staff_list_msg_empty">Not found</string>
+
+    <string name="options_dialog_action_done">done</string>
 
     <string-array name="lesson_types">
         <item>ЛК</item>

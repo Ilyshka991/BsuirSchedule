@@ -12,6 +12,8 @@ import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.display.fragment.SCHEDULE_ITEM_DATE_FORMAT_PATTERN
+import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialog
+import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogButtonData
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_modify_schedule_item.*
 import java.text.SimpleDateFormat
@@ -123,6 +125,9 @@ class ModifyScheduleItemFragment : BaseFragment() {
         }
         modifyScheduleItemNoteText.addTextListener {
             viewModel.dataProvider.noteData.value = it
+        }
+        modifyScheduleItemType.setSafeClickListener {
+            openLessonTypeDialog()
         }
     }
 
@@ -262,5 +267,30 @@ class ModifyScheduleItemFragment : BaseFragment() {
             onClick()
         }
         return chip
+    }
+
+    private fun getAvailableLessonTypes(): Array<String> {
+        val schedule = args.schedule
+        val isClassesSchedule = schedule is Schedule.GroupClasses || schedule is Schedule.EmployeeClasses
+        val arrayResId = if (isClassesSchedule) R.array.lesson_types else R.array.exam_types
+        return requireContext().resources.getStringArray(arrayResId)
+    }
+
+    private fun openLessonTypeDialog() {
+        val availableTypes = getAvailableLessonTypes()
+        val options = availableTypes.map { type ->
+            OptionDialogButtonData(text = type)
+        }
+        val listener = object : OptionDialog.OptionButtonClickListener {
+            override fun onClick(position: Int) {
+                viewModel.dataProvider.lessonTypeData.value = availableTypes[position]
+            }
+        }
+        val title = getString(R.string.modify_schedule_item_title_select_type)
+        OptionDialog.Builder()
+                .setTitle(title)
+                .setActions(options, listener)
+                .build()
+                .show(childFragmentManager, OptionDialog.TAG)
     }
 }
