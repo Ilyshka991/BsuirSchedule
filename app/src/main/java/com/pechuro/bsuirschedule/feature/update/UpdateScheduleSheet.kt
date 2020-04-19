@@ -2,7 +2,7 @@ package com.pechuro.bsuirschedule.feature.update
 
 import android.os.Bundle
 import android.view.View
-import androidx.navigation.fragment.navArgs
+import androidx.core.os.bundleOf
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.domain.entity.Schedule
@@ -12,18 +12,28 @@ import kotlinx.android.synthetic.main.sheet_update_schedule.*
 
 class UpdateScheduleSheet : BaseBottomSheetDialog() {
 
+    companion object {
+
+        const val TAG = "UpdateScheduleSheet"
+
+        private const val BUNDLE_ARGS = "BUNDLE_ARGS"
+
+        fun newInstance(args: UpdateScheduleSheetArgs) = UpdateScheduleSheet().apply {
+            arguments = bundleOf(BUNDLE_ARGS to args)
+        }
+    }
+
     override val layoutId = R.layout.sheet_update_schedule
 
     private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
         initViewModel(UpdateScheduleSheetViewModel::class)
     }
 
-    private val args: UpdateScheduleSheetArgs by navArgs()
+    private val args: UpdateScheduleSheetArgs by args(BUNDLE_ARGS)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val schedulesList = args.scheduleArray
-        viewModel.setSchedules(schedulesList)
+        viewModel.setSchedules(args.schedules)
         initView()
         observeData()
     }

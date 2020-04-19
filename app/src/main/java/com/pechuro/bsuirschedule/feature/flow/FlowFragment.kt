@@ -4,38 +4,52 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.navOptions
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.BaseEvent
-import com.pechuro.bsuirschedule.common.EventBus
+import com.pechuro.bsuirschedule.common.BackPressedHandler
+import com.pechuro.bsuirschedule.common.FragmentAnimationsResHolder
 import com.pechuro.bsuirschedule.common.base.BaseFragment
-import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.ext.setSafeClickListener
-import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleCompleteEvent
+import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleFragmentContainer
+import com.pechuro.bsuirschedule.feature.datepicker.DisplayScheduleDatePickerSheet
 import com.pechuro.bsuirschedule.feature.datepicker.DisplayScheduleDatePickerSheetArgs
-import com.pechuro.bsuirschedule.feature.datepicker.ScheduleDatePickedEvent
-import com.pechuro.bsuirschedule.feature.display.DisplayScheduleContainerArgs
-import com.pechuro.bsuirschedule.feature.display.DisplayScheduleEvent
+import com.pechuro.bsuirschedule.feature.display.DisplayScheduleFragmentContainer
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
-import com.pechuro.bsuirschedule.feature.examdetails.ExamDetailsFragmentArgs
-import com.pechuro.bsuirschedule.feature.itemoptions.EditScheduleItemEvent
-import com.pechuro.bsuirschedule.feature.itemoptions.ScheduleItemOptionsSheetArgs
-import com.pechuro.bsuirschedule.feature.lessondetails.LessonDetailsFragmentArgs
-import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoCompleteEvent
+import com.pechuro.bsuirschedule.feature.itemoptions.ScheduleItemOptionsSheet
+import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoFragment
+import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragment
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragmentArgs
-import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetEvent
-import com.pechuro.bsuirschedule.feature.scheduleoptions.DisplayScheduleOptionsSheetArgs
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheet
+import com.pechuro.bsuirschedule.feature.scheduleoptions.DisplayScheduleOptionsSheet
+import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation
+import com.pechuro.bsuirschedule.feature.stafflist.StaffListFragment
+import com.pechuro.bsuirschedule.feature.stafflist.StaffType
+import com.pechuro.bsuirschedule.feature.start.StartFragment
+import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheet
 import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheetArgs
 import kotlinx.android.synthetic.main.fragment_flow.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-class FlowFragment : BaseFragment() {
+class FlowFragment : BaseFragment(),
+        LoadInfoFragment.ActionCallback,
+        AddScheduleFragmentContainer.ActionCallback,
+        NavigationSheet.ActionCallback,
+        DisplayScheduleFragmentContainer.ActionCallback,
+        DisplayScheduleDatePickerSheet.ActionCallback,
+        ScheduleItemOptionsSheet.ActionCallback,
+        ModifyScheduleItemFragment.ActionCallback,
+        StaffListFragment.ActionCallback {
+
+    companion object {
+
+        fun newInstance() = FlowFragment()
+    }
 
     override val layoutId: Int = R.layout.fragment_flow
 
@@ -43,48 +57,116 @@ class FlowFragment : BaseFragment() {
         initViewModel(FlowViewModel::class)
     }
 
-    private val navController: NavController by lazy(LazyThreadSafetyMode.NONE) {
-        Navigation.findNavController(requireActivity(), R.id.navigationFragmentHost)
-    }
-    private val defaultNavOptions = navOptions {
-        anim {
-            enter = R.anim.fragment_open_enter
-            exit = R.anim.fragment_open_exit
-            popEnter = R.anim.fragment_close_enter
-            popExit = R.anim.fragment_close_exit
-        }
-        launchSingleTop = true
-    }
+    private val defaultFragmentAnimations = FragmentAnimationsResHolder(
+            enter = R.animator.fragment_open_enter,
+            exit = R.animator.fragment_open_exit,
+            popEnter = R.animator.fragment_close_enter,
+            popExit = R.animator.fragment_close_exit
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initNavigation()
-        setStartDestination()
+        if (savedInstanceState == null) setStartFragment()
         lifecycleScope.launch(Dispatchers.IO) {
             if (savedInstanceState == null && !viewModel.isInfoLoaded()) openLoadInfo()
             checkScheduleUpdates()
         }
         initViews()
-        receiveEvents()
     }
 
     override fun onResume() {
         super.onResume()
-        requireView().post { updateLayoutState() }
+        postUpdateLayoutState()
     }
 
     override fun onBackPressed(): Boolean {
-        when (navController.currentDestination?.id) {
-            R.id.loadInfoDestination -> return false
+        val currentFragment = getCurrentFragment() as? BackPressedHandler
+        if (currentFragment?.onBackPressed() == false) {
+            popFragment()
+            return true
         }
-        if (navController.navigateUp()) return true
         return false
     }
 
-    private fun initNavigation() {
-        navController.addOnDestinationChangedListener { _, _, _ ->
-            requireView().post { updateLayoutState() }
+    override fun onLoadInfoCompleted() {
+        popFragment()
+    }
+
+    override fun onAddScheduleCompleted(schedules: List<Schedule>) {
+        if (schedules.isEmpty()) {
+            popFragment()
+        } else {
+            val schedule = schedules.first()
+            openViewSchedule(schedule, skipIfOpened = false)
         }
+    }
+
+    override fun onNavigationSettingsClicked() {}
+
+    override fun onNavigationAddScheduleClicked() {
+        popFragment()
+        openAddSchedule()
+    }
+
+    override fun onNavigationScheduleSelected(schedule: Schedule) {
+        openViewSchedule(schedule)
+    }
+
+    override fun onNavigationScheduleDeleted(schedule: Schedule) {
+        onScheduleDeleted(schedule)
+    }
+
+    override fun onDisplayScheduleOpenDetails(data: DisplayScheduleItem) {
+        openScheduleItemDetails(data)
+    }
+
+    override fun onDisplayScheduleOpenOptions(data: DisplayScheduleItem) {
+        openScheduleItemOptions(data)
+    }
+
+    override fun onDisplaySchedulePositionChanged(position: Int) {
+        if (position != 0) {
+            bottomBarFab.show()
+        } else {
+            bottomBarFab.hide()
+        }
+    }
+
+    override fun onDisplayScheduleOpenDatePicker(startDate: Date, endDate: Date, currentDate: Date) {
+        openDatePicker(
+                startDate = startDate,
+                endDate = endDate,
+                currentDate = currentDate
+        )
+    }
+
+    override fun onDatePickerDatePicked(date: Date) {
+        setDisplayScheduleDate(date)
+        popFragment()
+    }
+
+    override fun onScheduleItemOptionsEditClicked(items: List<ScheduleItem>) {
+        popFragment()
+        val schedule = viewModel.getLastOpenedSchedule() ?: return
+        openEditScheduleItem(schedule, items)
+    }
+
+    override fun onModifyItemRequestAuditories() {
+        openStaffList(StaffType.AUDITORY)
+    }
+
+    override fun onModifyItemRequestEmployees() {
+        openStaffList(StaffType.EMPLOYEE)
+    }
+
+    override fun onModifyItemRequestGroups() {
+        openStaffList(StaffType.GROUP)
+    }
+
+    override fun onStaffListItemSelected(info: StaffItemInformation) {
+        popFragment()
+        addStaffItemToModifySchedule(info)
     }
 
     private fun initViews() {
@@ -96,7 +178,7 @@ class FlowFragment : BaseFragment() {
             openDisplayScheduleOptions(schedule)
         }
         bottomBarGoToDateButton.setSafeClickListener {
-            EventBus.send(FlowFragmentEvent.DisplayScheduleGoToDate)
+            openDisplayScheduleDatePicker()
         }
         bottomBarAddScheduleItemButton.setSafeClickListener {
             val schedule = viewModel.getLastOpenedSchedule() ?: return@setSafeClickListener
@@ -111,57 +193,24 @@ class FlowFragment : BaseFragment() {
         }
     }
 
-    private fun receiveEvents() {
-        EventBus.receive<BaseEvent>(eventCoroutineScope) { event ->
-            when (event) {
-                is LoadInfoCompleteEvent -> popFragment()
-                is AddScheduleCompleteEvent -> {
-                    val schedules = event.schedules
-                    if (schedules.isEmpty()) {
-                        popFragment()
-                    } else {
-                        val schedule = schedules.first()
-                        openViewSchedule(schedule, skipIfOpened = false)
-                    }
-                }
-                is NavigationSheetEvent.OnAddSchedule -> openAddSchedule()
-                is NavigationSheetEvent.OnScheduleClick -> openViewSchedule(event.schedule)
-                is NavigationSheetEvent.OnScheduleDeleted -> onScheduleDeleted(event.schedule)
-                is NavigationSheetEvent.OnOpenSettings -> {
-                }
-                is DisplayScheduleEvent.OpenScheduleItemDetails -> openScheduleItemDetails(event.data)
-                is DisplayScheduleEvent.OpenScheduleItemOptions -> openScheduleItemOptions(event.data)
-                is DisplayScheduleEvent.OnPositionChanged -> onDisplaySchedulePositionChanged(event.position)
-                is DisplayScheduleEvent.OpenDatePicker -> openDatePicker(event.startDate, event.endDate, event.currentDate)
-                is ScheduleDatePickedEvent -> popFragment()
-                is EditScheduleItemEvent -> {
-                    popFragment()
-                    val schedule = viewModel.getLastOpenedSchedule() ?: return@receive
-                    openEditScheduleItem(schedule, event.scheduleItems)
-                }
-            }
-        }
-    }
-
     private fun openScheduleItemOptions(data: DisplayScheduleItem) {
-        val arguments = ScheduleItemOptionsSheetArgs(data).toBundle()
-        navController.navigate(R.id.scheduleItemOptionsDestination, arguments, defaultNavOptions)
+        showDialog(ScheduleItemOptionsSheet.newInstance(data), ScheduleItemOptionsSheet.TAG)
     }
 
     private fun openAddScheduleItem(schedule: Schedule) {
         val arguments = ModifyScheduleItemFragmentArgs(
                 schedule = schedule,
-                items = emptyArray()
-        ).toBundle()
-        navController.navigate(R.id.modifyScheduleItemDestination, arguments, defaultNavOptions)
+                items = emptyList()
+        )
+        openFragment(ModifyScheduleItemFragment.newInstance(arguments), ModifyScheduleItemFragment.TAG)
     }
 
     private fun openEditScheduleItem(schedule: Schedule, scheduleItems: List<ScheduleItem>) {
         val arguments = ModifyScheduleItemFragmentArgs(
                 schedule = schedule,
-                items = scheduleItems.toTypedArray()
-        ).toBundle()
-        navController.navigate(R.id.modifyScheduleItemDestination, arguments, defaultNavOptions)
+                items = scheduleItems
+        )
+        openFragment(ModifyScheduleItemFragment.newInstance(arguments), ModifyScheduleItemFragment.TAG)
     }
 
     private fun openScheduleItemDetails(data: DisplayScheduleItem) {
@@ -172,13 +221,11 @@ class FlowFragment : BaseFragment() {
     }
 
     private fun openScheduleExamDetails(exam: Exam) {
-        val arguments = ExamDetailsFragmentArgs(exam).toBundle()
-        navController.navigate(R.id.examDetailsDestination, arguments, defaultNavOptions)
+
     }
 
     private fun openScheduleLessonDetails(lesson: Lesson) {
-        val arguments = LessonDetailsFragmentArgs(lesson).toBundle()
-        navController.navigate(R.id.lessonDetailsDestination, arguments, defaultNavOptions)
+
     }
 
     private fun openDatePicker(
@@ -186,96 +233,87 @@ class FlowFragment : BaseFragment() {
             endDate: Date,
             currentDate: Date
     ) {
-        val arguments = DisplayScheduleDatePickerSheetArgs(startDate, endDate, currentDate).toBundle()
-        navController.navigate(R.id.displayScheduleDatePickerDestination, arguments, defaultNavOptions)
+        val arguments = DisplayScheduleDatePickerSheetArgs(startDate, endDate, currentDate)
+        showDialog(DisplayScheduleDatePickerSheet.newInstance(arguments), DisplayScheduleDatePickerSheet.TAG)
     }
 
     private fun openNavigationSheet() {
-        navController.navigate(R.id.navigationSheetDestination)
+        showDialog(NavigationSheet.newInstance(), NavigationSheet.TAG)
     }
 
     private fun openLoadInfo() {
-        navController.navigate(R.id.loadInfoDestination, null, defaultNavOptions)
+        openFragment(LoadInfoFragment.newInstance(), LoadInfoFragment.TAG)
     }
 
     private fun openUpdateSchedules(schedules: List<Schedule>) {
-        val currentDestinationId = navController.currentDestination?.id
-        if (currentDestinationId == R.id.navigationSheetDestination ||
-                currentDestinationId == R.id.updateScheduleSheetDestination) return
-        navController.navigate(
-                R.id.updateScheduleSheetDestination,
-                UpdateScheduleSheetArgs(schedules.toTypedArray()).toBundle(),
-                defaultNavOptions
-        )
+        val currentFragment = getCurrentFragment()
+        if (currentFragment is NavigationSheet || currentFragment is UpdateScheduleSheet) return
+        val args = UpdateScheduleSheetArgs(schedules)
+        showDialog(UpdateScheduleSheet.newInstance(args), UpdateScheduleSheet.TAG)
     }
 
     private fun openAddSchedule() {
-        popFragment()
-        navController.navigate(R.id.addScheduleDestination, null, defaultNavOptions)
+        openFragment(AddScheduleFragmentContainer.newInstance(), AddScheduleFragmentContainer.TAG)
     }
 
     private fun openDisplayScheduleOptions(schedule: Schedule) {
-        val arguments = DisplayScheduleOptionsSheetArgs(schedule).toBundle()
-        navController.navigate(R.id.displayScheduleOptionsDestination, arguments, defaultNavOptions)
+        showDialog(DisplayScheduleOptionsSheet.newInstance(schedule), DisplayScheduleOptionsSheet.TAG)
     }
 
     private fun openViewSchedule(schedule: Schedule, skipIfOpened: Boolean = true) {
         if (skipIfOpened && viewModel.getLastOpenedSchedule() == schedule) return
         viewModel.setLastOpenedSchedule(schedule)
-        setViewScheduleStartDestination(schedule)
-        val arguments = DisplayScheduleContainerArgs(schedule).toBundle()
-        navController.navigate(R.id.viewScheduleDestination, arguments, defaultNavOptions)
+        setViewScheduleStartFragment(schedule)
+    }
+
+    private fun openStaffList(type: StaffType) {
+        openFragment(
+                StaffListFragment.newInstance(type),
+                StaffListFragment.TAG
+        )
     }
 
     private fun onScheduleDeleted(schedule: Schedule) {
         if (viewModel.getLastOpenedSchedule() == schedule) {
             viewModel.setLastOpenedSchedule(null)
-            setDefaultStartDestination()
+            setDefaultStartFragment()
         }
     }
 
-    private fun setStartDestination() {
+    private fun setStartFragment() {
         val lastOpenedSchedule = viewModel.getLastOpenedSchedule()
         if (lastOpenedSchedule == null) {
-            setDefaultStartDestination()
+            setDefaultStartFragment()
         } else {
-            setViewScheduleStartDestination(lastOpenedSchedule)
+            setViewScheduleStartFragment(lastOpenedSchedule)
         }
     }
 
-    private fun setViewScheduleStartDestination(schedule: Schedule) {
-        val navGraph = navController.navInflater.inflate(R.navigation.navigation_graph)
-        val arguments = DisplayScheduleContainerArgs(schedule).toBundle()
-        navGraph.startDestination = R.id.viewScheduleDestination
-        try {
-            navController.setGraph(navGraph, arguments)
-        } catch (e: IllegalStateException) {
-            Logger.e(e)
-            //TODO: Possible bug: DialogFragment doesn't exist in the FragmentManager
-        }
-        requireView().post { updateLayoutState() }
-
+    private fun setViewScheduleStartFragment(schedule: Schedule) {
+        openPrimaryFragment(
+                DisplayScheduleFragmentContainer.newInstance(schedule),
+                DisplayScheduleFragmentContainer.TAG
+        )
+        postUpdateLayoutState()
     }
 
-    private fun setDefaultStartDestination() {
-        val navGraph = navController.navInflater.inflate(R.navigation.navigation_graph)
-        navGraph.startDestination = R.id.startDestination
-        try {
-            navController.graph = navGraph
-        } catch (e: IllegalStateException) {
-            Logger.e(e)
-            //TODO: Possible bug: DialogFragment doesn't exist in the FragmentManager
-        }
-        requireView().post { updateLayoutState() }
+    private fun setDefaultStartFragment() {
+        openPrimaryFragment(StartFragment.newInstance(), StartFragment.TAG)
+        postUpdateLayoutState()
     }
 
-    private fun popFragment() = navController.popBackStack()
+    private fun postUpdateLayoutState() {
+        requireView().post {
+            updateLayoutState()
+        }
+    }
 
     private fun updateLayoutState() {
-        val isControlsVisible = when (navController.currentDestination?.id) {
-            R.id.addScheduleDestination,
-            R.id.modifyScheduleItemDestination,
-            R.id.loadInfoDestination -> false
+        val isControlsVisible = when (getCurrentFragment()) {
+            is AddScheduleFragmentContainer,
+            is ModifyScheduleItemFragment,
+            is StaffListFragment,
+            is LoadInfoFragment -> false
             else -> true
         }
         updateFabState()
@@ -290,21 +328,22 @@ class FlowFragment : BaseFragment() {
             null -> FabActionState.ADD_SCHEDULE
             else -> null
         }
-        if (fabState == FabActionState.ADD_SCHEDULE) {
-            bottomBarFab.show()
-        } else {
-            bottomBarFab.hide()
-        }
         if (fabState != null) {
             bottomBarFab.setImageDrawable(ContextCompat.getDrawable(requireContext(), fabState.iconRes))
             bottomBarFab.setSafeClickListener {
                 when (fabState) {
-                    FabActionState.DISPLAY_SCHEDULE_BACK -> EventBus.send(FlowFragmentEvent.DisplayScheduleSetToday)
+                    FabActionState.DISPLAY_SCHEDULE_BACK -> setDisplayScheduleDate(Date())
                     FabActionState.ADD_SCHEDULE -> openAddSchedule()
                 }
             }
+            if (fabState == FabActionState.ADD_SCHEDULE) {
+                bottomBarFab.show()
+            } else {
+                requestDisplayScheduleCurrentPosition()
+            }
         } else {
             bottomBarFab.setOnClickListener(null)
+            bottomBarFab.hide()
         }
     }
 
@@ -328,13 +367,78 @@ class FlowFragment : BaseFragment() {
         }
     }
 
-    private fun onDisplaySchedulePositionChanged(position: Int) {
-        requireView().post {
-            if (position != 0) {
-                bottomBarFab.show()
-            } else {
-                bottomBarFab.hide()
+    private fun initNavigation() {
+        childFragmentManager.addOnBackStackChangedListener {
+            postUpdateLayoutState()
+        }
+    }
+
+    private fun setDisplayScheduleDate(date: Date) {
+        childFragmentManager.displayScheduleFragment?.setDate(date)
+    }
+
+    private fun requestDisplayScheduleCurrentPosition() {
+        childFragmentManager.displayScheduleFragment?.requestCurrentPosition()
+    }
+
+    private fun openDisplayScheduleDatePicker() {
+        childFragmentManager.displayScheduleFragment?.openDatePicker()
+    }
+
+    private fun addStaffItemToModifySchedule(data: StaffItemInformation) {
+        val fragment = childFragmentManager.modifyItemFragment ?: return
+        when (data) {
+            is StaffItemInformation.GroupInfo -> {
+                fragment.addGroup(data.group)
+            }
+            is StaffItemInformation.EmployeeInfo -> {
+                fragment.addEmployee(data.employee)
+            }
+            is StaffItemInformation.AuditoryInfo -> {
+                fragment.addAuditory(data.auditory)
             }
         }
     }
+
+    private fun openPrimaryFragment(
+            fragment: Fragment,
+            tag: String,
+            animations: FragmentAnimationsResHolder = defaultFragmentAnimations
+    ) {
+        childFragmentManager.removeAllFragmentsImmediate()
+        childFragmentManager.commit {
+            animations.run {
+                setCustomAnimations(enter, exit, popEnter, popExit)
+            }
+            replace(navigationFragmentContainer.id, fragment, tag)
+            setPrimaryNavigationFragment(fragment)
+        }
+    }
+
+    private fun openFragment(
+            fragment: Fragment,
+            tag: String,
+            addToBackStack: Boolean = true,
+            animations: FragmentAnimationsResHolder = defaultFragmentAnimations
+    ) {
+        childFragmentManager.commit {
+            animations.run {
+                setCustomAnimations(enter, exit, popEnter, popExit)
+            }
+            replace(navigationFragmentContainer.id, fragment, tag)
+            if (addToBackStack) addToBackStack(tag)
+        }
+    }
+
+    private fun popFragment() = childFragmentManager.popBackStack()
+
+    private fun showDialog(
+            fragment: DialogFragment,
+            tag: String
+    ) {
+        val transaction = childFragmentManager.beginTransaction().addToBackStack(tag)
+        fragment.show(transaction, tag)
+    }
+
+    private fun getCurrentFragment() = childFragmentManager.currentFragment
 }

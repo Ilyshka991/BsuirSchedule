@@ -21,9 +21,6 @@
     <string name="add_schedule_tab_employees">Employees</string>
     <string name="add_schedule_tab_students">Students</string>
     <string name="add_schedule_msg_type">Type:</string>
-    <string name="add_schedule_msg_suggestion_group_course">Course: %1$d</string>
-    <string name="add_schedule_msg_suggestion_employee_department">Department: %1$s</string>
-    <string name="add_schedule_msg_empty_suggestions">Empty.</string>
 
     <string name="info_load_title">Info loading</string>
     <string name="info_load_message">Information is loading,\nplease wait</string>
@@ -82,6 +79,7 @@
     <string name="modify_schedule_item_hint_note">Note</string>
     <string name="modify_schedule_item_label_priority">Priority:</string>
     <string name="modify_schedule_item_label_date">Date:</string>
+    <string name="modify_schedule_item_action_add">add</string>
 
     <string-array name="lesson_types">
         <item>ЛК</item>
@@ -112,4 +110,12 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
+
+    <string name="staff_list_hint_enter_group_number">Enter group number</string>
+    <string name="staff_list_hint_enter_employee_name">Enter employee name</string>
+    <string name="staff_list_hint_enter_auditory">Enter auditory</string>
+    <string name="staff_list_msg_group_course">Course: %1$d</string>
+    <string name="staff_list_msg_employee_department">Department: %1$s</string>
+    <string name="staff_list_msg_auditory_capacity">capacity: %1$d</string>
+    <string name="staff_list_msg_empty">Not found</string>
 </resources>

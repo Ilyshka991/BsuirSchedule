@@ -11,13 +11,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.color
 import com.pechuro.bsuirschedule.ext.formattedColorRes
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
-import com.pechuro.bsuirschedule.feature.display.DisplayScheduleEvent
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import kotlinx.android.synthetic.main.item_display_schedule_classes.*
 import kotlinx.android.synthetic.main.item_display_schedule_exam.*
@@ -38,27 +36,30 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
     ) = oldItem == newItem
 }
 
-private class OnScheduleItemClickListener : View.OnClickListener, View.OnLongClickListener {
-
-    override fun onClick(view: View) {
-        val data = view.tag as? DisplayScheduleItem? ?: return
-        EventBus.send(DisplayScheduleEvent.OpenScheduleItemDetails(data))
-    }
-
-    override fun onLongClick(view: View): Boolean {
-        val data = view.tag as? DisplayScheduleItem? ?: return false
-        EventBus.send(DisplayScheduleEvent.OpenScheduleItemOptions(data))
-        return true
-    }
-}
-
 private const val CLASSES_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_classes
 private const val EXAMS_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_exam
 private const val EMPTY_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_empty
 
 const val SCHEDULE_ITEM_DATE_FORMAT_PATTERN = "dd.MM.yyyy"
 
-class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHolder<DisplayScheduleItem>>(DIFF_CALLBACK) {
+class DisplayScheduleItemAdapter(
+        onClickCallback: (data: DisplayScheduleItem) -> Unit,
+        onLongClickCallback: (data: DisplayScheduleItem) -> Unit
+) : ListAdapter<DisplayScheduleItem, BaseViewHolder<DisplayScheduleItem>>(DIFF_CALLBACK) {
+
+    private val clickListener = object : View.OnClickListener, View.OnLongClickListener {
+
+        override fun onClick(view: View) {
+            val data = view.tag as? DisplayScheduleItem? ?: return
+            onClickCallback(data)
+        }
+
+        override fun onLongClick(view: View): Boolean {
+            val data = view.tag as? DisplayScheduleItem? ?: return false
+            onLongClickCallback(data)
+            return true
+        }
+    }
 
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
         is DisplayScheduleItem.DayClasses, is DisplayScheduleItem.WeekClasses -> CLASSES_VIEW_TYPE_LAYOUT_ID
@@ -79,17 +80,15 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
 
     override fun onBindViewHolder(holder: BaseViewHolder<DisplayScheduleItem>, position: Int) {
         holder.onBind(getItem(position))
+        holder.itemView.apply {
+            setSafeClickListener(onClickListener = clickListener)
+            setOnLongClickListener(clickListener)
+        }
     }
 
     override fun getItemId(position: Int) = getItem(position).scheduleItem?.id ?: RecyclerView.NO_ID
 
     private class ClassesViewHolder(view: View) : BaseViewHolder<DisplayScheduleItem>(view) {
-
-        init {
-            val clickListener = OnScheduleItemClickListener()
-            itemView.setSafeClickListener(onClickListener = clickListener)
-            itemView.setOnLongClickListener(clickListener)
-        }
 
         override fun onBind(data: DisplayScheduleItem) {
             val scheduleItem = data.scheduleItem
@@ -128,12 +127,6 @@ class DisplayScheduleItemAdapter : ListAdapter<DisplayScheduleItem, BaseViewHold
     private class ExamsViewHolder(view: View) : BaseViewHolder<DisplayScheduleItem.Exams>(view) {
 
         private val dateFormatter = SimpleDateFormat(SCHEDULE_ITEM_DATE_FORMAT_PATTERN, Locale.getDefault())
-
-        init {
-            val clickListener = OnScheduleItemClickListener()
-            itemView.setSafeClickListener(onClickListener = clickListener)
-            itemView.setOnLongClickListener(clickListener)
-        }
 
         override fun onBind(data: DisplayScheduleItem.Exams) {
             val scheduleItem = data.scheduleItem

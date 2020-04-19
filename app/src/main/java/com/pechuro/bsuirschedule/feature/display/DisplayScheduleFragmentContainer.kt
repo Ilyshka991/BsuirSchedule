@@ -1,40 +1,62 @@
 package com.pechuro.bsuirschedule.feature.display
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.BaseEvent
-import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
-import com.pechuro.bsuirschedule.ext.clearAdapter
-import com.pechuro.bsuirschedule.ext.nonNull
-import com.pechuro.bsuirschedule.ext.observe
-import com.pechuro.bsuirschedule.feature.datepicker.ScheduleDatePickedEvent
+import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel.Event.OnScheduleItemClicked
+import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel.Event.OnScheduleItemLongClicked
+import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleViewType
-import com.pechuro.bsuirschedule.feature.flow.FlowFragmentEvent
 import kotlinx.android.synthetic.main.fragment_view_schedule_container.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DisplayScheduleContainer : BaseFragment() {
+class DisplayScheduleFragmentContainer : BaseFragment() {
+
+    interface ActionCallback {
+
+        fun onDisplayScheduleOpenDetails(data: DisplayScheduleItem)
+
+        fun onDisplayScheduleOpenOptions(data: DisplayScheduleItem)
+
+        fun onDisplaySchedulePositionChanged(position: Int)
+
+        fun onDisplayScheduleOpenDatePicker(
+                startDate: Date,
+                endDate: Date,
+                currentDate: Date
+        )
+    }
 
     companion object {
 
+        const val TAG = "DisplayScheduleContainer"
+
+        private const val BUNDLE_SCHEDULE = "BUNDLE_SCHEDULE"
         private const val TAB_DATE_FORMAT_DAY = "EEE, dd MMM"
         private const val TAB_DATE_FORMAT_WEEK = "EEEE"
+
+        fun newInstance(schedule: Schedule) = DisplayScheduleFragmentContainer().apply {
+            arguments = bundleOf(BUNDLE_SCHEDULE to schedule)
+        }
     }
 
     override val layoutId: Int = R.layout.fragment_view_schedule_container
 
-    private val args: DisplayScheduleContainerArgs by navArgs()
+    private val schedule: Schedule by args(BUNDLE_SCHEDULE)
 
     private lateinit var viewModel: DisplayScheduleViewModel
+
+    private var actionCallback: ActionCallback? = null
 
     private val tabDayDateFormatter by lazy(LazyThreadSafetyMode.NONE) {
         SimpleDateFormat(TAB_DATE_FORMAT_DAY, Locale.getDefault())
@@ -50,10 +72,15 @@ class DisplayScheduleContainer : BaseFragment() {
         }
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        actionCallback = getCallbackOrNull()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = initViewModel(DisplayScheduleViewModel::class, owner = this).apply {
-            schedule = args.schedule
+            schedule = this@DisplayScheduleFragmentContainer.schedule
         }
         val viewType = getViewType()
         initView(viewType)
@@ -70,19 +97,42 @@ class DisplayScheduleContainer : BaseFragment() {
         destroyView()
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        actionCallback = null
+    }
+
+    fun requestCurrentPosition() {
+        onPositionChanged()
+    }
+
+    fun setDate(date: Date = Date()) {
+        val position = pagerAdapter?.getPositionForDate(date) ?: return
+        setPosition(position)
+    }
+
+    fun openDatePicker() {
+        val pagerAdapter = pagerAdapter ?: return
+        actionCallback?.onDisplayScheduleOpenDatePicker(
+                startDate = pagerAdapter.getCalendarAt(0).time,
+                endDate = pagerAdapter.getCalendarAt(pagerAdapter.itemCount - 1).time,
+                currentDate = pagerAdapter.getCalendarAt(displayScheduleContainerViewPager.currentItem).time
+        )
+    }
+
     private fun observeData() {
-        EventBus.receive<BaseEvent>(eventCoroutineScope) { event ->
-            when (event) {
-                is FlowFragmentEvent.DisplayScheduleSetToday -> setFirstDay()
-                is FlowFragmentEvent.DisplayScheduleGoToDate -> openDatePicker()
-                is ScheduleDatePickedEvent -> setDate(event.date)
-            }
-        }
         viewModel.displayTypeData.nonNull().observe(viewLifecycleOwner) {
             val viewType = getViewType()
             if (pagerAdapter?.viewType == viewType) return@observe
             destroyView()
             initView(viewType)
+        }
+        viewModel.eventsData.nonNull().observe(viewLifecycleOwner) { event ->
+            when (event) {
+                is OnScheduleItemClicked -> actionCallback?.onDisplayScheduleOpenDetails(event.data)
+                is OnScheduleItemLongClicked -> actionCallback?.onDisplayScheduleOpenOptions(event.data)
+
+            }
         }
     }
 
@@ -131,7 +181,7 @@ class DisplayScheduleContainer : BaseFragment() {
         tabLayoutMediator = null
     }
 
-    private fun getViewType() = when (args.schedule) {
+    private fun getViewType() = when (schedule) {
         is Schedule.GroupClasses, is Schedule.EmployeeClasses -> {
             when (val type = viewModel.displayTypeData.value) {
                 ScheduleDisplayType.DAYS -> DisplayScheduleViewType.DAY_CLASSES
@@ -143,10 +193,10 @@ class DisplayScheduleContainer : BaseFragment() {
     }
 
     private fun onPositionChanged() {
-        if (args.schedule is Schedule.GroupExams || args.schedule is Schedule.EmployeeExams) return
+        if (schedule is Schedule.GroupExams || schedule is Schedule.EmployeeExams) return
         val pagerAdapter = pagerAdapter ?: return
         val relativePosition = displayScheduleContainerViewPager.currentItem - pagerAdapter.getStartPosition()
-        EventBus.send(DisplayScheduleEvent.OnPositionChanged(relativePosition))
+        actionCallback?.onDisplaySchedulePositionChanged(relativePosition)
     }
 
     private fun getTabTitle(viewType: DisplayScheduleViewType, position: Int): String {
@@ -162,25 +212,6 @@ class DisplayScheduleContainer : BaseFragment() {
             }
             else -> throw IllegalArgumentException("Unsupported view type: $viewType")
         }
-    }
-
-    private fun openDatePicker() {
-        val pagerAdapter = pagerAdapter ?: return
-        EventBus.send(DisplayScheduleEvent.OpenDatePicker(
-                startDate = pagerAdapter.getCalendarAt(0).time,
-                endDate = pagerAdapter.getCalendarAt(pagerAdapter.itemCount - 1).time,
-                currentDate = pagerAdapter.getCalendarAt(displayScheduleContainerViewPager.currentItem).time
-        ))
-    }
-
-    private fun setFirstDay() {
-        val startPosition = pagerAdapter?.getStartPosition() ?: return
-        setPosition(startPosition)
-    }
-
-    private fun setDate(date: Date) {
-        val position = pagerAdapter?.getPositionForDate(date) ?: return
-        setPosition(position)
     }
 
     private fun setPosition(position: Int) {

@@ -21,7 +21,7 @@ class UpdateScheduleSheetViewModel @Inject constructor(
 
     private var scheduleForUpdateQueue: Queue<Schedule> = emptyQueue()
 
-    fun setSchedules(schedules: Array<Schedule>) {
+    fun setSchedules(schedules: List<Schedule>) {
         scheduleForUpdateQueue.addAll(schedules)
         takeNextSchedule(removePrevious = false)
     }

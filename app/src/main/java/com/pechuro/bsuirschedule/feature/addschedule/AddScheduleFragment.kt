@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.addschedule.fragment
+package com.pechuro.bsuirschedule.feature.addschedule
 
 import android.content.Context
 import android.os.Bundle
@@ -14,10 +14,13 @@ import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleContainerPagerAdapter.FragmentType
-import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel.State
-import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation.EmployeeInfo
-import com.pechuro.bsuirschedule.feature.addschedule.fragment.SuggestionItemInformation.GroupInfo
+import com.pechuro.bsuirschedule.feature.stafflist.StaffAdapter
+import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation
+import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.EmployeeInfo
+import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.GroupInfo
+import com.pechuro.bsuirschedule.feature.stafflist.StaffListViewModel
+import com.pechuro.bsuirschedule.feature.stafflist.StaffType
 import kotlinx.android.synthetic.main.fragment_add_schedule.*
 
 class AddScheduleFragment : BaseFragment() {
@@ -34,17 +37,24 @@ class AddScheduleFragment : BaseFragment() {
 
     override val layoutId: Int = R.layout.fragment_add_schedule
 
-    private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
+    private val addScheduleViewModel by lazy(LazyThreadSafetyMode.NONE) {
         val owner = parentFragment ?: this
         initViewModel(AddScheduleViewModel::class, owner = owner)
+    }
+
+    private val staffViewModel by lazy(LazyThreadSafetyMode.NONE) {
+        initViewModel(StaffListViewModel::class)
     }
 
     private val scheduleType: FragmentType by lazy(LazyThreadSafetyMode.NONE) {
         requireArguments().getSerializable(ARG_SCHEDULE_TYPE) as FragmentType
     }
 
-    private val suggestionsAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        AddScheduleSuggestionsAdapter().also {
+    private val staffAdapter by lazy(LazyThreadSafetyMode.NONE) {
+        StaffAdapter(onItemClicked = {
+            addScheduleSuggestionsRecyclerView.tag = it
+            loadSchedule(it)
+        }).also {
             it.setHasStableIds(true)
         }
     }
@@ -54,13 +64,13 @@ class AddScheduleFragment : BaseFragment() {
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        activity?.window?.clearFlags(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val staffType = when (scheduleType) {
+            FragmentType.EMPLOYEE -> StaffType.EMPLOYEE
+            FragmentType.STUDENT -> StaffType.GROUP
+        }
+        staffViewModel.init(staffType)
         initView()
         observeData()
     }
@@ -80,6 +90,11 @@ class AddScheduleFragment : BaseFragment() {
         super.onDestroyView()
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        activity?.window?.clearFlags(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+    }
+
     private fun initView() {
         addScheduleNameInput.apply {
             val inputType = when (scheduleType) {
@@ -89,67 +104,50 @@ class AddScheduleFragment : BaseFragment() {
             this.inputType = inputType
 
             addTextListener {
-                when (scheduleType) {
-                    FragmentType.STUDENT -> viewModel.filterGroups(it)
-                    FragmentType.EMPLOYEE -> viewModel.filterEmployees(it)
-                }
+                staffViewModel.filter(it)
             }
         }
 
         addScheduleSuggestionsRecyclerView.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            adapter = suggestionsAdapter.apply {
-                onItemClicked = {
-                    addScheduleSuggestionsRecyclerView.tag = it
-                    loadSchedule(it)
-                }
-            }
+            adapter = staffAdapter
             setHasFixedSize(true)
         }
 
         addScheduleRetryButton.setSafeClickListener {
-            val info = addScheduleSuggestionsRecyclerView.tag as? SuggestionItemInformation
+            val info = addScheduleSuggestionsRecyclerView.tag as? StaffItemInformation
             if (info != null) {
                 loadSchedule(info)
             } else {
-                viewModel.cancel()
+                addScheduleViewModel.cancel()
             }
         }
 
         addScheduleCancelButton.setSafeClickListener {
-            viewModel.cancel()
+            addScheduleViewModel.cancel()
         }
     }
 
     private fun observeData() {
-        viewModel.state.nonNull().observe(viewLifecycleOwner) {
+        addScheduleViewModel.state.nonNull().observe(viewLifecycleOwner) {
             updateLayoutState(it)
         }
-        when (scheduleType) {
-            FragmentType.STUDENT -> {
-                viewModel.allGroupsData.nonNull().observe(viewLifecycleOwner) {
-                    suggestionsAdapter.submitList(it)
-                }
-            }
-            FragmentType.EMPLOYEE -> {
-                viewModel.allEmployeesData.nonNull().observe(viewLifecycleOwner) {
-                    suggestionsAdapter.submitList(it)
-                }
-            }
+        staffViewModel.listData.nonNull().observe(viewLifecycleOwner) {
+            staffAdapter.submitList(it)
         }
     }
 
-    private fun loadSchedule(info: SuggestionItemInformation) {
+    private fun loadSchedule(info: StaffItemInformation) {
         val scheduleTypes = sequence {
             if (addScheduleChipClasses.isChecked) yield(ScheduleType.CLASSES)
             if (addScheduleChipExams.isChecked) yield(ScheduleType.EXAMS)
         }.toList()
         when (info) {
             is GroupInfo -> {
-                viewModel.loadSchedule(info.group, scheduleTypes)
+                addScheduleViewModel.loadSchedule(info.group, scheduleTypes)
             }
             is EmployeeInfo -> {
-                viewModel.loadSchedule(info.employee, scheduleTypes)
+                addScheduleViewModel.loadSchedule(info.employee, scheduleTypes)
             }
         }
     }

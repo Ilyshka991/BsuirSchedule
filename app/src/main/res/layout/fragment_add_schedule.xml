@@ -147,6 +147,6 @@
             app:layout_constraintEnd_toEndOf="@+id/addScheduleTypesParentView"
             app:layout_constraintStart_toStartOf="@+id/addScheduleTypesParentView"
             app:layout_constraintTop_toBottomOf="@+id/addScheduleNameInputLayout"
-            tools:listitem="@layout/item_suggestion_group" />
+            tools:listitem="@layout/item_staff_group" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

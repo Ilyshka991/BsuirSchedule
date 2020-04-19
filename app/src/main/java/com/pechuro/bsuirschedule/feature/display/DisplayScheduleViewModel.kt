@@ -2,6 +2,7 @@ package com.pechuro.bsuirschedule.feature.display
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import com.pechuro.bsuirschedule.common.LiveEvent
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
@@ -45,6 +46,8 @@ class DisplayScheduleViewModel @Inject constructor(
         }
         addSource(displayTypeFlowData) { value = it }
     }
+
+    val eventsData = LiveEvent<Event>()
 
     private val scheduleItemList: LiveData<List<ScheduleItem>> = flowLiveData {
         getScheduleItems.execute(GetScheduleItems.Params(schedule)).getOrDefault(emptyFlow())
@@ -134,4 +137,9 @@ class DisplayScheduleViewModel @Inject constructor(
             .filterIsInstance<Exam>()
             .sortedBy { it.date }
             .map(DisplayScheduleItem::Exams)
+
+    sealed class Event {
+        data class OnScheduleItemClicked(val data: DisplayScheduleItem) : Event()
+        data class OnScheduleItemLongClicked(val data: DisplayScheduleItem) : Event()
+    }
 }

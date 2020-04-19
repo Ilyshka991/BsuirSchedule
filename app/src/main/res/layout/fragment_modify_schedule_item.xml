@@ -140,7 +140,7 @@
                 style="@style/DefaultText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/modify_schedule_item_label_employees"
                 android:textSize="22sp" />
 
@@ -153,7 +153,7 @@
                 style="@style/DefaultText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/modify_schedule_item_label_auditories"
                 android:textSize="22sp" />
 
