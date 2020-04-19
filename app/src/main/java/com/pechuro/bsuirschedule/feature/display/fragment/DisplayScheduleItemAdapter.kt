@@ -14,10 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.ext.color
-import com.pechuro.bsuirschedule.ext.dimenPx
-import com.pechuro.bsuirschedule.ext.formattedColorRes
-import com.pechuro.bsuirschedule.ext.setSafeClickListener
+import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import kotlinx.android.synthetic.main.item_display_schedule_classes.*
 import kotlinx.android.synthetic.main.item_display_schedule_exam.*
@@ -166,9 +163,9 @@ class DisplayScheduleItemAdapter(
     }
 }
 
-private fun List<WeekNumber>.formatWeekNumbers() = joinToString(separator = ",") { it.index.plus(1).toString() }
+private fun List<WeekNumber>.formatWeekNumbers() = joinToString(separator = ",") { it.formattedString}
 
-private fun List<Auditory>.formatAuditories() = joinToString(separator = ",") { "${it.name}-${it.building.name}" }
+private fun List<Auditory>.formatAuditories() = joinToString(separator = ",") { it.formattedName}
 
 private fun List<Employee>.formatEmployees() = joinToString(separator = ",") { it.abbreviation }
 

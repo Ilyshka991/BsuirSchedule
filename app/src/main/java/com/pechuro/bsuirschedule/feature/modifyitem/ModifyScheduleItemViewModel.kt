@@ -1,6 +1,5 @@
 package com.pechuro.bsuirschedule.feature.modifyitem
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.entity.Schedule
@@ -11,17 +10,20 @@ import javax.inject.Inject
 
 class ModifyScheduleItemViewModel @Inject constructor(
         private val addScheduleItems: AddScheduleItems,
-        private val deleteScheduleItems: DeleteScheduleItems,
-        private val context: Context
+        private val deleteScheduleItems: DeleteScheduleItems
 ) : BaseViewModel() {
 
     lateinit var dataProvider: ModifyScheduleItemDataProvider
     val state = MutableLiveData<State>(State.Idle)
 
-    fun init(schedule: Schedule, items: List<ScheduleItem>) {
+    fun init(
+            schedule: Schedule,
+            items: List<ScheduleItem>,
+            lessonTypes: Array<String>
+    ) {
         if (this::dataProvider.isInitialized) return
         dataProvider = ModifyScheduleItemDataProvider(
-                context = context,
+                lessonTypes = lessonTypes,
                 schedule = schedule,
                 scheduleItems = items
         )

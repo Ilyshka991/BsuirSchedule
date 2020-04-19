@@ -4,9 +4,7 @@ import android.content.res.Resources
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.domain.entity.LessonPriority
-import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
-import com.pechuro.bsuirschedule.domain.entity.WeekDay
+import com.pechuro.bsuirschedule.domain.entity.*
 
 @get:ColorRes
 val LessonPriority.formattedColorRes: Int
@@ -38,3 +36,9 @@ fun WeekDay.getFormattedString(resources: Resources): String {
     val resourceArray = resources.getStringArray(R.array.weekdays)
     return resourceArray[index]
 }
+
+val Auditory.formattedName: String
+    get() = "$name-${building.name}"
+
+val WeekNumber.formattedString: String
+    get() = (index + 1).toString()

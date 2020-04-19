@@ -1,6 +1,8 @@
 package com.pechuro.bsuirschedule.feature.modifyitem
 
 import android.content.Context
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.OvalShape
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
@@ -12,6 +14,9 @@ import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.display.fragment.SCHEDULE_ITEM_DATE_FORMAT_PATTERN
+import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialog
+import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogButtonData
+import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogCheckableButtonData
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_modify_schedule_item.*
 import java.text.SimpleDateFormat
@@ -64,7 +69,7 @@ class ModifyScheduleItemFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.init(args.schedule, args.items)
+        viewModel.init(args.schedule, args.items, getAvailableLessonTypes())
         initView()
         observeData()
     }
@@ -119,10 +124,25 @@ class ModifyScheduleItemFragment : BaseFragment() {
             viewModel.saveChanges()
         }
         modifyScheduleItemSubjectText.addTextListener {
-            viewModel.dataProvider.subjectData.value = it
+            viewModel.dataProvider.setSubject(it)
         }
         modifyScheduleItemNoteText.addTextListener {
-            viewModel.dataProvider.noteData.value = it
+            viewModel.dataProvider.setNote(it)
+        }
+        modifyScheduleItemType.setSafeClickListener {
+            selectLessonType()
+        }
+        modifyScheduleItemPriority.setSafeClickListener {
+            selectPriority()
+        }
+        modifyScheduleItemSubgroupNumber.setSafeClickListener {
+            selectSubgroupNumber()
+        }
+        modifyScheduleItemWeekday.setSafeClickListener {
+            selectWeekDay()
+        }
+        modifyScheduleItemWeekNumbers.setSafeClickListener {
+            selectWeekNumber()
         }
     }
 
@@ -152,7 +172,8 @@ class ModifyScheduleItemFragment : BaseFragment() {
                 modifyScheduleItemType.setMessage(lessonType)
             }
             subgroupNumberData.nonNull().observe(viewLifecycleOwner) { subgroupNumber ->
-                modifyScheduleItemSubgroupNumber.setMessage(subgroupNumber.formattedStringRes)
+                val formatted = getString(subgroupNumber.formattedStringRes).toLowerCase()
+                modifyScheduleItemSubgroupNumber.setMessage(formatted)
             }
             startTimeData.nonNull().observe(viewLifecycleOwner) { startTime ->
                 modifyScheduleItemStartTime.setMessage(startTime)
@@ -161,13 +182,14 @@ class ModifyScheduleItemFragment : BaseFragment() {
                 modifyScheduleItemEndTime.setMessage(endTime)
             }
             priorityData.nonNull().observe(viewLifecycleOwner) { priority ->
-                modifyScheduleItemPriority.setMessage(priority.formattedStringRes)
+                val formatted = getString(priority.formattedStringRes).toLowerCase()
+                modifyScheduleItemPriority.setMessage(formatted)
             }
             weekDayData.nonNull().observe(viewLifecycleOwner) { weekDay ->
                 modifyScheduleItemWeekday.setMessage(weekDay.getFormattedString(resources))
             }
             weekNumberData.nonNull().observe(viewLifecycleOwner) { weekNumbers ->
-                val formattedWeekNumbers = weekNumbers.map { it.index + 1 }.sorted().joinToString { it.toString() }
+                val formattedWeekNumbers = weekNumbers.joinToString { it.formattedString }
                 modifyScheduleItemWeekNumbers.setMessage(formattedWeekNumbers)
             }
             dateData.nonNull().observe(viewLifecycleOwner) { date ->
@@ -262,5 +284,121 @@ class ModifyScheduleItemFragment : BaseFragment() {
             onClick()
         }
         return chip
+    }
+
+    private fun getAvailableLessonTypes(): Array<String> {
+        val schedule = args.schedule
+        val isClassesSchedule = schedule is Schedule.GroupClasses || schedule is Schedule.EmployeeClasses
+        val arrayResId = if (isClassesSchedule) R.array.lesson_types else R.array.exam_types
+        return requireContext().resources.getStringArray(arrayResId)
+    }
+
+    private fun selectLessonType() {
+        val availableTypes = getAvailableLessonTypes()
+        val options = availableTypes.map { type ->
+            OptionDialogButtonData(text = type)
+        }
+        val listener = object : OptionDialog.OptionButtonClickListener {
+            override fun onClick(position: Int) {
+                viewModel.dataProvider.setLessonType(availableTypes[position])
+            }
+        }
+        val title = getString(R.string.modify_schedule_item_title_select_type)
+        OptionDialog.Builder()
+                .setTitle(title)
+                .setActions(options, listener)
+                .build()
+                .show(childFragmentManager, OptionDialog.TAG)
+    }
+
+    private fun selectPriority() {
+        val availablePriorities = LessonPriority.values()
+        val options = availablePriorities.map { prioriry ->
+            val drawable = ShapeDrawable(OvalShape()).apply {
+                paint.color = requireContext().color(prioriry.formattedColorRes)
+            }
+            OptionDialogButtonData(
+                    text = getString(prioriry.formattedStringRes),
+                    icon = drawable
+            )
+        }
+        val listener = object : OptionDialog.OptionButtonClickListener {
+            override fun onClick(position: Int) {
+                viewModel.dataProvider.setPriority(availablePriorities[position])
+            }
+        }
+        val title = getString(R.string.modify_schedule_item_title_select_priority)
+        OptionDialog.Builder()
+                .setTitle(title)
+                .setActions(options, listener)
+                .build()
+                .show(childFragmentManager, OptionDialog.TAG)
+    }
+
+    private fun selectSubgroupNumber() {
+        val availableNumbers = SubgroupNumber.values()
+        val options = availableNumbers.map { number ->
+            OptionDialogButtonData(text = getString(number.formattedStringRes))
+        }
+        val listener = object : OptionDialog.OptionButtonClickListener {
+            override fun onClick(position: Int) {
+                viewModel.dataProvider.setSubgroupNumber(availableNumbers[position])
+            }
+        }
+        val title = getString(R.string.modify_schedule_item_title_select_subgroup)
+        OptionDialog.Builder()
+                .setTitle(title)
+                .setActions(options, listener)
+                .build()
+                .show(childFragmentManager, OptionDialog.TAG)
+    }
+
+    private fun selectWeekDay() {
+        val availableWeekDays = WeekDay.values()
+        val options = availableWeekDays.map { day ->
+            OptionDialogButtonData(text = day.getFormattedString(resources))
+        }
+        val listener = object : OptionDialog.OptionButtonClickListener {
+            override fun onClick(position: Int) {
+                viewModel.dataProvider.setWeekDay(availableWeekDays[position])
+            }
+        }
+        val title = getString(R.string.modify_schedule_item_title_select_weekday)
+        OptionDialog.Builder()
+                .setTitle(title)
+                .setActions(options, listener)
+                .build()
+                .show(childFragmentManager, OptionDialog.TAG)
+    }
+
+    private fun selectWeekNumber() {
+        val availableWeekNumbers = WeekNumber.values()
+        val selectedWeeks = viewModel.dataProvider.weekNumberData.requireValue
+        val options = availableWeekNumbers.map { number ->
+            OptionDialogCheckableButtonData(
+                    text = number.formattedString,
+                    checked = number in selectedWeeks
+            )
+        }
+        val listener = object : OptionDialog.OptionCheckableButtonClickListener {
+            override fun onClick(position: Int, checked: Boolean) {
+                val changedWeek = availableWeekNumbers[position]
+                if (checked) {
+                    viewModel.dataProvider.addWeekNumber(changedWeek)
+                } else {
+                    viewModel.dataProvider.removeWeekNumber(changedWeek)
+                }
+            }
+        }
+        val title = getString(R.string.modify_schedule_item_title_select_weeknumber)
+        OptionDialog.Builder()
+                .setTitle(title)
+                .setCheckableActions(options, listener)
+                .setOnDismissListener {
+                    viewModel.dataProvider.checkWeekNumbers()
+                }
+                .build()
+                .show(childFragmentManager, OptionDialog.TAG)
+
     }
 }

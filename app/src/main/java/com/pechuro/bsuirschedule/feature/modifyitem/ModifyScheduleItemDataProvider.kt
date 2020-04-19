@@ -1,8 +1,7 @@
 package com.pechuro.bsuirschedule.feature.modifyitem
 
-import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.addIfEmpty
 import com.pechuro.bsuirschedule.ext.getWeekDay
@@ -11,47 +10,85 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class ModifyScheduleItemDataProvider(
-        private val context: Context,
+        lessonTypes: Array<String>,
         val schedule: Schedule,
         val scheduleItems: List<ScheduleItem>
 ) {
 
-    val subjectData = MutableLiveData<String>()
-    val lessonTypeData = MutableLiveData<String>()
-    val subgroupNumberData = MutableLiveData<SubgroupNumber>()
-    val noteData = MutableLiveData<String>()
-    val startTimeData = MutableLiveData<String>()
-    val endTimeData = MutableLiveData<String>()
-    val priorityData = MutableLiveData<LessonPriority>()
-    val weekDayData = MutableLiveData<WeekDay>()
-    val weekNumberData = MutableLiveData<List<WeekNumber>>()
-    val dateData = MutableLiveData<Date>()
-    val auditoriesData = MutableLiveData<Set<Auditory>>()
-    val employeesData = MutableLiveData<Set<Employee>>()
-    val studentGroupsData = MutableLiveData<Set<Group>>()
+    private val _subjectData = MutableLiveData<String>()
+    val subjectData: LiveData<String>
+        get() = _subjectData
+
+    private val _lessonTypeData = MutableLiveData<String>()
+    val lessonTypeData: LiveData<String>
+        get() = _lessonTypeData
+
+    private val _subgroupNumberData = MutableLiveData<SubgroupNumber>()
+    val subgroupNumberData: LiveData<SubgroupNumber>
+        get() = _subgroupNumberData
+
+    private val _noteData = MutableLiveData<String>()
+    val noteData: LiveData<String>
+        get() = _noteData
+
+    private val _startTimeData = MutableLiveData<String>()
+    val startTimeData: LiveData<String>
+        get() = _startTimeData
+
+    private val _endTimeData = MutableLiveData<String>()
+    val endTimeData: LiveData<String>
+        get() = _endTimeData
+
+    private val _priorityData = MutableLiveData<LessonPriority>()
+    val priorityData: LiveData<LessonPriority>
+        get() = _priorityData
+
+    private val _weekDayData = MutableLiveData<WeekDay>()
+    val weekDayData: LiveData<WeekDay>
+        get() = _weekDayData
+
+    private val _weekNumberData = MutableLiveData<SortedSet<WeekNumber>>()
+    val weekNumberData: LiveData<SortedSet<WeekNumber>>
+        get() = _weekNumberData
+
+    private val _dateData = MutableLiveData<Date>()
+    val dateData: LiveData<Date>
+        get() = _dateData
+
+    private val _auditoriesData = MutableLiveData<Set<Auditory>>()
+    val auditoriesData: LiveData<Set<Auditory>>
+        get() = _auditoriesData
+
+    private val _employeesData = MutableLiveData<Set<Employee>>()
+    val employeesData: LiveData<Set<Employee>>
+        get() = _employeesData
+
+    private val _studentGroupsData = MutableLiveData<Set<Group>>()
+    val studentGroupsData: LiveData<Set<Group>>
+        get() = _studentGroupsData
 
     private val timeFormatter = SimpleDateFormat(SCHEDULE_ITEM_TIME_FORMAT_PATTERN, Locale.getDefault())
 
     init {
         val scheduleItem = scheduleItems.firstOrNull()
 
-        subjectData.value = scheduleItem?.subject ?: ""
+        setSubject(scheduleItem?.subject ?: "")
 
-        val lessonType = scheduleItem?.lessonType ?: getDefaultLessonType(schedule)
-        lessonTypeData.value = lessonType
+        val lessonType = scheduleItem?.lessonType ?: lessonTypes.first()
+        setLessonType(lessonType)
 
         val subgroupNumber = scheduleItem?.subgroupNumber ?: SubgroupNumber.ALL
-        subgroupNumberData.value = subgroupNumber
+        setSubgroupNumber(subgroupNumber)
 
-        noteData.value = scheduleItem?.note ?: ""
+        setNote(scheduleItem?.note ?: "")
 
         val defaultTime = timeFormatter.format(Date())
-        startTimeData.value = scheduleItem?.startTime ?: defaultTime
-        endTimeData.value = scheduleItem?.endTime ?: defaultTime
+        _startTimeData.value = scheduleItem?.startTime ?: defaultTime
+        _endTimeData.value = scheduleItem?.endTime ?: defaultTime
 
         var priority = LessonPriority.getDefaultForLessonType(lessonType)
         var weekDay = Calendar.getInstance().getWeekDay()
-        var weekNumber = listOf(WeekNumber.calculateCurrentWeekNumber())
+        var weekNumbers = listOf(WeekNumber.calculateCurrentWeekNumber())
         var date = Date()
         when (scheduleItem) {
             is Lesson -> {
@@ -59,19 +96,21 @@ class ModifyScheduleItemDataProvider(
                 weekDay = scheduleItem.weekDay
                 val resultWeekNumbers = scheduleItems.filterIsInstance<Lesson>().map { it.weekNumber }
                 if (resultWeekNumbers.isNotEmpty()) {
-                    weekNumber = resultWeekNumbers
+                    weekNumbers = resultWeekNumbers
                 }
             }
             is Exam -> {
                 date = scheduleItem.date
             }
         }
-        priorityData.value = priority
-        weekDayData.value = weekDay
-        weekNumberData.value = weekNumber
-        dateData.value = date
+        setPriority(priority)
+        setWeekDay(weekDay)
+        weekNumbers.toSet().forEach {
+            addWeekNumber(it)
+        }
+        setDate(date)
 
-        auditoriesData.value = scheduleItem?.auditories?.toSet() ?: emptySet()
+        _auditoriesData.value = scheduleItem?.auditories?.toSet() ?: emptySet()
 
         val employees: List<Employee>
         val studentGroups: List<Group>
@@ -97,52 +136,105 @@ class ModifyScheduleItemDataProvider(
                 studentGroups = emptyList()
             }
         }
-        employeesData.value = employees.toSet()
-        studentGroupsData.value = studentGroups.toSet()
+        _employeesData.value = employees.toSet()
+        _studentGroupsData.value = studentGroups.toSet()
+    }
+
+    fun setSubject(value: String) {
+        _subjectData.value = value
+    }
+
+    fun setLessonType(value: String) {
+        _lessonTypeData.value = value
+    }
+
+    fun setSubgroupNumber(value: SubgroupNumber) {
+        _subgroupNumberData.value = value
+    }
+
+    fun setNote(value: String) {
+        _noteData.value = value
+    }
+
+    fun setPriority(value: LessonPriority) {
+        _priorityData.value = value
+    }
+
+    fun setWeekDay(value: WeekDay) {
+        _weekDayData.value = value
     }
 
     fun addEmloyee(employee: Employee) {
-        val current = employeesData.value ?: emptySet()
-        employeesData.value = current + employee
+        val current = _employeesData.value ?: emptySet()
+        _employeesData.value = current + employee
     }
 
     fun removeEmployee(employee: Employee) {
-        val current = employeesData.value ?: emptySet()
-        employeesData.value = current - employee
+        val current = _employeesData.value ?: emptySet()
+        _employeesData.value = current - employee
     }
 
     fun addGroup(group: Group) {
-        val current = studentGroupsData.value ?: emptySet()
-        studentGroupsData.value = current + group
+        val current = _studentGroupsData.value ?: emptySet()
+        _studentGroupsData.value = current + group
     }
 
     fun removeGroup(group: Group) {
-        val current = studentGroupsData.value ?: emptySet()
-        studentGroupsData.value = current - group
+        val current = _studentGroupsData.value ?: emptySet()
+        _studentGroupsData.value = current - group
     }
 
     fun addAuditory(auditory: Auditory) {
-        val current = auditoriesData.value ?: emptySet()
-        auditoriesData.value = current + auditory
+        val current = _auditoriesData.value ?: emptySet()
+        _auditoriesData.value = current + auditory
     }
 
     fun removeAuditory(auditory: Auditory) {
-        val current = auditoriesData.value ?: emptySet()
-        auditoriesData.value = current - auditory
+        val current = _auditoriesData.value ?: emptySet()
+        _auditoriesData.value = current - auditory
+    }
+
+    fun addWeekNumber(weekNumber: WeekNumber) {
+        val currentWeeks = _weekNumberData.value ?: sortedSetOf()
+        _weekNumberData.value = (currentWeeks + weekNumber).toSortedSet()
+    }
+
+    fun removeWeekNumber(weekNumber: WeekNumber) {
+        val currentWeeks = _weekNumberData.value ?: sortedSetOf()
+        _weekNumberData.value = (currentWeeks - weekNumber).toSortedSet()
+    }
+
+    fun checkWeekNumbers() {
+        val currentWeeks = _weekNumberData.value ?: sortedSetOf()
+        if (currentWeeks.isEmpty()) {
+            _weekNumberData.value = WeekNumber.values().toSortedSet()
+        }
+    }
+
+    fun setStartTime(value: Date) {
+        _startTimeData.value = timeFormatter.format(value)
+    }
+
+    fun setEndTime(value: Date) {
+        _endTimeData.value = timeFormatter.format(value)
+    }
+
+    fun setDate(value: Date) {
+        _dateData.value = value
     }
 
     fun getResultScheduleItem(): List<ScheduleItem> {
-        val subject = subjectData.requireValue
-        val subgroupNumber = subgroupNumberData.requireValue
-        val lessonType = lessonTypeData.requireValue
-        val note = noteData.requireValue
-        val startTime = startTimeData.requireValue
-        val endTime = endTimeData.requireValue
-        val auditories = auditoriesData.requireValue.toList()
-        val employees = employeesData.requireValue.toList()
-        val studentGroups = studentGroupsData.requireValue.toList()
+        val subject = _subjectData.requireValue
+        val subgroupNumber = _subgroupNumberData.requireValue
+        val lessonType = _lessonTypeData.requireValue
+        val note = _noteData.requireValue
+        val startTime = _startTimeData.requireValue
+        val endTime = _endTimeData.requireValue
+        val auditories = _auditoriesData.requireValue.toList()
+        val employees = _employeesData.requireValue.toList()
+        val studentGroups = _studentGroupsData.requireValue.toList()
         val isAddedByUser = scheduleItems.isEmpty()
-        val weekNumbers = weekNumberData.requireValue.addIfEmpty { WeekNumber.calculateCurrentWeekNumber() }
+        val weekNumbers = _weekNumberData.requireValue.addIfEmpty { WeekNumber.calculateCurrentWeekNumber() }
         return when (schedule) {
             is Schedule.GroupClasses -> weekNumbers.map { weekNumber ->
                 Lesson.GroupLesson(
@@ -155,8 +247,8 @@ class ModifyScheduleItemDataProvider(
                         endTime = endTime,
                         auditories = auditories,
                         isAddedByUser = isAddedByUser,
-                        priority = priorityData.requireValue,
-                        weekDay = weekDayData.requireValue,
+                        priority = _priorityData.requireValue,
+                        weekDay = _weekDayData.requireValue,
                         weekNumber = weekNumber,
                         employees = employees
                 )
@@ -172,8 +264,8 @@ class ModifyScheduleItemDataProvider(
                         endTime = endTime,
                         auditories = auditories,
                         isAddedByUser = isAddedByUser,
-                        priority = priorityData.requireValue,
-                        weekDay = weekDayData.requireValue,
+                        priority = _priorityData.requireValue,
+                        weekDay = _weekDayData.requireValue,
                         weekNumber = weekNumber,
                         studentGroups = studentGroups
                 )
@@ -188,7 +280,7 @@ class ModifyScheduleItemDataProvider(
                     endTime = endTime,
                     auditories = auditories,
                     isAddedByUser = isAddedByUser,
-                    date = dateData.requireValue,
+                    date = _dateData.requireValue,
                     employees = employees
             )
             )
@@ -202,15 +294,9 @@ class ModifyScheduleItemDataProvider(
                     endTime = endTime,
                     auditories = auditories,
                     isAddedByUser = isAddedByUser,
-                    date = dateData.requireValue,
+                    date = _dateData.requireValue,
                     studentGroups = studentGroups
             ))
         }
-    }
-
-    private fun getDefaultLessonType(schedule: Schedule): String {
-        val isClassesSchedule = schedule is Schedule.GroupClasses || schedule is Schedule.EmployeeClasses
-        val arrayResId = if (isClassesSchedule) R.array.lesson_types else R.array.exam_types
-        return context.resources.getStringArray(arrayResId).first()
     }
 }
