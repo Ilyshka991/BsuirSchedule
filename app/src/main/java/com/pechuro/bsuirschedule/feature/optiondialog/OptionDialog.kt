@@ -2,6 +2,7 @@ package com.pechuro.bsuirschedule.feature.optiondialog
 
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -9,12 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Button
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.textview.MaterialTextView
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import kotlinx.android.synthetic.main.dialog_options.*
@@ -43,10 +42,15 @@ class OptionDialog : DialogFragment() {
         private var singleSelectionlistener: OptionButtonClickListener? = null
         private var multipleSelectionButtons: List<OptionDialogCheckableButtonData> = emptyList()
         private var multipleSelectionlistener: OptionCheckableButtonClickListener? = null
+        private var onDismissListener: (() -> Unit)? = null
         private var title = ""
 
         fun setTitle(title: String) = apply {
             this.title = title
+        }
+
+        fun setOnDismissListener(listener: () -> Unit) = apply {
+            onDismissListener = listener
         }
 
         fun setCheckableActions(
@@ -76,7 +80,8 @@ class OptionDialog : DialogFragment() {
                     singleSelectionlistener = singleSelectionlistener,
                     multipleSelectionButtons = multipleSelectionButtons,
                     multipleSelectionlistener = multipleSelectionlistener,
-                    title = title
+                    title = title,
+                    onDismissListener = onDismissListener
             )
         }
     }
@@ -86,7 +91,8 @@ class OptionDialog : DialogFragment() {
             val singleSelectionlistener: OptionButtonClickListener?,
             val multipleSelectionButtons: List<OptionDialogCheckableButtonData>,
             val multipleSelectionlistener: OptionCheckableButtonClickListener?,
-            val title: String
+            val title: String,
+            val onDismissListener: (() -> Unit)?
     )
 
     private lateinit var params: Params
@@ -120,6 +126,11 @@ class OptionDialog : DialogFragment() {
         setDialogWidth()
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        params.onDismissListener?.invoke()
+    }
+
     private fun setDialogWidth() {
         val width = (resources.displayMetrics.widthPixels * WIDTH_PERCENT).roundToInt()
         dialog?.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -132,6 +143,7 @@ class OptionDialog : DialogFragment() {
         }
         optionsDialogDoneButton.isVisible = params.multipleSelectionButtons.isNotEmpty()
         addActionButtons()
+        addCheckableActionButtons()
     }
 
     private fun addActionButtons() {
@@ -140,11 +152,29 @@ class OptionDialog : DialogFragment() {
                     R.layout.item_option_dialog_button,
                     optionsDialogActionButtonContainer,
                     false
-            ) as TextView
+            ) as MaterialButton
             view.text = data.text
+            view.icon = data.icon
             view.setSafeClickListener {
                 params.singleSelectionlistener?.onClick(index)
                 dismiss()
+            }
+            optionsDialogActionButtonContainer.addView(view)
+        }
+    }
+
+    private fun addCheckableActionButtons() {
+        params.multipleSelectionButtons.forEachIndexed { index, data ->
+            val view = layoutInflater.inflate(
+                    R.layout.item_option_dialog_checkable_button,
+                    optionsDialogActionButtonContainer,
+                    false
+            ) as MaterialCheckBox
+            view.text = data.text
+            view.isChecked = data.checked
+            view.setSafeClickListener {
+                val checkBox = it as MaterialCheckBox
+                params.multipleSelectionlistener?.onClick(index, checkBox.isChecked)
             }
             optionsDialogActionButtonContainer.addView(view)
         }

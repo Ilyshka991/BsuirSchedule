@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
+import com.pechuro.bsuirschedule.ext.formattedName
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.Companion.TYPE_AUDITORY
 import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.Companion.TYPE_EMPLOYEE
@@ -133,7 +134,7 @@ class StaffAdapter(
 
         override fun onBind(data: StaffItemInformation.AuditoryInfo) {
             with(data.auditory) {
-                staffAuditoryName.text = "$name-${building.name}"
+                staffAuditoryName.text = formattedName
                 staffAuditoryType.text = auditoryType.name
                 staffAuditoryCapacity.isVisible = capacity != 0 && capacity != -1
                 staffAuditoryCapacity.text = itemView.context.getString(

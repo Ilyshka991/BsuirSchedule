@@ -24,7 +24,7 @@ class ModifyScheduleItemDataProvider(
     val endTimeData = MutableLiveData<String>()
     val priorityData = MutableLiveData<LessonPriority>()
     val weekDayData = MutableLiveData<WeekDay>()
-    val weekNumberData = MutableLiveData<List<WeekNumber>>()
+    val weekNumberData = MutableLiveData<Set<WeekNumber>>()
     val dateData = MutableLiveData<Date>()
     val auditoriesData = MutableLiveData<Set<Auditory>>()
     val employeesData = MutableLiveData<Set<Employee>>()
@@ -51,7 +51,7 @@ class ModifyScheduleItemDataProvider(
 
         var priority = LessonPriority.getDefaultForLessonType(lessonType)
         var weekDay = Calendar.getInstance().getWeekDay()
-        var weekNumber = listOf(WeekNumber.calculateCurrentWeekNumber())
+        var weekNumbers = listOf(WeekNumber.calculateCurrentWeekNumber())
         var date = Date()
         when (scheduleItem) {
             is Lesson -> {
@@ -59,7 +59,7 @@ class ModifyScheduleItemDataProvider(
                 weekDay = scheduleItem.weekDay
                 val resultWeekNumbers = scheduleItems.filterIsInstance<Lesson>().map { it.weekNumber }
                 if (resultWeekNumbers.isNotEmpty()) {
-                    weekNumber = resultWeekNumbers
+                    weekNumbers = resultWeekNumbers
                 }
             }
             is Exam -> {
@@ -68,7 +68,7 @@ class ModifyScheduleItemDataProvider(
         }
         priorityData.value = priority
         weekDayData.value = weekDay
-        weekNumberData.value = weekNumber
+        weekNumberData.value = weekNumbers.toSet()
         dateData.value = date
 
         auditoriesData.value = scheduleItem?.auditories?.toSet() ?: emptySet()
@@ -129,6 +129,23 @@ class ModifyScheduleItemDataProvider(
     fun removeAuditory(auditory: Auditory) {
         val current = auditoriesData.value ?: emptySet()
         auditoriesData.value = current - auditory
+    }
+
+    fun addWeekNumber(weekNumber: WeekNumber) {
+        val currentWeeks = weekNumberData.value ?: emptySet()
+        weekNumberData.value = currentWeeks + weekNumber
+    }
+
+    fun removeWeekNumber(weekNumber: WeekNumber) {
+        val currentWeeks = weekNumberData.value ?: emptySet()
+        weekNumberData.value = currentWeeks - weekNumber
+    }
+
+    fun checkWeekNumbers() {
+        val currentWeeks = weekNumberData.value ?: emptySet()
+        if (currentWeeks.isEmpty()) {
+            weekNumberData.value = WeekNumber.values().toSet()
+        }
     }
 
     fun getResultScheduleItem(): List<ScheduleItem> {

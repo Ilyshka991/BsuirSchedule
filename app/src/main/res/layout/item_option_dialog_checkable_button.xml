@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.button.MaterialButton xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.checkbox.MaterialCheckBox xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/TextButton"
@@ -7,7 +7,4 @@
     android:layout_height="wrap_content"
     android:gravity="start|center_vertical"
     android:textAllCaps="false"
-    app:iconPadding="4dp"
-    app:iconSize="32dp"
-    app:iconTint="@null"
     tools:text="AAAA" />
