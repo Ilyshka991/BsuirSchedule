@@ -5,13 +5,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commitNow
 import com.pechuro.bsuirschedule.domain.common.Logger
-import com.pechuro.bsuirschedule.feature.display.DisplayScheduleContainer
+import com.pechuro.bsuirschedule.feature.display.DisplayScheduleFragmentContainer
 import java.io.Serializable
 
 fun FragmentManager.removeAllFragmentsImmediate() = commitNow {
-    for (fragment in fragments) {
-        remove(fragment)
-    }
+    popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 }
 
 internal val FragmentManager.currentFragment: Fragment?
@@ -49,5 +47,5 @@ inline fun <reified T : Serializable> Fragment.serializableOrException(key: Stri
 inline fun <reified T : Parcelable> Fragment.parcelableArrayOrException(key: String): Array<T> =
         requireArguments().parcelableArrayOrException(key)
 
-val FragmentManager.displayScheduleFragment: DisplayScheduleContainer?
-    get() = findFragmentBy(DisplayScheduleContainer.TAG, DisplayScheduleContainer::class.java)
+val FragmentManager.displayScheduleFragment: DisplayScheduleFragmentContainer?
+    get() = findFragmentBy(DisplayScheduleFragmentContainer.TAG, DisplayScheduleFragmentContainer::class.java)

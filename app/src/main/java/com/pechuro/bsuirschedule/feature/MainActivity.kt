@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.BackPressedHandler
 import com.pechuro.bsuirschedule.feature.flow.FlowFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -15,8 +16,6 @@ class MainActivity : AppCompatActivity() {
 
         fun newIntent(context: Context) = Intent(context, MainActivity::class.java)
     }
-
-    private val flowFragment = FlowFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.LightTheme)
@@ -28,13 +27,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (flowFragment.onBackPressed()) return
+        val flowFragment = supportFragmentManager.fragments.firstOrNull() as? BackPressedHandler
+        if (flowFragment?.onBackPressed() == true) return
         super.onBackPressed()
     }
 
     private fun showFlowFragment() {
         supportFragmentManager.commit {
-            replace(activityHostFragment.id, flowFragment)
+            replace(activityHostFragment.id, FlowFragment.newInstance())
         }
     }
 }

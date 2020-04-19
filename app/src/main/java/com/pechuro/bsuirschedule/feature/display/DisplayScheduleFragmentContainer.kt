@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_view_schedule_container.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DisplayScheduleContainer : BaseFragment() {
+class DisplayScheduleFragmentContainer : BaseFragment() {
 
     interface ActionCallback {
 
@@ -45,7 +45,7 @@ class DisplayScheduleContainer : BaseFragment() {
         private const val TAB_DATE_FORMAT_DAY = "EEE, dd MMM"
         private const val TAB_DATE_FORMAT_WEEK = "EEEE"
 
-        fun newInstance(schedule: Schedule) = DisplayScheduleContainer().apply {
+        fun newInstance(schedule: Schedule) = DisplayScheduleFragmentContainer().apply {
             arguments = bundleOf(BUNDLE_SCHEDULE to schedule)
         }
     }
@@ -82,7 +82,7 @@ class DisplayScheduleContainer : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = initViewModel(DisplayScheduleViewModel::class, owner = this).apply {
-            schedule = this@DisplayScheduleContainer.schedule
+            schedule = this@DisplayScheduleFragmentContainer.schedule
         }
         val viewType = getViewType()
         initView(viewType)
@@ -107,6 +107,10 @@ class DisplayScheduleContainer : BaseFragment() {
     fun setFirstDay() {
         val startPosition = pagerAdapter?.getStartPosition() ?: return
         setPosition(startPosition)
+    }
+
+    fun requestCurrentPosition() {
+        onPositionChanged()
     }
 
     fun setDate(date: Date) {
