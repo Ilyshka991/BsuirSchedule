@@ -1,14 +1,15 @@
 package com.pechuro.bsuirschedule.feature.modifyitem
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import com.google.android.material.chip.Chip
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
-import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.display.fragment.SCHEDULE_ITEM_DATE_FORMAT_PATTERN
 import kotlinx.android.parcel.Parcelize
@@ -52,18 +53,42 @@ class ModifyScheduleItemFragment : BaseFragment() {
 
     private val args: ModifyScheduleItemFragmentArgs by args(BUNDLE_ARGS)
 
+    private var actionCallback: ActionCallback? = null
+
     private val dateFormatter = SimpleDateFormat(SCHEDULE_ITEM_DATE_FORMAT_PATTERN, Locale.getDefault())
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        actionCallback = getCallbackOrNull()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.init(args.schedule, args.items)
         initView()
-        fillParams()
         observeData()
     }
 
     override fun onStop() {
         super.onStop()
         context?.hideKeyboard(view?.findFocus()?.windowToken)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        actionCallback = null
+    }
+
+    fun addEmployee(employee: Employee) {
+        viewModel.dataProvider.addEmloyee(employee)
+    }
+
+    fun addGroup(group: Group) {
+        viewModel.dataProvider.addGroup(group)
+    }
+
+    fun addAuditory(auditory: Auditory) {
+        viewModel.dataProvider.addAuditory(auditory)
     }
 
     private fun initView() {
@@ -99,17 +124,6 @@ class ModifyScheduleItemFragment : BaseFragment() {
         modifyScheduleItemNoteText.addTextListener {
             viewModel.dataProvider.noteData.value = it
         }
-        modifyScheduleItemEmployeesLabel.setSafeClickListener {
-        }
-    }
-
-    private fun fillParams() {
-        val scheduleItems = args.items
-        viewModel.dataProvider.init(args.schedule, scheduleItems)
-        val subject = scheduleItems.firstOrNull()?.subject ?: ""
-        modifyScheduleItemSubjectText.setText(subject)
-        val note = scheduleItems.firstOrNull()?.note ?: ""
-        modifyScheduleItemNoteText.setText(note)
     }
 
     private fun observeData() {
@@ -124,6 +138,16 @@ class ModifyScheduleItemFragment : BaseFragment() {
             }
         }
         with(viewModel.dataProvider) {
+            subjectData.nonNull().observe(viewLifecycleOwner) { subject ->
+                if (modifyScheduleItemSubjectText.text?.toString() != subject) {
+                    modifyScheduleItemSubjectText.setText(subject)
+                }
+            }
+            noteData.nonNull().observe(viewLifecycleOwner) { note ->
+                if (modifyScheduleItemNoteText.text?.toString() != note) {
+                    modifyScheduleItemNoteText.setText(note)
+                }
+            }
             lessonTypeData.nonNull().observe(viewLifecycleOwner) { lessonType ->
                 modifyScheduleItemType.setMessage(lessonType)
             }
@@ -150,13 +174,13 @@ class ModifyScheduleItemFragment : BaseFragment() {
                 modifyScheduleItemDate.setMessage(dateFormatter.format(date))
             }
             auditoriesData.nonNull().observe(viewLifecycleOwner) {
-
+                fillAuditories(it)
             }
             employeesData.nonNull().observe(viewLifecycleOwner) {
-
+                fillEmployees(it)
             }
             studentGroupsData.nonNull().observe(viewLifecycleOwner) {
-
+                fillStudentGroups(it)
             }
         }
     }
@@ -173,5 +197,69 @@ class ModifyScheduleItemFragment : BaseFragment() {
         } else {
             getString(R.string.modify_schedule_item_title_edit, scheduleItem.subject)
         }
+    }
+
+    private fun fillEmployees(employees: Iterable<Employee>) {
+        modifyScheduleItemEmployeesChips.removeAllViews()
+        employees
+                .map { employee ->
+                    createChip(employee.abbreviation) { viewModel.dataProvider.removeEmployee(employee) }
+                }
+                .plus(createAddChip { actionCallback?.onModifyItemRequestEmployees() })
+                .forEach {
+                    modifyScheduleItemEmployeesChips.addView(it)
+                }
+
+    }
+
+    private fun fillStudentGroups(groups: Iterable<Group>) {
+        modifyScheduleItemGroupsChips.removeAllViews()
+        groups
+                .map { group ->
+                    createChip(group.number) { viewModel.dataProvider.removeGroup(group) }
+                }
+                .plus(createAddChip { actionCallback?.onModifyItemRequestGroups() })
+                .forEach {
+                    modifyScheduleItemGroupsChips.addView(it)
+                }
+
+    }
+
+    private fun fillAuditories(auditories: Iterable<Auditory>) {
+        modifyScheduleItemAuditoriesChips.removeAllViews()
+        auditories
+                .map { auditory ->
+                    createChip(auditory.name) { viewModel.dataProvider.removeAuditory(auditory) }
+                }
+                .plus(createAddChip { actionCallback?.onModifyItemRequestAuditories() })
+                .forEach {
+                    modifyScheduleItemAuditoriesChips.addView(it)
+                }
+
+    }
+
+    private inline fun createChip(text: CharSequence, crossinline onDelete: () -> Unit): Chip {
+        val chip = layoutInflater.inflate(
+                R.layout.item_modify_schedule_chip,
+                modifyScheduleItemEmployeesChips,
+                false
+        ) as Chip
+        chip.text = text
+        chip.setOnCloseIconClickListener {
+            onDelete()
+        }
+        return chip
+    }
+
+    private inline fun createAddChip(crossinline onClick: () -> Unit): Chip {
+        val chip = layoutInflater.inflate(
+                R.layout.item_modify_schedule_add_chip,
+                modifyScheduleItemEmployeesChips,
+                false
+        ) as Chip
+        chip.setSafeClickListener {
+            onClick()
+        }
+        return chip
     }
 }

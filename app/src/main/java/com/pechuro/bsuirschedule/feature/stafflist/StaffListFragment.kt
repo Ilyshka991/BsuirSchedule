@@ -56,6 +56,7 @@ class StaffListFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.init(staffType)
         initView()
         observeData()
     }
@@ -83,20 +84,18 @@ class StaffListFragment : BaseFragment() {
 
     private fun initView() {
         val inputType = when (staffType) {
-            StaffType.GROUP -> InputType.TYPE_CLASS_NUMBER
+            StaffType.GROUP, StaffType.AUDITORY -> InputType.TYPE_CLASS_NUMBER
             StaffType.EMPLOYEE -> InputType.TYPE_TEXT_VARIATION_PERSON_NAME
         }
         staffListNameInput.inputType = inputType
         staffListNameInput.addTextListener {
-            when (staffType) {
-                StaffType.GROUP -> viewModel.filterGroups(it)
-                StaffType.EMPLOYEE -> viewModel.filterEmployees(it)
-            }
+            viewModel.filter(it)
         }
 
         val hintRes = when (staffType) {
             StaffType.GROUP -> R.string.staff_list_hint_enter_group_number
             StaffType.EMPLOYEE -> R.string.staff_list_hint_enter_employee_name
+            StaffType.AUDITORY -> R.string.staff_list_hint_enter_auditory
         }
         staffListNameInputLayout.hint = getString(hintRes)
 
@@ -108,17 +107,8 @@ class StaffListFragment : BaseFragment() {
     }
 
     private fun observeData() {
-        when (staffType) {
-            StaffType.GROUP -> {
-                viewModel.allGroupsData.nonNull().observe(viewLifecycleOwner) {
-                    staffAdapter.submitList(it)
-                }
-            }
-            StaffType.EMPLOYEE -> {
-                viewModel.allEmployeesData.nonNull().observe(viewLifecycleOwner) {
-                    staffAdapter.submitList(it)
-                }
-            }
+        viewModel.listData.nonNull().observe(viewLifecycleOwner) {
+            staffAdapter.submitList(it)
         }
     }
 }

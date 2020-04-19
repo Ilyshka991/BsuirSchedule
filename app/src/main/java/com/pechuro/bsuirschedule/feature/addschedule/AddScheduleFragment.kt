@@ -20,6 +20,7 @@ import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation
 import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.EmployeeInfo
 import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.GroupInfo
 import com.pechuro.bsuirschedule.feature.stafflist.StaffListViewModel
+import com.pechuro.bsuirschedule.feature.stafflist.StaffType
 import kotlinx.android.synthetic.main.fragment_add_schedule.*
 
 class AddScheduleFragment : BaseFragment() {
@@ -42,8 +43,7 @@ class AddScheduleFragment : BaseFragment() {
     }
 
     private val staffViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        val owner = parentFragment ?: this
-        initViewModel(StaffListViewModel::class, owner = owner)
+        initViewModel(StaffListViewModel::class)
     }
 
     private val scheduleType: FragmentType by lazy(LazyThreadSafetyMode.NONE) {
@@ -66,6 +66,11 @@ class AddScheduleFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val staffType = when (scheduleType) {
+            FragmentType.EMPLOYEE -> StaffType.EMPLOYEE
+            FragmentType.STUDENT -> StaffType.GROUP
+        }
+        staffViewModel.init(staffType)
         initView()
         observeData()
     }
@@ -99,10 +104,7 @@ class AddScheduleFragment : BaseFragment() {
             this.inputType = inputType
 
             addTextListener {
-                when (scheduleType) {
-                    FragmentType.STUDENT -> staffViewModel.filterGroups(it)
-                    FragmentType.EMPLOYEE -> staffViewModel.filterEmployees(it)
-                }
+                staffViewModel.filter(it)
             }
         }
 
@@ -130,17 +132,8 @@ class AddScheduleFragment : BaseFragment() {
         addScheduleViewModel.state.nonNull().observe(viewLifecycleOwner) {
             updateLayoutState(it)
         }
-        when (scheduleType) {
-            FragmentType.STUDENT -> {
-                staffViewModel.allGroupsData.nonNull().observe(viewLifecycleOwner) {
-                    staffAdapter.submitList(it)
-                }
-            }
-            FragmentType.EMPLOYEE -> {
-                staffViewModel.allEmployeesData.nonNull().observe(viewLifecycleOwner) {
-                    staffAdapter.submitList(it)
-                }
-            }
+        staffViewModel.listData.nonNull().observe(viewLifecycleOwner) {
+            staffAdapter.submitList(it)
         }
     }
 

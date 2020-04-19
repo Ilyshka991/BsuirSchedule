@@ -10,7 +10,11 @@ import com.pechuro.bsuirschedule.ext.requireValue
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ModifyScheduleItemDataProvider(private val context: Context) {
+class ModifyScheduleItemDataProvider(
+        private val context: Context,
+        val schedule: Schedule,
+        val scheduleItems: List<ScheduleItem>
+) {
 
     val subjectData = MutableLiveData<String>()
     val lessonTypeData = MutableLiveData<String>()
@@ -22,20 +26,13 @@ class ModifyScheduleItemDataProvider(private val context: Context) {
     val weekDayData = MutableLiveData<WeekDay>()
     val weekNumberData = MutableLiveData<List<WeekNumber>>()
     val dateData = MutableLiveData<Date>()
-    val auditoriesData = MutableLiveData<List<Auditory>>()
-    val employeesData = MutableLiveData<List<Employee>>()
-    val studentGroupsData = MutableLiveData<List<Group>>()
+    val auditoriesData = MutableLiveData<Set<Auditory>>()
+    val employeesData = MutableLiveData<Set<Employee>>()
+    val studentGroupsData = MutableLiveData<Set<Group>>()
 
     private val timeFormatter = SimpleDateFormat(SCHEDULE_ITEM_TIME_FORMAT_PATTERN, Locale.getDefault())
 
-    lateinit var schedule: Schedule
-        private set
-    var scheduleItems: List<ScheduleItem> = emptyList()
-        private set
-
-    fun init(schedule: Schedule, scheduleItems: List<ScheduleItem>) {
-        this.schedule = schedule
-        this.scheduleItems = scheduleItems
+    init {
         val scheduleItem = scheduleItems.firstOrNull()
 
         subjectData.value = scheduleItem?.subject ?: ""
@@ -74,13 +71,64 @@ class ModifyScheduleItemDataProvider(private val context: Context) {
         weekNumberData.value = weekNumber
         dateData.value = date
 
-        auditoriesData.value = scheduleItem?.auditories ?: emptyList()
+        auditoriesData.value = scheduleItem?.auditories?.toSet() ?: emptySet()
 
-        val employees: List<Employee> = emptyList()
-        employeesData.value = employees
+        val employees: List<Employee>
+        val studentGroups: List<Group>
+        when (scheduleItem) {
+            is Lesson.GroupLesson -> {
+                employees = scheduleItem.employees
+                studentGroups = emptyList()
+            }
+            is Lesson.EmployeeLesson -> {
+                employees = emptyList()
+                studentGroups = scheduleItem.studentGroups
+            }
+            is Exam.GroupExam -> {
+                employees = scheduleItem.employees
+                studentGroups = emptyList()
+            }
+            is Exam.EmployeeExam -> {
+                employees = emptyList()
+                studentGroups = scheduleItem.studentGroups
+            }
+            else -> {
+                employees = emptyList()
+                studentGroups = emptyList()
+            }
+        }
+        employeesData.value = employees.toSet()
+        studentGroupsData.value = studentGroups.toSet()
+    }
 
-        val studentGroups: List<Group> = emptyList()
-        studentGroupsData.value = studentGroups
+    fun addEmloyee(employee: Employee) {
+        val current = employeesData.value ?: emptySet()
+        employeesData.value = current + employee
+    }
+
+    fun removeEmployee(employee: Employee) {
+        val current = employeesData.value ?: emptySet()
+        employeesData.value = current - employee
+    }
+
+    fun addGroup(group: Group) {
+        val current = studentGroupsData.value ?: emptySet()
+        studentGroupsData.value = current + group
+    }
+
+    fun removeGroup(group: Group) {
+        val current = studentGroupsData.value ?: emptySet()
+        studentGroupsData.value = current - group
+    }
+
+    fun addAuditory(auditory: Auditory) {
+        val current = auditoriesData.value ?: emptySet()
+        auditoriesData.value = current + auditory
+    }
+
+    fun removeAuditory(auditory: Auditory) {
+        val current = auditoriesData.value ?: emptySet()
+        auditoriesData.value = current - auditory
     }
 
     fun getResultScheduleItem(): List<ScheduleItem> {
@@ -90,9 +138,9 @@ class ModifyScheduleItemDataProvider(private val context: Context) {
         val note = noteData.requireValue
         val startTime = startTimeData.requireValue
         val endTime = endTimeData.requireValue
-        val auditories = auditoriesData.requireValue
-        val employees = employeesData.requireValue
-        val studentGroups = studentGroupsData.requireValue
+        val auditories = auditoriesData.requireValue.toList()
+        val employees = employeesData.requireValue.toList()
+        val studentGroups = studentGroupsData.requireValue.toList()
         val isAddedByUser = scheduleItems.isEmpty()
         val weekNumbers = weekNumberData.requireValue.addIfEmpty { WeekNumber.calculateCurrentWeekNumber() }
         return when (schedule) {

@@ -1,89 +1,95 @@
 package com.pechuro.bsuirschedule.feature.stafflist
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
+import com.pechuro.bsuirschedule.domain.entity.Auditory
+import com.pechuro.bsuirschedule.domain.interactor.GetAuditories
 import com.pechuro.bsuirschedule.domain.interactor.GetEmployees
 import com.pechuro.bsuirschedule.domain.interactor.GetGroups
 import com.pechuro.bsuirschedule.ext.flowLiveData
 import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class StaffListViewModel @Inject constructor(
         private val getGroups: GetGroups,
-        private val getEmployees: GetEmployees
+        private val getEmployees: GetEmployees,
+        private val getAuditories: GetAuditories
 ) : BaseViewModel() {
 
-    private val allGroupsFilter = MutableLiveData("")
-    private val allGroupsList = flowLiveData {
+    private val filterData = MutableLiveData("")
+
+    private val allGroupsListData = flowLiveData {
         getGroups.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
+                .map { list -> list.sortedBy { it.number } }
     }
-    val allGroupsData: LiveData<List<StaffItemInformation>> = MediatorLiveData<List<StaffItemInformation>>().apply {
-        addSource(allGroupsFilter) {
-            launchCoroutine(context = Dispatchers.IO) {
-                val resultList = getGroupsResultList()
-                postValue(resultList)
-            }
-        }
-        addSource(this@StaffListViewModel.allGroupsList) {
-            launchCoroutine(context = Dispatchers.IO) {
-                val resultList = getGroupsResultList()
-                postValue(resultList)
-            }
-        }
+    private val allAuditoriesListData = flowLiveData {
+        getAuditories.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
+                .map { list -> list.sortedWith(compareBy<Auditory> { it.building.name }.thenBy { it.name }) }
     }
-
-    private val allEmployeesFilter = MutableLiveData("")
-    private val allEmployeesList = flowLiveData {
+    private val allEmployeesListData = flowLiveData {
         getEmployees.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
+                .map { list -> list.sortedBy { it.abbreviation } }
     }
-    val allEmployeesData: LiveData<List<StaffItemInformation>> = MediatorLiveData<List<StaffItemInformation>>().apply {
-        addSource(allEmployeesFilter) {
+
+    val listData = MediatorLiveData<List<StaffItemInformation>>().apply {
+        addSource(filterData) {
             launchCoroutine(context = Dispatchers.IO) {
-                val resultList = getEmployeeResultList()
-                postValue(resultList)
-            }
-        }
-        addSource(allEmployeesList) {
-            launchCoroutine(context = Dispatchers.IO) {
-                val resultList = getEmployeeResultList()
+                val resultList = getResultList()
                 postValue(resultList)
             }
         }
     }
 
-    fun filterGroups(name: String) {
-        allGroupsFilter.value = name
-    }
+    private lateinit var type: StaffType
 
-    fun filterEmployees(abbreviation: String) {
-        allEmployeesFilter.value = abbreviation
-    }
-
-    private fun getEmployeeResultList(): List<StaffItemInformation> {
-        val filter = allEmployeesFilter.value ?: ""
-        val currentList = allEmployeesList.value ?: emptyList()
-        val filteredList = currentList.filter {
-            it.abbreviation.startsWith(filter, ignoreCase = true)
-        }.map { EmployeeInfo(it) }
-        return if (filteredList.isEmpty() && filter.isNotEmpty()) {
-            filteredList.plus(Empty)
-        } else {
-            filteredList
+    fun init(type: StaffType) {
+        if (this::type.isInitialized) return
+        this.type = type
+        val source = when (type) {
+            StaffType.AUDITORY -> allAuditoriesListData
+            StaffType.GROUP -> allGroupsListData
+            StaffType.EMPLOYEE -> allEmployeesListData
+        }
+        listData.addSource(source) {
+            launchCoroutine(context = Dispatchers.IO) {
+                val resultList = getResultList()
+                listData.postValue(resultList)
+            }
         }
     }
 
-    private fun getGroupsResultList(): List<StaffItemInformation> {
-        val filter = allGroupsFilter.value ?: ""
-        val currentList = allGroupsList.value ?: emptyList()
-        val filteredList = currentList.filter {
-            it.number.startsWith(filter)
-        }.map { GroupInfo(it) }
+    fun filter(filter: String) {
+        filterData.value = filter
+    }
+
+    private fun getResultList(): List<StaffItemInformation> {
+        val filter = filterData.value ?: ""
+        val filteredList = when (type) {
+            StaffType.AUDITORY -> {
+                val currentList = allAuditoriesListData.value ?: emptyList()
+                currentList.filter {
+                    it.name.startsWith(filter)
+                }.map { AuditoryInfo(it) }
+            }
+            StaffType.GROUP -> {
+                val currentList = allGroupsListData.value ?: emptyList()
+                currentList.filter {
+                    it.number.startsWith(filter)
+                }.map { GroupInfo(it) }
+            }
+            StaffType.EMPLOYEE -> {
+                val currentList = allEmployeesListData.value ?: emptyList()
+                currentList.filter {
+                    it.abbreviation.startsWith(filter, ignoreCase = true)
+                }.map { EmployeeInfo(it) }
+            }
+        }
         return if (filteredList.isEmpty() && filter.isNotEmpty()) {
             filteredList.plus(Empty)
         } else {

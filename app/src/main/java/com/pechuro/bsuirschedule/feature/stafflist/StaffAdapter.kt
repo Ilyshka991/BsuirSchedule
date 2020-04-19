@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.Glide
@@ -11,9 +12,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
+import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.Companion.TYPE_AUDITORY
 import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.Companion.TYPE_EMPLOYEE
 import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.Companion.TYPE_EMPTY
 import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.Companion.TYPE_GROUP
+import kotlinx.android.synthetic.main.item_staff_auditory.*
 import kotlinx.android.synthetic.main.item_staff_employee.*
 import kotlinx.android.synthetic.main.item_staff_group.*
 
@@ -27,18 +30,7 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<StaffItemInformation>() {
     override fun areContentsTheSame(
             oldItem: StaffItemInformation,
             newItem: StaffItemInformation
-    ) = when {
-        oldItem is StaffItemInformation.EmployeeInfo && newItem is StaffItemInformation.EmployeeInfo -> {
-            oldItem.employee == newItem.employee
-        }
-        oldItem is StaffItemInformation.GroupInfo && newItem is StaffItemInformation.GroupInfo -> {
-            oldItem.group == newItem.group
-        }
-        oldItem is StaffItemInformation.Empty && newItem is StaffItemInformation.Empty -> {
-            true
-        }
-        else -> false
-    }
+    ) = oldItem == newItem
 }
 
 class StaffAdapter(
@@ -65,6 +57,10 @@ class StaffAdapter(
                 val view = layoutInflater.inflate(R.layout.item_staff_empty, parent, false)
                 EmptyViewHolder(view)
             }
+            TYPE_AUDITORY -> {
+                val view = layoutInflater.inflate(R.layout.item_staff_auditory, parent, false)
+                AuditoryViewHolder(view)
+            }
             else -> throw IllegalArgumentException("Not supported type: $viewType")
         }
     }
@@ -78,14 +74,13 @@ class StaffAdapter(
     override fun getItemId(position: Int) = when (val item = getItem(position)) {
         is StaffItemInformation.GroupInfo -> item.group.id
         is StaffItemInformation.EmployeeInfo -> item.employee.id
+        is StaffItemInformation.AuditoryInfo -> item.auditory.id
         else -> -1
     }
 
-    private inner class GroupViewHolder(view: View) : BaseViewHolder<StaffItemInformation>(view) {
+    private inner class GroupViewHolder(view: View) : BaseViewHolder<StaffItemInformation.GroupInfo>(view) {
 
-        override fun onBind(data: StaffItemInformation) {
-            if (data !is StaffItemInformation.GroupInfo) return
-
+        override fun onBind(data: StaffItemInformation.GroupInfo) {
             with(data.group) {
                 suggestionGroupNumber.text = number
                 suggestionGroupFacultyAbbreviation.text = faculty.abbreviation
@@ -102,11 +97,9 @@ class StaffAdapter(
         }
     }
 
-    private inner class EmployeeViewHolder(view: View) : BaseViewHolder<StaffItemInformation>(view) {
+    private inner class EmployeeViewHolder(view: View) : BaseViewHolder<StaffItemInformation.EmployeeInfo>(view) {
 
-        override fun onBind(data: StaffItemInformation) {
-            if (data !is StaffItemInformation.EmployeeInfo) return
-
+        override fun onBind(data: StaffItemInformation.EmployeeInfo) {
             with(data.employee) {
                 suggestionEmployeePhoto.loadPhoto(photoLink)
                 suggestionEmployeeFirstName.text = firstName
@@ -133,6 +126,30 @@ class StaffAdapter(
                     .load(url)
                     .apply(glideOptions)
                     .into(this)
+        }
+    }
+
+    private inner class AuditoryViewHolder(view: View) : BaseViewHolder<StaffItemInformation.AuditoryInfo>(view) {
+
+        override fun onBind(data: StaffItemInformation.AuditoryInfo) {
+            with(data.auditory) {
+                staffAuditoryName.text = "$name-${building.name}"
+                staffAuditoryType.text = auditoryType.name
+                staffAuditoryCapacity.isVisible = capacity != 0 && capacity != -1
+                staffAuditoryCapacity.text = itemView.context.getString(
+                        R.string.add_schedule_msg_suggestion_auditory_capacity,
+                        capacity
+                )
+                staffAuditoryDepartment.isVisible = department != null
+                staffAuditoryDepartment.text = itemView.context.getString(
+                        R.string.add_schedule_msg_suggestion_employee_department,
+                        department?.abbreviation ?: ""
+                )
+                staffAuditoryNote.isVisible = note.isNotEmpty()
+                staffAuditoryNote.text = note
+            }
+            itemView.tag = data
+            itemView.setSafeClickListener(onClick = onClickListener)
         }
     }
 

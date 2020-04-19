@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commitNow
 import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleFragmentContainer
+import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragment
 
 fun FragmentManager.removeAllFragmentsImmediate() = commitNow {
     popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
@@ -42,3 +43,6 @@ inline fun <reified T> Fragment.args(key: String): Lazy<T> = lazy(LazyThreadSafe
 
 val FragmentManager.displayScheduleFragment: DisplayScheduleFragmentContainer?
     get() = findFragmentBy(DisplayScheduleFragmentContainer.TAG, DisplayScheduleFragmentContainer::class.java)
+
+val FragmentManager.modifyItemFragment: ModifyScheduleItemFragment?
+    get() = findFragmentBy(ModifyScheduleItemFragment.TAG, ModifyScheduleItemFragment::class.java)

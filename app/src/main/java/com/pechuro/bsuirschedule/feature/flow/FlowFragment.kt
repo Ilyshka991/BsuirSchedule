@@ -13,10 +13,7 @@ import com.pechuro.bsuirschedule.common.BackPressedHandler
 import com.pechuro.bsuirschedule.common.FragmentAnimationsResHolder
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.ext.currentFragment
-import com.pechuro.bsuirschedule.ext.displayScheduleFragment
-import com.pechuro.bsuirschedule.ext.removeAllFragmentsImmediate
-import com.pechuro.bsuirschedule.ext.setSafeClickListener
+import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleFragmentContainer
 import com.pechuro.bsuirschedule.feature.datepicker.DisplayScheduleDatePickerSheet
 import com.pechuro.bsuirschedule.feature.datepicker.DisplayScheduleDatePickerSheetArgs
@@ -28,7 +25,9 @@ import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragment
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragmentArgs
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheet
 import com.pechuro.bsuirschedule.feature.scheduleoptions.DisplayScheduleOptionsSheet
+import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation
 import com.pechuro.bsuirschedule.feature.stafflist.StaffListFragment
+import com.pechuro.bsuirschedule.feature.stafflist.StaffType
 import com.pechuro.bsuirschedule.feature.start.StartFragment
 import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheet
 import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheetArgs
@@ -43,7 +42,9 @@ class FlowFragment : BaseFragment(),
         NavigationSheet.ActionCallback,
         DisplayScheduleFragmentContainer.ActionCallback,
         DisplayScheduleDatePickerSheet.ActionCallback,
-        ScheduleItemOptionsSheet.ActionCallback {
+        ScheduleItemOptionsSheet.ActionCallback,
+        ModifyScheduleItemFragment.ActionCallback,
+        StaffListFragment.ActionCallback {
 
     companion object {
 
@@ -151,6 +152,23 @@ class FlowFragment : BaseFragment(),
         openEditScheduleItem(schedule, items)
     }
 
+    override fun onModifyItemRequestAuditories() {
+        openStaffList(StaffType.AUDITORY)
+    }
+
+    override fun onModifyItemRequestEmployees() {
+        openStaffList(StaffType.EMPLOYEE)
+    }
+
+    override fun onModifyItemRequestGroups() {
+        openStaffList(StaffType.GROUP)
+    }
+
+    override fun onStaffListItemSelected(info: StaffItemInformation) {
+        popFragment()
+        addStaffItemToModifySchedule(info)
+    }
+
     private fun initViews() {
         bottomBarMenuButton.setSafeClickListener {
             openNavigationSheet()
@@ -246,6 +264,13 @@ class FlowFragment : BaseFragment(),
         if (skipIfOpened && viewModel.getLastOpenedSchedule() == schedule) return
         viewModel.setLastOpenedSchedule(schedule)
         setViewScheduleStartFragment(schedule)
+    }
+
+    private fun openStaffList(type: StaffType) {
+        openFragment(
+                StaffListFragment.newInstance(type),
+                StaffListFragment.TAG
+        )
     }
 
     private fun onScheduleDeleted(schedule: Schedule) {
@@ -360,6 +385,21 @@ class FlowFragment : BaseFragment(),
         childFragmentManager.displayScheduleFragment?.openDatePicker()
     }
 
+    private fun addStaffItemToModifySchedule(data: StaffItemInformation) {
+        val fragment = childFragmentManager.modifyItemFragment ?: return
+        when (data) {
+            is StaffItemInformation.GroupInfo -> {
+                fragment.addGroup(data.group)
+            }
+            is StaffItemInformation.EmployeeInfo -> {
+                fragment.addEmployee(data.employee)
+            }
+            is StaffItemInformation.AuditoryInfo -> {
+                fragment.addAuditory(data.auditory)
+            }
+        }
+    }
+
     private fun openPrimaryFragment(
             fragment: Fragment,
             tag: String,
@@ -386,11 +426,7 @@ class FlowFragment : BaseFragment(),
                 setCustomAnimations(enter, exit, popEnter, popExit)
             }
             replace(navigationFragmentContainer.id, fragment, tag)
-            if (addToBackStack) {
-                addToBackStack(tag)
-            } else {
-                setPrimaryNavigationFragment(fragment)
-            }
+            if (addToBackStack) addToBackStack(tag)
         }
     }
 
