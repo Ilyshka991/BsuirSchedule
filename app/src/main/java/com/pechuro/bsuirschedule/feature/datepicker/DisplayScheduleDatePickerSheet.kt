@@ -8,7 +8,7 @@ import androidx.core.os.bundleOf
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.ext.getCallbackOrNull
-import com.pechuro.bsuirschedule.ext.parcelableOrException
+import com.pechuro.bsuirschedule.ext.args
 import kotlinx.android.synthetic.main.sheet_display_schedule_date_picker.*
 import java.util.*
 
@@ -34,9 +34,7 @@ class DisplayScheduleDatePickerSheet : BaseBottomSheetDialog() {
 
     override val layoutId = R.layout.sheet_display_schedule_date_picker
 
-    private val args: DisplayScheduleDatePickerSheetArgs by lazy(LazyThreadSafetyMode.NONE) {
-        parcelableOrException<DisplayScheduleDatePickerSheetArgs>(BUNDLE_ARGS)
-    }
+    private val args: DisplayScheduleDatePickerSheetArgs by args<DisplayScheduleDatePickerSheetArgs>(BUNDLE_ARGS)
 
     private val onDateChangedListener = CalendarView.OnDateChangeListener { _, year, month, day ->
         val selectedDate = Calendar.getInstance().apply {

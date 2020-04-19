@@ -16,10 +16,10 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
 
         const val TAG = "UpdateScheduleSheet"
 
-        private const val BUNDLE_SCHEDULES = "BUNDLE_SCHEDULES"
+        private const val BUNDLE_ARGS = "BUNDLE_ARGS"
 
-        fun newInstance(schedules: Array<Schedule>) = UpdateScheduleSheet().apply {
-            arguments = bundleOf(BUNDLE_SCHEDULES to schedules)
+        fun newInstance(args: UpdateScheduleSheetArgs) = UpdateScheduleSheet().apply {
+            arguments = bundleOf(BUNDLE_ARGS to args)
         }
     }
 
@@ -29,13 +29,11 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
         initViewModel(UpdateScheduleSheetViewModel::class)
     }
 
-    private val schedules: Array<Schedule> by lazy(LazyThreadSafetyMode.NONE) {
-        parcelableArrayOrException<Schedule>(BUNDLE_SCHEDULES)
-    }
+    private val args: UpdateScheduleSheetArgs by args(BUNDLE_ARGS)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.setSchedules(schedules)
+        viewModel.setSchedules(args.schedules)
         initView()
         observeData()
     }

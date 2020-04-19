@@ -31,6 +31,7 @@ import com.pechuro.bsuirschedule.feature.scheduleoptions.DisplayScheduleOptionsS
 import com.pechuro.bsuirschedule.feature.stafflist.StaffListFragment
 import com.pechuro.bsuirschedule.feature.start.StartFragment
 import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheet
+import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheetArgs
 import kotlinx.android.synthetic.main.fragment_flow.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -79,7 +80,7 @@ class FlowFragment : BaseFragment(),
     }
 
     override fun onBackPressed(): Boolean {
-        val currentFragment = childFragmentManager.currentFragment as? BackPressedHandler
+        val currentFragment = getCurrentFragment() as? BackPressedHandler
         if (currentFragment?.onBackPressed() == false) {
             popFragment()
             return true
@@ -150,12 +151,6 @@ class FlowFragment : BaseFragment(),
         openEditScheduleItem(schedule, items)
     }
 
-    private fun initNavigation() {
-        childFragmentManager.addOnBackStackChangedListener {
-            postUpdateLayoutState()
-        }
-    }
-
     private fun initViews() {
         bottomBarMenuButton.setSafeClickListener {
             openNavigationSheet()
@@ -165,7 +160,7 @@ class FlowFragment : BaseFragment(),
             openDisplayScheduleOptions(schedule)
         }
         bottomBarGoToDateButton.setSafeClickListener {
-            childFragmentManager.displayScheduleFragment?.openDatePicker()
+            openDisplayScheduleDatePicker()
         }
         bottomBarAddScheduleItemButton.setSafeClickListener {
             val schedule = viewModel.getLastOpenedSchedule() ?: return@setSafeClickListener
@@ -233,9 +228,10 @@ class FlowFragment : BaseFragment(),
     }
 
     private fun openUpdateSchedules(schedules: List<Schedule>) {
-        val currentFragment = childFragmentManager.currentFragment
+        val currentFragment = getCurrentFragment()
         if (currentFragment is NavigationSheet || currentFragment is UpdateScheduleSheet) return
-        showDialog(UpdateScheduleSheet.newInstance(schedules.toTypedArray()), UpdateScheduleSheet.TAG)
+        val args = UpdateScheduleSheetArgs(schedules)
+        showDialog(UpdateScheduleSheet.newInstance(args), UpdateScheduleSheet.TAG)
     }
 
     private fun openAddSchedule() {
@@ -269,18 +265,15 @@ class FlowFragment : BaseFragment(),
     }
 
     private fun setViewScheduleStartFragment(schedule: Schedule) {
-        childFragmentManager.removeAllFragmentsImmediate()
-        openFragment(
+        openPrimaryFragment(
                 DisplayScheduleFragmentContainer.newInstance(schedule),
-                DisplayScheduleFragmentContainer.TAG,
-                addToBackStack = false
+                DisplayScheduleFragmentContainer.TAG
         )
         postUpdateLayoutState()
     }
 
     private fun setDefaultStartFragment() {
-        childFragmentManager.removeAllFragmentsImmediate()
-        openFragment(StartFragment.newInstance(), StartFragment.TAG, addToBackStack = false)
+        openPrimaryFragment(StartFragment.newInstance(), StartFragment.TAG)
         postUpdateLayoutState()
     }
 
@@ -291,7 +284,7 @@ class FlowFragment : BaseFragment(),
     }
 
     private fun updateLayoutState() {
-        val isControlsVisible = when (childFragmentManager.currentFragment) {
+        val isControlsVisible = when (getCurrentFragment()) {
             is AddScheduleFragmentContainer,
             is ModifyScheduleItemFragment,
             is StaffListFragment,
@@ -314,7 +307,7 @@ class FlowFragment : BaseFragment(),
             bottomBarFab.setImageDrawable(ContextCompat.getDrawable(requireContext(), fabState.iconRes))
             bottomBarFab.setSafeClickListener {
                 when (fabState) {
-                    FabActionState.DISPLAY_SCHEDULE_BACK -> setDisplayScheduleFirstDay()
+                    FabActionState.DISPLAY_SCHEDULE_BACK -> setDisplayScheduleDate(Date())
                     FabActionState.ADD_SCHEDULE -> openAddSchedule()
                 }
             }
@@ -349,8 +342,10 @@ class FlowFragment : BaseFragment(),
         }
     }
 
-    private fun setDisplayScheduleFirstDay() {
-        childFragmentManager.displayScheduleFragment?.setFirstDay()
+    private fun initNavigation() {
+        childFragmentManager.addOnBackStackChangedListener {
+            postUpdateLayoutState()
+        }
     }
 
     private fun setDisplayScheduleDate(date: Date) {
@@ -359,6 +354,25 @@ class FlowFragment : BaseFragment(),
 
     private fun requestDisplayScheduleCurrentPosition() {
         childFragmentManager.displayScheduleFragment?.requestCurrentPosition()
+    }
+
+    private fun openDisplayScheduleDatePicker() {
+        childFragmentManager.displayScheduleFragment?.openDatePicker()
+    }
+
+    private fun openPrimaryFragment(
+            fragment: Fragment,
+            tag: String,
+            animations: FragmentAnimationsResHolder = defaultFragmentAnimations
+    ) {
+        childFragmentManager.removeAllFragmentsImmediate()
+        childFragmentManager.commit {
+            animations.run {
+                setCustomAnimations(enter, exit, popEnter, popExit)
+            }
+            replace(navigationFragmentContainer.id, fragment, tag)
+            setPrimaryNavigationFragment(fragment)
+        }
     }
 
     private fun openFragment(
@@ -372,7 +386,11 @@ class FlowFragment : BaseFragment(),
                 setCustomAnimations(enter, exit, popEnter, popExit)
             }
             replace(navigationFragmentContainer.id, fragment, tag)
-            if (addToBackStack) addToBackStack(tag)
+            if (addToBackStack) {
+                addToBackStack(tag)
+            } else {
+                setPrimaryNavigationFragment(fragment)
+            }
         }
     }
 
@@ -385,4 +403,6 @@ class FlowFragment : BaseFragment(),
         val transaction = childFragmentManager.beginTransaction().addToBackStack(tag)
         fragment.show(transaction, tag)
     }
+
+    private fun getCurrentFragment() = childFragmentManager.currentFragment
 }

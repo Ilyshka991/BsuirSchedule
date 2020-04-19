@@ -44,9 +44,7 @@ class StaffListFragment : BaseFragment() {
         }
     }
 
-    private val staffType: StaffType by lazy(LazyThreadSafetyMode.NONE) {
-        serializableOrException<StaffType>(BUNDLE_TYPE)
-    }
+    private val staffType: StaffType by args(BUNDLE_TYPE)
 
     private var actionCallback: ActionCallback? = null
 

@@ -52,9 +52,7 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
 
     override val layoutId: Int = R.layout.fragment_view_schedule_container
 
-    private val schedule: Schedule by lazy(LazyThreadSafetyMode.NONE) {
-        parcelableOrException<Schedule>(BUNDLE_SCHEDULE)
-    }
+    private val schedule: Schedule by args(BUNDLE_SCHEDULE)
 
     private lateinit var viewModel: DisplayScheduleViewModel
 
@@ -104,16 +102,11 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
         actionCallback = null
     }
 
-    fun setFirstDay() {
-        val startPosition = pagerAdapter?.getStartPosition() ?: return
-        setPosition(startPosition)
-    }
-
     fun requestCurrentPosition() {
         onPositionChanged()
     }
 
-    fun setDate(date: Date) {
+    fun setDate(date: Date = Date()) {
         val position = pagerAdapter?.getPositionForDate(date) ?: return
         setPosition(position)
     }

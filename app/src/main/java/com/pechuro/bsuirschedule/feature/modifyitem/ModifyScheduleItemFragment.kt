@@ -24,6 +24,15 @@ data class ModifyScheduleItemFragmentArgs(
 
 class ModifyScheduleItemFragment : BaseFragment() {
 
+    interface ActionCallback {
+
+        fun onModifyItemRequestAuditories()
+
+        fun onModifyItemRequestEmployees()
+
+        fun onModifyItemRequestGroups()
+    }
+
     companion object {
 
         const val TAG = "ModifyScheduleItemFragment"
@@ -41,9 +50,7 @@ class ModifyScheduleItemFragment : BaseFragment() {
         initViewModel(ModifyScheduleItemViewModel::class)
     }
 
-    private val args: ModifyScheduleItemFragmentArgs by lazy(LazyThreadSafetyMode.NONE) {
-        parcelableOrException<ModifyScheduleItemFragmentArgs>(BUNDLE_ARGS)
-    }
+    private val args: ModifyScheduleItemFragmentArgs by args(BUNDLE_ARGS)
 
     private val dateFormatter = SimpleDateFormat(SCHEDULE_ITEM_DATE_FORMAT_PATTERN, Locale.getDefault())
 

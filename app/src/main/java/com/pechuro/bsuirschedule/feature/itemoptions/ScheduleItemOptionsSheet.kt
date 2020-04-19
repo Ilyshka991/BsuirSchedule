@@ -7,8 +7,8 @@ import androidx.core.os.bundleOf
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.ext.args
 import com.pechuro.bsuirschedule.ext.getCallbackOrNull
-import com.pechuro.bsuirschedule.ext.parcelableOrException
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import kotlinx.android.synthetic.main.sheet_schedule_item_options.*
@@ -35,9 +35,7 @@ class ScheduleItemOptionsSheet : BaseBottomSheetDialog() {
 
     override val layoutId = R.layout.sheet_schedule_item_options
 
-    private val displayItem: DisplayScheduleItem by lazy(LazyThreadSafetyMode.NONE) {
-        parcelableOrException<DisplayScheduleItem>(BUNDLE_ITEM)
-    }
+    private val displayItem: DisplayScheduleItem by args(BUNDLE_ITEM)
 
     private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
         initViewModel(ScheduleItemOptionsViewModel::class)

@@ -9,9 +9,9 @@ import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
 import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
+import com.pechuro.bsuirschedule.ext.args
 import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.ext.observe
-import com.pechuro.bsuirschedule.ext.parcelableOrException
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import kotlinx.android.synthetic.main.sheet_display_schedule_options.*
 
@@ -34,9 +34,7 @@ class DisplayScheduleOptionsSheet : BaseBottomSheetDialog() {
         initViewModel(DisplayScheduleOptionsViewModel::class)
     }
 
-    private val schedule: Schedule by lazy(LazyThreadSafetyMode.NONE) {
-        parcelableOrException<Schedule>(BUNDLE_SCHEDULE)
-    }
+    private val schedule: Schedule by args(BUNDLE_SCHEDULE)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
