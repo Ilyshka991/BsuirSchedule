@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/suggestionGroupNumber"
+        android:id="@+id/staffGroupNumber"
         style="@style/DefaultText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
         tools:text="750502" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/suggestionGroupFacultyAbbreviation"
+        android:id="@+id/staffGroupFacultyAbbreviation"
         style="@style/DefaultText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -31,45 +31,45 @@
         android:gravity="start"
         android:maxLines="1"
         android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/suggestionGroupNumber"
+        app:layout_constraintBaseline_toBaselineOf="@+id/staffGroupNumber"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/suggestionGroupNumber"
+        app:layout_constraintStart_toEndOf="@+id/staffGroupNumber"
         tools:text="ФКСиС" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/suggestionGroupSpecialityAbbreviation"
+        android:id="@+id/staffGroupSpecialityAbbreviation"
         style="@style/DefaultText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/suggestionGroupNumber"
-        app:layout_constraintTop_toBottomOf="@+id/suggestionGroupNumber"
+        app:layout_constraintStart_toStartOf="@+id/staffGroupNumber"
+        app:layout_constraintTop_toBottomOf="@+id/staffGroupNumber"
         tools:text="ВМСиС" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/suggestionGroupEducationForm"
+        android:id="@+id/staffGroupEducationForm"
         style="@style/DefaultText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/suggestionGroupSpecialityAbbreviation"
-        app:layout_constraintStart_toEndOf="@+id/suggestionGroupSpecialityAbbreviation"
+        app:layout_constraintBaseline_toBaselineOf="@+id/staffGroupSpecialityAbbreviation"
+        app:layout_constraintStart_toEndOf="@+id/staffGroupSpecialityAbbreviation"
         tools:text="Очная" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/suggestionGroupCourse"
+        android:id="@+id/staffGroupCourse"
         style="@style/DefaultText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/suggestionGroupEducationForm"
-        app:layout_constraintStart_toEndOf="@+id/suggestionGroupEducationForm"
+        app:layout_constraintBaseline_toBaselineOf="@+id/staffGroupEducationForm"
+        app:layout_constraintStart_toEndOf="@+id/staffGroupEducationForm"
         tools:text="Course: 3" />
 </androidx.constraintlayout.widget.ConstraintLayout>

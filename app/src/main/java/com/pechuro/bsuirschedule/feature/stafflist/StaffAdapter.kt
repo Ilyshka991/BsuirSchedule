@@ -82,11 +82,11 @@ class StaffAdapter(
 
         override fun onBind(data: StaffItemInformation.GroupInfo) {
             with(data.group) {
-                suggestionGroupNumber.text = number
-                suggestionGroupFacultyAbbreviation.text = faculty.abbreviation
-                suggestionGroupSpecialityAbbreviation.text = speciality.abbreviation
-                suggestionGroupEducationForm.text = speciality.educationForm.name
-                suggestionGroupCourse.text = itemView.context.getString(
+                staffGroupNumber.text = number
+                staffGroupFacultyAbbreviation.text = faculty.abbreviation
+                staffGroupSpecialityAbbreviation.text = speciality.abbreviation
+                staffGroupEducationForm.text = speciality.educationForm.name
+                staffGroupCourse.text = itemView.context.getString(
                         R.string.add_schedule_msg_suggestion_group_course,
                         course
                 )
@@ -101,15 +101,15 @@ class StaffAdapter(
 
         override fun onBind(data: StaffItemInformation.EmployeeInfo) {
             with(data.employee) {
-                suggestionEmployeePhoto.loadPhoto(photoLink)
+                staffEmployeePhoto.loadPhoto(photoLink)
                 suggestionEmployeeFirstName.text = firstName
-                suggestionEmployeeMiddleName.text = middleName
-                suggestionEmployeeLastName.text = lastName
-                suggestionEmployeeDepartmentAbbreviation.text = itemView.context.getString(
+                staffEmployeeMiddleName.text = middleName
+                staffEmployeeLastName.text = lastName
+                staffEmployeeDepartmentAbbreviation.text = itemView.context.getString(
                         R.string.add_schedule_msg_suggestion_employee_department,
                         department.abbreviation
                 )
-                suggestionEmployeeRank.text = rank
+                staffEmployeeRank.text = rank
             }
 
             itemView.tag = data
