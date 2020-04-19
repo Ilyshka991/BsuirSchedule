@@ -22,7 +22,7 @@ private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NavigationSheetItemIn
     override fun areItemsTheSame(
             oldItem: NavigationSheetItemInformation,
             newItem: NavigationSheetItemInformation
-    ) = oldItem.id == newItem.id
+    ) = oldItem == newItem
 
     override fun areContentsTheSame(
             oldItem: NavigationSheetItemInformation,

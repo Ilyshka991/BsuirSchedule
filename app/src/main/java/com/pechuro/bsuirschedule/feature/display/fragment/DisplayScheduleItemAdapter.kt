@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +15,7 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.color
+import com.pechuro.bsuirschedule.ext.dimenPx
 import com.pechuro.bsuirschedule.ext.formattedColorRes
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
@@ -93,12 +95,16 @@ class DisplayScheduleItemAdapter(
         override fun onBind(data: DisplayScheduleItem) {
             val scheduleItem = data.scheduleItem
             if (scheduleItem !is Lesson) return
+            val defaultItemPadding = itemView.context.dimenPx(R.dimen.display_schedule_item_default_padding)
             scheduleItem.run {
                 displayClassesLessonType.text = lessonType
                 val lessonTypeColor = itemView.context.color(priority.formattedColorRes)
                 ViewCompat.setBackgroundTintList(displayClassesLessonType, ColorStateList.valueOf(lessonTypeColor))
                 displayClassesTitle.text = subject
-                displayClassesAuditories.text = auditories.formatAuditories()
+                displayClassesTitle.updatePadding(right = if (subject.isNotEmpty()) defaultItemPadding else 0)
+                val formattedAuditories = auditories.formatAuditories()
+                displayClassesAuditories.text = formattedAuditories
+                displayClassesAuditories.updatePadding(right = if (formattedAuditories.isNotEmpty()) defaultItemPadding else 0)
                 displayClassesSubgroup.isVisible = subgroupNumber != SubgroupNumber.ALL
                 displayClassesSubgroup.text = itemView.context.getString(R.string.display_schedule_item_msg_subgroup, subgroupNumber.value)
                 displayClassesStartTime.text = startTime

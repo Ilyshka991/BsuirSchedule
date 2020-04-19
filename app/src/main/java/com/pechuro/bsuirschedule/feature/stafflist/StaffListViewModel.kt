@@ -1,5 +1,6 @@
 package com.pechuro.bsuirschedule.feature.stafflist
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
@@ -38,14 +39,9 @@ class StaffListViewModel @Inject constructor(
                 .map { list -> list.sortedBy { it.abbreviation } }
     }
 
-    val listData = MediatorLiveData<List<StaffItemInformation>>().apply {
-        addSource(filterData) {
-            launchCoroutine(context = Dispatchers.IO) {
-                val resultList = getResultList()
-                postValue(resultList)
-            }
-        }
-    }
+    private val _listData = MediatorLiveData<List<StaffItemInformation>>()
+    val listData: LiveData<List<StaffItemInformation>>
+        get() = _listData
 
     private lateinit var type: StaffType
 
@@ -57,10 +53,18 @@ class StaffListViewModel @Inject constructor(
             StaffType.GROUP -> allGroupsListData
             StaffType.EMPLOYEE -> allEmployeesListData
         }
-        listData.addSource(source) {
-            launchCoroutine(context = Dispatchers.IO) {
-                val resultList = getResultList()
-                listData.postValue(resultList)
+        _listData.apply {
+            addSource(filterData) {
+                launchCoroutine(context = Dispatchers.IO) {
+                    val resultList = getResultList()
+                    postValue(resultList)
+                }
+            }
+            addSource(source) {
+                launchCoroutine(context = Dispatchers.IO) {
+                    val resultList = getResultList()
+                    postValue(resultList)
+                }
             }
         }
     }
@@ -87,7 +91,8 @@ class StaffListViewModel @Inject constructor(
             StaffType.EMPLOYEE -> {
                 val currentList = allEmployeesListData.value ?: emptyList()
                 currentList.filter {
-                    it.abbreviation.startsWith(filter, ignoreCase = true)
+                    it.firstName.startsWith(filter, ignoreCase = true)
+                            || it.lastName.startsWith(filter, ignoreCase = true)
                 }.map { EmployeeInfo(it) }
             }
         }

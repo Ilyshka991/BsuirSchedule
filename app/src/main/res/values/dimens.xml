@@ -4,4 +4,6 @@
     <dimen name="navigation_sheet_item_action_icon_margin">16dp</dimen>
 
     <dimen name="labeled_text_default_size">22sp</dimen>
+
+    <dimen name="display_schedule_item_default_padding">8dp</dimen>
 </resources>

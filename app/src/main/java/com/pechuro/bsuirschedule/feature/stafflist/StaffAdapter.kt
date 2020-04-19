@@ -25,7 +25,7 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<StaffItemInformation>() {
     override fun areItemsTheSame(
             oldItem: StaffItemInformation,
             newItem: StaffItemInformation
-    ) = oldItem === newItem
+    ) = oldItem == newItem
 
     override fun areContentsTheSame(
             oldItem: StaffItemInformation,
@@ -75,7 +75,7 @@ class StaffAdapter(
         is StaffItemInformation.GroupInfo -> item.group.id
         is StaffItemInformation.EmployeeInfo -> item.employee.id
         is StaffItemInformation.AuditoryInfo -> item.auditory.id
-        else -> -1
+        else -> -100
     }
 
     private inner class GroupViewHolder(view: View) : BaseViewHolder<StaffItemInformation.GroupInfo>(view) {
