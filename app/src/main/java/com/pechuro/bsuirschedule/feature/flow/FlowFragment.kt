@@ -55,7 +55,12 @@ class FlowFragment : BaseFragment(),
         initViewModel(FlowViewModel::class)
     }
 
-    private val defaultFragmentAnimations = FragmentAnimationsResHolder()
+    private val defaultFragmentAnimations = FragmentAnimationsResHolder(
+            enter = R.animator.fragment_open_enter,
+            exit = R.animator.fragment_open_exit,
+            popEnter = R.animator.fragment_close_enter,
+            popExit = R.animator.fragment_close_exit
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -363,11 +368,11 @@ class FlowFragment : BaseFragment(),
             animations: FragmentAnimationsResHolder = defaultFragmentAnimations
     ) {
         childFragmentManager.commit {
-            replace(navigationFragmentContainer.id, fragment, tag)
-            if (addToBackStack) addToBackStack(tag)
             animations.run {
                 setCustomAnimations(enter, exit, popEnter, popExit)
             }
+            replace(navigationFragmentContainer.id, fragment, tag)
+            if (addToBackStack) addToBackStack(tag)
         }
     }
 
