@@ -48,7 +48,7 @@
     <string name="display_schedule_tab_title">%1$s, week %2$d</string>
 
     <string name="display_schedule_item_msg_subgroup">%1$d subgroup</string>
-    <string name="display_schedule_item_msg_week_numbers">Weeks %1$s</string>
+    <string name="display_schedule_item_msg_week_numbers">weeks: %1$s</string>
     <string name="display_schedule_item_msg_empty_list">Nothing there</string>
 
     <string name="display_options_sheet_title_type">Display by %1$s</string>
@@ -81,6 +81,23 @@
     <string name="modify_schedule_item_label_date">Date:</string>
     <string name="modify_schedule_item_action_add">add</string>
 
+    <string name="lesson_priotity_lowest">lowest</string>
+    <string name="lesson_priotity_low">low</string>
+    <string name="lesson_priotity_medium">medium</string>
+    <string name="lesson_priotity_high">high</string>
+
+    <string name="subgroup_number_all">all group</string>
+    <string name="subgroup_number_first">first</string>
+    <string name="subgroup_number_second">second</string>
+
+    <string name="staff_list_hint_enter_group_number">Enter group number</string>
+    <string name="staff_list_hint_enter_employee_name">Enter employee name</string>
+    <string name="staff_list_hint_enter_auditory">Enter auditory</string>
+    <string name="staff_list_msg_group_course">course: %1$d</string>
+    <string name="staff_list_msg_employee_department">Department: %1$s</string>
+    <string name="staff_list_msg_auditory_capacity">capacity: %1$d</string>
+    <string name="staff_list_msg_empty">Not found</string>
+
     <string-array name="lesson_types">
         <item>ЛК</item>
         <item>ПЗ</item>
@@ -92,15 +109,6 @@
         <item>Консультация</item>
     </string-array>
 
-    <string name="lesson_priotity_lowest">lowest</string>
-    <string name="lesson_priotity_low">low</string>
-    <string name="lesson_priotity_medium">medium</string>
-    <string name="lesson_priotity_high">high</string>
-
-    <string name="subgroup_number_all">all group</string>
-    <string name="subgroup_number_first">first</string>
-    <string name="subgroup_number_second">second</string>
-
     <string-array name="weekdays">
         <item>Monday</item>
         <item>Tuesday</item>
@@ -110,12 +118,4 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
-
-    <string name="staff_list_hint_enter_group_number">Enter group number</string>
-    <string name="staff_list_hint_enter_employee_name">Enter employee name</string>
-    <string name="staff_list_hint_enter_auditory">Enter auditory</string>
-    <string name="staff_list_msg_group_course">Course: %1$d</string>
-    <string name="staff_list_msg_employee_department">Department: %1$s</string>
-    <string name="staff_list_msg_auditory_capacity">capacity: %1$d</string>
-    <string name="staff_list_msg_empty">Not found</string>
 </resources>

@@ -29,8 +29,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:textSize="18sp"
             android:textColor="?attr/textSemiBoldColor"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/displayExamTitle"
             app:layout_constraintTop_toBottomOf="@+id/displayExamTitle"
             tools:text="16:55" />
@@ -63,12 +63,16 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/displayExamSubgroup"
             style="@style/DefaultText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="1"
             android:textSize="14sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/displayExamTitle"
+            app:layout_constraintEnd_toStartOf="@+id/displayExamType"
             app:layout_constraintStart_toEndOf="@+id/displayExamAuditories"
             tools:text="1 Подгруппа" />
 
@@ -108,8 +112,8 @@
             android:ellipsize="end"
             android:gravity="start"
             android:maxLines="2"
-            android:textSize="18sp"
             android:textColor="?attr/textSemiBoldColor"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/displayExamStartTime"
             app:layout_constraintTop_toBottomOf="@+id/displayExamStartTime"
