@@ -69,7 +69,7 @@ class ModifyScheduleItemFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.init(args.schedule, args.items)
+        viewModel.init(args.schedule, args.items, getAvailableLessonTypes())
         initView()
         observeData()
     }
@@ -124,10 +124,10 @@ class ModifyScheduleItemFragment : BaseFragment() {
             viewModel.saveChanges()
         }
         modifyScheduleItemSubjectText.addTextListener {
-            viewModel.dataProvider.subjectData.value = it
+            viewModel.dataProvider.setSubject(it)
         }
         modifyScheduleItemNoteText.addTextListener {
-            viewModel.dataProvider.noteData.value = it
+            viewModel.dataProvider.setNote(it)
         }
         modifyScheduleItemType.setSafeClickListener {
             selectLessonType()
@@ -189,7 +189,7 @@ class ModifyScheduleItemFragment : BaseFragment() {
                 modifyScheduleItemWeekday.setMessage(weekDay.getFormattedString(resources))
             }
             weekNumberData.nonNull().observe(viewLifecycleOwner) { weekNumbers ->
-                val formattedWeekNumbers = weekNumbers.map { it.index + 1 }.sorted().joinToString { it.toString() }
+                val formattedWeekNumbers = weekNumbers.joinToString { it.formattedString }
                 modifyScheduleItemWeekNumbers.setMessage(formattedWeekNumbers)
             }
             dateData.nonNull().observe(viewLifecycleOwner) { date ->
@@ -300,7 +300,7 @@ class ModifyScheduleItemFragment : BaseFragment() {
         }
         val listener = object : OptionDialog.OptionButtonClickListener {
             override fun onClick(position: Int) {
-                viewModel.dataProvider.lessonTypeData.value = availableTypes[position]
+                viewModel.dataProvider.setLessonType(availableTypes[position])
             }
         }
         val title = getString(R.string.modify_schedule_item_title_select_type)
@@ -324,7 +324,7 @@ class ModifyScheduleItemFragment : BaseFragment() {
         }
         val listener = object : OptionDialog.OptionButtonClickListener {
             override fun onClick(position: Int) {
-                viewModel.dataProvider.priorityData.value = availablePriorities[position]
+                viewModel.dataProvider.setPriority(availablePriorities[position])
             }
         }
         val title = getString(R.string.modify_schedule_item_title_select_priority)
@@ -342,7 +342,7 @@ class ModifyScheduleItemFragment : BaseFragment() {
         }
         val listener = object : OptionDialog.OptionButtonClickListener {
             override fun onClick(position: Int) {
-                viewModel.dataProvider.subgroupNumberData.value = availableNumbers[position]
+                viewModel.dataProvider.setSubgroupNumber(availableNumbers[position])
             }
         }
         val title = getString(R.string.modify_schedule_item_title_select_subgroup)
@@ -360,7 +360,7 @@ class ModifyScheduleItemFragment : BaseFragment() {
         }
         val listener = object : OptionDialog.OptionButtonClickListener {
             override fun onClick(position: Int) {
-                viewModel.dataProvider.weekDayData.value = availableWeekDays[position]
+                viewModel.dataProvider.setWeekDay(availableWeekDays[position])
             }
         }
         val title = getString(R.string.modify_schedule_item_title_select_weekday)
@@ -382,11 +382,11 @@ class ModifyScheduleItemFragment : BaseFragment() {
         }
         val listener = object : OptionDialog.OptionCheckableButtonClickListener {
             override fun onClick(position: Int, checked: Boolean) {
-                val changedItem = availableWeekNumbers[position]
+                val changedWeek = availableWeekNumbers[position]
                 if (checked) {
-                    viewModel.dataProvider.addWeekNumber(changedItem)
+                    viewModel.dataProvider.addWeekNumber(changedWeek)
                 } else {
-                    viewModel.dataProvider.removeWeekNumber(changedItem)
+                    viewModel.dataProvider.removeWeekNumber(changedWeek)
                 }
             }
         }
