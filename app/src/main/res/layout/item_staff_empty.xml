@@ -3,4 +3,4 @@
     style="@style/DefaultText"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:text="@string/add_schedule_msg_empty_suggestions" />
+    android:text="@string/staff_list_msg_empty" />

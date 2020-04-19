@@ -5,8 +5,8 @@ import androidx.room.Junction
 import androidx.room.Relation
 import com.pechuro.bsuirschedule.local.entity.building.AuditoryCached
 import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeItemClassesCached
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.EmployeeLessonAuditoryCrossRef
 import com.pechuro.bsuirschedule.local.entity.schedule.crossref.EmployeeLessonGroupCrossRef
-import com.pechuro.bsuirschedule.local.entity.schedule.crossref.GroupLessonAuditoryCrossRef
 import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
 
 data class EmployeeClassesItemComplex(
@@ -16,7 +16,7 @@ data class EmployeeClassesItemComplex(
                 parentColumn = "id",
                 entityColumn = "id",
                 associateBy = Junction(
-                        value = GroupLessonAuditoryCrossRef::class,
+                        value = EmployeeLessonAuditoryCrossRef::class,
                         parentColumn = "schedule_item_id",
                         entityColumn = "auditory_id"
                 )

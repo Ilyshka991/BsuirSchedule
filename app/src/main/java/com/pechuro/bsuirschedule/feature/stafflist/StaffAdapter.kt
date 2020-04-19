@@ -87,7 +87,7 @@ class StaffAdapter(
                 staffGroupSpecialityAbbreviation.text = speciality.abbreviation
                 staffGroupEducationForm.text = speciality.educationForm.name
                 staffGroupCourse.text = itemView.context.getString(
-                        R.string.add_schedule_msg_suggestion_group_course,
+                        R.string.staff_list_msg_group_course,
                         course
                 )
             }
@@ -106,7 +106,7 @@ class StaffAdapter(
                 staffEmployeeMiddleName.text = middleName
                 staffEmployeeLastName.text = lastName
                 staffEmployeeDepartmentAbbreviation.text = itemView.context.getString(
-                        R.string.add_schedule_msg_suggestion_employee_department,
+                        R.string.staff_list_msg_employee_department,
                         department.abbreviation
                 )
                 staffEmployeeRank.text = rank
@@ -137,12 +137,12 @@ class StaffAdapter(
                 staffAuditoryType.text = auditoryType.name
                 staffAuditoryCapacity.isVisible = capacity != 0 && capacity != -1
                 staffAuditoryCapacity.text = itemView.context.getString(
-                        R.string.add_schedule_msg_suggestion_auditory_capacity,
+                        R.string.staff_list_msg_auditory_capacity,
                         capacity
                 )
                 staffAuditoryDepartment.isVisible = department != null
                 staffAuditoryDepartment.text = itemView.context.getString(
-                        R.string.add_schedule_msg_suggestion_employee_department,
+                        R.string.staff_list_msg_employee_department,
                         department?.abbreviation ?: ""
                 )
                 staffAuditoryNote.isVisible = note.isNotEmpty()

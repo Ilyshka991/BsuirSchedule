@@ -6,6 +6,7 @@ import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.Auditory
+import com.pechuro.bsuirschedule.domain.entity.Group
 import com.pechuro.bsuirschedule.domain.interactor.GetAuditories
 import com.pechuro.bsuirschedule.domain.interactor.GetEmployees
 import com.pechuro.bsuirschedule.domain.interactor.GetGroups
@@ -26,7 +27,7 @@ class StaffListViewModel @Inject constructor(
 
     private val allGroupsListData = flowLiveData {
         getGroups.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
-                .map { list -> list.sortedBy { it.number } }
+                .map { list -> list.sortedWith(compareBy<Group> { it.faculty.abbreviation }.thenBy { it.number }) }
     }
     private val allAuditoriesListData = flowLiveData {
         getAuditories.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())

@@ -24,6 +24,8 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="chipBackgroundColor">@color/chip_color</item>
         <item name="android:textColor">?attr/buttonEnabledTextColor</item>
+        <item name="chipIconTint">?attr/buttonEnabledTextColor</item>
+        <item name="closeIconTint">?attr/buttonEnabledTextColor</item>
         <item name="android:textAppearance">@style/ChipTextAppearance</item>
     </style>
 

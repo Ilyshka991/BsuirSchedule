@@ -229,7 +229,8 @@ class ModifyScheduleItemFragment : BaseFragment() {
         modifyScheduleItemAuditoriesChips.removeAllViews()
         auditories
                 .map { auditory ->
-                    createChip(auditory.name) { viewModel.dataProvider.removeAuditory(auditory) }
+                    val text = "${auditory.name}-${auditory.building.name}"
+                    createChip(text) { viewModel.dataProvider.removeAuditory(auditory) }
                 }
                 .plus(createAddChip { actionCallback?.onModifyItemRequestAuditories() })
                 .forEach {

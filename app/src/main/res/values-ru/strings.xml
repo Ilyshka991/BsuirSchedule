@@ -19,9 +19,9 @@
     <string name="add_schedule_tab_employees">Сотрудники</string>
     <string name="add_schedule_tab_students">Группы</string>
     <string name="add_schedule_msg_type">Тип:</string>
-    <string name="add_schedule_msg_suggestion_group_course">Курс: %1$d</string>
-    <string name="add_schedule_msg_suggestion_employee_department">Кафедра: %1$s</string>
-    <string name="add_schedule_msg_empty_suggestions">Пусто.</string>
+    <string name="staff_list_msg_group_course">Курс: %1$d</string>
+    <string name="staff_list_msg_employee_department">Кафедра: %1$s</string>
+    <string name="staff_list_msg_empty">Пусто.</string>
 
     <string name="info_load_title">Загрузка информации</string>
     <string name="info_load_message">Загрузка информации,\nподождите</string>
