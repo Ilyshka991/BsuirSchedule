@@ -173,8 +173,10 @@ class ModifyScheduleItemDataProvider(
         setNote(scheduleItem?.note ?: "")
 
         val defaultTime = LocalTime.current()
-        _startTimeData.value = scheduleItem?.startTime ?: defaultTime
-        _endTimeData.value = scheduleItem?.endTime ?: defaultTime
+        val startTime = scheduleItem?.startTime ?: defaultTime
+        setStartTime(startTime)
+        val endTime = scheduleItem?.endTime ?: defaultTime
+        setEndTime(endTime)
 
         var priority = LessonPriority.getDefaultForLessonType(lessonType)
         var weekDay = Calendar.getInstance().getWeekDay()
