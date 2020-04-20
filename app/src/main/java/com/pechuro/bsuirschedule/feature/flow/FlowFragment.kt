@@ -317,6 +317,7 @@ class FlowFragment : BaseFragment(),
             is AddScheduleFragmentContainer,
             is ModifyScheduleItemFragment,
             is StaffListFragment,
+            is LessonDetailsFragment,
             is LoadInfoFragment -> false
             else -> true
         }
