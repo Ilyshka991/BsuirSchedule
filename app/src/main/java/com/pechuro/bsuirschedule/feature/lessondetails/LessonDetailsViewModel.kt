@@ -1,12 +1,12 @@
 package com.pechuro.bsuirschedule.feature.lessondetails
 
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
-import com.pechuro.bsuirschedule.domain.entity.ILesson
+import com.pechuro.bsuirschedule.domain.entity.Lesson
 import javax.inject.Inject
 
 class LessonDetailsViewModel @Inject constructor() : BaseViewModel() {
 
-    private lateinit var lesson: ILesson
+    private lateinit var lesson: Lesson
 
     lateinit var subject: String
 
@@ -20,7 +20,7 @@ class LessonDetailsViewModel @Inject constructor() : BaseViewModel() {
 
     lateinit var auditory: String
 
-    fun setLesson(lesson: ILesson) {
+    fun setLesson(lesson: Lesson) {
         this.lesson = lesson
         subject = lesson.subject
         time = with(lesson) { "$startTime - $endTime" }
