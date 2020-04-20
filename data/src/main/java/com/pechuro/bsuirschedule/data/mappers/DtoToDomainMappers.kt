@@ -126,8 +126,10 @@ internal fun List<ScheduleItemDTO>.toGroupLessons(
                         lessonType = lesson.lessonType ?: "",
                         auditories = lessonAuditories ?: emptyList(),
                         note = lesson.note ?: "",
-                        startTime = lesson.startTime ?: "",
-                        endTime = lesson.endTime ?: "",
+                        startTime = lesson.startTime?.run { timeFormatter.parse(this) }?.getLocalTime()
+                                ?: LocalTime.of(0, 0),
+                        endTime = lesson.endTime?.run { timeFormatter.parse(this) }?.getLocalTime()
+                                ?: LocalTime.of(0, 0),
                         employees = lessonEmployees ?: emptyList(),
                         weekDay = getWeekDayFor(scheduleItem.weekDay),
                         weekNumber = weekNumber,
@@ -165,10 +167,12 @@ internal fun List<ScheduleItemDTO>.toGroupExams(
                     lessonType = lesson.lessonType ?: "",
                     auditories = lessonAuditories ?: emptyList(),
                     note = lesson.note ?: "",
-                    startTime = lesson.startTime ?: "",
-                    endTime = lesson.endTime ?: "",
+                    startTime = lesson.startTime?.run { timeFormatter.parse(this) }?.getLocalTime()
+                            ?: LocalTime.of(0, 0),
+                    endTime = lesson.endTime?.run { timeFormatter.parse(this) }?.getLocalTime()
+                            ?: LocalTime.of(0, 0),
                     employees = lessonEmployees ?: emptyList(),
-                    date = dateFormatter.parseOrDefault(scheduleItem.weekDay, Date()),
+                    date = dateFormatter.parseOrDefault(scheduleItem.weekDay, Date(0)).getLocalDate(),
                     isAddedByUser = false
             )
             resultList.add(mappedScheduleItem)
@@ -201,8 +205,10 @@ internal fun List<ScheduleItemDTO>.toEmployeeLessons(
                         lessonType = lessonType,
                         auditories = lessonAuditories ?: emptyList(),
                         note = lesson.note ?: "",
-                        startTime = lesson.startTime ?: "",
-                        endTime = lesson.endTime ?: "",
+                        startTime = lesson.startTime?.run { timeFormatter.parse(this) }?.getLocalTime()
+                                ?: LocalTime.of(0, 0),
+                        endTime = lesson.endTime?.run { timeFormatter.parse(this) }?.getLocalTime()
+                                ?: LocalTime.of(0, 0),
                         weekDay = getWeekDayFor(scheduleItem.weekDay),
                         studentGroups = lessonGroups ?: emptyList(),
                         priority = LessonPriority.getDefaultForLessonType(lessonType),
@@ -236,10 +242,12 @@ internal fun List<ScheduleItemDTO>.toEmployeeExams(
                     lessonType = lesson.lessonType ?: "",
                     auditories = lessonAuditories ?: emptyList(),
                     note = lesson.note ?: "",
-                    startTime = lesson.startTime ?: "",
-                    endTime = lesson.endTime ?: "",
+                    startTime = lesson.startTime?.run { timeFormatter.parse(this) }?.getLocalTime()
+                            ?: LocalTime.of(0, 0),
+                    endTime = lesson.endTime?.run { timeFormatter.parse(this) }?.getLocalTime()
+                            ?: LocalTime.of(0, 0),
                     studentGroups = lessonGroups ?: emptyList(),
-                    date = dateFormatter.parseOrDefault(scheduleItem.weekDay, Date()),
+                    date = dateFormatter.parseOrDefault(scheduleItem.weekDay, Date(0)).getLocalDate(),
                     isAddedByUser = false
             )
             resultList.add(mappedScheduleItem)
@@ -263,6 +271,11 @@ private fun getWeekDayFor(value: String) = when (value.toLowerCase()) {
 
 private val dateFormatter: DateFormat
     get() = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).apply {
+        isLenient = false
+    }
+
+private val timeFormatter: DateFormat
+    get() = SimpleDateFormat("HH:mm", Locale.getDefault()).apply {
         isLenient = false
     }
 

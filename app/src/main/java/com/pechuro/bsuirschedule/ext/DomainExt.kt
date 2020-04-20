@@ -42,3 +42,9 @@ val Auditory.formattedName: String
 
 val WeekNumber.formattedString: String
     get() = (index + 1).toString()
+
+val LocalTime.formattedString: String
+    get() = String.format("%02d:%02d", hour, minute)
+
+val LocalDate.formattedString: String
+    get() = String.format("%02d.%02d.%d", day, month, year)

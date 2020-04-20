@@ -7,6 +7,7 @@
     <string name="notification_update_title">Schedule update for %1$s is available</string>
     <string name="notification_update_description">Tap for update</string>
 
+    <string name="action_discard">Discard</string>
     <string name="action_retry">Retry</string>
     <string name="action_cancel">Cancel</string>
 
@@ -85,6 +86,7 @@
     <string name="modify_schedule_item_title_select_subgroup">Select subgroup</string>
     <string name="modify_schedule_item_title_select_weekday">Select weekday</string>
     <string name="modify_schedule_item_title_select_weeknumber">Select weeks</string>
+    <string name="modify_schedule_item_title_discard_changes">Discard changes?</string>
 
     <string name="lesson_priotity_lowest">Lowest</string>
     <string name="lesson_priotity_low">Low</string>

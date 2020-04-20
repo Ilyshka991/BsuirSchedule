@@ -86,7 +86,7 @@ class FlowFragment : BaseFragment(),
             popFragment()
             return true
         }
-        return false
+        return childFragmentManager.backStackEntryCount > 0
     }
 
     override fun onLoadInfoCompleted() {
