@@ -103,8 +103,8 @@ internal fun LastUpdateDTO.toDomainEntity() = run {
 internal fun List<ScheduleItemDTO>.toGroupLessons(
         auditories: List<Auditory>,
         departments: List<Department>
-): List<ScheduleItem.GroupLesson> {
-    val resultList = mutableListOf<ScheduleItem.GroupLesson>()
+): List<Lesson.GroupLesson> {
+    val resultList = mutableListOf<Lesson.GroupLesson>()
     forEach { scheduleItem ->
         scheduleItem.classes.map { lesson ->
             val lessonAuditories = lesson.auditories?.let { lessonAuditories ->
@@ -118,7 +118,7 @@ internal fun List<ScheduleItemDTO>.toGroupLessons(
             }
             getResultWeekNumbers(lesson.weekNumber).forEach { weekNumber ->
                 val lessonType = lesson.lessonType?.toUpperCase(Locale.getDefault()) ?: ""
-                val mappedScheduleItem = ScheduleItem.GroupLesson(
+                val mappedScheduleItem = Lesson.GroupLesson(
                         //This ID will be generated later
                         id = 0,
                         subject = lesson.subject ?: "",
@@ -131,7 +131,8 @@ internal fun List<ScheduleItemDTO>.toGroupLessons(
                         employees = lessonEmployees ?: emptyList(),
                         weekDay = getWeekDayFor(scheduleItem.weekDay),
                         weekNumber = weekNumber,
-                        priority = LessonPriority.getDefaultForLessonType(lessonType)
+                        priority = LessonPriority.getDefaultForLessonType(lessonType),
+                        isAddedByUser = false
                 )
                 resultList.add(mappedScheduleItem)
             }
@@ -143,8 +144,8 @@ internal fun List<ScheduleItemDTO>.toGroupLessons(
 internal fun List<ScheduleItemDTO>.toGroupExams(
         auditories: List<Auditory>,
         departments: List<Department>
-): List<ScheduleItem.GroupExam> {
-    val resultList = mutableListOf<ScheduleItem.GroupExam>()
+): List<Exam.GroupExam> {
+    val resultList = mutableListOf<Exam.GroupExam>()
     forEach { scheduleItem ->
         scheduleItem.classes.map { lesson ->
             val lessonAuditories = lesson.auditories?.let { lessonAuditories ->
@@ -156,7 +157,7 @@ internal fun List<ScheduleItemDTO>.toGroupExams(
                 } ?: throw DataSourceException.InvalidData
                 employeeDto.toDomainEntity(department)
             }
-            val mappedScheduleItem = ScheduleItem.GroupExam(
+            val mappedScheduleItem = Exam.GroupExam(
                     //This ID will be generated later
                     id = 0,
                     subject = lesson.subject ?: "",
@@ -167,7 +168,8 @@ internal fun List<ScheduleItemDTO>.toGroupExams(
                     startTime = lesson.startTime ?: "",
                     endTime = lesson.endTime ?: "",
                     employees = lessonEmployees ?: emptyList(),
-                    date = dateFormatter.parseOrDefault(scheduleItem.weekDay, Date())
+                    date = dateFormatter.parseOrDefault(scheduleItem.weekDay, Date()),
+                    isAddedByUser = false
             )
             resultList.add(mappedScheduleItem)
         }
@@ -178,8 +180,8 @@ internal fun List<ScheduleItemDTO>.toGroupExams(
 internal fun List<ScheduleItemDTO>.toEmployeeLessons(
         groups: List<Group>,
         auditories: List<Auditory>
-): List<ScheduleItem.EmployeeLesson> {
-    val resultList = mutableListOf<ScheduleItem.EmployeeLesson>()
+): List<Lesson.EmployeeLesson> {
+    val resultList = mutableListOf<Lesson.EmployeeLesson>()
     forEach { scheduleItem ->
         scheduleItem.classes.map { lesson ->
             val lessonAuditories = lesson.auditories?.let { lessonAuditories ->
@@ -190,7 +192,7 @@ internal fun List<ScheduleItemDTO>.toEmployeeLessons(
             }
             getResultWeekNumbers(lesson.weekNumber).forEach { weekNumber ->
                 val lessonType = lesson.lessonType?.toUpperCase(Locale.getDefault()) ?: ""
-                val mappedScheduleItem = ScheduleItem.EmployeeLesson(
+                val mappedScheduleItem = Lesson.EmployeeLesson(
                         //This ID will be generated later
                         id = 0,
                         subject = lesson.subject ?: "",
@@ -203,7 +205,8 @@ internal fun List<ScheduleItemDTO>.toEmployeeLessons(
                         endTime = lesson.endTime ?: "",
                         weekDay = getWeekDayFor(scheduleItem.weekDay),
                         studentGroups = lessonGroups ?: emptyList(),
-                        priority = LessonPriority.getDefaultForLessonType(lessonType)
+                        priority = LessonPriority.getDefaultForLessonType(lessonType),
+                        isAddedByUser = false
                 )
                 resultList.add(mappedScheduleItem)
             }
@@ -215,8 +218,8 @@ internal fun List<ScheduleItemDTO>.toEmployeeLessons(
 internal fun List<ScheduleItemDTO>.toEmployeeExams(
         groups: List<Group>,
         auditories: List<Auditory>
-): List<ScheduleItem.EmployeeExam> {
-    val resultList = mutableListOf<ScheduleItem.EmployeeExam>()
+): List<Exam.EmployeeExam> {
+    val resultList = mutableListOf<Exam.EmployeeExam>()
     forEach { scheduleItem ->
         scheduleItem.classes.map { lesson ->
             val lessonAuditories = lesson.auditories?.let { lessonAuditories ->
@@ -225,7 +228,7 @@ internal fun List<ScheduleItemDTO>.toEmployeeExams(
             val lessonGroups = lesson.studentGroups?.let { lessonGroups ->
                 groups.filter { it.number in lessonGroups }
             }
-            val mappedScheduleItem = ScheduleItem.EmployeeExam(
+            val mappedScheduleItem = Exam.EmployeeExam(
                     //This ID will be generated later
                     id = 0,
                     subject = lesson.subject ?: "",
@@ -236,7 +239,8 @@ internal fun List<ScheduleItemDTO>.toEmployeeExams(
                     startTime = lesson.startTime ?: "",
                     endTime = lesson.endTime ?: "",
                     studentGroups = lessonGroups ?: emptyList(),
-                    date = dateFormatter.parseOrDefault(scheduleItem.weekDay, Date())
+                    date = dateFormatter.parseOrDefault(scheduleItem.weekDay, Date()),
+                    isAddedByUser = false
             )
             resultList.add(mappedScheduleItem)
         }

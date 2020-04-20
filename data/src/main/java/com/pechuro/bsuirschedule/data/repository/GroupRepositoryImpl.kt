@@ -4,7 +4,6 @@ import com.pechuro.bsuirschedule.data.common.BaseRepository
 import com.pechuro.bsuirschedule.data.mappers.toDatabaseEntity
 import com.pechuro.bsuirschedule.data.mappers.toDomainEntity
 import com.pechuro.bsuirschedule.domain.entity.Group
-import com.pechuro.bsuirschedule.domain.exception.DataSourceException
 import com.pechuro.bsuirschedule.domain.repository.IGroupRepository
 import com.pechuro.bsuirschedule.domain.repository.ISpecialityRepository
 import com.pechuro.bsuirschedule.local.dao.GroupDao
@@ -68,11 +67,11 @@ class GroupRepositoryImpl(
             .map { cachedList ->
                 val allFaculties = specialityRepository.getAllFaculties().first()
                 val allSpecialities = specialityRepository.getAllSpecialities().first()
-                cachedList.map { groupCached ->
+                cachedList.mapNotNull { groupCached ->
                     val faculty = allFaculties.find { it.id == groupCached.facultyId }
-                            ?: throw DataSourceException.InvalidData
+                            ?: return@mapNotNull null
                     val speciality = allSpecialities.find { it.id == groupCached.specialityId }
-                            ?: throw DataSourceException.InvalidData
+                            ?: return@mapNotNull null
                     groupCached.toDomainEntity(
                             faculty = faculty,
                             speciality = speciality

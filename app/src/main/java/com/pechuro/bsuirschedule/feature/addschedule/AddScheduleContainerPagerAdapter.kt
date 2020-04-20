@@ -5,7 +5,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
-import com.pechuro.bsuirschedule.feature.addschedule.fragment.AddScheduleFragment
 
 class AddScheduleContainerPagerAdapter(
         fragmentManager: FragmentManager

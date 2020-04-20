@@ -3,6 +3,7 @@ package com.pechuro.bsuirschedule.ext
 import android.animation.Animator
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.annotation.Px
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
@@ -18,6 +19,14 @@ inline fun View.setSafeClickListener(
     val safeClickListener = OneFirePerIntervalClickListener(interval.milliseconds) {
         onClick(it)
     }
+    setOnClickListener(safeClickListener)
+}
+
+inline fun View.setSafeClickListener(
+        interval: ClickInterval = ClickInterval.NORMAL,
+        onClickListener: View.OnClickListener
+) {
+    val safeClickListener = OneFirePerIntervalClickListener(interval.milliseconds, onClickListener::onClick)
     setOnClickListener(safeClickListener)
 }
 
@@ -77,3 +86,6 @@ fun View.updateMargin(
         }
     }
 }
+
+val EditText.textString: String
+    get() = text?.toString() ?: ""

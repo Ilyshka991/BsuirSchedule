@@ -22,6 +22,7 @@ class GetGroups @Inject constructor(
             }
         }
         launch {
+            Logger.e("ASDASDASDASD")
             groupRepository.getAll().collect {
                 send(it)
             }

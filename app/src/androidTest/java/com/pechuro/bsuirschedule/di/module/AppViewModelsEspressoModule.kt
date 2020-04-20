@@ -6,7 +6,7 @@ import com.pechuro.bsuirschedule.common.factory.ViewModelFactory
 import com.pechuro.bsuirschedule.di.annotations.ViewModelKey
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel
 import com.pechuro.bsuirschedule.feature.flow.FlowViewModel
-import com.pechuro.bsuirschedule.feature.loadinfo.LoadInfoViewModel
+import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoViewModel
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetViewModel
 import com.pechuro.bsuirschedule.viewmodels.EspressoInfoLoadViewModel
 import dagger.Binds

@@ -5,7 +5,7 @@ import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.di.annotations.AppScope
 import com.pechuro.bsuirschedule.di.module.*
-import com.pechuro.bsuirschedule.feature.displayschedule.fragment.DisplayScheduleFragment
+import com.pechuro.bsuirschedule.feature.display.fragment.DisplayScheduleFragment
 import dagger.BindsInstance
 import dagger.Component
 

@@ -4,10 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.commit
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.ext.commit
-import com.pechuro.bsuirschedule.ext.currentFragment
-import com.pechuro.bsuirschedule.ext.thisTag
+import com.pechuro.bsuirschedule.common.BackPressedHandler
 import com.pechuro.bsuirschedule.feature.flow.FlowFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -28,14 +27,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (supportFragmentManager.currentFragment?.onBackPressed() == true) return
+        val flowFragment = supportFragmentManager.fragments.firstOrNull() as? BackPressedHandler
+        if (flowFragment?.onBackPressed() == true) return
         super.onBackPressed()
     }
 
     private fun showFlowFragment() {
         supportFragmentManager.commit {
-            val fragment = FlowFragment()
-            replace(activityHostFragment.id, fragment, fragment.thisTag)
+            replace(activityHostFragment.id, FlowFragment.newInstance())
         }
     }
 }

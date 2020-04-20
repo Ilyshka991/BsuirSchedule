@@ -15,11 +15,7 @@ internal fun <T> LiveData<T>.nonNull(): NonNullMediatorLiveData<T> {
     return mediator
 }
 
-internal inline fun <T> NonNullMediatorLiveData<T>.observe(owner: LifecycleOwner, crossinline observer: (t: T) -> Unit) {
-    this.observe(owner, Observer { observer(it) })
-}
-
-internal inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, crossinline observer: (t: T?) -> Unit) {
+internal inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, crossinline observer: (t: T) -> Unit) {
     this.observe(owner, Observer { observer(it) })
 }
 
@@ -28,3 +24,6 @@ internal inline fun <T> flowLiveData(crossinline block: suspend () -> Flow<T>): 
         Logger.e(it)
     })
 }.asLiveData()
+
+val <T>LiveData<T>.requireValue: T
+    get() = value ?: throw IllegalStateException("Value is null")

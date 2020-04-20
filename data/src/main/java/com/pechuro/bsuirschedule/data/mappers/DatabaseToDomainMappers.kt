@@ -151,7 +151,7 @@ internal fun GroupClassesItemComplex.toDomainEntity(
         auditories: List<Auditory>,
         employees: List<Employee>
 ) = run {
-    ScheduleItem.GroupLesson(
+    Lesson.GroupLesson(
             id = scheduleItem.id,
             subject = scheduleItem.subject,
             subgroupNumber = SubgroupNumber.getForValue(scheduleItem.subgroupNumber),
@@ -163,7 +163,8 @@ internal fun GroupClassesItemComplex.toDomainEntity(
             weekNumber = WeekNumber.getForIndex(scheduleItem.weekNumber),
             auditories = auditories,
             employees = employees,
-            priority = LessonPriority.getForValue(scheduleItem.priority)
+            priority = LessonPriority.getForValue(scheduleItem.priority),
+            isAddedByUser = scheduleItem.isAddedByUser
     )
 }
 
@@ -171,7 +172,7 @@ internal fun GroupExamItemComplex.toDomainEntity(
         auditories: List<Auditory>,
         employees: List<Employee>
 ) = run {
-    ScheduleItem.GroupExam(
+    Exam.GroupExam(
             id = scheduleItem.id,
             subject = scheduleItem.subject,
             subgroupNumber = SubgroupNumber.getForValue(scheduleItem.subgroupNumber),
@@ -181,7 +182,8 @@ internal fun GroupExamItemComplex.toDomainEntity(
             endTime = scheduleItem.endTime,
             date = scheduleItem.date,
             auditories = auditories,
-            employees = employees
+            employees = employees,
+            isAddedByUser = scheduleItem.isAddedByUser
     )
 }
 
@@ -190,7 +192,7 @@ internal fun EmployeeClassesItemComplex.toDomainEntity(
         auditories: List<Auditory>,
         groups: List<Group>
 ) = run {
-    ScheduleItem.EmployeeLesson(
+    Lesson.EmployeeLesson(
             id = scheduleItem.id,
             subject = scheduleItem.subject,
             subgroupNumber = SubgroupNumber.getForValue(scheduleItem.subgroupNumber),
@@ -202,7 +204,8 @@ internal fun EmployeeClassesItemComplex.toDomainEntity(
             weekNumber = WeekNumber.getForIndex(scheduleItem.weekNumber),
             auditories = auditories,
             studentGroups = groups,
-            priority = LessonPriority.getForValue(scheduleItem.priority)
+            priority = LessonPriority.getForValue(scheduleItem.priority),
+            isAddedByUser = scheduleItem.isAddedByUser
     )
 }
 
@@ -210,7 +213,7 @@ internal fun EmployeeExamItemComplex.toDomainEntity(
         auditories: List<Auditory>,
         groups: List<Group>
 ) = run {
-    ScheduleItem.EmployeeExam(
+    Exam.EmployeeExam(
             id = scheduleItem.id,
             subject = scheduleItem.subject,
             subgroupNumber = SubgroupNumber.getForValue(scheduleItem.subgroupNumber),
@@ -220,6 +223,7 @@ internal fun EmployeeExamItemComplex.toDomainEntity(
             endTime = scheduleItem.endTime,
             date = scheduleItem.date,
             auditories = auditories,
-            studentGroups = groups
+            studentGroups = groups,
+            isAddedByUser = scheduleItem.isAddedByUser
     )
 }

@@ -1,20 +1,30 @@
 package com.pechuro.bsuirschedule.feature.addschedule
 
+import android.content.Context
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.EventBus
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.ext.addOnTabSelectedListener
-import com.pechuro.bsuirschedule.ext.nonNull
-import com.pechuro.bsuirschedule.ext.observe
-import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
+import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel.State
 import kotlinx.android.synthetic.main.fragment_add_schedule_container.*
 
 class AddScheduleFragmentContainer : BaseFragment() {
+
+    interface ActionCallback {
+
+        fun onAddScheduleCompleted(schedules: List<Schedule>)
+    }
+
+    companion object {
+
+        const val TAG = "AddScheduleFragmentContainer"
+
+        fun newInstance() = AddScheduleFragmentContainer()
+    }
 
     override val layoutId: Int = R.layout.fragment_add_schedule_container
 
@@ -26,16 +36,28 @@ class AddScheduleFragmentContainer : BaseFragment() {
         initViewModel(AddScheduleViewModel::class, owner = this)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    private var actionCallback: ActionCallback? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        actionCallback = getCallbackOrNull()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initView()
         observeData()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        actionCallback = null
     }
 
     private fun initView() {
         addScheduleContainerToolbar.apply {
             setNavigationOnClickListener {
-                activity?.onBackPressed()
+                onComplete(emptyList())
             }
         }
         addScheduleContainerViewPager.apply {
@@ -66,7 +88,7 @@ class AddScheduleFragmentContainer : BaseFragment() {
     }
 
     private fun onComplete(schedules: List<Schedule>) {
-        EventBus.send(AddScheduleCompleteEvent(schedules))
+        actionCallback?.onAddScheduleCompleted(schedules)
     }
 
     private fun setActionsEnabled(enabled: Boolean) {

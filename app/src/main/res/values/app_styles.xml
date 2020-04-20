@@ -19,6 +19,7 @@
         <item name="accentColor">@color/amber_200</item>
 
         <item name="backgroundColor">@color/white</item>
+        <item name="secondBackgroundColor">@color/grey_100</item>
         <item name="backgroundDarkColor">@color/grey_800</item>
         <item name="rippleColor">@color/grey_300</item>
         <item name="dividerColor">@color/grey_400</item>
@@ -32,12 +33,16 @@
         <item name="chipUncheckedColor">@color/grey_100</item>
 
         <item name="textDefaultColor">@color/grey_600</item>
+        <item name="textSemiBoldColor">@color/grey_800</item>
         <item name="titleColor">@color/grey_700</item>
         <item name="tabSelectedColor">?attr/textDefaultColor</item>
         <item name="tabUnselectedColor">@color/grey_400</item>
+        <item name="textErrorColor">@color/amber_900</item>
 
         <item name="menuIconColor">?attr/backgroundColor</item>
         <item name="fabBackgroundColor">@color/amber_500</item>
+
+        <item name="schedule_item_background_color">?attr/backgroundColor</item>
     </style>
 
     <style name="SplashTheme" parent="AppTheme">

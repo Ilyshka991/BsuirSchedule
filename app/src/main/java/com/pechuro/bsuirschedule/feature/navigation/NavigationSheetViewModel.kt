@@ -111,30 +111,34 @@ class NavigationSheetViewModel @Inject constructor(
                 .filter { it is Schedule.GroupClasses || it is Schedule.EmployeeClasses }
         if (allClasses.isNotEmpty()) {
             resultList += NavigationSheetItemInformation.Title(ScheduleType.CLASSES)
-            resultList += allClasses.map {
-                val updateState = when {
-                    updateStates.containsKey(it) -> updateStates.getValue(it)
-                    it in availableForUpdateScheduleList -> UpdateState.AVAILABLE
-                    else -> UpdateState.NOT_AVAILABLE
-                }
-                val isSelected = it == selectedSchedule
-                NavigationSheetItemInformation.Content(it, updateState, isSelected)
-            }
+            resultList += allClasses
+                    .sortedBy { it.name }
+                    .map {
+                        val updateState = when {
+                            updateStates.containsKey(it) -> updateStates.getValue(it)
+                            it in availableForUpdateScheduleList -> UpdateState.AVAILABLE
+                            else -> UpdateState.NOT_AVAILABLE
+                        }
+                        val isSelected = it == selectedSchedule
+                        NavigationSheetItemInformation.Content(it, updateState, isSelected)
+                    }
         }
 
         val allExams = scheduleList
                 .filter { it is Schedule.GroupExams || it is Schedule.EmployeeExams }
         if (allExams.isNotEmpty()) {
             resultList += NavigationSheetItemInformation.Title(ScheduleType.EXAMS)
-            resultList += allExams.map {
-                val updateState = when {
-                    updateStates.containsKey(it) -> updateStates.getValue(it)
-                    it in availableForUpdateScheduleList -> UpdateState.AVAILABLE
-                    else -> UpdateState.NOT_AVAILABLE
-                }
-                val isSelected = it == selectedSchedule
-                NavigationSheetItemInformation.Content(it, updateState, isSelected)
-            }
+            resultList += allExams
+                    .sortedBy { it.name }
+                    .map {
+                        val updateState = when {
+                            updateStates.containsKey(it) -> updateStates.getValue(it)
+                            it in availableForUpdateScheduleList -> UpdateState.AVAILABLE
+                            else -> UpdateState.NOT_AVAILABLE
+                        }
+                        val isSelected = it == selectedSchedule
+                        NavigationSheetItemInformation.Content(it, updateState, isSelected)
+                    }
         }
         return resultList.toList()
     }

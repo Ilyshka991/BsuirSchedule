@@ -121,26 +121,34 @@ class SpecialityRepositoryImpl(
 
     private suspend fun getSpecialitiesFromDao() = dao.getAllSpecialities()
             .map { list ->
-                list.map { specialityCached ->
-                    val faculty = specialityCached.facultyId?.let {
-                        performDaoCall { dao.getFacultyById(it) }
+                withContext(Dispatchers.IO) {
+                    list.map { specialityCached ->
+                        async {
+                            val faculty = specialityCached.facultyId?.let {
+                                performDaoCall { dao.getFacultyById(it) }
+                            }
+                            val educationForm = performDaoCall {
+                                dao.getEducationFormById(specialityCached.educationFormId)
+                            }
+                            specialityCached.toDomainEntity(
+                                    faculty = faculty?.toDomainEntity(),
+                                    educationForm = educationForm.toDomainEntity()
+                            )
+                        }
                     }
-                    val educationForm = performDaoCall {
-                        dao.getEducationFormById(specialityCached.educationFormId)
-                    }
-                    specialityCached.toDomainEntity(
-                            faculty = faculty?.toDomainEntity(),
-                            educationForm = educationForm.toDomainEntity()
-                    )
-                }
+                }.awaitAll()
             }
             .flowOn(Dispatchers.IO)
 
     private suspend fun getFacultiesFromDao() = dao.getAllFaculties()
             .map { list ->
-                list.map { facultyCached ->
-                    facultyCached.toDomainEntity()
-                }
+                withContext(Dispatchers.IO) {
+                    list.map { facultyCached ->
+                        async {
+                            facultyCached.toDomainEntity()
+                        }
+                    }
+                }.awaitAll()
             }
             .flowOn(Dispatchers.IO)
 

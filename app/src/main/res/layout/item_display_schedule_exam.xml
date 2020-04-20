@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="8dp"
+    app:contentPadding="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/displayExamTitle"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/textSemiBoldColor"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="ОАиП" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/displayExamStartTime"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textColor="?attr/textSemiBoldColor"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/displayExamTitle"
+            app:layout_constraintTop_toBottomOf="@+id/displayExamTitle"
+            tools:text="16:55" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/displayExamAuditories"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/displayExamTitle"
+            app:layout_constraintStart_toEndOf="@+id/displayExamTitle"
+            tools:text="505-5" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/displayExamDate"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:textColor="?attr/textSemiBoldColor"
+            android:textSize="18sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/displayExamStartTime"
+            app:layout_constraintStart_toEndOf="@+id/displayExamStartTime"
+            tools:text="11.11.2011" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/displayExamSubgroup"
+            style="@style/DefaultText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="1"
+            android:textSize="14sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/displayExamTitle"
+            app:layout_constraintEnd_toStartOf="@+id/displayExamType"
+            app:layout_constraintStart_toEndOf="@+id/displayExamAuditories"
+            tools:text="1 Подгруппа" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/displayExamType"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/textSemiBoldColor"
+            android:textSize="18sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/displayExamTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Экзамен" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/displayExamInfo"
+            style="@style/DefaultText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:maxLines="1"
+            android:textSize="14sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/displayExamDate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/displayExamDate"
+            tools:text="Луцик Юрий" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/displayExamsNote"
+            style="@style/DefaultText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="2"
+            android:textColor="?attr/textSemiBoldColor"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/displayExamStartTime"
+            app:layout_constraintTop_toBottomOf="@+id/displayExamStartTime"
+            tools:text="Это заметка" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

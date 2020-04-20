@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/staffEmployeePhoto"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="20dp"
+        android:contentDescription="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_photo_load_progress" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/suggestionEmployeeFirstName"
+        style="@style/DefaultText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="2dp"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/staffEmployeeLastName"
+        app:layout_constraintStart_toEndOf="@+id/staffEmployeePhoto"
+        app:layout_constraintTop_toTopOf="@+id/staffEmployeePhoto"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Иван" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/staffEmployeeMiddleName"
+        style="@style/DefaultText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="20sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/suggestionEmployeeFirstName"
+        app:layout_constraintStart_toEndOf="@+id/suggestionEmployeeFirstName"
+        tools:text="Иванович" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/staffEmployeeLastName"
+        style="@style/DefaultText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="2dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/staffEmployeePhoto"
+        app:layout_constraintStart_toEndOf="@+id/staffEmployeePhoto"
+        app:layout_constraintTop_toBottomOf="@+id/suggestionEmployeeFirstName"
+        tools:text="Глецевич" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/staffEmployeeDepartmentAbbreviation"
+        style="@style/DefaultText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/staffEmployeePhoto"
+        app:layout_constraintTop_toBottomOf="@+id/staffEmployeePhoto"
+        tools:text="ЭВМ" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/staffEmployeeRank"
+        style="@style/DefaultText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/staffEmployeeDepartmentAbbreviation"
+        app:layout_constraintStart_toEndOf="@+id/staffEmployeeDepartmentAbbreviation"
+        tools:text="Ранг" />
+</androidx.constraintlayout.widget.ConstraintLayout>

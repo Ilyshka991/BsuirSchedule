@@ -3,20 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/backgroundColor">
+    android:layout_height="match_parent">
 
-    <FrameLayout
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/navigationFragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <fragment
-            android:id="@+id/navigationFragmentHost"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </FrameLayout>
+        android:layout_height="match_parent" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomBarParentView"
@@ -48,7 +40,7 @@
             android:src="@drawable/ic_schedule_go_to_date" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/bottomBarDisplayAddButton"
+            android:id="@+id/bottomBarAddScheduleItemButton"
             style="@style/IconButton"
             android:src="@drawable/ic_add" />
     </com.google.android.material.bottomappbar.BottomAppBar>
@@ -57,6 +49,7 @@
         android:id="@+id/bottomBarFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         app:backgroundTint="?attr/fabBackgroundColor"
         app:layout_anchor="@+id/bottomBarParentView"
         app:tint="?attr/menuIconColor" />

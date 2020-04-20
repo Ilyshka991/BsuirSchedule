@@ -36,5 +36,7 @@ data class EmployeeItemClassesCached(
         @ColumnInfo(name = "week_day")
         val weekDay: Int,
         @ColumnInfo(name = "priority")
-        val priority: Int
+        val priority: Int,
+        @ColumnInfo(name = "is_added_by_user")
+        val isAddedByUser: Boolean
 )

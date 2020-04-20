@@ -24,6 +24,8 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="chipBackgroundColor">@color/chip_color</item>
         <item name="android:textColor">?attr/buttonEnabledTextColor</item>
+        <item name="chipIconTint">?attr/buttonEnabledTextColor</item>
+        <item name="closeIconTint">?attr/buttonEnabledTextColor</item>
         <item name="android:textAppearance">@style/ChipTextAppearance</item>
     </style>
 
@@ -46,7 +48,7 @@
         <item name="android:textSize">24sp</item>
     </style>
 
-    <style name="TitleTextAppearance">
+    <style name="TitleTextAppearance" parent="DefaultText">
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -64,8 +66,43 @@
         <item name="boxStrokeColor">?attr/textDefaultColor</item>
     </style>
 
+    <style name="FilledTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="hintTextColor">?attr/textDefaultColor</item>
+        <item name="boxBackgroundColor">?attr/secondBackgroundColor</item>
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerRadius">12dp</item>
+    </style>
+
+    <style name="AutoValidateTextInputLayout" parent="OutlinedTextInputLayout">
+        <item name="errorTextColor">?attr/textErrorColor</item>
+        <item name="errorIconDrawable">@drawable/ic_error</item>
+        <item name="errorIconTint">?attr/textErrorColor</item>
+        <item name="errorTextAppearance">@style/AutoValidateTextErrorAppearance</item>
+        <item name="hintTextAppearance">@style/AutoValidateTextHintAppearance</item>
+        <item name="background">@null</item>
+    </style>
+
+    <style name="AutoValidateTextErrorAppearance">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AutoValidateTextHintAppearance">
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="TextInput" parent="Widget.AppCompat.EditText">
         <item name="android:textColor">?attr/textDefaultColor</item>
         <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="ModifyItemLabeledText">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="text_size">22sp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 </resources>

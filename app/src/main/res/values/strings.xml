@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bsuir Schedule</string>
+    <string name="app_name" translatable="false">Bsuir Schedule</string>
 
     <string name="notification_group_actions_label">Schedule actions</string>
     <string name="notification_channel_update_label">Updates</string>
@@ -15,15 +15,12 @@
     <string name="add_schedule_title">Add new schedule</string>
     <string name="add_schedule_error_types_not_specified">Please, select type</string>
     <string name="add_schedule_error_empty_suggestions">Please, update information</string>
-    <string name="add_schedule_error_blank_schedule_name">Please, fill in schedule name</string>
+    <string name="add_schedule_error_blank_schedule_name">Please, enter schedule name</string>
     <string name="add_schedule_error_unknown_schedule">Unknown schedule</string>
     <string name="add_schedule_hint_enter_schedule">Enter schedule</string>
     <string name="add_schedule_tab_employees">Employees</string>
     <string name="add_schedule_tab_students">Students</string>
     <string name="add_schedule_msg_type">Type:</string>
-    <string name="add_schedule_msg_suggestion_group_course">course: %1$d</string>
-    <string name="add_schedule_msg_suggestion_employee_department">Department: %1$s</string>
-    <string name="add_schedule_msg_empty_suggestions">Nothing there</string>
 
     <string name="info_load_title">Info loading</string>
     <string name="info_load_message">Information is loading,\nplease wait</string>
@@ -38,8 +35,8 @@
     <string name="navigation_msg_schedule_update_available">Update is available</string>
     <string name="navigation_msg_schedule_update_success">Updated</string>
 
-    <string name="update_schedule_classes_title">Update classes for %1$s is available!</string>
-    <string name="update_schedule_exams_title">Update exams for %1$s is available!</string>
+    <string name="update_schedule_classes_title">Classes schedule for %1$s has changed!</string>
+    <string name="update_schedule_exams_title">Exams schedule for %1$s has changed!</string>
     <string name="update_schedule_action_update">Update</string>
     <string name="update_schedule_action_cancel">Cancel</string>
     <string name="update_schedule_action_not_remind">Don\'t remind</string>
@@ -48,15 +45,84 @@
 
     <string name="settings_title">Settings</string>
 
-    <string name="display_schedule_tab_title">%1$s, week: %2$d</string>
+    <string name="display_schedule_tab_title">%1$s, week %2$d</string>
 
-    <string name="display_schedule_item_msg_subgroup">%1$d Subgroup</string>
-    <string name="display_schedule_item_msg_week_numbers">Weeks %1$s</string>
+    <string name="display_schedule_item_msg_subgroup">%1$d subgroup</string>
+    <string name="display_schedule_item_msg_week_numbers">weeks: %1$s</string>
     <string name="display_schedule_item_msg_empty_list">Nothing there</string>
 
-    <string name="display_options_sheet_title_type">Display by: %1$s</string>
+    <string name="display_options_sheet_title_type">Display by %1$s</string>
     <string name="display_options_sheet_msg_type_weeks">weeks</string>
     <string name="display_options_sheet_msg_type_days">days</string>
     <string name="display_options_sheet_title_subgroup">Display %1$d subgroup</string>
     <string name="display_options_sheet_title_all_group">Display all group</string>
+
+    <string name="schedule_item_options_sheet_title">%1$s</string>
+    <string name="schedule_item_options_sheet_action_edit">Edit</string>
+    <string name="schedule_item_options_sheet_action_delete">Delete</string>
+
+    <string name="modify_schedule_item_title_edit">Edit %1$s</string>
+    <string name="modify_schedule_item_title_add">Add new %1$s</string>
+    <string name="modify_schedule_item_msg_exam">exam</string>
+    <string name="modify_schedule_item_msg_lesson">class</string>
+    <string name="modify_schedule_item_action_done">Done</string>
+    <string name="modify_schedule_item_hint_subject">Subject</string>
+    <string name="modify_schedule_item_label_type">Type:</string>
+    <string name="modify_schedule_item_label_weekday">Day:</string>
+    <string name="modify_schedule_item_label_week_numbers">Week:</string>
+    <string name="modify_schedule_item_label_start_time">Start time:</string>
+    <string name="modify_schedule_item_label_end_time">End time:</string>
+    <string name="modify_schedule_item_label_groups">Groups:</string>
+    <string name="modify_schedule_item_label_employees">Employees:</string>
+    <string name="modify_schedule_item_label_subgroup_number">Subgroup:</string>
+    <string name="modify_schedule_item_label_auditories">Auditories:</string>
+    <string name="modify_schedule_item_hint_note">Note</string>
+    <string name="modify_schedule_item_label_priority">Priority:</string>
+    <string name="modify_schedule_item_label_date">Date:</string>
+    <string name="modify_schedule_item_action_add">add</string>
+    <string name="modify_schedule_item_title_select_type">Select lesson type</string>
+    <string name="modify_schedule_item_title_select_priority">Select priority</string>
+    <string name="modify_schedule_item_title_select_subgroup">Select subgroup</string>
+    <string name="modify_schedule_item_title_select_weekday">Select weekday</string>
+    <string name="modify_schedule_item_title_select_weeknumber">Select weeks</string>
+
+    <string name="lesson_priotity_lowest">Lowest</string>
+    <string name="lesson_priotity_low">Low</string>
+    <string name="lesson_priotity_medium">Medium</string>
+    <string name="lesson_priotity_high">High</string>
+
+    <string name="subgroup_number_all">All group</string>
+    <string name="subgroup_number_first">First</string>
+    <string name="subgroup_number_second">Second</string>
+
+    <string name="staff_list_hint_enter_group_number">Enter group number</string>
+    <string name="staff_list_hint_enter_employee_name">Enter employee name</string>
+    <string name="staff_list_hint_enter_auditory">Enter auditory</string>
+    <string name="staff_list_msg_group_course">course: %1$d</string>
+    <string name="staff_list_msg_employee_department">Department: %1$s</string>
+    <string name="staff_list_msg_auditory_capacity">capacity: %1$d</string>
+    <string name="staff_list_msg_empty">Not found</string>
+
+    <string name="options_dialog_action_done">done</string>
+
+    <string-array name="lesson_types">
+        <item>ЛК</item>
+        <item>ПЗ</item>
+        <item>ЛР</item>
+    </string-array>
+
+    <string-array name="exam_types">
+        <item>Экзамен</item>
+        <item>Консультация</item>
+    </string-array>
+
+    <string-array name="weekdays">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
 </resources>
