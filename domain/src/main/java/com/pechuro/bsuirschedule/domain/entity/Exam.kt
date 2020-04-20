@@ -1,10 +1,9 @@
 package com.pechuro.bsuirschedule.domain.entity
 
 import kotlinx.android.parcel.Parcelize
-import java.util.*
 
 sealed class Exam(
-        open val date: Date
+        open val date: LocalDate
 ) : ScheduleItem {
 
     @Parcelize
@@ -14,11 +13,11 @@ sealed class Exam(
             override val subgroupNumber: SubgroupNumber,
             override val lessonType: String,
             override val note: String,
-            override val startTime: String,
-            override val endTime: String,
+            override val startTime: LocalTime,
+            override val endTime: LocalTime,
             override val auditories: List<Auditory>,
             override val isAddedByUser: Boolean,
-            override val date: Date,
+            override val date: LocalDate,
             val employees: List<Employee>
     ) : Exam(
             date = date
@@ -31,11 +30,11 @@ sealed class Exam(
             override val subgroupNumber: SubgroupNumber,
             override val lessonType: String,
             override val note: String,
-            override val startTime: String,
-            override val endTime: String,
+            override val startTime: LocalTime,
+            override val endTime: LocalTime,
             override val auditories: List<Auditory>,
             override val isAddedByUser: Boolean,
-            override val date: Date,
+            override val date: LocalDate,
             val studentGroups: List<Group>
     ) : Exam(
             date = date

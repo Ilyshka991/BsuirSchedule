@@ -1,5 +1,7 @@
 package com.pechuro.bsuirschedule.feature.modifyitem
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
@@ -15,15 +17,12 @@ import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.confirmationdialog.ConfirmationDialog
 import com.pechuro.bsuirschedule.feature.confirmationdialog.ConfirmationDialogButtonData
-import com.pechuro.bsuirschedule.feature.display.fragment.SCHEDULE_ITEM_DATE_FORMAT_PATTERN
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemViewModel.State.Complete
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialog
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogButtonData
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogCheckableButtonData
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_modify_schedule_item.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 @Parcelize
 data class ModifyScheduleItemFragmentArgs(
@@ -62,8 +61,6 @@ class ModifyScheduleItemFragment : BaseFragment() {
     private val args: ModifyScheduleItemFragmentArgs by args(BUNDLE_ARGS)
 
     private var actionCallback: ActionCallback? = null
-
-    private val dateFormatter = SimpleDateFormat(SCHEDULE_ITEM_DATE_FORMAT_PATTERN, Locale.getDefault())
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -156,6 +153,24 @@ class ModifyScheduleItemFragment : BaseFragment() {
         modifyScheduleItemWeekNumbers.setSafeClickListener {
             selectWeekNumber()
         }
+        modifyScheduleItemStartTime.setSafeClickListener {
+            val current = viewModel.dataProvider.startTimeData.requireValue
+            pickTime(current) {
+                viewModel.dataProvider.setStartTime(it)
+            }
+        }
+        modifyScheduleItemEndTime.setSafeClickListener {
+            val current = viewModel.dataProvider.endTimeData.requireValue
+            pickTime(current) {
+                viewModel.dataProvider.setEndTime(it)
+            }
+        }
+        modifyScheduleItemDate.setSafeClickListener {
+            val current = viewModel.dataProvider.dateData.requireValue
+            pickDate(current) {
+                viewModel.dataProvider.setDate(it)
+            }
+        }
     }
 
     private fun observeData() {
@@ -188,10 +203,10 @@ class ModifyScheduleItemFragment : BaseFragment() {
                 modifyScheduleItemSubgroupNumber.setMessage(formatted)
             }
             startTimeData.nonNull().observe(viewLifecycleOwner) { startTime ->
-                modifyScheduleItemStartTime.setMessage(startTime)
+                modifyScheduleItemStartTime.setMessage(startTime.formattedString)
             }
             endTimeData.nonNull().observe(viewLifecycleOwner) { endTime ->
-                modifyScheduleItemEndTime.setMessage(endTime)
+                modifyScheduleItemEndTime.setMessage(endTime.formattedString)
             }
             priorityData.nonNull().observe(viewLifecycleOwner) { priority ->
                 val formatted = getString(priority.formattedStringRes).toLowerCase()
@@ -205,7 +220,7 @@ class ModifyScheduleItemFragment : BaseFragment() {
                 modifyScheduleItemWeekNumbers.setMessage(formattedWeekNumbers)
             }
             dateData.nonNull().observe(viewLifecycleOwner) { date ->
-                modifyScheduleItemDate.setMessage(dateFormatter.format(date))
+                modifyScheduleItemDate.setMessage(date.formattedString)
             }
             auditoriesData.nonNull().observe(viewLifecycleOwner) {
                 fillAuditories(it)
@@ -442,5 +457,31 @@ class ModifyScheduleItemFragment : BaseFragment() {
                         text = getString(R.string.action_cancel)))
                 .build()
                 .show(childFragmentManager, ConfirmationDialog.TAG)
+    }
+
+    private fun pickTime(currentTime: LocalTime, onPicked: (LocalTime) -> Unit) {
+        TimePickerDialog(
+                requireContext(),
+                TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+                    val time = LocalTime.of(hourOfDay, minute)
+                    onPicked(time)
+                },
+                currentTime.hour,
+                currentTime.minute,
+                true
+        ).show()
+    }
+
+    private fun pickDate(currentDate: LocalDate, onPicked: (LocalDate) -> Unit) {
+        DatePickerDialog(
+                requireContext(),
+                DatePickerDialog.OnDateSetListener { _, year, month, day ->
+                    val selectedDate = LocalDate(year, month, day)
+                    onPicked(selectedDate)
+                },
+                currentDate.year,
+                currentDate.month,
+                currentDate.day
+        ).show()
     }
 }

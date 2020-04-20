@@ -29,9 +29,9 @@ data class EmployeeItemExamCached(
         @ColumnInfo(name = "note")
         val note: String,
         @ColumnInfo(name = "start_time")
-        val startTime: String,
+        val startTime: Date,
         @ColumnInfo(name = "end_time")
-        val endTime: String,
+        val endTime: Date,
         @ColumnInfo(name = "week_day")
         val date: Date,
         @ColumnInfo(name = "is_added_by_user")

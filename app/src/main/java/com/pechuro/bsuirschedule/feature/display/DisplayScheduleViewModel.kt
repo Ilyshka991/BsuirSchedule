@@ -135,7 +135,7 @@ class DisplayScheduleViewModel @Inject constructor(
 
     private fun List<ScheduleItem>.mapToExams(): List<DisplayScheduleItem.Exams> = this
             .filterIsInstance<Exam>()
-            .sortedBy { it.date }
+            .sortedWith(compareBy<Exam> { it.date }.thenBy { it.startTime })
             .map(DisplayScheduleItem::Exams)
 
     sealed class Event {

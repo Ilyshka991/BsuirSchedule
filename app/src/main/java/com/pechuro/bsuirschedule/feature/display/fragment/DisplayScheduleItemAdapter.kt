@@ -18,8 +18,6 @@ import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import kotlinx.android.synthetic.main.item_display_schedule_classes.*
 import kotlinx.android.synthetic.main.item_display_schedule_exam.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
 
@@ -38,8 +36,6 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
 private const val CLASSES_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_classes
 private const val EXAMS_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_exam
 private const val EMPTY_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_empty
-
-const val SCHEDULE_ITEM_DATE_FORMAT_PATTERN = "dd.MM.yyyy"
 
 class DisplayScheduleItemAdapter(
         onClickCallback: (data: DisplayScheduleItem) -> Unit,
@@ -104,8 +100,8 @@ class DisplayScheduleItemAdapter(
                 displayClassesAuditories.updatePadding(right = if (formattedAuditories.isNotEmpty()) defaultItemPadding else 0)
                 displayClassesSubgroup.isVisible = subgroupNumber != SubgroupNumber.ALL
                 displayClassesSubgroup.text = itemView.context.getString(R.string.display_schedule_item_msg_subgroup, subgroupNumber.value)
-                displayClassesStartTime.text = startTime
-                displayClassesEndTime.text = endTime
+                displayClassesStartTime.text = startTime.formattedString
+                displayClassesEndTime.text = endTime.formattedString
                 displayClassesNote.isVisible = note.isNotEmpty() && note.isNotBlank()
                 displayClassesNote.text = note
                 if (data is DisplayScheduleItem.WeekClasses) {
@@ -129,15 +125,13 @@ class DisplayScheduleItemAdapter(
 
     private class ExamsViewHolder(view: View) : BaseViewHolder<DisplayScheduleItem.Exams>(view) {
 
-        private val dateFormatter = SimpleDateFormat(SCHEDULE_ITEM_DATE_FORMAT_PATTERN, Locale.getDefault())
-
         override fun onBind(data: DisplayScheduleItem.Exams) {
             val scheduleItem = data.scheduleItem
             data.scheduleItem.run {
-                displayExamStartTime.text = startTime
+                displayExamStartTime.text = startTime.formattedString
                 displayExamAuditories.text = auditories.formatAuditories()
                 displayExamTitle.text = subject
-                displayExamDate.text = dateFormatter.format(date)
+                displayExamDate.text = date.formattedString
                 displayExamSubgroup.isVisible = subgroupNumber != SubgroupNumber.ALL
                 displayExamSubgroup.text = itemView.context.getString(
                         R.string.display_schedule_item_msg_subgroup,
@@ -163,9 +157,9 @@ class DisplayScheduleItemAdapter(
     }
 }
 
-private fun List<WeekNumber>.formatWeekNumbers() = joinToString(separator = ",") { it.formattedString}
+private fun List<WeekNumber>.formatWeekNumbers() = joinToString(separator = ",") { it.formattedString }
 
-private fun List<Auditory>.formatAuditories() = joinToString(separator = ",") { it.formattedName}
+private fun List<Auditory>.formatAuditories() = joinToString(separator = ",") { it.formattedName }
 
 private fun List<Employee>.formatEmployees() = joinToString(separator = ",") { it.abbreviation }
 

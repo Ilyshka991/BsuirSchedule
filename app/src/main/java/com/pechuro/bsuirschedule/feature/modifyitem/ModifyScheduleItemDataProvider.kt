@@ -6,7 +6,6 @@ import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.addIfEmpty
 import com.pechuro.bsuirschedule.ext.getWeekDay
 import com.pechuro.bsuirschedule.ext.requireValue
-import java.text.SimpleDateFormat
 import java.util.*
 
 class ModifyScheduleItemDataProvider(
@@ -31,12 +30,12 @@ class ModifyScheduleItemDataProvider(
     val noteData: LiveData<String>
         get() = _noteData
 
-    private val _startTimeData = MutableLiveData<String>()
-    val startTimeData: LiveData<String>
+    private val _startTimeData = MutableLiveData<LocalTime>()
+    val startTimeData: LiveData<LocalTime>
         get() = _startTimeData
 
-    private val _endTimeData = MutableLiveData<String>()
-    val endTimeData: LiveData<String>
+    private val _endTimeData = MutableLiveData<LocalTime>()
+    val endTimeData: LiveData<LocalTime>
         get() = _endTimeData
 
     private val _priorityData = MutableLiveData<LessonPriority>()
@@ -51,8 +50,8 @@ class ModifyScheduleItemDataProvider(
     val weekNumberData: LiveData<SortedSet<WeekNumber>>
         get() = _weekNumberData
 
-    private val _dateData = MutableLiveData<Date>()
-    val dateData: LiveData<Date>
+    private val _dateData = MutableLiveData<LocalDate>()
+    val dateData: LiveData<LocalDate>
         get() = _dateData
 
     private val _auditoriesData = MutableLiveData<Set<Auditory>>()
@@ -67,8 +66,6 @@ class ModifyScheduleItemDataProvider(
     val studentGroupsData: LiveData<Set<Group>>
         get() = _studentGroupsData
 
-    private val timeFormatter = SimpleDateFormat(SCHEDULE_ITEM_TIME_FORMAT_PATTERN, Locale.getDefault())
-
     init {
         initData()
     }
@@ -77,10 +74,6 @@ class ModifyScheduleItemDataProvider(
         val resultItems = getResultScheduleItems()
         val isItemsTheSame = resultItems.containsAll(initialItems) && initialItems.containsAll(resultItems)
         return !isItemsTheSame
-    }
-
-    fun revertChanges() {
-        initData()
     }
 
     fun setSubject(value: String) {
@@ -154,15 +147,15 @@ class ModifyScheduleItemDataProvider(
         }
     }
 
-    fun setStartTime(value: Date) {
-        _startTimeData.value = timeFormatter.format(value)
+    fun setStartTime(value: LocalTime) {
+        _startTimeData.value = value
     }
 
-    fun setEndTime(value: Date) {
-        _endTimeData.value = timeFormatter.format(value)
+    fun setEndTime(value: LocalTime) {
+        _endTimeData.value = value
     }
 
-    fun setDate(value: Date) {
+    fun setDate(value: LocalDate) {
         _dateData.value = value
     }
 
@@ -179,14 +172,14 @@ class ModifyScheduleItemDataProvider(
 
         setNote(scheduleItem?.note ?: "")
 
-        val defaultTime = timeFormatter.format(Date())
+        val defaultTime = LocalTime.current()
         _startTimeData.value = scheduleItem?.startTime ?: defaultTime
         _endTimeData.value = scheduleItem?.endTime ?: defaultTime
 
         var priority = LessonPriority.getDefaultForLessonType(lessonType)
         var weekDay = Calendar.getInstance().getWeekDay()
         var weekNumbers = listOf(WeekNumber.calculateCurrentWeekNumber())
-        var date = Date()
+        var date = LocalDate.current()
         when (scheduleItem) {
             is Lesson -> {
                 priority = scheduleItem.priority
