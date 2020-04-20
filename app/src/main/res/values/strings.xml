@@ -104,6 +104,7 @@
     <string name="staff_list_msg_empty">Not found</string>
 
     <string name="options_dialog_action_done">done</string>
+    <string name="options_dialog_action_cancel">cancel</string>
 
     <string-array name="lesson_types">
         <item>ЛК</item>

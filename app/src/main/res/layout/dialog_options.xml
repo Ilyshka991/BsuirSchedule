@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_option_dialog">
+    android:background="@drawable/background_dialog_fragment">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/optionsDialogTitle"

@@ -4,7 +4,8 @@ import android.graphics.drawable.Drawable
 
 data class OptionDialogButtonData(
         val text: String,
-        val icon: Drawable? = null
+        val icon: Drawable? = null,
+        val selected: Boolean
 )
 
 data class OptionDialogCheckableButtonData(

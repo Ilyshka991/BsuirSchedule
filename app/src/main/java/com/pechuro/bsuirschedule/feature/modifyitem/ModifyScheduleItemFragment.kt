@@ -295,8 +295,12 @@ class ModifyScheduleItemFragment : BaseFragment() {
 
     private fun selectLessonType() {
         val availableTypes = getAvailableLessonTypes()
+        val selectedType = viewModel.dataProvider.lessonTypeData.requireValue
         val options = availableTypes.map { type ->
-            OptionDialogButtonData(text = type)
+            OptionDialogButtonData(
+                    text = type,
+                    selected = type == selectedType
+            )
         }
         val listener = object : OptionDialog.OptionButtonClickListener {
             override fun onClick(position: Int) {
@@ -313,13 +317,15 @@ class ModifyScheduleItemFragment : BaseFragment() {
 
     private fun selectPriority() {
         val availablePriorities = LessonPriority.values()
+        val selectedPriority = viewModel.dataProvider.priorityData.requireValue
         val options = availablePriorities.map { prioriry ->
             val drawable = ShapeDrawable(OvalShape()).apply {
                 paint.color = requireContext().color(prioriry.formattedColorRes)
             }
             OptionDialogButtonData(
                     text = getString(prioriry.formattedStringRes),
-                    icon = drawable
+                    icon = drawable,
+                    selected = prioriry == selectedPriority
             )
         }
         val listener = object : OptionDialog.OptionButtonClickListener {
@@ -337,8 +343,12 @@ class ModifyScheduleItemFragment : BaseFragment() {
 
     private fun selectSubgroupNumber() {
         val availableNumbers = SubgroupNumber.values()
+        val selectedSubgroupNumber = viewModel.dataProvider.subgroupNumberData.requireValue
         val options = availableNumbers.map { number ->
-            OptionDialogButtonData(text = getString(number.formattedStringRes))
+            OptionDialogButtonData(
+                    text = getString(number.formattedStringRes),
+                    selected = number == selectedSubgroupNumber
+            )
         }
         val listener = object : OptionDialog.OptionButtonClickListener {
             override fun onClick(position: Int) {
@@ -355,8 +365,12 @@ class ModifyScheduleItemFragment : BaseFragment() {
 
     private fun selectWeekDay() {
         val availableWeekDays = WeekDay.values()
+        val selectedWeekDay = viewModel.dataProvider.weekDayData.requireValue
         val options = availableWeekDays.map { day ->
-            OptionDialogButtonData(text = day.getFormattedString(resources))
+            OptionDialogButtonData(
+                    text = day.getFormattedString(resources),
+                    selected = day == selectedWeekDay
+            )
         }
         val listener = object : OptionDialog.OptionButtonClickListener {
             override fun onClick(position: Int) {
