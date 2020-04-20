@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.domain.entity.Auditory
+import com.pechuro.bsuirschedule.domain.entity.Employee
 import com.pechuro.bsuirschedule.domain.entity.Lesson
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_employee_details.*
@@ -148,6 +149,7 @@ class LessonDetailsAdapter(
             holder.employeeDetailsFullName.text = with(employee) {
                 "$firstName $middleName $lastName"
             }
+            holder.employeeDetailsAdditionalInfo.text = employee.getAdditionalInfoText()
             Glide.with(holder.itemView)
                     .load(employee.photoLink)
                     .placeholder(R.drawable.employee_placeholder)
@@ -155,6 +157,9 @@ class LessonDetailsAdapter(
                     .circleCrop()
                     .into(holder.employeeDetailsPhoto)
         }
+
+        private fun Employee.getAdditionalInfoText(): String =
+                "$rank${if (rank.isNotEmpty()) ", " else ""}${department.name}"
     }
 
     private class EmployeeViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
