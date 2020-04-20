@@ -35,14 +35,25 @@
         app:layout_constraintTop_toBottomOf="@id/lessonDetailsName"
         tools:text="13:45 - 15:00" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/lessonDetailsInfoRecycler"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/lessonDetailsInfoViewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lessonDetailsTime" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/lessonDetailsInfoTabLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lessonDetailsInfoViewPager"
+        app:tabBackground="@drawable/selector_lesson_details_employee_indicator"
+        app:tabIndicatorHeight="0dp"
+        app:tabRippleColor="@null" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/lessonDetailsWeeks"
@@ -54,7 +65,7 @@
         android:layout_marginTop="16dp"
         android:textStyle="normal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lessonDetailsInfoRecycler"
+        app:layout_constraintTop_toBottomOf="@id/lessonDetailsInfoTabLayout"
         tools:text="@string/lesson_details_weeks" />
 
 
@@ -65,6 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="4dp"
         android:text="@string/lesson_details_location"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lessonDetailsWeeks" />
