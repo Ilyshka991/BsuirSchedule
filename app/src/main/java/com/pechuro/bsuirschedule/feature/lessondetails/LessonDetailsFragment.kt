@@ -3,6 +3,7 @@ package com.pechuro.bsuirschedule.feature.lessondetails
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
@@ -31,6 +32,10 @@ class LessonDetailsFragment : BaseFragment() {
         }
     }
 
+    private val adapter by lazy(LazyThreadSafetyMode.NONE) {
+        LessonDetailsAdapter(lesson)
+    }
+
     override val layoutId: Int get() = R.layout.fragment_lesson_details
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,16 +44,7 @@ class LessonDetailsFragment : BaseFragment() {
     }
 
     private fun initView() {
-        lessonDetailsName.text = viewModel.subject
-        lessonDetailsTime.text = viewModel.time
-        Glide.with(this)
-                .load(viewModel.employeePhotoUrl)
-                .placeholder(R.drawable.employee_placeholder)
-                .error(R.drawable.employee_placeholder)
-                .circleCrop()
-                .into(lessonDetailsPhoto)
-        lessonDetailsFullName.text = viewModel.employeeFullName
-        lessonDetailsWeeks.text = viewModel.weeks
-        lessonDetailsAuditory.text = viewModel.auditory
+        lessonDetailsRootRecycler.adapter = adapter
+        lessonDetailsRootRecycler.layoutManager = LinearLayoutManager(requireContext())
     }
 }

@@ -125,4 +125,7 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
+
+    <string name="lesson_details_location">Location:</string>
+    <string name="lesson_details_weeks">Weeks: </string>
 </resources>
