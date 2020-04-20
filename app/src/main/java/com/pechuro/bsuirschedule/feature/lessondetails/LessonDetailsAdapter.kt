@@ -13,6 +13,7 @@ import com.pechuro.bsuirschedule.domain.entity.Auditory
 import com.pechuro.bsuirschedule.domain.entity.Lesson
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_lesson_details_header.*
+import kotlinx.android.synthetic.main.item_lesson_details_location.*
 
 class LessonDetailsAdapter(
         private val lesson: Lesson
@@ -46,8 +47,28 @@ class LessonDetailsAdapter(
         }
     }
 
-    private fun onBindLocation(holder: LocationViewHolder, auditory: Auditory) {
+    private fun onBindLocation(holder: LocationViewHolder, auditory: Auditory) = with(holder) {
+        lessonDetailsLocationAuditoryName.text = with(auditory) {
+            "$name-${building.name}"
+        }
+        lessonDetailsLocationAuditoryType.text = auditory.auditoryType.name
 
+        lessonDetailsLocationAuditoryNote.visibility =
+                if (auditory.note.isNotEmpty()) {
+                    lessonDetailsLocationAuditoryNote.text = auditory.note
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+
+        val department = auditory.department
+        lessonDetailsLocationAuditoryDepartment.visibility =
+                if (department != null) {
+                    lessonDetailsLocationAuditoryDepartment.text = department.name
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
     }
 
     private fun onBindHeader(holder: HeaderViewHolder) = with(holder) {
@@ -56,6 +77,10 @@ class LessonDetailsAdapter(
         lessonDetailsName.text = lesson.subject
         lessonDetailsTime.text = with(lesson) { "$startTime - $endTime" }
         lessonDetailsWeeks.text = getWeeksText(context)
+
+        lessonDetailsLocationsTitle.visibility =
+                if (lesson.auditories.isNotEmpty()) View.VISIBLE
+                else View.GONE
     }
 
     private fun getWeeksText(context: Context): CharSequence {
