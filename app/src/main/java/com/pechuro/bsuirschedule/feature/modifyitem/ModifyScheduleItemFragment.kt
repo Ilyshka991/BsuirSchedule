@@ -13,7 +13,10 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.feature.confirmationdialog.ConfirmationDialog
+import com.pechuro.bsuirschedule.feature.confirmationdialog.ConfirmationDialogButtonData
 import com.pechuro.bsuirschedule.feature.display.fragment.SCHEDULE_ITEM_DATE_FORMAT_PATTERN
+import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemViewModel.State.Complete
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialog
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogButtonData
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogCheckableButtonData
@@ -84,6 +87,15 @@ class ModifyScheduleItemFragment : BaseFragment() {
         actionCallback = null
     }
 
+    override fun onBackPressed() = when {
+        viewModel.state.requireValue == Complete -> false
+        viewModel.dataProvider.hasChanges() -> {
+            showExitDialog()
+            true
+        }
+        else -> super.onBackPressed()
+    }
+
     fun addEmployee(employee: Employee) {
         viewModel.dataProvider.addEmloyee(employee)
     }
@@ -152,7 +164,7 @@ class ModifyScheduleItemFragment : BaseFragment() {
                 is ModifyScheduleItemViewModel.State.Saving -> {
                     modifyScheduleItemDoneButton.isEnabled = false
                 }
-                is ModifyScheduleItemViewModel.State.Complete -> {
+                is Complete -> {
                     activity?.onBackPressed()
                 }
             }
@@ -414,5 +426,21 @@ class ModifyScheduleItemFragment : BaseFragment() {
                 .build()
                 .show(childFragmentManager, OptionDialog.TAG)
 
+    }
+
+    private fun showExitDialog() {
+        ConfirmationDialog
+                .Builder()
+                .setTitle(getString(R.string.modify_schedule_item_title_discard_changes))
+                .setPositiveAction(ConfirmationDialogButtonData(
+                        text = getString(R.string.action_discard),
+                        onClick = {
+                            viewModel.close()
+                        }
+                ))
+                .setNegativeAction(ConfirmationDialogButtonData(
+                        text = getString(R.string.action_cancel)))
+                .build()
+                .show(childFragmentManager, ConfirmationDialog.TAG)
     }
 }

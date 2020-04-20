@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.pechuro.bsuirschedule.R
@@ -111,8 +112,7 @@ class OptionDialog : BaseDialogFragment() {
             dismiss()
         }
         val isInMultipleSelectionMode = params.multipleSelectionButtons.isNotEmpty()
-        val doneButtonTextRes = if (isInMultipleSelectionMode) R.string.options_dialog_action_done else R.string.options_dialog_action_cancel
-        optionsDialogDoneButton.setText(doneButtonTextRes)
+        optionsDialogDoneButton.isVisible = isInMultipleSelectionMode
         addActionButtons()
         addCheckableActionButtons()
     }

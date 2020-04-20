@@ -17,7 +17,7 @@ abstract class BaseDialogFragment : DialogFragment() {
     @get:LayoutRes
     protected abstract val layoutId: Int
 
-    protected val widthPercent: Float = 0.8F
+    protected open val widthPercent: Float = 0.8F
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return super.onCreateDialog(savedInstanceState).apply {

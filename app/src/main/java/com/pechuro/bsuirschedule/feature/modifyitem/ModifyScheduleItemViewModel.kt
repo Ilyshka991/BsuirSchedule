@@ -24,8 +24,8 @@ class ModifyScheduleItemViewModel @Inject constructor(
         if (this::dataProvider.isInitialized) return
         dataProvider = ModifyScheduleItemDataProvider(
                 lessonTypes = lessonTypes,
-                schedule = schedule,
-                scheduleItems = items
+                initialSchedule = schedule,
+                initialItems = items
         )
     }
 
@@ -33,14 +33,18 @@ class ModifyScheduleItemViewModel @Inject constructor(
         launchCoroutine {
             state.value = State.Saving
             deleteScheduleItems.execute(DeleteScheduleItems.Params(
-                    scheduleItems = dataProvider.scheduleItems.toList()
+                    scheduleItems = dataProvider.initialItems.toList()
             ))
             addScheduleItems.execute(AddScheduleItems.Params(
-                    schedule = dataProvider.schedule,
-                    scheduleItems = dataProvider.getResultScheduleItem()
+                    schedule = dataProvider.initialSchedule,
+                    scheduleItems = dataProvider.getResultScheduleItems()
             ))
             state.value = State.Complete
         }
+    }
+
+    fun close() {
+        state.value = State.Complete
     }
 
     sealed class State {

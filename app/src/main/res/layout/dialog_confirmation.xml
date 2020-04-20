@@ -16,9 +16,40 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="title" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/confirmationPositiveButton"
+        style="@style/TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="?attr/textErrorColor"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirmationDialogTitle"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="OK"
+        tools:visibility="visible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/confirmationNegativeButton"
+        style="@style/TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintBaseline_toBaselineOf="@+id/confirmationPositiveButton"
+        app:layout_constraintEnd_toStartOf="@+id/confirmationPositiveButton"
+        tools:text="No"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>
