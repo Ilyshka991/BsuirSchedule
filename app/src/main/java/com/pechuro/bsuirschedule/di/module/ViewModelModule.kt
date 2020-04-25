@@ -13,6 +13,7 @@ import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoViewModel
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemViewModel
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetViewModel
 import com.pechuro.bsuirschedule.feature.scheduleoptions.DisplayScheduleOptionsViewModel
+import com.pechuro.bsuirschedule.feature.settings.SettingsViewModel
 import com.pechuro.bsuirschedule.feature.stafflist.StaffListViewModel
 import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheetViewModel
 import dagger.Binds
@@ -79,4 +80,9 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(StaffListViewModel::class)
     fun staffList(viewModel: StaffListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SettingsViewModel::class)
+    fun settings(viewModel: SettingsViewModel): ViewModel
 }

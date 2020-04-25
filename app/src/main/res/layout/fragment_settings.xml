@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/settingsToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="@string/settings_title"
+        app:titleTextAppearance="@style/TitleTextAppearance"
+        app:titleTextColor="?attr/titleColor" />
+
+    <View
+        android:id="@+id/settingsToolbarDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/dividerColor" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/settingsThemeButton"
+                style="@style/SettingsButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/settings_action_change_theme" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/settingsUpdateInfoButton"
+                style="@style/SettingsButton"
+                android:text="@string/settings_action_update_info"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/settingsThemeButton" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/settingsTermOfUseButton"
+                style="@style/SettingsButton"
+                android:text="@string/settings_action_term_of_use"
+                app:layout_constraintBottom_toTopOf="@+id/settingsSendFeedbackButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/settingsUpdateInfoButton"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/settingsSendFeedbackButton"
+                style="@style/SettingsButton"
+                android:text="@string/settings_action_send_feedback"
+                app:layout_constraintBottom_toTopOf="@+id/settingsRateAppButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/settingsRateAppButton"
+                style="@style/SettingsButton"
+                android:text="@string/settings_action_rate_app"
+                app:layout_constraintBottom_toTopOf="@+id/settingsVersionText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <com.pechuro.bsuirschedule.widget.LabeledTextView
+                android:id="@+id/settingsVersionText"
+                style="@style/ModifyItemLabeledText"
+                android:padding="16dp"
+                app:label_text="@string/settings_label_version"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>
