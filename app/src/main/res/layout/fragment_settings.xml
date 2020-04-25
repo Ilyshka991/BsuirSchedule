@@ -60,9 +60,9 @@
                     app:layout_constraintTop_toBottomOf="@+id/settingsThemeButton" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/settingsTermOfUseButton"
+                    android:id="@+id/settingsPrivacyPoliceButton"
                     style="@style/SettingsButton"
-                    android:text="@string/settings_action_term_of_use"
+                    android:text="@string/settings_action_privacy_police"
                     app:layout_constraintBottom_toTopOf="@+id/settingsSendFeedbackButton"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

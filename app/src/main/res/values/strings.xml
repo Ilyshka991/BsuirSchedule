@@ -110,8 +110,10 @@
     <string name="settings_action_update_info">Update information</string>
     <string name="settings_action_rate_app">Rate app!</string>
     <string name="settings_action_send_feedback">Send feedback</string>
-    <string name="settings_action_term_of_use">Term of use</string>
+    <string name="settings_action_privacy_police">Privacy police</string>
     <string name="settings_label_version">Version:</string>
+    <string name="settings_feedback_email_subject">Feedback for Bsuir Schedule</string>
+    <string name="settings_feedback_email_address">ilyapechuro991@gmail.com</string>
 
     <string-array name="lesson_types">
         <item>ЛК</item>

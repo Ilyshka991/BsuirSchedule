@@ -3,6 +3,7 @@ package com.pechuro.bsuirschedule.feature.settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
+import com.pechuro.bsuirschedule.common.provider.AppUriProvider
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.fold
 import com.pechuro.bsuirschedule.domain.exception.DataSourceException
@@ -10,6 +11,7 @@ import com.pechuro.bsuirschedule.domain.interactor.LoadInfo
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
+        val appUriProvider: AppUriProvider,
         private val loadInfo: LoadInfo
 ) : BaseViewModel() {
 
