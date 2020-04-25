@@ -47,4 +47,4 @@ val LocalTime.formattedString: String
     get() = String.format("%02d:%02d", hour, minute)
 
 val LocalDate.formattedString: String
-    get() = String.format("%02d.%02d.%d", day, month, year)
+    get() = String.format("%02d.%02d.%d", day, month + 1, year)
