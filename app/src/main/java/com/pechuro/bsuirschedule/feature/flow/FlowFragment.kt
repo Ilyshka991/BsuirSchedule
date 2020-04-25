@@ -25,6 +25,7 @@ import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragment
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragmentArgs
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheet
 import com.pechuro.bsuirschedule.feature.scheduleoptions.DisplayScheduleOptionsSheet
+import com.pechuro.bsuirschedule.feature.settings.SettingsFragment
 import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation
 import com.pechuro.bsuirschedule.feature.stafflist.StaffListFragment
 import com.pechuro.bsuirschedule.feature.stafflist.StaffType
@@ -102,7 +103,10 @@ class FlowFragment : BaseFragment(),
         }
     }
 
-    override fun onNavigationSettingsClicked() {}
+    override fun onNavigationSettingsClicked() {
+        popFragment()
+        openSettings()
+    }
 
     override fun onNavigationAddScheduleClicked() {
         popFragment()
@@ -256,6 +260,10 @@ class FlowFragment : BaseFragment(),
         openFragment(AddScheduleFragmentContainer.newInstance(), AddScheduleFragmentContainer.TAG)
     }
 
+    private fun openSettings() {
+        openFragment(SettingsFragment.newInstance(), SettingsFragment.TAG)
+    }
+
     private fun openDisplayScheduleOptions(schedule: Schedule) {
         showDialog(DisplayScheduleOptionsSheet.newInstance(schedule), DisplayScheduleOptionsSheet.TAG)
     }
@@ -313,6 +321,7 @@ class FlowFragment : BaseFragment(),
             is AddScheduleFragmentContainer,
             is ModifyScheduleItemFragment,
             is StaffListFragment,
+            is SettingsFragment,
             is LoadInfoFragment -> false
             else -> true
         }
