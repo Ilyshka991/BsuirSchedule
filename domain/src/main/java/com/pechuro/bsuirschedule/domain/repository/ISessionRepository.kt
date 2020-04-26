@@ -27,4 +27,8 @@ interface ISessionRepository {
     suspend fun getNavigationHintDisplayState(): Flow<Boolean>
 
     suspend fun setNavigationHintDisplayState(shown: Boolean)
+
+    suspend fun getScheduleHintDisplayState(): Flow<Boolean>
+
+    suspend fun setScheduleHintDisplayState(shown: Boolean)
 }

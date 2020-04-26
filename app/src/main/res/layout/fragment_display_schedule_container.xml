@@ -9,15 +9,28 @@
         android:id="@+id/displayScheduleContainerTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:tabBackground="?attr/backgroundColor"
         app:tabIndicatorColor="?attr/titleColor"
         app:tabMode="scrollable"
-        app:tabBackground="?attr/backgroundColor"
         app:tabRippleColor="?attr/rippleColor"
         app:tabTextAppearance="@style/TabTextAppearance"
         app:tabTextColor="@color/tab_color" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/displayScheduleContainerViewPager"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/displayScheduleContainerViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <include
+            layout="@layout/item_schedule_actions_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="96dp" />
+    </FrameLayout>
 </LinearLayout>

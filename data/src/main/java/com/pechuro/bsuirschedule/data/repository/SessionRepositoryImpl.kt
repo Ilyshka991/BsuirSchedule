@@ -78,4 +78,11 @@ class SessionRepositoryImpl(
     override suspend fun setNavigationHintDisplayState(shown: Boolean) {
         sharedPreferencesManager.setNavigationHintDisplayState(shown)
     }
+
+    override suspend fun getScheduleHintDisplayState(): Flow<Boolean> = sharedPreferencesManager
+            .getScheduleHintDisplayState(false)
+
+    override suspend fun setScheduleHintDisplayState(shown: Boolean) {
+        sharedPreferencesManager.setScheduleHintDisplayState(shown)
+    }
 }
