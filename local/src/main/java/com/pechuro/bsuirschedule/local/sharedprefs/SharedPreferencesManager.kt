@@ -21,6 +21,7 @@ class SharedPreferencesManager @Inject constructor(
         private const val KEY_SUBGROUP_NUMBER = "KEY_SUBGROUP_NUMBER"
         private const val KEY_APP_THEME = "KEY_APP_THEME"
         private const val KEY_NAVIGATION_HINT_SHOWN = "KEY_NAVIGATION_HINT_SHOWN"
+        private const val KEY_SCHEDULE_HINT_SHOWN = "KEY_SCHEDULE_HINT_SHOWN"
     }
 
     private val openedScheduleJsonAdapter = moshi.adapter(LastOpenedSchedule::class.java)
@@ -56,6 +57,12 @@ class SharedPreferencesManager @Inject constructor(
 
     fun setNavigationHintDisplayState(shown: Boolean) {
         put(KEY_NAVIGATION_HINT_SHOWN, shown)
+    }
+
+    fun getScheduleHintDisplayState(default: Boolean): Flow<Boolean> = getFlow(KEY_SCHEDULE_HINT_SHOWN) { default }
+
+    fun setScheduleHintDisplayState(shown: Boolean) {
+        put(KEY_SCHEDULE_HINT_SHOWN, shown)
     }
 
     private fun <T : Any> getFlow(key: String, defaultValue: () -> T): Flow<T> = callbackFlow {
