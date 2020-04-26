@@ -122,11 +122,14 @@
     <string name="theme_black">Black</string>
     <string name="theme_indigo">Indigo</string>
     <string name="theme_teal">Teal</string>
-    <string name="theme_blue_gray">Blue-gray</string>
+    <string name="theme_blue_grey">Blue-grey</string>
     <string name="theme_blue_white">Blue-white</string>
+    <string name="theme_brown">Brown</string>
+    <string name="theme_orange">Orange</string>
+    <string name="theme_purple">Purple</string>
+    <string name="theme_cyan">Cyan</string>
     <string name="theme_red">Red</string>
-    <string name="theme_green">Green</string>
-
+    <string name="theme_lime">Lime</string>
 
     <string-array name="lesson_types">
         <item>ЛК</item>

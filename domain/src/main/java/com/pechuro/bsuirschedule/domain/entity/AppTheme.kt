@@ -1,7 +1,21 @@
 package com.pechuro.bsuirschedule.domain.entity
 
 enum class AppTheme {
-    FOLLOW_SYSTEM, LIGHT, DARK, BLACK, INDIGO, TEAL, BLUE_GRAY, BLUE_WHITE, RED, GREEN;
+
+    FOLLOW_SYSTEM,
+    LIGHT,
+    DARK,
+    BLACK,
+    INDIGO,
+    TEAL,
+    BLUE_GREY,
+    BLUE_LIGHT,
+    BROWN,
+    ORANGE,
+    PURPLE,
+    CYAN,
+    RED,
+    LIME;
 
     companion object {
         val DEFAULT = FOLLOW_SYSTEM

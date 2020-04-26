@@ -58,8 +58,12 @@ val AppTheme.formattedStringRes: Int
         AppTheme.BLACK -> R.string.theme_black
         AppTheme.INDIGO -> R.string.theme_indigo
         AppTheme.TEAL -> R.string.theme_teal
-        AppTheme.BLUE_GRAY -> R.string.theme_blue_gray
-        AppTheme.BLUE_WHITE -> R.string.theme_blue_white
+        AppTheme.BLUE_GREY -> R.string.theme_blue_grey
+        AppTheme.BLUE_LIGHT -> R.string.theme_blue_white
+        AppTheme.BROWN -> R.string.theme_brown
+        AppTheme.ORANGE -> R.string.theme_orange
+        AppTheme.PURPLE -> R.string.theme_purple
+        AppTheme.CYAN -> R.string.theme_cyan
         AppTheme.RED -> R.string.theme_red
-        AppTheme.GREEN -> R.string.theme_green
+        AppTheme.LIME -> R.string.theme_lime
     }
