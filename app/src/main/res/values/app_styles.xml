@@ -13,7 +13,23 @@
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogStyle</item>
     </style>
 
-    <style name="LightTheme" parent="AppTheme">
+    <style name="AppTheme.SplashTheme">
+        <item name="android:background">@drawable/background_splash</item>
+    </style>
+
+    <style name="BottomSheetDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:statusBarColor" tools:targetApi="21">@color/transparent</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
+    </style>
+
+    <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="LightStyleTheme">
+        <item name="android:background">@color/transparent</item>
+
         <item name="primaryColor">@color/grey_400</item>
         <item name="primaryDarkColor">@color/grey_600</item>
         <item name="accentColor">@color/amber_200</item>
@@ -45,17 +61,37 @@
         <item name="schedule_item_background_color">?attr/backgroundColor</item>
     </style>
 
-    <style name="SplashTheme" parent="AppTheme">
-        <item name="android:background">@drawable/background_splash</item>
-    </style>
-
-    <style name="BottomSheetDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="android:statusBarColor" tools:targetApi="21">@color/transparent</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
-    </style>
-
-    <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
+    <style name="DarkStyleTheme">
         <item name="android:background">@color/transparent</item>
+
+        <item name="primaryColor">@color/grey_400</item>
+        <item name="primaryDarkColor">@color/grey_600</item>
+        <item name="accentColor">@color/amber_200</item>
+
+        <item name="backgroundColor">@color/black</item>
+        <item name="secondBackgroundColor">@color/grey_100</item>
+        <item name="backgroundDarkColor">@color/grey_800</item>
+        <item name="rippleColor">@color/grey_300</item>
+        <item name="dividerColor">@color/grey_400</item>
+        <item name="backgroundNavigationSwipeActionColor">@color/amber_100</item>
+
+        <item name="buttonDefaultBackgroundColor">@color/transparent</item>
+        <item name="buttonSelectedBackgroundColor">@color/grey_100</item>
+        <item name="buttonEnabledTextColor">@color/grey_600</item>
+        <item name="buttonDisabledTextColor">@color/grey_300</item>
+        <item name="chipCheckedColor">@color/grey_300</item>
+        <item name="chipUncheckedColor">@color/grey_100</item>
+
+        <item name="textDefaultColor">@color/grey_600</item>
+        <item name="textSemiBoldColor">@color/grey_800</item>
+        <item name="titleColor">@color/grey_700</item>
+        <item name="tabSelectedColor">?attr/textDefaultColor</item>
+        <item name="tabUnselectedColor">@color/grey_400</item>
+        <item name="textErrorColor">@color/amber_900</item>
+
+        <item name="menuIconColor">?attr/backgroundColor</item>
+        <item name="fabBackgroundColor">@color/amber_500</item>
+
+        <item name="schedule_item_background_color">?attr/backgroundColor</item>
     </style>
 </resources>

@@ -4,22 +4,27 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import com.pechuro.bsuirschedule.BuildConfig
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
+import com.pechuro.bsuirschedule.domain.entity.AppTheme
+import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.ext.observe
-import com.pechuro.bsuirschedule.ext.setSafeClickListener
-import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
+import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialog
+import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogButtonData
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : BaseFragment() {
 
+    interface ActionCallback {
+
+        fun onSettingsThemeChanged()
+    }
+
     companion object {
 
         const val TAG = "SettingsFragment"
-
 
         fun newInstance() = SettingsFragment()
     }
@@ -30,11 +35,23 @@ class SettingsFragment : BaseFragment() {
         initViewModel(SettingsViewModel::class)
     }
 
+    private var actionCallback: ActionCallback? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        actionCallback = getCallbackOrNull()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
         observeData()
         setViewListeners()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        actionCallback = null
     }
 
     override fun onBackPressed() = viewModel.setNormalState()
@@ -45,13 +62,17 @@ class SettingsFragment : BaseFragment() {
                 activity?.onBackPressed()
             }
         }
-        settingsThemeButton.text = getString(R.string.settings_action_change_theme, "light")
+        val currentTheme = getString(viewModel.getCurrentAppTheme().formattedStringRes)
+        settingsThemeButton.text = getString(R.string.settings_action_change_theme, currentTheme)
         settingsVersionText.setMessage(BuildConfig.VERSION_NAME)
     }
 
     private fun observeData() {
         viewModel.stateData.nonNull().observe(viewLifecycleOwner) {
             updateLayoutState(it)
+        }
+        viewModel.themeChangedEvent.nonNull().observe(viewLifecycleOwner) {
+            actionCallback?.onSettingsThemeChanged()
         }
     }
 
@@ -77,7 +98,7 @@ class SettingsFragment : BaseFragment() {
 
     private fun setViewListeners() {
         settingsThemeButton.setSafeClickListener {
-            Toast.makeText(requireContext(), "Not implemented", Toast.LENGTH_SHORT).show()
+            selectTheme()
         }
         settingsUpdateInfoButton.setSafeClickListener {
             viewModel.updateInfo()
@@ -136,5 +157,30 @@ class SettingsFragment : BaseFragment() {
         intent.resolveActivity(context.packageManager)?.let {
             startActivity(intent)
         }
+    }
+
+    private fun selectTheme() {
+        val availableThemes = AppTheme.values()
+        val selectedTheme = viewModel.getCurrentAppTheme()
+        val options = availableThemes.map { theme ->
+            OptionDialogButtonData(
+                    text = getString(theme.formattedStringRes),
+                    selected = theme == selectedTheme
+            )
+        }
+        val listener = object : OptionDialog.OptionButtonClickListener {
+            override fun onClick(position: Int) {
+                val newTheme = availableThemes[position]
+                if (newTheme != selectedTheme) {
+                    viewModel.setAppTheme(newTheme)
+                }
+            }
+        }
+        val title = getString(R.string.settings_title_select_theme)
+        OptionDialog.Builder()
+                .setTitle(title)
+                .setActions(options, listener)
+                .build()
+                .show(childFragmentManager, OptionDialog.TAG)
     }
 }

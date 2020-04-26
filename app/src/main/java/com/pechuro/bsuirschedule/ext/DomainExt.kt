@@ -48,3 +48,10 @@ val LocalTime.formattedString: String
 
 val LocalDate.formattedString: String
     get() = String.format("%02d.%02d.%d", day, month + 1, year)
+
+@get:StringRes
+val AppTheme.formattedStringRes: Int
+    get() = when (this) {
+        AppTheme.LIGHT -> R.string.theme_light
+        AppTheme.DARK -> R.string.theme_dark
+    }

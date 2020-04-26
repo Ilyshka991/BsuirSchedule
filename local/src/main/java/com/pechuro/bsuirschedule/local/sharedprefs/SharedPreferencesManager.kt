@@ -19,6 +19,7 @@ class SharedPreferencesManager @Inject constructor(
         private const val KEY_OPENED_SCHEDULE = "KEY_OPENED_SCHEDULE"
         private const val KEY_DISPLAY_TYPE = "KEY_DISPLAY_TYPE"
         private const val KEY_SUBGROUP_NUMBER = "KEY_SUBGROUP_NUMBER"
+        private const val KEY_APP_THEME = "KEY_APP_THEME"
     }
 
     private val openedScheduleJsonAdapter = moshi.adapter(LastOpenedSchedule::class.java)
@@ -45,6 +46,10 @@ class SharedPreferencesManager @Inject constructor(
     fun setSubgroupNumber(type: Int) {
         put(KEY_SUBGROUP_NUMBER, type)
     }
+
+    fun getAppTheme(default: String) = get(KEY_APP_THEME, default)
+
+    fun setAppTheme(value: String) = put(KEY_APP_THEME, value)
 
     private fun <T : Any> getFlow(key: String, defaultValue: () -> T): Flow<T> = callbackFlow {
         val sendNewValueCallback = {

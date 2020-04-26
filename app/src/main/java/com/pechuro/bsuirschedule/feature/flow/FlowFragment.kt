@@ -1,5 +1,6 @@
 package com.pechuro.bsuirschedule.feature.flow
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -45,7 +46,13 @@ class FlowFragment : BaseFragment(),
         DisplayScheduleDatePickerSheet.ActionCallback,
         ScheduleItemOptionsSheet.ActionCallback,
         ModifyScheduleItemFragment.ActionCallback,
-        StaffListFragment.ActionCallback {
+        StaffListFragment.ActionCallback,
+        SettingsFragment.ActionCallback {
+
+    interface ActionCallback {
+
+        fun onFlowRecreate()
+    }
 
     companion object {
 
@@ -58,12 +65,19 @@ class FlowFragment : BaseFragment(),
         initViewModel(FlowViewModel::class)
     }
 
+    private var actionCallback: ActionCallback? = null
+
     private val defaultFragmentAnimations = FragmentAnimationsResHolder(
             enter = R.animator.fragment_open_enter,
             exit = R.animator.fragment_open_exit,
             popEnter = R.animator.fragment_close_enter,
             popExit = R.animator.fragment_close_exit
     )
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        actionCallback = getCallbackOrNull()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,6 +93,11 @@ class FlowFragment : BaseFragment(),
     override fun onResume() {
         super.onResume()
         postUpdateLayoutState()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        actionCallback = null
     }
 
     override fun onBackPressed(): Boolean {
@@ -171,6 +190,10 @@ class FlowFragment : BaseFragment(),
     override fun onStaffListItemSelected(info: StaffItemInformation) {
         popFragment()
         addStaffItemToModifySchedule(info)
+    }
+
+    override fun onSettingsThemeChanged() {
+        actionCallback?.onFlowRecreate()
     }
 
     private fun initViews() {

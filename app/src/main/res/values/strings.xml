@@ -114,6 +114,10 @@
     <string name="settings_label_version">Version:</string>
     <string name="settings_feedback_email_subject">Feedback for Bsuir Schedule</string>
     <string name="settings_feedback_email_address">ilyapechuro991@gmail.com</string>
+    <string name="settings_title_select_theme">Select theme</string>
+
+    <string name="theme_light">light</string>
+    <string name="theme_dark">dark</string>
 
     <string-array name="lesson_types">
         <item>ЛК</item>
