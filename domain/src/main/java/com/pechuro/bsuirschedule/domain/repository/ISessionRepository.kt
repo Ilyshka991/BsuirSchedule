@@ -23,4 +23,8 @@ interface ISessionRepository {
     suspend fun getAppTheme(): AppTheme
 
     suspend fun setAppTheme(theme: AppTheme)
+
+    suspend fun getNavigationHintDisplayState(): Flow<Boolean>
+
+    suspend fun setNavigationHintDisplayState(shown: Boolean)
 }

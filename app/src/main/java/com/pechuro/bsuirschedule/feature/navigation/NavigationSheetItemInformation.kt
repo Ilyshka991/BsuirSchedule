@@ -10,6 +10,7 @@ sealed class NavigationSheetItemInformation(val id: Int) {
         const val ID_TITLE = 2
         const val ID_CONTENT = 3
         const val ID_EMPTY = 4
+        const val ID_HINT = 5
     }
 
     object Divider : NavigationSheetItemInformation(ID_DIVIDER)
@@ -28,4 +29,6 @@ sealed class NavigationSheetItemInformation(val id: Int) {
             NOT_AVAILABLE, AVAILABLE, IN_PROGRESS, SUCCESS, ERROR
         }
     }
+
+    object Hint : NavigationSheetItemInformation(ID_HINT)
 }

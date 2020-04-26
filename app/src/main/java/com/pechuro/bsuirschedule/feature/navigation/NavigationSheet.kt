@@ -104,6 +104,10 @@ class NavigationSheet : BaseBottomSheetDialog() {
         override fun onScheduleClicked(schedule: Schedule) {
             actionCallback?.onNavigationScheduleSelected(schedule)
         }
+
+        override fun onHintDismissed() {
+            viewModel.onHintDismissed()
+        }
     }
     private val adapter = NavigationDrawerAdapter().apply {
         actionCallback = adapterActionCallback

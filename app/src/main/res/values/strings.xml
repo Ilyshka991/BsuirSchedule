@@ -10,6 +10,7 @@
     <string name="action_discard">Discard</string>
     <string name="action_retry">Retry</string>
     <string name="action_cancel">Cancel</string>
+    <string name="action_ok">OK</string>
 
     <string name="error_loading">Something went wrong,\nretry later</string>
 
@@ -35,6 +36,7 @@
     <string name="navigation_msg_schedule_update_error">Not updated</string>
     <string name="navigation_msg_schedule_update_available">Update is available</string>
     <string name="navigation_msg_schedule_update_success">Updated</string>
+    <string name="navigation_hint_schedule_actions">You can swipe left to delete schedule, or swipe right to update</string>
 
     <string name="update_schedule_classes_title">Classes schedule for %1$s has changed!</string>
     <string name="update_schedule_exams_title">Exams schedule for %1$s has changed!</string>
