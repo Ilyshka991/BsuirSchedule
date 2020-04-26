@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.BackPressedHandler
 import com.pechuro.bsuirschedule.common.FragmentAnimationsResHolder
 import com.pechuro.bsuirschedule.common.base.BaseFragment
@@ -133,6 +135,7 @@ class FlowFragment : BaseFragment(),
     }
 
     override fun onNavigationScheduleSelected(schedule: Schedule) {
+        AppAnalytics.report(AppAnalyticsEvent.ScheduleOpened(schedule))
         openViewSchedule(schedule)
     }
 
