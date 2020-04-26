@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorRes
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
@@ -18,6 +19,8 @@ import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import kotlinx.android.synthetic.main.item_display_schedule_classes.*
 import kotlinx.android.synthetic.main.item_display_schedule_exam.*
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
 
@@ -140,6 +143,12 @@ class DisplayScheduleItemAdapter(
                 displayExamType.text = lessonType
                 displayExamsNote.isVisible = note.isNotEmpty() && note.isNotBlank()
                 displayExamsNote.text = note
+                val isExam = lessonType.toLowerCase(Locale.getDefault()) == "экзамен"
+                displayExamLeftDaysIndicator.isVisible = isExam
+                if (isExam) {
+                    val leftDaysIndicatorColor = itemView.context.color(getLeftDaysIndicatorColorRes(date, startTime))
+                    displayExamLeftDaysIndicator.setBackgroundColor(leftDaysIndicatorColor)
+                }
                 val info = when (scheduleItem) {
                     is Exam.EmployeeExam -> scheduleItem.studentGroups.formatGroupNumbers()
                     is Exam.GroupExam -> scheduleItem.employees.formatEmployees()
@@ -148,6 +157,26 @@ class DisplayScheduleItemAdapter(
 
             }
             itemView.tag = data
+        }
+
+        @ColorRes
+        private fun getLeftDaysIndicatorColorRes(examDate: LocalDate, examTime: LocalTime): Int {
+            val dateDiffMs = examDate.toDate().time - LocalDate.current().toDate().time
+            val daysLeft = TimeUnit.DAYS.convert(dateDiffMs, TimeUnit.MILLISECONDS)
+            val timeDiffMs = examTime.toDate().time - LocalTime.current().toDate().time
+            return when {
+                daysLeft < 0L -> R.color.transparent
+                daysLeft == 0L && timeDiffMs < 0 -> R.color.transparent
+                daysLeft == 0L -> R.color.amber_900
+                daysLeft < 3 -> R.color.amber_800
+                daysLeft < 5 -> R.color.amber_700
+                daysLeft < 7 -> R.color.amber_600
+                daysLeft < 10 -> R.color.amber_500
+                daysLeft < 12 -> R.color.amber_400
+                daysLeft < 15 -> R.color.amber_300
+                daysLeft < 20 -> R.color.amber_200
+                else -> R.color.amber_100
+            }
         }
     }
 
