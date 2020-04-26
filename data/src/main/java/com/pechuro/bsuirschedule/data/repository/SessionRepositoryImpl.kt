@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.data.repository
 
 import com.pechuro.bsuirschedule.data.common.BaseRepository
+import com.pechuro.bsuirschedule.domain.entity.AppTheme
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
 import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
@@ -59,5 +60,15 @@ class SessionRepositoryImpl(
 
     override suspend fun setScheduleDisplaySubgroupNumber(number: SubgroupNumber) {
         sharedPreferencesManager.setSubgroupNumber(number.value)
+    }
+
+    override suspend fun getAppTheme(): AppTheme {
+        val themeName = sharedPreferencesManager.getAppTheme(AppTheme.DEFAULT.name)
+        return AppTheme.getForName(themeName)
+    }
+
+    override suspend fun setAppTheme(theme: AppTheme) {
+        val name = theme.name
+        sharedPreferencesManager.setAppTheme(name)
     }
 }
