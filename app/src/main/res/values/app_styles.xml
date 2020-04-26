@@ -30,7 +30,7 @@
 
     <!-- Theme colors -->
 
-    <style name="LightStyleTheme" parent="AppTheme">
+    <style name="LightStyleTheme">
         <item name="android:background">@color/transparent</item>
 
         <item name="primaryColor">@color/grey_400</item>
