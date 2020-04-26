@@ -61,6 +61,15 @@
             app:layout_constraintStart_toEndOf="@+id/displayExamStartTime"
             tools:text="11.11.2011" />
 
+        <View
+            android:id="@+id/displayExamLeftDaysIndicator"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            app:layout_constraintEnd_toEndOf="@+id/displayExamDate"
+            app:layout_constraintStart_toStartOf="@+id/displayExamStartTime"
+            app:layout_constraintTop_toBottomOf="@id/displayExamStartTime"
+            tools:background="@color/amber_400" />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/displayExamSubgroup"
             style="@style/DefaultText"
