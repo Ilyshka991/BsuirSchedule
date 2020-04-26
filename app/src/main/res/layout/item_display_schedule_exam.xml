@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    app:cardBackgroundColor="?attr/schedule_item_background_color"
+    app:cardBackgroundColor="?attr/scheduleItemBackgroundColor"
     app:cardCornerRadius="8dp"
     app:contentPadding="8dp">
 
