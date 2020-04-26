@@ -15,7 +15,6 @@
         android:roundIcon="@mipmap/app_icon_round"
         android:supportsRtl="true"
         tools:ignore="GoogleAppIndexingWarning">
-
         <activity
             android:name=".feature.MainActivity"
             android:theme="@style/AppTheme.SplashTheme">
@@ -30,5 +29,20 @@
             android:name="androidx.work.impl.WorkManagerInitializer"
             android:authorities="${applicationId}.workmanager-init"
             tools:node="remove" />
+
+        <receiver android:name=".schedulewidget.ScheduleWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/schedule_widget_info" />
+        </receiver>
+
+        <activity android:name=".schedulewidget.ScheduleWidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>
