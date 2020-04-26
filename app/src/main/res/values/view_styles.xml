@@ -74,10 +74,12 @@
     <style name="OutlinedTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="hintTextColor">?attr/textDefaultColor</item>
         <item name="boxStrokeColor">?attr/textDefaultColor</item>
+        <item name="android:textColorHint">?attr/textDefaultColor</item>
     </style>
 
     <style name="FilledTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="hintTextColor">?attr/textDefaultColor</item>
+        <item name="android:textColorHint">?attr/textDefaultColor</item>
         <item name="boxBackgroundColor">?attr/secondBackgroundColor</item>
         <item name="cornerFamilyTopLeft">rounded</item>
         <item name="cornerFamilyTopRight">rounded</item>

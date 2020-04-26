@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         app:tabIndicatorColor="?attr/titleColor"
         app:tabMode="scrollable"
+        app:tabBackground="?attr/backgroundColor"
         app:tabRippleColor="?attr/rippleColor"
         app:tabTextAppearance="@style/TabTextAppearance"
         app:tabTextColor="@color/tab_color" />

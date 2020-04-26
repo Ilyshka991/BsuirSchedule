@@ -116,8 +116,17 @@
     <string name="settings_feedback_email_address">ilyapechuro991@gmail.com</string>
     <string name="settings_title_select_theme">Select theme</string>
 
-    <string name="theme_light">light</string>
-    <string name="theme_dark">dark</string>
+    <string name="theme_follow_system">Follow system</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_black">Black</string>
+    <string name="theme_indigo">Indigo</string>
+    <string name="theme_teal">Teal</string>
+    <string name="theme_blue_gray">Blue-gray</string>
+    <string name="theme_blue_white">Blue-white</string>
+    <string name="theme_red">Red</string>
+    <string name="theme_green">Green</string>
+
 
     <string-array name="lesson_types">
         <item>ЛК</item>

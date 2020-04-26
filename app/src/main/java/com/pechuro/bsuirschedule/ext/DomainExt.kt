@@ -52,6 +52,14 @@ val LocalDate.formattedString: String
 @get:StringRes
 val AppTheme.formattedStringRes: Int
     get() = when (this) {
+        AppTheme.FOLLOW_SYSTEM -> R.string.theme_follow_system
         AppTheme.LIGHT -> R.string.theme_light
         AppTheme.DARK -> R.string.theme_dark
+        AppTheme.BLACK -> R.string.theme_black
+        AppTheme.INDIGO -> R.string.theme_indigo
+        AppTheme.TEAL -> R.string.theme_teal
+        AppTheme.BLUE_GRAY -> R.string.theme_blue_gray
+        AppTheme.BLUE_WHITE -> R.string.theme_blue_white
+        AppTheme.RED -> R.string.theme_red
+        AppTheme.GREEN -> R.string.theme_green
     }

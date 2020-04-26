@@ -14,6 +14,7 @@ import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialog
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogButtonData
 import kotlinx.android.synthetic.main.fragment_settings.*
+import java.util.*
 
 class SettingsFragment : BaseFragment() {
 
@@ -62,7 +63,7 @@ class SettingsFragment : BaseFragment() {
                 activity?.onBackPressed()
             }
         }
-        val currentTheme = getString(viewModel.getCurrentAppTheme().formattedStringRes)
+        val currentTheme = getString(viewModel.getCurrentAppTheme().formattedStringRes).toLowerCase(Locale.getDefault())
         settingsThemeButton.text = getString(R.string.settings_action_change_theme, currentTheme)
         settingsVersionText.setMessage(BuildConfig.VERSION_NAME)
     }

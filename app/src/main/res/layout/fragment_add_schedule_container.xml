@@ -18,6 +18,7 @@
         android:id="@+id/addScheduleContainerTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:tabBackground="?attr/backgroundColor"
         app:tabIndicatorColor="?attr/titleColor"
         app:tabMode="fixed"
         app:tabRippleColor="?attr/rippleColor"
