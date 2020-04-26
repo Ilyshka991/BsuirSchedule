@@ -23,7 +23,9 @@ class NavigationSheetViewModel @Inject constructor(
         private val deleteSchedule: DeleteSchedule,
         private val updateSchedule: UpdateSchedule,
         private val getAvailableForUpdateSchedules: GetAvailableForUpdateSchedules,
-        private val getLastOpenedSchedule: GetLastOpenedSchedule
+        private val getLastOpenedSchedule: GetLastOpenedSchedule,
+        private val getNavigationHintDisplayState: GetNavigationHintDisplayState,
+        private val setNavigationHintDisplayState: SetNavigationHintDisplayState
 ) : BaseViewModel() {
 
     companion object {
@@ -39,6 +41,9 @@ class NavigationSheetViewModel @Inject constructor(
     private val selectedScheduleData = flowLiveData {
         getLastOpenedSchedule.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
     }
+    private val hintDisplayState = flowLiveData {
+        getNavigationHintDisplayState.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
+    }
     private val schedulesUpdateState = MutableLiveData(emptyMap<Schedule, UpdateState>())
 
     val navigationInfoData = MediatorLiveData<List<NavigationSheetItemInformation>>().apply {
@@ -46,6 +51,7 @@ class NavigationSheetViewModel @Inject constructor(
         addSource(availableForUpdateScheduleListData) { updateNavigationInfo() }
         addSource(schedulesUpdateState) { updateNavigationInfo() }
         addSource(selectedScheduleData) { updateNavigationInfo() }
+        addSource(hintDisplayState) { updateNavigationInfo() }
     }
 
     private var updateInfoJob: Job? = null
@@ -74,6 +80,12 @@ class NavigationSheetViewModel @Inject constructor(
         }
     }
 
+    fun onHintDismissed() {
+        launchCoroutine {
+            setNavigationHintDisplayState.execute(SetNavigationHintDisplayState.Params(shown = true))
+        }
+    }
+
     private fun updateNavigationInfo() {
         updateInfoJob?.cancel()
         updateInfoJob = launchCoroutine {
@@ -82,12 +94,14 @@ class NavigationSheetViewModel @Inject constructor(
                     ?: emptyList()
             val schedulesUpdateState = schedulesUpdateState.value ?: emptyMap()
             val selectedSchedule = selectedScheduleData.value
+            val hintShown = hintDisplayState.value ?: false
             val newInfo = withContext(Dispatchers.IO) {
                 transformScheduleListToNavInfoList(
                         scheduleList = scheduleList,
                         availableForUpdateScheduleList = availableForUpdateScheduleList,
                         updateStates = schedulesUpdateState,
-                        selectedSchedule = selectedSchedule
+                        selectedSchedule = selectedSchedule,
+                        hintShown = hintShown
                 )
             }
             navigationInfoData.value = newInfo
@@ -98,10 +112,14 @@ class NavigationSheetViewModel @Inject constructor(
             scheduleList: List<Schedule>,
             availableForUpdateScheduleList: List<Schedule>,
             updateStates: Map<Schedule, UpdateState>,
-            selectedSchedule: Schedule?
+            selectedSchedule: Schedule?,
+            hintShown: Boolean
     ): List<NavigationSheetItemInformation> {
         val resultList = mutableListOf<NavigationSheetItemInformation>()
 
+        if (!hintShown && scheduleList.isNotEmpty()) {
+            resultList += NavigationSheetItemInformation.Hint
+        }
         if (scheduleList.isEmpty()) {
             resultList += NavigationSheetItemInformation.Empty
             return resultList

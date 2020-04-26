@@ -16,6 +16,7 @@ import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformati
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState.*
 import kotlinx.android.synthetic.main.item_navigation_sheet_content.*
 import kotlinx.android.synthetic.main.item_navigation_sheet_empty.*
+import kotlinx.android.synthetic.main.item_navigation_sheet_hint.*
 
 private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NavigationSheetItemInformation>() {
 
@@ -35,6 +36,8 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
     interface ActionCallback {
 
         fun onScheduleClicked(schedule: Schedule)
+
+        fun onHintDismissed()
     }
 
     companion object {
@@ -67,6 +70,10 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
             NavigationSheetItemInformation.ID_EMPTY -> {
                 val view = layoutInflater.inflate(R.layout.item_navigation_sheet_empty, parent, false)
                 EmptyViewHolder(view)
+            }
+            NavigationSheetItemInformation.ID_HINT -> {
+                val view = layoutInflater.inflate(R.layout.item_navigation_sheet_hint, parent, false)
+                HintViewHolder(view)
             }
             else -> throw IllegalStateException("Not supported type: $viewType")
         }
@@ -125,5 +132,16 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
             navigationItemContentUpdateAvailableText.isVisible = data.updateState == AVAILABLE
             isSwipeAllowed = data.updateState == NOT_AVAILABLE || data.updateState == AVAILABLE
         }
+    }
+
+    private inner class HintViewHolder(view: View) : BaseViewHolder<Hint>(view) {
+
+        init {
+            navigationItemHintOkButton.setSafeClickListener {
+                actionCallback?.onHintDismissed()
+            }
+        }
+
+        override fun onBind(data: Hint) {}
     }
 }

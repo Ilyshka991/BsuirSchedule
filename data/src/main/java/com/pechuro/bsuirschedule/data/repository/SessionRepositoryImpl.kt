@@ -71,4 +71,11 @@ class SessionRepositoryImpl(
         val name = theme.name
         sharedPreferencesManager.setAppTheme(name)
     }
+
+    override suspend fun getNavigationHintDisplayState(): Flow<Boolean> = sharedPreferencesManager
+            .getNavigationHintDisplayState(false)
+
+    override suspend fun setNavigationHintDisplayState(shown: Boolean) {
+        sharedPreferencesManager.setNavigationHintDisplayState(shown)
+    }
 }
