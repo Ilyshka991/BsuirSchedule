@@ -46,7 +46,7 @@
 
     <string name="settings_title">Settings</string>
 
-    <string name="display_schedule_tab_title">%1$s, week %2$d</string>
+    <string name="display_schedule_tab_title">%1$s, Week %2$d</string>
 
     <string name="display_schedule_item_msg_subgroup">%1$d subgroup</string>
     <string name="display_schedule_item_msg_week_numbers">weeks: %1$s</string>
@@ -70,7 +70,7 @@
     <string name="modify_schedule_item_hint_subject">Subject</string>
     <string name="modify_schedule_item_label_type">Type:</string>
     <string name="modify_schedule_item_label_weekday">Day:</string>
-    <string name="modify_schedule_item_label_week_numbers">Week:</string>
+    <string name="modify_schedule_item_label_week_numbers">Weeks:</string>
     <string name="modify_schedule_item_label_start_time">Start time:</string>
     <string name="modify_schedule_item_label_end_time">End time:</string>
     <string name="modify_schedule_item_label_groups">Groups:</string>
@@ -102,7 +102,7 @@
     <string name="staff_list_hint_enter_auditory">Enter auditory</string>
     <string name="staff_list_msg_group_course">course: %1$d</string>
     <string name="staff_list_msg_employee_department">Department: %1$s</string>
-    <string name="staff_list_msg_auditory_capacity">capacity: %1$d</string>
+    <string name="staff_list_msg_auditory_capacity">Capacity: %1$d</string>
     <string name="staff_list_msg_empty">Not found</string>
 
     <string name="options_dialog_action_done">done</string>

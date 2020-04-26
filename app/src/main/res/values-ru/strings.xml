@@ -5,6 +5,7 @@
     <string name="notification_update_title">Изменено расписание для %1$s</string>
     <string name="notification_update_description">Нажмите для обновления</string>
 
+    <string name="action_discard">Отклонить</string>
     <string name="action_retry">Повторить</string>
     <string name="action_cancel">Отмена</string>
 
@@ -19,9 +20,6 @@
     <string name="add_schedule_tab_employees">Сотрудники</string>
     <string name="add_schedule_tab_students">Группы</string>
     <string name="add_schedule_msg_type">Тип:</string>
-    <string name="staff_list_msg_group_course">Курс: %1$d</string>
-    <string name="staff_list_msg_employee_department">Кафедра: %1$s</string>
-    <string name="staff_list_msg_empty">Пусто.</string>
 
     <string name="info_load_title">Загрузка информации</string>
     <string name="info_load_message">Загрузка информации,\nподождите</string>
@@ -67,4 +65,65 @@
     <string name="modify_schedule_item_msg_exam">экзамен</string>
     <string name="modify_schedule_item_msg_lesson">занятие</string>
     <string name="modify_schedule_item_action_done">Готово</string>
+    <string name="modify_schedule_item_hint_subject">Предмет</string>
+    <string name="modify_schedule_item_label_type">Тип:</string>
+    <string name="modify_schedule_item_label_weekday">День недели:</string>
+    <string name="modify_schedule_item_label_week_numbers">Недели:</string>
+    <string name="modify_schedule_item_label_start_time">Начало:</string>
+    <string name="modify_schedule_item_label_end_time">Окончание:</string>
+    <string name="modify_schedule_item_label_groups">Группы</string>
+    <string name="modify_schedule_item_label_employees">Сотрудники</string>
+    <string name="modify_schedule_item_label_subgroup_number">Подгруппа:</string>
+    <string name="modify_schedule_item_label_auditories">Аудитории</string>
+    <string name="modify_schedule_item_hint_note">Заметки</string>
+    <string name="modify_schedule_item_label_priority">Приоритет:</string>
+    <string name="modify_schedule_item_label_date">Дата:</string>
+    <string name="modify_schedule_item_action_add">добавить</string>
+    <string name="modify_schedule_item_title_select_type">Выберите тип занятия</string>
+    <string name="modify_schedule_item_title_select_priority">Установите приоритет</string>
+    <string name="modify_schedule_item_title_select_subgroup">Выберите подгруппу</string>
+    <string name="modify_schedule_item_title_select_weekday">Выберите день недели</string>
+    <string name="modify_schedule_item_title_select_weeknumber">Выберите недели</string>
+    <string name="modify_schedule_item_title_discard_changes">Отклонить изменения?</string>
+
+    <string name="lesson_priotity_lowest">Очень низкий</string>
+    <string name="lesson_priotity_low">Низкий</string>
+    <string name="lesson_priotity_medium">Средний</string>
+    <string name="lesson_priotity_high">Высокий</string>
+
+    <string name="subgroup_number_all">Вся группа</string>
+    <string name="subgroup_number_first">Первая</string>
+    <string name="subgroup_number_second">Вторая</string>
+
+    <string name="staff_list_hint_enter_group_number">Введите номер группы</string>
+    <string name="staff_list_hint_enter_employee_name">Введите имя сотрудника</string>
+    <string name="staff_list_hint_enter_auditory">Введите номер аудитории</string>
+
+    <string name="staff_list_msg_group_course">Курс: %1$d</string>
+    <string name="staff_list_msg_employee_department">Кафедра: %1$s</string>
+    <string name="staff_list_msg_auditory_capacity">Вместимость: %1$d</string>
+    <string name="staff_list_msg_empty">Пусто.</string>
+
+    <string name="options_dialog_action_done">готово</string>
+
+    <string-array name="lesson_types">
+        <item>ЛК</item>
+        <item>ПЗ</item>
+        <item>ЛР</item>
+    </string-array>
+
+    <string-array name="exam_types">
+        <item>Экзамен</item>
+        <item>Консультация</item>
+    </string-array>
+
+    <string-array name="weekdays">
+        <item>Понедельник</item>
+        <item>Вторник</item>
+        <item>Среда</item>
+        <item>Четверг</item>
+        <item>Пятница</item>
+        <item>Суббота</item>
+        <item>Воскресенье</item>
+    </string-array>
 </resources>
