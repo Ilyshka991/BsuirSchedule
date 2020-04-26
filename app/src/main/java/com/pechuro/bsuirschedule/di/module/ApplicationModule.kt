@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.pechuro.bsuirschedule.App
 import com.pechuro.bsuirschedule.common.AndroidLoggerTree
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsReporter
 import com.pechuro.bsuirschedule.common.NetworkAvailabilityCheckerImpl
 import com.pechuro.bsuirschedule.common.provider.AppUriProvider
 import com.pechuro.bsuirschedule.common.provider.AppUriProviderImpl
@@ -37,4 +39,8 @@ class ApplicationModule {
     @Provides
     @AppScope
     fun provideUriProvider(context: Context): AppUriProvider = AppUriProviderImpl(context = context)
+
+    @Provides
+    @AppScope
+    fun provideAnalyticsReporter(): AppAnalytics.Reporter = AppAnalyticsReporter()
 }
