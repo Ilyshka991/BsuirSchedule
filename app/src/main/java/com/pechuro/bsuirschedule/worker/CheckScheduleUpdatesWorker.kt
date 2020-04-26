@@ -32,7 +32,7 @@ class CheckScheduleUpdatesWorker(
             val workRequest = createOneTimeRequestRequest()
             WorkManager.getInstance(context).enqueueUniqueWork(
                     TAG,
-                    ExistingWorkPolicy.KEEP,
+                    ExistingWorkPolicy.REPLACE,
                     workRequest
             )
         }
