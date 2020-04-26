@@ -1,12 +1,14 @@
 package com.pechuro.bsuirschedule.domain.interactor
 
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
+import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -38,6 +40,9 @@ class GetAvailableForUpdateSchedules @Inject constructor(
                             .awaitAll()
                             .filter { it.second }
                             .map { it.first }
+                }
+                .catch {
+                    Logger.e(it)
                 }
     }
 
