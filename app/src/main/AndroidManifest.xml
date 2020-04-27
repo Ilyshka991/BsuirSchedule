@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".schedulewidget.ScheduleWidgetConfigureActivity">
+        <activity android:name=".feature.appwidgetconfiguration.AppWidgetConfigurationActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -38,7 +38,7 @@
             android:authorities="${applicationId}.workmanager-init"
             tools:node="remove" />
 
-        <receiver android:name=".schedulewidget.ScheduleWidgetProvider">
+        <receiver android:name=".appwidget.AppWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -48,7 +48,7 @@
         </receiver>
 
         <service
-            android:name=".schedulewidget.ScheduleWidgetViewService"
+            android:name=".appwidget.AppWidgetViewService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 </manifest>

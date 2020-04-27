@@ -1,5 +1,6 @@
 package com.pechuro.bsuirschedule.di.module
 
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import com.pechuro.bsuirschedule.App
 import com.pechuro.bsuirschedule.common.AndroidLoggerTree
@@ -31,4 +32,7 @@ class ApplicationModule {
     @Provides
     @AppScope
     fun provideAnalyticsReporter(): AppAnalytics.Reporter = AppAnalyticsReporter()
+
+    @Provides
+    fun provideWidgetManager(context: Context): AppWidgetManager = AppWidgetManager.getInstance(context)
 }

@@ -1,9 +1,8 @@
-package com.pechuro.bsuirschedule.schedulewidget
+package com.pechuro.bsuirschedule.appwidget
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
-import android.content.Intent
 import android.widget.RemoteViews
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.domain.entity.ScheduleWidgetInfo
@@ -11,7 +10,7 @@ import com.pechuro.bsuirschedule.domain.repository.IWidgetRepository
 import com.pechuro.bsuirschedule.ext.app
 import javax.inject.Inject
 
-class ScheduleWidgetProvider : AppWidgetProvider() {
+class AppWidgetProvider : AppWidgetProvider() {
 
     companion object {
 

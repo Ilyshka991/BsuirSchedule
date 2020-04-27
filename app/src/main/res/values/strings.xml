@@ -134,6 +134,13 @@
     <string name="theme_red">Red</string>
     <string name="theme_lime">Lime</string>
 
+    <string name="configure_schedule_widget_title">Add new widget</string>
+    <string name="configure_schedule_widget_msg_exit">Discard changes?</string>
+    <string name="configure_schedule_widget_action_done">Done</string>
+    <string name="configure_schedule_widget_action_msg_select_schedule">Select schedule:</string>
+    <string name="configure_schedule_widget_action_go_to_app">Go to app</string>
+    <string name="configure_schedule_widget_error_empty_schedules">Please, add at least one schedule from main app</string>
+
     <string-array name="lesson_types">
         <item>ЛК</item>
         <item>ПЗ</item>

@@ -3,31 +3,24 @@ package com.pechuro.bsuirschedule.feature
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.AppThemeManager
 import com.pechuro.bsuirschedule.common.BackPressedHandler
-import com.pechuro.bsuirschedule.ext.app
+import com.pechuro.bsuirschedule.common.base.BaseActivity
 import com.pechuro.bsuirschedule.feature.flow.FlowFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), FlowFragment.ActionCallback {
+class MainActivity : BaseActivity(), FlowFragment.ActionCallback {
 
     companion object {
 
         fun newIntent(context: Context) = Intent(context, MainActivity::class.java)
     }
 
-    @Inject
-    protected lateinit var appThemeManager: AppThemeManager
+    override val layoutId: Int = R.layout.activity_main
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        app.appComponent.inject(this)
-        appThemeManager.applyToCurrentTheme(theme)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
             showFlowFragment()
         }

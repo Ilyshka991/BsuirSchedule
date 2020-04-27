@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.schedulewidget
+package com.pechuro.bsuirschedule.appwidget
 
 import android.content.Context
 import android.content.Intent
@@ -7,7 +7,7 @@ import android.widget.RemoteViewsService
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.domain.entity.ScheduleWidgetInfo
 
-class ScheduleWidgetViewService : RemoteViewsService() {
+class AppWidgetViewService : RemoteViewsService() {
 
     companion object {
 
@@ -17,14 +17,14 @@ class ScheduleWidgetViewService : RemoteViewsService() {
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
         val widgetInfo = intent.getParcelableExtra<ScheduleWidgetInfo>(EXTRA_SCHEDULE_INFO)
                 ?: throw IllegalArgumentException("Schedule info must be set")
-        return ScheduleRemoteViewFactory(
+        return AppRemoteViewFactory(
                 context = applicationContext,
                 widgetInfo = widgetInfo
         )
     }
 }
 
-class ScheduleRemoteViewFactory(
+class AppRemoteViewFactory(
         private val context: Context,
         private val widgetInfo: ScheduleWidgetInfo
 ) : RemoteViewsService.RemoteViewsFactory {
