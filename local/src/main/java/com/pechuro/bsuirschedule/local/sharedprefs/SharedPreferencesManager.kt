@@ -22,17 +22,19 @@ class SharedPreferencesManager @Inject constructor(
         private const val KEY_APP_THEME = "KEY_APP_THEME"
         private const val KEY_NAVIGATION_HINT_SHOWN = "KEY_NAVIGATION_HINT_SHOWN"
         private const val KEY_SCHEDULE_HINT_SHOWN = "KEY_SCHEDULE_HINT_SHOWN"
+        private const val KEY_SCHEDULE_WIDGET_INFO = "KEY_SCHEDULE_WIDGET_INFO"
     }
 
-    private val openedScheduleJsonAdapter = moshi.adapter(LastOpenedSchedule::class.java)
+    private val openedScheduleJsonAdapter = moshi.adapter(LocalScheduleInfo::class.java)
+    private val widgetInfoJsonAdapter = moshi.adapter(LocalScheduleWidgetInfo::class.java)
 
-    fun getLastOpenedSchedule(): Flow<LastOpenedSchedule?> = getFlow(KEY_OPENED_SCHEDULE) {
+    fun getLastOpenedSchedule(): Flow<LocalScheduleInfo?> = getFlow(KEY_OPENED_SCHEDULE) {
         openedScheduleJsonAdapter.toJson(null)
     }
             .map { openedScheduleJsonAdapter.fromJson(it) }
             .flowOn(Dispatchers.IO)
 
-    fun setLastOpenedSchedule(schedule: LastOpenedSchedule?) {
+    fun setLastOpenedSchedule(schedule: LocalScheduleInfo?) {
         val jsonString = openedScheduleJsonAdapter.toJson(schedule)
         put(KEY_OPENED_SCHEDULE, jsonString)
     }
@@ -64,6 +66,25 @@ class SharedPreferencesManager @Inject constructor(
     fun setScheduleHintDisplayState(shown: Boolean) {
         put(KEY_SCHEDULE_HINT_SHOWN, shown)
     }
+
+    fun getScheduleWidgetInfo(widgetId: Int): LocalScheduleWidgetInfo? {
+        val key = buildScheduleWidgetInfoPrefsKey(widgetId)
+        val jsonValue = get(key, widgetInfoJsonAdapter.toJson(null))
+        return widgetInfoJsonAdapter.fromJson(jsonValue)
+    }
+
+    fun addScheduleWidgetInfo(info: LocalScheduleWidgetInfo) {
+        val key = buildScheduleWidgetInfoPrefsKey(info.widgetId)
+        val jsonValue = widgetInfoJsonAdapter.toJson(info)
+        put(key, jsonValue)
+    }
+
+    fun removeScheduleWidgetInfo(id: Int) {
+        val key = buildScheduleWidgetInfoPrefsKey(id)
+        preferences.edit().remove(key).apply()
+    }
+
+    private fun buildScheduleWidgetInfoPrefsKey(widgetId: Int) = "${KEY_SCHEDULE_WIDGET_INFO}_$widgetId"
 
     private fun <T : Any> getFlow(key: String, defaultValue: () -> T): Flow<T> = callbackFlow {
         val sendNewValueCallback = {

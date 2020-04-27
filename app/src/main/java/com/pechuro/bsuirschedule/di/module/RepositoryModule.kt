@@ -90,4 +90,14 @@ class RepositoryModule {
             sharedPreferencesManager = sharedPreferencesManager,
             scheduleRepository = scheduleRepository
     )
+
+    @Provides
+    @AppScope
+    fun provideWidgetRepository(
+            sharedPreferencesManager: SharedPreferencesManager,
+            scheduleRepository: IScheduleRepository
+    ): IWidgetRepository = WidgetRepositoryImpl(
+            sharedPreferencesManager = sharedPreferencesManager,
+            scheduleRepository = scheduleRepository
+    )
 }

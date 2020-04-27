@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.pechuro.bsuirschedule.common.factory.ViewModelFactory
 import com.pechuro.bsuirschedule.di.annotations.ViewModelKey
+import com.pechuro.bsuirschedule.feature.MainViewModel
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel
+import com.pechuro.bsuirschedule.feature.appwidgetconfiguration.AppWidgetConfigurationViewModel
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel
 import com.pechuro.bsuirschedule.feature.flow.FlowViewModel
 import com.pechuro.bsuirschedule.feature.itemoptions.ScheduleItemOptionsViewModel
@@ -85,4 +87,14 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(SettingsViewModel::class)
     fun settings(viewModel: SettingsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AppWidgetConfigurationViewModel::class)
+    fun configureScheduleWidget(viewModel: AppWidgetConfigurationViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MainViewModel::class)
+    fun main(viewModel: MainViewModel): ViewModel
 }
