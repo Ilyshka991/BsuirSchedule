@@ -60,12 +60,11 @@ class AppWidgetConfigurationViewModel @Inject constructor(
     fun saveChanges() {
         val resultWidgetInfo = dataProvider.getResultWidgetInfo()
         widgetRepository.updateScheduleWidget(resultWidgetInfo)
-        val appWidgetManager = AppWidgetManager.getInstance(context)
         AppWidgetProvider.updateWidget(
                 context = context,
-                appWidgetManager = appWidgetManager,
+                appWidgetManager = AppWidgetManager.getInstance(context),
                 widgetInfo = resultWidgetInfo,
-                widgetData = widgetDataProvider.getScheduleItemsList(resultWidgetInfo)
+                widgetData = widgetDataProvider.getScheduleItemsList(resultWidgetInfo.widgetId)
         )
     }
 

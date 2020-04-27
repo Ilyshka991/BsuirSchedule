@@ -58,13 +58,13 @@ class AppWidgetProvider : AppWidgetProvider() {
             }
             views.setPendingIntentTemplate(R.id.scheduleWidgetListView, openMainAppIntent)
 
+            appWidgetManager.notifyAppWidgetViewDataChanged(widgetInfo.widgetId, R.id.scheduleWidgetListView)
             appWidgetManager.updateAppWidget(widgetInfo.widgetId, views)
         }
     }
 
     @Inject
     protected lateinit var widgetRepository: IWidgetRepository
-
     @Inject
     protected lateinit var dataProvider: AppWidgetDataProvider
 
@@ -76,7 +76,7 @@ class AppWidgetProvider : AppWidgetProvider() {
                     context = context,
                     appWidgetManager = appWidgetManager,
                     widgetInfo = widgetInfo,
-                    widgetData = dataProvider.getScheduleItemsList(widgetInfo)
+                    widgetData = dataProvider.getScheduleItemsList(widgetInfo.widgetId)
             )
             appWidgetManager.notifyAppWidgetViewDataChanged(id, R.id.scheduleWidgetListView)
         }
