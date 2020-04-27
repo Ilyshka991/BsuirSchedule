@@ -1,86 +1,68 @@
 package com.pechuro.bsuirschedule.schedulewidget
 
-import android.app.Activity
 import android.appwidget.AppWidgetManager
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.AppThemeManager
+import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.repository.IWidgetRepository
+import com.pechuro.bsuirschedule.ext.app
+import kotlinx.android.synthetic.main.activity_configure_schedule_widget.*
+import java.util.*
+import javax.inject.Inject
 
-class ScheduleWidgetConfigureActivity : Activity() {
+class ScheduleWidgetConfigureActivity : AppCompatActivity() {
 
-    private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-    private lateinit var appWidgetText: EditText
-    private var onClickListener = View.OnClickListener {
-        val context = this
+    @Inject
+    protected lateinit var widgetRepository: IWidgetRepository
+    @Inject
+    protected lateinit var appThemeManager: AppThemeManager
 
-        // When the button is clicked, store the string locally
-        val widgetText = appWidgetText.text.toString()
-        saveTitlePref(context, appWidgetId, widgetText)
+    private val widgetId: Int by lazy(LazyThreadSafetyMode.NONE) {
+        intent.extras?.getInt(
+                AppWidgetManager.EXTRA_APPWIDGET_ID,
+                AppWidgetManager.INVALID_APPWIDGET_ID
+        ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
+    }
 
-        // It is the responsibility of the configuration activity to update the app widget
-        val appWidgetManager = AppWidgetManager.getInstance(context)
-        updateAppWidget(context, appWidgetManager, appWidgetId)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        app.appComponent.inject(this)
+        appThemeManager.applyToCurrentTheme(theme)
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_configure_schedule_widget)
+        setResult(RESULT_CANCELED)
+        add_button.setOnClickListener {
+            onDone()
+        }
+    }
 
-        // Make sure we pass back the original appWidgetId
-        val resultValue = Intent()
-        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-        setResult(RESULT_OK, resultValue)
+    private fun onDone() {
+        val resultWidgetInfo = getResultWidgetInfo()
+        updateCurrentWidget(resultWidgetInfo)
+        val resultIntent = Intent().apply {
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+        }
+        setResult(RESULT_OK, resultIntent)
         finish()
     }
 
-    public override fun onCreate(icicle: Bundle?) {
-        super.onCreate(icicle)
-
-        // Set the result to CANCELED.  This will cause the widget host to cancel
-        // out of the widget placement if the user presses the back button.
-        setResult(RESULT_CANCELED)
-
-        setContentView(R.layout.activity_configure_schedule_widget)
-        appWidgetText = findViewById<View>(R.id.appwidget_text) as EditText
-        findViewById<View>(R.id.add_button).setOnClickListener(onClickListener)
-
-        // Find the widget id from the intent.
-        val intent = intent
-        val extras = intent.extras
-        if (extras != null) {
-            appWidgetId = extras.getInt(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-        }
-
-        // If this activity was started with an intent without an app widget ID, finish with an error.
-        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish()
-            return
-        }
-
-        appWidgetText.setText(loadTitlePref(this, appWidgetId))
+    private fun updateCurrentWidget(info: ScheduleWidgetInfo) {
+        widgetRepository.updateScheduleWidget(info)
+        val appWidgetManager = AppWidgetManager.getInstance(this)
+        ScheduleWidgetProvider.updateWidget(
+                context = this,
+                appWidgetManager = appWidgetManager,
+                widgetInfo = info
+        )
     }
 
-}
-
-private const val PREFS_NAME = "com.pechuro.bsuirschedule.appwidget.AppWidget"
-private const val PREF_PREFIX_KEY = "appwidget_"
-
-// Write the prefix to the SharedPreferences object for this widget
-internal fun saveTitlePref(context: Context, appWidgetId: Int, text: String) {
-    val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
-    prefs.putString(PREF_PREFIX_KEY + appWidgetId, text)
-    prefs.apply()
-}
-
-// Read the prefix from the SharedPreferences object for this widget.
-// If there is no preference saved, get the default from a resource
-internal fun loadTitlePref(context: Context, appWidgetId: Int): String {
-    val prefs = context.getSharedPreferences(PREFS_NAME, 0)
-    val titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null)
-    return titleValue ?: "AAAA"
-}
-
-internal fun deleteTitlePref(context: Context, appWidgetId: Int) {
-    val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
-    prefs.remove(PREF_PREFIX_KEY + appWidgetId)
-    prefs.apply()
+    private fun getResultWidgetInfo(): ScheduleWidgetInfo {
+        return ScheduleWidgetInfo(
+                widgetId = widgetId,
+                schedule = Schedule.GroupClasses("", Date(), Group(1, "", Faculty(2, "", ""), Speciality(2, null, EducationForm(3, ""), "", ",", ""), 4), false),
+                subgroupNumber = SubgroupNumber.ALL
+        )
+    }
 }

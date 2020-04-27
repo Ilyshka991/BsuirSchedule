@@ -7,8 +7,8 @@ import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
 import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
 import com.pechuro.bsuirschedule.domain.repository.ISessionRepository
-import com.pechuro.bsuirschedule.local.sharedprefs.LastOpenedSchedule
-import com.pechuro.bsuirschedule.local.sharedprefs.LastOpenedSchedule.ScheduleType.*
+import com.pechuro.bsuirschedule.local.sharedprefs.LocalScheduleInfo
+import com.pechuro.bsuirschedule.local.sharedprefs.LocalScheduleInfo.ScheduleType.*
 import com.pechuro.bsuirschedule.local.sharedprefs.SharedPreferencesManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -37,7 +37,7 @@ class SessionRepositoryImpl(
                 is Schedule.EmployeeClasses -> EMPLOYEE_CLASSES
                 is Schedule.EmployeeExams -> EMPLOYEE_EXAMS
             }
-            LastOpenedSchedule(name, scheduleType)
+            LocalScheduleInfo(name, scheduleType)
         }
         sharedPreferencesManager.setLastOpenedSchedule(prefsValue)
     }
