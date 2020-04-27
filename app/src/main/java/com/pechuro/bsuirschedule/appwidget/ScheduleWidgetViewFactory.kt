@@ -11,7 +11,7 @@ import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.ext.app
 import javax.inject.Inject
 
-class AppWidgetViewService : RemoteViewsService() {
+class ScheduleWidgetViewService : RemoteViewsService() {
 
     companion object {
 
@@ -19,7 +19,7 @@ class AppWidgetViewService : RemoteViewsService() {
     }
 
     @Inject
-    protected lateinit var dataProvider: AppWidgetDataProvider
+    protected lateinit var dataProvider: ScheduleWidgetDataProvider
 
     override fun onCreate() {
         applicationContext.app.appComponent.inject(this)
@@ -27,7 +27,7 @@ class AppWidgetViewService : RemoteViewsService() {
 
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
         val widgetInfoId = intent.getIntExtra(EXTRA_WIDGET_ID, 0)
-        return AppWidgetRemoteViewFactory(
+        return ScheduleWidgetRemoteViewFactory(
                 context = applicationContext,
                 widgetId = widgetInfoId,
                 dataProvider = dataProvider
@@ -35,10 +35,10 @@ class AppWidgetViewService : RemoteViewsService() {
     }
 }
 
-class AppWidgetRemoteViewFactory(
+class ScheduleWidgetRemoteViewFactory(
         private val context: Context,
         private val widgetId: Int,
-        private val dataProvider: AppWidgetDataProvider
+        private val dataProvider: ScheduleWidgetDataProvider
 ) : RemoteViewsService.RemoteViewsFactory {
 
     private var scheduleItems: List<ScheduleItem> = emptyList()

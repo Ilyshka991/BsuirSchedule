@@ -16,7 +16,7 @@ import com.pechuro.bsuirschedule.feature.MainActivity
 import com.pechuro.bsuirschedule.feature.appwidgetconfiguration.AppWidgetConfigurationActivity
 import javax.inject.Inject
 
-class AppWidgetProvider : AppWidgetProvider() {
+class ScheduleWidgetProvider : AppWidgetProvider() {
 
     companion object {
 
@@ -44,8 +44,8 @@ class AppWidgetProvider : AppWidgetProvider() {
             }
             views.setOnClickPendingIntent(R.id.scheduleWidgetTitleParentView, editWidgetInfoIntent)
 
-            val listViewIntent = Intent(context, AppWidgetViewService::class.java).apply {
-                putExtra(AppWidgetViewService.EXTRA_WIDGET_ID, widgetInfo.widgetId)
+            val listViewIntent = Intent(context, ScheduleWidgetViewService::class.java).apply {
+                putExtra(ScheduleWidgetViewService.EXTRA_WIDGET_ID, widgetInfo.widgetId)
                 data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
             }
             views.setRemoteAdapter(R.id.scheduleWidgetListView, listViewIntent)
@@ -66,7 +66,7 @@ class AppWidgetProvider : AppWidgetProvider() {
     @Inject
     protected lateinit var widgetRepository: IWidgetRepository
     @Inject
-    protected lateinit var dataProvider: AppWidgetDataProvider
+    protected lateinit var dataProvider: ScheduleWidgetDataProvider
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         injectDependencies(context)

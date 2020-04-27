@@ -17,7 +17,7 @@ data class ScheduleWidgetData(
         val scheduleItems: List<ScheduleItem>
 )
 
-class AppWidgetDataProvider @Inject constructor(
+class ScheduleWidgetDataProvider @Inject constructor(
         private val getScheduleItems: GetScheduleItems,
         private val widgetRepository: IWidgetRepository
 ) {
