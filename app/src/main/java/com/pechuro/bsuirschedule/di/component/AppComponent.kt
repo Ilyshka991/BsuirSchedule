@@ -1,13 +1,14 @@
 package com.pechuro.bsuirschedule.di.component
 
 import com.pechuro.bsuirschedule.App
+import com.pechuro.bsuirschedule.appwidget.AppWidgetProvider
+import com.pechuro.bsuirschedule.appwidget.AppWidgetViewService
 import com.pechuro.bsuirschedule.common.base.BaseActivity
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.di.annotations.AppScope
 import com.pechuro.bsuirschedule.di.module.*
 import com.pechuro.bsuirschedule.feature.display.fragment.DisplayScheduleFragment
-import com.pechuro.bsuirschedule.appwidget.AppWidgetProvider
 import dagger.BindsInstance
 import dagger.Component
 
@@ -35,6 +36,8 @@ interface AppComponent {
     fun inject(displayScheduleFragment: DisplayScheduleFragment)
 
     fun inject(scheduleWidgetProvider: AppWidgetProvider)
+
+    fun inject(appWidgetViewService: AppWidgetViewService)
 
     @Component.Builder
     interface Builder {

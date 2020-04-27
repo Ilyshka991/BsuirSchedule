@@ -277,4 +277,9 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00000000</color>
+
+    <color name="widget_title_background">@color/blue_grey_700</color>
+    <color name="widget_list_background">@color/white</color>
+    <color name="widget_title_text">@color/grey_100</color>
+    <color name="widget_list_item_text">@color/blue_grey_900</color>
 </resources>

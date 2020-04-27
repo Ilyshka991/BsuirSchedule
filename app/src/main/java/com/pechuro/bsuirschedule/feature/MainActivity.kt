@@ -7,6 +7,7 @@ import androidx.fragment.app.commit
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.BackPressedHandler
 import com.pechuro.bsuirschedule.common.base.BaseActivity
+import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.feature.flow.FlowFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -14,13 +15,23 @@ class MainActivity : BaseActivity(), FlowFragment.ActionCallback {
 
     companion object {
 
+        const val EXTRA_SCHEDULE = "EXTRA_SCHEDULE"
+
         fun newIntent(context: Context) = Intent(context, MainActivity::class.java)
     }
 
     override val layoutId: Int = R.layout.activity_main
 
+    private val viewModel by lazy {
+        initViewModel(MainViewModel::class)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (intent.hasExtra(EXTRA_SCHEDULE)) {
+            val schedule = intent.getParcelableExtra<Schedule>(EXTRA_SCHEDULE)
+            viewModel.setLastOpenedSchedule(schedule)
+        }
         if (savedInstanceState == null) {
             showFlowFragment()
         }

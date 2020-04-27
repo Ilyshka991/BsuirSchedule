@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.feature.appwidgetconfiguration
 
 import android.appwidget.AppWidgetManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.isVisible
@@ -18,6 +19,11 @@ import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogButtonData
 import kotlinx.android.synthetic.main.activity_configure_schedule_widget.*
 
 class AppWidgetConfigurationActivity : BaseActivity() {
+
+    companion object {
+
+        fun newIntent(context: Context) = Intent(context, AppWidgetConfigurationActivity::class.java)
+    }
 
     override val layoutId: Int = R.layout.activity_configure_schedule_widget
 
@@ -138,7 +144,7 @@ class AppWidgetConfigurationActivity : BaseActivity() {
     }
 
     private fun onDone() {
-        viewModel.onDone()
+        viewModel.saveChanges()
         val resultIntent = Intent().apply {
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
         }

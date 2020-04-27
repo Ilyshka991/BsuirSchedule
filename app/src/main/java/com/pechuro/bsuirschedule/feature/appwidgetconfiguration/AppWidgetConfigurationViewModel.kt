@@ -3,6 +3,7 @@ package com.pechuro.bsuirschedule.feature.appwidgetconfiguration
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import androidx.lifecycle.MediatorLiveData
+import com.pechuro.bsuirschedule.appwidget.AppWidgetDataProvider
 import com.pechuro.bsuirschedule.appwidget.AppWidgetProvider
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
@@ -20,7 +21,8 @@ import javax.inject.Inject
 class AppWidgetConfigurationViewModel @Inject constructor(
         private val widgetRepository: IWidgetRepository,
         private val context: Context,
-        private val getAllSchedules: GetAllSchedules
+        private val getAllSchedules: GetAllSchedules,
+        private val widgetDataProvider: AppWidgetDataProvider
 ) : BaseViewModel() {
 
     private val allScheduleListData = flowLiveData {
@@ -55,14 +57,15 @@ class AppWidgetConfigurationViewModel @Inject constructor(
         )
     }
 
-    fun onDone() {
+    fun saveChanges() {
         val resultWidgetInfo = dataProvider.getResultWidgetInfo()
         widgetRepository.updateScheduleWidget(resultWidgetInfo)
         val appWidgetManager = AppWidgetManager.getInstance(context)
         AppWidgetProvider.updateWidget(
                 context = context,
                 appWidgetManager = appWidgetManager,
-                widgetInfo = resultWidgetInfo
+                widgetInfo = resultWidgetInfo,
+                widgetData = widgetDataProvider.getScheduleItemsList(resultWidgetInfo)
         )
     }
 
