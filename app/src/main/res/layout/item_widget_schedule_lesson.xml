@@ -1,17 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scheduleWidgetItemParentView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="64dp">
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/widgetLessonTypeBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignStart="@+id/widgetLessonType"
+        android:layout_alignLeft="@+id/widgetLessonType"
+        android:layout_alignTop="@+id/widgetLessonType"
+        android:layout_alignEnd="@+id/widgetLessonType"
+        android:layout_alignRight="@+id/widgetLessonType"
+        android:layout_alignBottom="@+id/widgetLessonType"
+        tools:src="@color/amber_500" />
 
     <TextView
-        android:id="@+id/widget_list_item_note"
+        android:id="@+id/widgetLessonType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:text="aaa"
-        android:textSize="16sp" />
+        android:layout_alignTop="@+id/widgetLessonSubject"
+        android:layout_alignBottom="@+id/widgetLessonAuditories"
+        android:gravity="center"
+        android:padding="8dp"
+        android:textAllCaps="true"
+        android:textColor="@color/widget_list_background"
+        android:textSize="22sp"
+        tools:text="ЛК" />
+
+    <TextView
+        android:id="@+id/widgetLessonSubject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginBottom="2dp"
+        android:layout_toEndOf="@+id/widgetLessonType"
+        android:layout_toRightOf="@+id/widgetLessonType"
+        android:textColor="@color/widget_list_item_text"
+        android:textSize="16sp"
+        tools:text="Subject" />
+
+    <TextView
+        android:id="@+id/widgetLessonSubgroupNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/widgetLessonSubject"
+        android:layout_toStartOf="@+id/widgetLessonStartTime"
+        android:layout_toLeftOf="@+id/widgetLessonStartTime"
+        android:layout_toEndOf="@+id/widgetLessonSubject"
+        android:layout_toRightOf="@+id/widgetLessonSubject"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingStart="4dp"
+        android:paddingLeft="4dp"
+        android:paddingEnd="4dp"
+        android:paddingRight="4dp"
+        android:textColor="@color/widget_list_item_text"
+        android:textSize="14sp"
+        tools:text="2 subgroup" />
+
+    <TextView
+        android:id="@+id/widgetLessonAuditories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/widgetLessonSubject"
+        android:layout_alignStart="@+id/widgetLessonSubject"
+        android:layout_alignLeft="@+id/widgetLessonSubject"
+        android:layout_marginTop="2dp"
+        android:layout_toStartOf="@+id/widgetLessonEndTime"
+        android:layout_toLeftOf="@+id/widgetLessonEndTime"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingEnd="4dp"
+        android:paddingRight="4dp"
+        android:textColor="@color/widget_list_item_text"
+        android:textSize="14sp"
+        tools:text="333, 666-6" />
+
+    <TextView
+        android:id="@+id/widgetLessonStartTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/widgetLessonSubject"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/widget_list_item_text"
+        android:textSize="16sp"
+        tools:text="11:11" />
+
+    <TextView
+        android:id="@+id/widgetLessonEndTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/widgetLessonAuditories"
+        android:layout_alignEnd="@+id/widgetLessonStartTime"
+        android:layout_alignRight="@+id/widgetLessonStartTime"
+        android:textColor="@color/widget_list_item_text"
+        android:textSize="16sp"
+        tools:text="22:22" />
+
+    <TextView
+        android:id="@+id/widgetLessonNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/widgetLessonAuditories"
+        android:layout_alignStart="@+id/widgetLessonTypeBackground"
+        android:layout_alignLeft="@+id/widgetLessonTypeBackground"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/widget_list_item_text"
+        android:textSize="16sp"
+        tools:text="Note" />
 </RelativeLayout>

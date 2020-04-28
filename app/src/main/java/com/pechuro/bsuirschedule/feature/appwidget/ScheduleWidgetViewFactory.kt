@@ -2,13 +2,21 @@ package com.pechuro.bsuirschedule.feature.appwidget
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.OvalShape
+import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
+import androidx.core.graphics.drawable.toBitmap
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.domain.entity.Exam
 import com.pechuro.bsuirschedule.domain.entity.Lesson
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
-import com.pechuro.bsuirschedule.ext.app
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
+import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.feature.display.fragment.formatAuditories
+import com.pechuro.bsuirschedule.feature.display.fragment.formatEmployees
+import com.pechuro.bsuirschedule.feature.display.fragment.formatGroupNumbers
 import javax.inject.Inject
 
 class ScheduleWidgetViewService : RemoteViewsService() {
@@ -75,6 +83,31 @@ class ScheduleWidgetRemoteViewFactory(
 
     private fun getLessonRow(lesson: Lesson): RemoteViews {
         val row = RemoteViews(context.packageName, R.layout.item_widget_schedule_lesson)
+
+        row.setTextViewText(R.id.widgetLessonType, lesson.lessonType)
+        val typeBackgroundDrawable = ShapeDrawable(OvalShape()).apply {
+            paint.color = context.color(lesson.priority.formattedColorRes)
+        }
+        val size = context.dimenPx(R.dimen.widget_lesson_type_image_size)
+        val lessonTypeBitmap = typeBackgroundDrawable.toBitmap(width = size, height = size)
+        row.setImageViewBitmap(R.id.widgetLessonTypeBackground, lessonTypeBitmap)
+
+        row.setTextViewText(R.id.widgetLessonSubject, lesson.subject)
+
+        val subgroupNumber = context.getString(R.string.display_schedule_item_msg_subgroup, lesson.subgroupNumber.value)
+        row.setTextViewText(R.id.widgetLessonSubgroupNumber, subgroupNumber)
+        val subgroupNumberTextVisibility = if (lesson.subgroupNumber != SubgroupNumber.ALL) View.VISIBLE else View.GONE
+        row.setViewVisibility(R.id.widgetLessonSubgroupNumber, subgroupNumberTextVisibility)
+
+        row.setTextViewText(R.id.widgetLessonStartTime, lesson.startTime.formattedString)
+
+        row.setTextViewText(R.id.widgetLessonEndTime, lesson.endTime.formattedString)
+
+        row.setTextViewText(R.id.widgetLessonAuditories, lesson.auditories.formatAuditories())
+
+        val noteTextVisibility = if (lesson.note.isNotEmpty()) View.VISIBLE else View.GONE
+        row.setTextViewText(R.id.widgetLessonNote, lesson.note)
+        row.setViewVisibility(R.id.widgetLessonNote, noteTextVisibility)
 
         return row
     }
