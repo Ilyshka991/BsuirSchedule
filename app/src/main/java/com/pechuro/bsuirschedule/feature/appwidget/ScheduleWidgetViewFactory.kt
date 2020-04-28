@@ -115,6 +115,25 @@ class ScheduleWidgetRemoteViewFactory(
     private fun getExamRow(exam: Exam): RemoteViews {
         val row = RemoteViews(context.packageName, R.layout.item_widget_schedule_exam)
 
+        row.setTextViewText(R.id.widgetExamSubject, exam.subject)
+
+        val subgroupNumber = context.getString(R.string.display_schedule_item_msg_subgroup, exam.subgroupNumber.value)
+        row.setTextViewText(R.id.widgetExamSubgroup, subgroupNumber)
+        val subgroupNumberTextVisibility = if (exam.subgroupNumber != SubgroupNumber.ALL) View.VISIBLE else View.GONE
+        row.setViewVisibility(R.id.widgetExamSubgroup, subgroupNumberTextVisibility)
+
+        row.setTextViewText(R.id.widgetExamTime, exam.startTime.formattedString)
+
+        row.setTextViewText(R.id.widgetExamDate, exam.date.formattedString)
+
+        row.setTextViewText(R.id.widgetExamType, exam.lessonType)
+
+        row.setTextViewText(R.id.widgetExamAuditory, exam.auditories.formatAuditories())
+
+        val noteTextVisibility = if (exam.note.isNotEmpty()) View.VISIBLE else View.GONE
+        row.setTextViewText(R.id.widgetExamNote, exam.note)
+        row.setViewVisibility(R.id.widgetExamNote, noteTextVisibility)
+
         return row
     }
 }
