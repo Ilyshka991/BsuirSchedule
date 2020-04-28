@@ -67,3 +67,11 @@ val AppTheme.formattedStringRes: Int
         AppTheme.RED -> R.string.theme_red
         AppTheme.LIME -> R.string.theme_lime
     }
+
+@get:StringRes
+val ScheduleWidgetInfo.WidgetTheme.formattedStringRes: Int
+    get() = when (this) {
+        ScheduleWidgetInfo.WidgetTheme.SYSTEM -> R.string.theme_follow_system
+        ScheduleWidgetInfo.WidgetTheme.LIGHT -> R.string.theme_light
+        ScheduleWidgetInfo.WidgetTheme.DARK -> R.string.theme_dark
+    }

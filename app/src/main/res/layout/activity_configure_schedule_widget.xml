@@ -47,6 +47,15 @@
         app:text_size="22sp"
         tools:visibility="visible" />
 
+    <com.pechuro.bsuirschedule.widget.LabeledTextView
+        android:id="@+id/configureScheduleWidgetTheme"
+        style="@style/ModifyItemLabeledText"
+        android:layout_height="wrap_content"
+        android:paddingVertical="16dp"
+        app:label_text="@string/configure_schedule_widget_label_theme"
+        app:text_size="22sp"
+        tools:visibility="visible" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/configureScheduleWidgetSelectScheduleText"
         style="@style/DefaultText"

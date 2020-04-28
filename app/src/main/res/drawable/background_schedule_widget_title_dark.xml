@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:shape="rectangle">
     <corners
-        android:bottomLeftRadius="16dp"
-        android:bottomRightRadius="16dp" />
+        android:topLeftRadius="16dp"
+        android:topRightRadius="16dp" />
     <solid
-        android:color="@color/widget_list_background" />
+        android:color="@color/widget_title_background_dark"/>
 </shape>

@@ -1,0 +1,69 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/scheduleWidgetTitleParentView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_schedule_widget_title_dark">
+
+        <LinearLayout
+            android:id="@+id/scheduleWidgetTitleLinearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:id="@+id/scheduleWidgetScheduleNameText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/widget_title_text_dark"
+                android:textSize="18sp"
+                tools:text="750502" />
+
+            <TextView
+                android:id="@+id/scheduleWidgetDayText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:maxLines="1"
+                android:textAllCaps="true"
+                android:textColor="@color/widget_title_text_dark"
+                android:textSize="18sp"
+                tools:text=", TODAY" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_schedule_widget_list_dark">
+
+        <ListView
+            android:id="@+id/scheduleWidgetListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@color/widget_list_divider_dark"
+            android:dividerHeight="1dp" />
+
+        <TextView
+            android:id="@+id/scheduleWidgetListEmptyText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/schedule_widget_msg_empty"
+            android:textColor="@color/widget_list_item_text_dark"
+            android:textSize="22sp" />
+    </FrameLayout>
+</LinearLayout>

@@ -9,7 +9,7 @@ import com.pechuro.bsuirschedule.ext.requireValue
 
 class AppWidgetConfigurationDataProvider(
         val widgetId: Int,
-        private val initialInfo: ScheduleWidgetInfo?
+        initialInfo: ScheduleWidgetInfo?
 ) {
 
     private val _subgroupNumberData = MutableLiveData(SubgroupNumber.ALL)
@@ -20,10 +20,15 @@ class AppWidgetConfigurationDataProvider(
     val selectedScheduleData: LiveData<Schedule>
         get() = _selectedScheduleData
 
+    private val _widgetTheme = MutableLiveData(ScheduleWidgetInfo.WidgetTheme.DEFAULT)
+    val widgetTheme: LiveData<ScheduleWidgetInfo.WidgetTheme>
+        get() = _widgetTheme
+
     init {
         initialInfo?.run {
             setSubgroupNumber(subgroupNumber)
             setSelectedSchedule(schedule)
+            setWidgetTheme(theme)
         }
     }
 
@@ -35,11 +40,16 @@ class AppWidgetConfigurationDataProvider(
         _selectedScheduleData.value = value
     }
 
+    fun setWidgetTheme(value: ScheduleWidgetInfo.WidgetTheme) {
+        _widgetTheme.value = value
+    }
+
     fun getResultWidgetInfo(): ScheduleWidgetInfo {
         return ScheduleWidgetInfo(
                 widgetId = widgetId,
                 schedule = selectedScheduleData.requireValue,
-                subgroupNumber = subgroupNumberData.requireValue
+                subgroupNumber = subgroupNumberData.requireValue,
+                theme = widgetTheme.requireValue
         )
     }
 }

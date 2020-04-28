@@ -27,7 +27,7 @@
         android:gravity="center"
         android:padding="8dp"
         android:textAllCaps="true"
-        android:textColor="@color/widget_list_background"
+        android:textColor="@color/widget_list_item_lesson_type_dark"
         android:textSize="22sp"
         tools:text="ЛК" />
 
@@ -41,7 +41,7 @@
         android:layout_marginBottom="2dp"
         android:layout_toEndOf="@+id/widgetLessonType"
         android:layout_toRightOf="@+id/widgetLessonType"
-        android:textColor="@color/widget_list_item_text"
+        android:textColor="@color/widget_list_item_text_dark"
         android:textSize="16sp"
         tools:text="Subject" />
 
@@ -60,7 +60,7 @@
         android:paddingLeft="4dp"
         android:paddingEnd="4dp"
         android:paddingRight="4dp"
-        android:textColor="@color/widget_list_item_text"
+        android:textColor="@color/widget_list_item_text_dark"
         android:textSize="14sp"
         tools:text="2 subgroup" />
 
@@ -78,7 +78,7 @@
         android:maxLines="1"
         android:paddingEnd="4dp"
         android:paddingRight="4dp"
-        android:textColor="@color/widget_list_item_text"
+        android:textColor="@color/widget_list_item_text_dark"
         android:textSize="14sp"
         tools:text="333, 666-6" />
 
@@ -89,7 +89,7 @@
         android:layout_alignBaseline="@+id/widgetLessonSubject"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:textColor="@color/widget_list_item_text"
+        android:textColor="@color/widget_list_item_text_dark"
         android:textSize="16sp"
         tools:text="11:11" />
 
@@ -100,7 +100,7 @@
         android:layout_alignBaseline="@+id/widgetLessonAuditories"
         android:layout_alignEnd="@+id/widgetLessonStartTime"
         android:layout_alignRight="@+id/widgetLessonStartTime"
-        android:textColor="@color/widget_list_item_text"
+        android:textColor="@color/widget_list_item_text_dark"
         android:textSize="16sp"
         tools:text="22:22" />
 
@@ -114,7 +114,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="4dp"
-        android:textColor="@color/widget_list_item_text"
+        android:textColor="@color/widget_list_item_text_dark"
         android:textSize="16sp"
         tools:text="Note" />
 </RelativeLayout>
