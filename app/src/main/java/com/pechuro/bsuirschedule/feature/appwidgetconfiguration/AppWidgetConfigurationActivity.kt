@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseActivity
+import com.pechuro.bsuirschedule.domain.entity.ScheduleWidgetInfo.WidgetTheme
 import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.MainActivity
@@ -70,6 +71,9 @@ class AppWidgetConfigurationActivity : BaseActivity() {
         configureScheduleWidgetSubgroupNumber.setSafeClickListener {
             selectSubgroupNumber()
         }
+        configureScheduleWidgetTheme.setSafeClickListener {
+            selectWidgetTheme()
+        }
         configureScheduleWidgetGoToAppButton.setSafeClickListener {
             startMainApp()
         }
@@ -85,6 +89,9 @@ class AppWidgetConfigurationActivity : BaseActivity() {
         viewModel.dataProvider.selectedScheduleData.observe(this, Observer {
             updateLayoutState()
         })
+        viewModel.dataProvider.widgetTheme.nonNull().observe(this) { theme ->
+            configureScheduleWidgetTheme.setMessage(theme.formattedStringRes)
+        }
         viewModel.scheduleListData.nonNull().observe(this) {
             updateLayoutState()
             scheduleListAdapter.submitList(it)
@@ -97,6 +104,7 @@ class AppWidgetConfigurationActivity : BaseActivity() {
         configureScheduleWidgetEmptySchedulesParentView.isVisible = isScheduleListEmpty
         configureScheduleWidgetRecyclerView.isVisible = !isScheduleListEmpty
         configureScheduleWidgetSubgroupNumber.isVisible = !isScheduleListEmpty
+        configureScheduleWidgetTheme.isVisible = !isScheduleListEmpty
         configureScheduleWidgetSelectScheduleText.isVisible = !isScheduleListEmpty
         configureScheduleWidgetDoneButton.isEnabled = !isScheduleListEmpty && isScheduleSelected
     }
@@ -130,6 +138,31 @@ class AppWidgetConfigurationActivity : BaseActivity() {
             }
         }
         val title = getString(R.string.modify_schedule_item_title_select_subgroup)
+        OptionDialog.Builder()
+                .setTitle(title)
+                .setActions(options, listener)
+                .build()
+                .show(supportFragmentManager, OptionDialog.TAG)
+    }
+
+    private fun selectWidgetTheme() {
+        val availableThemes = WidgetTheme.values()
+        val selectedTheme = viewModel.dataProvider.widgetTheme.requireValue
+        val options = availableThemes.map { theme ->
+            OptionDialogButtonData(
+                    text = getString(theme.formattedStringRes),
+                    selected = theme == selectedTheme
+            )
+        }
+        val listener = object : OptionDialog.OptionButtonClickListener {
+            override fun onClick(position: Int) {
+                val newTheme = availableThemes[position]
+                if (newTheme != selectedTheme) {
+                    viewModel.dataProvider.setWidgetTheme(newTheme)
+                }
+            }
+        }
+        val title = getString(R.string.settings_title_select_theme)
         OptionDialog.Builder()
                 .setTitle(title)
                 .setActions(options, listener)

@@ -22,6 +22,8 @@ class ScheduleWidgetDataProvider @Inject constructor(
         private val widgetRepository: IWidgetRepository
 ) {
 
+    fun getWidgetInfo(widgetId: Int) = widgetRepository.getScheduleWidget(widgetId)
+
     fun getScheduleItemsList(widgetId: Int): ScheduleWidgetData {
         val widgetInfo = widgetRepository.getScheduleWidget(widgetId) ?: return ScheduleWidgetData(
                 isForTomorrow = false,

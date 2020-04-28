@@ -57,7 +57,8 @@ class WidgetRepositoryImpl(
         return ScheduleWidgetInfo(
                 widgetId = widgetId,
                 schedule = schedule,
-                subgroupNumber = SubgroupNumber.getForValue(subgroupNumber)
+                subgroupNumber = SubgroupNumber.getForValue(subgroupNumber),
+                theme = ScheduleWidgetInfo.WidgetTheme.getForName(theme)
         )
     }
 
@@ -72,6 +73,7 @@ class WidgetRepositoryImpl(
                         is Schedule.EmployeeExams -> EMPLOYEE_EXAMS
                     }
             ),
-            subgroupNumber = subgroupNumber.value
+            subgroupNumber = subgroupNumber.value,
+            theme = theme.name
     )
 }

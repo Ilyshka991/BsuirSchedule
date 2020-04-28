@@ -2,6 +2,7 @@ package com.pechuro.bsuirschedule.feature.appwidget
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.view.View
@@ -9,14 +10,9 @@ import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import androidx.core.graphics.drawable.toBitmap
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.domain.entity.Exam
-import com.pechuro.bsuirschedule.domain.entity.Lesson
-import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
-import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
+import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.display.fragment.formatAuditories
-import com.pechuro.bsuirschedule.feature.display.fragment.formatEmployees
-import com.pechuro.bsuirschedule.feature.display.fragment.formatGroupNumbers
 import javax.inject.Inject
 
 class ScheduleWidgetViewService : RemoteViewsService() {
@@ -50,6 +46,7 @@ class ScheduleWidgetRemoteViewFactory(
 ) : RemoteViewsService.RemoteViewsFactory {
 
     private var scheduleItems: List<ScheduleItem> = emptyList()
+    private var widgetInfo: ScheduleWidgetInfo? = null
 
     override fun onCreate() {
         onDataSetChanged()
@@ -57,6 +54,7 @@ class ScheduleWidgetRemoteViewFactory(
 
     override fun onDataSetChanged() {
         scheduleItems = dataProvider.getScheduleItemsList(widgetId).scheduleItems
+        widgetInfo = dataProvider.getWidgetInfo(widgetId)
     }
 
     override fun getViewAt(position: Int): RemoteViews {
@@ -73,16 +71,27 @@ class ScheduleWidgetRemoteViewFactory(
 
     override fun getItemId(position: Int) = scheduleItems[position].id
 
-    override fun hasStableIds() = true
+    override fun hasStableIds() = false
 
     override fun getCount() = scheduleItems.size
 
-    override fun getViewTypeCount() = 2
+    override fun getViewTypeCount() = 4
 
     override fun onDestroy() {}
 
     private fun getLessonRow(lesson: Lesson): RemoteViews {
-        val row = RemoteViews(context.packageName, R.layout.item_widget_schedule_lesson)
+        val layoutRes = when (widgetInfo?.theme) {
+            ScheduleWidgetInfo.WidgetTheme.LIGHT -> R.layout.item_widget_schedule_lesson_light
+            ScheduleWidgetInfo.WidgetTheme.DARK -> R.layout.item_widget_schedule_lesson_dark
+            else -> {
+                when (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+                    Configuration.UI_MODE_NIGHT_NO -> R.layout.item_widget_schedule_lesson_light
+                    Configuration.UI_MODE_NIGHT_YES -> R.layout.item_widget_schedule_lesson_dark
+                    else -> R.layout.item_widget_schedule_lesson_light
+                }
+            }
+        }
+        val row = RemoteViews(context.packageName, layoutRes)
 
         row.setTextViewText(R.id.widgetLessonType, lesson.lessonType)
         val typeBackgroundDrawable = ShapeDrawable(OvalShape()).apply {
@@ -113,7 +122,18 @@ class ScheduleWidgetRemoteViewFactory(
     }
 
     private fun getExamRow(exam: Exam): RemoteViews {
-        val row = RemoteViews(context.packageName, R.layout.item_widget_schedule_exam)
+        val layoutRes = when (widgetInfo?.theme) {
+            ScheduleWidgetInfo.WidgetTheme.LIGHT -> R.layout.item_widget_schedule_exam_light
+            ScheduleWidgetInfo.WidgetTheme.DARK -> R.layout.item_widget_schedule_exam_dark
+            else -> {
+                when (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+                    Configuration.UI_MODE_NIGHT_NO -> R.layout.item_widget_schedule_exam_light
+                    Configuration.UI_MODE_NIGHT_YES -> R.layout.item_widget_schedule_exam_dark
+                    else -> R.layout.item_widget_schedule_exam_light
+                }
+            }
+        }
+        val row = RemoteViews(context.packageName, layoutRes)
 
         row.setTextViewText(R.id.widgetExamSubject, exam.subject)
 

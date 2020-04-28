@@ -6,7 +6,8 @@ import com.squareup.moshi.JsonClass
 data class LocalScheduleWidgetInfo(
         val widgetId: Int,
         val schedule: LocalScheduleInfo,
-        val subgroupNumber: Int
+        val subgroupNumber: Int,
+        val theme: String
 )
 
 

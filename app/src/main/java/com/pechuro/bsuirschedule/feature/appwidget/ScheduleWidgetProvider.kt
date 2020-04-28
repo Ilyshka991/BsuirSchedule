@@ -5,11 +5,14 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
+import android.os.Handler
 import android.widget.RemoteViews
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleWidgetInfo
+import com.pechuro.bsuirschedule.domain.entity.ScheduleWidgetInfo.WidgetTheme
 import com.pechuro.bsuirschedule.domain.repository.IWidgetRepository
 import com.pechuro.bsuirschedule.ext.app
 import com.pechuro.bsuirschedule.feature.MainActivity
@@ -20,6 +23,8 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
 
     companion object {
 
+        private var a = false
+
         fun updateWidget(
                 context: Context,
                 appWidgetManager: AppWidgetManager,
@@ -27,7 +32,18 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
                 widgetInfo: ScheduleWidgetInfo?,
                 widgetData: ScheduleWidgetData
         ) {
-            val views = RemoteViews(context.packageName, R.layout.layout_schedule_widget)
+            val layoutRes = when (widgetInfo?.theme) {
+                WidgetTheme.LIGHT -> R.layout.layout_schedule_widget_light
+                WidgetTheme.DARK -> R.layout.layout_schedule_widget_dark
+                else -> {
+                    when (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+                        Configuration.UI_MODE_NIGHT_NO -> R.layout.layout_schedule_widget_light
+                        Configuration.UI_MODE_NIGHT_YES -> R.layout.layout_schedule_widget_dark
+                        else -> R.layout.layout_schedule_widget_light
+                    }
+                }
+            }
+            val views = RemoteViews(context.packageName, layoutRes)
 
             val dayStringRes = when {
                 widgetInfo == null -> R.string.schedule_widget_msg_deleted
@@ -37,7 +53,8 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
                 else -> R.string.schedule_widget_msg_today
             }
             views.setTextViewText(R.id.scheduleWidgetDayText, context.getString(dayStringRes))
-            views.setTextViewText(R.id.scheduleWidgetScheduleNameText, widgetInfo?.schedule?.name ?: "")
+            views.setTextViewText(R.id.scheduleWidgetScheduleNameText, widgetInfo?.schedule?.name
+                    ?: "")
 
             val editWidgetInfoIntent = AppWidgetConfigurationActivity.newIntent(context).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
@@ -60,8 +77,15 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
             }
             views.setPendingIntentTemplate(R.id.scheduleWidgetListView, openMainAppIntent)
 
+            appWidgetManager.updateAppWidget(widgetId, null)
             appWidgetManager.notifyAppWidgetViewDataChanged(widgetId, R.id.scheduleWidgetListView)
             appWidgetManager.updateAppWidget(widgetId, views)
+
+            //TODO: Figure out why it works
+            Handler().postDelayed({
+                appWidgetManager.notifyAppWidgetViewDataChanged(widgetId, R.id.scheduleWidgetListView)
+                appWidgetManager.updateAppWidget(widgetId, views)
+            }, 50)
         }
     }
 
