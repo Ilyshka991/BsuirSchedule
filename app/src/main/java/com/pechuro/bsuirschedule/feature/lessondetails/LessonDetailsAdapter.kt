@@ -14,6 +14,7 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.domain.entity.Auditory
 import com.pechuro.bsuirschedule.domain.entity.Employee
 import com.pechuro.bsuirschedule.domain.entity.Lesson
+import com.pechuro.bsuirschedule.domain.entity.LocalTime
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_employee_details.*
 import kotlinx.android.synthetic.main.item_lesson_details_header.*
@@ -79,7 +80,7 @@ class LessonDetailsAdapter(
         val context = itemView.context
 
         lessonDetailsName.text = lesson.subject
-        lessonDetailsTime.text = with(lesson) { "$startTime - $endTime" }
+        lessonDetailsTime.text = with(lesson) { "${startTime.format()} - ${endTime.format()}" }
         lessonDetailsWeeks.text = getWeeksText(context)
 
         lessonDetailsLocationsTitle.visibility =
@@ -128,6 +129,8 @@ class LessonDetailsAdapter(
         holder.lessonDetailsInfoViewPager.adapter = EmployeeAdapter(groupLesson)
         TabLayoutMediator(holder.lessonDetailsInfoTabLayout, holder.lessonDetailsInfoViewPager) { _, _ -> }.attach()
     }
+
+    private fun LocalTime.format(): String = "$hour:$minute"
 
     private class HeaderViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 

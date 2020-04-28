@@ -23,12 +23,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/lessonDetailsLocationAuditoryName"
+        style="@style/DefaultText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:gravity="start"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/lessonDetailsLocationAuditoryType"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,12 +38,14 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="123-4" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/lessonDetailsLocationAuditoryType"
+        style="@style/DefaultText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:gravity="start"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/lessonDetailsLocationAuditoryDepartment"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,12 +53,14 @@
         app:layout_constraintTop_toBottomOf="@id/lessonDetailsLocationAuditoryName"
         tools:text="Type" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/lessonDetailsLocationAuditoryDepartment"
+        style="@style/DefaultText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:gravity="start"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/lessonDetailsLocationAuditoryNote"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,12 +68,14 @@
         app:layout_constraintTop_toBottomOf="@id/lessonDetailsLocationAuditoryType"
         tools:text="Department" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/lessonDetailsLocationAuditoryNote"
+        style="@style/DefaultText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:gravity="start"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
