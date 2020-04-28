@@ -7,11 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.bold
 import androidx.core.text.toSpannable
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.request.target.Target
 import com.google.android.material.tabs.TabLayoutMediator
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.entity.Auditory
+import com.pechuro.bsuirschedule.domain.entity.Employee
+import com.pechuro.bsuirschedule.domain.entity.Lesson
+import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 import com.pechuro.bsuirschedule.ext.formattedString
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_employee_details.*
@@ -102,12 +109,8 @@ class LessonDetailsAdapter(
     }
 
     private fun onBindGroupHeader(holder: HeaderViewHolder, groupLesson: Lesson.GroupLesson) {
-        holder.lessonDetailsInfoViewPager.visibility =
-                if (groupLesson.employees.isNotEmpty()) View.VISIBLE
-                else View.GONE
-        holder.lessonDetailsInfoTabLayout.visibility =
-                if (groupLesson.employees.size > 1) View.VISIBLE
-                else View.GONE
+        holder.lessonDetailsInfoViewPager.isVisible = groupLesson.employees.isNotEmpty()
+        holder.lessonDetailsInfoTabLayout.isVisible = groupLesson.employees.size > 1
     }
 
     private fun getWeeksText(context: Context): CharSequence {
@@ -117,7 +120,7 @@ class LessonDetailsAdapter(
             append(prefix)
         }
         builder.append(" ")
-        builder.append(weeks.joinToString { "${it.index + 1}" })
+        builder.append(weeks.joinToString { it.formattedString })
         return builder.toSpannable()
     }
 
@@ -132,6 +135,12 @@ class LessonDetailsAdapter(
 
     private fun initGroupHeader(holder: HeaderViewHolder, groupLesson: Lesson.GroupLesson) {
         holder.lessonDetailsInfoViewPager.adapter = EmployeeAdapter(groupLesson)
+        holder.lessonDetailsInfoViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                println("onPageSelected")
+                holder.lessonDetailsInfoViewPager.adapter?.notifyDataSetChanged()
+            }
+        })
         TabLayoutMediator(holder.lessonDetailsInfoTabLayout, holder.lessonDetailsInfoViewPager) { _, _ -> }.attach()
     }
 
@@ -158,6 +167,8 @@ class LessonDetailsAdapter(
             holder.employeeDetailsAdditionalInfo.text = employee.getAdditionalInfoText()
             Glide.with(holder.itemView)
                     .load(employee.photoLink)
+                    .override(Target.SIZE_ORIGINAL)
+                    .format(DecodeFormat.PREFER_ARGB_8888)
                     .placeholder(R.drawable.employee_placeholder)
                     .error(R.drawable.employee_placeholder)
                     .circleCrop()
