@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Lesson
+import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 import com.pechuro.bsuirschedule.ext.args
 import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.ext.observe
@@ -34,7 +35,7 @@ class LessonDetailsFragment : BaseFragment() {
     }
 
     private val adapter by lazy(LazyThreadSafetyMode.NONE) {
-        LessonDetailsAdapter(lesson)
+        LessonDetailsAdapter()
     }
 
     override val layoutId: Int get() = R.layout.fragment_lesson_details
@@ -47,8 +48,14 @@ class LessonDetailsFragment : BaseFragment() {
 
     private fun observeData() {
         viewModel.weeks.nonNull().observe(viewLifecycleOwner) {
-            adapter.weeks = it
+            adapter.submitList(getLessonList(it))
         }
+    }
+
+    private fun getLessonList(weeks: List<WeekNumber>): List<DetailsItem> {
+        val list = mutableListOf<DetailsItem>(DetailsItem.LessonHeader(lesson, weeks))
+        list += lesson.auditories.map { DetailsItem.LocationItem(it) }
+        return list
     }
 
     private fun initView() {
