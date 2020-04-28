@@ -37,5 +37,5 @@ interface IScheduleRepository {
 
     suspend fun addScheduleItems(schedule: Schedule, scheduleItems: List<ScheduleItem>)
 
-    suspend fun getLessonWeeks(lesson: Lesson): Flow<List<WeekNumber>>
+    suspend fun getLessonWeeks(lesson: Lesson): List<WeekNumber>
 }

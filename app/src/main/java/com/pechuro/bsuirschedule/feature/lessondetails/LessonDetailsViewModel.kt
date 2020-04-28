@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.feature.lessondetails
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.Lesson
@@ -16,7 +17,8 @@ class LessonDetailsViewModel @Inject constructor(
 
     lateinit var lesson: Lesson
 
-    val weeks: LiveData<List<WeekNumber>> = flowLiveData {
-        getLessonWeeks.execute(GetLessonWeeks.Params(lesson)).getOrDefault(emptyFlow())
+    val weeks: LiveData<List<WeekNumber>> = liveData {
+        val weeks = getLessonWeeks.execute(GetLessonWeeks.Params(lesson)).getOrDefault(emptyList())
+        emit(weeks)
     }
 }

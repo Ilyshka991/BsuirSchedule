@@ -8,7 +8,6 @@ import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupClassesItemC
 import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupExamItemComplex
 import com.pechuro.bsuirschedule.local.entity.schedule.crossref.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapConcat
 import java.util.*
 
 @Dao
@@ -23,8 +22,9 @@ interface ScheduleDao {
             startTime: Date,
             endTime: Date,
             weekDay: Int
-    ): Flow<List<Int>> = getGroupClassesScheduleName(id).flatMapConcat { scheduleName ->
-        getGroupClassesWeeks(scheduleName, subject, subgroupNumber, lessonType, startTime, endTime, weekDay)
+    ): List<Int> {
+        val scheduleName = getGroupClassesScheduleName(id)
+        return getGroupClassesWeeks(scheduleName, subject, subgroupNumber, lessonType, startTime, endTime, weekDay)
     }
 
     @Transaction
@@ -393,7 +393,7 @@ interface ScheduleDao {
 
 
     @Query("SELECT week_number FROM group_item_classes WHERE schedule_name = :scheduleName AND subject = :subject AND subgroup_number = :subgroupNumber AND lesson_type = :lessonType AND start_time = :startTime AND end_time = :endTime AND week_day = :weekDay")
-    fun getGroupClassesWeeks(
+    suspend fun getGroupClassesWeeks(
             scheduleName: String,
             subject: String,
             subgroupNumber: Int,
@@ -401,8 +401,8 @@ interface ScheduleDao {
             startTime: Date,
             endTime: Date,
             weekDay: Int
-    ): Flow<List<Int>>
+    ): List<Int>
 
     @Query("SELECT schedule_name FROM group_item_classes WHERE id = :id")
-    fun getGroupClassesScheduleName(id: Long): Flow<String>
+    suspend fun getGroupClassesScheduleName(id: Long): String
 }
