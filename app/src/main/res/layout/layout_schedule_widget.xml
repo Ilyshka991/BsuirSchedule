@@ -29,7 +29,7 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/widget_list_background"
+                android:textColor="@color/widget_title_color"
                 android:textSize="18sp"
                 tools:text="750502" />
 
@@ -39,7 +39,7 @@
                 android:layout_height="match_parent"
                 android:maxLines="1"
                 android:textAllCaps="true"
-                android:textColor="@color/widget_list_background"
+                android:textColor="@color/widget_title_color"
                 android:textSize="18sp"
                 tools:text=", TODAY" />
         </LinearLayout>

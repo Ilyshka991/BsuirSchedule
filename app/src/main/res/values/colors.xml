@@ -278,8 +278,12 @@
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00000000</color>
 
+
+    <!-- Widget colors -->
     <color name="widget_title_background">@color/blue_grey_700</color>
+    <color name="widget_title_color">@color/widget_list_background</color>
     <color name="widget_list_background">@color/grey_50</color>
     <color name="widget_list_divider">@color/grey_300</color>
+    <color name="widget_list_item_lesson_type">@color/widget_list_background</color>
     <color name="widget_list_item_text">@color/blue_grey_900</color>
 </resources>

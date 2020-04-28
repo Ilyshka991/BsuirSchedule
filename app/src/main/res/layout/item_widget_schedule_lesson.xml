@@ -27,7 +27,7 @@
         android:gravity="center"
         android:padding="8dp"
         android:textAllCaps="true"
-        android:textColor="@color/widget_list_background"
+        android:textColor="@color/widget_list_item_lesson_type"
         android:textSize="22sp"
         tools:text="ЛК" />
 
