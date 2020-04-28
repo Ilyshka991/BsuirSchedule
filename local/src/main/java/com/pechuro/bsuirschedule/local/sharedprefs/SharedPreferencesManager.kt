@@ -67,6 +67,16 @@ class SharedPreferencesManager @Inject constructor(
         put(KEY_SCHEDULE_HINT_SHOWN, shown)
     }
 
+    fun getAllScheduleWidgetInfoList(): List<LocalScheduleWidgetInfo> = preferences.all
+            .filterKeys {
+                it.startsWith(KEY_SCHEDULE_WIDGET_INFO)
+            }
+            .keys
+            .mapNotNull { key ->
+                val jsonValue = get(key, widgetInfoJsonAdapter.toJson(null))
+                widgetInfoJsonAdapter.fromJson(jsonValue)
+            }
+
     fun getScheduleWidgetInfo(widgetId: Int): LocalScheduleWidgetInfo? {
         val key = buildScheduleWidgetInfoPrefsKey(widgetId)
         val jsonValue = get(key, widgetInfoJsonAdapter.toJson(null))

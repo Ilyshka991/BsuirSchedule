@@ -11,6 +11,7 @@ import com.pechuro.bsuirschedule.local.sharedprefs.LocalScheduleInfo
 import com.pechuro.bsuirschedule.local.sharedprefs.LocalScheduleInfo.ScheduleType.*
 import com.pechuro.bsuirschedule.local.sharedprefs.SharedPreferencesManager
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
 class SessionRepositoryImpl(
@@ -27,6 +28,8 @@ class SessionRepositoryImpl(
                     EMPLOYEE_EXAMS -> scheduleRepository.getEmployeeExamsByName(it.name)
                     else -> null
                 }
+            }.catch {
+                emit(null)
             }
 
     override suspend fun setLastOpenedSchedule(schedule: Schedule?) {

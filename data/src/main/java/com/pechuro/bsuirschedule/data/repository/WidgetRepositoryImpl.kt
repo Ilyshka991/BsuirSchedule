@@ -31,6 +31,14 @@ class WidgetRepositoryImpl(
         sharedPreferencesManager.removeScheduleWidgetInfo(widgetId)
     }
 
+    override fun removeScheduleWidget(schedule: Schedule) {
+        val allWidgets = sharedPreferencesManager
+                .getAllScheduleWidgetInfoList()
+                .map { it.mapToDomainInfo() }
+        val widgetToRemoveId = allWidgets.find { it.schedule == schedule }?.widgetId ?: 0
+        removeScheduleWidget(widgetToRemoveId)
+    }
+
     private fun add(info: ScheduleWidgetInfo) {
         val localInfo = info.mapToLocalInfo()
         sharedPreferencesManager.addScheduleWidgetInfo(localInfo)

@@ -1,5 +1,6 @@
 package com.pechuro.bsuirschedule.domain.repository
 
+import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleWidgetInfo
 
 interface IWidgetRepository {
@@ -9,4 +10,6 @@ interface IWidgetRepository {
     fun updateScheduleWidget(info: ScheduleWidgetInfo)
 
     fun removeScheduleWidget(widgetId: Int)
+
+    fun removeScheduleWidget(schedule: Schedule)
 }

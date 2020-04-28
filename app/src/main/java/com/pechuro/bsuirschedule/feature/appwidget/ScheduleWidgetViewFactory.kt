@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.appwidget
+package com.pechuro.bsuirschedule.feature.appwidget
 
 import android.content.Context
 import android.content.Intent
