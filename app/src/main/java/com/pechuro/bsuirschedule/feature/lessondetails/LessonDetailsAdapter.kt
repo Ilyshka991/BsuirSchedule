@@ -11,10 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.domain.entity.Auditory
-import com.pechuro.bsuirschedule.domain.entity.Employee
-import com.pechuro.bsuirschedule.domain.entity.Lesson
-import com.pechuro.bsuirschedule.domain.entity.LocalTime
+import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.formattedString
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_employee_details.*
@@ -29,6 +26,12 @@ class LessonDetailsAdapter(
         private const val HEADER_VIEW_TYPE = R.layout.item_lesson_details_header
         private const val LOCATION_VIEW_TYPE = R.layout.item_lesson_details_location
     }
+
+    var weeks: List<WeekNumber> = emptyList()
+        set(value) {
+            field = value
+            notifyItemChanged(0)
+        }
 
     override fun getItemViewType(position: Int): Int = when (position) {
         0 -> HEADER_VIEW_TYPE
@@ -113,7 +116,8 @@ class LessonDetailsAdapter(
             val prefix = context.getString(R.string.lesson_details_weeks)
             append(prefix)
         }
-        builder.append(" ${lesson.weekDay.index + 1}")
+        builder.append(" ")
+        builder.append(weeks.joinToString { "${it.index + 1}" })
         return builder.toSpannable()
     }
 

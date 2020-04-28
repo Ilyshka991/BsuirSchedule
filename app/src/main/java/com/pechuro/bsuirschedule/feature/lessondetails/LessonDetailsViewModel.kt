@@ -1,32 +1,22 @@
 package com.pechuro.bsuirschedule.feature.lessondetails
 
+import androidx.lifecycle.LiveData
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
+import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.Lesson
+import com.pechuro.bsuirschedule.domain.entity.WeekNumber
+import com.pechuro.bsuirschedule.domain.interactor.GetLessonWeeks
+import com.pechuro.bsuirschedule.ext.flowLiveData
+import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
-class LessonDetailsViewModel @Inject constructor() : BaseViewModel() {
+class LessonDetailsViewModel @Inject constructor(
+        private val getLessonWeeks: GetLessonWeeks
+) : BaseViewModel() {
 
-    private lateinit var lesson: Lesson
+    lateinit var lesson: Lesson
 
-    lateinit var subject: String
-
-    lateinit var time: String
-
-    lateinit var employeePhotoUrl: String
-
-    lateinit var employeeFullName: String
-
-    lateinit var weeks: String
-
-    lateinit var auditory: String
-
-    fun setLesson(lesson: Lesson) {
-        this.lesson = lesson
-        subject = lesson.subject
-        time = with(lesson) { "$startTime - $endTime" }
-        employeePhotoUrl = "https://www.grassrootinstitute.org/wp-content/uploads/2013/04/00409335.jpg" // TODO
-        employeeFullName = "Asian teacher" // TODO
-        weeks = "Weeks: ${lesson.weekNumber.index + 1}" // TODO
-        auditory = lesson.auditories.firstOrNull()?.run { "$name-${building.name}" } ?: "" //TODO
+    val weeks: LiveData<List<WeekNumber>> = flowLiveData {
+        getLessonWeeks.execute(GetLessonWeeks.Params(lesson)).getOrDefault(emptyFlow())
     }
 }

@@ -282,6 +282,30 @@ class ScheduleRepositoryImpl(
         }
     }
 
+    override suspend fun getLessonWeeks(lesson: Lesson): Flow<List<WeekNumber>> =
+            when (lesson) {
+                is Lesson.GroupLesson -> getGroupLessonWeeks(lesson)
+                is Lesson.EmployeeLesson -> getEmployeeLessonWeeks(lesson)
+            }
+
+    private fun getEmployeeLessonWeeks(lesson: Lesson.EmployeeLesson): Flow<List<WeekNumber>> {
+        TODO("Not yet implemented")
+    }
+
+    private suspend fun getGroupLessonWeeks(lesson: Lesson.GroupLesson): Flow<List<WeekNumber>> = performDaoCall {
+        dao.getGroupClassesWeeks(
+                id = lesson.id,
+                subject = lesson.subject,
+                subgroupNumber = lesson.subgroupNumber.value,
+                lessonType = lesson.lessonType,
+                startTime = lesson.startTime.toDate(),
+                endTime = lesson.endTime.toDate(),
+                weekDay = lesson.weekDay.index
+        ).map { intValues ->
+            intValues.map { WeekNumber.getForIndex(it) }
+        }
+    }
+
     private suspend fun addScheduleItem(schedule: Schedule, scheduleItem: ScheduleItem) {
         performDaoCall {
             when (scheduleItem) {

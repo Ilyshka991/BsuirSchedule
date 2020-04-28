@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Lesson
 import com.pechuro.bsuirschedule.ext.args
+import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.observe
 import kotlinx.android.synthetic.main.fragment_lesson_details.*
 
 class LessonDetailsFragment : BaseFragment() {
@@ -28,7 +29,7 @@ class LessonDetailsFragment : BaseFragment() {
 
     private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
         initViewModel(LessonDetailsViewModel::class).also {
-            it.setLesson(lesson)
+            it.lesson = lesson
         }
     }
 
@@ -41,6 +42,13 @@ class LessonDetailsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        observeData()
+    }
+
+    private fun observeData() {
+        viewModel.weeks.nonNull().observe(viewLifecycleOwner) {
+            adapter.weeks = it
+        }
     }
 
     private fun initView() {
