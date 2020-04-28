@@ -1,5 +1,6 @@
 package com.pechuro.bsuirschedule.feature.flow
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -9,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.BackPressedHandler
 import com.pechuro.bsuirschedule.common.FragmentAnimationsResHolder
 import com.pechuro.bsuirschedule.common.base.BaseFragment
@@ -26,6 +29,7 @@ import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragment
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragmentArgs
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheet
 import com.pechuro.bsuirschedule.feature.scheduleoptions.DisplayScheduleOptionsSheet
+import com.pechuro.bsuirschedule.feature.settings.SettingsFragment
 import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation
 import com.pechuro.bsuirschedule.feature.stafflist.StaffListFragment
 import com.pechuro.bsuirschedule.feature.stafflist.StaffType
@@ -45,7 +49,13 @@ class FlowFragment : BaseFragment(),
         DisplayScheduleDatePickerSheet.ActionCallback,
         ScheduleItemOptionsSheet.ActionCallback,
         ModifyScheduleItemFragment.ActionCallback,
-        StaffListFragment.ActionCallback {
+        StaffListFragment.ActionCallback,
+        SettingsFragment.ActionCallback {
+
+    interface ActionCallback {
+
+        fun onFlowRecreate()
+    }
 
     companion object {
 
@@ -58,12 +68,19 @@ class FlowFragment : BaseFragment(),
         initViewModel(FlowViewModel::class)
     }
 
+    private var actionCallback: ActionCallback? = null
+
     private val defaultFragmentAnimations = FragmentAnimationsResHolder(
             enter = R.animator.fragment_open_enter,
             exit = R.animator.fragment_open_exit,
             popEnter = R.animator.fragment_close_enter,
             popExit = R.animator.fragment_close_exit
     )
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        actionCallback = getCallbackOrNull()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -81,13 +98,18 @@ class FlowFragment : BaseFragment(),
         postUpdateLayoutState()
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        actionCallback = null
+    }
+
     override fun onBackPressed(): Boolean {
         val currentFragment = getCurrentFragment() as? BackPressedHandler
         if (currentFragment?.onBackPressed() == false) {
             popFragment()
             return true
         }
-        return false
+        return childFragmentManager.backStackEntryCount > 0
     }
 
     override fun onLoadInfoCompleted() {
@@ -103,7 +125,10 @@ class FlowFragment : BaseFragment(),
         }
     }
 
-    override fun onNavigationSettingsClicked() {}
+    override fun onNavigationSettingsClicked() {
+        popFragment()
+        openSettings()
+    }
 
     override fun onNavigationAddScheduleClicked() {
         popFragment()
@@ -111,6 +136,7 @@ class FlowFragment : BaseFragment(),
     }
 
     override fun onNavigationScheduleSelected(schedule: Schedule) {
+        AppAnalytics.report(AppAnalyticsEvent.ScheduleOpened(schedule))
         openViewSchedule(schedule)
     }
 
@@ -168,6 +194,10 @@ class FlowFragment : BaseFragment(),
     override fun onStaffListItemSelected(info: StaffItemInformation) {
         popFragment()
         addStaffItemToModifySchedule(info)
+    }
+
+    override fun onSettingsThemeChanged() {
+        actionCallback?.onFlowRecreate()
     }
 
     private fun initViews() {
@@ -260,6 +290,10 @@ class FlowFragment : BaseFragment(),
         openFragment(AddScheduleFragmentContainer.newInstance(), AddScheduleFragmentContainer.TAG)
     }
 
+    private fun openSettings() {
+        openFragment(SettingsFragment.newInstance(), SettingsFragment.TAG)
+    }
+
     private fun openDisplayScheduleOptions(schedule: Schedule) {
         showDialog(DisplayScheduleOptionsSheet.newInstance(schedule), DisplayScheduleOptionsSheet.TAG)
     }
@@ -317,6 +351,7 @@ class FlowFragment : BaseFragment(),
             is AddScheduleFragmentContainer,
             is ModifyScheduleItemFragment,
             is StaffListFragment,
+            is SettingsFragment,
             is LessonDetailsFragment,
             is LoadInfoFragment -> false
             else -> true

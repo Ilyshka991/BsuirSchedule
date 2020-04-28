@@ -142,8 +142,8 @@ internal fun Lesson.GroupLesson.toDatabaseEntity(schedule: GroupClassesScheduleC
             subgroupNumber = subgroupNumber.value,
             lessonType = lessonType,
             note = note,
-            startTime = startTime,
-            endTime = endTime,
+            startTime = startTime.toDate(),
+            endTime = endTime.toDate(),
             weekDay = weekDay.index,
             weekNumber = weekNumber.index,
             priority = priority.value,
@@ -166,9 +166,9 @@ internal fun Exam.GroupExam.toDatabaseEntity(schedule: GroupExamScheduleCached) 
             subgroupNumber = subgroupNumber.value,
             lessonType = lessonType,
             note = note,
-            startTime = startTime,
-            endTime = endTime,
-            date = date,
+            startTime = startTime.toDate(),
+            endTime = endTime.toDate(),
+            date = date.toDate(),
             isAddedByUser = isAddedByUser
     )
     val employees = employees.map { it.toDatabaseEntity() }
@@ -203,8 +203,8 @@ internal fun Lesson.EmployeeLesson.toDatabaseEntity(schedule: EmployeeClassesSch
             subgroupNumber = subgroupNumber.value,
             lessonType = lessonType,
             note = note,
-            startTime = startTime,
-            endTime = endTime,
+            startTime = startTime.toDate(),
+            endTime = endTime.toDate(),
             weekDay = weekDay.index,
             priority = priority.value,
             isAddedByUser = isAddedByUser
@@ -226,9 +226,9 @@ internal fun Exam.EmployeeExam.toDatabaseEntity(schedule: EmployeeExamScheduleCa
             subgroupNumber = subgroupNumber.value,
             lessonType = lessonType,
             note = note,
-            startTime = startTime,
-            endTime = endTime,
-            date = date,
+            startTime = startTime.toDate(),
+            endTime = endTime.toDate(),
+            date = date.toDate(),
             isAddedByUser = isAddedByUser
     )
     val groups = studentGroups.map { it.toDatabaseEntity() }

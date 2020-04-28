@@ -1,11 +1,7 @@
 package com.pechuro.bsuirschedule.worker
 
 import android.content.Context
-import androidx.annotation.IntRange
-import androidx.work.CoroutineWorker
-import androidx.work.PeriodicWorkRequest
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkerParameters
+import androidx.work.*
 import com.pechuro.bsuirschedule.common.NotificationManager
 import com.pechuro.bsuirschedule.common.factory.ChildWorkerFactory
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
@@ -29,18 +25,32 @@ class CheckScheduleUpdatesWorker(
     companion object {
         const val TAG = "UpdateScheduleWorker"
 
-        fun createPeriodicRequest(
-                @IntRange(from = 0, to = 23) scheduleAtHour: Int,
-                repeatIntervalMillis: Long
-        ): PeriodicWorkRequest {
-            val executeAtTimeMillis = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, scheduleAtHour)
-                if (System.currentTimeMillis() > timeInMillis) {
-                    add(Calendar.DATE, 1)
-                }
-            }.timeInMillis
-            val timeDiff = executeAtTimeMillis - System.currentTimeMillis()
-            return PeriodicWorkRequestBuilder<CheckScheduleUpdatesWorker>(repeatIntervalMillis, TimeUnit.MILLISECONDS)
+        private const val SCHEDULE_AT_HOUR = 20
+        private const val PERIOD_HOURS = 24
+
+        fun scheduleNextWork(context: Context) {
+            val workRequest = createOneTimeRequestRequest()
+            WorkManager.getInstance(context).enqueueUniqueWork(
+                    TAG,
+                    ExistingWorkPolicy.REPLACE,
+                    workRequest
+            )
+        }
+
+        private fun createOneTimeRequestRequest(): OneTimeWorkRequest {
+            val currentDate = Calendar.getInstance()
+            val dueDate = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, SCHEDULE_AT_HOUR)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+            }
+
+            if (dueDate.before(currentDate)) {
+                dueDate.add(Calendar.HOUR_OF_DAY, PERIOD_HOURS)
+            }
+            val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
+
+            return OneTimeWorkRequestBuilder<CheckScheduleUpdatesWorker>()
                     .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
                     .addTag(TAG)
                     .build()
@@ -58,6 +68,7 @@ class CheckScheduleUpdatesWorker(
                         notificationManager.showUpdateAvailable(it)
                     }
                 }
+        scheduleNextWork(applicationContext)
         return Result.success()
     }
 

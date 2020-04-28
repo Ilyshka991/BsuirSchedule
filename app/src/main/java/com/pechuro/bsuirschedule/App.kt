@@ -8,22 +8,24 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
 import androidx.work.Configuration
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.WorkManager
 import androidx.work.WorkerFactory
+import com.pechuro.bsuirschedule.common.AppAnalytics
 import com.pechuro.bsuirschedule.di.component.AppComponent
 import com.pechuro.bsuirschedule.di.component.DaggerAppComponent
 import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.worker.CheckScheduleUpdatesWorker
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 open class App : Application(), Configuration.Provider, LifecycleObserver {
 
     @Inject
     protected lateinit var loggerTree: Logger.Tree
+
     @Inject
     protected lateinit var workerFactory: WorkerFactory
+
+    @Inject
+    protected lateinit var analyticsReporter: AppAnalytics.Reporter
 
     lateinit var appComponent: AppComponent
 
@@ -42,6 +44,7 @@ open class App : Application(), Configuration.Provider, LifecycleObserver {
         super.onCreate()
         initDI()
         initLogger()
+        initAnalytics()
         startCheckScheduleUpdatesWorker()
     }
 
@@ -66,15 +69,11 @@ open class App : Application(), Configuration.Provider, LifecycleObserver {
         }
     }
 
+    private fun initAnalytics() {
+        AppAnalytics.set(analyticsReporter)
+    }
+
     private fun startCheckScheduleUpdatesWorker() {
-        val workRequest = CheckScheduleUpdatesWorker.createPeriodicRequest(
-                scheduleAtHour = 20,
-                repeatIntervalMillis = TimeUnit.DAYS.toMillis(1)
-        )
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-                CheckScheduleUpdatesWorker.TAG,
-                ExistingPeriodicWorkPolicy.KEEP,
-                workRequest
-        )
+        CheckScheduleUpdatesWorker.scheduleNextWork(context = this)
     }
 }

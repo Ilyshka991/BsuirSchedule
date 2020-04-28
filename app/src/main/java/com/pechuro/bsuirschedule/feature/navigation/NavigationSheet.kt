@@ -104,6 +104,10 @@ class NavigationSheet : BaseBottomSheetDialog() {
         override fun onScheduleClicked(schedule: Schedule) {
             actionCallback?.onNavigationScheduleSelected(schedule)
         }
+
+        override fun onHintDismissed() {
+            viewModel.onHintDismissed()
+        }
     }
     private val adapter = NavigationDrawerAdapter().apply {
         actionCallback = adapterActionCallback
@@ -190,7 +194,7 @@ class NavigationSheet : BaseBottomSheetDialog() {
     private fun observeData() {
         viewModel.navigationInfoData.nonNull().observe(viewLifecycleOwner) {
             adapter.submitList(it) {
-                navigationSheetItemRecyclerView.scrollToPosition(0)
+                navigationSheetItemRecyclerView?.scrollToPosition(0)
             }
         }
     }

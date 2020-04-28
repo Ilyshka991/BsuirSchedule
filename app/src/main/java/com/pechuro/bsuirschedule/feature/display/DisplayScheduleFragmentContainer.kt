@@ -16,7 +16,8 @@ import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel.Event.
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel.Event.OnScheduleItemLongClicked
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleViewType
-import kotlinx.android.synthetic.main.fragment_view_schedule_container.*
+import kotlinx.android.synthetic.main.fragment_display_schedule_container.*
+import kotlinx.android.synthetic.main.item_schedule_actions_hint.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -50,7 +51,7 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
         }
     }
 
-    override val layoutId: Int = R.layout.fragment_view_schedule_container
+    override val layoutId: Int = R.layout.fragment_display_schedule_container
 
     private val schedule: Schedule by args(BUNDLE_SCHEDULE)
 
@@ -131,8 +132,10 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
             when (event) {
                 is OnScheduleItemClicked -> actionCallback?.onDisplayScheduleOpenDetails(event.data)
                 is OnScheduleItemLongClicked -> actionCallback?.onDisplayScheduleOpenOptions(event.data)
-
             }
+        }
+        viewModel.hintDisplayState.nonNull().observe(viewLifecycleOwner) { shown ->
+            scheduleActionsHintParentView.isVisible = !shown
         }
     }
 
@@ -157,6 +160,10 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
         } else {
             displayScheduleContainerTabLayout.isVisible = false
             displayScheduleContainerViewPager.isUserInputEnabled = false
+        }
+
+        scheduleActionsHintOkButton.setSafeClickListener {
+            viewModel.dismissHint()
         }
     }
 

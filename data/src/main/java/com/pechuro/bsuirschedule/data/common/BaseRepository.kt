@@ -4,6 +4,7 @@ import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.exception.DataSourceException
 import com.pechuro.bsuirschedule.remote.common.NetworkUnavailableException
 import com.squareup.moshi.JsonDataException
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -33,6 +34,7 @@ abstract class BaseRepository {
             is ConnectException, is NetworkUnavailableException -> DataSourceException.NoDataSourceConnection
             is JsonDataException, is EOFException -> DataSourceException.InvalidData
             is UnknownHostException, is HttpException -> DataSourceException.DataSourceUnavailable
+            is CancellationException -> DataSourceException.CancellationException
             else -> DataSourceException.UnknownException
         }
         throw exception
@@ -44,6 +46,10 @@ abstract class BaseRepository {
         }
     } catch (e: Exception) {
         Logger.e(e)
-        throw DataSourceException.UnknownException
+        val exception = when (e) {
+            is CancellationException -> DataSourceException.CancellationException
+            else -> DataSourceException.UnknownException
+        }
+        throw exception
     }
 }

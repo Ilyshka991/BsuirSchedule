@@ -1,13 +1,14 @@
 package com.pechuro.bsuirschedule.data.repository
 
 import com.pechuro.bsuirschedule.data.common.BaseRepository
+import com.pechuro.bsuirschedule.domain.entity.AppTheme
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
 import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
 import com.pechuro.bsuirschedule.domain.repository.ISessionRepository
-import com.pechuro.bsuirschedule.local.sharedprefs.LastOpenedSchedule
-import com.pechuro.bsuirschedule.local.sharedprefs.LastOpenedSchedule.ScheduleType.*
+import com.pechuro.bsuirschedule.local.sharedprefs.LocalScheduleInfo
+import com.pechuro.bsuirschedule.local.sharedprefs.LocalScheduleInfo.ScheduleType.*
 import com.pechuro.bsuirschedule.local.sharedprefs.SharedPreferencesManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -36,7 +37,7 @@ class SessionRepositoryImpl(
                 is Schedule.EmployeeClasses -> EMPLOYEE_CLASSES
                 is Schedule.EmployeeExams -> EMPLOYEE_EXAMS
             }
-            LastOpenedSchedule(name, scheduleType)
+            LocalScheduleInfo(name, scheduleType)
         }
         sharedPreferencesManager.setLastOpenedSchedule(prefsValue)
     }
@@ -59,5 +60,29 @@ class SessionRepositoryImpl(
 
     override suspend fun setScheduleDisplaySubgroupNumber(number: SubgroupNumber) {
         sharedPreferencesManager.setSubgroupNumber(number.value)
+    }
+
+    override suspend fun getAppTheme(): AppTheme {
+        val themeName = sharedPreferencesManager.getAppTheme(AppTheme.DEFAULT.name)
+        return AppTheme.getForName(themeName)
+    }
+
+    override suspend fun setAppTheme(theme: AppTheme) {
+        val name = theme.name
+        sharedPreferencesManager.setAppTheme(name)
+    }
+
+    override suspend fun getNavigationHintDisplayState(): Flow<Boolean> = sharedPreferencesManager
+            .getNavigationHintDisplayState(false)
+
+    override suspend fun setNavigationHintDisplayState(shown: Boolean) {
+        sharedPreferencesManager.setNavigationHintDisplayState(shown)
+    }
+
+    override suspend fun getScheduleHintDisplayState(): Flow<Boolean> = sharedPreferencesManager
+            .getScheduleHintDisplayState(false)
+
+    override suspend fun setScheduleHintDisplayState(shown: Boolean) {
+        sharedPreferencesManager.setScheduleHintDisplayState(shown)
     }
 }

@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorRes
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
@@ -18,8 +19,8 @@ import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import kotlinx.android.synthetic.main.item_display_schedule_classes.*
 import kotlinx.android.synthetic.main.item_display_schedule_exam.*
-import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
 
@@ -38,8 +39,6 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
 private const val CLASSES_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_classes
 private const val EXAMS_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_exam
 private const val EMPTY_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_empty
-
-const val SCHEDULE_ITEM_DATE_FORMAT_PATTERN = "dd.MM.yyyy"
 
 class DisplayScheduleItemAdapter(
         onClickCallback: (data: DisplayScheduleItem) -> Unit,
@@ -104,8 +103,8 @@ class DisplayScheduleItemAdapter(
                 displayClassesAuditories.updatePadding(right = if (formattedAuditories.isNotEmpty()) defaultItemPadding else 0)
                 displayClassesSubgroup.isVisible = subgroupNumber != SubgroupNumber.ALL
                 displayClassesSubgroup.text = itemView.context.getString(R.string.display_schedule_item_msg_subgroup, subgroupNumber.value)
-                displayClassesStartTime.text = startTime
-                displayClassesEndTime.text = endTime
+                displayClassesStartTime.text = startTime.formattedString
+                displayClassesEndTime.text = endTime.formattedString
                 displayClassesNote.isVisible = note.isNotEmpty() && note.isNotBlank()
                 displayClassesNote.text = note
                 if (data is DisplayScheduleItem.WeekClasses) {
@@ -129,15 +128,13 @@ class DisplayScheduleItemAdapter(
 
     private class ExamsViewHolder(view: View) : BaseViewHolder<DisplayScheduleItem.Exams>(view) {
 
-        private val dateFormatter = SimpleDateFormat(SCHEDULE_ITEM_DATE_FORMAT_PATTERN, Locale.getDefault())
-
         override fun onBind(data: DisplayScheduleItem.Exams) {
             val scheduleItem = data.scheduleItem
             data.scheduleItem.run {
-                displayExamStartTime.text = startTime
+                displayExamStartTime.text = startTime.formattedString
                 displayExamAuditories.text = auditories.formatAuditories()
                 displayExamTitle.text = subject
-                displayExamDate.text = dateFormatter.format(date)
+                displayExamDate.text = date.formattedString
                 displayExamSubgroup.isVisible = subgroupNumber != SubgroupNumber.ALL
                 displayExamSubgroup.text = itemView.context.getString(
                         R.string.display_schedule_item_msg_subgroup,
@@ -146,6 +143,12 @@ class DisplayScheduleItemAdapter(
                 displayExamType.text = lessonType
                 displayExamsNote.isVisible = note.isNotEmpty() && note.isNotBlank()
                 displayExamsNote.text = note
+                val isExam = lessonType.toLowerCase(Locale.getDefault()) == "экзамен"
+                displayExamLeftDaysIndicator.isVisible = isExam
+                if (isExam) {
+                    val leftDaysIndicatorColor = itemView.context.color(getLeftDaysIndicatorColorRes(date, startTime))
+                    displayExamLeftDaysIndicator.setBackgroundColor(leftDaysIndicatorColor)
+                }
                 val info = when (scheduleItem) {
                     is Exam.EmployeeExam -> scheduleItem.studentGroups.formatGroupNumbers()
                     is Exam.GroupExam -> scheduleItem.employees.formatEmployees()
@@ -155,6 +158,26 @@ class DisplayScheduleItemAdapter(
             }
             itemView.tag = data
         }
+
+        @ColorRes
+        private fun getLeftDaysIndicatorColorRes(examDate: LocalDate, examTime: LocalTime): Int {
+            val dateDiffMs = examDate.toDate().time - LocalDate.current().toDate().time
+            val daysLeft = TimeUnit.DAYS.convert(dateDiffMs, TimeUnit.MILLISECONDS)
+            val timeDiffMs = examTime.toDate().time - LocalTime.current().toDate().time
+            return when {
+                daysLeft < 0L -> R.color.transparent
+                daysLeft == 0L && timeDiffMs < 0 -> R.color.transparent
+                daysLeft == 0L -> R.color.amber_900
+                daysLeft < 3 -> R.color.amber_800
+                daysLeft < 5 -> R.color.amber_700
+                daysLeft < 7 -> R.color.amber_600
+                daysLeft < 10 -> R.color.amber_500
+                daysLeft < 12 -> R.color.amber_400
+                daysLeft < 15 -> R.color.amber_300
+                daysLeft < 20 -> R.color.amber_200
+                else -> R.color.amber_100
+            }
+        }
     }
 
     private class EmptyViewHolder(view: View) : BaseViewHolder<DisplayScheduleItem.Empty>(view) {
@@ -163,9 +186,9 @@ class DisplayScheduleItemAdapter(
     }
 }
 
-private fun List<WeekNumber>.formatWeekNumbers() = joinToString(separator = ",") { it.formattedString}
+private fun List<WeekNumber>.formatWeekNumbers() = joinToString(separator = ",") { it.formattedString }
 
-private fun List<Auditory>.formatAuditories() = joinToString(separator = ",") { it.formattedName}
+private fun List<Auditory>.formatAuditories() = joinToString(separator = ",") { it.formattedName }
 
 private fun List<Employee>.formatEmployees() = joinToString(separator = ",") { it.abbreviation }
 

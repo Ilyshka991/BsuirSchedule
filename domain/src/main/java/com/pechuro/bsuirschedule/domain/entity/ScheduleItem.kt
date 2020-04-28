@@ -8,10 +8,8 @@ interface ScheduleItem : Parcelable {
     val subgroupNumber: SubgroupNumber
     val lessonType: String
     val note: String
-    val startTime: String
-    val endTime: String
+    val startTime: LocalTime
+    val endTime: LocalTime
     val auditories: List<Auditory>
     val isAddedByUser: Boolean
 }
-
-const val SCHEDULE_ITEM_TIME_FORMAT_PATTERN = "HH:mm"

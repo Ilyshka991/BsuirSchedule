@@ -4,7 +4,7 @@ import androidx.annotation.Keep
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class LastOpenedSchedule(
+data class LocalScheduleInfo(
         val name: String,
         val type: ScheduleType
 ) {

@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.local.entity.schedule
 
 import androidx.room.*
+import java.util.*
 
 @Entity(
         tableName = "employee_item_classes",
@@ -30,9 +31,9 @@ data class EmployeeItemClassesCached(
         @ColumnInfo(name = "note")
         val note: String,
         @ColumnInfo(name = "start_time")
-        val startTime: String,
+        val startTime: Date,
         @ColumnInfo(name = "end_time")
-        val endTime: String,
+        val endTime: Date,
         @ColumnInfo(name = "week_day")
         val weekDay: Int,
         @ColumnInfo(name = "priority")

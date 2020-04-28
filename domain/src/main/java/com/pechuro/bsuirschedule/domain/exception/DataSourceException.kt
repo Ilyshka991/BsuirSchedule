@@ -9,4 +9,6 @@ sealed class DataSourceException : Exception() {
     object InvalidData : DataSourceException()
 
     object UnknownException : DataSourceException()
+
+    object CancellationException : DataSourceException()
 }

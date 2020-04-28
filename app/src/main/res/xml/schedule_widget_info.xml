@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:configure="com.pechuro.bsuirschedule.feature.appwidgetconfiguration.AppWidgetConfigurationActivity"
+    android:initialKeyguardLayout="@layout/layout_schedule_widget"
+    android:initialLayout="@layout/layout_schedule_widget"
+    android:minWidth="240dp"
+    android:minHeight="120dp"
+    android:previewImage="@drawable/schedule_widget_preview"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="900000"
+    android:widgetCategory="home_screen|keyguard" />

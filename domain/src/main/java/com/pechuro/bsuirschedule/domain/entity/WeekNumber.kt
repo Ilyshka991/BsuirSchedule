@@ -29,4 +29,9 @@ enum class WeekNumber(val index: Int) {
             return WeekNumber.getForIndex(weekNumberIndex)
         }
     }
+
+    fun getNext(): WeekNumber {
+        val nextIndex = (index + 1) % TOTAL_COUNT
+        return getForIndex(nextIndex)
+    }
 }

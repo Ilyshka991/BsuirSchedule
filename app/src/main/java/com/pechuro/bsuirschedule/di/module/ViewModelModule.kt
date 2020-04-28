@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.pechuro.bsuirschedule.common.factory.ViewModelFactory
 import com.pechuro.bsuirschedule.di.annotations.ViewModelKey
+import com.pechuro.bsuirschedule.feature.MainViewModel
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel
+import com.pechuro.bsuirschedule.feature.appwidgetconfiguration.AppWidgetConfigurationViewModel
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel
 import com.pechuro.bsuirschedule.feature.flow.FlowViewModel
 import com.pechuro.bsuirschedule.feature.itemoptions.ScheduleItemOptionsViewModel
@@ -13,6 +15,7 @@ import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoViewModel
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemViewModel
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetViewModel
 import com.pechuro.bsuirschedule.feature.scheduleoptions.DisplayScheduleOptionsViewModel
+import com.pechuro.bsuirschedule.feature.settings.SettingsViewModel
 import com.pechuro.bsuirschedule.feature.stafflist.StaffListViewModel
 import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheetViewModel
 import dagger.Binds
@@ -79,4 +82,19 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(StaffListViewModel::class)
     fun staffList(viewModel: StaffListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SettingsViewModel::class)
+    fun settings(viewModel: SettingsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AppWidgetConfigurationViewModel::class)
+    fun configureScheduleWidget(viewModel: AppWidgetConfigurationViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MainViewModel::class)
+    fun main(viewModel: MainViewModel): ViewModel
 }

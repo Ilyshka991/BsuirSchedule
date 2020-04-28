@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -22,5 +23,9 @@ abstract class BaseViewModel : ViewModel() {
             crossinline body: suspend CoroutineScope.() -> T
     ) = viewModelScope.async(context) {
         body()
+    }
+
+    protected fun cancelAllJobs() {
+        viewModelScope.coroutineContext.cancelChildren()
     }
 }

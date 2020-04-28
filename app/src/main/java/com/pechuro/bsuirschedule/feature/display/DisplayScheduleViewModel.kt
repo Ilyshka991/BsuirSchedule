@@ -8,9 +8,7 @@ import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber.Companion.calculateCurrentWeekNumber
-import com.pechuro.bsuirschedule.domain.interactor.GetScheduleDisplaySubgroupNumber
-import com.pechuro.bsuirschedule.domain.interactor.GetScheduleDisplayType
-import com.pechuro.bsuirschedule.domain.interactor.GetScheduleItems
+import com.pechuro.bsuirschedule.domain.interactor.*
 import com.pechuro.bsuirschedule.ext.addIfEmpty
 import com.pechuro.bsuirschedule.ext.flowLiveData
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
@@ -28,7 +26,9 @@ import javax.inject.Inject
 class DisplayScheduleViewModel @Inject constructor(
         private val getScheduleItems: GetScheduleItems,
         private val getScheduleDisplayType: GetScheduleDisplayType,
-        private val getScheduleDisplaySubgroupNumber: GetScheduleDisplaySubgroupNumber
+        private val getScheduleDisplaySubgroupNumber: GetScheduleDisplaySubgroupNumber,
+        private val getScheduleHintDisplayState: GetScheduleHintDisplayState,
+        private val setScheduleHintDisplayState: SetScheduleHintDisplayState
 ) : BaseViewModel() {
 
     lateinit var schedule: Schedule
@@ -45,6 +45,10 @@ class DisplayScheduleViewModel @Inject constructor(
             getScheduleDisplayType.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
         }
         addSource(displayTypeFlowData) { value = it }
+    }
+
+    val hintDisplayState = flowLiveData {
+        getScheduleHintDisplayState.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
     }
 
     val eventsData = LiveEvent<Event>()
@@ -72,6 +76,12 @@ class DisplayScheduleViewModel @Inject constructor(
         }
         addSource(scheduleItemList) { transformFunction() }
         addSource(displaySubgroupNumber) { transformFunction() }
+    }
+
+    fun dismissHint() {
+        launchCoroutine {
+            setScheduleHintDisplayState.execute(SetScheduleHintDisplayState.Params(shown = true))
+        }
     }
 
     private fun mapToDisplayScheduleItems(
@@ -135,7 +145,7 @@ class DisplayScheduleViewModel @Inject constructor(
 
     private fun List<ScheduleItem>.mapToExams(): List<DisplayScheduleItem.Exams> = this
             .filterIsInstance<Exam>()
-            .sortedBy { it.date }
+            .sortedWith(compareBy<Exam> { it.date }.thenBy { it.startTime })
             .map(DisplayScheduleItem::Exams)
 
     sealed class Event {

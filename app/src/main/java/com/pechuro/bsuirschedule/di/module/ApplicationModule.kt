@@ -1,9 +1,11 @@
 package com.pechuro.bsuirschedule.di.module
 
+import android.appwidget.AppWidgetManager
 import android.content.Context
-import android.content.SharedPreferences
 import com.pechuro.bsuirschedule.App
 import com.pechuro.bsuirschedule.common.AndroidLoggerTree
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsReporter
 import com.pechuro.bsuirschedule.common.NetworkAvailabilityCheckerImpl
 import com.pechuro.bsuirschedule.di.annotations.AppScope
 import com.pechuro.bsuirschedule.domain.common.Logger
@@ -29,6 +31,8 @@ class ApplicationModule {
 
     @Provides
     @AppScope
-    fun provideSharedPrefs(context: Context): SharedPreferences =
-            context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
+    fun provideAnalyticsReporter(): AppAnalytics.Reporter = AppAnalyticsReporter()
+
+    @Provides
+    fun provideWidgetManager(context: Context): AppWidgetManager = AppWidgetManager.getInstance(context)
 }

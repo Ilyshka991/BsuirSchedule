@@ -7,8 +7,10 @@
     <string name="notification_update_title">Schedule update for %1$s is available</string>
     <string name="notification_update_description">Tap for update</string>
 
+    <string name="action_discard">Discard</string>
     <string name="action_retry">Retry</string>
     <string name="action_cancel">Cancel</string>
+    <string name="action_ok">OK</string>
 
     <string name="error_loading">Something went wrong,\nretry later</string>
 
@@ -34,6 +36,7 @@
     <string name="navigation_msg_schedule_update_error">Not updated</string>
     <string name="navigation_msg_schedule_update_available">Update is available</string>
     <string name="navigation_msg_schedule_update_success">Updated</string>
+    <string name="navigation_hint_schedule_actions">You can swipe left to delete schedule, or swipe right to update</string>
 
     <string name="update_schedule_classes_title">Classes schedule for %1$s has changed!</string>
     <string name="update_schedule_exams_title">Exams schedule for %1$s has changed!</string>
@@ -43,13 +46,12 @@
 
     <string name="start_message">Hello</string>
 
-    <string name="settings_title">Settings</string>
-
     <string name="display_schedule_tab_title">%1$s, week %2$d</string>
 
     <string name="display_schedule_item_msg_subgroup">%1$d subgroup</string>
     <string name="display_schedule_item_msg_week_numbers">weeks: %1$s</string>
     <string name="display_schedule_item_msg_empty_list">Nothing there</string>
+    <string name="display_schedule__hint_schedule_actions">You can view details by single tap on item, or modify by long tap</string>
 
     <string name="display_options_sheet_title_type">Display by %1$s</string>
     <string name="display_options_sheet_msg_type_weeks">weeks</string>
@@ -85,6 +87,7 @@
     <string name="modify_schedule_item_title_select_subgroup">Select subgroup</string>
     <string name="modify_schedule_item_title_select_weekday">Select weekday</string>
     <string name="modify_schedule_item_title_select_weeknumber">Select weeks</string>
+    <string name="modify_schedule_item_title_discard_changes">Discard changes?</string>
 
     <string name="lesson_priotity_lowest">Lowest</string>
     <string name="lesson_priotity_low">Low</string>
@@ -104,6 +107,44 @@
     <string name="staff_list_msg_empty">Not found</string>
 
     <string name="options_dialog_action_done">done</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_action_change_theme">Theme: %1$s</string>
+    <string name="settings_action_update_info">Update information</string>
+    <string name="settings_action_rate_app">Rate app!</string>
+    <string name="settings_action_send_feedback">Send feedback</string>
+    <string name="settings_action_privacy_police">Privacy police</string>
+    <string name="settings_label_version">Version:</string>
+    <string name="settings_feedback_email_subject">Feedback for Bsuir Schedule</string>
+    <string name="settings_feedback_email_address">ilyapechuro991@gmail.com</string>
+    <string name="settings_title_select_theme">Select theme</string>
+
+    <string name="theme_follow_system">Follow system</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_black">Black</string>
+    <string name="theme_indigo">Indigo</string>
+    <string name="theme_teal">Teal</string>
+    <string name="theme_blue_grey">Blue-grey</string>
+    <string name="theme_blue_white">Blue-white</string>
+    <string name="theme_brown">Brown</string>
+    <string name="theme_orange">Orange</string>
+    <string name="theme_purple">Purple</string>
+    <string name="theme_cyan">Cyan</string>
+    <string name="theme_red">Red</string>
+    <string name="theme_lime">Lime</string>
+
+    <string name="configure_schedule_widget_title">Add new widget</string>
+    <string name="configure_schedule_widget_msg_exit">Discard changes?</string>
+    <string name="configure_schedule_widget_action_done">Done</string>
+    <string name="configure_schedule_widget_action_msg_select_schedule">Select schedule:</string>
+    <string name="configure_schedule_widget_action_go_to_app">Go to app</string>
+    <string name="configure_schedule_widget_error_empty_schedules">Please, add at least one schedule from main app</string>
+
+    <string name="schedule_widget_msg_today">, Today</string>
+    <string name="schedule_widget_msg_tomorrow">, Tomorrow</string>
+    <string name="schedule_widget_msg_exams">, Exams</string>
+    <string name="schedule_widget_msg_empty">Nothing there</string>
 
     <string-array name="lesson_types">
         <item>ЛК</item>

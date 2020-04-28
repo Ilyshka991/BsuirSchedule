@@ -1,6 +1,9 @@
 package com.pechuro.bsuirschedule.di.component
 
 import com.pechuro.bsuirschedule.App
+import com.pechuro.bsuirschedule.appwidget.ScheduleWidgetProvider
+import com.pechuro.bsuirschedule.appwidget.ScheduleWidgetViewService
+import com.pechuro.bsuirschedule.common.base.BaseActivity
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.di.annotations.AppScope
@@ -17,17 +20,24 @@ import dagger.Component
     DatabaseModule::class,
     RepositoryModule::class,
     WorkerModule::class,
-    RecyclerViewModule::class
+    RecyclerViewModule::class,
+    DataModule::class
 ])
 interface AppComponent {
 
     fun inject(app: App)
+
+    fun inject(activity: BaseActivity)
 
     fun inject(fragment: BaseFragment)
 
     fun inject(dialog: BaseBottomSheetDialog)
 
     fun inject(displayScheduleFragment: DisplayScheduleFragment)
+
+    fun inject(scheduleWidgetProvider: ScheduleWidgetProvider)
+
+    fun inject(scheduleWidgetViewService: ScheduleWidgetViewService)
 
     @Component.Builder
     interface Builder {

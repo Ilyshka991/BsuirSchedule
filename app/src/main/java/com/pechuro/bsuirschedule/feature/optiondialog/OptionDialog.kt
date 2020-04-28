@@ -1,30 +1,21 @@
 package com.pechuro.bsuirschedule.feature.optiondialog
 
-import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.Window
 import androidx.core.view.isVisible
-import androidx.fragment.app.DialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.base.BaseDialogFragment
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import kotlinx.android.synthetic.main.dialog_options.*
-import kotlin.math.roundToInt
 
-class OptionDialog : DialogFragment() {
+class OptionDialog : BaseDialogFragment() {
 
     companion object {
         const val TAG = "OptionDialog"
-
-        private const val WIDTH_PERCENT = 0.8
     }
 
     interface OptionButtonClickListener {
@@ -97,33 +88,17 @@ class OptionDialog : DialogFragment() {
 
     private lateinit var params: Params
 
+    override val layoutId: Int = R.layout.dialog_options
+
     override fun onAttach(context: Context) {
         // Can't restore dialog state, so dismiss there
         if (!::params.isInitialized) dismiss()
         super.onAttach(context)
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return super.onCreateDialog(savedInstanceState).apply {
-            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            window?.requestFeature(Window.FEATURE_NO_TITLE)
-        }
-    }
-
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.dialog_options, container, false)
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        setDialogWidth()
     }
 
     override fun onDismiss(dialog: DialogInterface) {
@@ -131,17 +106,13 @@ class OptionDialog : DialogFragment() {
         params.onDismissListener?.invoke()
     }
 
-    private fun setDialogWidth() {
-        val width = (resources.displayMetrics.widthPixels * WIDTH_PERCENT).roundToInt()
-        dialog?.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
-    }
-
     private fun initViews() {
         optionsDialogTitle.text = params.title
         optionsDialogDoneButton.setSafeClickListener {
             dismiss()
         }
-        optionsDialogDoneButton.isVisible = params.multipleSelectionButtons.isNotEmpty()
+        val isInMultipleSelectionMode = params.multipleSelectionButtons.isNotEmpty()
+        optionsDialogDoneButton.isVisible = isInMultipleSelectionMode
         addActionButtons()
         addCheckableActionButtons()
     }
@@ -155,6 +126,7 @@ class OptionDialog : DialogFragment() {
             ) as MaterialButton
             view.text = data.text
             view.icon = data.icon
+            view.isSelected = data.selected
             view.setSafeClickListener {
                 params.singleSelectionlistener?.onClick(index)
                 dismiss()

@@ -42,3 +42,28 @@ val Auditory.formattedName: String
 
 val WeekNumber.formattedString: String
     get() = (index + 1).toString()
+
+val LocalTime.formattedString: String
+    get() = String.format("%02d:%02d", hour, minute)
+
+val LocalDate.formattedString: String
+    get() = String.format("%02d.%02d.%d", day, month + 1, year)
+
+@get:StringRes
+val AppTheme.formattedStringRes: Int
+    get() = when (this) {
+        AppTheme.FOLLOW_SYSTEM -> R.string.theme_follow_system
+        AppTheme.LIGHT -> R.string.theme_light
+        AppTheme.DARK -> R.string.theme_dark
+        AppTheme.BLACK -> R.string.theme_black
+        AppTheme.INDIGO -> R.string.theme_indigo
+        AppTheme.TEAL -> R.string.theme_teal
+        AppTheme.BLUE_GREY -> R.string.theme_blue_grey
+        AppTheme.BLUE_LIGHT -> R.string.theme_blue_white
+        AppTheme.BROWN -> R.string.theme_brown
+        AppTheme.ORANGE -> R.string.theme_orange
+        AppTheme.PURPLE -> R.string.theme_purple
+        AppTheme.CYAN -> R.string.theme_cyan
+        AppTheme.RED -> R.string.theme_red
+        AppTheme.LIME -> R.string.theme_lime
+    }
