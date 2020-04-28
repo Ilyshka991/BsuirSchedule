@@ -35,26 +35,13 @@
         app:layout_constraintTop_toBottomOf="@id/lessonDetailsName"
         tools:text="13:45 - 15:00" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/lessonDetailsInfoViewPager"
+    <com.pechuro.bsuirschedule.widget.EmployeesView
+        android:id="@+id/lessonDetailsEmployeeView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lessonDetailsTime" />
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/lessonDetailsInfoTabLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lessonDetailsInfoViewPager"
-        app:tabBackground="@drawable/selector_lesson_details_employee_indicator"
-        app:tabIndicatorHeight="0dp"
-        app:tabRippleColor="@null" />
+        app:layout_constraintTop_toBottomOf="@id/lessonDetailsTime"
+        android:layout_height="wrap_content" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/lessonDetailsWeeks"
@@ -66,7 +53,7 @@
         android:layout_marginTop="16dp"
         android:textStyle="normal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lessonDetailsInfoTabLayout"
+        app:layout_constraintTop_toBottomOf="@id/lessonDetailsEmployeeView"
         tools:text="@string/lesson_details_weeks" />
 
 

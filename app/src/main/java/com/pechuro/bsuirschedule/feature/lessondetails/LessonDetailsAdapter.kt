@@ -7,21 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.bold
 import androidx.core.text.toSpannable
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.request.target.Target
-import com.google.android.material.tabs.TabLayoutMediator
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.domain.entity.Auditory
-import com.pechuro.bsuirschedule.domain.entity.Employee
 import com.pechuro.bsuirschedule.domain.entity.Lesson
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 import com.pechuro.bsuirschedule.ext.formattedString
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_employee_details.*
 import kotlinx.android.synthetic.main.item_lesson_details_header.*
 import kotlinx.android.synthetic.main.item_lesson_details_location.*
 
@@ -48,7 +40,7 @@ class LessonDetailsAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
         return when (viewType) {
-            HEADER_VIEW_TYPE -> HeaderViewHolder(view).also { initHeader(it) }
+            HEADER_VIEW_TYPE -> HeaderViewHolder(view)
             LOCATION_VIEW_TYPE -> LocationViewHolder(view)
             else -> throw IllegalArgumentException()
         }
@@ -109,8 +101,7 @@ class LessonDetailsAdapter(
     }
 
     private fun onBindGroupHeader(holder: HeaderViewHolder, groupLesson: Lesson.GroupLesson) {
-        holder.lessonDetailsInfoViewPager.isVisible = groupLesson.employees.isNotEmpty()
-        holder.lessonDetailsInfoTabLayout.isVisible = groupLesson.employees.size > 1
+        holder.lessonDetailsEmployeeView.employees = groupLesson.employees
     }
 
     private fun getWeeksText(context: Context): CharSequence {
@@ -124,60 +115,7 @@ class LessonDetailsAdapter(
         return builder.toSpannable()
     }
 
-    private fun initHeader(holder: HeaderViewHolder) = when (lesson) {
-        is Lesson.GroupLesson -> initGroupHeader(holder, lesson)
-        is Lesson.EmployeeLesson -> initEmployeeHeader(holder, lesson)
-    }
-
-    private fun initEmployeeHeader(holder: HeaderViewHolder, employeeLesson: Lesson.EmployeeLesson) {
-        TODO("Not yet implemented")
-    }
-
-    private fun initGroupHeader(holder: HeaderViewHolder, groupLesson: Lesson.GroupLesson) {
-        holder.lessonDetailsInfoViewPager.adapter = EmployeeAdapter(groupLesson)
-        holder.lessonDetailsInfoViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                println("onPageSelected")
-                holder.lessonDetailsInfoViewPager.adapter?.notifyDataSetChanged()
-            }
-        })
-        TabLayoutMediator(holder.lessonDetailsInfoTabLayout, holder.lessonDetailsInfoViewPager) { _, _ -> }.attach()
-    }
-
     private class HeaderViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 
     private class LocationViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
-
-    private class EmployeeAdapter(
-            private val groupLesson: Lesson.GroupLesson
-    ) : RecyclerView.Adapter<EmployeeViewHolder>() {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmployeeViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_employee_details, parent, false)
-            return EmployeeViewHolder(view)
-        }
-
-        override fun getItemCount(): Int = groupLesson.employees.size
-
-        override fun onBindViewHolder(holder: EmployeeViewHolder, position: Int) {
-            val employee = groupLesson.employees[position]
-            holder.employeeDetailsFullName.text = with(employee) {
-                "$firstName $middleName $lastName"
-            }
-            holder.employeeDetailsAdditionalInfo.text = employee.getAdditionalInfoText()
-            Glide.with(holder.itemView)
-                    .load(employee.photoLink)
-                    .override(Target.SIZE_ORIGINAL)
-                    .format(DecodeFormat.PREFER_ARGB_8888)
-                    .placeholder(R.drawable.employee_placeholder)
-                    .error(R.drawable.employee_placeholder)
-                    .circleCrop()
-                    .into(holder.employeeDetailsPhoto)
-        }
-
-        private fun Employee.getAdditionalInfoText(): String =
-                "$rank${if (rank.isNotEmpty()) ", " else ""}${department.name}"
-    }
-
-    private class EmployeeViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 }
