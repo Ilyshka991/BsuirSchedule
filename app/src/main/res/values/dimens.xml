@@ -6,4 +6,6 @@
     <dimen name="labeled_text_default_size">22sp</dimen>
 
     <dimen name="display_schedule_item_default_padding">8dp</dimen>
+
+    <dimen name="widget_lesson_type_image_size">64dp</dimen>
 </resources>

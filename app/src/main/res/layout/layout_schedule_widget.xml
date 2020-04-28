@@ -24,19 +24,23 @@
 
             <TextView
                 android:id="@+id/scheduleWidgetScheduleNameText"
-                style="@style/WidgetTitleText"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/widget_list_background"
+                android:textSize="18sp"
                 tools:text="750502" />
 
             <TextView
                 android:id="@+id/scheduleWidgetDayText"
-                style="@style/WidgetTitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:maxLines="1"
                 android:textAllCaps="true"
+                android:textColor="@color/widget_list_background"
+                android:textSize="18sp"
                 tools:text=", TODAY" />
         </LinearLayout>
     </FrameLayout>
@@ -49,11 +53,12 @@
         <ListView
             android:id="@+id/scheduleWidgetListView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:divider="@color/widget_list_divider"
+            android:dividerHeight="1dp" />
 
         <TextView
             android:id="@+id/scheduleWidgetListEmptyText"
-            style="@style/WidgetTitleText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"

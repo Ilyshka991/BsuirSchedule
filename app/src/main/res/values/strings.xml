@@ -144,6 +144,7 @@
     <string name="schedule_widget_msg_today">, Today</string>
     <string name="schedule_widget_msg_tomorrow">, Tomorrow</string>
     <string name="schedule_widget_msg_exams">, Exams</string>
+    <string name="schedule_widget_msg_deleted">Deleted schedule</string>
     <string name="schedule_widget_msg_empty">Nothing there</string>
 
     <string-array name="lesson_types">

@@ -3,8 +3,6 @@ package com.pechuro.bsuirschedule.feature.appwidgetconfiguration
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import androidx.lifecycle.MediatorLiveData
-import com.pechuro.bsuirschedule.appwidget.ScheduleWidgetDataProvider
-import com.pechuro.bsuirschedule.appwidget.ScheduleWidgetProvider
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
@@ -13,6 +11,8 @@ import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.domain.interactor.GetAllSchedules
 import com.pechuro.bsuirschedule.domain.repository.IWidgetRepository
 import com.pechuro.bsuirschedule.ext.flowLiveData
+import com.pechuro.bsuirschedule.feature.appwidget.ScheduleWidgetDataProvider
+import com.pechuro.bsuirschedule.feature.appwidget.ScheduleWidgetProvider
 import com.pechuro.bsuirschedule.feature.appwidgetconfiguration.AppWidgetConfigurationScheduleDisplayData.Content
 import com.pechuro.bsuirschedule.feature.appwidgetconfiguration.AppWidgetConfigurationScheduleDisplayData.Title
 import kotlinx.coroutines.flow.emptyFlow
@@ -63,6 +63,7 @@ class AppWidgetConfigurationViewModel @Inject constructor(
         ScheduleWidgetProvider.updateWidget(
                 context = context,
                 appWidgetManager = AppWidgetManager.getInstance(context),
+                widgetId = resultWidgetInfo.widgetId,
                 widgetInfo = resultWidgetInfo,
                 widgetData = widgetDataProvider.getScheduleItemsList(resultWidgetInfo.widgetId)
         )
