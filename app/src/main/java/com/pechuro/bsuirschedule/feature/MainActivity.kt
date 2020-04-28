@@ -35,7 +35,6 @@ class MainActivity : BaseActivity(), FlowFragment.ActionCallback {
         if (savedInstanceState == null) {
             showFlowFragment()
         }
-        //finish()
     }
 
     override fun onBackPressed() {
