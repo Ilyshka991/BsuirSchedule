@@ -53,7 +53,6 @@ class LessonDetailsAdapter : ListAdapter<DetailsItem, BaseViewHolder<DetailsItem
         override fun onBind(data: DetailsItem.LessonHeader) {
             val lesson = data.lesson
 
-            lessonDetailsName.text = lesson.subject
             lessonDetailsTime.text = with(lesson) { "${startTime.formattedString} - ${endTime.formattedString}" }
             lessonDetailsWeeks.text = getWeeksText(itemView.context, data.weeks)
 
