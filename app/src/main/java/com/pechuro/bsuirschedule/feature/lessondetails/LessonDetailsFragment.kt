@@ -3,6 +3,7 @@ package com.pechuro.bsuirschedule.feature.lessondetails
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
@@ -47,15 +48,9 @@ class LessonDetailsFragment : BaseFragment() {
     }
 
     private fun observeData() {
-        viewModel.weeks.nonNull().observe(viewLifecycleOwner) {
-            adapter.submitList(getLessonList(it))
+        viewModel.detailsItems.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
-    }
-
-    private fun getLessonList(weeks: List<WeekNumber>): List<DetailsItem> {
-        val list = mutableListOf<DetailsItem>(DetailsItem.LessonHeader(lesson, weeks))
-        list += lesson.auditories.map { DetailsItem.LocationItem(it) }
-        return list
     }
 
     private fun initView() {

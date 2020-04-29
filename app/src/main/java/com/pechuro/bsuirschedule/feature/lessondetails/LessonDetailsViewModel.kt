@@ -7,8 +7,6 @@ import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.Lesson
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 import com.pechuro.bsuirschedule.domain.interactor.GetLessonWeeks
-import com.pechuro.bsuirschedule.ext.flowLiveData
-import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
 class LessonDetailsViewModel @Inject constructor(
@@ -17,8 +15,15 @@ class LessonDetailsViewModel @Inject constructor(
 
     lateinit var lesson: Lesson
 
-    val weeks: LiveData<List<WeekNumber>> = liveData {
+    val detailsItems: LiveData<List<DetailsItem>> = liveData {
         val weeks = getLessonWeeks.execute(GetLessonWeeks.Params(lesson)).getOrDefault(emptyList())
-        emit(weeks)
+        emit(getDetailsItems(weeks))
     }
+
+    private fun getDetailsItems(weeks: List<WeekNumber>): List<DetailsItem> {
+        val list = mutableListOf<DetailsItem>(DetailsItem.LessonHeader(lesson, weeks))
+        list += lesson.auditories.map { DetailsItem.LocationItem(it) }
+        return list
+    }
+
 }
