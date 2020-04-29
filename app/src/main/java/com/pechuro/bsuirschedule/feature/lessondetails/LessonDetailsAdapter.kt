@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.bold
 import androidx.core.text.toSpannable
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.pechuro.bsuirschedule.R
@@ -19,9 +20,10 @@ import kotlinx.android.synthetic.main.item_lesson_details_location.*
 
 private object DiffCallback : DiffUtil.ItemCallback<DetailsItem>() {
 
-    override fun areItemsTheSame(oldItem: DetailsItem, newItem: DetailsItem): Boolean {
-        return if (oldItem.javaClass == newItem.javaClass) oldItem.id == newItem.id
-        else false
+    override fun areItemsTheSame(oldItem: DetailsItem, newItem: DetailsItem): Boolean = if (oldItem.javaClass == newItem.javaClass) {
+        oldItem.id == newItem.id
+    } else {
+        false
     }
 
     override fun areContentsTheSame(oldItem: DetailsItem, newItem: DetailsItem): Boolean {
@@ -55,9 +57,7 @@ class LessonDetailsAdapter : ListAdapter<DetailsItem, BaseViewHolder<DetailsItem
             lessonDetailsTime.text = with(lesson) { "${startTime.formattedString} - ${endTime.formattedString}" }
             lessonDetailsWeeks.text = getWeeksText(itemView.context, data.weeks)
 
-            lessonDetailsLocationsTitle.visibility =
-                    if (lesson.auditories.isNotEmpty()) View.VISIBLE
-                    else View.GONE
+            lessonDetailsLocationsTitle.isVisible = lesson.auditories.isNotEmpty()
 
             return when (lesson) {
                 is Lesson.GroupLesson -> onBindGroupHeader(lesson)
@@ -89,27 +89,15 @@ class LessonDetailsAdapter : ListAdapter<DetailsItem, BaseViewHolder<DetailsItem
         override fun onBind(data: DetailsItem.LocationItem) {
             val auditory = data.auditory
 
-            lessonDetailsLocationAuditoryName.text = with(auditory) {
-                "$name-${building.name}"
-            }
+            lessonDetailsLocationAuditoryName.text = with(auditory) { "$name-${building.name}" }
             lessonDetailsLocationAuditoryType.text = auditory.auditoryType.name
 
-            lessonDetailsLocationAuditoryNote.visibility =
-                    if (auditory.note.isNotEmpty()) {
-                        lessonDetailsLocationAuditoryNote.text = auditory.note
-                        View.VISIBLE
-                    } else {
-                        View.GONE
-                    }
+            lessonDetailsLocationAuditoryNote.isVisible = auditory.note.isNotEmpty()
+            lessonDetailsLocationAuditoryNote.text = auditory.note
 
             val department = auditory.department
-            lessonDetailsLocationAuditoryDepartment.visibility =
-                    if (department != null) {
-                        lessonDetailsLocationAuditoryDepartment.text = department.name
-                        View.VISIBLE
-                    } else {
-                        View.GONE
-                    }
+            lessonDetailsLocationAuditoryDepartment.isVisible = department != null
+            lessonDetailsLocationAuditoryDepartment.text = department?.name
         }
     }
 }
