@@ -11,7 +11,9 @@ fun Calendar.getLocalTime() = LocalTime(
 
 fun LocalTime.toDate() = Calendar.getInstance().apply {
     set(0, 0, 0, hour, minute, 0)
-}.time
+}.time.apply {
+    time -= (time) % 1000
+}
 
 fun Date.getLocalTime() = Calendar.getInstance().apply {
     time = this@getLocalTime

@@ -62,6 +62,11 @@
         <item name="fabBackgroundColor">@color/amber_500</item>
 
         <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
+
+
+        <item name="indicatorDefaultColor">@color/grey_300</item>
+        <item name="indicatorSelectedColor">@color/grey_700</item>
+        <item name="locationIconTintColor">@android:color/darker_gray</item>
     </style>
 
     <style name="DarkStyleTheme">
@@ -96,6 +101,11 @@
         <item name="fabBackgroundColor">@color/amber_500</item>
 
         <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
+
+
+        <item name="indicatorDefaultColor">@color/grey_300</item>
+        <item name="indicatorSelectedColor">@color/grey_700</item>
+        <item name="locationIconTintColor">@android:color/darker_gray</item>
     </style>
 
     <style name="BlackStyleTheme">
@@ -130,6 +140,11 @@
         <item name="fabBackgroundColor">@color/amber_500</item>
 
         <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
+
+
+        <item name="indicatorDefaultColor">@color/grey_300</item>
+        <item name="indicatorSelectedColor">@color/grey_700</item>
+        <item name="locationIconTintColor">@android:color/darker_gray</item>
     </style>
 
     <style name="IndigoStyleTheme">
@@ -164,6 +179,11 @@
         <item name="fabBackgroundColor">@color/amber_500</item>
 
         <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
+
+
+        <item name="indicatorDefaultColor">@color/grey_300</item>
+        <item name="indicatorSelectedColor">@color/grey_700</item>
+        <item name="locationIconTintColor">@android:color/darker_gray</item>
     </style>
 
     <style name="TealStyleTheme">
@@ -198,6 +218,11 @@
         <item name="fabBackgroundColor">@color/amber_500</item>
 
         <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
+
+
+        <item name="indicatorDefaultColor">@color/grey_300</item>
+        <item name="indicatorSelectedColor">@color/grey_700</item>
+        <item name="locationIconTintColor">@android:color/darker_gray</item>
     </style>
 
     <style name="BlueGreyStyleTheme">
@@ -232,6 +257,11 @@
         <item name="fabBackgroundColor">@color/amber_500</item>
 
         <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
+
+
+        <item name="indicatorDefaultColor">@color/grey_300</item>
+        <item name="indicatorSelectedColor">@color/grey_700</item>
+        <item name="locationIconTintColor">@android:color/darker_gray</item>
     </style>
 
     <style name="BlueLightStyleTheme">
@@ -266,6 +296,11 @@
         <item name="fabBackgroundColor">@color/amber_500</item>
 
         <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
+
+
+        <item name="indicatorDefaultColor">@color/grey_300</item>
+        <item name="indicatorSelectedColor">@color/grey_700</item>
+        <item name="locationIconTintColor">@android:color/darker_gray</item>
     </style>
 
     <style name="BrownStyleTheme">
@@ -300,6 +335,11 @@
         <item name="fabBackgroundColor">@color/amber_500</item>
 
         <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
+
+
+        <item name="indicatorDefaultColor">@color/grey_300</item>
+        <item name="indicatorSelectedColor">@color/grey_700</item>
+        <item name="locationIconTintColor">@android:color/darker_gray</item>
     </style>
 
     <style name="OrangeStyleTheme">
@@ -334,6 +374,11 @@
         <item name="fabBackgroundColor">@color/amber_500</item>
 
         <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
+
+
+        <item name="indicatorDefaultColor">@color/grey_300</item>
+        <item name="indicatorSelectedColor">@color/grey_700</item>
+        <item name="locationIconTintColor">@android:color/darker_gray</item>
     </style>
 
     <style name="PurpleStyleTheme">
@@ -368,6 +413,11 @@
         <item name="fabBackgroundColor">@color/amber_500</item>
 
         <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
+
+
+        <item name="indicatorDefaultColor">@color/grey_300</item>
+        <item name="indicatorSelectedColor">@color/grey_700</item>
+        <item name="locationIconTintColor">@android:color/darker_gray</item>
     </style>
 
     <style name="CyanStyleTheme">
@@ -402,6 +452,11 @@
         <item name="fabBackgroundColor">@color/amber_500</item>
 
         <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
+
+
+        <item name="indicatorDefaultColor">@color/grey_300</item>
+        <item name="indicatorSelectedColor">@color/grey_700</item>
+        <item name="locationIconTintColor">@android:color/darker_gray</item>
     </style>
 
     <style name="RedStyleTheme">
@@ -436,6 +491,11 @@
         <item name="fabBackgroundColor">@color/amber_500</item>
 
         <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
+
+
+        <item name="indicatorDefaultColor">@color/grey_300</item>
+        <item name="indicatorSelectedColor">@color/grey_700</item>
+        <item name="locationIconTintColor">@android:color/darker_gray</item>
     </style>
 
     <style name="LimeStyleTheme">
@@ -470,5 +530,10 @@
         <item name="fabBackgroundColor">@color/amber_500</item>
 
         <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
+
+
+        <item name="indicatorDefaultColor">@color/grey_300</item>
+        <item name="indicatorSelectedColor">@color/grey_700</item>
+        <item name="locationIconTintColor">@android:color/darker_gray</item>
     </style>
 </resources>

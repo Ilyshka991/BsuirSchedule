@@ -29,5 +29,9 @@
     <attr name="menuIconColor" format="color" />
     <attr name="fabBackgroundColor" format="color" />
 
-    <attr name="scheduleItemBackgroundColor" format="color"/>
+    <attr name="scheduleItemBackgroundColor" format="color" />
+
+    <attr name="indicatorSelectedColor" format="color" />
+    <attr name="indicatorDefaultColor" format="color" />
+    <attr name="locationIconTintColor" format="color" />
 </resources>

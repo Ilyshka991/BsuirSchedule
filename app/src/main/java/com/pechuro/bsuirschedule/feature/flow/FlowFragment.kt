@@ -23,6 +23,7 @@ import com.pechuro.bsuirschedule.feature.datepicker.DisplayScheduleDatePickerShe
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleFragmentContainer
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import com.pechuro.bsuirschedule.feature.itemoptions.ScheduleItemOptionsSheet
+import com.pechuro.bsuirschedule.feature.lessondetails.LessonDetailsFragment
 import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoFragment
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragment
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragmentArgs
@@ -255,7 +256,10 @@ class FlowFragment : BaseFragment(),
     }
 
     private fun openScheduleLessonDetails(lesson: Lesson) {
-
+        openFragment(
+                fragment = LessonDetailsFragment.newInstance(lesson),
+                tag = LessonDetailsFragment.TAG
+        )
     }
 
     private fun openDatePicker(
@@ -348,6 +352,7 @@ class FlowFragment : BaseFragment(),
             is ModifyScheduleItemFragment,
             is StaffListFragment,
             is SettingsFragment,
+            is LessonDetailsFragment,
             is LoadInfoFragment -> false
             else -> true
         }
