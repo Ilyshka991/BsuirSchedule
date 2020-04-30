@@ -31,6 +31,14 @@ class WidgetRepositoryImpl(
         sharedPreferencesManager.removeScheduleWidgetInfo(widgetId)
     }
 
+    override fun removeScheduleWidget(schedule: Schedule) {
+        val allWidgets = sharedPreferencesManager
+                .getAllScheduleWidgetInfoList()
+                .map { it.mapToDomainInfo() }
+        val widgetToRemoveId = allWidgets.find { it.schedule == schedule }?.widgetId ?: 0
+        removeScheduleWidget(widgetToRemoveId)
+    }
+
     private fun add(info: ScheduleWidgetInfo) {
         val localInfo = info.mapToLocalInfo()
         sharedPreferencesManager.addScheduleWidgetInfo(localInfo)
@@ -49,7 +57,8 @@ class WidgetRepositoryImpl(
         return ScheduleWidgetInfo(
                 widgetId = widgetId,
                 schedule = schedule,
-                subgroupNumber = SubgroupNumber.getForValue(subgroupNumber)
+                subgroupNumber = SubgroupNumber.getForValue(subgroupNumber),
+                theme = ScheduleWidgetInfo.WidgetTheme.getForName(theme)
         )
     }
 
@@ -64,6 +73,7 @@ class WidgetRepositoryImpl(
                         is Schedule.EmployeeExams -> EMPLOYEE_EXAMS
                     }
             ),
-            subgroupNumber = subgroupNumber.value
+            subgroupNumber = subgroupNumber.value,
+            theme = theme.name
     )
 }

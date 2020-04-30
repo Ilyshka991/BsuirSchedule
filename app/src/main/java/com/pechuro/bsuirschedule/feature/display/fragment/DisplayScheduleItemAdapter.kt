@@ -186,13 +186,13 @@ class DisplayScheduleItemAdapter(
     }
 }
 
-private fun List<WeekNumber>.formatWeekNumbers() = joinToString(separator = ",") { it.formattedString }
+fun List<WeekNumber>.formatWeekNumbers() = joinToString(separator = ",") { it.formattedString }
 
-private fun List<Auditory>.formatAuditories() = joinToString(separator = ",") { it.formattedName }
+fun List<Auditory>.formatAuditories() = joinToString(separator = ",") { it.formattedName }
 
-private fun List<Employee>.formatEmployees() = joinToString(separator = ",") { it.abbreviation }
+fun List<Employee>.formatEmployees() = joinToString(separator = ",") { it.abbreviation }
 
-private fun List<Group>.formatGroupNumbers() = asSequence()
+fun List<Group>.formatGroupNumbers() = asSequence()
         .map { it.number }
         .filter { it.isNotEmpty() }
         .map { it.take(it.lastIndex) to it }

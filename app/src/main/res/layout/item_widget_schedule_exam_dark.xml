@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scheduleWidgetItemParentView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/widgetExamSubject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginBottom="2dp"
+        android:textColor="@color/widget_list_item_text_dark"
+        android:textSize="16sp"
+        tools:text="Subject" />
+
+    <TextView
+        android:id="@+id/widgetExamAuditory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/widgetExamSubject"
+        android:layout_toStartOf="@+id/widgetExamType"
+        android:layout_toLeftOf="@+id/widgetExamType"
+        android:layout_toEndOf="@+id/widgetExamSubject"
+        android:layout_toRightOf="@+id/widgetExamSubject"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingStart="4dp"
+        android:paddingLeft="4dp"
+        android:paddingEnd="4dp"
+        android:paddingRight="4dp"
+        android:textColor="@color/widget_list_item_text_dark"
+        android:textSize="14sp"
+        tools:text="444-44" />
+
+    <TextView
+        android:id="@+id/widgetExamTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/widgetExamSubject"
+        android:layout_alignStart="@+id/widgetExamSubject"
+        android:layout_alignLeft="@+id/widgetExamSubject"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/widget_list_item_text_dark"
+        android:textSize="16sp"
+        tools:text="22:55" />
+
+    <TextView
+        android:id="@+id/widgetExamType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/widgetExamSubject"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/widget_list_item_text_dark"
+        android:textSize="16sp"
+        tools:text="Экзамен" />
+
+    <TextView
+        android:id="@+id/widgetExamDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/widgetExamTime"
+        android:layout_toStartOf="@+id/widgetExamSubgroup"
+        android:layout_toLeftOf="@+id/widgetExamSubgroup"
+        android:layout_toEndOf="@+id/widgetExamTime"
+        android:layout_toRightOf="@+id/widgetExamTime"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingStart="4dp"
+        android:paddingLeft="4dp"
+        android:paddingEnd="4dp"
+        android:paddingRight="4dp"
+        android:textColor="@color/widget_list_item_text_dark"
+        android:textSize="16sp"
+        tools:text="21.12.1002" />
+
+    <TextView
+        android:id="@+id/widgetExamSubgroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/widgetExamTime"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/widget_list_item_text_dark"
+        android:textSize="16sp"
+        tools:text="2 subgroup" />
+
+    <TextView
+        android:id="@+id/widgetExamNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/widgetExamTime"
+        android:layout_alignStart="@+id/widgetExamSubject"
+        android:layout_alignLeft="@+id/widgetExamSubject"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/widget_list_item_text_dark"
+        android:textSize="16sp"
+        tools:text="Note" />
+</RelativeLayout>

@@ -278,8 +278,19 @@
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00000000</color>
 
-    <color name="widget_title_background">@color/blue_grey_700</color>
-    <color name="widget_list_background">@color/white</color>
-    <color name="widget_title_text">@color/grey_100</color>
-    <color name="widget_list_item_text">@color/blue_grey_900</color>
+
+    <!-- Widget colors -->
+    <color name="widget_title_background_light">@color/blue_grey_700</color>
+    <color name="widget_title_text_light">@color/widget_list_background_light</color>
+    <color name="widget_list_background_light">@color/grey_50</color>
+    <color name="widget_list_divider_light">@color/grey_300</color>
+    <color name="widget_list_item_lesson_type_light">@color/widget_list_background_light</color>
+    <color name="widget_list_item_text_light">@color/blue_grey_900</color>
+
+    <color name="widget_title_background_dark">@color/blue_grey_700</color>
+    <color name="widget_title_text_dark">@color/grey_100</color>
+    <color name="widget_list_background_dark">@color/grey_800</color>
+    <color name="widget_list_divider_dark">@color/widget_title_text_light</color>
+    <color name="widget_list_item_lesson_type_dark">@color/widget_title_text_light</color>
+    <color name="widget_list_item_text_dark">@color/widget_title_text_light</color>
 </resources>

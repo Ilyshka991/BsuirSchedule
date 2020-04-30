@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.appwidget
+package com.pechuro.bsuirschedule.feature.appwidget
 
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.*
@@ -21,6 +21,8 @@ class ScheduleWidgetDataProvider @Inject constructor(
         private val getScheduleItems: GetScheduleItems,
         private val widgetRepository: IWidgetRepository
 ) {
+
+    fun getWidgetInfo(widgetId: Int) = widgetRepository.getScheduleWidget(widgetId)
 
     fun getScheduleItemsList(widgetId: Int): ScheduleWidgetData {
         val widgetInfo = widgetRepository.getScheduleWidget(widgetId) ?: return ScheduleWidgetData(

@@ -38,7 +38,7 @@
             android:authorities="${applicationId}.workmanager-init"
             tools:node="remove" />
 
-        <receiver android:name=".appwidget.ScheduleWidgetProvider">
+        <receiver android:name=".feature.appwidget.ScheduleWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -48,7 +48,7 @@
         </receiver>
 
         <service
-            android:name=".appwidget.ScheduleWidgetViewService"
+            android:name=".feature.appwidget.ScheduleWidgetViewService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 </manifest>

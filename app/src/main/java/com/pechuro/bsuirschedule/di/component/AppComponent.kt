@@ -1,8 +1,8 @@
 package com.pechuro.bsuirschedule.di.component
 
 import com.pechuro.bsuirschedule.App
-import com.pechuro.bsuirschedule.appwidget.ScheduleWidgetProvider
-import com.pechuro.bsuirschedule.appwidget.ScheduleWidgetViewService
+import com.pechuro.bsuirschedule.feature.appwidget.ScheduleWidgetProvider
+import com.pechuro.bsuirschedule.feature.appwidget.ScheduleWidgetViewService
 import com.pechuro.bsuirschedule.common.base.BaseActivity
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.common.base.BaseFragment
