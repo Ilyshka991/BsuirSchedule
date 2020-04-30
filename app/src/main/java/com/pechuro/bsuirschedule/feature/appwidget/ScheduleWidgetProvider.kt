@@ -23,8 +23,6 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
 
     companion object {
 
-        private var a = false
-
         fun updateWidget(
                 context: Context,
                 appWidgetManager: AppWidgetManager,
