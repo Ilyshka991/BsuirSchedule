@@ -17,13 +17,32 @@ class LessonDetailsViewModel @Inject constructor(
 
     val detailsItems: LiveData<List<DetailsItem>> = liveData {
         val weeks = getLessonWeeks.execute(GetLessonWeeks.Params(lesson)).getOrDefault(emptyList())
-        emit(getDetailsItems(weeks))
+        emit(getDetailsItems(lesson, weeks))
     }
 
-    private fun getDetailsItems(weeks: List<WeekNumber>): List<DetailsItem> {
-        val list = mutableListOf<DetailsItem>(DetailsItem.LessonHeader(lesson, weeks))
+    private fun getDetailsItems(lesson: Lesson, weeks: List<WeekNumber>): List<DetailsItem> {
+        val list = mutableListOf(
+                DetailsItem.Time(lesson.startTime, lesson.endTime),
+                getInfoItem(lesson),
+                DetailsItem.Weeks(weeks)
+        )
+        if (lesson.auditories.isNotEmpty()) {
+            list += DetailsItem.LocationHeader
+        }
         list += lesson.auditories.map { DetailsItem.LocationItem(it) }
+        list += DetailsItem.LessonFooter(lesson.note) { onNoteChanged(it) }
         return list
     }
 
+    private fun onNoteChanged(note: String) {
+        if (note == lesson.note) {
+            return
+        }
+        TODO("Not yet implemented")
+    }
+
+    private fun getInfoItem(lesson: Lesson): DetailsItem = when (lesson) {
+        is Lesson.GroupLesson -> DetailsItem.EmployeeInfo(lesson.employees)
+        is Lesson.EmployeeLesson -> TODO()
+    }
 }
