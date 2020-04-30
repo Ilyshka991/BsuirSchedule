@@ -38,4 +38,6 @@ interface IScheduleRepository {
     suspend fun addScheduleItems(schedule: Schedule, scheduleItems: List<ScheduleItem>)
 
     suspend fun getLessonWeeks(lesson: Lesson): List<WeekNumber>
+
+    suspend fun updateScheduleItem(scheduleItem: ScheduleItem)
 }

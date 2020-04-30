@@ -11,6 +11,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
+import java.lang.IllegalArgumentException
 import java.util.*
 import kotlin.coroutines.coroutineContext
 import kotlin.reflect.KClass
@@ -287,6 +288,44 @@ class ScheduleRepositoryImpl(
                 is Lesson.GroupLesson -> getGroupLessonWeeks(lesson)
                 is Lesson.EmployeeLesson -> getEmployeeLessonWeeks(lesson)
             }
+
+    override suspend fun updateScheduleItem(scheduleItem: ScheduleItem) {
+        return when (scheduleItem) {
+            is Lesson -> when (scheduleItem) {
+                is Lesson.GroupLesson -> updateGroupLesson(scheduleItem)
+                is Lesson.EmployeeLesson -> updateEmployeeLesson(scheduleItem)
+            }
+            is Exam -> when (scheduleItem) {
+                is Exam.GroupExam -> updateGroupExam(scheduleItem)
+                is Exam.EmployeeExam -> updateEmployeeExam(scheduleItem)
+            }
+            else -> throw IllegalArgumentException()
+        }
+    }
+
+    private suspend fun updateEmployeeExam(exam: Exam.EmployeeExam) = performDaoCall {
+        val scheduleName = dao.getEmployeeExamById(exam.id).scheduleName
+        val cached = exam.toDatabaseEntity(scheduleName)
+        dao.insertEmployeeExamItems(cached)
+    }
+
+    private suspend fun updateGroupExam(exam: Exam.GroupExam) = performDaoCall {
+        val scheduleName = dao.getGroupExamById(exam.id).scheduleName
+        val cached = exam.toDatabaseEntity(scheduleName)
+        dao.insertGroupExamItems(cached)
+    }
+
+    private suspend fun updateEmployeeLesson(lesson: Lesson.EmployeeLesson) = performDaoCall {
+        val scheduleName = dao.getEmployeeClassesById(lesson.id).scheduleName
+        val cached = lesson.toDatabaseEntity(scheduleName)
+        dao.insertEmployeeClassesItems(cached)
+    }
+
+    private suspend fun updateGroupLesson(lesson: Lesson.GroupLesson) = performDaoCall {
+        val scheduleName = dao.getGroupClassesById(lesson.id).scheduleName
+        val cached = lesson.toDatabaseEntity(scheduleName)
+        dao.insertGroupClassesItems(cached)
+    }
 
     private suspend fun getEmployeeLessonWeeks(lesson: Lesson.EmployeeLesson): List<WeekNumber> {
         TODO("Not yet implemented")
