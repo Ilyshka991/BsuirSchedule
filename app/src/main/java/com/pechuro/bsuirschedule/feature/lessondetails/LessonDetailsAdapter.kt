@@ -1,9 +1,7 @@
 package com.pechuro.bsuirschedule.feature.lessondetails
 
 import android.content.Context
-import android.text.Editable
 import android.text.SpannableStringBuilder
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +13,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
+import com.pechuro.bsuirschedule.ext.addTextListener
 import com.pechuro.bsuirschedule.ext.formattedString
 import kotlinx.android.synthetic.main.item_lesson_details_employees.*
 import kotlinx.android.synthetic.main.item_lesson_details_footer.*
@@ -24,10 +23,9 @@ import kotlinx.android.synthetic.main.item_lesson_details_weeks.*
 
 private object DiffCallback : DiffUtil.ItemCallback<DetailsItem>() {
 
-    override fun areItemsTheSame(oldItem: DetailsItem, newItem: DetailsItem): Boolean = if (oldItem.javaClass == newItem.javaClass) {
-        oldItem.id == newItem.id
-    } else {
-        false
+    override fun areItemsTheSame(old: DetailsItem, new: DetailsItem): Boolean = when {
+        old is DetailsItem.LocationItem && new is DetailsItem.LocationItem -> old.auditory.id == new.auditory.id
+        else -> old === new
     }
 
     override fun areContentsTheSame(oldItem: DetailsItem, newItem: DetailsItem): Boolean {
@@ -109,17 +107,11 @@ class LessonDetailsAdapter : ListAdapter<DetailsItem, BaseViewHolder<DetailsItem
     private class LessonFooterViewHolder(view: View) : BaseViewHolder<DetailsItem.LessonFooter>(view) {
 
         init {
-            val textWatcher = object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {}
-
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    val data = lessonDetailsNoteText.tag as? DetailsItem.LessonFooter ?: return
-                    data.onNoteChanged(s.toString())
-                }
+            lessonDetailsNoteText.addTextListener {
+                val data = lessonDetailsNoteText.tag as? DetailsItem.LessonFooter
+                        ?: return@addTextListener
+                data.onNoteChanged(it)
             }
-            lessonDetailsNoteText.addTextChangedListener(textWatcher)
         }
 
         override fun onBind(data: DetailsItem.LessonFooter) {

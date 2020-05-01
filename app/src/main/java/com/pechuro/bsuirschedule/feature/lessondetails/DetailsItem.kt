@@ -13,14 +13,12 @@ sealed class DetailsItem {
         const val LESSON_FOOTER_VIEW_TYPE = 5
     }
 
-    open val id: Any get() = this
-
     val viewType: Int
         get() = when (this) {
             is Time -> TIME_VIEW_TYPE
             is EmployeeInfo -> EMPLOYEE_INFO_VIEW_TYPE
             is Weeks -> WEEKS_VIEW_TYPE
-            LocationHeader -> LOCATION_HEADER_VIEW_TYPE
+            is LocationHeader -> LOCATION_HEADER_VIEW_TYPE
             is LocationItem -> LOCATION_ITEM_VIEW_TYPE
             is LessonFooter -> LESSON_FOOTER_VIEW_TYPE
         }
@@ -36,9 +34,7 @@ sealed class DetailsItem {
 
     object LocationHeader : DetailsItem()
 
-    data class LocationItem(val auditory: Auditory) : DetailsItem() {
-        override val id: Any get() = auditory.id
-    }
+    data class LocationItem(val auditory: Auditory) : DetailsItem()
 
     data class LessonFooter(
             val note: String,
