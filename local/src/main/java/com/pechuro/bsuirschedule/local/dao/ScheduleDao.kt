@@ -23,7 +23,7 @@ interface ScheduleDao {
             endTime: Date,
             weekDay: Int
     ): List<Int> {
-        val scheduleName = getGroupClassesScheduleName(id)
+        val scheduleName = getGroupClassesById(id).scheduleName
         return getGroupClassesWeeks(scheduleName, subject, subgroupNumber, lessonType, startTime, endTime, weekDay)
     }
 
@@ -33,6 +33,11 @@ interface ScheduleDao {
             items: List<GroupClassesItemComplex>
     ) {
         insert(schedule)
+        insertGroupClassesItems(*items.toTypedArray())
+    }
+
+    @Transaction
+    suspend fun insertGroupClassesItems(vararg items: GroupClassesItemComplex) {
         items.forEach {
             val scheduleItemId = insert(it.scheduleItem)
             it.employees.forEach { employee ->
@@ -52,6 +57,11 @@ interface ScheduleDao {
             items: List<GroupExamItemComplex>
     ) {
         insert(schedule)
+        insertGroupExamItems(*items.toTypedArray())
+    }
+
+    @Transaction
+    suspend fun insertGroupExamItems(vararg items: GroupExamItemComplex) {
         items.forEach {
             val scheduleItemId = insert(it.scheduleItem)
             it.employees.forEach { employee ->
@@ -71,6 +81,11 @@ interface ScheduleDao {
             items: List<EmployeeClassesItemComplex>
     ) {
         insert(schedule)
+        insertEmployeeClassesItems(*items.toTypedArray())
+    }
+
+    @Transaction
+    suspend fun insertEmployeeClassesItems(vararg items: EmployeeClassesItemComplex) {
         items.forEach {
             val scheduleItemId = insert(it.scheduleItem)
             it.groups.forEach { group ->
@@ -90,6 +105,11 @@ interface ScheduleDao {
             items: List<EmployeeExamItemComplex>
     ) {
         insert(schedule)
+        insertEmployeeExamItems(*items.toTypedArray())
+    }
+
+    @Transaction
+    suspend fun insertEmployeeExamItems(vararg items: EmployeeExamItemComplex) {
         items.forEach {
             val scheduleItemId = insert(it.scheduleItem)
             it.groups.forEach { group ->
@@ -110,17 +130,7 @@ interface ScheduleDao {
     ) {
         update(schedule)
         deleteNotUserGroupClassesItems(schedule.name)
-        items.forEach {
-            val scheduleItemId = insert(it.scheduleItem)
-            it.employees.forEach { employee ->
-                val joinEntity = GroupLessonEmployeeCrossRef(scheduleItemId, employee.id)
-                insert(joinEntity)
-            }
-            it.auditories.forEach { auditory ->
-                val joinEntity = GroupLessonAuditoryCrossRef(scheduleItemId, auditory.id)
-                insert(joinEntity)
-            }
-        }
+        insertGroupClassesItems(*items.toTypedArray())
     }
 
     @Transaction
@@ -130,17 +140,7 @@ interface ScheduleDao {
     ) {
         update(schedule)
         deleteNotUserGroupExamItems(schedule.name)
-        items.forEach {
-            val scheduleItemId = insert(it.scheduleItem)
-            it.employees.forEach { employee ->
-                val joinEntity = GroupExamEmployeeCrossRef(scheduleItemId, employee.id)
-                insert(joinEntity)
-            }
-            it.auditories.forEach { auditory ->
-                val joinEntity = GroupExamAuditoryCrossRef(scheduleItemId, auditory.id)
-                insert(joinEntity)
-            }
-        }
+        insertGroupExamItems(*items.toTypedArray())
     }
 
     @Transaction
@@ -150,17 +150,7 @@ interface ScheduleDao {
     ) {
         update(schedule)
         deleteNotUserEmployeeClassesItems(schedule.name)
-        items.forEach {
-            val scheduleItemId = insert(it.scheduleItem)
-            it.groups.forEach { group ->
-                val joinEntity = EmployeeLessonGroupCrossRef(scheduleItemId, group.id)
-                insert(joinEntity)
-            }
-            it.auditories.forEach { auditory ->
-                val joinEntity = EmployeeLessonAuditoryCrossRef(scheduleItemId, auditory.id)
-                insert(joinEntity)
-            }
-        }
+        insertEmployeeClassesItems(*items.toTypedArray())
     }
 
     @Transaction
@@ -170,17 +160,7 @@ interface ScheduleDao {
     ) {
         update(schedule)
         deleteNotUserEmployeeExamItems(schedule.name)
-        items.forEach {
-            val scheduleItemId = insert(it.scheduleItem)
-            it.groups.forEach { group ->
-                val joinEntity = EmployeeExamGroupCrossRef(scheduleItemId, group.id)
-                insert(joinEntity)
-            }
-            it.auditories.forEach { auditory ->
-                val joinEntity = EmployeeExamAuditoryCrossRef(scheduleItemId, auditory.id)
-                insert(joinEntity)
-            }
-        }
+        insertEmployeeExamItems(*items.toTypedArray())
     }
 
     @Transaction
@@ -403,6 +383,16 @@ interface ScheduleDao {
             weekDay: Int
     ): List<Int>
 
-    @Query("SELECT schedule_name FROM group_item_classes WHERE id = :id")
-    suspend fun getGroupClassesScheduleName(id: Long): String
+
+    @Query("SELECT * FROM group_item_classes WHERE id = :id")
+    suspend fun getGroupClassesById(id: Long): GroupItemClassesCached
+
+    @Query("SELECT * FROM group_item_exam WHERE id = :id")
+    suspend fun getGroupExamById(id: Long): GroupItemExamCached
+
+    @Query("SELECT * FROM employee_item_classes WHERE id = :id")
+    suspend fun getEmployeeClassesById(id: Long): EmployeeItemClassesCached
+
+    @Query("SELECT * FROM employee_item_exam WHERE id = :id")
+    suspend fun getEmployeeExamById(id: Long): EmployeeItemExamCached
 }

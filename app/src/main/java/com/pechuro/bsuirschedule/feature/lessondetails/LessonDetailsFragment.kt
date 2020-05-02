@@ -45,6 +45,13 @@ class LessonDetailsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         observeData()
+        setListeners()
+    }
+
+    private fun setListeners() {
+        lessonDetailsToolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
     }
 
     private fun observeData() {
@@ -56,5 +63,7 @@ class LessonDetailsFragment : BaseFragment() {
     private fun initView() {
         lessonDetailsRootRecycler.adapter = adapter
         lessonDetailsRootRecycler.layoutManager = LinearLayoutManager(requireContext())
+
+        lessonDetailsName.text = viewModel.lesson.subject
     }
 }

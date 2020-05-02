@@ -12,18 +12,20 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
-import com.pechuro.bsuirschedule.domain.entity.Lesson
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
+import com.pechuro.bsuirschedule.ext.addTextListener
 import com.pechuro.bsuirschedule.ext.formattedString
-import kotlinx.android.synthetic.main.item_lesson_details_header.*
+import kotlinx.android.synthetic.main.item_lesson_details_employees.*
+import kotlinx.android.synthetic.main.item_lesson_details_footer.*
 import kotlinx.android.synthetic.main.item_lesson_details_location.*
+import kotlinx.android.synthetic.main.item_lesson_details_time.*
+import kotlinx.android.synthetic.main.item_lesson_details_weeks.*
 
 private object DiffCallback : DiffUtil.ItemCallback<DetailsItem>() {
 
-    override fun areItemsTheSame(oldItem: DetailsItem, newItem: DetailsItem): Boolean = if (oldItem.javaClass == newItem.javaClass) {
-        oldItem.id == newItem.id
-    } else {
-        false
+    override fun areItemsTheSame(old: DetailsItem, new: DetailsItem): Boolean = when {
+        old is DetailsItem.LocationItem && new is DetailsItem.LocationItem -> old.auditory.id == new.auditory.id
+        else -> old === new
     }
 
     override fun areContentsTheSame(oldItem: DetailsItem, newItem: DetailsItem): Boolean {
@@ -37,8 +39,12 @@ class LessonDetailsAdapter : ListAdapter<DetailsItem, BaseViewHolder<DetailsItem
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<DetailsItem> {
         return when (viewType) {
-            DetailsItem.LESSON_HEADER_VIEW_TYPE -> HeaderViewHolder(R.layout.item_lesson_details_header.inflate(parent))
-            DetailsItem.LOCATION_VIEW_TYPE -> LocationViewHolder(R.layout.item_lesson_details_location.inflate(parent))
+            DetailsItem.TIME_VIEW_TYPE -> TimeViewHolder(R.layout.item_lesson_details_time.inflate(parent))
+            DetailsItem.EMPLOYEE_INFO_VIEW_TYPE -> EmployeeInfoViewHolder(R.layout.item_lesson_details_employees.inflate(parent))
+            DetailsItem.WEEKS_VIEW_TYPE -> WeeksViewHolder(R.layout.item_lesson_details_weeks.inflate(parent))
+            DetailsItem.LOCATION_HEADER_VIEW_TYPE -> LocationHeaderViewHolder(R.layout.item_lesson_details_location_header.inflate(parent))
+            DetailsItem.LOCATION_ITEM_VIEW_TYPE -> LocationItemViewHolder(R.layout.item_lesson_details_location.inflate(parent))
+            DetailsItem.LESSON_FOOTER_VIEW_TYPE -> LessonFooterViewHolder(R.layout.item_lesson_details_footer.inflate(parent))
             else -> throw IllegalArgumentException()
         }
     }
@@ -49,28 +55,21 @@ class LessonDetailsAdapter : ListAdapter<DetailsItem, BaseViewHolder<DetailsItem
 
     private fun Int.inflate(parent: ViewGroup) = LayoutInflater.from(parent.context).inflate(this, parent, false)
 
-    private class HeaderViewHolder(view: View) : BaseViewHolder<DetailsItem.LessonHeader>(view) {
-        override fun onBind(data: DetailsItem.LessonHeader) {
-            val lesson = data.lesson
+    private class TimeViewHolder(view: View) : BaseViewHolder<DetailsItem.Time>(view) {
+        override fun onBind(data: DetailsItem.Time) {
+            lessonDetailsTime.text = with(data) { "${startTime.formattedString} - ${endTime.formattedString}" }
+        }
+    }
 
-            lessonDetailsName.text = lesson.subject
-            lessonDetailsTime.text = with(lesson) { "${startTime.formattedString} - ${endTime.formattedString}" }
+    private class EmployeeInfoViewHolder(view: View) : BaseViewHolder<DetailsItem.EmployeeInfo>(view) {
+        override fun onBind(data: DetailsItem.EmployeeInfo) {
+            lessonDetailsEmployeeView.employees = data.employees
+        }
+    }
+
+    private class WeeksViewHolder(view: View) : BaseViewHolder<DetailsItem.Weeks>(view) {
+        override fun onBind(data: DetailsItem.Weeks) {
             lessonDetailsWeeks.text = getWeeksText(itemView.context, data.weeks)
-
-            lessonDetailsLocationsTitle.isVisible = lesson.auditories.isNotEmpty()
-
-            return when (lesson) {
-                is Lesson.GroupLesson -> onBindGroupHeader(lesson)
-                is Lesson.EmployeeLesson -> onBindEmployeeHeader(lesson)
-            }
-        }
-
-        private fun onBindEmployeeHeader(employeeLesson: Lesson.EmployeeLesson) {
-            TODO("Not yet implemented")
-        }
-
-        private fun onBindGroupHeader(groupLesson: Lesson.GroupLesson) {
-            lessonDetailsEmployeeView.employees = groupLesson.employees
         }
 
         private fun getWeeksText(context: Context, weeks: List<WeekNumber>): CharSequence {
@@ -85,7 +84,11 @@ class LessonDetailsAdapter : ListAdapter<DetailsItem, BaseViewHolder<DetailsItem
         }
     }
 
-    private class LocationViewHolder(view: View) : BaseViewHolder<DetailsItem.LocationItem>(view) {
+    private class LocationHeaderViewHolder(view: View) : BaseViewHolder<DetailsItem.LocationHeader>(view) {
+        override fun onBind(data: DetailsItem.LocationHeader) {}
+    }
+
+    private class LocationItemViewHolder(view: View) : BaseViewHolder<DetailsItem.LocationItem>(view) {
         override fun onBind(data: DetailsItem.LocationItem) {
             val auditory = data.auditory
 
@@ -98,6 +101,26 @@ class LessonDetailsAdapter : ListAdapter<DetailsItem, BaseViewHolder<DetailsItem
             val department = auditory.department
             lessonDetailsLocationAuditoryDepartment.isVisible = department != null
             lessonDetailsLocationAuditoryDepartment.text = department?.name
+        }
+    }
+
+    private class LessonFooterViewHolder(view: View) : BaseViewHolder<DetailsItem.LessonFooter>(view) {
+
+        init {
+            lessonDetailsNoteText.addTextListener {
+                val data = lessonDetailsNoteText.tag as? DetailsItem.LessonFooter
+                        ?: return@addTextListener
+                data.onNoteChanged(it)
+            }
+        }
+
+        override fun onBind(data: DetailsItem.LessonFooter) {
+            lessonDetailsNoteText.apply {
+                tag = data
+                if (data.note != text?.toString()) {
+                    setText(data.note)
+                }
+            }
         }
     }
 }

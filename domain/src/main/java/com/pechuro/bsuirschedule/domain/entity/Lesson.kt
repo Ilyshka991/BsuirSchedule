@@ -8,6 +8,50 @@ sealed class Lesson(
         open val priority: LessonPriority
 ) : ScheduleItem {
 
+    fun copy(
+            id: Long = this.id,
+            subject: String = this.subject,
+            subgroupNumber: SubgroupNumber = this.subgroupNumber,
+            lessonType: String = this.lessonType,
+            note: String = this.note,
+            startTime: LocalTime = this.startTime,
+            endTime: LocalTime = this.endTime,
+            auditories: List<Auditory> = this.auditories,
+            isAddedByUser: Boolean = this.isAddedByUser,
+            priority: LessonPriority = this.priority,
+            weekDay: WeekDay = this.weekDay,
+            weekNumber: WeekNumber = this.weekNumber
+    ) = when (this) {
+        is GroupLesson -> GroupLesson(id = id,
+                subject = subject,
+                subgroupNumber = subgroupNumber,
+                lessonType = lessonType,
+                note = note,
+                startTime = startTime,
+                endTime = endTime,
+                auditories = auditories,
+                isAddedByUser = isAddedByUser,
+                priority = priority,
+                weekDay = weekDay,
+                weekNumber = weekNumber,
+                employees = this.employees
+        )
+        is EmployeeLesson -> EmployeeLesson(id = id,
+                subject = subject,
+                subgroupNumber = subgroupNumber,
+                lessonType = lessonType,
+                note = note,
+                startTime = startTime,
+                endTime = endTime,
+                auditories = auditories,
+                isAddedByUser = isAddedByUser,
+                priority = priority,
+                weekDay = weekDay,
+                weekNumber = weekNumber,
+                studentGroups = this.studentGroups
+        )
+    }
+
     @Parcelize
     data class GroupLesson(
             override val id: Long,
