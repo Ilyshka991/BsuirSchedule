@@ -46,7 +46,7 @@
 
     <string name="start_message">Hello</string>
 
-    <string name="display_schedule_tab_title">%1$s, week %2$d</string>
+    <string name="display_schedule_tab_title">%1$s, Week %2$d</string>
 
     <string name="display_schedule_item_msg_subgroup">%1$d subgroup</string>
     <string name="display_schedule_item_msg_week_numbers">weeks: %1$s</string>
@@ -101,9 +101,9 @@
     <string name="staff_list_hint_enter_group_number">Enter group number</string>
     <string name="staff_list_hint_enter_employee_name">Enter employee name</string>
     <string name="staff_list_hint_enter_auditory">Enter auditory</string>
-    <string name="staff_list_msg_group_course">course: %1$d</string>
+    <string name="staff_list_msg_group_course">Course: %1$d</string>
     <string name="staff_list_msg_employee_department">Department: %1$s</string>
-    <string name="staff_list_msg_auditory_capacity">capacity: %1$d</string>
+    <string name="staff_list_msg_auditory_capacity">Capacity: %1$d</string>
     <string name="staff_list_msg_empty">Not found</string>
 
     <string name="options_dialog_action_done">done</string>
@@ -111,9 +111,9 @@
     <string name="settings_title">Settings</string>
     <string name="settings_action_change_theme">Theme: %1$s</string>
     <string name="settings_action_update_info">Update information</string>
-    <string name="settings_action_rate_app">Rate app!</string>
+    <string name="settings_action_rate_app">Rate app</string>
     <string name="settings_action_send_feedback">Send feedback</string>
-    <string name="settings_action_privacy_police">Privacy police</string>
+    <string name="settings_action_privacy_policy">Privacy policy</string>
     <string name="settings_label_version">Version:</string>
     <string name="settings_feedback_email_subject">Feedback for Bsuir Schedule</string>
     <string name="settings_feedback_email_address">ilyapechuro991@gmail.com</string>
@@ -148,6 +148,9 @@
     <string name="schedule_widget_msg_deleted">Deleted schedule</string>
     <string name="schedule_widget_msg_empty">Nothing there</string>
 
+    <string name="lesson_details_location">Location:</string>
+    <string name="lesson_details_weeks">Weeks: </string>
+
     <string-array name="lesson_types">
         <item>ЛК</item>
         <item>ПЗ</item>
@@ -169,6 +172,4 @@
         <item>Sunday</item>
     </string-array>
 
-    <string name="lesson_details_location">Location:</string>
-    <string name="lesson_details_weeks">Weeks: </string>
 </resources>

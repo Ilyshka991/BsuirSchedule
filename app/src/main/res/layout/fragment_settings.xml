@@ -62,7 +62,7 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/settingsPrivacyPoliceButton"
                     style="@style/SettingsButton"
-                    android:text="@string/settings_action_privacy_police"
+                    android:text="@string/settings_action_privacy_policy"
                     app:layout_constraintBottom_toTopOf="@+id/settingsSendFeedbackButton"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

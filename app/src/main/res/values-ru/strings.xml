@@ -8,6 +8,7 @@
     <string name="action_discard">Отклонить</string>
     <string name="action_retry">Повторить</string>
     <string name="action_cancel">Отмена</string>
+    <string name="action_ok">ОК</string>
 
     <string name="error_loading">Произошла ошибка,\nпопробуйте ещё раз</string>
 
@@ -17,7 +18,7 @@
     <string name="add_schedule_error_blank_schedule_name">Выберите расписание</string>
     <string name="add_schedule_error_unknown_schedule">Неизвестное расписание</string>
     <string name="add_schedule_hint_enter_schedule">Начните ввод</string>
-    <string name="add_schedule_tab_employees">Сотрудники</string>
+    <string name="add_schedule_tab_employees">Преподаватели</string>
     <string name="add_schedule_tab_students">Группы</string>
     <string name="add_schedule_msg_type">Тип:</string>
 
@@ -33,6 +34,7 @@
     <string name="navigation_msg_schedule_update_error">Не обновлено.</string>
     <string name="navigation_msg_schedule_update_available">Доступно обновление</string>
     <string name="navigation_msg_schedule_update_success">Обновлено</string>
+    <string name="navigation_hint_schedule_actions">Расписание можно обновить, проведя по нему вправо, или удалить, проведя влево</string>
 
     <string name="update_schedule_classes_title">Расписание занятий для %1$s изменено!</string>
     <string name="update_schedule_exams_title">Расписание экзаменов для %1$s изменено!</string>
@@ -42,13 +44,12 @@
 
     <string name="start_message">Добро пожаловать!</string>
 
-    <string name="settings_title">Настройки</string>
-
     <string name="display_schedule_tab_title">%1$s, нед. %2$d</string>
 
     <string name="display_schedule_item_msg_subgroup">%1$d подгруппа</string>
     <string name="display_schedule_item_msg_week_numbers">Недели %1$s</string>
     <string name="display_schedule_item_msg_empty_list">Пусто.</string>
+    <string name="display_schedule__hint_schedule_actions">Коснитесь занятия для подробностей, коснитесь и удерживайте для изменения</string>
 
     <string name="display_options_sheet_title_type">Отображать по %1$s</string>
     <string name="display_options_sheet_msg_type_weeks">неделям</string>
@@ -71,10 +72,10 @@
     <string name="modify_schedule_item_label_week_numbers">Недели:</string>
     <string name="modify_schedule_item_label_start_time">Начало:</string>
     <string name="modify_schedule_item_label_end_time">Окончание:</string>
-    <string name="modify_schedule_item_label_groups">Группы</string>
-    <string name="modify_schedule_item_label_employees">Сотрудники</string>
+    <string name="modify_schedule_item_label_groups">Группы:</string>
+    <string name="modify_schedule_item_label_employees">Преподаватели:</string>
     <string name="modify_schedule_item_label_subgroup_number">Подгруппа:</string>
-    <string name="modify_schedule_item_label_auditories">Аудитории</string>
+    <string name="modify_schedule_item_label_auditories">Аудитории:</string>
     <string name="modify_schedule_item_hint_note">Заметки</string>
     <string name="modify_schedule_item_label_priority">Приоритет:</string>
     <string name="modify_schedule_item_label_date">Дата:</string>
@@ -105,6 +106,47 @@
     <string name="staff_list_msg_empty">Пусто.</string>
 
     <string name="options_dialog_action_done">готово</string>
+
+    <string name="settings_title">Настройки</string>
+    <string name="settings_action_change_theme">Тема: %1$s</string>
+    <string name="settings_action_update_info">Обновить информацию</string>
+    <string name="settings_action_rate_app">Оценить приложение</string>
+    <string name="settings_action_send_feedback">Обратная связь</string>
+    <string name="settings_action_privacy_policy">Политика конфиденциальности</string>
+    <string name="settings_label_version">Версия:</string>
+    <string name="settings_title_select_theme">Выберите тему</string>
+
+    <string name="theme_follow_system">По умолчанию</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Тёмная</string>
+    <string name="theme_black">Чёрная</string>
+    <string name="theme_indigo">Индиго</string>
+    <string name="theme_teal">Бирюзовая</string>
+    <string name="theme_blue_grey">Серая</string>
+    <string name="theme_blue_white">Бело-синяя</string>
+    <string name="theme_brown">Коричневая</string>
+    <string name="theme_orange">Оранжевая</string>
+    <string name="theme_purple">Фиолетовая</string>
+    <string name="theme_cyan">Голубая</string>
+    <string name="theme_red">Красная</string>
+    <string name="theme_lime">Лаймовая</string>
+
+    <string name="configure_schedule_widget_title">Добавить виджет</string>
+    <string name="configure_schedule_widget_msg_exit">Отклонить изменения</string>
+    <string name="configure_schedule_widget_action_done">Готово</string>
+    <string name="configure_schedule_widget_action_msg_select_schedule">Выберите расписание:</string>
+    <string name="configure_schedule_widget_action_go_to_app">Запустить приложение</string>
+    <string name="configure_schedule_widget_error_empty_schedules">Пожалуйста, загрузите расписание через приложение </string>
+    <string name="configure_schedule_widget_label_theme">Тема:</string>
+
+    <string name="schedule_widget_msg_today">, Сегодня</string>
+    <string name="schedule_widget_msg_tomorrow">, Завтра</string>
+    <string name="schedule_widget_msg_exams">, Экзамены</string>
+    <string name="schedule_widget_msg_deleted">Расписание удалено</string>
+    <string name="schedule_widget_msg_empty">Пусто.</string>
+
+    <string name="lesson_details_location">Место проведения:</string>
+    <string name="lesson_details_weeks">Недели: </string>
 
     <string-array name="lesson_types">
         <item>ЛК</item>
