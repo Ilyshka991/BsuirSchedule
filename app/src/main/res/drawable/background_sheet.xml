@@ -4,7 +4,7 @@
     <item android:id="@+id/backgroundNavigationSheetTopLayer">
         <shape android:shape="rectangle">
             <solid
-                android:color="?attr/backgroundDarkColor"
+                android:color="?attr/primaryColor"
                 tools:color="@color/grey_700" />
             <corners
                 android:topLeftRadius="@dimen/navigation_sheet_top_corner_radius"
@@ -20,14 +20,14 @@
                 android:height="4dp" />
             <corners android:radius="8dp" />
             <solid
-                android:color="?attr/backgroundColor"
+                android:color="?attr/secondBackgroundColor"
                 tools:color="@color/white" />
         </shape>
     </item>
     <item android:top="20dp">
         <shape android:shape="rectangle">
             <solid
-                android:color="?attr/backgroundColor"
+                android:color="?attr/secondBackgroundColor"
                 tools:color="@color/white" />
             <corners
                 android:topLeftRadius="16dp"

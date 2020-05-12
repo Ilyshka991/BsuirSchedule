@@ -26,10 +26,12 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/navigationSheetSettingButton"
         style="@style/NavigationButton"
-        android:text="@string/navigation_action_settings" />
+        android:text="@string/navigation_action_settings"
+        android:textColor="?attr/buttonDisabledTextColor"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/navigationSheetAddButton"
         style="@style/NavigationButton"
-        android:text="@string/navigation_action_add_schedule" />
+        android:text="@string/navigation_action_add_schedule"
+        android:textColor="?attr/buttonDisabledTextColor"/>
 </LinearLayout>

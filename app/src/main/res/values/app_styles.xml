@@ -41,13 +41,13 @@
         <item name="secondBackgroundColor">@color/grey_100</item>
         <item name="backgroundDarkColor">@color/grey_800</item>
         <item name="rippleColor">@color/grey_300</item>
-        <item name="dividerColor">@color/grey_400</item>
+        <item name="dividerColor">?attr/primaryColor</item>
         <item name="backgroundNavigationSwipeActionColor">@color/amber_100</item>
 
         <item name="buttonDefaultBackgroundColor">@color/transparent</item>
-        <item name="buttonSelectedBackgroundColor">@color/grey_100</item>
+        <item name="buttonSelectedBackgroundColor">@color/grey_300</item>
         <item name="buttonEnabledTextColor">@color/grey_600</item>
-        <item name="buttonDisabledTextColor">@color/grey_300</item>
+        <item name="buttonDisabledTextColor">?attr/textSemiBoldColor</item>
         <item name="chipCheckedColor">@color/grey_300</item>
         <item name="chipUncheckedColor">@color/grey_100</item>
 
@@ -73,22 +73,22 @@
         <item name="android:background">@color/transparent</item>
 
         <item name="primaryColor">@color/grey_800</item>
-        <item name="primaryDarkColor">@color/grey_700</item>
+        <item name="primaryDarkColor">@color/black</item>
         <item name="accentColor">@color/amber_200</item>
 
         <item name="backgroundColor">@color/grey_900</item>
-        <item name="secondBackgroundColor">@color/grey_700</item>
+        <item name="secondBackgroundColor">@color/grey_400</item>
         <item name="backgroundDarkColor">@color/grey_800</item>
         <item name="rippleColor">@color/grey_300</item>
-        <item name="dividerColor">@color/grey_400</item>
+        <item name="dividerColor">?attr/primaryColor</item>
         <item name="backgroundNavigationSwipeActionColor">@color/amber_100</item>
 
         <item name="buttonDefaultBackgroundColor">@color/transparent</item>
-        <item name="buttonSelectedBackgroundColor">@color/grey_700</item>
-        <item name="buttonEnabledTextColor">@color/grey_500</item>
-        <item name="buttonDisabledTextColor">@color/grey_800</item>
-        <item name="chipCheckedColor">@color/grey_500</item>
-        <item name="chipUncheckedColor">?attr/secondBackgroundColor</item>
+        <item name="buttonSelectedBackgroundColor">@color/grey_500</item>
+        <item name="buttonEnabledTextColor">?attr/textDefaultColor</item>
+        <item name="buttonDisabledTextColor">@color/black</item>
+        <item name="chipCheckedColor">@color/grey_600</item>
+        <item name="chipUncheckedColor">@color/grey_700</item>
 
         <item name="textDefaultColor">@color/grey_400</item>
         <item name="textSemiBoldColor">@color/grey_100</item>
@@ -97,18 +97,18 @@
         <item name="tabUnselectedColor">@color/grey_700</item>
         <item name="textErrorColor">@color/amber_900</item>
 
-        <item name="menuIconColor">@color/grey_500</item>
+        <item name="menuIconColor">@color/grey_100</item>
         <item name="fabBackgroundColor">@color/amber_500</item>
 
         <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
 
 
-        <item name="indicatorDefaultColor">@color/grey_300</item>
-        <item name="indicatorSelectedColor">@color/grey_700</item>
+        <item name="indicatorDefaultColor">@color/grey_800</item>
+        <item name="indicatorSelectedColor">@color/grey_600</item>
         <item name="locationIconTintColor">@color/red_500</item>
     </style>
 
-    <style name="BlackStyleTheme">
+    <style name="BlackStyleTheme" parent="DarkStyleTheme">
         <item name="android:background">@color/transparent</item>
 
         <item name="primaryColor">@color/grey_900</item>
@@ -116,424 +116,164 @@
         <item name="accentColor">@color/amber_200</item>
 
         <item name="backgroundColor">@color/black</item>
-        <item name="secondBackgroundColor">@color/grey_700</item>
         <item name="backgroundDarkColor">@color/grey_800</item>
-        <item name="rippleColor">@color/grey_300</item>
-        <item name="dividerColor">@color/grey_400</item>
-        <item name="backgroundNavigationSwipeActionColor">@color/amber_100</item>
-
-        <item name="buttonDefaultBackgroundColor">@color/transparent</item>
-        <item name="buttonSelectedBackgroundColor">@color/grey_700</item>
-        <item name="buttonEnabledTextColor">@color/grey_400</item>
-        <item name="buttonDisabledTextColor">@color/grey_800</item>
-        <item name="chipCheckedColor">@color/grey_500</item>
-        <item name="chipUncheckedColor">?attr/secondBackgroundColor</item>
-
-        <item name="textDefaultColor">@color/grey_300</item>
-        <item name="textSemiBoldColor">@color/grey_50</item>
-        <item name="titleColor">?attr/textDefaultColor</item>
-        <item name="tabSelectedColor">?attr/textDefaultColor</item>
-        <item name="tabUnselectedColor">@color/grey_700</item>
-        <item name="textErrorColor">@color/amber_900</item>
-
-        <item name="menuIconColor">@color/grey_500</item>
-        <item name="fabBackgroundColor">@color/amber_500</item>
-
-        <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
-
-
-        <item name="indicatorDefaultColor">@color/grey_300</item>
-        <item name="indicatorSelectedColor">@color/grey_700</item>
-        <item name="locationIconTintColor">@color/red_500</item>
     </style>
 
-    <style name="IndigoStyleTheme">
-        <item name="android:background">@color/transparent</item>
+    <style name="IndigoStyleTheme" parent="LightStyleTheme">
+        <item name="secondBackgroundColor">@color/indigo_50</item>
 
         <item name="primaryColor">@color/indigo_500</item>
         <item name="primaryDarkColor">@color/indigo_600</item>
-        <item name="accentColor">@color/amber_200</item>
+        <item name="accentColor">@color/indigo_200</item>
 
-        <item name="backgroundColor">@color/white</item>
-        <item name="secondBackgroundColor">@color/grey_100</item>
-        <item name="backgroundDarkColor">@color/grey_800</item>
+        <item name="buttonSelectedBackgroundColor">@color/indigo_200</item>
+
         <item name="rippleColor">@color/indigo_300</item>
-        <item name="dividerColor">@color/grey_400</item>
         <item name="backgroundNavigationSwipeActionColor">@color/indigo_100</item>
 
-        <item name="buttonDefaultBackgroundColor">@color/transparent</item>
-        <item name="buttonSelectedBackgroundColor">@color/grey_100</item>
-        <item name="buttonEnabledTextColor">@color/grey_600</item>
-        <item name="buttonDisabledTextColor">@color/grey_300</item>
-        <item name="chipCheckedColor">@color/grey_300</item>
-        <item name="chipUncheckedColor">@color/grey_100</item>
-
-        <item name="textDefaultColor">@color/grey_600</item>
-        <item name="textSemiBoldColor">@color/grey_800</item>
-        <item name="titleColor">@color/grey_700</item>
-        <item name="tabSelectedColor">?attr/textDefaultColor</item>
-        <item name="tabUnselectedColor">@color/grey_400</item>
-        <item name="textErrorColor">@color/amber_900</item>
-
-        <item name="menuIconColor">?attr/backgroundColor</item>
-        <item name="fabBackgroundColor">@color/amber_500</item>
-
-        <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
-
-
         <item name="indicatorDefaultColor">@color/indigo_300</item>
-        <item name="indicatorSelectedColor">@color/indigo_600</item>
-        <item name="locationIconTintColor">@color/red_500</item>
+        <item name="indicatorSelectedColor">@color/indigo_500</item>
     </style>
 
-    <style name="TealStyleTheme">
-        <item name="android:background">@color/transparent</item>
+    <style name="TealStyleTheme" parent="LightStyleTheme">
+        <item name="secondBackgroundColor">@color/teal_50</item>
 
-        <item name="primaryColor">@color/teal_600</item>
-        <item name="primaryDarkColor">@color/teal_700</item>
-        <item name="accentColor">@color/amber_200</item>
+        <item name="primaryColor">@color/teal_500</item>
+        <item name="primaryDarkColor">@color/teal_600</item>
+        <item name="accentColor">@color/teal_200</item>
 
-        <item name="backgroundColor">@color/teal_800</item>
-        <item name="secondBackgroundColor">@color/teal_600</item>
-        <item name="backgroundDarkColor">@color/teal_700</item>
-        <item name="rippleColor">@color/grey_300</item>
-        <item name="dividerColor">@color/grey_400</item>
-        <item name="backgroundNavigationSwipeActionColor">@color/amber_100</item>
+        <item name="buttonSelectedBackgroundColor">@color/teal_200</item>
 
-        <item name="buttonDefaultBackgroundColor">@color/transparent</item>
-        <item name="buttonSelectedBackgroundColor">@color/teal_600</item>
-        <item name="buttonEnabledTextColor">@color/grey_400</item>
-        <item name="buttonDisabledTextColor">@color/grey_700</item>
-        <item name="chipCheckedColor">@color/teal_500</item>
-        <item name="chipUncheckedColor">?attr/secondBackgroundColor</item>
+        <item name="rippleColor">@color/teal_300</item>
+        <item name="backgroundNavigationSwipeActionColor">@color/teal_100</item>
 
-        <item name="textDefaultColor">@color/grey_300</item>
-        <item name="textSemiBoldColor">@color/grey_50</item>
-        <item name="titleColor">?attr/textDefaultColor</item>
-        <item name="tabSelectedColor">?attr/textDefaultColor</item>
-        <item name="tabUnselectedColor">@color/teal_600</item>
-        <item name="textErrorColor">@color/amber_900</item>
-
-        <item name="menuIconColor">@color/teal_900</item>
-        <item name="fabBackgroundColor">@color/amber_500</item>
-
-        <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
-
-
-        <item name="indicatorDefaultColor">@color/grey_300</item>
-        <item name="indicatorSelectedColor">@color/grey_700</item>
-        <item name="locationIconTintColor">@color/red_500</item>
+        <item name="indicatorDefaultColor">@color/teal_300</item>
+        <item name="indicatorSelectedColor">@color/teal_500</item>
     </style>
 
-    <style name="BlueGreyStyleTheme">
-        <item name="android:background">@color/transparent</item>
+    <style name="BlueGreyStyleTheme" parent="LightStyleTheme">
+        <item name="secondBackgroundColor">@color/blue_grey_50</item>
 
-        <item name="primaryColor">@color/blue_grey_600</item>
-        <item name="primaryDarkColor">@color/blue_grey_700</item>
-        <item name="accentColor">@color/amber_200</item>
+        <item name="primaryColor">@color/blue_grey_500</item>
+        <item name="primaryDarkColor">@color/blue_grey_600</item>
+        <item name="accentColor">@color/blue_grey_200</item>
 
-        <item name="backgroundColor">@color/blue_grey_800</item>
-        <item name="secondBackgroundColor">@color/blue_grey_600</item>
-        <item name="backgroundDarkColor">@color/blue_grey_700</item>
-        <item name="rippleColor">@color/grey_300</item>
-        <item name="dividerColor">@color/grey_400</item>
-        <item name="backgroundNavigationSwipeActionColor">@color/amber_100</item>
+        <item name="buttonSelectedBackgroundColor">@color/blue_grey_200</item>
 
-        <item name="buttonDefaultBackgroundColor">@color/transparent</item>
-        <item name="buttonSelectedBackgroundColor">@color/blue_grey_600</item>
-        <item name="buttonEnabledTextColor">@color/grey_400</item>
-        <item name="buttonDisabledTextColor">@color/grey_700</item>
-        <item name="chipCheckedColor">@color/blue_grey_500</item>
-        <item name="chipUncheckedColor">?attr/secondBackgroundColor</item>
+        <item name="rippleColor">@color/blue_grey_300</item>
+        <item name="backgroundNavigationSwipeActionColor">@color/blue_grey_100</item>
 
-        <item name="textDefaultColor">@color/grey_300</item>
-        <item name="textSemiBoldColor">@color/grey_50</item>
-        <item name="titleColor">?attr/textDefaultColor</item>
-        <item name="tabSelectedColor">?attr/textDefaultColor</item>
-        <item name="tabUnselectedColor">@color/blue_grey_600</item>
-        <item name="textErrorColor">@color/amber_900</item>
-
-        <item name="menuIconColor">@color/blue_grey_900</item>
-        <item name="fabBackgroundColor">@color/amber_500</item>
-
-        <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
-
-
-        <item name="indicatorDefaultColor">@color/grey_300</item>
-        <item name="indicatorSelectedColor">@color/grey_700</item>
-        <item name="locationIconTintColor">@color/red_500</item>
+        <item name="indicatorDefaultColor">@color/blue_grey_300</item>
+        <item name="indicatorSelectedColor">@color/blue_grey_500</item>
     </style>
 
-    <style name="BlueLightStyleTheme">
-        <item name="android:background">@color/transparent</item>
+    <style name="BlueLightStyleTheme" parent="LightStyleTheme">
+        <item name="secondBackgroundColor">@color/blue_50</item>
 
-        <item name="primaryColor">@color/light_blue_400</item>
-        <item name="primaryDarkColor">@color/light_blue_500</item>
-        <item name="accentColor">@color/light_blue_200</item>
+        <item name="primaryColor">@color/blue_500</item>
+        <item name="primaryDarkColor">@color/blue_600</item>
+        <item name="accentColor">@color/blue_200</item>
 
-        <item name="backgroundColor">@color/white</item>
-        <item name="secondBackgroundColor">@color/grey_100</item>
-        <item name="backgroundDarkColor">@color/grey_800</item>
-        <item name="rippleColor">@color/light_blue_300</item>
-        <item name="dividerColor">@color/grey_400</item>
-        <item name="backgroundNavigationSwipeActionColor">@color/light_blue_100</item>
+        <item name="buttonSelectedBackgroundColor">@color/blue_200</item>
 
-        <item name="buttonDefaultBackgroundColor">@color/transparent</item>
-        <item name="buttonSelectedBackgroundColor">@color/grey_100</item>
-        <item name="buttonEnabledTextColor">@color/grey_600</item>
-        <item name="buttonDisabledTextColor">@color/grey_300</item>
-        <item name="chipCheckedColor">@color/grey_300</item>
-        <item name="chipUncheckedColor">@color/grey_100</item>
+        <item name="rippleColor">@color/blue_300</item>
+        <item name="backgroundNavigationSwipeActionColor">@color/blue_100</item>
 
-        <item name="textDefaultColor">@color/grey_600</item>
-        <item name="textSemiBoldColor">@color/grey_800</item>
-        <item name="titleColor">@color/grey_700</item>
-        <item name="tabSelectedColor">?attr/textDefaultColor</item>
-        <item name="tabUnselectedColor">@color/grey_400</item>
-        <item name="textErrorColor">@color/amber_900</item>
-
-        <item name="menuIconColor">?attr/backgroundColor</item>
-        <item name="fabBackgroundColor">@color/amber_500</item>
-
-        <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
-
-
-        <item name="indicatorDefaultColor">@color/light_blue_200</item>
-        <item name="indicatorSelectedColor">@color/light_blue_500</item>
-        <item name="locationIconTintColor">@color/red_500</item>
+        <item name="indicatorDefaultColor">@color/blue_300</item>
+        <item name="indicatorSelectedColor">@color/blue_500</item>
     </style>
 
-    <style name="BrownStyleTheme">
-        <item name="android:background">@color/transparent</item>
+    <style name="BrownStyleTheme" parent="LightStyleTheme">
 
-        <item name="primaryColor">@color/brown_600</item>
-        <item name="primaryDarkColor">@color/brown_700</item>
-        <item name="accentColor">@color/amber_200</item>
+        <item name="primaryColor">@color/brown_500</item>
+        <item name="primaryDarkColor">@color/brown_600</item>
+        <item name="accentColor">@color/brown_200</item>
 
-        <item name="backgroundColor">@color/brown_800</item>
-        <item name="secondBackgroundColor">@color/brown_600</item>
-        <item name="backgroundDarkColor">@color/brown_700</item>
-        <item name="rippleColor">@color/grey_300</item>
-        <item name="dividerColor">@color/grey_400</item>
-        <item name="backgroundNavigationSwipeActionColor">@color/amber_100</item>
+        <item name="buttonSelectedBackgroundColor">@color/brown_200</item>
 
-        <item name="buttonDefaultBackgroundColor">@color/transparent</item>
-        <item name="buttonSelectedBackgroundColor">@color/brown_600</item>
-        <item name="buttonEnabledTextColor">@color/grey_400</item>
-        <item name="buttonDisabledTextColor">@color/grey_700</item>
-        <item name="chipCheckedColor">@color/brown_500</item>
-        <item name="chipUncheckedColor">?attr/secondBackgroundColor</item>
+        <item name="rippleColor">@color/brown_300</item>
+        <item name="backgroundNavigationSwipeActionColor">@color/brown_100</item>
 
-        <item name="textDefaultColor">@color/grey_300</item>
-        <item name="textSemiBoldColor">@color/grey_50</item>
-        <item name="titleColor">?attr/textDefaultColor</item>
-        <item name="tabSelectedColor">?attr/textDefaultColor</item>
-        <item name="tabUnselectedColor">@color/brown_600</item>
-        <item name="textErrorColor">@color/amber_900</item>
-
-        <item name="menuIconColor">@color/brown_900</item>
-        <item name="fabBackgroundColor">@color/amber_500</item>
-
-        <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
-
-
-        <item name="indicatorDefaultColor">@color/grey_300</item>
-        <item name="indicatorSelectedColor">@color/grey_700</item>
-        <item name="locationIconTintColor">@color/red_500</item>
+        <item name="indicatorDefaultColor">@color/brown_300</item>
+        <item name="indicatorSelectedColor">@color/brown_500</item>
     </style>
 
-    <style name="OrangeStyleTheme">
-        <item name="android:background">@color/transparent</item>
+    <style name="OrangeStyleTheme" parent="DarkStyleTheme">
+        <item name="secondBackgroundColor">@color/orange_50</item>
 
         <item name="primaryColor">@color/orange_700</item>
         <item name="primaryDarkColor">@color/orange_800</item>
-        <item name="accentColor">@color/orange_500</item>
+        <item name="accentColor">@color/orange_200</item>
 
-        <item name="backgroundColor">@color/grey_900</item>
-        <item name="secondBackgroundColor">@color/grey_700</item>
-        <item name="backgroundDarkColor">@color/grey_800</item>
+        <item name="buttonSelectedBackgroundColor">@color/orange_300</item>
+
         <item name="rippleColor">@color/orange_400</item>
-        <item name="dividerColor">@color/grey_400</item>
-        <item name="backgroundNavigationSwipeActionColor">@color/orange_400</item>
-
-        <item name="buttonDefaultBackgroundColor">@color/transparent</item>
-        <item name="buttonSelectedBackgroundColor">@color/grey_700</item>
-        <item name="buttonEnabledTextColor">@color/grey_500</item>
-        <item name="buttonDisabledTextColor">@color/grey_800</item>
-        <item name="chipCheckedColor">@color/grey_500</item>
-        <item name="chipUncheckedColor">?attr/secondBackgroundColor</item>
-
-        <item name="textDefaultColor">@color/grey_400</item>
-        <item name="textSemiBoldColor">@color/grey_100</item>
-        <item name="titleColor">?attr/textDefaultColor</item>
-        <item name="tabSelectedColor">?attr/textDefaultColor</item>
-        <item name="tabUnselectedColor">@color/grey_700</item>
-        <item name="textErrorColor">@color/amber_900</item>
-
-        <item name="menuIconColor">@color/grey_300</item>
-        <item name="fabBackgroundColor">@color/amber_500</item>
-
-        <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
-
+        <item name="backgroundNavigationSwipeActionColor">@color/orange_200</item>
 
         <item name="indicatorDefaultColor">@color/orange_300</item>
         <item name="indicatorSelectedColor">@color/orange_500</item>
-        <item name="locationIconTintColor">@color/red_500</item>
     </style>
 
-    <style name="PurpleStyleTheme">
-        <item name="android:background">@color/transparent</item>
+    <style name="PurpleStyleTheme" parent="DarkStyleTheme">
 
-        <item name="primaryColor">@color/purple_700</item>
-        <item name="primaryDarkColor">@color/purple_800</item>
-        <item name="accentColor">@color/purple_600</item>
+        <item name="primaryColor">@color/purple_300</item>
+        <item name="primaryDarkColor">@color/purple_400</item>
+        <item name="accentColor">@color/purple_200</item>
 
-        <item name="backgroundColor">@color/grey_900</item>
-        <item name="secondBackgroundColor">@color/grey_700</item>
-        <item name="backgroundDarkColor">@color/grey_800</item>
-        <item name="rippleColor">@color/purple_500</item>
-        <item name="dividerColor">@color/grey_400</item>
-        <item name="backgroundNavigationSwipeActionColor">@color/purple_500</item>
+        <item name="buttonSelectedBackgroundColor">@color/purple_300</item>
 
-        <item name="buttonDefaultBackgroundColor">@color/transparent</item>
-        <item name="buttonSelectedBackgroundColor">@color/grey_700</item>
-        <item name="buttonEnabledTextColor">@color/grey_500</item>
-        <item name="buttonDisabledTextColor">@color/grey_800</item>
-        <item name="chipCheckedColor">@color/grey_500</item>
-        <item name="chipUncheckedColor">?attr/secondBackgroundColor</item>
+        <item name="secondBackgroundColor">@color/purple_50</item>
 
-        <item name="textDefaultColor">@color/grey_400</item>
-        <item name="textSemiBoldColor">@color/grey_100</item>
-        <item name="titleColor">?attr/textDefaultColor</item>
-        <item name="tabSelectedColor">?attr/textDefaultColor</item>
-        <item name="tabUnselectedColor">@color/grey_700</item>
-        <item name="textErrorColor">@color/amber_900</item>
+        <item name="rippleColor">@color/purple_100</item>
+        <item name="backgroundNavigationSwipeActionColor">@color/purple_200</item>
 
-        <item name="menuIconColor">@color/grey_400</item>
-        <item name="fabBackgroundColor">@color/amber_500</item>
-
-        <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
-
-
-        <item name="indicatorDefaultColor">@color/purple_400</item>
-        <item name="indicatorSelectedColor">@color/purple_700</item>
-        <item name="locationIconTintColor">@color/red_500</item>
+        <item name="indicatorDefaultColor">@color/purple_100</item>
+        <item name="indicatorSelectedColor">@color/purple_400</item>
     </style>
 
-    <style name="CyanStyleTheme">
-        <item name="android:background">@color/transparent</item>
+    <style name="CyanStyleTheme" parent="LightStyleTheme">
 
-        <item name="primaryColor">@color/cyan_200</item>
-        <item name="primaryDarkColor">@color/cyan_300</item>
-        <item name="accentColor">@color/cyan_100</item>
+        <item name="primaryColor">@color/cyan_500</item>
+        <item name="primaryDarkColor">@color/cyan_600</item>
+        <item name="accentColor">@color/cyan_200</item>
 
-        <item name="backgroundColor">@color/white</item>
-        <item name="secondBackgroundColor">@color/grey_100</item>
-        <item name="backgroundDarkColor">@color/grey_800</item>
-        <item name="rippleColor">@color/cyan_100</item>
-        <item name="dividerColor">@color/grey_400</item>
-        <item name="backgroundNavigationSwipeActionColor">@color/cyan_50</item>
+        <item name="buttonSelectedBackgroundColor">@color/cyan_200</item>
 
-        <item name="buttonDefaultBackgroundColor">@color/transparent</item>
-        <item name="buttonSelectedBackgroundColor">@color/grey_100</item>
-        <item name="buttonEnabledTextColor">@color/grey_600</item>
-        <item name="buttonDisabledTextColor">@color/grey_300</item>
-        <item name="chipCheckedColor">@color/grey_300</item>
-        <item name="chipUncheckedColor">@color/grey_100</item>
+        <item name="rippleColor">@color/cyan_300</item>
+        <item name="backgroundNavigationSwipeActionColor">@color/cyan_100</item>
 
-        <item name="textDefaultColor">@color/grey_600</item>
-        <item name="textSemiBoldColor">@color/grey_800</item>
-        <item name="titleColor">@color/grey_700</item>
-        <item name="tabSelectedColor">?attr/textDefaultColor</item>
-        <item name="tabUnselectedColor">@color/grey_400</item>
-        <item name="textErrorColor">@color/amber_900</item>
-
-        <item name="menuIconColor">?attr/backgroundColor</item>
-        <item name="fabBackgroundColor">@color/amber_500</item>
-
-        <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
-
-
-        <item name="indicatorDefaultColor">@color/cyan_100</item>
-        <item name="indicatorSelectedColor">@color/cyan_300</item>
-        <item name="locationIconTintColor">@color/red_500</item>
+        <item name="indicatorDefaultColor">@color/cyan_300</item>
+        <item name="indicatorSelectedColor">@color/cyan_500</item>
     </style>
 
-    <style name="RedStyleTheme">
-        <item name="android:background">@color/transparent</item>
+    <style name="RedStyleTheme" parent="LightStyleTheme">
 
         <item name="primaryColor">@color/red_400</item>
         <item name="primaryDarkColor">@color/red_500</item>
-        <item name="accentColor">@color/amber_200</item>
+        <item name="accentColor">@color/red_200</item>
 
-        <item name="backgroundColor">@color/white</item>
-        <item name="secondBackgroundColor">@color/grey_100</item>
-        <item name="backgroundDarkColor">@color/grey_800</item>
+        <item name="buttonSelectedBackgroundColor">@color/red_200</item>
+
         <item name="rippleColor">@color/red_300</item>
-        <item name="dividerColor">@color/grey_400</item>
-        <item name="backgroundNavigationSwipeActionColor">@color/red_200</item>
-
-        <item name="buttonDefaultBackgroundColor">@color/transparent</item>
-        <item name="buttonSelectedBackgroundColor">@color/grey_100</item>
-        <item name="buttonEnabledTextColor">@color/grey_600</item>
-        <item name="buttonDisabledTextColor">@color/grey_300</item>
-        <item name="chipCheckedColor">@color/grey_300</item>
-        <item name="chipUncheckedColor">@color/grey_100</item>
-
-        <item name="textDefaultColor">@color/grey_600</item>
-        <item name="textSemiBoldColor">@color/grey_800</item>
-        <item name="titleColor">@color/grey_700</item>
-        <item name="tabSelectedColor">?attr/textDefaultColor</item>
-        <item name="tabUnselectedColor">@color/grey_400</item>
-        <item name="textErrorColor">@color/amber_900</item>
-
-        <item name="menuIconColor">?attr/backgroundColor</item>
-        <item name="fabBackgroundColor">@color/amber_500</item>
-
-        <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
-
+        <item name="backgroundNavigationSwipeActionColor">@color/red_100</item>
 
         <item name="indicatorDefaultColor">@color/red_300</item>
-        <item name="indicatorSelectedColor">@color/red_600</item>
-        <item name="locationIconTintColor">@color/red_500</item>
+        <item name="indicatorSelectedColor">@color/red_500</item>
     </style>
 
-    <style name="LimeStyleTheme">
-        <item name="android:background">@color/transparent</item>
+    <style name="LimeStyleTheme" parent="DarkStyleTheme">
+        <item name="secondBackgroundColor">@color/lime_50</item>
 
-        <item name="primaryColor">@color/lime_600</item>
-        <item name="primaryDarkColor">@color/lime_700</item>
-        <item name="accentColor">@color/amber_200</item>
+        <item name="primaryColor">@color/lime_700</item>
+        <item name="primaryDarkColor">@color/lime_800</item>
+        <item name="accentColor">@color/lime_200</item>
 
-        <item name="backgroundColor">@color/lime_800</item>
-        <item name="secondBackgroundColor">@color/lime_600</item>
-        <item name="backgroundDarkColor">@color/lime_700</item>
-        <item name="rippleColor">@color/grey_300</item>
-        <item name="dividerColor">@color/grey_400</item>
-        <item name="backgroundNavigationSwipeActionColor">@color/amber_100</item>
+        <item name="buttonSelectedBackgroundColor">@color/lime_400</item>
 
-        <item name="buttonDefaultBackgroundColor">@color/transparent</item>
-        <item name="buttonSelectedBackgroundColor">@color/lime_600</item>
-        <item name="buttonEnabledTextColor">@color/grey_300</item>
-        <item name="buttonDisabledTextColor">@color/grey_400</item>
-        <item name="chipCheckedColor">@color/lime_500</item>
-        <item name="chipUncheckedColor">?attr/secondBackgroundColor</item>
+        <item name="rippleColor">@color/lime_400</item>
+        <item name="backgroundNavigationSwipeActionColor">@color/lime_300</item>
 
-        <item name="textDefaultColor">@color/grey_300</item>
-        <item name="textSemiBoldColor">@color/grey_50</item>
-        <item name="titleColor">?attr/textDefaultColor</item>
-        <item name="tabSelectedColor">?attr/textDefaultColor</item>
-        <item name="tabUnselectedColor">@color/lime_600</item>
-        <item name="textErrorColor">@color/amber_900</item>
-
-        <item name="menuIconColor">@color/lime_900</item>
-        <item name="fabBackgroundColor">@color/amber_500</item>
-
-        <item name="scheduleItemBackgroundColor">?attr/backgroundColor</item>
-
-
-        <item name="indicatorDefaultColor">@color/grey_300</item>
-        <item name="indicatorSelectedColor">@color/grey_700</item>
-        <item name="locationIconTintColor">@color/red_500</item>
+        <item name="indicatorDefaultColor">@color/lime_300</item>
+        <item name="indicatorSelectedColor">@color/lime_500</item>
     </style>
 </resources>

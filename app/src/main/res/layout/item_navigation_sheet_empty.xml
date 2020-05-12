@@ -4,4 +4,5 @@
     style="@style/DefaultText"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:text="@string/navigation_msg_no_schedules" />
+    android:text="@string/navigation_msg_no_schedules"
+    android:textColor="?attr/buttonDisabledTextColor"/>

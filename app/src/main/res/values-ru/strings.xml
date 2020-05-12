@@ -30,7 +30,7 @@
     <string name="navigation_action_add_schedule">Добавить расписание</string>
     <string name="navigation_action_settings">Настройки</string>
     <string name="navigation_msg_no_schedules">Пусто.</string>
-    <string name="navigation_msg_schedule_update_in_progress">Обновление…</string>
+    <string name="navigation_msg_schedule_update_in_progress">Обновляется</string>
     <string name="navigation_msg_schedule_update_error">Не обновлено.</string>
     <string name="navigation_msg_schedule_update_available">Доступно обновление</string>
     <string name="navigation_msg_schedule_update_success">Обновлено</string>
@@ -108,12 +108,12 @@
     <string name="options_dialog_action_done">готово</string>
 
     <string name="settings_title">Настройки</string>
-    <string name="settings_action_change_theme">Тема: %1$s</string>
+    <string name="settings_action_change_theme">Сменить тему</string>
     <string name="settings_action_update_info">Обновить информацию</string>
     <string name="settings_action_rate_app">Оценить приложение</string>
     <string name="settings_action_send_feedback">Обратная связь</string>
     <string name="settings_action_privacy_policy">Политика конфиденциальности</string>
-    <string name="settings_label_version">Версия:</string>
+    <string name="settings_label_version">Версия</string>
     <string name="settings_title_select_theme">Выберите тему</string>
 
     <string name="theme_follow_system">По умолчанию</string>
@@ -123,7 +123,7 @@
     <string name="theme_indigo">Индиго</string>
     <string name="theme_teal">Бирюзовая</string>
     <string name="theme_blue_grey">Серая</string>
-    <string name="theme_blue_white">Бело-синяя</string>
+    <string name="theme_blue_white">Синяя</string>
     <string name="theme_brown">Коричневая</string>
     <string name="theme_orange">Оранжевая</string>
     <string name="theme_purple">Фиолетовая</string>

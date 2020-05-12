@@ -21,7 +21,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/navigationItemHintOkButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="?attr/buttonDisabledTextColor"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/navigationItemHintOkButton"
@@ -31,5 +32,6 @@
         android:text="@string/action_ok"
         app:layout_constraintBottom_toBottomOf="@+id/navigationItemHintText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/navigationItemHintText" />
+        app:layout_constraintTop_toTopOf="@+id/navigationItemHintText"
+        android:textColor="?attr/buttonDisabledTextColor"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

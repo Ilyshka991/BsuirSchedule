@@ -26,7 +26,8 @@
             app:navigationIcon="@drawable/ic_arrow_back"
             app:title="@string/settings_title"
             app:titleTextAppearance="@style/TitleTextAppearance"
-            app:titleTextColor="?attr/titleColor" />
+            app:titleTextColor="?attr/menuIconColor"
+            android:background="?attr/primaryColor"/>
 
         <View
             android:id="@+id/settingsToolbarDivider"

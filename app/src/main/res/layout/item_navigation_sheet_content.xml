@@ -19,7 +19,8 @@
         app:backgroundTint="@color/selected_button_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="?attr/buttonDisabledTextColor"/>
 
     <FrameLayout
         android:id="@+id/navigationItemContentUpdateParentView"
@@ -41,7 +42,8 @@
             android:layout_height="wrap_content"
             android:text="@string/navigation_msg_schedule_update_in_progress"
             android:textSize="16sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:textColor="?attr/buttonDisabledTextColor"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/navigationItemContentUpdateSuccessText"
@@ -50,7 +52,8 @@
             android:layout_height="wrap_content"
             android:text="@string/navigation_msg_schedule_update_success"
             android:textSize="16sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:textColor="?attr/buttonDisabledTextColor"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/navigationItemContentUpdateErrorText"
@@ -59,7 +62,8 @@
             android:layout_height="wrap_content"
             android:text="@string/navigation_msg_schedule_update_error"
             android:textSize="16sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:textColor="?attr/buttonDisabledTextColor"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/navigationItemContentUpdateAvailableText"
@@ -68,6 +72,7 @@
             android:layout_height="wrap_content"
             android:text="@string/navigation_msg_schedule_update_available"
             android:textSize="16sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:textColor="?attr/buttonDisabledTextColor"/>
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

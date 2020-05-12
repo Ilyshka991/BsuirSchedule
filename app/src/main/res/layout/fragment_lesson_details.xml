@@ -13,7 +13,8 @@
         android:gravity="center_horizontal"
         app:navigationIcon="@drawable/ic_arrow_back"
         app:titleTextAppearance="@style/TitleTextAppearance"
-        app:titleTextColor="?attr/titleColor">
+        android:background="?attr/primaryColor"
+        app:titleTextColor="?attr/menuIconColor">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/lessonDetailsName"
@@ -22,7 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:textSize="24sp"
-            tools:text="Lesson name" />
+            tools:text="Lesson name"
+            android:textColor="?attr/menuIconColor"/>
 
     </com.google.android.material.appbar.MaterialToolbar>
 

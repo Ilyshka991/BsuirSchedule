@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         app:navigationIcon="@drawable/ic_arrow_back"
         app:titleTextAppearance="@style/TitleTextAppearance"
-        app:titleTextColor="?attr/titleColor">
+        android:background="?attr/primaryColor"
+        app:titleTextColor="?attr/menuIconColor">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/modifyScheduleItemDoneButton"
@@ -22,7 +23,8 @@
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
             android:text="@string/modify_schedule_item_action_done"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textColor="?attr/menuIconColor"/>
     </com.google.android.material.appbar.MaterialToolbar>
 
     <View

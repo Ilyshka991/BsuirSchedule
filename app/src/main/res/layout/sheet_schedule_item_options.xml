@@ -14,16 +14,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:textSize="24sp"
-        tools:text="@string/schedule_item_options_sheet_title" />
+        tools:text="@string/schedule_item_options_sheet_title"
+        android:textColor="?attr/buttonDisabledTextColor"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/scheduleItemOptionsEditButton"
         style="@style/NavigationButton"
         android:layout_marginTop="4dp"
-        android:text="@string/schedule_item_options_sheet_action_edit" />
+        android:text="@string/schedule_item_options_sheet_action_edit"
+        android:textColor="?attr/buttonDisabledTextColor"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/scheduleItemOptionsDeleteButton"
         style="@style/NavigationButton"
-        android:text="@string/schedule_item_options_sheet_action_delete" />
+        android:text="@string/schedule_item_options_sheet_action_delete"
+        android:textColor="?attr/buttonDisabledTextColor"/>
 </LinearLayout>

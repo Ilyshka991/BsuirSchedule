@@ -7,4 +7,5 @@
     android:layout_marginStart="16dp"
     android:layout_marginLeft="16dp"
     android:gravity="start"
-    android:textSize="20sp" />
+    android:textSize="20sp"
+    android:textColor="?attr/buttonDisabledTextColor"/>

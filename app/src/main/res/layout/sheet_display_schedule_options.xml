@@ -11,10 +11,12 @@
         android:id="@+id/displayOptionsSheetTypeButton"
         style="@style/NavigationButton"
         android:layout_marginTop="28dp"
-        tools:text="@string/display_options_sheet_title_type" />
+        tools:text="@string/display_options_sheet_title_type"
+        android:textColor="?attr/buttonDisabledTextColor" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/displayOptionsSheetSubgroupButton"
         style="@style/NavigationButton"
-        tools:text="@string/display_options_sheet_title_all_group" />
+        tools:text="@string/display_options_sheet_title_all_group"
+        android:textColor="?attr/buttonDisabledTextColor" />
 </LinearLayout>
