@@ -15,86 +15,100 @@ import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 import com.pechuro.bsuirschedule.ext.formattedString
 import com.pechuro.bsuirschedule.feature.lessondetails.ScheduleItemDetailsInfo.*
-import com.pechuro.bsuirschedule.feature.lessondetails.ScheduleItemDetailsInfo.Companion.VIEW_TYPE_AUDITORY_HEADER
-import com.pechuro.bsuirschedule.feature.lessondetails.ScheduleItemDetailsInfo.Companion.VIEW_TYPE_AUDITORY_INFO
-import com.pechuro.bsuirschedule.feature.lessondetails.ScheduleItemDetailsInfo.Companion.VIEW_TYPE_EMPLOYEE_INFO
-import com.pechuro.bsuirschedule.feature.lessondetails.ScheduleItemDetailsInfo.Companion.VIEW_TYPE_NOTE
-import com.pechuro.bsuirschedule.feature.lessondetails.ScheduleItemDetailsInfo.Companion.VIEW_TYPE_TIME
-import com.pechuro.bsuirschedule.feature.lessondetails.ScheduleItemDetailsInfo.Companion.VIEW_TYPE_WEEKS
-import kotlinx.android.synthetic.main.item_lesson_details_employees.*
-import kotlinx.android.synthetic.main.item_lesson_details_footer.*
-import kotlinx.android.synthetic.main.item_lesson_details_location.*
-import kotlinx.android.synthetic.main.item_lesson_details_time.*
-import kotlinx.android.synthetic.main.item_lesson_details_weeks.*
+import kotlinx.android.synthetic.main.item_schedule_details_auditories.*
+import kotlinx.android.synthetic.main.item_schedule_details_employees.*
+import kotlinx.android.synthetic.main.item_schedule_details_lesson_date.*
+import kotlinx.android.synthetic.main.item_schedule_details_note.*
+import kotlinx.android.synthetic.main.item_schedule_details_time.*
 
-private object DiffCallback : DiffUtil.ItemCallback<ScheduleItemDetailsInfo>() {
+val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ScheduleItemDetailsInfo>() {
 
-    override fun areItemsTheSame(old: ScheduleItemDetailsInfo, new: ScheduleItemDetailsInfo): Boolean = when {
-        old is AuditoryInfo && new is AuditoryInfo -> old.auditory.id == new.auditory.id
-        else -> old === new
-    }
+    override fun areItemsTheSame(
+            oldItem: ScheduleItemDetailsInfo,
+            newItem: ScheduleItemDetailsInfo
+    ) = oldItem == newItem
 
-    override fun areContentsTheSame(oldItem: ScheduleItemDetailsInfo, newItem: ScheduleItemDetailsInfo): Boolean {
-        return oldItem == newItem
-    }
+    override fun areContentsTheSame(
+            oldItem: ScheduleItemDetailsInfo,
+            newItem: ScheduleItemDetailsInfo
+    ) = oldItem == newItem
 }
 
-class ScheduleItemDetailsAdapter : ListAdapter<ScheduleItemDetailsInfo, BaseViewHolder<ScheduleItemDetailsInfo>>(DiffCallback) {
+private const val EMPLOYEE_INFO_TYPE_LAYOUT_RES = R.layout.item_schedule_details_employees
+private const val GROUP_INFO_TYPE_LAYOUT_RES = R.layout.item_schedule_details_groups
+private const val TIME_TYPE_LAYOUT_RES = R.layout.item_schedule_details_time
+private const val LESSON_TYPE_TYPE_LAYOUT_RES = R.layout.item_schedule_details_lesson_type
+private const val LESSON_DATE_TYPE_LAYOUT_RES = R.layout.item_schedule_details_lesson_date
+private const val EXAM_DATE_TYPE_LAYOUT_RES = R.layout.item_schedule_details_exam_date
+private const val SUBGROUP_NUMBER_TYPE_LAYOUT_RES = R.layout.item_schedule_details_subgroup
+private const val PRIORITY_TYPE_LAYOUT_RES = R.layout.item_schedule_details_priority
+private const val AUDITORY_INFO_TYPE_LAYOUT_RES = R.layout.item_schedule_details_auditories
+private const val NOTE_TYPE_LAYOUT_RES = R.layout.item_schedule_details_note
 
-    override fun getItemViewType(position: Int): Int = getItem(position).viewType
+class ScheduleItemDetailsAdapter : ListAdapter<ScheduleItemDetailsInfo, BaseViewHolder<ScheduleItemDetailsInfo>>(DIFF_CALLBACK) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ScheduleItemDetailsInfo> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewTypeLayoutRes: Int): BaseViewHolder<ScheduleItemDetailsInfo> {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return when (viewType) {
-            VIEW_TYPE_TIME -> {
-                val view = layoutInflater.inflate(R.layout.item_lesson_details_time, parent, false)
-                TimeViewHolder(view)
-            }
-            VIEW_TYPE_EMPLOYEE_INFO -> {
-                val view=layoutInflater.inflate(R.layout.item_lesson_details_employees, parent, false)
-                EmployeeInfoViewHolder(view)
-            }
-            VIEW_TYPE_WEEKS -> {
-                val view=layoutInflater.inflate(R.layout.item_lesson_details_weeks, parent, false)
-                WeeksViewHolder(view)
-            }
-            VIEW_TYPE_AUDITORY_HEADER -> {
-                val view=layoutInflater.inflate(R.layout.item_lesson_details_location_header, parent, false)
-                LocationHeaderViewHolder(view)
-            }
-            VIEW_TYPE_AUDITORY_INFO -> {
-                val view=layoutInflater.inflate(R.layout.item_lesson_details_location, parent, false)
-                LocationItemViewHolder(view)
-            }
-            VIEW_TYPE_NOTE -> {
-                val view=layoutInflater.inflate(R.layout.item_lesson_details_footer, parent, false)
-                LessonFooterViewHolder(view)
-            }
-            else -> throw IllegalArgumentException("Not supported type: $viewType")
+        val view = layoutInflater.inflate(viewTypeLayoutRes, parent, false)
+        return when (viewTypeLayoutRes) {
+            EMPLOYEE_INFO_TYPE_LAYOUT_RES -> EmployeeInfoViewHolder(view)
+            GROUP_INFO_TYPE_LAYOUT_RES -> GroupInfoViewHolder(view)
+            TIME_TYPE_LAYOUT_RES -> TimeViewHolder(view)
+            LESSON_TYPE_TYPE_LAYOUT_RES -> LessonTypeViewHolder(view)
+            LESSON_DATE_TYPE_LAYOUT_RES -> LessonDateViewHolder(view)
+            EXAM_DATE_TYPE_LAYOUT_RES -> ExamDateViewHolder(view)
+            SUBGROUP_NUMBER_TYPE_LAYOUT_RES -> SubgroupViewHolder(view)
+            PRIORITY_TYPE_LAYOUT_RES -> PriorityViewHolder(view)
+            AUDITORY_INFO_TYPE_LAYOUT_RES -> AuditoryInfoViewHolder(view)
+            NOTE_TYPE_LAYOUT_RES -> NoteViewHolder(view)
+            else -> throw IllegalArgumentException("Not supported type: $viewTypeLayoutRes")
         }
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder<ScheduleItemDetailsInfo>, position: Int) {
-        holder.onBind(getItem(position))
+    override fun getItemViewType(position: Int): Int = when (getItem(position)) {
+        is EmployeeInfo -> EMPLOYEE_INFO_TYPE_LAYOUT_RES
+        is GroupInfo -> GROUP_INFO_TYPE_LAYOUT_RES
+        is Time -> TIME_TYPE_LAYOUT_RES
+        is LessonType -> LESSON_TYPE_TYPE_LAYOUT_RES
+        is LessonDate -> LESSON_DATE_TYPE_LAYOUT_RES
+        is ExamDate -> EXAM_DATE_TYPE_LAYOUT_RES
+        is Subgroup -> SUBGROUP_NUMBER_TYPE_LAYOUT_RES
+        is Priority -> PRIORITY_TYPE_LAYOUT_RES
+        is AuditoryInfo -> AUDITORY_INFO_TYPE_LAYOUT_RES
+        is Note -> NOTE_TYPE_LAYOUT_RES
     }
 
-    private class TimeViewHolder(view: View) : BaseViewHolder<Time>(view) {
-
-        override fun onBind(data: Time) {
-            lessonDetailsTime.text = with(data) { "${startTime.formattedString} - ${endTime.formattedString}" }
-        }
-    }
+    override fun onBindViewHolder(
+            holder: BaseViewHolder<ScheduleItemDetailsInfo>,
+            position: Int
+    ) = holder.onBind(getItem(position))
 
     private class EmployeeInfoViewHolder(view: View) : BaseViewHolder<EmployeeInfo>(view) {
-
         override fun onBind(data: EmployeeInfo) {
             lessonDetailsEmployeeView.employees = data.employees
         }
     }
 
-    private class WeeksViewHolder(view: View) : BaseViewHolder<Weeks>(view) {
+    private class GroupInfoViewHolder(view: View) : BaseViewHolder<EmployeeInfo>(view) {
+        override fun onBind(data: EmployeeInfo) {
+            lessonDetailsEmployeeView.employees = data.employees
+        }
+    }
 
-        override fun onBind(data: Weeks) {
+    private class TimeViewHolder(view: View) : BaseViewHolder<Time>(view) {
+        override fun onBind(data: Time) {
+            lessonDetailsTime.text = with(data) { "${startTime.formattedString} - ${endTime.formattedString}" }
+        }
+    }
+
+    private class LessonTypeViewHolder(view: View) : BaseViewHolder<LessonType>(view) {
+        override fun onBind(data: LessonType) {
+
+        }
+    }
+
+    private class LessonDateViewHolder(view: View) : BaseViewHolder<LessonDate>(view) {
+        override fun onBind(data: LessonDate) {
             lessonDetailsWeeks.text = getWeeksText(itemView.context, data.weeks)
         }
 
@@ -110,12 +124,25 @@ class ScheduleItemDetailsAdapter : ListAdapter<ScheduleItemDetailsInfo, BaseView
         }
     }
 
-    private class LocationHeaderViewHolder(view: View) : BaseViewHolder<AuditoryHeader>(view) {
-        override fun onBind(data: AuditoryHeader) {}
+    private class ExamDateViewHolder(view: View) : BaseViewHolder<ExamDate>(view) {
+        override fun onBind(data: ExamDate) {
+
+        }
     }
 
-    private class LocationItemViewHolder(view: View) : BaseViewHolder<AuditoryInfo>(view) {
+    private class SubgroupViewHolder(view: View) : BaseViewHolder<Subgroup>(view) {
+        override fun onBind(data: Subgroup) {
 
+        }
+    }
+
+    private class PriorityViewHolder(view: View) : BaseViewHolder<Priority>(view) {
+        override fun onBind(data: Priority) {
+
+        }
+    }
+
+    private class AuditoryInfoViewHolder(view: View) : BaseViewHolder<AuditoryInfo>(view) {
         override fun onBind(data: AuditoryInfo) {
             val auditory = data.auditory
 
@@ -131,8 +158,7 @@ class ScheduleItemDetailsAdapter : ListAdapter<ScheduleItemDetailsInfo, BaseView
         }
     }
 
-    private class LessonFooterViewHolder(view: View) : BaseViewHolder<Note>(view) {
-
+    private class NoteViewHolder(view: View) : BaseViewHolder<Note>(view) {
         override fun onBind(data: Note) {
             lessonDetailsNoteText.apply {
                 tag = data

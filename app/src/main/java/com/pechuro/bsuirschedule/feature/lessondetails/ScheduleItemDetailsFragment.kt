@@ -36,22 +36,18 @@ class ScheduleItemDetailsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewModel()
-        initView()
+        val scheduleItem: ScheduleItem by args(ARG_SCHEDULE_ITEM)
+        viewModel.init(scheduleItem)
+        initView(scheduleItem)
         observeData()
     }
 
-    private fun initViewModel() {
-        val scheduleItem: ScheduleItem by args(ARG_SCHEDULE_ITEM)
-        viewModel.scheduleItem = scheduleItem
-    }
-
-    private fun initView() {
+    private fun initView(scheduleItem: ScheduleItem) {
         scheduleItemDetailsToolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
         }
         scheduleItemDetailsRootRecycler.adapter = adapter
-        scheduleItemDetailsTitle.text = viewModel.scheduleItem.subject
+        scheduleItemDetailsTitle.text = scheduleItem.subject
     }
 
     private fun observeData() {
