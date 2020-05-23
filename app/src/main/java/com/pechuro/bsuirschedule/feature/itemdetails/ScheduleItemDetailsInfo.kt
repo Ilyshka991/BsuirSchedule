@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.lessondetails
+package com.pechuro.bsuirschedule.feature.itemdetails
 
 import com.pechuro.bsuirschedule.domain.entity.*
 

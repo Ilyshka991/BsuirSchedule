@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.lessondetails
+package com.pechuro.bsuirschedule.feature.itemdetails
 
 import android.content.Context
 import android.text.SpannableStringBuilder
@@ -14,9 +14,10 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 import com.pechuro.bsuirschedule.ext.formattedString
-import com.pechuro.bsuirschedule.feature.lessondetails.ScheduleItemDetailsInfo.*
+import com.pechuro.bsuirschedule.feature.itemdetails.ScheduleItemDetailsInfo.*
 import kotlinx.android.synthetic.main.item_schedule_details_auditories.*
 import kotlinx.android.synthetic.main.item_schedule_details_employees.*
+import kotlinx.android.synthetic.main.item_schedule_details_groups.*
 import kotlinx.android.synthetic.main.item_schedule_details_lesson_date.*
 import kotlinx.android.synthetic.main.item_schedule_details_note.*
 import kotlinx.android.synthetic.main.item_schedule_details_time.*
@@ -85,13 +86,13 @@ class ScheduleItemDetailsAdapter : ListAdapter<ScheduleItemDetailsInfo, BaseView
 
     private class EmployeeInfoViewHolder(view: View) : BaseViewHolder<EmployeeInfo>(view) {
         override fun onBind(data: EmployeeInfo) {
-            lessonDetailsEmployeeView.employees = data.employees
+            scheduleItemDetailsEmployeesInfo.setEmployees(data.employees)
         }
     }
 
-    private class GroupInfoViewHolder(view: View) : BaseViewHolder<EmployeeInfo>(view) {
-        override fun onBind(data: EmployeeInfo) {
-            lessonDetailsEmployeeView.employees = data.employees
+    private class GroupInfoViewHolder(view: View) : BaseViewHolder<GroupInfo>(view) {
+        override fun onBind(data: GroupInfo) {
+            scheduleItemDetailsGroupsInfo.setGroups(data.groups)
         }
     }
 

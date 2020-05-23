@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.pechuro.bsuirschedule.widget.EmployeesView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/lessonDetailsEmployeeView"
+<com.pechuro.bsuirschedule.widget.staffdetails.StaffDetailsView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scheduleItemDetailsEmployeesInfo"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />

@@ -25,7 +25,7 @@ import com.pechuro.bsuirschedule.feature.datepicker.DisplayScheduleDatePickerShe
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleFragmentContainer
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import com.pechuro.bsuirschedule.feature.itemoptions.ScheduleItemOptionsSheet
-import com.pechuro.bsuirschedule.feature.lessondetails.ScheduleItemDetailsFragment
+import com.pechuro.bsuirschedule.feature.itemdetails.ScheduleItemDetailsFragment
 import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoFragment
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragment
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragmentArgs

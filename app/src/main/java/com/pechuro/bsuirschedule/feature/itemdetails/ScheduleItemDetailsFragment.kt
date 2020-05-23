@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.feature.lessondetails
+package com.pechuro.bsuirschedule.feature.itemdetails
 
 import android.os.Bundle
 import android.view.View

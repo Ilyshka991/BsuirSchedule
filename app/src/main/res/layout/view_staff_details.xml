@@ -6,18 +6,18 @@
     tools:parentTag="android.widget.LinearLayout">
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/employeesViewInfoViewPager"
+        android:id="@+id/staffDetailsViewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp" />
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/employeesViewInfoTabLayout"
+        android:id="@+id/staffDetailsTabLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:background="@null"
-        app:tabBackground="@drawable/selector_lesson_details_employee_indicator"
+        app:tabBackground="@drawable/selector_staff_details_tab_indicator"
         app:tabIndicatorHeight="0dp"
         app:tabRippleColor="@null" />
 </merge>

@@ -10,7 +10,7 @@ import com.pechuro.bsuirschedule.feature.appwidgetconfiguration.AppWidgetConfigu
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel
 import com.pechuro.bsuirschedule.feature.flow.FlowViewModel
 import com.pechuro.bsuirschedule.feature.itemoptions.ScheduleItemOptionsViewModel
-import com.pechuro.bsuirschedule.feature.lessondetails.ScheduleItemDetailsViewModel
+import com.pechuro.bsuirschedule.feature.itemdetails.ScheduleItemDetailsViewModel
 import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoViewModel
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemViewModel
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetViewModel
