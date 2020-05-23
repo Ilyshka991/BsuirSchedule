@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
+import com.pechuro.bsuirschedule.domain.entity.Auditory
 import com.pechuro.bsuirschedule.domain.entity.Exam
 import com.pechuro.bsuirschedule.domain.entity.Lesson
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
@@ -41,9 +42,7 @@ class ScheduleItemDetailsViewModel @Inject constructor(
         if (scheduleItem is Lesson) {
             resultList += ScheduleItemDetailsInfo.Priority(scheduleItem.priority)
         }
-        resultList += scheduleItem.auditories.map {
-            ScheduleItemDetailsInfo.AuditoryInfo(it)
-        }
+        resultList += getAuditoriesInfo(scheduleItem.auditories)
         resultList += ScheduleItemDetailsInfo.Note(scheduleItem.note)
         return resultList.toList()
     }
@@ -66,5 +65,16 @@ class ScheduleItemDetailsViewModel @Inject constructor(
         }
         is Exam -> ScheduleItemDetailsInfo.ExamDate(scheduleItem.date)
         else -> throw IllegalArgumentException("Not supported type: $scheduleItem")
+    }
+
+    private fun getAuditoriesInfo(auditories: List<Auditory>): List<ScheduleItemDetailsInfo> {
+        val resultList = mutableListOf<ScheduleItemDetailsInfo>()
+        if (auditories.isNotEmpty()) {
+            resultList += ScheduleItemDetailsInfo.AuditoryInfoHeader
+        }
+        resultList += auditories.map {
+            ScheduleItemDetailsInfo.AuditoryInfo(it)
+        }
+        return resultList
     }
 }

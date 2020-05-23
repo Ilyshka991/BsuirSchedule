@@ -8,13 +8,11 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="horizontal"
-    android:paddingStart="20dp"
-    android:paddingTop="8dp"
-    android:paddingEnd="20dp"
-    android:paddingBottom="8dp">
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="8dp">
 
     <ImageView
-        android:id="@+id/lessonDetailsLocationIcon"
+        android:id="@+id/scheduleItemDetailsAuditoryIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_location"
@@ -24,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/lessonDetailsLocationAuditoryName"
+        android:id="@+id/scheduleItemDetailsAuditoryName"
         style="@style/DefaultText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -32,14 +30,14 @@
         android:layout_marginLeft="8dp"
         android:gravity="start"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/lessonDetailsLocationAuditoryType"
+        app:layout_constraintBottom_toTopOf="@id/scheduleItemDetailsAuditoryType"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/lessonDetailsLocationIcon"
+        app:layout_constraintStart_toEndOf="@id/scheduleItemDetailsAuditoryIcon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="123-4" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/lessonDetailsLocationAuditoryType"
+        android:id="@+id/scheduleItemDetailsAuditoryType"
         style="@style/DefaultText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -47,14 +45,14 @@
         android:layout_marginLeft="8dp"
         android:gravity="start"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/lessonDetailsLocationAuditoryDepartment"
+        app:layout_constraintBottom_toTopOf="@id/scheduleItemDetailsAuditoryDepartment"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/lessonDetailsLocationIcon"
-        app:layout_constraintTop_toBottomOf="@id/lessonDetailsLocationAuditoryName"
+        app:layout_constraintStart_toEndOf="@id/scheduleItemDetailsAuditoryIcon"
+        app:layout_constraintTop_toBottomOf="@id/scheduleItemDetailsAuditoryName"
         tools:text="Type" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/lessonDetailsLocationAuditoryDepartment"
+        android:id="@+id/scheduleItemDetailsAuditoryDepartment"
         style="@style/DefaultText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -62,14 +60,14 @@
         android:layout_marginLeft="8dp"
         android:gravity="start"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/lessonDetailsLocationAuditoryNote"
+        app:layout_constraintBottom_toTopOf="@id/scheduleItemDetailsAuditoryNote"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/lessonDetailsLocationIcon"
-        app:layout_constraintTop_toBottomOf="@id/lessonDetailsLocationAuditoryType"
+        app:layout_constraintStart_toEndOf="@id/scheduleItemDetailsAuditoryIcon"
+        app:layout_constraintTop_toBottomOf="@id/scheduleItemDetailsAuditoryType"
         tools:text="Department" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/lessonDetailsLocationAuditoryNote"
+        android:id="@+id/scheduleItemDetailsAuditoryNote"
         style="@style/DefaultText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -79,9 +77,7 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/lessonDetailsLocationIcon"
-        app:layout_constraintTop_toBottomOf="@id/lessonDetailsLocationAuditoryDepartment"
+        app:layout_constraintStart_toEndOf="@id/scheduleItemDetailsAuditoryIcon"
+        app:layout_constraintTop_toBottomOf="@id/scheduleItemDetailsAuditoryDepartment"
         tools:text="Note" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

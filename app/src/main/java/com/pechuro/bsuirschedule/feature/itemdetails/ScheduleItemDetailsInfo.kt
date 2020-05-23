@@ -18,6 +18,8 @@ sealed class ScheduleItemDetailsInfo {
             val weeks: List<WeekNumber>
     ) : ScheduleItemDetailsInfo()
 
+    object AuditoryInfoHeader : ScheduleItemDetailsInfo()
+
     data class AuditoryInfo(val auditory: Auditory) : ScheduleItemDetailsInfo()
 
     data class Note(
