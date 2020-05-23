@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/lessonDetailsName"
+        android:id="@+id/scheduleItemDetailsTitle"
         style="@style/TitleTextAppearance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lessonDetailsName"
+        app:layout_constraintTop_toBottomOf="@id/scheduleItemDetailsTitle"
         tools:text="13:45 - 15:00" />
 
     <com.pechuro.bsuirschedule.widget.EmployeesView
