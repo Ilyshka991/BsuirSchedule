@@ -1,19 +1,23 @@
 package com.pechuro.bsuirschedule.feature.itemdetails
 
+import android.content.Intent
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
+import com.pechuro.bsuirschedule.domain.common.Logger
+import com.pechuro.bsuirschedule.domain.entity.Building
 import com.pechuro.bsuirschedule.domain.entity.LessonPriority
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialog
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogButtonData
 import kotlinx.android.synthetic.main.fragment_schedule_item_details.*
+
 
 class ScheduleItemDetailsFragment : BaseFragment() {
 
@@ -35,7 +39,8 @@ class ScheduleItemDetailsFragment : BaseFragment() {
     private val adapter by lazy(LazyThreadSafetyMode.NONE) {
         ScheduleItemDetailsAdapter(
                 onPrioritySelected = ::selectPriority,
-                onNoteChanged = { viewModel.updateNote(it) }
+                onNoteChanged = { viewModel.updateNote(it) },
+                onAuditoryClicked = ::openMap
         )
     }
 
@@ -87,5 +92,17 @@ class ScheduleItemDetailsFragment : BaseFragment() {
                 .setActions(options, listener)
                 .build()
                 .show(childFragmentManager, OptionDialog.TAG)
+    }
+
+    private fun openMap(building: Building) {
+        val context = this.context ?: return
+        val latLng = building.coordinates ?: return
+        val uri = viewModel.appUriProvider.provideGeoUri(latLng)
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = uri
+        }
+        intent.resolveActivity(context.packageManager)?.let {
+            startActivity(intent)
+        }
     }
 }

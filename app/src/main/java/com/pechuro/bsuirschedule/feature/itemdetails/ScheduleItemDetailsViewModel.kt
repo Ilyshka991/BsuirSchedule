@@ -2,6 +2,7 @@ package com.pechuro.bsuirschedule.feature.itemdetails
 
 import androidx.lifecycle.LiveData
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
+import com.pechuro.bsuirschedule.common.provider.AppUriProvider
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.domain.interactor.GetLessonWeeks
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ScheduleItemDetailsViewModel @Inject constructor(
+        val appUriProvider: AppUriProvider,
         private val getScheduleItem: GetScheduleItem,
         private val getLessonWeeks: GetLessonWeeks,
         private val updateScheduleItem: UpdateScheduleItem

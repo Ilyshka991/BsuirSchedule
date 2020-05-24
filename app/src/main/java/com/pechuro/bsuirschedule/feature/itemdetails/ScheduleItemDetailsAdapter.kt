@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.ext.coordinates
 import com.pechuro.bsuirschedule.ext.formattedString
 import com.pechuro.bsuirschedule.ext.formattedStringRes
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
@@ -62,7 +63,8 @@ private const val NOTE_TYPE_LAYOUT_RES = R.layout.item_schedule_details_note
 
 class ScheduleItemDetailsAdapter(
         val onPrioritySelected: (currentPriority: LessonPriority) -> Unit,
-        val onNoteChanged: (note: String) -> Unit
+        val onNoteChanged: (note: String) -> Unit,
+        val onAuditoryClicked: (building: Building) -> Unit
 ) : ListAdapter<ScheduleItemDetailsInfo, BaseViewHolder<ScheduleItemDetailsInfo>>(DIFF_CALLBACK) {
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -224,10 +226,20 @@ class ScheduleItemDetailsAdapter(
         override fun onBind(data: AuditoryInfoHeader) {}
     }
 
-    private class AuditoryInfoViewHolder(view: View) : BaseViewHolder<AuditoryInfo>(view) {
+    private inner class AuditoryInfoViewHolder(view: View) : BaseViewHolder<AuditoryInfo>(view) {
+
+        init {
+            scheduleItemDetailsAuditoryParentView.setSafeClickListener {
+                val building = it.tag as? Building ?: return@setSafeClickListener
+                onAuditoryClicked(building)
+            }
+        }
 
         override fun onBind(data: AuditoryInfo) {
             val auditory = data.auditory
+
+            scheduleItemDetailsAuditoryParentView.tag = auditory.building
+            scheduleItemDetailsAuditoryParentView.isClickable = auditory.building.coordinates != null
 
             scheduleItemDetailsAuditoryName.text = with(auditory) { "$name-${building.name}" }
             scheduleItemDetailsAuditoryType.text = auditory.auditoryType.name
