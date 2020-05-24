@@ -86,6 +86,13 @@ class StaffDetailsAdapter : ListAdapter<StaffDetailsInfo, BaseViewHolder<StaffDe
         override fun onBind(data: GroupInfo) {
             val group = data.group
             groupDetailsNumber.text = group.number
+            groupDetailsCourse.text = itemView.context.getString(
+                    R.string.staff_list_msg_group_course,
+                    group.course
+            )
+            groupDetailsSpecialityName.text = group.speciality.name
+            groupDetailsEducationForm.text = group.speciality.educationForm.name
+            groupDetailsFacultyName.text = group.faculty.name.capitalize()
         }
     }
 }

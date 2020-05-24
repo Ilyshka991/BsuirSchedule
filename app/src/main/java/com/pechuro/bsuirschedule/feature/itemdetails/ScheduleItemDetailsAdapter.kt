@@ -13,9 +13,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
-import com.pechuro.bsuirschedule.domain.entity.LessonPriority
-import com.pechuro.bsuirschedule.domain.entity.WeekNumber
-import com.pechuro.bsuirschedule.domain.entity.toDate
+import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.formattedString
 import com.pechuro.bsuirschedule.ext.formattedStringRes
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
@@ -124,9 +122,18 @@ class ScheduleItemDetailsAdapter(
     private class TimeViewHolder(view: View) : BaseViewHolder<Time>(view) {
 
         override fun onBind(data: Time) {
-            scheduleItemDetailsTime.text = with(data) {
-                "${startTime.formattedString} - ${endTime.formattedString}"
+            scheduleItemDetailsTime.text = itemView.context.getFormattedText(data.startTime, data.endTime)
+        }
+
+        private fun Context.getFormattedText(startTime: LocalTime, endTime: LocalTime): CharSequence {
+            val builder = SpannableStringBuilder()
+            builder.bold {
+                val prefix = getString(R.string.item_details_msg_time)
+                append(prefix)
             }
+            builder.append(" ")
+            builder.append("${startTime.formattedString} - ${endTime.formattedString}")
+            return builder.toSpannable()
         }
     }
 
@@ -153,15 +160,36 @@ class ScheduleItemDetailsAdapter(
         private val dateFormatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
 
         override fun onBind(data: ExamDate) {
-            val date = data.date.toDate()
-            scheduleItemDetailsExamDate.text = dateFormatter.format(date)
+            scheduleItemDetailsExamDate.text = itemView.context.getFormattedText(data.date)
+        }
+
+        private fun Context.getFormattedText(date: LocalDate): CharSequence {
+            val builder = SpannableStringBuilder()
+            builder.bold {
+                val prefix = getString(R.string.item_details_msg_date)
+                append(prefix)
+            }
+            builder.append(" ")
+            builder.append(dateFormatter.format(date.toDate()))
+            return builder.toSpannable()
         }
     }
 
     private class SubgroupViewHolder(view: View) : BaseViewHolder<Subgroup>(view) {
 
         override fun onBind(data: Subgroup) {
-            scheduleItemDetailsSubgroupNumber.text = itemView.context.getString(data.subgroupNumber.formattedStringRes)
+            scheduleItemDetailsSubgroupNumber.text = itemView.context.getFormattedText(data.subgroupNumber)
+        }
+
+        private fun Context.getFormattedText(subgroup: SubgroupNumber): CharSequence {
+            val builder = SpannableStringBuilder()
+            builder.bold {
+                val prefix = getString(R.string.item_details_msg_subgroup)
+                append(prefix)
+            }
+            builder.append(" ")
+            builder.append(getString(subgroup.formattedStringRes))
+            return builder.toSpannable()
         }
     }
 
@@ -176,7 +204,18 @@ class ScheduleItemDetailsAdapter(
 
         override fun onBind(data: Priority) {
             scheduleItemDetailsPriority.tag = data.priority
-            scheduleItemDetailsPriority.setMessage(data.priority.formattedStringRes)
+            scheduleItemDetailsPriority.text = itemView.context.getFormattedText(data.priority)
+        }
+
+        private fun Context.getFormattedText(priority: LessonPriority): CharSequence {
+            val builder = SpannableStringBuilder()
+            builder.bold {
+                val prefix = getString(R.string.item_details_msg_priority)
+                append(prefix)
+            }
+            builder.append(" ")
+            builder.append(getString(priority.formattedStringRes))
+            return builder.toSpannable()
         }
     }
 

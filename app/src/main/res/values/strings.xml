@@ -152,6 +152,10 @@
     <string name="item_details_title">%1$s(%2$s)</string>
     <string name="item_details_msg_location">Location:</string>
     <string name="item_details_msg_weeks">Weeks: </string>
+    <string name="item_details_msg_subgroup">Subgroup: </string>
+    <string name="item_details_msg_priority">Priority: </string>
+    <string name="item_details_msg_time">Time: </string>
+    <string name="item_details_msg_date">Date: </string>
 
     <string-array name="lesson_types">
         <item>ЛК</item>

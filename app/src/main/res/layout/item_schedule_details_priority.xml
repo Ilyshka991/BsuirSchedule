@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.pechuro.bsuirschedule.widget.LabeledTextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.textview.MaterialTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scheduleItemDetailsPriority"
-    style="@style/ModifyItemLabeledText"
-    android:paddingStart="20dp"
-    android:paddingLeft="20dp"
-    app:label_text="@string/modify_schedule_item_label_priority" />
+    style="@style/TitleTextAppearance"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="start"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="4dp"
+    android:textStyle="normal"
+    tools:text="@string/item_details_msg_priority" />

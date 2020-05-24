@@ -2,9 +2,10 @@
 <com.google.android.material.textview.MaterialTextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scheduleItemDetailsSubgroupNumber"
-    style="@style/DefaultText"
+    style="@style/TitleTextAppearance"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="20dp"
-    android:layout_marginTop="8dp"
-    tools:text="1 subgroup" />
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="4dp"
+    android:textStyle="normal"
+    tools:text="@string/item_details_msg_subgroup"/>
