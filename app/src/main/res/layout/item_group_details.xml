@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="20dp">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/groupDetailsNumber"
+        style="@style/DefaultText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="750502" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/groupDetailsCourse"
+        style="@style/DefaultText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/groupDetailsNumber"
+        app:layout_constraintStart_toEndOf="@+id/groupDetailsNumber"
+        tools:text="3 курс" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/groupDetailsEducationForm"
+        style="@style/DefaultText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:ellipsize="end"
+        android:gravity="start"
+        android:maxLines="1"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/groupDetailsCourse"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/groupDetailsCourse"
+        tools:text="заочная" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/groupDetailsSpecialityName"
+        style="@style/DefaultText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="start"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/groupDetailsNumber"
+        app:layout_constraintTop_toBottomOf="@+id/groupDetailsNumber"
+        tools:text="Вмсии" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/groupDetailsFacultyName"
+        style="@style/DefaultText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="start"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/groupDetailsSpecialityName"
+        app:layout_constraintTop_toBottomOf="@+id/groupDetailsSpecialityName"
+        tools:text="Adsfsdf" />
+</androidx.constraintlayout.widget.ConstraintLayout>

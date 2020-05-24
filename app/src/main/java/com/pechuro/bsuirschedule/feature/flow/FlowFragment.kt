@@ -15,15 +15,18 @@ import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.BackPressedHandler
 import com.pechuro.bsuirschedule.common.FragmentAnimationsResHolder
 import com.pechuro.bsuirschedule.common.base.BaseFragment
-import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleFragmentContainer
 import com.pechuro.bsuirschedule.feature.datepicker.DisplayScheduleDatePickerSheet
 import com.pechuro.bsuirschedule.feature.datepicker.DisplayScheduleDatePickerSheetArgs
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleFragmentContainer
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
+import com.pechuro.bsuirschedule.feature.itemdetails.ScheduleItemDetailsArgs
 import com.pechuro.bsuirschedule.feature.itemoptions.ScheduleItemOptionsSheet
-import com.pechuro.bsuirschedule.feature.lessondetails.LessonDetailsFragment
+import com.pechuro.bsuirschedule.feature.itemdetails.ScheduleItemDetailsFragment
 import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoFragment
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragment
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragmentArgs
@@ -144,8 +147,8 @@ class FlowFragment : BaseFragment(),
         onScheduleDeleted(schedule)
     }
 
-    override fun onDisplayScheduleOpenDetails(data: DisplayScheduleItem) {
-        openScheduleItemDetails(data)
+    override fun onDisplayScheduleOpenDetails(schedule: Schedule, scheduleItem: ScheduleItem) {
+        openScheduleItemDetails(schedule, scheduleItem)
     }
 
     override fun onDisplayScheduleOpenOptions(data: DisplayScheduleItem) {
@@ -244,22 +247,13 @@ class FlowFragment : BaseFragment(),
         openFragment(ModifyScheduleItemFragment.newInstance(arguments), ModifyScheduleItemFragment.TAG)
     }
 
-    private fun openScheduleItemDetails(data: DisplayScheduleItem) {
-        when (val scheduleItem = data.scheduleItem) {
-            is Lesson -> openScheduleLessonDetails(scheduleItem)
-            is Exam -> openScheduleExamDetails(scheduleItem)
-        }
-    }
-
-    private fun openScheduleExamDetails(exam: Exam) {
-
-    }
-
-    private fun openScheduleLessonDetails(lesson: Lesson) {
-        openFragment(
-                fragment = LessonDetailsFragment.newInstance(lesson),
-                tag = LessonDetailsFragment.TAG
+    private fun openScheduleItemDetails(schedule: Schedule, scheduleItem: ScheduleItem) {
+        val args = ScheduleItemDetailsArgs(
+                schedule = schedule,
+                itemId = scheduleItem.id
         )
+        val fragment = ScheduleItemDetailsFragment.newInstance(args)
+        openFragment(fragment, ScheduleItemDetailsFragment.TAG)
     }
 
     private fun openDatePicker(
@@ -352,7 +346,7 @@ class FlowFragment : BaseFragment(),
             is ModifyScheduleItemFragment,
             is StaffListFragment,
             is SettingsFragment,
-            is LessonDetailsFragment,
+            is ScheduleItemDetailsFragment,
             is LoadInfoFragment -> false
             else -> true
         }

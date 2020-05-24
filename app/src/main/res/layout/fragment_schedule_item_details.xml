@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/lessonDetailsToolbar"
+        android:id="@+id/scheduleItemDetailsToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
@@ -16,11 +16,15 @@
         app:titleTextColor="?attr/titleColor">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/lessonDetailsName"
+            android:id="@+id/scheduleItemDetailsTitle"
             style="@style/TitleTextAppearance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textSize="24sp"
             tools:text="Lesson name" />
 
@@ -32,8 +36,12 @@
         android:background="?attr/dividerColor" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/lessonDetailsRootRecycler"
+        android:id="@+id/scheduleItemDetailsRootRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="ifContentScrolls" />
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:overScrollMode="ifContentScrolls"
+        android:paddingVertical="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 </LinearLayout>

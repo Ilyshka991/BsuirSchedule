@@ -145,8 +145,8 @@
     <string name="schedule_widget_msg_deleted">Расписание удалено</string>
     <string name="schedule_widget_msg_empty">Пусто.</string>
 
-    <string name="lesson_details_location">Место проведения:</string>
-    <string name="lesson_details_weeks">Недели: </string>
+    <string name="item_details_msg_location">Место проведения:</string>
+    <string name="item_details_msg_weeks">Недели: </string>
 
     <string-array name="lesson_types">
         <item>ЛК</item>

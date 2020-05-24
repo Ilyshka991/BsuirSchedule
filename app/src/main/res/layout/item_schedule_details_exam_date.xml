@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.textview.MaterialTextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/lessonDetailsWeeks"
+    android:id="@+id/scheduleItemDetailsExamDate"
     style="@style/TitleTextAppearance"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="20dp"
-    android:layout_marginLeft="20dp"
-    android:layout_marginTop="16dp"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="4dp"
     android:textStyle="normal"
-    tools:text="@string/lesson_details_weeks" />
+    tools:text="21.2.4" />

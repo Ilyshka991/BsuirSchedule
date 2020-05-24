@@ -4,7 +4,9 @@ import android.content.res.Resources
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.LatLng
 import com.pechuro.bsuirschedule.domain.entity.*
+import java.util.*
 
 @get:ColorRes
 val LessonPriority.formattedColorRes: Int
@@ -74,4 +76,22 @@ val ScheduleWidgetInfo.WidgetTheme.formattedStringRes: Int
         ScheduleWidgetInfo.WidgetTheme.SYSTEM -> R.string.theme_follow_system
         ScheduleWidgetInfo.WidgetTheme.LIGHT -> R.string.theme_light
         ScheduleWidgetInfo.WidgetTheme.DARK -> R.string.theme_dark
+    }
+
+val ScheduleItem.isExam: Boolean
+    get() = lessonType.toLowerCase(Locale.getDefault()) == "экзамен"
+
+val ScheduleItem.isConsultation: Boolean
+    get() = lessonType.toLowerCase(Locale.getDefault()) == "консультация"
+
+val Building.coordinates: LatLng?
+    get() = when (name) {
+        "1" -> LatLng(53.917750, 27.595138)
+        "2" -> LatLng(53.918812, 27.593705)
+        "3" -> LatLng(53.916677, 27.596191)
+        "4" -> LatLng(53.912343, 27.594539)
+        "5" -> LatLng(53.911641, 27.595961)
+        "7" -> LatLng(53.902895, 27.598172)
+        "8" -> LatLng(53.903092, 27.598119)
+        else -> null
     }

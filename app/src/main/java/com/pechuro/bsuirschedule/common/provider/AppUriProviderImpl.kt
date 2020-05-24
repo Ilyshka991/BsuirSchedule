@@ -2,6 +2,7 @@ package com.pechuro.bsuirschedule.common.provider
 
 import android.content.Context
 import android.net.Uri
+import com.pechuro.bsuirschedule.common.LatLng
 
 class AppUriProviderImpl(context: Context) : AppUriProvider {
 
@@ -18,4 +19,8 @@ class AppUriProviderImpl(context: Context) : AppUriProvider {
     )
 
     override val emailFeedbackUri: Uri = Uri.parse("mailto:")
+
+    override fun provideGeoUri(latLng: LatLng): Uri = Uri.parse(
+            "geo:${latLng.latitude},${latLng.longitude}?z=17.5"
+    )
 }
