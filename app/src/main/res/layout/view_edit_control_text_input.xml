@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editControlTextLayout"
+        style="@style/FilledTextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/modify_schedule_item_hint_note"
+        app:endIconDrawable="@drawable/ic_mode_edit"
+        app:endIconMode="custom"
+        app:endIconTint="?attr/textDefaultColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editControlTextInput"
+            style="@style/TextInput"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textMultiLine" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/editControlTextCancelButton"
+        style="@style/TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/action_cancel"
+        android:textSize="16sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/editControlTextDoneButton"
+        app:layout_constraintEnd_toStartOf="@+id/editControlTextDoneButton" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/editControlTextDoneButton"
+        style="@style/TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/action_save"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editControlTextLayout" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/editControlTextActionButtonGroup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:constraint_referenced_ids="editControlTextCancelButton,editControlTextDoneButton"
+        tools:visibility="gone" />
+</merge>

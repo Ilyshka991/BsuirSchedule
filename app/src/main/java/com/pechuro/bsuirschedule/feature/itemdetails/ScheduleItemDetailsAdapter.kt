@@ -10,6 +10,7 @@ import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.LessonPriority
@@ -36,12 +37,18 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ScheduleItemDetailsInfo>() {
     override fun areItemsTheSame(
             oldItem: ScheduleItemDetailsInfo,
             newItem: ScheduleItemDetailsInfo
-    ) = oldItem == newItem
+    ) = when {
+        oldItem is Note && newItem is Note -> true
+        else -> oldItem == newItem
+    }
 
     override fun areContentsTheSame(
             oldItem: ScheduleItemDetailsInfo,
             newItem: ScheduleItemDetailsInfo
-    ) = oldItem == newItem
+    ) = when {
+        oldItem is Note && newItem is Note -> true
+        else -> oldItem == newItem
+    }
 }
 
 private const val EMPLOYEE_INFO_TYPE_LAYOUT_RES = R.layout.item_schedule_details_employees
@@ -56,8 +63,13 @@ private const val AUDITORY_INFO_TYPE_LAYOUT_RES = R.layout.item_schedule_details
 private const val NOTE_TYPE_LAYOUT_RES = R.layout.item_schedule_details_note
 
 class ScheduleItemDetailsAdapter(
-        val onPrioritySelected: (currentPriority: LessonPriority) -> Unit
+        val onPrioritySelected: (currentPriority: LessonPriority) -> Unit,
+        val onNoteChanged: (note: String) -> Unit
 ) : ListAdapter<ScheduleItemDetailsInfo, BaseViewHolder<ScheduleItemDetailsInfo>>(DIFF_CALLBACK) {
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        recyclerView.recycledViewPool.setMaxRecycledViews(NOTE_TYPE_LAYOUT_RES, 1)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewTypeLayoutRes: Int): BaseViewHolder<ScheduleItemDetailsInfo> {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -190,15 +202,16 @@ class ScheduleItemDetailsAdapter(
         }
     }
 
-    private class NoteViewHolder(view: View) : BaseViewHolder<Note>(view) {
+    private inner class NoteViewHolder(view: View) : BaseViewHolder<Note>(view) {
+
+        init {
+            scheduleItemDetailsNoteText.onNewTextSubmitted = {
+                onNoteChanged(it)
+            }
+        }
 
         override fun onBind(data: Note) {
-            scheduleItemDetailsNoteText.apply {
-                tag = data
-                if (data.note != text?.toString()) {
-                    setText(data.note)
-                }
-            }
+            scheduleItemDetailsNoteText.setText(data.note)
         }
     }
 }

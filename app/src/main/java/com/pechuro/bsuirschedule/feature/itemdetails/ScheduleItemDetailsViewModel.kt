@@ -48,6 +48,20 @@ class ScheduleItemDetailsViewModel @Inject constructor(
         }
     }
 
+    fun updateNote(note: String) {
+        launchCoroutine {
+            val currentItem = detailsData.value?.scheduleItem ?: return@launchCoroutine
+            val updatedItem = when (currentItem) {
+                is Lesson.GroupLesson -> currentItem.copy(note = note)
+                is Lesson.EmployeeLesson -> currentItem.copy(note = note)
+                is Exam.GroupExam -> currentItem.copy(note = note)
+                is Exam.EmployeeExam -> currentItem.copy(note = note)
+                else -> throw IllegalArgumentException("Not supported schedule item: ${currentItem::class.java.simpleName}")
+            }
+            updateScheduleItem.execute(UpdateScheduleItem.Params(updatedItem))
+        }
+    }
+
     private suspend fun getDetails(scheduleItem: ScheduleItem): List<ScheduleItemDetailsInfo> {
         val resultList = mutableListOf<ScheduleItemDetailsInfo>()
         resultList += getStaffInfo(scheduleItem)

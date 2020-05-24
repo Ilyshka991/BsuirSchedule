@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.lifecycle.observe
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.LessonPriority
@@ -32,7 +33,10 @@ class ScheduleItemDetailsFragment : BaseFragment() {
     }
 
     private val adapter by lazy(LazyThreadSafetyMode.NONE) {
-        ScheduleItemDetailsAdapter(onPrioritySelected = ::selectPriority)
+        ScheduleItemDetailsAdapter(
+                onPrioritySelected = ::selectPriority,
+                onNoteChanged = { viewModel.updateNote(it) }
+        )
     }
 
     override val layoutId: Int = R.layout.fragment_schedule_item_details
@@ -54,7 +58,8 @@ class ScheduleItemDetailsFragment : BaseFragment() {
 
     private fun observeData() {
         viewModel.detailsData.nonNull().observe(viewLifecycleOwner) { (scheduleItem, details) ->
-            scheduleItemDetailsTitle.text = getString(R.string.item_details_title, scheduleItem.subject, scheduleItem.lessonType)
+            val title = getString(R.string.item_details_title, scheduleItem.subject, scheduleItem.lessonType)
+            scheduleItemDetailsTitle.text = title
             adapter.submitList(details)
         }
     }
