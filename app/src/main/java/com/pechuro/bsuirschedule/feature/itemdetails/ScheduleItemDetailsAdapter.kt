@@ -12,15 +12,24 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
+import com.pechuro.bsuirschedule.domain.entity.LessonPriority
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
+import com.pechuro.bsuirschedule.domain.entity.toDate
 import com.pechuro.bsuirschedule.ext.formattedString
+import com.pechuro.bsuirschedule.ext.formattedStringRes
+import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.itemdetails.ScheduleItemDetailsInfo.*
 import kotlinx.android.synthetic.main.item_schedule_details_auditory_info.*
 import kotlinx.android.synthetic.main.item_schedule_details_employees.*
+import kotlinx.android.synthetic.main.item_schedule_details_exam_date.*
 import kotlinx.android.synthetic.main.item_schedule_details_groups.*
 import kotlinx.android.synthetic.main.item_schedule_details_lesson_date.*
 import kotlinx.android.synthetic.main.item_schedule_details_note.*
+import kotlinx.android.synthetic.main.item_schedule_details_priority.*
+import kotlinx.android.synthetic.main.item_schedule_details_subgroup.*
 import kotlinx.android.synthetic.main.item_schedule_details_time.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ScheduleItemDetailsInfo>() {
 
@@ -38,7 +47,6 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ScheduleItemDetailsInfo>() {
 private const val EMPLOYEE_INFO_TYPE_LAYOUT_RES = R.layout.item_schedule_details_employees
 private const val GROUP_INFO_TYPE_LAYOUT_RES = R.layout.item_schedule_details_groups
 private const val TIME_TYPE_LAYOUT_RES = R.layout.item_schedule_details_time
-private const val LESSON_TYPE_TYPE_LAYOUT_RES = R.layout.item_schedule_details_lesson_type
 private const val LESSON_DATE_TYPE_LAYOUT_RES = R.layout.item_schedule_details_lesson_date
 private const val EXAM_DATE_TYPE_LAYOUT_RES = R.layout.item_schedule_details_exam_date
 private const val SUBGROUP_NUMBER_TYPE_LAYOUT_RES = R.layout.item_schedule_details_subgroup
@@ -47,7 +55,9 @@ private const val AUDITORY_HEADER_INFO_TYPE_LAYOUT_RES = R.layout.item_schedule_
 private const val AUDITORY_INFO_TYPE_LAYOUT_RES = R.layout.item_schedule_details_auditory_info
 private const val NOTE_TYPE_LAYOUT_RES = R.layout.item_schedule_details_note
 
-class ScheduleItemDetailsAdapter : ListAdapter<ScheduleItemDetailsInfo, BaseViewHolder<ScheduleItemDetailsInfo>>(DIFF_CALLBACK) {
+class ScheduleItemDetailsAdapter(
+        val onPrioritySelected: (currentPriority: LessonPriority) -> Unit
+) : ListAdapter<ScheduleItemDetailsInfo, BaseViewHolder<ScheduleItemDetailsInfo>>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewTypeLayoutRes: Int): BaseViewHolder<ScheduleItemDetailsInfo> {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -56,7 +66,6 @@ class ScheduleItemDetailsAdapter : ListAdapter<ScheduleItemDetailsInfo, BaseView
             EMPLOYEE_INFO_TYPE_LAYOUT_RES -> EmployeeInfoViewHolder(view)
             GROUP_INFO_TYPE_LAYOUT_RES -> GroupInfoViewHolder(view)
             TIME_TYPE_LAYOUT_RES -> TimeViewHolder(view)
-            LESSON_TYPE_TYPE_LAYOUT_RES -> LessonTypeViewHolder(view)
             LESSON_DATE_TYPE_LAYOUT_RES -> LessonDateViewHolder(view)
             EXAM_DATE_TYPE_LAYOUT_RES -> ExamDateViewHolder(view)
             SUBGROUP_NUMBER_TYPE_LAYOUT_RES -> SubgroupViewHolder(view)
@@ -72,7 +81,6 @@ class ScheduleItemDetailsAdapter : ListAdapter<ScheduleItemDetailsInfo, BaseView
         is EmployeeInfo -> EMPLOYEE_INFO_TYPE_LAYOUT_RES
         is GroupInfo -> GROUP_INFO_TYPE_LAYOUT_RES
         is Time -> TIME_TYPE_LAYOUT_RES
-        is LessonType -> LESSON_TYPE_TYPE_LAYOUT_RES
         is LessonDate -> LESSON_DATE_TYPE_LAYOUT_RES
         is ExamDate -> EXAM_DATE_TYPE_LAYOUT_RES
         is Subgroup -> SUBGROUP_NUMBER_TYPE_LAYOUT_RES
@@ -110,13 +118,6 @@ class ScheduleItemDetailsAdapter : ListAdapter<ScheduleItemDetailsInfo, BaseView
         }
     }
 
-    private class LessonTypeViewHolder(view: View) : BaseViewHolder<LessonType>(view) {
-
-        override fun onBind(data: LessonType) {
-
-        }
-    }
-
     private class LessonDateViewHolder(view: View) : BaseViewHolder<LessonDate>(view) {
 
         override fun onBind(data: LessonDate) {
@@ -126,7 +127,7 @@ class ScheduleItemDetailsAdapter : ListAdapter<ScheduleItemDetailsInfo, BaseView
         private fun Context.getFormattedWeeksText(weeks: List<WeekNumber>): CharSequence {
             val builder = SpannableStringBuilder()
             builder.bold {
-                val prefix = getString(R.string.lesson_details_weeks)
+                val prefix = getString(R.string.item_details_msg_weeks)
                 append(prefix)
             }
             builder.append(" ")
@@ -137,22 +138,33 @@ class ScheduleItemDetailsAdapter : ListAdapter<ScheduleItemDetailsInfo, BaseView
 
     private class ExamDateViewHolder(view: View) : BaseViewHolder<ExamDate>(view) {
 
-        override fun onBind(data: ExamDate) {
+        private val dateFormatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
 
+        override fun onBind(data: ExamDate) {
+            val date = data.date.toDate()
+            scheduleItemDetailsExamDate.text = dateFormatter.format(date)
         }
     }
 
     private class SubgroupViewHolder(view: View) : BaseViewHolder<Subgroup>(view) {
 
         override fun onBind(data: Subgroup) {
-
+            scheduleItemDetailsSubgroupNumber.text = itemView.context.getString(data.subgroupNumber.formattedStringRes)
         }
     }
 
-    private class PriorityViewHolder(view: View) : BaseViewHolder<Priority>(view) {
+    private inner class PriorityViewHolder(view: View) : BaseViewHolder<Priority>(view) {
+
+        init {
+            scheduleItemDetailsPriority.setSafeClickListener {
+                val currentPriority = it.tag as? LessonPriority ?: return@setSafeClickListener
+                onPrioritySelected(currentPriority)
+            }
+        }
 
         override fun onBind(data: Priority) {
-
+            scheduleItemDetailsPriority.tag = data.priority
+            scheduleItemDetailsPriority.setMessage(data.priority.formattedStringRes)
         }
     }
 

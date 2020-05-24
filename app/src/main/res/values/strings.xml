@@ -148,8 +148,9 @@
     <string name="schedule_widget_msg_deleted">Deleted schedule</string>
     <string name="schedule_widget_msg_empty">Nothing there</string>
 
-    <string name="lesson_details_location">Location:</string>
-    <string name="lesson_details_weeks">Weeks: </string>
+    <string name="item_details_title">%1$s(%2$s)</string>
+    <string name="item_details_msg_location">Location:</string>
+    <string name="item_details_msg_weeks">Weeks: </string>
 
     <string-array name="lesson_types">
         <item>ЛК</item>

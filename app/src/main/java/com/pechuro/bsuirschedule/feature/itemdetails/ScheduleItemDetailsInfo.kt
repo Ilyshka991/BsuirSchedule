@@ -37,8 +37,4 @@ sealed class ScheduleItemDetailsInfo {
     data class ExamDate(
             val date: LocalDate
     ) : ScheduleItemDetailsInfo()
-
-    data class LessonType(
-            val type: String
-    ) : ScheduleItemDetailsInfo()
 }

@@ -44,7 +44,8 @@ class DisplayScheduleFragment : BaseFragment() {
     private val itemsAdapter by lazy(LazyThreadSafetyMode.NONE) {
         DisplayScheduleItemAdapter(
                 onClickCallback = {
-                    viewModel.eventsData.value = OnScheduleItemClicked(it)
+                    val scheduleItem = it.scheduleItem ?: return@DisplayScheduleItemAdapter
+                    viewModel.eventsData.value = OnScheduleItemClicked(scheduleItem)
                 },
                 onLongClickCallback = {
                     viewModel.eventsData.value = OnScheduleItemLongClicked(it)

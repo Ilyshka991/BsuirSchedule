@@ -20,7 +20,11 @@
             style="@style/TitleTextAppearance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textSize="24sp"
             tools:text="Lesson name" />
 

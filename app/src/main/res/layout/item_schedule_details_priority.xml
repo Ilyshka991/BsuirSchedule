@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.pechuro.bsuirschedule.widget.LabeledTextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+    android:id="@+id/scheduleItemDetailsPriority"
+    style="@style/ModifyItemLabeledText"
+    android:paddingStart="20dp"
+    android:paddingLeft="20dp"
+    app:label_text="@string/modify_schedule_item_label_priority" />

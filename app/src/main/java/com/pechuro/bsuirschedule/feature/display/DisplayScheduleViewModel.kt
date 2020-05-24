@@ -149,7 +149,7 @@ class DisplayScheduleViewModel @Inject constructor(
             .map(DisplayScheduleItem::Exams)
 
     sealed class Event {
-        data class OnScheduleItemClicked(val data: DisplayScheduleItem) : Event()
+        data class OnScheduleItemClicked(val data: ScheduleItem) : Event()
         data class OnScheduleItemLongClicked(val data: DisplayScheduleItem) : Event()
     }
 }

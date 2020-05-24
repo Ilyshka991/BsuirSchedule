@@ -1,26 +1,29 @@
 package com.pechuro.bsuirschedule.feature.itemdetails
 
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.OvalShape
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.lifecycle.observe
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
-import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
-import com.pechuro.bsuirschedule.ext.args
-import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.domain.entity.LessonPriority
+import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialog
+import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogButtonData
 import kotlinx.android.synthetic.main.fragment_schedule_item_details.*
 
 class ScheduleItemDetailsFragment : BaseFragment() {
 
     companion object {
 
-        private const val ARG_SCHEDULE_ITEM = "ARG_SCHEDULE_ITEM"
+        private const val BUNDLE_ARGS = "BUNDLE_ARGS"
 
         const val TAG = "LessonDetailsFragment"
 
-        fun newInstance(scheduleItem: ScheduleItem) = ScheduleItemDetailsFragment().apply {
-            arguments = bundleOf(ARG_SCHEDULE_ITEM to scheduleItem)
+        fun newInstance(args: ScheduleItemDetailsArgs) = ScheduleItemDetailsFragment().apply {
+            arguments = bundleOf(BUNDLE_ARGS to args)
         }
     }
 
@@ -29,30 +32,55 @@ class ScheduleItemDetailsFragment : BaseFragment() {
     }
 
     private val adapter by lazy(LazyThreadSafetyMode.NONE) {
-        ScheduleItemDetailsAdapter()
+        ScheduleItemDetailsAdapter(onPrioritySelected = ::selectPriority)
     }
 
     override val layoutId: Int = R.layout.fragment_schedule_item_details
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val scheduleItem: ScheduleItem by args(ARG_SCHEDULE_ITEM)
-        viewModel.init(scheduleItem)
-        initView(scheduleItem)
+        val args: ScheduleItemDetailsArgs by args(BUNDLE_ARGS)
+        viewModel.init(args.schedule, args.itemId)
+        initView()
         observeData()
     }
 
-    private fun initView(scheduleItem: ScheduleItem) {
+    private fun initView() {
         scheduleItemDetailsToolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
         }
         scheduleItemDetailsRootRecycler.adapter = adapter
-        scheduleItemDetailsTitle.text = scheduleItem.subject
     }
 
     private fun observeData() {
-        viewModel.detailsData.nonNull().observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+        viewModel.detailsData.nonNull().observe(viewLifecycleOwner) { (scheduleItem, details) ->
+            scheduleItemDetailsTitle.text = getString(R.string.item_details_title, scheduleItem.subject, scheduleItem.lessonType)
+            adapter.submitList(details)
         }
+    }
+
+    private fun selectPriority(selectedPriority: LessonPriority) {
+        val availablePriorities = LessonPriority.values()
+        val options = availablePriorities.map { prioriry ->
+            val drawable = ShapeDrawable(OvalShape()).apply {
+                paint.color = requireContext().color(prioriry.formattedColorRes)
+            }
+            OptionDialogButtonData(
+                    text = getString(prioriry.formattedStringRes),
+                    icon = drawable,
+                    selected = prioriry == selectedPriority
+            )
+        }
+        val listener = object : OptionDialog.OptionButtonClickListener {
+            override fun onClick(position: Int) {
+                viewModel.updatePriority(availablePriorities[position])
+            }
+        }
+        val title = getString(R.string.modify_schedule_item_title_select_priority)
+        OptionDialog.Builder()
+                .setTitle(title)
+                .setActions(options, listener)
+                .build()
+                .show(childFragmentManager, OptionDialog.TAG)
     }
 }

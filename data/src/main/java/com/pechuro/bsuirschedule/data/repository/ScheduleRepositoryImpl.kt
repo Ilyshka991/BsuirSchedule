@@ -11,7 +11,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
-import java.lang.IllegalArgumentException
 import java.util.*
 import kotlin.coroutines.coroutineContext
 import kotlin.reflect.KClass
@@ -93,6 +92,43 @@ class ScheduleRepositoryImpl(
         val schedule = performDaoCall { dao.getEmployeeExamsByName(name) }
         val employee = employeeRepository.getById(schedule.employeeId)
         return schedule.toDomainEntity(employee)
+    }
+
+    override suspend fun getScheduleItem(schedule: Schedule, itemId: Long): Flow<ScheduleItem> {
+        return when (schedule) {
+            is Schedule.GroupClasses -> dao.getGroupClassesItemById(itemId).map { item ->
+                val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
+                val employees = item.employees.map { employeeRepository.getById(it.id) }
+                item.toDomainEntity(
+                        auditories = auditories,
+                        employees = employees
+                )
+            }
+            is Schedule.GroupExams -> dao.getGroupExamItemById(itemId).map { item ->
+                val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
+                val employees = item.employees.map { employeeRepository.getById(it.id) }
+                item.toDomainEntity(
+                        auditories = auditories,
+                        employees = employees
+                )
+            }
+            is Schedule.EmployeeClasses -> dao.getEmployeeClassesItemById(itemId).map { item ->
+                val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
+                val groups = item.groups.map { groupRepository.getById(it.id) }
+                item.toDomainEntity(
+                        auditories = auditories,
+                        groups = groups
+                )
+            }
+            is Schedule.EmployeeExams -> dao.getEmployeeExamItemById(itemId).map { item ->
+                val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
+                val groups = item.groups.map { groupRepository.getById(it.id) }
+                item.toDomainEntity(
+                        auditories = auditories,
+                        groups = groups
+                )
+            }
+        }
     }
 
     override suspend fun getScheduleItems(schedule: Schedule): Flow<List<ScheduleItem>> {

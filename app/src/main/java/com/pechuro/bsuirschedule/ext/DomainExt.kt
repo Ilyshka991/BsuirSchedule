@@ -5,6 +5,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.domain.entity.*
+import java.util.*
 
 @get:ColorRes
 val LessonPriority.formattedColorRes: Int
@@ -75,3 +76,9 @@ val ScheduleWidgetInfo.WidgetTheme.formattedStringRes: Int
         ScheduleWidgetInfo.WidgetTheme.LIGHT -> R.string.theme_light
         ScheduleWidgetInfo.WidgetTheme.DARK -> R.string.theme_dark
     }
+
+val ScheduleItem.isExam: Boolean
+    get() = lessonType.toLowerCase(Locale.getDefault()) == "экзамен"
+
+val ScheduleItem.isConsultation: Boolean
+    get() = lessonType.toLowerCase(Locale.getDefault()) == "консультация"

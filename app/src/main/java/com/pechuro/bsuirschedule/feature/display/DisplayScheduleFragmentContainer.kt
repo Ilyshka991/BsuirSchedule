@@ -11,6 +11,7 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel.Event.OnScheduleItemClicked
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel.Event.OnScheduleItemLongClicked
@@ -25,7 +26,7 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
 
     interface ActionCallback {
 
-        fun onDisplayScheduleOpenDetails(data: DisplayScheduleItem)
+        fun onDisplayScheduleOpenDetails(schedule: Schedule, scheduleItem: ScheduleItem)
 
         fun onDisplayScheduleOpenOptions(data: DisplayScheduleItem)
 
@@ -130,7 +131,7 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
         }
         viewModel.eventsData.nonNull().observe(viewLifecycleOwner) { event ->
             when (event) {
-                is OnScheduleItemClicked -> actionCallback?.onDisplayScheduleOpenDetails(event.data)
+                is OnScheduleItemClicked -> actionCallback?.onDisplayScheduleOpenDetails(schedule, event.data)
                 is OnScheduleItemLongClicked -> actionCallback?.onDisplayScheduleOpenOptions(event.data)
             }
         }
