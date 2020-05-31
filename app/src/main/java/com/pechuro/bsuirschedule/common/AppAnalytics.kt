@@ -53,7 +53,7 @@ sealed class AppAnalyticsEvent {
 
         object Opened : AddSchedule()
 
-        data class ScheduleLoaded(val schedules: List<Schedule>) : AddSchedule()
+        data class ScheduleLoaded(val schedule: Schedule,val types: List<ScheduleType>) : AddSchedule()
 
         object ScheduleLoadFailed : AddSchedule()
     }

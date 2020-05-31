@@ -91,7 +91,6 @@ class AddScheduleFragmentContainer : BaseFragment() {
     }
 
     private fun onComplete(schedules: List<Schedule>) {
-        AppAnalytics.report(AppAnalyticsEvent.AddSchedule.ScheduleLoaded(schedules))
         actionCallback?.onAddScheduleCompleted(schedules)
     }
 

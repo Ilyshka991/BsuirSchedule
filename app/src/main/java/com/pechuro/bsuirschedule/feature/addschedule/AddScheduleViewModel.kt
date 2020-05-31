@@ -1,6 +1,8 @@
 package com.pechuro.bsuirschedule.feature.addschedule
 
 import androidx.lifecycle.MutableLiveData
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.fold
 import com.pechuro.bsuirschedule.domain.entity.Employee
@@ -24,6 +26,12 @@ class AddScheduleViewModel @Inject constructor(
         launchCoroutine {
             loadGroupSchedule.execute(LoadGroupSchedule.Params(group, types)).fold(
                     onSuccess = {
+                        it.firstOrNull()?.let { schedule ->
+                            AppAnalytics.report(AppAnalyticsEvent.AddSchedule.ScheduleLoaded(
+                                    schedule = schedule,
+                                    types = types
+                            ))
+                        }
                         state.value = State.Complete(it)
                     },
                     onFailure = {
@@ -39,6 +47,12 @@ class AddScheduleViewModel @Inject constructor(
         launchCoroutine {
             loadEmployeeSchedule.execute(LoadEmployeeSchedule.Params(employee, types)).fold(
                     onSuccess = {
+                        it.firstOrNull()?.let { schedule ->
+                            AppAnalytics.report(AppAnalyticsEvent.AddSchedule.ScheduleLoaded(
+                                    schedule = schedule,
+                                    types = types
+                            ))
+                        }
                         state.value = State.Complete(it)
                     },
                     onFailure = {
