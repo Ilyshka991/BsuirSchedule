@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.View
 import com.pechuro.bsuirschedule.BuildConfig
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.AppTheme
 import com.pechuro.bsuirschedule.ext.*
@@ -39,6 +41,7 @@ class SettingsFragment : BaseFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         actionCallback = getCallbackOrNull()
+        AppAnalytics.report(AppAnalyticsEvent.Settings.Opened)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -100,19 +103,24 @@ class SettingsFragment : BaseFragment() {
             selectTheme()
         }
         settingsUpdateInfoButton.setSafeClickListener {
+            AppAnalytics.report(AppAnalyticsEvent.Settings.InformationUpdated)
             viewModel.updateInfo()
         }
         settingsInfoLoadErrorButton.setSafeClickListener {
+            AppAnalytics.report(AppAnalyticsEvent.Settings.InformationUpdated)
             viewModel.updateInfo()
         }
         settingsRateAppButton.setSafeClickListener {
+            AppAnalytics.report(AppAnalyticsEvent.Settings.RateAppOpened)
             viewModel.onRateApp()
             rateApp(it.context)
         }
         settingsSendFeedbackButton.setSafeClickListener {
+            AppAnalytics.report(AppAnalyticsEvent.Settings.SendFeedbackOpened)
             sendFeedback(it.context)
         }
         settingsPrivacyPoliceButton.setSafeClickListener {
+            AppAnalytics.report(AppAnalyticsEvent.Settings.PrivacyPoliceOpened)
             openPrivacyPolice(it.context)
         }
     }
@@ -160,6 +168,7 @@ class SettingsFragment : BaseFragment() {
     }
 
     private fun selectTheme() {
+        AppAnalytics.report(AppAnalyticsEvent.Settings.ThemesOpened)
         val availableThemes = AppTheme.getAvailable()
         val selectedTheme = viewModel.getCurrentAppTheme()
         val options = availableThemes.map { theme ->
@@ -172,6 +181,7 @@ class SettingsFragment : BaseFragment() {
             override fun onClick(position: Int) {
                 val newTheme = availableThemes[position]
                 if (newTheme != selectedTheme) {
+                    AppAnalytics.report(AppAnalyticsEvent.Settings.ThemeChanged(newTheme))
                     viewModel.setAppTheme(newTheme)
                 }
             }

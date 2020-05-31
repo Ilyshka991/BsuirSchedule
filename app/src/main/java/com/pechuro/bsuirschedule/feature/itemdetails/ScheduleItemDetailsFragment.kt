@@ -8,6 +8,8 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.lifecycle.observe
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Building
 import com.pechuro.bsuirschedule.domain.entity.LessonPriority
@@ -69,6 +71,7 @@ class ScheduleItemDetailsFragment : BaseFragment() {
     }
 
     private fun selectPriority(selectedPriority: LessonPriority) {
+        AppAnalytics.report(AppAnalyticsEvent.Details.PriorityOpened)
         val availablePriorities = LessonPriority.values()
         val options = availablePriorities.map { prioriry ->
             val drawable = ShapeDrawable(OvalShape()).apply {
@@ -94,6 +97,7 @@ class ScheduleItemDetailsFragment : BaseFragment() {
     }
 
     private fun openMap(building: Building) {
+        AppAnalytics.report(AppAnalyticsEvent.Details.LocationClicked(building))
         val context = this.context ?: return
         val latLng = building.coordinates ?: return
         val uri = viewModel.appUriProvider.provideGeoUri(latLng)

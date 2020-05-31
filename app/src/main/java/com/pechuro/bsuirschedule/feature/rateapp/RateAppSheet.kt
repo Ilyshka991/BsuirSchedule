@@ -6,6 +6,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import kotlinx.android.synthetic.main.sheet_rate_app.*
@@ -36,15 +38,18 @@ class RateAppSheet : BaseBottomSheetDialog() {
 
     private fun initView() {
         rateAppRateButton.setSafeClickListener {
+            AppAnalytics.report(AppAnalyticsEvent.RateApp.RateClicked)
             viewModel.onRateAppAskNever()
             rateApp(it.context)
             dismiss()
         }
         rateAppNoButton.setSafeClickListener {
+            AppAnalytics.report(AppAnalyticsEvent.RateApp.NotRemindClicked)
             viewModel.onRateAppAskNever()
             dismiss()
         }
         rateAppLaterButton.setSafeClickListener {
+            AppAnalytics.report(AppAnalyticsEvent.RateApp.LaterClicked)
             viewModel.onRateAppAskLater()
             dismiss()
         }

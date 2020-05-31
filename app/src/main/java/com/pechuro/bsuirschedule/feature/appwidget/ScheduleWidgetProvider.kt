@@ -10,6 +10,8 @@ import android.net.Uri
 import android.os.Handler
 import android.widget.RemoteViews
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleWidgetInfo
 import com.pechuro.bsuirschedule.domain.entity.ScheduleWidgetInfo.WidgetTheme
@@ -111,6 +113,10 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         injectDependencies(context)
         appWidgetIds.forEach { id ->
+            val info = widgetRepository.getScheduleWidget(id)
+            info?.let {
+                AppAnalytics.report(AppAnalyticsEvent.Widget.Deleted(it.schedule))
+            }
             widgetRepository.removeScheduleWidget(id)
         }
     }

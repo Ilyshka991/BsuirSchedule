@@ -3,6 +3,8 @@ package com.pechuro.bsuirschedule.feature.appwidgetconfiguration
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import androidx.lifecycle.MediatorLiveData
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
@@ -51,6 +53,7 @@ class AppWidgetConfigurationViewModel @Inject constructor(
     fun init(widgetId: Int) {
         if (::dataProvider.isInitialized) return
         val widgetInfo = widgetRepository.getScheduleWidget(widgetId)
+        AppAnalytics.report(AppAnalyticsEvent.Widget.ConfigurationOpened(widgetInfo != null))
         dataProvider = AppWidgetConfigurationDataProvider(
                 widgetId = widgetId,
                 initialInfo = widgetInfo
@@ -67,6 +70,15 @@ class AppWidgetConfigurationViewModel @Inject constructor(
                 widgetInfo = resultWidgetInfo,
                 widgetData = widgetDataProvider.getScheduleItemsList(resultWidgetInfo.widgetId)
         )
+        AppAnalytics.report(AppAnalyticsEvent.Widget.ConfigurationApplied(
+                schedule = resultWidgetInfo.schedule,
+                subgroupNumber = resultWidgetInfo.subgroupNumber,
+                theme = resultWidgetInfo.theme
+        ))
+    }
+
+    fun onCancelled() {
+        AppAnalytics.report(AppAnalyticsEvent.Widget.ConfigurationCanceled(dataProvider.initialInfo != null))
     }
 
     private fun transformScheduleListToDisplayData(

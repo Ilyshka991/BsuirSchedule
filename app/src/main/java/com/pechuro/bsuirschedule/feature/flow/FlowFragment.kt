@@ -150,7 +150,6 @@ class FlowFragment : BaseFragment(),
     }
 
     override fun onNavigationScheduleSelected(schedule: Schedule) {
-        AppAnalytics.report(AppAnalyticsEvent.ScheduleOpened(schedule))
         openViewSchedule(schedule)
     }
 
@@ -220,9 +219,11 @@ class FlowFragment : BaseFragment(),
         }
         bottomBarDisplayOptionsButton.setSafeClickListener {
             val schedule = viewModel.getLastOpenedSchedule() ?: return@setSafeClickListener
+            AppAnalytics.report(AppAnalyticsEvent.DisplaySchedule.ViewSettingsOpened)
             openDisplayScheduleOptions(schedule)
         }
         bottomBarGoToDateButton.setSafeClickListener {
+            AppAnalytics.report(AppAnalyticsEvent.DisplaySchedule.CalendarOpened)
             openDisplayScheduleDatePicker()
         }
         bottomBarAddScheduleItemButton.setSafeClickListener {
@@ -382,7 +383,10 @@ class FlowFragment : BaseFragment(),
             bottomBarFab.setImageDrawable(ContextCompat.getDrawable(requireContext(), fabState.iconRes))
             bottomBarFab.setSafeClickListener {
                 when (fabState) {
-                    FabActionState.DISPLAY_SCHEDULE_BACK -> setDisplayScheduleDate(Date())
+                    FabActionState.DISPLAY_SCHEDULE_BACK -> {
+                        AppAnalytics.report(AppAnalyticsEvent.DisplaySchedule.CurrentDayBackClicked)
+                        setDisplayScheduleDate(Date())
+                    }
                     FabActionState.ADD_SCHEDULE -> openAddSchedule()
                 }
             }

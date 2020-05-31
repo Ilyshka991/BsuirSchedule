@@ -6,11 +6,15 @@ import android.view.View
 import android.widget.CalendarView
 import androidx.core.os.bundleOf
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
-import com.pechuro.bsuirschedule.ext.getCallbackOrNull
 import com.pechuro.bsuirschedule.ext.args
+import com.pechuro.bsuirschedule.ext.getCallbackOrNull
 import kotlinx.android.synthetic.main.sheet_display_schedule_date_picker.*
 import java.util.*
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeUnit.DAYS
 
 class DisplayScheduleDatePickerSheet : BaseBottomSheetDialog() {
 
@@ -40,6 +44,11 @@ class DisplayScheduleDatePickerSheet : BaseBottomSheetDialog() {
         val selectedDate = Calendar.getInstance().apply {
             set(year, month, day)
         }
+
+        val millisDiff = selectedDate.timeInMillis - Calendar.getInstance().timeInMillis
+        val dayDiff = DAYS.convert(millisDiff, TimeUnit.MILLISECONDS)
+        AppAnalytics.report(AppAnalyticsEvent.DisplaySchedule.CalendarDateSelected(dayDiff))
+
         actionCallback?.onDatePickerDatePicked(selectedDate.time)
     }
 

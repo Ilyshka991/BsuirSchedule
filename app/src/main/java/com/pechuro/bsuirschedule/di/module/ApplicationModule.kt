@@ -2,6 +2,7 @@ package com.pechuro.bsuirschedule.di.module
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.pechuro.bsuirschedule.App
 import com.pechuro.bsuirschedule.common.AndroidLoggerTree
 import com.pechuro.bsuirschedule.common.AppAnalytics
@@ -31,8 +32,11 @@ class ApplicationModule {
 
     @Provides
     @AppScope
-    fun provideAnalyticsReporter(): AppAnalytics.Reporter = AppAnalyticsReporter()
+    fun provideAnalyticsReporter(firebaseAnalytics: FirebaseAnalytics): AppAnalytics.Reporter = AppAnalyticsReporter(firebaseAnalytics)
 
     @Provides
     fun provideWidgetManager(context: Context): AppWidgetManager = AppWidgetManager.getInstance(context)
+
+    @Provides
+    fun provideFirebaseAnalytics(context: Context) = FirebaseAnalytics.getInstance(context)
 }

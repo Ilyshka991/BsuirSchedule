@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoViewModel.Status
@@ -67,10 +69,12 @@ class LoadInfoFragment : BaseFragment() {
     }
 
     private fun handleComplete() {
+        AppAnalytics.report(AppAnalyticsEvent.InfoLoad.Loaded)
         actionCallback?.onLoadInfoCompleted()
     }
 
     private fun handleError() {
+        AppAnalytics.report(AppAnalyticsEvent.InfoLoad.Failed)
         infoLoadLoaderView.setVisibleWithAlpha(false)
         infoLoadErrorParentView.setVisibleWithAlpha(true)
     }
