@@ -6,7 +6,7 @@ enum class AppTheme {
     LIGHT,
     DARK,
     BLACK,
-    INDIGO,
+    /*INDIGO,
     TEAL,
     BLUE_GREY,
     BLUE_LIGHT,
@@ -15,7 +15,7 @@ enum class AppTheme {
     PURPLE,
     CYAN,
     RED,
-    LIME;
+    LIME*/;
 
     companion object {
         val DEFAULT = FOLLOW_SYSTEM

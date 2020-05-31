@@ -92,7 +92,7 @@ class ScheduleWidgetDataProvider @Inject constructor(
                     else -> it.subgroupNumber == subgroupNumber
                 }
             }
-            .sortedBy { it.startTime }
+            .sortedWith(compareBy<Exam> { it.date }.thenBy { it.startTime })
             .toList()
 
     private fun List<ScheduleItem>.filterLessons(

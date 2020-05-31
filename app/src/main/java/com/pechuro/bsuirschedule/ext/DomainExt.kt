@@ -58,7 +58,7 @@ val AppTheme.formattedStringRes: Int
         AppTheme.LIGHT -> R.string.theme_light
         AppTheme.DARK -> R.string.theme_dark
         AppTheme.BLACK -> R.string.theme_black
-        AppTheme.INDIGO -> R.string.theme_indigo
+      /*  AppTheme.INDIGO -> R.string.theme_indigo
         AppTheme.TEAL -> R.string.theme_teal
         AppTheme.BLUE_GREY -> R.string.theme_blue_grey
         AppTheme.BLUE_LIGHT -> R.string.theme_blue_white
@@ -67,7 +67,7 @@ val AppTheme.formattedStringRes: Int
         AppTheme.PURPLE -> R.string.theme_purple
         AppTheme.CYAN -> R.string.theme_cyan
         AppTheme.RED -> R.string.theme_red
-        AppTheme.LIME -> R.string.theme_lime
+        AppTheme.LIME -> R.string.theme_lime*/
     }
 
 @get:StringRes

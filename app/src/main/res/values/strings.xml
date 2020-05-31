@@ -116,8 +116,8 @@
     <string name="settings_action_send_feedback">Send feedback</string>
     <string name="settings_action_privacy_policy">Privacy policy</string>
     <string name="settings_label_version">Version:</string>
-    <string name="settings_feedback_email_subject">Feedback for Bsuir Schedule</string>
-    <string name="settings_feedback_email_address">ilyapechuro991@gmail.com</string>
+    <string name="settings_feedback_email_subject" translatable="false">Feedback for Bsuir Schedule</string>
+    <string name="settings_feedback_email_address" translatable="false">ilyapechuro991@gmail.com</string>
     <string name="settings_title_select_theme">Select theme</string>
 
     <string name="theme_follow_system">Follow system</string>
@@ -149,7 +149,7 @@
     <string name="schedule_widget_msg_deleted">Deleted schedule</string>
     <string name="schedule_widget_msg_empty">Nothing there</string>
 
-    <string name="item_details_title">%1$s(%2$s)</string>
+    <string name="item_details_title" translatable="false">%1$s(%2$s)</string>
     <string name="item_details_msg_location">Location:</string>
     <string name="item_details_msg_weeks">Weeks: </string>
     <string name="item_details_msg_subgroup">Subgroup: </string>
