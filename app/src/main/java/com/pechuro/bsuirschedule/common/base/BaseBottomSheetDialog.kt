@@ -24,7 +24,7 @@ abstract class BaseBottomSheetDialog : BottomSheetDialogFragment(), BackPressedH
     @get:LayoutRes
     protected abstract val layoutId: Int
 
-    override fun onBackPressed(): Boolean = false
+    override fun handleBackPressed(): Boolean = false
 
     override fun onAttach(context: Context) {
         context.app.appComponent.inject(this)

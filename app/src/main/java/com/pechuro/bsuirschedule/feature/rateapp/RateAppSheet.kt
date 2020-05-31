@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.feature.rateapp
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -29,17 +30,22 @@ class RateAppSheet : BaseBottomSheetDialog() {
         initView()
     }
 
+    override fun onCancel(dialog: DialogInterface) {
+        viewModel.onRateAppAskLater()
+    }
+
     private fun initView() {
         rateAppRateButton.setSafeClickListener {
+            viewModel.onRateAppAskNever()
             rateApp(it.context)
             dismiss()
         }
         rateAppNoButton.setSafeClickListener {
-            viewModel.onDismissRateApp()
+            viewModel.onRateAppAskNever()
             dismiss()
         }
         rateAppLaterButton.setSafeClickListener {
-            viewModel.onRateAppLater()
+            viewModel.onRateAppAskLater()
             dismiss()
         }
     }

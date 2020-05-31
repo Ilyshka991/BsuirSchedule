@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.ext
+package com.pechuro.bsuirschedule.domain.ext
 
 import com.pechuro.bsuirschedule.domain.entity.WeekDay
 import java.util.*

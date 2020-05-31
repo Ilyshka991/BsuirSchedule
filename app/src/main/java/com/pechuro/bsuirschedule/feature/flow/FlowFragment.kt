@@ -91,8 +91,18 @@ class FlowFragment : BaseFragment(),
         initNavigation()
         if (savedInstanceState == null) setStartFragment()
         lifecycleScope.launch(Dispatchers.IO) {
-            if (savedInstanceState == null && !viewModel.isInfoLoaded()) openLoadInfo()
-            checkScheduleUpdates()
+            if (savedInstanceState == null && !viewModel.isInfoLoaded()) {
+                openLoadInfo()
+                return@launch
+            }
+            val availableForUpdateSchedules = checkScheduleUpdates()
+            if (availableForUpdateSchedules.isNotEmpty()) {
+                openUpdateSchedules(availableForUpdateSchedules)
+                return@launch
+            }
+            if (viewModel.shouldShowRateApp()) {
+                openRateApp()
+            }
         }
         initViews()
     }
@@ -100,7 +110,6 @@ class FlowFragment : BaseFragment(),
     override fun onResume() {
         super.onResume()
         postUpdateLayoutState()
-        openRateApp()
     }
 
     override fun onDetach() {
@@ -108,11 +117,11 @@ class FlowFragment : BaseFragment(),
         actionCallback = null
     }
 
-    override fun onBackPressed(): Boolean {
+    override fun handleBackPressed(): Boolean {
         val currentFragment = getCurrentFragment() as? BackPressedHandler
-        if (currentFragment?.onBackPressed() == false) {
+        if (currentFragment?.handleBackPressed() == false) {
             popFragment()
-            return true
+            return currentFragment != childFragmentManager.primaryNavigationFragment
         }
         return childFragmentManager.backStackEntryCount > 0
     }
@@ -222,11 +231,8 @@ class FlowFragment : BaseFragment(),
         }
     }
 
-    private suspend fun checkScheduleUpdates() {
-        val availableForUpdateSchedules = viewModel.getAvailableForUpdateSchedules()
-        if (availableForUpdateSchedules.isNotEmpty()) {
-            openUpdateSchedules(availableForUpdateSchedules)
-        }
+    private suspend fun checkScheduleUpdates(): List<Schedule> {
+        return viewModel.getAvailableForUpdateSchedules()
     }
 
     private fun openScheduleItemOptions(data: DisplayScheduleItem) {
@@ -268,7 +274,10 @@ class FlowFragment : BaseFragment(),
     }
 
     private fun openRateApp() {
-        showDialog(RateAppSheet.newInstance(), RateAppSheet.TAG)
+        val currentFragment = getCurrentFragment()
+        if (currentFragment is DisplayScheduleFragmentContainer || currentFragment is StartFragment) {
+            showDialog(RateAppSheet.newInstance(), RateAppSheet.TAG)
+        }
     }
 
     private fun openNavigationSheet() {
@@ -281,9 +290,10 @@ class FlowFragment : BaseFragment(),
 
     private fun openUpdateSchedules(schedules: List<Schedule>) {
         val currentFragment = getCurrentFragment()
-        if (currentFragment is NavigationSheet || currentFragment is UpdateScheduleSheet) return
-        val args = UpdateScheduleSheetArgs(schedules)
-        showDialog(UpdateScheduleSheet.newInstance(args), UpdateScheduleSheet.TAG)
+        if (currentFragment is DisplayScheduleFragmentContainer || currentFragment is StartFragment) {
+            val args = UpdateScheduleSheetArgs(schedules)
+            showDialog(UpdateScheduleSheet.newInstance(args), UpdateScheduleSheet.TAG)
+        }
     }
 
     private fun openAddSchedule() {

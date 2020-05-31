@@ -84,13 +84,13 @@ class ModifyScheduleItemFragment : BaseFragment() {
         actionCallback = null
     }
 
-    override fun onBackPressed() = when {
+    override fun handleBackPressed() = when {
         viewModel.state.requireValue == Complete -> false
         viewModel.dataProvider.hasChanges() -> {
             showExitDialog()
             true
         }
-        else -> super.onBackPressed()
+        else -> super.handleBackPressed()
     }
 
     fun addEmployee(employee: Employee) {

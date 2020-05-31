@@ -53,7 +53,7 @@ class SettingsFragment : BaseFragment() {
         actionCallback = null
     }
 
-    override fun onBackPressed() = viewModel.setNormalState()
+    override fun handleBackPressed() = viewModel.setNormalState()
 
     private fun initView() {
         settingsToolbar.apply {
@@ -106,6 +106,7 @@ class SettingsFragment : BaseFragment() {
             viewModel.updateInfo()
         }
         settingsRateAppButton.setSafeClickListener {
+            viewModel.onRateApp()
             rateApp(it.context)
         }
         settingsSendFeedbackButton.setSafeClickListener {

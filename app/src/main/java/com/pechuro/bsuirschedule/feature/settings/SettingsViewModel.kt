@@ -14,6 +14,7 @@ import com.pechuro.bsuirschedule.domain.exception.DataSourceException
 import com.pechuro.bsuirschedule.domain.interactor.GetAppTheme
 import com.pechuro.bsuirschedule.domain.interactor.LoadInfo
 import com.pechuro.bsuirschedule.domain.interactor.SetAppTheme
+import com.pechuro.bsuirschedule.domain.interactor.SetRateAppAskNever
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -21,7 +22,8 @@ class SettingsViewModel @Inject constructor(
         val appUriProvider: AppUriProvider,
         private val loadInfo: LoadInfo,
         private val getAppTheme: GetAppTheme,
-        private val setAppTheme: SetAppTheme
+        private val setAppTheme: SetAppTheme,
+        private val setRateAppAskNever: SetRateAppAskNever
 ) : BaseViewModel() {
 
     private val _stateData = MutableLiveData<State>(State.Idle)
@@ -60,6 +62,12 @@ class SettingsViewModel @Inject constructor(
             setAppTheme.execute(SetAppTheme.Params(theme)).onSuccess {
                 themeChangedEvent.value = Unit
             }
+        }
+    }
+
+    fun onRateApp() {
+        launchCoroutine {
+            setRateAppAskNever.execute(BaseInteractor.NoParams)
         }
     }
 

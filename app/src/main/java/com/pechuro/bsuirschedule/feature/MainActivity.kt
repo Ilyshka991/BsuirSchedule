@@ -39,7 +39,7 @@ class MainActivity : BaseActivity(), FlowFragment.ActionCallback {
 
     override fun onBackPressed() {
         val flowFragment = supportFragmentManager.fragments.firstOrNull() as? BackPressedHandler
-        if (flowFragment?.onBackPressed() == true) return
+        if (flowFragment?.handleBackPressed() == true) return
         super.onBackPressed()
     }
 

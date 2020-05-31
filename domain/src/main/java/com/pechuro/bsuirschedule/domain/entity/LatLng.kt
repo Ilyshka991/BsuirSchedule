@@ -1,4 +1,4 @@
-package com.pechuro.bsuirschedule.common
+package com.pechuro.bsuirschedule.domain.entity
 
 data class LatLng(
         val latitude: Double,

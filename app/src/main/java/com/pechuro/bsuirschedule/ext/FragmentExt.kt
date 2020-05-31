@@ -15,7 +15,7 @@ internal val FragmentManager.currentFragment: Fragment?
     get() = if (backStackEntryCount > 0) {
         val topFragmentTag = getBackStackEntryAt(backStackEntryCount - 1).name
         findFragmentByTag(topFragmentTag)
-    } else null
+    } else primaryNavigationFragment
 
 inline fun <reified T : Fragment> FragmentManager.fragmentByTag(tag: String) = findFragmentBy(tag, T::class.java)
 

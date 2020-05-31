@@ -28,7 +28,7 @@ abstract class BaseFragment : Fragment(), BackPressedHandler {
     protected lateinit var eventCoroutineScope: CoroutineScope
         private set
 
-    override fun onBackPressed(): Boolean = false
+    override fun handleBackPressed(): Boolean = false
 
     override fun onAttach(context: Context) {
         context.app.appComponent.inject(this)

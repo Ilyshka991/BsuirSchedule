@@ -3,16 +3,15 @@ package com.pechuro.bsuirschedule.feature.itemdetails
 import android.content.Intent
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.lifecycle.observe
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
-import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.entity.Building
 import com.pechuro.bsuirschedule.domain.entity.LessonPriority
+import com.pechuro.bsuirschedule.domain.entity.coordinates
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialog
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogButtonData

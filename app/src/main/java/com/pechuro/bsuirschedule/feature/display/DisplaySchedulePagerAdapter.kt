@@ -4,8 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.pechuro.bsuirschedule.domain.entity.WeekDay
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
-import com.pechuro.bsuirschedule.ext.addDays
-import com.pechuro.bsuirschedule.ext.getWeekDay
+import com.pechuro.bsuirschedule.domain.ext.addDays
+import com.pechuro.bsuirschedule.domain.ext.getWeekDay
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItemInfo
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleViewType
 import com.pechuro.bsuirschedule.feature.display.fragment.DisplayScheduleFragment

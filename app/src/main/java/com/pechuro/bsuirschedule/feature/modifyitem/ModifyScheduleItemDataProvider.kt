@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.addIfEmpty
-import com.pechuro.bsuirschedule.ext.getWeekDay
+import com.pechuro.bsuirschedule.domain.ext.getWeekDay
 import com.pechuro.bsuirschedule.ext.requireValue
 import java.util.*
 

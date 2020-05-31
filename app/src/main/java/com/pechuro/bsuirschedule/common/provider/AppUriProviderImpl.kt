@@ -2,7 +2,7 @@ package com.pechuro.bsuirschedule.common.provider
 
 import android.content.Context
 import android.net.Uri
-import com.pechuro.bsuirschedule.common.LatLng
+import com.pechuro.bsuirschedule.domain.entity.LatLng
 
 class AppUriProviderImpl(context: Context) : AppUriProvider {
 
