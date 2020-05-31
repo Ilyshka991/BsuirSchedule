@@ -25,12 +25,13 @@ import com.pechuro.bsuirschedule.feature.datepicker.DisplayScheduleDatePickerShe
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleFragmentContainer
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import com.pechuro.bsuirschedule.feature.itemdetails.ScheduleItemDetailsArgs
-import com.pechuro.bsuirschedule.feature.itemoptions.ScheduleItemOptionsSheet
 import com.pechuro.bsuirschedule.feature.itemdetails.ScheduleItemDetailsFragment
+import com.pechuro.bsuirschedule.feature.itemoptions.ScheduleItemOptionsSheet
 import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoFragment
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragment
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragmentArgs
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheet
+import com.pechuro.bsuirschedule.feature.rateapp.RateAppSheet
 import com.pechuro.bsuirschedule.feature.scheduleoptions.DisplayScheduleOptionsSheet
 import com.pechuro.bsuirschedule.feature.settings.SettingsFragment
 import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation
@@ -90,8 +91,18 @@ class FlowFragment : BaseFragment(),
         initNavigation()
         if (savedInstanceState == null) setStartFragment()
         lifecycleScope.launch(Dispatchers.IO) {
-            if (savedInstanceState == null && !viewModel.isInfoLoaded()) openLoadInfo()
-            checkScheduleUpdates()
+            if (savedInstanceState == null && !viewModel.isInfoLoaded()) {
+                openLoadInfo()
+                return@launch
+            }
+            val availableForUpdateSchedules = checkScheduleUpdates()
+            if (availableForUpdateSchedules.isNotEmpty()) {
+                openUpdateSchedules(availableForUpdateSchedules)
+                return@launch
+            }
+            if (viewModel.shouldShowRateApp()) {
+                openRateApp()
+            }
         }
         initViews()
     }
@@ -106,11 +117,11 @@ class FlowFragment : BaseFragment(),
         actionCallback = null
     }
 
-    override fun onBackPressed(): Boolean {
+    override fun handleBackPressed(): Boolean {
         val currentFragment = getCurrentFragment() as? BackPressedHandler
-        if (currentFragment?.onBackPressed() == false) {
+        if (currentFragment?.handleBackPressed() == false) {
             popFragment()
-            return true
+            return currentFragment != childFragmentManager.primaryNavigationFragment
         }
         return childFragmentManager.backStackEntryCount > 0
     }
@@ -220,11 +231,8 @@ class FlowFragment : BaseFragment(),
         }
     }
 
-    private suspend fun checkScheduleUpdates() {
-        val availableForUpdateSchedules = viewModel.getAvailableForUpdateSchedules()
-        if (availableForUpdateSchedules.isNotEmpty()) {
-            openUpdateSchedules(availableForUpdateSchedules)
-        }
+    private suspend fun checkScheduleUpdates(): List<Schedule> {
+        return viewModel.getAvailableForUpdateSchedules()
     }
 
     private fun openScheduleItemOptions(data: DisplayScheduleItem) {
@@ -265,6 +273,13 @@ class FlowFragment : BaseFragment(),
         showDialog(DisplayScheduleDatePickerSheet.newInstance(arguments), DisplayScheduleDatePickerSheet.TAG)
     }
 
+    private fun openRateApp() {
+        val currentFragment = getCurrentFragment()
+        if (currentFragment is DisplayScheduleFragmentContainer || currentFragment is StartFragment) {
+            showDialog(RateAppSheet.newInstance(), RateAppSheet.TAG)
+        }
+    }
+
     private fun openNavigationSheet() {
         showDialog(NavigationSheet.newInstance(), NavigationSheet.TAG)
     }
@@ -275,9 +290,10 @@ class FlowFragment : BaseFragment(),
 
     private fun openUpdateSchedules(schedules: List<Schedule>) {
         val currentFragment = getCurrentFragment()
-        if (currentFragment is NavigationSheet || currentFragment is UpdateScheduleSheet) return
-        val args = UpdateScheduleSheetArgs(schedules)
-        showDialog(UpdateScheduleSheet.newInstance(args), UpdateScheduleSheet.TAG)
+        if (currentFragment is DisplayScheduleFragmentContainer || currentFragment is StartFragment) {
+            val args = UpdateScheduleSheetArgs(schedules)
+            showDialog(UpdateScheduleSheet.newInstance(args), UpdateScheduleSheet.TAG)
+        }
     }
 
     private fun openAddSchedule() {

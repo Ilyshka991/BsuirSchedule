@@ -20,6 +20,8 @@ enum class AppTheme {
     companion object {
         val DEFAULT = FOLLOW_SYSTEM
 
+        fun getAvailable() = listOf(FOLLOW_SYSTEM, LIGHT, DARK, BLACK)
+
         fun getForName(name: String) = valueOf(name)
     }
 }

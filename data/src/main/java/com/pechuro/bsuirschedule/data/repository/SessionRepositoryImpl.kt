@@ -1,18 +1,17 @@
 package com.pechuro.bsuirschedule.data.repository
 
 import com.pechuro.bsuirschedule.data.common.BaseRepository
-import com.pechuro.bsuirschedule.domain.entity.AppTheme
-import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
-import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
+import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
 import com.pechuro.bsuirschedule.domain.repository.ISessionRepository
+import com.pechuro.bsuirschedule.local.sharedprefs.LocalRateAppAskInfo
 import com.pechuro.bsuirschedule.local.sharedprefs.LocalScheduleInfo
 import com.pechuro.bsuirschedule.local.sharedprefs.LocalScheduleInfo.ScheduleType.*
 import com.pechuro.bsuirschedule.local.sharedprefs.SharedPreferencesManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import java.util.*
 
 class SessionRepositoryImpl(
         private val sharedPreferencesManager: SharedPreferencesManager,
@@ -87,5 +86,25 @@ class SessionRepositoryImpl(
 
     override suspend fun setScheduleHintDisplayState(shown: Boolean) {
         sharedPreferencesManager.setScheduleHintDisplayState(shown)
+    }
+
+    override suspend fun getRateAppAskInfo(): RateAppAskInfo {
+        val localInfo = sharedPreferencesManager.getRateAppAskInfo()
+        return localInfo?.run {
+            RateAppAskInfo(
+                    installDate = Date(installDate).getLocalDate(),
+                    shouldAsk = shouldAsk,
+                    askLaterDate = askLaterDate?.let { Date(it).getLocalDate() }
+            )
+        } ?: RateAppAskInfo()
+    }
+
+    override suspend fun setRateAppAskInfo(info: RateAppAskInfo) {
+        val localInfo = LocalRateAppAskInfo(
+                installDate = info.installDate.toDate().time,
+                shouldAsk = info.shouldAsk,
+                askLaterDate = info.askLaterDate?.toDate()?.time
+        )
+        sharedPreferencesManager.setRateAppAskInfo(localInfo)
     }
 }

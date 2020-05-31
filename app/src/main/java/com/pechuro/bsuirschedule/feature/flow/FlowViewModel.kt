@@ -19,7 +19,8 @@ class FlowViewModel @Inject constructor(
         private val notificationManager: NotificationManager,
         private val getLastOpenedSchedule: GetLastOpenedSchedule,
         private val getScheduleDisplayType: GetScheduleDisplayType,
-        private val setLastOpenedSchedule: SetLastOpenedSchedule
+        private val setLastOpenedSchedule: SetLastOpenedSchedule,
+        private val shouldAskRateApp: ShouldAskRateApp
 ) : BaseViewModel() {
 
     private var lastOpenedSchedule: Schedule? = runBlocking {
@@ -54,6 +55,8 @@ class FlowViewModel @Inject constructor(
     }
 
     fun getScheduleDisplayType(): ScheduleDisplayType = scheduleDisplayType
+
+    suspend fun shouldShowRateApp() = shouldAskRateApp.execute(BaseInteractor.NoParams).getOrDefault(false)
 
     suspend fun getAvailableForUpdateSchedules() =
             getAvailableForUpdateSchedules.execute(Params(includeAll = false))

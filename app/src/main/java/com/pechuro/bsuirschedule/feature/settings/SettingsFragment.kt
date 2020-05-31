@@ -9,8 +9,6 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.AppTheme
 import com.pechuro.bsuirschedule.ext.*
-import com.pechuro.bsuirschedule.ext.nonNull
-import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialog
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogButtonData
 import kotlinx.android.synthetic.main.fragment_settings.*
@@ -55,7 +53,7 @@ class SettingsFragment : BaseFragment() {
         actionCallback = null
     }
 
-    override fun onBackPressed() = viewModel.setNormalState()
+    override fun handleBackPressed() = viewModel.setNormalState()
 
     private fun initView() {
         settingsToolbar.apply {
@@ -108,6 +106,7 @@ class SettingsFragment : BaseFragment() {
             viewModel.updateInfo()
         }
         settingsRateAppButton.setSafeClickListener {
+            viewModel.onRateApp()
             rateApp(it.context)
         }
         settingsSendFeedbackButton.setSafeClickListener {
@@ -161,7 +160,7 @@ class SettingsFragment : BaseFragment() {
     }
 
     private fun selectTheme() {
-        val availableThemes = AppTheme.values()
+        val availableThemes = AppTheme.getAvailable()
         val selectedTheme = viewModel.getCurrentAppTheme()
         val options = availableThemes.map { theme ->
             OptionDialogButtonData(

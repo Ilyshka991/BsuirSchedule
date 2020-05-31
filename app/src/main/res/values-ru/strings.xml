@@ -8,6 +8,7 @@
     <string name="action_discard">Отклонить</string>
     <string name="action_retry">Повторить</string>
     <string name="action_cancel">Отмена</string>
+    <string name="action_save">Сохранить</string>
     <string name="action_ok">ОК</string>
 
     <string name="error_loading">Произошла ошибка,\nпопробуйте ещё раз</string>
@@ -29,7 +30,7 @@
     <string name="navigation_title_exams">Экзамены</string>
     <string name="navigation_action_add_schedule">Добавить расписание</string>
     <string name="navigation_action_settings">Настройки</string>
-    <string name="navigation_msg_no_schedules">Пусто.</string>
+    <string name="navigation_msg_no_schedules">Нет расписаний</string>
     <string name="navigation_msg_schedule_update_in_progress">Обновление…</string>
     <string name="navigation_msg_schedule_update_error">Не обновлено.</string>
     <string name="navigation_msg_schedule_update_available">Доступно обновление</string>
@@ -48,7 +49,7 @@
 
     <string name="display_schedule_item_msg_subgroup">%1$d подгруппа</string>
     <string name="display_schedule_item_msg_week_numbers">Недели %1$s</string>
-    <string name="display_schedule_item_msg_empty_list">Пусто.</string>
+    <string name="display_schedule_item_msg_empty_list">Нет занятий</string>
     <string name="display_schedule__hint_schedule_actions">Коснитесь занятия для подробностей, коснитесь и удерживайте для изменения</string>
 
     <string name="display_options_sheet_title_type">Отображать по %1$s</string>
@@ -103,7 +104,7 @@
     <string name="staff_list_msg_group_course">Курс: %1$d</string>
     <string name="staff_list_msg_employee_department">Кафедра: %1$s</string>
     <string name="staff_list_msg_auditory_capacity">Вместимость: %1$d</string>
-    <string name="staff_list_msg_empty">Пусто.</string>
+    <string name="staff_list_msg_empty">Ничего не найдено</string>
 
     <string name="options_dialog_action_done">готово</string>
 
@@ -132,7 +133,7 @@
     <string name="theme_lime">Лаймовая</string>
 
     <string name="configure_schedule_widget_title">Добавить виджет</string>
-    <string name="configure_schedule_widget_msg_exit">Отклонить изменения</string>
+    <string name="configure_schedule_widget_msg_exit">Отклонить изменения?</string>
     <string name="configure_schedule_widget_action_done">Готово</string>
     <string name="configure_schedule_widget_action_msg_select_schedule">Выберите расписание:</string>
     <string name="configure_schedule_widget_action_go_to_app">Запустить приложение</string>
@@ -143,21 +144,19 @@
     <string name="schedule_widget_msg_tomorrow">, Завтра</string>
     <string name="schedule_widget_msg_exams">, Экзамены</string>
     <string name="schedule_widget_msg_deleted">Расписание удалено</string>
-    <string name="schedule_widget_msg_empty">Пусто.</string>
+    <string name="schedule_widget_msg_empty">Нет занятий</string>
 
     <string name="item_details_msg_location">Место проведения:</string>
     <string name="item_details_msg_weeks">Недели: </string>
+    <string name="item_details_msg_subgroup">Подгруппа: </string>
+    <string name="item_details_msg_priority">Приоритет: </string>
+    <string name="item_details_msg_time">Время: </string>
+    <string name="item_details_msg_date">Дата: </string>
 
-    <string-array name="lesson_types">
-        <item>ЛК</item>
-        <item>ПЗ</item>
-        <item>ЛР</item>
-    </string-array>
-
-    <string-array name="exam_types">
-        <item>Экзамен</item>
-        <item>Консультация</item>
-    </string-array>
+    <string name="rate_app_description">Если вам понравилось это приложение, пожалуйста, найдите время, чтобы оценить его. Это не займет больше минуты. Спасибо за вашу поддержку!</string>
+    <string name="rate_app_action_rate">Оценить сейчас</string>
+    <string name="rate_app_action_no">Нет, спасибо</string>
+    <string name="rate_app_action_later">Напомнить позже</string>
 
     <string-array name="weekdays">
         <item>Понедельник</item>

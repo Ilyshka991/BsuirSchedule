@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_sheet">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/rateAppDescriptionText"
+        style="@style/DefaultText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/rate_app_description"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/rateAppRateButton"
+        style="@style/TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/rate_app_action_rate"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/rateAppDescriptionText"
+        app:layout_constraintTop_toBottomOf="@+id/rateAppDescriptionText" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/rateAppNoButton"
+        style="@style/TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rate_app_action_no"
+        android:textSize="16sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/rateAppRateButton"
+        app:layout_constraintStart_toStartOf="@+id/rateAppDescriptionText" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/rateAppLaterButton"
+        style="@style/TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/rate_app_action_later"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/rateAppRateButton"
+        app:layout_constraintTop_toBottomOf="@+id/rateAppRateButton" />
+</androidx.constraintlayout.widget.ConstraintLayout>

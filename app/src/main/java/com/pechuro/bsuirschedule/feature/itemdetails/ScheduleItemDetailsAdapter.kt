@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.ext.coordinates
 import com.pechuro.bsuirschedule.ext.formattedString
 import com.pechuro.bsuirschedule.ext.formattedStringRes
 import com.pechuro.bsuirschedule.ext.setSafeClickListener

@@ -1,13 +1,13 @@
 package com.pechuro.bsuirschedule.di.component
 
 import com.pechuro.bsuirschedule.App
-import com.pechuro.bsuirschedule.feature.appwidget.ScheduleWidgetProvider
-import com.pechuro.bsuirschedule.feature.appwidget.ScheduleWidgetViewService
 import com.pechuro.bsuirschedule.common.base.BaseActivity
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.di.annotations.AppScope
 import com.pechuro.bsuirschedule.di.module.*
+import com.pechuro.bsuirschedule.feature.appwidget.ScheduleWidgetProvider
+import com.pechuro.bsuirschedule.feature.appwidget.ScheduleWidgetViewService
 import com.pechuro.bsuirschedule.feature.display.fragment.DisplayScheduleFragment
 import dagger.BindsInstance
 import dagger.Component

@@ -32,7 +32,7 @@ class LoadInfoFragment : BaseFragment() {
 
     private var actionCallback: ActionCallback? = null
 
-    override fun onBackPressed() = true
+    override fun handleBackPressed() = true
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

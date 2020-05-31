@@ -9,11 +9,12 @@ import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel
 import com.pechuro.bsuirschedule.feature.appwidgetconfiguration.AppWidgetConfigurationViewModel
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel
 import com.pechuro.bsuirschedule.feature.flow.FlowViewModel
-import com.pechuro.bsuirschedule.feature.itemoptions.ScheduleItemOptionsViewModel
 import com.pechuro.bsuirschedule.feature.itemdetails.ScheduleItemDetailsViewModel
+import com.pechuro.bsuirschedule.feature.itemoptions.ScheduleItemOptionsViewModel
 import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoViewModel
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemViewModel
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetViewModel
+import com.pechuro.bsuirschedule.feature.rateapp.RateAppViewModel
 import com.pechuro.bsuirschedule.feature.scheduleoptions.DisplayScheduleOptionsViewModel
 import com.pechuro.bsuirschedule.feature.settings.SettingsViewModel
 import com.pechuro.bsuirschedule.feature.stafflist.StaffListViewModel
@@ -97,4 +98,9 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(MainViewModel::class)
     fun main(viewModel: MainViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RateAppViewModel::class)
+    fun rateApp(viewModel: RateAppViewModel): ViewModel
 }
