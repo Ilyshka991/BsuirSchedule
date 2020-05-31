@@ -153,16 +153,10 @@
     <string name="item_details_msg_time">Время: </string>
     <string name="item_details_msg_date">Дата: </string>
 
-    <string-array name="lesson_types">
-        <item>ЛК</item>
-        <item>ПЗ</item>
-        <item>ЛР</item>
-    </string-array>
-
-    <string-array name="exam_types">
-        <item>Экзамен</item>
-        <item>Консультация</item>
-    </string-array>
+    <string name="rate_app_description">Если вам понравилось это приложение, пожалуйста, найдите время, чтобы оценить его. Это не займет больше минуты. Спасибо за вашу поддержку!</string>
+    <string name="rate_app_action_rate">Оценить сейчас</string>
+    <string name="rate_app_action_no">Нет, спасибо</string>
+    <string name="rate_app_action_later">Напомнить позже</string>
 
     <string-array name="weekdays">
         <item>Понедельник</item>

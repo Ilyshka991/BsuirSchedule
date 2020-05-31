@@ -35,7 +35,7 @@ class AppThemeManager @Inject constructor(
             AppTheme.LIGHT -> R.style.LightStyleTheme
             AppTheme.DARK -> R.style.DarkStyleTheme
             AppTheme.BLACK -> R.style.BlackStyleTheme
-           /* AppTheme.INDIGO -> R.style.IndigoStyleTheme
+            AppTheme.INDIGO -> R.style.IndigoStyleTheme
             AppTheme.TEAL -> R.style.TealStyleTheme
             AppTheme.BLUE_GREY -> R.style.BlueGreyStyleTheme
             AppTheme.BLUE_LIGHT -> R.style.BlueLightStyleTheme
@@ -44,7 +44,7 @@ class AppThemeManager @Inject constructor(
             AppTheme.PURPLE -> R.style.PurpleStyleTheme
             AppTheme.CYAN -> R.style.CyanStyleTheme
             AppTheme.RED -> R.style.RedStyleTheme
-            AppTheme.LIME -> R.style.LimeStyleTheme*/
+            AppTheme.LIME -> R.style.LimeStyleTheme
         }
     }
 }

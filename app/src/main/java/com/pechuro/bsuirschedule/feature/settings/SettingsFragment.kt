@@ -9,8 +9,6 @@ import com.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.AppTheme
 import com.pechuro.bsuirschedule.ext.*
-import com.pechuro.bsuirschedule.ext.nonNull
-import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialog
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogButtonData
 import kotlinx.android.synthetic.main.fragment_settings.*
@@ -161,7 +159,7 @@ class SettingsFragment : BaseFragment() {
     }
 
     private fun selectTheme() {
-        val availableThemes = AppTheme.values()
+        val availableThemes = AppTheme.getAvailable()
         val selectedTheme = viewModel.getCurrentAppTheme()
         val options = availableThemes.map { theme ->
             OptionDialogButtonData(

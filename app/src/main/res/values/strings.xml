@@ -157,6 +157,11 @@
     <string name="item_details_msg_time">Time: </string>
     <string name="item_details_msg_date">Date: </string>
 
+    <string name="rate_app_description">If you enjoy using this app, would you mind taking a moment to rate it? It won\'t take more than a minute. Thank you for your support!</string>
+    <string name="rate_app_action_rate">Rate now</string>
+    <string name="rate_app_action_no">No, thanks</string>
+    <string name="rate_app_action_later">Later</string>
+
     <string-array name="lesson_types">
         <item>ЛК</item>
         <item>ПЗ</item>
@@ -177,5 +182,4 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
-
 </resources>
