@@ -1,5 +1,7 @@
 package com.pechuro.bsuirschedule.feature.scheduleoptions
 
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
@@ -31,6 +33,7 @@ class DisplayScheduleOptionsViewModel @Inject constructor(
         launchCoroutine {
             val currentType = displayTypeData.value ?: ScheduleDisplayType.DEFAULT
             val nextType = currentType.getNextType()
+            AppAnalytics.report(AppAnalyticsEvent.DisplaySchedule.ViewTypeChanged(nextType))
             setScheduleDisplayType.execute(SetScheduleDisplayType.Params(nextType))
         }
     }
@@ -39,6 +42,7 @@ class DisplayScheduleOptionsViewModel @Inject constructor(
         launchCoroutine {
             val currentNumber = subgroupNumberData.value ?: SubgroupNumber.ALL
             val nextNumber = currentNumber.getNextNumber()
+            AppAnalytics.report(AppAnalyticsEvent.DisplaySchedule.SubgroupChanged(nextNumber))
             setScheduleDisplaySubgroupNumber.execute(SetScheduleDisplaySubgroupNumber.Params(nextNumber))
         }
     }

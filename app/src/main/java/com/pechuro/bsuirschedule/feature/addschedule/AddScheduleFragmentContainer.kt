@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.ext.*
@@ -41,6 +43,7 @@ class AddScheduleFragmentContainer : BaseFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         actionCallback = getCallbackOrNull()
+        AppAnalytics.report(AppAnalyticsEvent.AddSchedule.Opened)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -82,13 +85,19 @@ class AddScheduleFragmentContainer : BaseFragment() {
                 is State.Complete -> onComplete(state.schedules)
                 is State.Loading -> setActionsEnabled(false)
                 is State.Idle -> setActionsEnabled(true)
-                is State.Error -> setActionsEnabled(false)
+                is State.Error -> onError()
             }
         }
     }
 
     private fun onComplete(schedules: List<Schedule>) {
+        AppAnalytics.report(AppAnalyticsEvent.AddSchedule.ScheduleLoaded(schedules))
         actionCallback?.onAddScheduleCompleted(schedules)
+    }
+
+    private fun onError() {
+        AppAnalytics.report(AppAnalyticsEvent.AddSchedule.ScheduleLoadFailed)
+        setActionsEnabled(false)
     }
 
     private fun setActionsEnabled(enabled: Boolean) {

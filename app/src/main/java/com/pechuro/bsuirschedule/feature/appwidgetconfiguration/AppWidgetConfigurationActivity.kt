@@ -57,6 +57,7 @@ class AppWidgetConfigurationActivity : BaseActivity() {
         if (configureScheduleWidgetDoneButton.isEnabled) {
             showExitDialog()
         } else {
+            viewModel.onCancelled()
             finish()
         }
     }
@@ -115,7 +116,10 @@ class AppWidgetConfigurationActivity : BaseActivity() {
                 .setTitle(getString(R.string.configure_schedule_widget_msg_exit))
                 .setPositiveAction(ConfirmationDialogButtonData(
                         text = getString(R.string.action_discard),
-                        onClick = { finish() }
+                        onClick = {
+                            viewModel.onCancelled()
+                            finish()
+                        }
                 ))
                 .setNegativeAction(ConfirmationDialogButtonData(
                         text = getString(R.string.action_cancel)))

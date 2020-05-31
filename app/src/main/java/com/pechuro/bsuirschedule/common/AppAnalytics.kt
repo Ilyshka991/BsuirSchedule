@@ -1,7 +1,6 @@
 package com.pechuro.bsuirschedule.common
 
 import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleViewType
 
 object AppAnalytics {
 
@@ -24,115 +23,115 @@ object AppAnalytics {
 
 sealed class AppAnalyticsEvent {
 
-    object Navigation {
+    sealed class Navigation : AppAnalyticsEvent() {
 
-        data class ScheduleOpened(val schedule: Schedule) : AppAnalyticsEvent()
+        data class ScheduleOpened(val schedule: Schedule) : Navigation()
 
-        data class ScheduleUpdated(val schedule: Schedule) : AppAnalyticsEvent()
+        data class ScheduleUpdated(val schedule: Schedule) : Navigation()
 
-        data class ScheduleDeleted(val schedule: Schedule) : AppAnalyticsEvent()
+        data class ScheduleDeleted(val schedule: Schedule) : Navigation()
     }
 
-    object Settings {
+    sealed class Settings : AppAnalyticsEvent() {
 
-        object Opened : AppAnalyticsEvent()
+        object Opened : Settings()
 
-        object ThemesOpened : AppAnalyticsEvent()
+        object ThemesOpened : Settings()
 
-        data class ThemeChanged(val theme: AppTheme) : AppAnalyticsEvent()
+        data class ThemeChanged(val theme: AppTheme) : Settings()
 
-        object InformationUpdated : AppAnalyticsEvent()
+        object InformationUpdated : Settings()
 
-        object PrivacyPoliceOpened : AppAnalyticsEvent()
+        object PrivacyPoliceOpened : Settings()
 
-        object SendFeedbackOpened : AppAnalyticsEvent()
+        object SendFeedbackOpened : Settings()
 
-        object RateAppOpened : AppAnalyticsEvent()
+        object RateAppOpened : Settings()
     }
 
-    object AddSchedule {
+    sealed class AddSchedule : AppAnalyticsEvent() {
 
-        object Opened : AppAnalyticsEvent()
+        object Opened : AddSchedule()
 
-        data class ScheduleLoaded(val schedule: Schedule, val type: ScheduleType) : AppAnalyticsEvent()
+        data class ScheduleLoaded(val schedules: List<Schedule>) : AddSchedule()
 
-        data class ScheduleLoadFailed(val schedule: Schedule) : AppAnalyticsEvent()
+        object ScheduleLoadFailed : AddSchedule()
     }
 
-    object DisplaySchedule {
+    sealed class DisplaySchedule : AppAnalyticsEvent() {
 
-        data class ItemOptionOpened(val scheduleItem: ScheduleItem) : AppAnalyticsEvent()
+        data class ItemOptionOpened(val scheduleItem: ScheduleItem) : DisplaySchedule()
 
-        data class ItemDeleted(val scheduleItem: ScheduleItem) : AppAnalyticsEvent()
+        data class ItemDeleted(val scheduleItem: ScheduleItem) : DisplaySchedule()
 
-        object SettingsOpened : AppAnalyticsEvent()
+        object ViewSettingsOpened : DisplaySchedule()
 
-        data class ViewTypeChanged(val type: DisplayScheduleViewType) : AppAnalyticsEvent()
+        data class ViewTypeChanged(val type: ScheduleDisplayType) : DisplaySchedule()
 
-        data class SubgroupChanged(val subgroupNumber: SubgroupNumber) : AppAnalyticsEvent()
+        data class SubgroupChanged(val subgroupNumber: SubgroupNumber) : DisplaySchedule()
 
-        object CalendarOpened : AppAnalyticsEvent()
+        object CalendarOpened : DisplaySchedule()
 
-        data class CalendarDateSelected(val dayDiff: Int) : AppAnalyticsEvent()
+        data class CalendarDateSelected(val dayDiff: Long) : DisplaySchedule()
 
-        object BackClicked : AppAnalyticsEvent()
+        object CurrentDayBackClicked : DisplaySchedule()
     }
 
-    object Edit {
+    sealed class Edit : AppAnalyticsEvent() {
 
-        data class Opened(val scheduleItem: ScheduleItem?) : AppAnalyticsEvent()
+        data class Opened(val scheduleItem: ScheduleItem?) : Edit()
 
-        object Saved : AppAnalyticsEvent()
+        object Saved : Edit()
 
-        object Cancelled : AppAnalyticsEvent()
+        object Cancelled : Edit()
     }
 
-    object Details {
+    sealed class Details : AppAnalyticsEvent() {
 
-        data class Opened(val scheduleItem: ScheduleItem) : AppAnalyticsEvent()
+        data class Opened(val scheduleItem: ScheduleItem) : Details()
 
-        data class LocationClicked(val building: Building) : AppAnalyticsEvent()
+        data class LocationClicked(val building: Building) : Details()
 
-        object PriorityOpened : AppAnalyticsEvent()
+        object PriorityOpened : Details()
 
-        object NoteChanged : AppAnalyticsEvent()
+        object NoteChanged : Details()
     }
 
-    object UpdateSchedule {
+    sealed class UpdateSchedule : AppAnalyticsEvent() {
 
-        object Updated : AppAnalyticsEvent()
+        object Updated : UpdateSchedule()
 
-        data class Dismissed(val notRemind: Boolean) : AppAnalyticsEvent()
+        data class Dismissed(val notRemind: Boolean) : UpdateSchedule()
     }
 
-    object InfoLoad {
+    sealed class InfoLoad : AppAnalyticsEvent() {
 
-        object Loaded : AppAnalyticsEvent()
+        object Loaded : InfoLoad()
 
-        object Failed : AppAnalyticsEvent()
+        object Failed : InfoLoad()
     }
 
-    object RateApp {
+    sealed class RateApp : AppAnalyticsEvent() {
 
-        object RateClicked : AppAnalyticsEvent()
+        object RateClicked : RateApp()
 
-        object LaterClicked : AppAnalyticsEvent()
+        object LaterClicked : RateApp()
 
-        object NotRemindClicked : AppAnalyticsEvent()
+        object NotRemindClicked : RateApp()
     }
 
-    object Widget {
+    sealed class Widget : AppAnalyticsEvent() {
 
-        data class ConfigurationOpened(val widgetExist: Boolean) : AppAnalyticsEvent()
+        data class ConfigurationOpened(val widgetExist: Boolean) : Widget()
 
-        data class ConfigurationCanceled(val widgetExist: Boolean) : AppAnalyticsEvent()
+        data class ConfigurationCanceled(val widgetExist: Boolean) : Widget()
 
         data class ConfigurationApplied(
                 val schedule: Schedule,
                 val subgroupNumber: SubgroupNumber,
                 val theme: ScheduleWidgetInfo.WidgetTheme
-        ) : AppAnalyticsEvent()
+        ) : Widget()
 
-        object Deleted : AppAnalyticsEvent()
+        data class Deleted(val schedule: Schedule) : Widget()
     }
 }

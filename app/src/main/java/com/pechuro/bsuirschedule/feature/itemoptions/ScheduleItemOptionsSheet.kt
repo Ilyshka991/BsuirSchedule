@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.ext.args
@@ -44,6 +46,9 @@ class ScheduleItemOptionsSheet : BaseBottomSheetDialog() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         actionCallback = getCallbackOrNull()
+        displayItem.scheduleItem?.let {
+            AppAnalytics.report(AppAnalyticsEvent.DisplaySchedule.ItemOptionOpened(it))
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,6 +70,9 @@ class ScheduleItemOptionsSheet : BaseBottomSheetDialog() {
             actionCallback?.onScheduleItemOptionsEditClicked(getScheduleItems())
         }
         scheduleItemOptionsDeleteButton.setSafeClickListener {
+            displayItem.scheduleItem?.let {
+                AppAnalytics.report(AppAnalyticsEvent.DisplaySchedule.ItemDeleted(it))
+            }
             viewModel.deleteScheduleItem(getScheduleItems())
             dismiss()
         }

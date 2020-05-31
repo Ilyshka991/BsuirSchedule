@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.entity.Schedule
@@ -102,6 +104,7 @@ class NavigationSheet : BaseBottomSheetDialog() {
     private val adapterActionCallback = object : NavigationDrawerAdapter.ActionCallback {
 
         override fun onScheduleClicked(schedule: Schedule) {
+            AppAnalytics.report(AppAnalyticsEvent.Navigation.ScheduleOpened(schedule))
             actionCallback?.onNavigationScheduleSelected(schedule)
         }
 
@@ -219,6 +222,7 @@ class NavigationSheet : BaseBottomSheetDialog() {
     private fun deleteItemAt(position: Int) {
         val scheduleInfo = adapter.getItemAt(position) as? NavigationSheetItemInformation.Content
         if (scheduleInfo != null) {
+            AppAnalytics.report(AppAnalyticsEvent.Navigation.ScheduleDeleted(scheduleInfo.schedule))
             actionCallback?.onNavigationScheduleDeleted(scheduleInfo.schedule)
             viewModel.deleteSchedule(scheduleInfo.schedule)
         } else {
@@ -230,6 +234,7 @@ class NavigationSheet : BaseBottomSheetDialog() {
         resetSwipedItems()
         val scheduleInfo = adapter.getItemAt(position) as? NavigationSheetItemInformation.Content
         if (scheduleInfo != null) {
+            AppAnalytics.report(AppAnalyticsEvent.Navigation.ScheduleUpdated(scheduleInfo.schedule))
             viewModel.updateSchedule(scheduleInfo.schedule)
         } else {
             Logger.w("Try to update item, which is not a subtype of NavigationSheetItemInformation.Content")

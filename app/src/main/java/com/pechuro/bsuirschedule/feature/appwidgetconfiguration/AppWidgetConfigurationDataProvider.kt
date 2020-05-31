@@ -9,7 +9,7 @@ import com.pechuro.bsuirschedule.ext.requireValue
 
 class AppWidgetConfigurationDataProvider(
         val widgetId: Int,
-        initialInfo: ScheduleWidgetInfo?
+        val initialInfo: ScheduleWidgetInfo?
 ) {
 
     private val _subgroupNumberData = MutableLiveData(SubgroupNumber.ALL)

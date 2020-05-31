@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import com.pechuro.bsuirschedule.R
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.ext.*
@@ -41,12 +43,15 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
     private fun initView() {
         val onUpdateClickAction: (View) -> Unit = {
             viewModel.updateNextSchedule()
+            AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Updated)
         }
         updateScheduleSheetUpdateButton.setSafeClickListener(onClick = onUpdateClickAction)
         updateScheduleErrorRetryButton.setSafeClickListener(onClick = onUpdateClickAction)
 
         val onCancelClickAction: (View) -> Unit = {
-            viewModel.cancelUpdate(updateScheduleSheetNotRemindCheckbox.isChecked)
+            val notRemind=updateScheduleSheetNotRemindCheckbox.isChecked
+            viewModel.cancelUpdate(notRemind)
+            AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Dismissed(notRemind))
         }
         updateScheduleSheetCancelButton.setSafeClickListener(onClick = onCancelClickAction)
         updateScheduleErrorCancelButton.setSafeClickListener(onClick = onCancelClickAction)

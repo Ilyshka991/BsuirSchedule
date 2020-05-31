@@ -1,6 +1,8 @@
 package com.pechuro.bsuirschedule.feature.modifyitem
 
 import androidx.lifecycle.MutableLiveData
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
@@ -22,6 +24,7 @@ class ModifyScheduleItemViewModel @Inject constructor(
             lessonTypes: Array<String>
     ) {
         if (this::dataProvider.isInitialized) return
+        AppAnalytics.report(AppAnalyticsEvent.Edit.Opened(items.firstOrNull()))
         dataProvider = ModifyScheduleItemDataProvider(
                 lessonTypes = lessonTypes,
                 initialSchedule = schedule,
@@ -30,6 +33,7 @@ class ModifyScheduleItemViewModel @Inject constructor(
     }
 
     fun saveChanges() {
+        AppAnalytics.report(AppAnalyticsEvent.Edit.Saved)
         launchCoroutine {
             state.value = State.Saving
             deleteScheduleItems.execute(DeleteScheduleItems.Params(
@@ -44,6 +48,7 @@ class ModifyScheduleItemViewModel @Inject constructor(
     }
 
     fun close() {
+        AppAnalytics.report(AppAnalyticsEvent.Edit.Cancelled)
         state.value = State.Complete
     }
 

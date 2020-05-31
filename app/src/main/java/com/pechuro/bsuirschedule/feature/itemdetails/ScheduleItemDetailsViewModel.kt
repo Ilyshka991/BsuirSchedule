@@ -1,6 +1,8 @@
 package com.pechuro.bsuirschedule.feature.itemdetails
 
 import androidx.lifecycle.LiveData
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.common.provider.AppUriProvider
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
@@ -27,12 +29,17 @@ class ScheduleItemDetailsViewModel @Inject constructor(
 
     fun init(schedule: Schedule, itemId: Long) {
         if (this::detailsData.isInitialized) return
+        var isEventSent = false
         detailsData = flowLiveData {
             getScheduleItem
                     .execute(GetScheduleItem.Params(schedule, itemId))
                     .getOrDefault(emptyFlow())
                     .distinctUntilChanged()
                     .map { scheduleItem ->
+                        if (!isEventSent) {
+                            isEventSent = true
+                            AppAnalytics.report(AppAnalyticsEvent.Details.Opened(scheduleItem))
+                        }
                         val details = getDetails(scheduleItem)
                         DetailsData(scheduleItem, details)
                     }
@@ -51,6 +58,7 @@ class ScheduleItemDetailsViewModel @Inject constructor(
     }
 
     fun updateNote(note: String) {
+        AppAnalytics.report(AppAnalyticsEvent.Details.NoteChanged)
         launchCoroutine {
             val currentItem = detailsData.value?.scheduleItem ?: return@launchCoroutine
             val updatedItem = when (currentItem) {
