@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="bottom"
-        app:backgroundTint="@android:color/darker_gray"
+        app:backgroundTint="?attr/bottomBarColor"
         app:contentInsetStartWithNavigation="0dp"
         app:fabAlignmentMode="end"
         app:fabCradleRoundedCornerRadius="16dp"
@@ -53,5 +53,5 @@
         android:visibility="invisible"
         app:backgroundTint="?attr/fabBackgroundColor"
         app:layout_anchor="@+id/bottomBarParentView"
-        app:tint="?attr/menuIconColor" />
+        app:tint="?attr/fabIconColor" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

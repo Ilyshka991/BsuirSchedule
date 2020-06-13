@@ -10,5 +10,7 @@
         android:id="@+id/displayCalendarSheetDatePicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"/>
+        android:layout_marginTop="28dp"
+        android:dateTextAppearance="@style/CalendarText"
+        android:weekDayTextAppearance="@style/CalendarText" />
 </LinearLayout>

@@ -4,6 +4,6 @@
     android:shape="rectangle">
     <corners android:radius="16dp" />
     <solid
-        android:color="?attr/backgroundColor"
+        android:color="?attr/optionDialogBackgroundColor"
         tools:color="@color/white" />
 </shape>
