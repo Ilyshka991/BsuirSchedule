@@ -13,7 +13,7 @@
       "ddd": 0,
       "ind": 2,
       "ty": 4,
-      "nm": "Shape Layer 2",
+      "nm": "foreground",
       "ks": {
         "o": {
           "a": 0,
@@ -493,7 +493,7 @@
       "ddd": 0,
       "ind": 3,
       "ty": 4,
-      "nm": "Shape Layer 1",
+      "nm": "background",
       "ks": {
         "o": {
           "a": 0,
