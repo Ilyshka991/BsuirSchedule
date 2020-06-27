@@ -6,7 +6,7 @@ import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
-import com.pechuro.bsuirschedule.R
+import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.domain.entity.Employee
 import com.pechuro.bsuirschedule.domain.entity.Group
 import kotlinx.android.synthetic.main.view_staff_details.view.*

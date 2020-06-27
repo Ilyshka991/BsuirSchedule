@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import com.google.android.material.button.MaterialButton
-import com.pechuro.bsuirschedule.R
+import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseDialogFragment
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import kotlinx.android.synthetic.main.dialog_confirmation.*

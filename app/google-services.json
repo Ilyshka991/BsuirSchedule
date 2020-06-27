@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:398803956815:android:a15fd14832eff40fbe263a",
+        "mobilesdk_app_id": "1:398803956815:android:4ae945bec9109455be263a",
         "android_client_info": {
-          "package_name": "com.pechuro.bsuirschedule"
+          "package_name": "com.bsuir.pechuro.bsuirschedule"
         }
       },
       "oauth_client": [
@@ -37,9 +37,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:398803956815:android:3159ecdbf0eddb53be263a",
+        "mobilesdk_app_id": "1:398803956815:android:e13c8e22e3107c41be263a",
         "android_client_info": {
-          "package_name": "com.pechuro.bsuirschedule.beta"
+          "package_name": "com.bsuir.pechuro.bsuirschedule.beta"
         }
       },
       "oauth_client": [
@@ -66,9 +66,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:398803956815:android:ac1c03e72daa3cfdbe263a",
+        "mobilesdk_app_id": "1:398803956815:android:b72b9625db3ce5d6be263a",
         "android_client_info": {
-          "package_name": "com.pechuro.bsuirschedule.debug"
+          "package_name": "com.bsuir.pechuro.bsuirschedule.dev"
         }
       },
       "oauth_client": [

@@ -3,7 +3,7 @@ package com.pechuro.bsuirschedule.ext
 import android.content.res.Resources
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
-import com.pechuro.bsuirschedule.R
+import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.domain.entity.*
 import java.util.*
 

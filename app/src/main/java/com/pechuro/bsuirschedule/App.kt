@@ -9,6 +9,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
 import androidx.work.Configuration
 import androidx.work.WorkerFactory
+import com.bsuir.pechuro.bsuirschedule.BuildConfig
 import com.pechuro.bsuirschedule.common.AppAnalytics
 import com.pechuro.bsuirschedule.di.component.AppComponent
 import com.pechuro.bsuirschedule.di.component.DaggerAppComponent

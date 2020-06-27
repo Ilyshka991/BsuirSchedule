@@ -9,7 +9,7 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Handler
 import android.widget.RemoteViews
-import com.pechuro.bsuirschedule.R
+import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.AppAnalytics
 import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.domain.entity.Schedule

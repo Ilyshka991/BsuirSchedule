@@ -7,7 +7,7 @@ import android.widget.LinearLayout
 import androidx.annotation.StringRes
 import androidx.core.content.res.use
 import com.google.android.material.textview.MaterialTextView
-import com.pechuro.bsuirschedule.R
+import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.ext.dimen
 import com.pechuro.bsuirschedule.ext.dimenPx
 import kotlinx.android.synthetic.main.view_labeled_text.view.*

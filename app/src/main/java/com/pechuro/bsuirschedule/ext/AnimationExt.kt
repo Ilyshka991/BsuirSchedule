@@ -5,7 +5,7 @@ import android.animation.ValueAnimator
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
-import com.pechuro.bsuirschedule.R
+import com.bsuir.pechuro.bsuirschedule.R
 
 private const val FAST_ANIMATION_DURATION_MS: Long = 150
 private const val DEFAULT_ANIMATION_DURATION_MS: Long = 250
