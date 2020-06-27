@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Bsuir Schedule</string>
+    <string name="app_name" translatable="false">BSUIR Schedule</string>
 
     <string name="notification_group_actions_label">Schedule actions</string>
     <string name="notification_channel_update_label">Updates</string>
