@@ -293,4 +293,6 @@
     <color name="widget_list_divider_dark">@color/widget_title_text_light</color>
     <color name="widget_list_item_lesson_type_dark">@color/widget_title_text_light</color>
     <color name="widget_list_item_text_dark">@color/widget_title_text_light</color>
+
+    <color name="app_icon_background">#46A6A4</color>
 </resources>

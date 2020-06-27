@@ -8,7 +8,7 @@ import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.pechuro.bsuirschedule.R
+import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.ext.doIfVersionGreaterThan
 import com.pechuro.bsuirschedule.feature.MainActivity

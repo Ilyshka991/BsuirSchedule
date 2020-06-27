@@ -9,7 +9,7 @@ import androidx.core.content.res.use
 import androidx.core.view.isVisible
 import com.airbnb.lottie.LottieProperty
 import com.airbnb.lottie.model.KeyPath
-import com.pechuro.bsuirschedule.R
+import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.ext.colorFromAttr
 import kotlinx.android.synthetic.main.view_loader.view.*
 

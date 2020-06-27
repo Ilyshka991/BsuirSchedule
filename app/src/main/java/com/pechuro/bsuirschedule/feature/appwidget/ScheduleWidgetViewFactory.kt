@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import androidx.core.graphics.drawable.toBitmap
-import com.pechuro.bsuirschedule.R
+import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.feature.display.fragment.formatAuditories

@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.pechuro.bsuirschedule.R
+import com.bsuir.pechuro.bsuirschedule.R
 import kotlinx.android.synthetic.main.view_auto_validate_input_text.view.*
 import com.google.android.material.R as materialR
 

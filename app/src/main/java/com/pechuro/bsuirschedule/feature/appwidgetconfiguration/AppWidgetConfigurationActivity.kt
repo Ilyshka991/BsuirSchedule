@@ -7,7 +7,7 @@ import android.os.Bundle
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.pechuro.bsuirschedule.R
+import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseActivity
 import com.pechuro.bsuirschedule.domain.entity.ScheduleWidgetInfo.WidgetTheme
 import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber

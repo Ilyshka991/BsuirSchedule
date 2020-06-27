@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
-import com.pechuro.bsuirschedule.R
+import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.AppAnalytics
 import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog

@@ -8,7 +8,7 @@ import androidx.annotation.Px
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.view.*
-import com.pechuro.bsuirschedule.R
+import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.ClickInterval
 import com.pechuro.bsuirschedule.common.OneFirePerIntervalClickListener
 

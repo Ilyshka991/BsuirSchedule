@@ -9,7 +9,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
-import com.pechuro.bsuirschedule.R
+import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.AppAnalytics
 import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.BackPressedHandler

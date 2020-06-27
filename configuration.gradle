@@ -1,5 +1,5 @@
 ext.configuration = [
-        applicationId     : 'com.pechuro.bsuirschedule',
+        applicationId     : 'com.bsuir.pechuro.bsuirschedule',
 
         androidJUnitRunner: 'com.pechuro.bsuirschedule.runner.EspressoTestRunner',
 
@@ -7,8 +7,8 @@ ext.configuration = [
         minSdkVersion     : 16,
         targetSdkVersion  : 29,
 
-        versionCode       : 1,
-        versionName       : '1.0.0',
+        versionCode       : 11,
+        versionName       : '3.0',
 
         multiDexEnabled   : false
 ]

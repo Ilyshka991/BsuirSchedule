@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.pechuro.bsuirschedule">
+    package="com.bsuir.pechuro.bsuirschedule">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name=".App"
+        android:name="com.pechuro.bsuirschedule.App"
         android:allowBackup="true"
         android:icon="@mipmap/app_icon_round"
         android:label="@string/app_name"
@@ -18,7 +18,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name=".feature.MainActivity"
+            android:name="com.pechuro.bsuirschedule.feature.MainActivity"
             android:theme="@style/AppTheme.SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".feature.appwidgetconfiguration.AppWidgetConfigurationActivity">
+        <activity android:name="com.pechuro.bsuirschedule.feature.appwidgetconfiguration.AppWidgetConfigurationActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -38,7 +38,7 @@
             android:authorities="${applicationId}.workmanager-init"
             tools:node="remove" />
 
-        <receiver android:name=".feature.appwidget.ScheduleWidgetProvider">
+        <receiver android:name="com.pechuro.bsuirschedule.feature.appwidget.ScheduleWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -48,7 +48,7 @@
         </receiver>
 
         <service
-            android:name=".feature.appwidget.ScheduleWidgetViewService"
+            android:name="com.pechuro.bsuirschedule.feature.appwidget.ScheduleWidgetViewService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 </manifest>

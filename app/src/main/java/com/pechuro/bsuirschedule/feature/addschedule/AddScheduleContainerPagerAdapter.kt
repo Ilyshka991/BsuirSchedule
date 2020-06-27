@@ -3,7 +3,7 @@ package com.pechuro.bsuirschedule.feature.addschedule
 import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.pechuro.bsuirschedule.R
+import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 
 class AddScheduleContainerPagerAdapter(
