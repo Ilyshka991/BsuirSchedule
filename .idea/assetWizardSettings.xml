@@ -79,8 +79,8 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="$USER_HOME$/Downloads/mortarboard.svg" />
-                                                <entry key="scalingPercent" value="45" />
+                                                <entry key="imagePath" value="$USER_HOME$/Downloads/school.svg" />
+                                                <entry key="scalingPercent" value="41" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -116,6 +116,7 @@
                                       <entry key="backgroundColor" value="46a6a4" />
                                       <entry key="legacyIconShape" value="CIRCLE" />
                                       <entry key="outputName" value="app_icon" />
+                                      <entry key="previewDensity" value="XXXHIGH" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -279,6 +280,11 @@
                                           </PersistentState>
                                         </value>
                                       </entry>
+                                    </map>
+                                  </option>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="previewDensity" value="XXXHIGH" />
                                     </map>
                                   </option>
                                 </PersistentState>
