@@ -90,7 +90,7 @@
         <item name="optionDialogBackgroundColor">?attr/backgroundColor</item>
 
         <item name="buttonDefaultBackgroundColor">@color/transparent</item>
-        <item name="buttonSelectedBackgroundColor">@color/grey_900</item>
+        <item name="buttonSelectedBackgroundColor">@color/grey_800</item>
         <item name="buttonEnabledTextColor">@color/grey_500</item>
         <item name="buttonDisabledTextColor">@color/grey_700</item>
         <item name="chipCheckedColor">@color/grey_700</item>
