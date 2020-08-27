@@ -112,6 +112,7 @@
     <string name="settings_title">Settings</string>
     <string name="settings_action_change_theme">Theme: %1$s</string>
     <string name="settings_action_update_info">Update information</string>
+    <string name="settings_msg_update_info">Update employees &amp; groups</string>
     <string name="settings_action_rate_app">Rate app</string>
     <string name="settings_action_send_feedback">Send feedback</string>
     <string name="settings_action_privacy_policy">Privacy policy</string>

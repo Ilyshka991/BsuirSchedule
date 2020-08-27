@@ -2,13 +2,12 @@ package com.pechuro.bsuirschedule.ext
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.commitNow
 import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleFragmentContainer
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemFragment
 
-fun FragmentManager.removeAllFragmentsImmediate() = commitNow {
-    popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+fun FragmentManager.removeAllFragments() {
+    popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 }
 
 internal val FragmentManager.currentFragment: Fragment?
