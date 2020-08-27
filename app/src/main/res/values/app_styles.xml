@@ -83,7 +83,7 @@
         <item name="backgroundColor">@color/grey_900</item>
         <item name="secondBackgroundColor">@color/black</item>
         <item name="backgroundDarkColor">@color/black</item>
-        <item name="rippleColor">@color/grey_800</item>
+        <item name="rippleColor">@color/grey_700</item>
         <item name="dividerColor">@color/grey_800</item>
         <item name="backgroundNavigationSwipeActionColor">@color/amber_300</item>
         <item name="bottomBarColor">@color/grey_800</item>
@@ -122,7 +122,7 @@
         <item name="backgroundColor">@color/black</item>
         <item name="secondBackgroundColor">@color/grey_900</item>
         <item name="backgroundDarkColor">@color/grey_900</item>
-        <item name="rippleColor">@color/grey_800</item>
+        <item name="rippleColor">@color/grey_700</item>
         <item name="dividerColor">@color/grey_900</item>
         <item name="backgroundNavigationSwipeActionColor">@color/amber_300</item>
         <item name="bottomBarColor">@color/grey_800</item>

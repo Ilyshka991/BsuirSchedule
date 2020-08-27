@@ -286,7 +286,11 @@ class FlowFragment : BaseFragment(),
     }
 
     private fun openLoadInfo() {
-        openFragment(LoadInfoFragment.newInstance(), LoadInfoFragment.TAG)
+        openFragment(
+                LoadInfoFragment.newInstance(),
+                LoadInfoFragment.TAG,
+                allowStateLoss = true // FIXME: Can not perform this action after onSaveInstanceState
+        )
     }
 
     private fun openUpdateSchedules(schedules: List<Schedule>) {
@@ -353,7 +357,9 @@ class FlowFragment : BaseFragment(),
 
     private fun postUpdateLayoutState() {
         requireView().post {
-            updateLayoutState()
+            if (this@FlowFragment.isVisible) {
+                updateLayoutState()
+            }
         }
     }
 
@@ -459,7 +465,7 @@ class FlowFragment : BaseFragment(),
             tag: String,
             animations: FragmentAnimationsResHolder = defaultFragmentAnimations
     ) {
-        childFragmentManager.removeAllFragmentsImmediate()
+        childFragmentManager.removeAllFragments()
         childFragmentManager.commit {
             animations.run {
                 setCustomAnimations(enter, exit, popEnter, popExit)
@@ -473,9 +479,10 @@ class FlowFragment : BaseFragment(),
             fragment: Fragment,
             tag: String,
             addToBackStack: Boolean = true,
-            animations: FragmentAnimationsResHolder = defaultFragmentAnimations
+            animations: FragmentAnimationsResHolder = defaultFragmentAnimations,
+            allowStateLoss: Boolean = false
     ) {
-        childFragmentManager.commit {
+        childFragmentManager.commit(allowStateLoss = allowStateLoss) {
             animations.run {
                 setCustomAnimations(enter, exit, popEnter, popExit)
             }

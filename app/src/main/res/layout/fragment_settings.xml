@@ -59,6 +59,19 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/settingsThemeButton" />
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/settingsUpdateInfoDescription"
+                    style="@style/DefaultText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:paddingHorizontal="16dp"
+                    android:text="@string/settings_msg_update_info"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/settingsUpdateInfoButton"
+                    app:layout_constraintEnd_toEndOf="@+id/settingsUpdateInfoButton"
+                    app:layout_constraintStart_toStartOf="@+id/settingsUpdateInfoButton" />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/settingsPrivacyPoliceButton"
                     style="@style/SettingsButton"

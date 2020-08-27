@@ -111,6 +111,7 @@
     <string name="settings_title">Настройки</string>
     <string name="settings_action_change_theme">Тема: %1$s</string>
     <string name="settings_action_update_info">Обновить информацию</string>
+    <string name="settings_msg_update_info">Обновить список групп и преподавателей</string>
     <string name="settings_action_rate_app">Оценить приложение</string>
     <string name="settings_action_send_feedback">Обратная связь</string>
     <string name="settings_action_privacy_policy">Политика конфиденциальности</string>
