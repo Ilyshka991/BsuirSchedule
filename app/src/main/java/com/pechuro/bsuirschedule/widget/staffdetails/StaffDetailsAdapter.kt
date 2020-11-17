@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.bsuir.pechuro.bsuirschedule.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
-import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.Employee
 import com.pechuro.bsuirschedule.widget.staffdetails.StaffDetailsInfo.EmployeeInfo
@@ -67,7 +67,7 @@ class StaffDetailsAdapter : ListAdapter<StaffDetailsInfo, BaseViewHolder<StaffDe
         private fun Employee.getFullName() = "$firstName $middleName $lastName"
 
         private fun Employee.getAdditionalInfoText() =
-                "$rank${if (rank.isNotEmpty()) ", " else ""}${department.name}"
+                "$rank${if (rank.isNotEmpty() && !department?.name.isNullOrEmpty()) ", " else ""}${department?.name ?: ""}"
 
         private fun ImageView.loadAvatar(url: String) {
             Glide.with(itemView)

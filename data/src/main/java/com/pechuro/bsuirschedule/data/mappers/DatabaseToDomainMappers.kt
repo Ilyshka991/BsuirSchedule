@@ -28,7 +28,7 @@ internal fun FacultyCached.toDomainEntity() = run {
 }
 
 internal fun EmployeeCached.toDomainEntity(
-        department: Department
+        department: Department?
 ) = run {
     Employee(
             id = id,

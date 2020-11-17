@@ -12,5 +12,5 @@ data class Employee(
         val abbreviation: String,
         val photoLink: String,
         val rank: String,
-        val department: Department
+        val department: Department?
 ) : Parcelable

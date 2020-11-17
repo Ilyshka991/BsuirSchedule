@@ -47,7 +47,7 @@ internal fun AuditoryDTO.toDomainEntity() = run {
     )
 }
 
-internal fun EmployeeDTO.toDomainEntity(department: Department) = run {
+internal fun EmployeeDTO.toDomainEntity(department: Department?) = run {
     Employee(
             id = id,
             firstName = firstName,
@@ -113,7 +113,7 @@ internal fun List<ScheduleItemDTO>.toGroupLessons(
             val lessonEmployees = lesson.employees?.map { employeeDto ->
                 val department = departments.find {
                     it.abbreviation == employeeDto.departmentAbbreviation.firstOrNull()
-                } ?: throw DataSourceException.InvalidData
+                }
                 employeeDto.toDomainEntity(department)
             }
             getResultWeekNumbers(lesson.weekNumber).forEach { weekNumber ->

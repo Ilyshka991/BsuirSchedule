@@ -7,9 +7,9 @@ import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.bsuir.pechuro.bsuirschedule.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.ext.formattedName
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
@@ -106,10 +106,14 @@ class StaffAdapter(
                 suggestionEmployeeFirstName.text = firstName
                 staffEmployeeMiddleName.text = middleName
                 staffEmployeeLastName.text = lastName
-                staffEmployeeDepartmentAbbreviation.text = itemView.context.getString(
-                        R.string.staff_list_msg_employee_department,
-                        department.abbreviation
-                )
+                staffEmployeeDepartmentAbbreviation.text = if (department != null) {
+                    itemView.context.getString(
+                            R.string.staff_list_msg_employee_department,
+                            department?.abbreviation ?: ""
+                    )
+                } else {
+                    ""
+                }
                 staffEmployeeRank.text = rank
             }
 

@@ -75,7 +75,7 @@ internal fun Employee.toDatabaseEntity() = run {
             abbreviation = abbreviation,
             photoLink = photoLink,
             rank = rank,
-            departmentId = department.id
+            departmentId = department?.id
     )
 }
 

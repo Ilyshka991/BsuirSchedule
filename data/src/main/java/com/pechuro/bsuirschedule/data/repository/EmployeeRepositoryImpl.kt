@@ -4,7 +4,6 @@ import com.pechuro.bsuirschedule.data.common.BaseRepository
 import com.pechuro.bsuirschedule.data.mappers.toDatabaseEntity
 import com.pechuro.bsuirschedule.data.mappers.toDomainEntity
 import com.pechuro.bsuirschedule.domain.entity.Employee
-import com.pechuro.bsuirschedule.domain.exception.DataSourceException
 import com.pechuro.bsuirschedule.domain.repository.IEmployeeRepository
 import com.pechuro.bsuirschedule.domain.repository.ISpecialityRepository
 import com.pechuro.bsuirschedule.local.dao.EmployeeDao
@@ -37,7 +36,7 @@ class EmployeeRepositoryImpl(
 
     override suspend fun getById(id: Long): Employee {
         val employeeCached = performDaoCall { dao.getById(id) }
-        val department = specialityRepository.getDepartmentById(employeeCached.departmentId)
+        val department = employeeCached.departmentId?.let { specialityRepository.getDepartmentById(it) }
         return employeeCached.toDomainEntity(department)
     }
 
@@ -50,8 +49,7 @@ class EmployeeRepositoryImpl(
         performDaoCall { dao.deleteAll() }
     }
 
-    override suspend fun isCached(): Boolean =
-            performDaoCall { dao.isNotEmpty() }
+    override suspend fun isCached(): Boolean = performDaoCall { dao.isNotEmpty() }
 
     private suspend fun loadEmployeesFromApi(): List<Employee> {
         val allDepartments = specialityRepository.getAllDepartments().first()
@@ -59,13 +57,12 @@ class EmployeeRepositoryImpl(
                 .map { dto ->
                     val department = allDepartments.find {
                         it.abbreviation == dto.departmentAbbreviation.firstOrNull()
-                    } ?: throw DataSourceException.InvalidData
+                    }
                     dto.toDomainEntity(
                             department = department
                     )
                 }
     }
-
 
     private suspend fun getEmployeesFromDao() = dao.getAll()
             .map { cachedList ->
@@ -74,13 +71,11 @@ class EmployeeRepositoryImpl(
                     cachedList.map { employeeCached ->
                         async {
                             val department = allDepartments.find { it.id == employeeCached.departmentId }
-                                    ?: return@async null
                             employeeCached.toDomainEntity(department)
                         }
                     }
                 }
                         .awaitAll()
-                        .filterNotNull()
             }
             .flowOn(Dispatchers.IO)
 

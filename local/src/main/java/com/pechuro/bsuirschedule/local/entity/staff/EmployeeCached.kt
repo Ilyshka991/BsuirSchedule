@@ -29,7 +29,7 @@ data class EmployeeCached(
         @ColumnInfo(name = "photo_link")
         val photoLink: String,
         @ColumnInfo(name = "department_id", index = true)
-        val departmentId: Long,
+        val departmentId: Long?,
         @ColumnInfo(name = "rank")
         val rank: String
 )
