@@ -12,6 +12,7 @@
     <string name="action_ok">ОК</string>
 
     <string name="error_loading">Произошла ошибка,\nпопробуйте ещё раз</string>
+    <string name="error_loading_secondary">Также попробуйте обновить информацию в настройках</string>
 
     <string name="add_schedule_title">Добавить расписание</string>
     <string name="add_schedule_error_types_not_specified">Выберите тип</string>

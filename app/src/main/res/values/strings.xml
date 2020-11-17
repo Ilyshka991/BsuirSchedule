@@ -14,6 +14,7 @@
     <string name="action_ok">OK</string>
 
     <string name="error_loading">Something went wrong,\nretry later</string>
+    <string name="error_loading_secondary">Also try update information in settings</string>
 
     <string name="add_schedule_title">Add new schedule</string>
     <string name="add_schedule_error_types_not_specified">Please, select type</string>

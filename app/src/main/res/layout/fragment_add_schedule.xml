@@ -25,7 +25,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="gone">
+        tools:visibility="visible">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/addScheduleLoadingErrorText"
@@ -37,6 +37,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/addScheduleLoadingErrorSubText"
+            style="@style/DefaultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.75"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:textSize="18sp"
+            android:text="@string/error_loading_secondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addScheduleLoadingErrorText" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addScheduleCancelButton"
@@ -63,7 +77,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/addScheduleCancelButton"
-            app:layout_constraintTop_toBottomOf="@+id/addScheduleLoadingErrorText" />
+            app:layout_constraintTop_toBottomOf="@+id/addScheduleLoadingErrorSubText" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
