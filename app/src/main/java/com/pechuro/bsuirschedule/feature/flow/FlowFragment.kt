@@ -171,6 +171,7 @@ class FlowFragment : BaseFragment(),
         } else {
             bottomBarFab.hide()
         }
+        bottomBarParentView.performShow()
     }
 
     override fun onDisplayScheduleOpenDatePicker(startDate: Date, endDate: Date, currentDate: Date) {

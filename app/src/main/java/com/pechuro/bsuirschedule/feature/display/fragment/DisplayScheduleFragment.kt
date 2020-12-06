@@ -66,6 +66,12 @@ class DisplayScheduleFragment : BaseFragment() {
         observeData()
     }
 
+    override fun onDestroyView() {
+        displayScheduleRecyclerView.setRecycledViewPool(null)
+        displayScheduleRecyclerView.clearAdapter()
+        super.onDestroyView()
+    }
+
     private fun initView() {
         displayScheduleRecyclerView.apply {
             setRecycledViewPool(sharedRecycledViewPool)
@@ -85,11 +91,5 @@ class DisplayScheduleFragment : BaseFragment() {
         viewModel.getItems(itemInfo).nonNull().observe(viewLifecycleOwner) {
             itemsAdapter.submitList(it)
         }
-    }
-
-    override fun onDestroyView() {
-        displayScheduleRecyclerView.clearAdapter()
-        displayScheduleRecyclerView.setRecycledViewPool(null)
-        super.onDestroyView()
     }
 }
