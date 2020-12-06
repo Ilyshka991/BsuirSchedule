@@ -98,8 +98,12 @@ class ScheduleWidgetRemoteViewFactory(
             paint.color = context.color(lesson.priority.formattedColorRes)
         }
         val size = context.dimenPx(R.dimen.widget_lesson_type_image_size)
-        val lessonTypeBitmap = typeBackgroundDrawable.toBitmap(width = size, height = size)
-        row.setImageViewBitmap(R.id.widgetLessonTypeBackground, lessonTypeBitmap)
+        try {
+            val lessonTypeBitmap = typeBackgroundDrawable.toBitmap(width = size, height = size)
+            row.setImageViewBitmap(R.id.widgetLessonTypeBackground, lessonTypeBitmap)
+        } catch (e: IndexOutOfBoundsException) {
+            //FIXME: why this happens
+        }
 
         row.setTextViewText(R.id.widgetLessonSubject, lesson.subject)
 

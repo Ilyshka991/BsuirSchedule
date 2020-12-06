@@ -20,7 +20,8 @@ class WidgetRepositoryImpl(
 
     override fun getScheduleWidget(widgetId: Int): ScheduleWidgetInfo? = sharedPreferencesManager
             .getScheduleWidgetInfo(widgetId)
-            ?.run { mapToDomainInfo() }
+            ?.runCatching { mapToDomainInfo() }
+            ?.getOrNull()
 
     override fun updateScheduleWidget(info: ScheduleWidgetInfo) {
         removeScheduleWidget(info.widgetId)
