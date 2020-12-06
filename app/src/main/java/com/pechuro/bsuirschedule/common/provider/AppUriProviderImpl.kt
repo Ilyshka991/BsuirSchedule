@@ -7,7 +7,7 @@ import com.pechuro.bsuirschedule.domain.entity.LatLng
 class AppUriProviderImpl(context: Context) : AppUriProvider {
 
     override val privacyPoliceUri: Uri = Uri.parse(
-            "https://ilyshka991.github.io/bsuir_schedule/privacy_policy.html"
+            "https://ilyshka991.github.io/BsuirSchedule/docs/privacy_policy.html"
     )
 
     override val playStoreWebUri: Uri = Uri.parse(
