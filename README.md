@@ -1,9 +1,13 @@
-# BSUIR Schedule ![Build](https://github.com/Ilyshka991/BsuirSchedule/workflows/Build/badge.svg)
+# BSUIR Schedule
 
 BSUIR Schedule viewer for students and employees.
 <a href='https://play.google.com/store/apps/details?id=com.bsuir.pechuro.bsuirschedule&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
 [Read](docs/privacy_policy.md) our privacy policy
+
+## Status
+
+![Build](https://github.com/Ilyshka991/BsuirSchedule/workflows/Build/badge.svg?branch=master)
 
 ## License
 
