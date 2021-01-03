@@ -19,14 +19,9 @@ class TestAllSchedules @Inject constructor(
 ) : BaseInteractor<Unit, BaseInteractor.NoParams>() {
 
     override suspend fun run(params: NoParams) {
-        //  tryLoadAllGroupSchedules()
+        // tryLoadAllGroupSchedules()
         // tryLoadAllEmployeesSchedules()
-        //checkEmptySchedules()
-        scheduleRepository.getAllSchedules().first().filter {
-            it is Schedule.GroupClasses && it.group.speciality.educationForm.name == "дистанционная"
-        }.also {
-            Logger.d(it.joinToString { it.name })
-        }
+        // checkEmptySchedules()
     }
 
     private suspend fun tryLoadAllGroupSchedules() {
