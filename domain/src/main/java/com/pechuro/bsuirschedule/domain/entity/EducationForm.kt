@@ -8,3 +8,6 @@ data class EducationForm(
         val id: Long,
         val name: String
 ) : Parcelable
+
+val EducationForm.isPartTime: Boolean
+    get() = name == "заочная"

@@ -14,6 +14,6 @@ data class Group(
 
 val Group.availableScheduleTypes: Iterable<ScheduleType>
     get() = when {
-        speciality.educationForm.name == "заочная" -> listOf(ScheduleType.EXAMS)
+        speciality.educationForm.isPartTime -> listOf(ScheduleType.EXAMS)
         else -> ScheduleType.values().toList()
     }
