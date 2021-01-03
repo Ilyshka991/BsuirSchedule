@@ -11,3 +11,9 @@ data class Group(
         val speciality: Speciality,
         val course: Int
 ) : Parcelable
+
+val Group.availableScheduleTypes: Iterable<ScheduleType>
+    get() = when {
+        speciality.educationForm.name == "заочная" -> listOf(ScheduleType.EXAMS)
+        else -> ScheduleType.values().toList()
+    }

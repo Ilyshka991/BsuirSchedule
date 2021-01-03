@@ -5,12 +5,10 @@ import com.pechuro.bsuirschedule.common.AppAnalytics
 import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.fold
-import com.pechuro.bsuirschedule.domain.entity.Employee
-import com.pechuro.bsuirschedule.domain.entity.Group
-import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.domain.entity.ScheduleType
+import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.domain.interactor.LoadEmployeeSchedule
 import com.pechuro.bsuirschedule.domain.interactor.LoadGroupSchedule
+import com.pechuro.bsuirschedule.ext.addIfEmpty
 import javax.inject.Inject
 
 class AddScheduleViewModel @Inject constructor(
@@ -21,15 +19,16 @@ class AddScheduleViewModel @Inject constructor(
     val state = MutableLiveData<State>(State.Idle)
 
     fun loadSchedule(group: Group, types: List<ScheduleType>) {
-        if (types.isEmpty()) return
+        val resultTypes = correlateScheduleTypes(group, types)
+        if (resultTypes.isEmpty()) return
         state.value = State.Loading
         launchCoroutine {
-            loadGroupSchedule.execute(LoadGroupSchedule.Params(group, types)).fold(
+            loadGroupSchedule.execute(LoadGroupSchedule.Params(group, resultTypes)).fold(
                     onSuccess = {
                         it.firstOrNull()?.let { schedule ->
                             AppAnalytics.report(AppAnalyticsEvent.AddSchedule.ScheduleLoaded(
                                     schedule = schedule,
-                                    types = types
+                                    types = resultTypes
                             ))
                         }
                         state.value = State.Complete(it)
@@ -64,6 +63,17 @@ class AddScheduleViewModel @Inject constructor(
 
     fun cancel() {
         state.value = State.Idle
+    }
+
+    private fun correlateScheduleTypes(group: Group, typesToDownload: List<ScheduleType>): List<ScheduleType> {
+        val availableTypes = group.availableScheduleTypes
+        return typesToDownload
+                .intersect(availableTypes)
+                .addIfEmpty {
+                    availableTypes.firstOrNull()
+                }
+                .filterNotNull()
+                .toList()
     }
 
     sealed class State {
