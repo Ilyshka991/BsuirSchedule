@@ -2,7 +2,6 @@ package com.pechuro.bsuirschedule.data.mappers
 
 import android.annotation.SuppressLint
 import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.domain.exception.DataSourceException
 import com.pechuro.bsuirschedule.domain.ext.parseOrDefault
 import com.pechuro.bsuirschedule.remote.dto.*
 import java.text.DateFormat
@@ -156,7 +155,7 @@ internal fun List<ScheduleItemDTO>.toGroupExams(
             val lessonEmployees = lesson.employees?.map { employeeDto ->
                 val department = departments.find {
                     it.abbreviation == employeeDto.departmentAbbreviation.firstOrNull()
-                } ?: throw DataSourceException.InvalidData
+                }
                 employeeDto.toDomainEntity(department)
             }
             val mappedScheduleItem = Exam.GroupExam(
