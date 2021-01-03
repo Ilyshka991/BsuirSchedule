@@ -5,6 +5,10 @@ BSUIR Schedule viewer for students and employees.
 
 [Read](docs/privacy_policy.md) our privacy policy
 
+## Status
+
+![Build](https://github.com/Ilyshka991/BsuirSchedule/workflows/Build/badge.svg?branch=master)
+
 ## License
 
    Copyright 2020 Pechuro
