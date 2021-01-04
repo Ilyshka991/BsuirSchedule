@@ -4,14 +4,13 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
-import com.pechuro.bsuirschedule.ext.app
-import com.pechuro.bsuirschedule.ext.clearAdapter
-import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.*
 import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel.Event.OnScheduleItemClicked
@@ -89,7 +88,14 @@ class DisplayScheduleFragment : BaseFragment() {
 
     private fun observeData() {
         viewModel.getItems(itemInfo).nonNull().observe(viewLifecycleOwner) {
-            itemsAdapter.submitList(it)
+            itemsAdapter.submitList(it) {
+                whenStateAtLeast(Lifecycle.State.CREATED) {
+                    if (itemsAdapter.dataUpdatesCount <= 1) {
+                        val scrollTo = viewModel.calculateFirstVisibleItem(it)
+                        displayScheduleRecyclerView.scrollToPosition(scrollTo)
+                    }
+                }
+            }
         }
     }
 }

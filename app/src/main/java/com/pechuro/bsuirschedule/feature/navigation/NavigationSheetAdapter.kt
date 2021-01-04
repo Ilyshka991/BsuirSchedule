@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.ListAdapter
 import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.*
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState.*
@@ -109,8 +108,9 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
 
         override fun onBind(data: Title) {
             val titleRes = when (data.scheduleType) {
-                ScheduleType.CLASSES -> R.string.navigation_title_classes
-                ScheduleType.EXAMS -> R.string.navigation_title_exams
+                Title.Type.CLASSES -> R.string.navigation_title_classes
+                Title.Type.EXAMS -> R.string.navigation_title_exams
+                Title.Type.PART_TIME -> R.string.navigation_title_part_time
             }
             (containerView as? TextView)?.setText(titleRes)
         }
