@@ -29,6 +29,7 @@
 
     <string name="navigation_title_classes">Занятия</string>
     <string name="navigation_title_exams">Экзамены</string>
+    <string name="navigation_title_part_time">Заочная</string>
     <string name="navigation_action_add_schedule">Добавить расписание</string>
     <string name="navigation_action_settings">Настройки</string>
     <string name="navigation_msg_no_schedules">Нет расписаний</string>

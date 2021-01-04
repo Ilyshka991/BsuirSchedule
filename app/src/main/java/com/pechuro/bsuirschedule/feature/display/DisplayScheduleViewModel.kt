@@ -84,6 +84,13 @@ class DisplayScheduleViewModel @Inject constructor(
         }
     }
 
+    fun calculateFirstVisibleItem(items: List<DisplayScheduleItem>): Int {
+        val currentDate = LocalDate.current()
+        return items.indexOfFirst {
+            it is DisplayScheduleItem.Exams && it.scheduleItem.date >= currentDate
+        }
+    }
+
     private fun mapToDisplayScheduleItems(
             scheduleItems: List<ScheduleItem>,
             info: DisplayScheduleItemInfo,

@@ -6,11 +6,12 @@ import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.domain.entity.ScheduleType
+import com.pechuro.bsuirschedule.domain.entity.isPartTime
 import com.pechuro.bsuirschedule.domain.interactor.*
 import com.pechuro.bsuirschedule.domain.interactor.GetAvailableForUpdateSchedules.Params
 import com.pechuro.bsuirschedule.ext.flowLiveData
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Title
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -125,40 +126,58 @@ class NavigationSheetViewModel @Inject constructor(
             return resultList
         }
 
-        val allClasses = scheduleList
-                .filter { it is Schedule.GroupClasses || it is Schedule.EmployeeClasses }
+        val allClasses = scheduleList.filter {
+            it is Schedule.GroupClasses || it is Schedule.EmployeeClasses
+        }
         if (allClasses.isNotEmpty()) {
-            resultList += NavigationSheetItemInformation.Title(ScheduleType.CLASSES)
-            resultList += allClasses
-                    .sortedBy { it.name }
-                    .map {
-                        val updateState = when {
-                            updateStates.containsKey(it) -> updateStates.getValue(it)
-                            it in availableForUpdateScheduleList -> UpdateState.AVAILABLE
-                            else -> UpdateState.NOT_AVAILABLE
-                        }
-                        val isSelected = it == selectedSchedule
-                        NavigationSheetItemInformation.Content(it, updateState, isSelected)
-                    }
+            resultList += Title(Title.Type.CLASSES)
+            resultList += allClasses.mapToNavInfo(
+                    availableForUpdateScheduleList = availableForUpdateScheduleList,
+                    updateStates = updateStates,
+                    selectedSchedule = selectedSchedule
+            )
         }
 
-        val allExams = scheduleList
-                .filter { it is Schedule.GroupExams || it is Schedule.EmployeeExams }
-        if (allExams.isNotEmpty()) {
-            resultList += NavigationSheetItemInformation.Title(ScheduleType.EXAMS)
-            resultList += allExams
-                    .sortedBy { it.name }
-                    .map {
-                        val updateState = when {
-                            updateStates.containsKey(it) -> updateStates.getValue(it)
-                            it in availableForUpdateScheduleList -> UpdateState.AVAILABLE
-                            else -> UpdateState.NOT_AVAILABLE
-                        }
-                        val isSelected = it == selectedSchedule
-                        NavigationSheetItemInformation.Content(it, updateState, isSelected)
-                    }
+        val allExams = scheduleList.filter {
+            (it is Schedule.GroupExams && !it.group.speciality.educationForm.isPartTime)
+                    || it is Schedule.EmployeeExams
         }
+        if (allExams.isNotEmpty()) {
+            resultList += Title(Title.Type.EXAMS)
+            resultList += allExams.mapToNavInfo(
+                    availableForUpdateScheduleList = availableForUpdateScheduleList,
+                    updateStates = updateStates,
+                    selectedSchedule = selectedSchedule
+            )
+        }
+
+        val allPartTime = scheduleList.filter {
+            it is Schedule.GroupExams && it.group.speciality.educationForm.isPartTime
+        }
+        if (allPartTime.isNotEmpty()) {
+            resultList += Title(Title.Type.PART_TIME)
+            resultList += allPartTime.mapToNavInfo(
+                    availableForUpdateScheduleList = availableForUpdateScheduleList,
+                    updateStates = updateStates,
+                    selectedSchedule = selectedSchedule
+            )
+        }
+
         return resultList.toList()
+    }
+
+    private fun List<Schedule>.mapToNavInfo(
+            availableForUpdateScheduleList: List<Schedule>,
+            updateStates: Map<Schedule, UpdateState>,
+            selectedSchedule: Schedule?
+    ) = sortedBy { it.name }.map {
+        val updateState = when {
+            updateStates.containsKey(it) -> updateStates.getValue(it)
+            it in availableForUpdateScheduleList -> UpdateState.AVAILABLE
+            else -> UpdateState.NOT_AVAILABLE
+        }
+        val isSelected = it == selectedSchedule
+        NavigationSheetItemInformation.Content(it, updateState, isSelected)
     }
 
     private fun setUpdateState(schedule: Schedule, state: UpdateState) {

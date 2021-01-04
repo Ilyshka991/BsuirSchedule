@@ -59,6 +59,19 @@ class DisplayScheduleItemAdapter(
         }
     }
 
+    var dataUpdatesCount = 0
+        private set
+
+    override fun submitList(list: List<DisplayScheduleItem>?) {
+        dataUpdatesCount++
+        super.submitList(list)
+    }
+
+    override fun submitList(list: List<DisplayScheduleItem>?, commitCallback: Runnable?) {
+        dataUpdatesCount++
+        super.submitList(list, commitCallback)
+    }
+
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
         is DisplayScheduleItem.DayClasses, is DisplayScheduleItem.WeekClasses -> CLASSES_VIEW_TYPE_LAYOUT_ID
         is DisplayScheduleItem.Exams -> EXAMS_VIEW_TYPE_LAYOUT_ID
