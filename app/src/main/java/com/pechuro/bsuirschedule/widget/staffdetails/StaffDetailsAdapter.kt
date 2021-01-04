@@ -74,8 +74,8 @@ class StaffDetailsAdapter : ListAdapter<StaffDetailsInfo, BaseViewHolder<StaffDe
                     .load(url)
                     .override(SIZE_ORIGINAL)
                     .format(DecodeFormat.PREFER_ARGB_8888)
-                    .placeholder(R.drawable.employee_placeholder)
-                    .error(R.drawable.employee_placeholder)
+                    .placeholder(R.drawable.ic_employee_placeholder)
+                    .error(R.drawable.ic_employee_placeholder)
                     .circleCrop()
                     .into(this)
         }
