@@ -363,8 +363,16 @@ class ScheduleRepositoryImpl(
         dao.insertGroupClassesItems(cached)
     }
 
-    private suspend fun getEmployeeLessonWeeks(lesson: Lesson.EmployeeLesson): List<WeekNumber> {
-        TODO("Not yet implemented")
+    private suspend fun getEmployeeLessonWeeks(lesson: Lesson.EmployeeLesson): List<WeekNumber> = performDaoCall {
+        dao.getEmployeeClassesWeeks(
+                id = lesson.id,
+                subject = lesson.subject,
+                subgroupNumber = lesson.subgroupNumber.value,
+                lessonType = lesson.lessonType,
+                startTime = lesson.startTime.toDate(),
+                endTime = lesson.endTime.toDate(),
+                weekDay = lesson.weekDay.index
+        ).map { WeekNumber.getForIndex(it) }
     }
 
     private suspend fun getGroupLessonWeeks(lesson: Lesson.GroupLesson): List<WeekNumber> = performDaoCall {

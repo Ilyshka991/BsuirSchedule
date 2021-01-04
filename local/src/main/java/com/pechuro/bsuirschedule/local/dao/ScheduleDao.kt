@@ -14,20 +14,6 @@ import java.util.*
 interface ScheduleDao {
 
     @Transaction
-    suspend fun getGroupClassesWeeks(
-            id: Long,
-            subject: String,
-            subgroupNumber: Int,
-            lessonType: String,
-            startTime: Date,
-            endTime: Date,
-            weekDay: Int
-    ): List<Int> {
-        val scheduleName = getGroupClassesById(id).scheduleName
-        return getGroupClassesWeeks(scheduleName, subject, subgroupNumber, lessonType, startTime, endTime, weekDay)
-    }
-
-    @Transaction
     suspend fun insertGroupClassesSchedule(
             schedule: GroupClassesScheduleCached,
             items: List<GroupClassesItemComplex>
@@ -401,6 +387,17 @@ interface ScheduleDao {
             weekDay: Int
     ): List<Int>
 
+    @Query("SELECT week_number FROM employee_item_classes WHERE schedule_name = :scheduleName AND subject = :subject AND subgroup_number = :subgroupNumber AND lesson_type = :lessonType AND start_time = :startTime AND end_time = :endTime AND week_day = :weekDay")
+    suspend fun getEmployeeClassesWeeks(
+            scheduleName: String,
+            subject: String,
+            subgroupNumber: Int,
+            lessonType: String,
+            startTime: Date,
+            endTime: Date,
+            weekDay: Int
+    ): List<Int>
+
 
     @Query("SELECT * FROM group_item_classes WHERE id = :id")
     suspend fun getGroupClassesById(id: Long): GroupItemClassesCached
@@ -413,4 +410,49 @@ interface ScheduleDao {
 
     @Query("SELECT * FROM employee_item_exam WHERE id = :id")
     suspend fun getEmployeeExamById(id: Long): EmployeeItemExamCached
+
+
+    @Transaction
+    suspend fun getGroupClassesWeeks(
+            id: Long,
+            subject: String,
+            subgroupNumber: Int,
+            lessonType: String,
+            startTime: Date,
+            endTime: Date,
+            weekDay: Int
+    ): List<Int> {
+        val scheduleName = getGroupClassesById(id).scheduleName
+        return getGroupClassesWeeks(
+                scheduleName = scheduleName,
+                subject = subject,
+                subgroupNumber = subgroupNumber,
+                lessonType = lessonType,
+                startTime = startTime,
+                endTime = endTime,
+                weekDay = weekDay
+        ).distinct()
+    }
+
+    @Transaction
+    suspend fun getEmployeeClassesWeeks(
+            id: Long,
+            subject: String,
+            subgroupNumber: Int,
+            lessonType: String,
+            startTime: Date,
+            endTime: Date,
+            weekDay: Int
+    ): List<Int> {
+        val scheduleName = getEmployeeClassesById(id).scheduleName
+        return getEmployeeClassesWeeks(
+                scheduleName = scheduleName,
+                subject = subject,
+                subgroupNumber = subgroupNumber,
+                lessonType = lessonType,
+                startTime = startTime,
+                endTime = endTime,
+                weekDay = weekDay
+        ).distinct()
+    }
 }
