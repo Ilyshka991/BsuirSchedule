@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.AppAnalytics
@@ -297,8 +298,10 @@ class FlowFragment : BaseFragment(),
     private fun openUpdateSchedules(schedules: List<Schedule>) {
         val currentFragment = getCurrentFragment()
         if (currentFragment is DisplayScheduleFragmentContainer || currentFragment is StartFragment) {
-            val args = UpdateScheduleSheetArgs(schedules)
-            showDialog(UpdateScheduleSheet.newInstance(args), UpdateScheduleSheet.TAG)
+            whenStateAtLeast(Lifecycle.State.RESUMED) {
+                val args = UpdateScheduleSheetArgs(schedules)
+                showDialog(UpdateScheduleSheet.newInstance(args), UpdateScheduleSheet.TAG)
+            }
         }
     }
 
