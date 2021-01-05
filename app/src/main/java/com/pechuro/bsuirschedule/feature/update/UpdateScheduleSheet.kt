@@ -8,7 +8,12 @@ import com.pechuro.bsuirschedule.common.AppAnalytics
 import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.ext.args
+import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.observe
+import com.pechuro.bsuirschedule.ext.setSafeClickListener
+import com.pechuro.bsuirschedule.ext.setVisibleOrInvisibleWithAlpha
+import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
 import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheetViewModel.State
 import kotlinx.android.synthetic.main.sheet_update_schedule.*
 

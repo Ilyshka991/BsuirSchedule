@@ -1,7 +1,16 @@
 package com.pechuro.bsuirschedule.common
 
 import com.flurry.android.FlurryAgent
-import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.*
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.AddSchedule
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.Details
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.DisplaySchedule
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.Edit
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.InfoLoad
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.Navigation
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.RateApp
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.Settings
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.UpdateSchedule
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.Widget
 import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.entity.Exam
 import com.pechuro.bsuirschedule.domain.entity.Lesson

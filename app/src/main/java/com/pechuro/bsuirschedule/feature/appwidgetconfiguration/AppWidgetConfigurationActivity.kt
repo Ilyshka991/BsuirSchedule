@@ -11,7 +11,11 @@ import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseActivity
 import com.pechuro.bsuirschedule.domain.entity.ScheduleWidgetInfo.WidgetTheme
 import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
-import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.ext.formattedStringRes
+import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.observe
+import com.pechuro.bsuirschedule.ext.requireValue
+import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.MainActivity
 import com.pechuro.bsuirschedule.feature.confirmationdialog.ConfirmationDialog
 import com.pechuro.bsuirschedule.feature.confirmationdialog.ConfirmationDialogButtonData

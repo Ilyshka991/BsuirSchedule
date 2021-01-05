@@ -9,11 +9,11 @@ import com.pechuro.bsuirschedule.local.entity.education.SpecialityCached
 @Entity(
         tableName = "group",
         foreignKeys = [
-            ForeignKey(
-                    entity = SpecialityCached::class,
-                    parentColumns = ["id"],
-                    childColumns = ["speciality_id"],
-                    onDelete = ForeignKey.CASCADE)
+                ForeignKey(
+                        entity = SpecialityCached::class,
+                        parentColumns = ["id"],
+                        childColumns = ["speciality_id"],
+                        onDelete = ForeignKey.CASCADE)
         ]
 )
 data class GroupCached(

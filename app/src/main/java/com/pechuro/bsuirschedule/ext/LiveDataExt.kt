@@ -1,6 +1,10 @@
 package com.pechuro.bsuirschedule.ext
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.asLiveData
 import com.pechuro.bsuirschedule.domain.common.Logger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

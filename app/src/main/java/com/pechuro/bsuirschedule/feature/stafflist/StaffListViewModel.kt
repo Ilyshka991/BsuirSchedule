@@ -12,7 +12,10 @@ import com.pechuro.bsuirschedule.domain.interactor.GetAuditories
 import com.pechuro.bsuirschedule.domain.interactor.GetEmployees
 import com.pechuro.bsuirschedule.domain.interactor.GetGroups
 import com.pechuro.bsuirschedule.ext.flowLiveData
-import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.*
+import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.AuditoryInfo
+import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.EmployeeInfo
+import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.Empty
+import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.GroupInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map

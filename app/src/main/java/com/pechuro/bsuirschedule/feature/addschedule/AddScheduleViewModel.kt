@@ -5,7 +5,11 @@ import com.pechuro.bsuirschedule.common.AppAnalytics
 import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.fold
-import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.entity.Employee
+import com.pechuro.bsuirschedule.domain.entity.Group
+import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleType
+import com.pechuro.bsuirschedule.domain.entity.availableScheduleTypes
 import com.pechuro.bsuirschedule.domain.interactor.LoadEmployeeSchedule
 import com.pechuro.bsuirschedule.domain.interactor.LoadGroupSchedule
 import com.pechuro.bsuirschedule.ext.addIfEmpty

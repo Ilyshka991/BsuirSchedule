@@ -15,7 +15,11 @@ import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Building
 import com.pechuro.bsuirschedule.domain.entity.LessonPriority
 import com.pechuro.bsuirschedule.domain.entity.coordinates
-import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.ext.args
+import com.pechuro.bsuirschedule.ext.color
+import com.pechuro.bsuirschedule.ext.formattedColorRes
+import com.pechuro.bsuirschedule.ext.formattedStringRes
+import com.pechuro.bsuirschedule.ext.nonNull
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialog
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogButtonData
 import kotlinx.android.synthetic.main.fragment_schedule_item_details.*

@@ -1,6 +1,14 @@
 package com.pechuro.bsuirschedule.feature.itemdetails
 
-import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.entity.Auditory
+import com.pechuro.bsuirschedule.domain.entity.Employee
+import com.pechuro.bsuirschedule.domain.entity.Group
+import com.pechuro.bsuirschedule.domain.entity.LessonPriority
+import com.pechuro.bsuirschedule.domain.entity.LocalDate
+import com.pechuro.bsuirschedule.domain.entity.LocalTime
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
+import com.pechuro.bsuirschedule.domain.entity.WeekDay
+import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 
 sealed class ScheduleItemDetailsInfo {
 

@@ -10,8 +10,16 @@ import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import androidx.core.graphics.drawable.toBitmap
 import com.bsuir.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.domain.entity.Exam
+import com.pechuro.bsuirschedule.domain.entity.Lesson
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.ScheduleWidgetInfo
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
+import com.pechuro.bsuirschedule.ext.app
+import com.pechuro.bsuirschedule.ext.color
+import com.pechuro.bsuirschedule.ext.dimenPx
+import com.pechuro.bsuirschedule.ext.formattedColorRes
+import com.pechuro.bsuirschedule.ext.formattedString
 import com.pechuro.bsuirschedule.feature.display.fragment.formatAuditories
 import javax.inject.Inject
 
