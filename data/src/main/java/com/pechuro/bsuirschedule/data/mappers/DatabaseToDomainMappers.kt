@@ -82,13 +82,11 @@ internal fun BuildingCached.toDomainEntity() = run {
 }
 
 internal fun GroupCached.toDomainEntity(
-        faculty: Faculty,
         speciality: Speciality
 ) = run {
     Group(
             id = id,
             number = number,
-            faculty = faculty,
             course = course,
             speciality = speciality
     )

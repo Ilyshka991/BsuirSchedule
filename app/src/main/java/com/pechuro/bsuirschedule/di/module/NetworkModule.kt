@@ -4,7 +4,10 @@ import com.pechuro.bsuirschedule.di.annotations.AppScope
 import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.remote.ApiConfig.BASE_URL
 import com.pechuro.bsuirschedule.remote.ApiConfig.CONNECT_TIMEOUT
-import com.pechuro.bsuirschedule.remote.api.*
+import com.pechuro.bsuirschedule.remote.api.BuildingApi
+import com.pechuro.bsuirschedule.remote.api.ScheduleApi
+import com.pechuro.bsuirschedule.remote.api.SpecialityApi
+import com.pechuro.bsuirschedule.remote.api.StaffApi
 import com.pechuro.bsuirschedule.remote.common.NetworkAvailabilityChecker
 import com.pechuro.bsuirschedule.remote.interceptor.NetworkAvailabilityInterceptor
 import com.squareup.moshi.Moshi
@@ -68,11 +71,6 @@ class NetworkModule {
     @AppScope
     fun provideConverterFactory(moshi: Moshi): Converter.Factory =
             MoshiConverterFactory.create(moshi)
-
-    @Provides
-    @AppScope
-    fun provideAnnouncementApi(retrofit: Retrofit): AnnouncementApi =
-            retrofit.create(AnnouncementApi::class.java)
 
     @Provides
     @AppScope

@@ -85,15 +85,6 @@ interface SpecialityDao {
     }
 
 
-    @Query("DELETE FROM speciality")
-    suspend fun deleteAllSpecialities()
-
-    @Query("DELETE FROM faculty")
-    suspend fun deleteAllFaculties()
-
-    @Query("DELETE FROM department")
-    suspend fun deleteAllDepartments()
-
     @Query("SELECT * FROM department")
     fun getAllDepartments(): Flow<List<DepartmentCached>>
 
@@ -102,9 +93,6 @@ interface SpecialityDao {
 
     @Query("SELECT * FROM faculty")
     fun getAllFaculties(): Flow<List<FacultyCached>>
-
-    @Query("SELECT * FROM education_form")
-    fun getAllEducationForms(): Flow<List<EducationFormCached>>
 
     @Query("SELECT * FROM department WHERE id = :id")
     suspend fun getDepartmentById(id: Long): DepartmentCached

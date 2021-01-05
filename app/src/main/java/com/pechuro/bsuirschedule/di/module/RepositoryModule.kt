@@ -5,7 +5,10 @@ import com.pechuro.bsuirschedule.di.annotations.AppScope
 import com.pechuro.bsuirschedule.domain.repository.*
 import com.pechuro.bsuirschedule.local.dao.*
 import com.pechuro.bsuirschedule.local.sharedprefs.SharedPreferencesManager
-import com.pechuro.bsuirschedule.remote.api.*
+import com.pechuro.bsuirschedule.remote.api.BuildingApi
+import com.pechuro.bsuirschedule.remote.api.ScheduleApi
+import com.pechuro.bsuirschedule.remote.api.SpecialityApi
+import com.pechuro.bsuirschedule.remote.api.StaffApi
 import dagger.Module
 import dagger.Provides
 
@@ -75,11 +78,6 @@ class RepositoryModule {
             dao = dao,
             specialityRepository = specialityRepository
     )
-
-    @Provides
-    @AppScope
-    fun provideAnnouncementRepository(api: AnnouncementApi): IAnnouncementRepository =
-            AnnouncementRepositoryImpl(api)
 
     @Provides
     @AppScope

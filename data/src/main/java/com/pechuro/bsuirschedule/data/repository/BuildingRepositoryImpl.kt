@@ -4,7 +4,6 @@ import com.pechuro.bsuirschedule.data.common.BaseRepository
 import com.pechuro.bsuirschedule.data.mappers.toDatabaseEntity
 import com.pechuro.bsuirschedule.data.mappers.toDomainEntity
 import com.pechuro.bsuirschedule.domain.entity.Auditory
-import com.pechuro.bsuirschedule.domain.entity.AuditoryType
 import com.pechuro.bsuirschedule.domain.repository.IBuildingRepository
 import com.pechuro.bsuirschedule.domain.repository.ISpecialityRepository
 import com.pechuro.bsuirschedule.local.dao.BuildingDao
@@ -25,19 +24,6 @@ class BuildingRepositoryImpl(
             updateCache()
         }
         return getAllAuditoriesFromDao()
-    }
-
-    override suspend fun getAllAuditoryTypes(): Flow<List<AuditoryType>> {
-        if (!isCached()) {
-            updateCache()
-        }
-        return dao.getAllAuditoryTypes()
-                .map { cachedList ->
-                    cachedList.map { auditoryTypeCached ->
-                        auditoryTypeCached.toDomainEntity()
-                    }
-                }
-                .flowOn(Dispatchers.IO)
     }
 
     override suspend fun getAuditoryById(id: Long): Auditory {

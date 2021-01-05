@@ -84,9 +84,10 @@ class StaffAdapter(
         override fun onBind(data: StaffItemInformation.GroupInfo) {
             with(data.group) {
                 staffGroupNumber.text = number
-                staffGroupFacultyAbbreviation.text = faculty.abbreviation
+                staffGroupFacultyAbbreviation.text = speciality.faculty?.abbreviation ?: ""
                 staffGroupSpecialityAbbreviation.text = speciality.abbreviation
                 staffGroupEducationForm.text = speciality.educationForm.name + ","
+                staffGroupCourse.isVisible = course != -1
                 staffGroupCourse.text = itemView.context.getString(
                         R.string.staff_list_msg_group_course,
                         course
@@ -140,6 +141,7 @@ class StaffAdapter(
             with(data.auditory) {
                 staffAuditoryName.text = formattedName
                 staffAuditoryType.text = auditoryType.name
+                staffAuditoryType.isVisible = auditoryType.name.isNotEmpty()
                 staffAuditoryCapacity.isVisible = capacity != 0 && capacity != -1
                 staffAuditoryCapacity.text = itemView.context.getString(
                         R.string.staff_list_msg_auditory_capacity,

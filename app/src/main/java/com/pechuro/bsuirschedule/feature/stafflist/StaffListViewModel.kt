@@ -28,7 +28,7 @@ class StaffListViewModel @Inject constructor(
 
     private val allGroupsListData = flowLiveData {
         getGroups.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
-                .map { list -> list.sortedWith(compareBy<Group> { it.faculty.abbreviation }.thenBy { it.number }) }
+                .map { list -> list.sortedWith(compareBy<Group> { it.speciality.faculty?.abbreviation }.thenBy { it.number }) }
                 .map { it.map { GroupInfo(it) } }
     }
     private val allAuditoriesListData = flowLiveData {

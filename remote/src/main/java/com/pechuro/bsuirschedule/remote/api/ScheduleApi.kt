@@ -7,14 +7,6 @@ import retrofit2.http.Query
 
 interface ScheduleApi {
 
-    @GET("week")
-    suspend fun getCurrentWeek(): Int
-
-    @GET("studentGroup/schedule")
-    suspend fun getStudentSchedule(
-            @Query(value = "studentGroup") name: String
-    ): ScheduleDTO
-
     @GET("studentGroup/schedule")
     suspend fun getStudentSchedule(
             @Query(value = "id") id: Long

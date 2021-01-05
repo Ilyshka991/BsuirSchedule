@@ -90,7 +90,6 @@ internal fun Group.toDatabaseEntity() = run {
     GroupCached(
             id = id,
             number = number,
-            facultyId = faculty.id,
             course = course,
             specialityId = speciality.id
     )
