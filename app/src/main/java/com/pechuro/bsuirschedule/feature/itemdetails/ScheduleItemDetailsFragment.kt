@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.lifecycle.observe
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.AppAnalytics
 import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
@@ -60,6 +61,11 @@ class ScheduleItemDetailsFragment : BaseFragment() {
             activity?.onBackPressed()
         }
         scheduleItemDetailsRootRecycler.adapter = adapter
+        val animator = scheduleItemDetailsRootRecycler.itemAnimator as? SimpleItemAnimator
+        animator?.apply {
+            addDuration = 0L
+            changeDuration = 0L
+        }
     }
 
     private fun observeData() {

@@ -54,7 +54,8 @@
     <string name="display_schedule_item_msg_subgroup">%1$d subgroup</string>
     <string name="display_schedule_item_msg_week_numbers">weeks: %1$s</string>
     <string name="display_schedule_item_msg_empty_list">Nothing there</string>
-    <string name="display_schedule__hint_schedule_actions">You can view details by single tap on item, or modify by long tap</string>
+    <string name="display_schedule_hint_schedule_actions">You can view details by single tap on item, or modify by long tap</string>
+    <string name="display_schedule_hint_exam_actions">You can view details by single tap on item, or modify by long tap</string>
 
     <string name="display_options_sheet_title_type">Display by %1$s</string>
     <string name="display_options_sheet_msg_type_weeks">weeks</string>

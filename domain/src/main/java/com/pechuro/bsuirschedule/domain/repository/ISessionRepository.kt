@@ -25,9 +25,9 @@ interface ISessionRepository {
 
     suspend fun setNavigationHintDisplayState(shown: Boolean)
 
-    suspend fun getScheduleHintDisplayState(): Flow<Boolean>
+    suspend fun getScheduleHintDisplayState(): Flow<HintDisplayState>
 
-    suspend fun setScheduleHintDisplayState(shown: Boolean)
+    suspend fun setScheduleHintDisplayState(state: HintDisplayState)
 
     suspend fun getRateAppAskInfo(): RateAppAskInfo
 

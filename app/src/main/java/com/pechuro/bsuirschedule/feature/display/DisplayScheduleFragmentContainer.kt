@@ -6,8 +6,8 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayoutMediator
 import com.bsuir.pechuro.bsuirschedule.R
+import com.google.android.material.tabs.TabLayoutMediator
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
@@ -135,7 +135,12 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
                 is OnScheduleItemLongClicked -> actionCallback?.onDisplayScheduleOpenOptions(event.data)
             }
         }
-        viewModel.hintDisplayState.nonNull().observe(viewLifecycleOwner) { shown ->
+        viewModel.hintDisplayState.nonNull().observe(viewLifecycleOwner) { state ->
+            val (hintResId, shown) = when (schedule) {
+                is Schedule.GroupClasses, is Schedule.EmployeeClasses -> R.string.display_schedule_hint_schedule_actions to state.lessonHintShown
+                is Schedule.GroupExams, is Schedule.EmployeeExams -> R.string.display_schedule_hint_exam_actions to state.examHintShown
+            }
+            scheduleActionsHintText.setText(hintResId)
             scheduleActionsHintParentView.isVisible = !shown
         }
     }
@@ -164,7 +169,10 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
         }
 
         scheduleActionsHintOkButton.setSafeClickListener {
-            viewModel.dismissHint()
+            when (schedule) {
+                is Schedule.GroupClasses, is Schedule.EmployeeClasses -> viewModel.dismissLessonHint()
+                is Schedule.GroupExams, is Schedule.EmployeeExams -> viewModel.dismissExamHint()
+            }
         }
     }
 

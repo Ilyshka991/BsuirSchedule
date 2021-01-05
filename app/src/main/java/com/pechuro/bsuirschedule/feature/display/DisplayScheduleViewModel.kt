@@ -78,9 +78,25 @@ class DisplayScheduleViewModel @Inject constructor(
         addSource(displaySubgroupNumber) { transformFunction() }
     }
 
-    fun dismissHint() {
+    fun dismissLessonHint() {
         launchCoroutine {
-            setScheduleHintDisplayState.execute(SetScheduleHintDisplayState.Params(shown = true))
+            val currentState = hintDisplayState.value
+            val newState = HintDisplayState(
+                    lessonHintShown = true,
+                    examHintShown = currentState?.examHintShown ?: false
+            )
+            setScheduleHintDisplayState.execute(SetScheduleHintDisplayState.Params(newState))
+        }
+    }
+
+    fun dismissExamHint() {
+        launchCoroutine {
+            val currentState = hintDisplayState.value
+            val newState = HintDisplayState(
+                    lessonHintShown = currentState?.lessonHintShown ?: false,
+                    examHintShown = true
+            )
+            setScheduleHintDisplayState.execute(SetScheduleHintDisplayState.Params(newState))
         }
     }
 

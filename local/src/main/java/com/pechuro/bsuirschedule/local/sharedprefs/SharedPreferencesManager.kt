@@ -21,7 +21,7 @@ class SharedPreferencesManager @Inject constructor(
         private const val KEY_SUBGROUP_NUMBER = "KEY_SUBGROUP_NUMBER"
         private const val KEY_APP_THEME = "KEY_APP_THEME"
         private const val KEY_NAVIGATION_HINT_SHOWN = "KEY_NAVIGATION_HINT_SHOWN"
-        private const val KEY_SCHEDULE_HINT_SHOWN = "KEY_SCHEDULE_HINT_SHOWN"
+        private const val KEY_SCHEDULE_HINT_STATE = "KEY_SCHEDULE_HINT_STATE"
         private const val KEY_SCHEDULE_WIDGET_INFO = "KEY_SCHEDULE_WIDGET_INFO"
         private const val KEY_RATE_APP_ASK_INFO = "KEY_RATE_APP_ASK_INFO"
     }
@@ -29,6 +29,7 @@ class SharedPreferencesManager @Inject constructor(
     private val openedScheduleJsonAdapter = moshi.adapter(LocalScheduleInfo::class.java)
     private val widgetInfoJsonAdapter = moshi.adapter(LocalScheduleWidgetInfo::class.java)
     private val rateAppAskInfoJsonAdapter = moshi.adapter(LocalRateAppAskInfo::class.java)
+    private val scheduleHintDisplayStateJsonAdapter = moshi.adapter(LocalHintDisplayState::class.java)
 
 
     fun getLastOpenedSchedule(): Flow<LocalScheduleInfo?> = getFlow(KEY_OPENED_SCHEDULE) {
@@ -75,10 +76,15 @@ class SharedPreferencesManager @Inject constructor(
         put(KEY_RATE_APP_ASK_INFO, jsonString)
     }
 
-    fun getScheduleHintDisplayState(default: Boolean): Flow<Boolean> = getFlow(KEY_SCHEDULE_HINT_SHOWN) { default }
+    fun getScheduleHintDisplayState(): Flow<LocalHintDisplayState?> = getFlow(KEY_SCHEDULE_HINT_STATE) {
+        scheduleHintDisplayStateJsonAdapter.toJson(null)
+    }.map {
+        scheduleHintDisplayStateJsonAdapter.fromJson(it)
+    }
 
-    fun setScheduleHintDisplayState(shown: Boolean) {
-        put(KEY_SCHEDULE_HINT_SHOWN, shown)
+    fun setScheduleHintDisplayState(state: LocalHintDisplayState) {
+        val jsonString = scheduleHintDisplayStateJsonAdapter.toJson(state)
+        put(KEY_SCHEDULE_HINT_STATE, jsonString)
     }
 
     fun getAllScheduleWidgetInfoList(): List<LocalScheduleWidgetInfo> = preferences.all
