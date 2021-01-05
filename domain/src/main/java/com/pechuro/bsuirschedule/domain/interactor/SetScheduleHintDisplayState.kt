@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.domain.interactor
 
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
+import com.pechuro.bsuirschedule.domain.entity.HintDisplayState
 import com.pechuro.bsuirschedule.domain.repository.ISessionRepository
 import javax.inject.Inject
 
@@ -9,10 +10,10 @@ class SetScheduleHintDisplayState @Inject constructor(
 ) : BaseInteractor<Unit, SetScheduleHintDisplayState.Params>() {
 
     override suspend fun run(params: Params) {
-        sessionRepository.setScheduleHintDisplayState(params.shown)
+        sessionRepository.setScheduleHintDisplayState(params.newState)
     }
 
     data class Params(
-            val shown: Boolean
+            val newState: HintDisplayState
     )
 }

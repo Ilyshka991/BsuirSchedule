@@ -29,11 +29,11 @@
 
     <string name="navigation_title_classes">Занятия</string>
     <string name="navigation_title_exams">Экзамены</string>
-    <string name="navigation_title_part_time">Заочная</string>
+    <string name="navigation_title_part_time">Заочное</string>
     <string name="navigation_action_add_schedule">Добавить расписание</string>
     <string name="navigation_action_settings">Настройки</string>
     <string name="navigation_msg_no_schedules">Нет расписаний</string>
-    <string name="navigation_msg_schedule_update_in_progress">Обновление…</string>
+    <string name="navigation_msg_schedule_update_in_progress">Обновление</string>
     <string name="navigation_msg_schedule_update_error">Не обновлено.</string>
     <string name="navigation_msg_schedule_update_available">Доступно обновление</string>
     <string name="navigation_msg_schedule_update_success">Обновлено</string>
@@ -52,9 +52,10 @@
     <string name="display_schedule_item_msg_subgroup">%1$d подгруппа</string>
     <string name="display_schedule_item_msg_week_numbers">Недели %1$s</string>
     <string name="display_schedule_item_msg_empty_list">Нет занятий</string>
-    <string name="display_schedule__hint_schedule_actions">Коснитесь занятия для подробностей, коснитесь и удерживайте для изменения</string>
+    <string name="display_schedule_hint_schedule_actions">Коснитесь для подробностей, коснитесь и удерживайте для изменения</string>
+    <string name="display_schedule_hint_exam_actions">Коснитесь для подробностей, коснитесь и удерживайте для изменения</string>
 
-    <string name="display_options_sheet_title_type">Отображать по %1$s</string>
+    <string name="display_options_sheet_title_type">Отображение по %1$s</string>
     <string name="display_options_sheet_msg_type_weeks">неделям</string>
     <string name="display_options_sheet_msg_type_days">дням</string>
     <string name="display_options_sheet_title_subgroup">%1$d подгруппа</string>
@@ -79,7 +80,7 @@
     <string name="modify_schedule_item_label_employees">Преподаватели:</string>
     <string name="modify_schedule_item_label_subgroup_number">Подгруппа:</string>
     <string name="modify_schedule_item_label_auditories">Аудитории:</string>
-    <string name="modify_schedule_item_hint_note">Заметки</string>
+    <string name="modify_schedule_item_hint_note">Заметка</string>
     <string name="modify_schedule_item_label_priority">Приоритет:</string>
     <string name="modify_schedule_item_label_date">Дата:</string>
     <string name="modify_schedule_item_action_add">добавить</string>

@@ -4,6 +4,7 @@ import com.pechuro.bsuirschedule.data.common.BaseRepository
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
 import com.pechuro.bsuirschedule.domain.repository.ISessionRepository
+import com.pechuro.bsuirschedule.local.sharedprefs.LocalHintDisplayState
 import com.pechuro.bsuirschedule.local.sharedprefs.LocalRateAppAskInfo
 import com.pechuro.bsuirschedule.local.sharedprefs.LocalScheduleInfo
 import com.pechuro.bsuirschedule.local.sharedprefs.LocalScheduleInfo.ScheduleType.*
@@ -81,11 +82,21 @@ class SessionRepositoryImpl(
         sharedPreferencesManager.setNavigationHintDisplayState(shown)
     }
 
-    override suspend fun getScheduleHintDisplayState(): Flow<Boolean> = sharedPreferencesManager
-            .getScheduleHintDisplayState(false)
+    override suspend fun getScheduleHintDisplayState(): Flow<HintDisplayState> = sharedPreferencesManager
+            .getScheduleHintDisplayState()
+            .map {
+                HintDisplayState(
+                        lessonHintShown = it?.scheduleHintShown ?: false,
+                        examHintShown = it?.examHintShown ?: false
+                )
+            }
 
-    override suspend fun setScheduleHintDisplayState(shown: Boolean) {
-        sharedPreferencesManager.setScheduleHintDisplayState(shown)
+    override suspend fun setScheduleHintDisplayState(state: HintDisplayState) {
+        val localState = LocalHintDisplayState(
+                scheduleHintShown = state.lessonHintShown,
+                examHintShown = state.examHintShown
+        )
+        sharedPreferencesManager.setScheduleHintDisplayState(localState)
     }
 
     override suspend fun getRateAppAskInfo(): RateAppAskInfo {
