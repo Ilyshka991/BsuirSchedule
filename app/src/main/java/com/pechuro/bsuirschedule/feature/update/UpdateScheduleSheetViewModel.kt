@@ -4,10 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.fold
 import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.ext.emptyQueue
 import com.pechuro.bsuirschedule.domain.interactor.SetScheduleNotRemindForUpdatesStatus
 import com.pechuro.bsuirschedule.domain.interactor.SetScheduleNotRemindForUpdatesStatus.Params
 import com.pechuro.bsuirschedule.domain.interactor.UpdateSchedule
-import com.pechuro.bsuirschedule.ext.emptyQueue
 import java.util.*
 import javax.inject.Inject
 

@@ -14,6 +14,11 @@ androidExtensions {
 android {
     compileSdkVersion configuration.compileSdkVersion
 
+    defaultConfig {
+        minSdkVersion configuration.minSdkVersion
+        targetSdkVersion configuration.targetSdkVersion
+    }
+
     buildTypes {
         beta {
             consumerProguardFiles 'proguard-rules.pro'

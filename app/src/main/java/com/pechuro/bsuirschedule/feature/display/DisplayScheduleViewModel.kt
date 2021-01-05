@@ -8,8 +8,8 @@ import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber.Companion.calculateCurrentWeekNumber
+import com.pechuro.bsuirschedule.domain.ext.addIfEmpty
 import com.pechuro.bsuirschedule.domain.interactor.*
-import com.pechuro.bsuirschedule.ext.addIfEmpty
 import com.pechuro.bsuirschedule.ext.flowLiveData
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItemInfo
