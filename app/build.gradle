@@ -28,6 +28,8 @@ android {
         versionName configuration.versionName
         testInstrumentationRunner configuration.androidJUnitRunner
         multiDexEnabled false
+
+        buildConfigField "String", "FLURRY_API_KEY", "\"${configuration.flurryApiKey}\""
     }
 
     signingConfigs {
@@ -91,6 +93,8 @@ dependencies {
     kapt roomProcessor
 
     implementation networkDependencies.values()
+
+    implementation flurryDependencies.values()
 
     debugImplementation leekcanary
 

@@ -237,7 +237,6 @@ class NavigationSheet : BaseBottomSheetDialog() {
         resetSwipedItems()
         val scheduleInfo = adapter.getItemAt(position) as? NavigationSheetItemInformation.Content
         if (scheduleInfo != null) {
-            AppAnalytics.report(AppAnalyticsEvent.Navigation.ScheduleUpdated(scheduleInfo.schedule))
             viewModel.updateSchedule(scheduleInfo.schedule)
         } else {
             Logger.w("Try to update item, which is not a subtype of NavigationSheetItemInformation.Content")

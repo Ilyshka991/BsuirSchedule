@@ -2,8 +2,11 @@ package com.pechuro.bsuirschedule.feature.navigation
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
+import com.pechuro.bsuirschedule.domain.common.fold
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.isPartTime
@@ -61,7 +64,16 @@ class NavigationSheetViewModel @Inject constructor(
         launchCoroutine {
             setUpdateState(schedule, UpdateState.IN_PROGRESS)
             val result = updateSchedule.execute(UpdateSchedule.Params(schedule))
-            val resultState = if (result.isSuccess) UpdateState.SUCCESS else UpdateState.ERROR
+            val resultState = result.fold(
+                    onSuccess = {
+                        AppAnalytics.report(AppAnalyticsEvent.Navigation.ScheduleUpdateSuccess(schedule))
+                        UpdateState.SUCCESS
+                    },
+                    onFailure = {
+                        AppAnalytics.report(AppAnalyticsEvent.Navigation.ScheduleUpdateFail(it))
+                        UpdateState.ERROR
+                    }
+            )
             setUpdateState(schedule, resultState)
             delay(DELAY_AFTER_UPDATE_DURATION_MS)
             val availableForUpdateSchedules = availableForUpdateScheduleListData.value

@@ -42,7 +42,9 @@ def libraryVersions = [
         testRunner        : '1.2.0',
         androidXTestCore  : '1.2.0',
         espresso          : '3.2.0-alpha03',
-        junitExtVersion   : '1.1.1'
+        junitExtVersion   : '1.1.1',
+
+        flurry            : '12.9.0'
 ]
 
 ext {
@@ -107,6 +109,10 @@ ext {
     firebaseDependencies = [
             crashlythics: "com.google.firebase:firebase-crashlytics-ktx:${libraryVersions.crashlytics}",
             analytics   : "com.google.firebase:firebase-analytics-ktx:${libraryVersions.analytics}"
+    ]
+
+    flurryDependencies = [
+            analytics: "com.flurry.android:analytics:${libraryVersions.flurry}"
     ]
 
     testDependencies = [

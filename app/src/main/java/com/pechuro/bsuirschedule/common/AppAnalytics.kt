@@ -27,7 +27,9 @@ sealed class AppAnalyticsEvent {
 
         data class ScheduleOpened(val schedule: Schedule) : Navigation()
 
-        data class ScheduleUpdated(val schedule: Schedule) : Navigation()
+        data class ScheduleUpdateSuccess(val schedule: Schedule) : Navigation()
+
+        data class ScheduleUpdateFail(val exception: Throwable) : Navigation()
 
         data class ScheduleDeleted(val schedule: Schedule) : Navigation()
     }

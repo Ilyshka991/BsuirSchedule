@@ -8,5 +8,14 @@ ext.configuration = [
         targetSdkVersion  : 29,
 
         versionCode       : 18,
-        versionName       : '3.1.0'
+        versionName       : '3.1.0',
+
+        flurryApiKey      : ""
 ]
+
+def apiKeyPropsFile = rootProject.file('apikey.properties')
+if (apiKeyPropsFile.exists()) {
+    def props = new Properties()
+    props.load(new FileInputStream(apiKeyPropsFile))
+    configuration.flurryApiKey = props['flurry']
+}
