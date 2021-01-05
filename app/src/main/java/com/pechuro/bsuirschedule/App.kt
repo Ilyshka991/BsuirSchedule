@@ -10,6 +10,7 @@ import androidx.multidex.MultiDex
 import androidx.work.Configuration
 import androidx.work.WorkerFactory
 import com.bsuir.pechuro.bsuirschedule.BuildConfig
+import com.flurry.android.FlurryAgent
 import com.pechuro.bsuirschedule.common.AppAnalytics
 import com.pechuro.bsuirschedule.di.component.AppComponent
 import com.pechuro.bsuirschedule.di.component.DaggerAppComponent
@@ -71,6 +72,10 @@ open class App : Application(), Configuration.Provider, LifecycleObserver {
     }
 
     private fun initAnalytics() {
+        FlurryAgent.Builder()
+                .withLogEnabled(true)
+                .withCaptureUncaughtExceptions(true)
+                .build(this, BuildConfig.FLURRY_API_KEY)
         AppAnalytics.set(analyticsReporter)
     }
 
