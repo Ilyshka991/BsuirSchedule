@@ -46,6 +46,7 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/settingsThemeButton"
                     style="@style/SettingsButton"
+                    android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -54,6 +55,8 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/settingsUpdateInfoButton"
                     style="@style/SettingsButton"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
                     android:text="@string/settings_action_update_info"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -101,6 +104,7 @@
                 <com.pechuro.bsuirschedule.widget.LabeledTextView
                     android:id="@+id/settingsVersionText"
                     style="@style/ModifyItemLabeledText"
+                    android:layout_marginBottom="8dp"
                     android:padding="16dp"
                     app:label_text="@string/settings_label_version"
                     app:layout_constraintBottom_toBottomOf="parent"
