@@ -199,11 +199,11 @@ class DisplayScheduleItemAdapter(
     }
 }
 
-fun List<WeekNumber>.formatWeekNumbers() = joinToString(separator = ",") { it.formattedString }
+fun List<WeekNumber>.formatWeekNumbers() = joinToString(separator = ", ") { it.formattedString }
 
-fun List<Auditory>.formatAuditories() = joinToString(separator = ",") { it.formattedName }
+fun List<Auditory>.formatAuditories() = joinToString(separator = ", ") { it.formattedName }
 
-fun List<Employee>.formatEmployees() = joinToString(separator = ",") { it.abbreviation }
+fun List<Employee>.formatEmployees() = joinToString(separator = ", ") { it.abbreviation }
 
 fun List<Group>.formatGroupNumbers() = asSequence()
         .map { it.number }
@@ -217,4 +217,4 @@ fun List<Group>.formatGroupNumbers() = asSequence()
                 groupNumbers.firstOrNull() ?: ""
             }
         }
-        .joinToString(separator = ",") { it }
+        .joinToString(separator = ", ") { it }

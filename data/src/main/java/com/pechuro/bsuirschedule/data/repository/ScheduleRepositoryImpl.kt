@@ -96,7 +96,7 @@ class ScheduleRepositoryImpl(
 
     override suspend fun getScheduleItem(schedule: Schedule, itemId: Long): Flow<ScheduleItem> {
         return when (schedule) {
-            is Schedule.GroupClasses -> dao.getGroupClassesItemById(itemId).map { item ->
+            is Schedule.GroupClasses -> dao.getGroupClassesItemByIdFlow(itemId).map { item ->
                 val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
                 val employees = item.employees.map { employeeRepository.getById(it.id) }
                 item.toDomainEntity(
@@ -112,7 +112,7 @@ class ScheduleRepositoryImpl(
                         employees = employees
                 )
             }
-            is Schedule.EmployeeClasses -> dao.getEmployeeClassesItemById(itemId).map { item ->
+            is Schedule.EmployeeClasses -> dao.getEmployeeClassesItemByIdFlow(itemId).map { item ->
                 val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
                 val groups = item.groups.map { groupRepository.getById(it.id) }
                 item.toDomainEntity(

@@ -11,7 +11,8 @@ data class LessonGroupKey(
         val lessonType: String,
         val startTime: LocalTime,
         val endTime: LocalTime,
-        val priority: LessonPriority
+        val priority: LessonPriority,
+        val additionInfo: Any
 )
 
 fun Lesson.toGroupKey() = LessonGroupKey(
@@ -20,5 +21,9 @@ fun Lesson.toGroupKey() = LessonGroupKey(
         lessonType = lessonType,
         startTime = startTime,
         endTime = endTime,
-        priority = priority
+        priority = priority,
+        additionInfo = when (this) {
+            is Lesson.EmployeeLesson -> studentGroups
+            is Lesson.GroupLesson -> employees
+        }
 )
