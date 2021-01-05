@@ -336,7 +336,11 @@ interface ScheduleDao {
 
     @Transaction
     @Query("SELECT * FROM group_item_classes WHERE id = :id")
-    fun getGroupClassesItemById(id: Long): Flow<GroupClassesItemComplex>
+    fun getGroupClassesItemByIdFlow(id: Long): Flow<GroupClassesItemComplex>
+
+    @Transaction
+    @Query("SELECT * FROM group_item_classes WHERE id = :id")
+    fun getGroupClassesItemById(id: Long): GroupClassesItemComplex
 
     @Transaction
     @Query("SELECT * FROM group_item_exam WHERE id = :id")
@@ -344,7 +348,11 @@ interface ScheduleDao {
 
     @Transaction
     @Query("SELECT * FROM employee_item_classes WHERE id = :id")
-    fun getEmployeeClassesItemById(id: Long): Flow<EmployeeClassesItemComplex>
+    fun getEmployeeClassesItemByIdFlow(id: Long): Flow<EmployeeClassesItemComplex>
+
+    @Transaction
+    @Query("SELECT * FROM employee_item_classes WHERE id = :id")
+    fun getEmployeeClassesItemById(id: Long): EmployeeClassesItemComplex
 
     @Transaction
     @Query("SELECT * FROM employee_item_exam WHERE id = :id")
@@ -376,7 +384,7 @@ interface ScheduleDao {
     suspend fun deleteNotUserEmployeeExamItems(scheduleName: String)
 
 
-    @Query("SELECT week_number FROM group_item_classes WHERE schedule_name = :scheduleName AND subject = :subject AND subgroup_number = :subgroupNumber AND lesson_type = :lessonType AND start_time = :startTime AND end_time = :endTime AND week_day = :weekDay")
+    @Query("SELECT week_number FROM group_item_classes INNER JOIN join_group_lesson_employee ON group_item_classes.id = join_group_lesson_employee.schedule_item_id WHERE join_group_lesson_employee.employee_id IN (:employeeIds) AND schedule_name = :scheduleName AND subject = :subject AND subgroup_number = :subgroupNumber AND lesson_type = :lessonType AND start_time = :startTime AND end_time = :endTime AND week_day = :weekDay")
     suspend fun getGroupClassesWeeks(
             scheduleName: String,
             subject: String,
@@ -384,10 +392,11 @@ interface ScheduleDao {
             lessonType: String,
             startTime: Date,
             endTime: Date,
-            weekDay: Int
+            weekDay: Int,
+            employeeIds: List<Long>
     ): List<Int>
 
-    @Query("SELECT week_number FROM employee_item_classes WHERE schedule_name = :scheduleName AND subject = :subject AND subgroup_number = :subgroupNumber AND lesson_type = :lessonType AND start_time = :startTime AND end_time = :endTime AND week_day = :weekDay")
+    @Query("SELECT week_number FROM employee_item_classes INNER JOIN join_employee_lesson_group ON employee_item_classes.id = join_employee_lesson_group.schedule_item_id WHERE join_employee_lesson_group.group_id IN (:groupIds) AND schedule_name = :scheduleName AND subject = :subject AND subgroup_number = :subgroupNumber AND lesson_type = :lessonType AND start_time = :startTime AND end_time = :endTime AND week_day = :weekDay")
     suspend fun getEmployeeClassesWeeks(
             scheduleName: String,
             subject: String,
@@ -395,7 +404,8 @@ interface ScheduleDao {
             lessonType: String,
             startTime: Date,
             endTime: Date,
-            weekDay: Int
+            weekDay: Int,
+            groupIds: List<Long>
     ): List<Int>
 
 
@@ -422,16 +432,17 @@ interface ScheduleDao {
             endTime: Date,
             weekDay: Int
     ): List<Int> {
-        val scheduleName = getGroupClassesById(id).scheduleName
+        val scheduleItem = getGroupClassesItemById(id)
         return getGroupClassesWeeks(
-                scheduleName = scheduleName,
+                scheduleName = scheduleItem.scheduleItem.scheduleName,
                 subject = subject,
                 subgroupNumber = subgroupNumber,
                 lessonType = lessonType,
                 startTime = startTime,
                 endTime = endTime,
-                weekDay = weekDay
-        ).distinct()
+                weekDay = weekDay,
+                employeeIds = scheduleItem.employees.map { it.id }
+        )
     }
 
     @Transaction
@@ -444,15 +455,16 @@ interface ScheduleDao {
             endTime: Date,
             weekDay: Int
     ): List<Int> {
-        val scheduleName = getEmployeeClassesById(id).scheduleName
+        val scheduleItem = getEmployeeClassesItemById(id)
         return getEmployeeClassesWeeks(
-                scheduleName = scheduleName,
+                scheduleName = scheduleItem.scheduleItem.scheduleName,
                 subject = subject,
                 subgroupNumber = subgroupNumber,
                 lessonType = lessonType,
                 startTime = startTime,
                 endTime = endTime,
-                weekDay = weekDay
-        ).distinct()
+                weekDay = weekDay,
+                groupIds = scheduleItem.groups.map { it.id }
+        )
     }
 }
