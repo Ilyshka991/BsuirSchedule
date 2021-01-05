@@ -10,8 +10,14 @@ import com.pechuro.bsuirschedule.domain.common.fold
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.isPartTime
-import com.pechuro.bsuirschedule.domain.interactor.*
+import com.pechuro.bsuirschedule.domain.interactor.DeleteSchedule
+import com.pechuro.bsuirschedule.domain.interactor.GetAllSchedules
+import com.pechuro.bsuirschedule.domain.interactor.GetAvailableForUpdateSchedules
 import com.pechuro.bsuirschedule.domain.interactor.GetAvailableForUpdateSchedules.Params
+import com.pechuro.bsuirschedule.domain.interactor.GetLastOpenedSchedule
+import com.pechuro.bsuirschedule.domain.interactor.GetNavigationHintDisplayState
+import com.pechuro.bsuirschedule.domain.interactor.SetNavigationHintDisplayState
+import com.pechuro.bsuirschedule.domain.interactor.UpdateSchedule
 import com.pechuro.bsuirschedule.ext.flowLiveData
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState
 import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Title

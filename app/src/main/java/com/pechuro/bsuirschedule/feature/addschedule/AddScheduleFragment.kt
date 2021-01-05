@@ -12,7 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
-import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.ext.addTextListener
+import com.pechuro.bsuirschedule.ext.clearAdapter
+import com.pechuro.bsuirschedule.ext.hideKeyboard
+import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.observe
+import com.pechuro.bsuirschedule.ext.setSafeClickListener
+import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
+import com.pechuro.bsuirschedule.ext.showKeyboard
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleContainerPagerAdapter.FragmentType
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel.State
 import com.pechuro.bsuirschedule.feature.stafflist.StaffAdapter

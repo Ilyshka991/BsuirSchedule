@@ -1,6 +1,18 @@
 package com.pechuro.bsuirschedule.data.mappers
 
-import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.entity.Auditory
+import com.pechuro.bsuirschedule.domain.entity.AuditoryType
+import com.pechuro.bsuirschedule.domain.entity.Building
+import com.pechuro.bsuirschedule.domain.entity.Department
+import com.pechuro.bsuirschedule.domain.entity.EducationForm
+import com.pechuro.bsuirschedule.domain.entity.Employee
+import com.pechuro.bsuirschedule.domain.entity.Exam
+import com.pechuro.bsuirschedule.domain.entity.Faculty
+import com.pechuro.bsuirschedule.domain.entity.Group
+import com.pechuro.bsuirschedule.domain.entity.Lesson
+import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.Speciality
+import com.pechuro.bsuirschedule.domain.entity.toDate
 import com.pechuro.bsuirschedule.local.entity.building.AuditoryCached
 import com.pechuro.bsuirschedule.local.entity.building.AuditoryTypeCached
 import com.pechuro.bsuirschedule.local.entity.building.BuildingCached
@@ -8,7 +20,14 @@ import com.pechuro.bsuirschedule.local.entity.education.DepartmentCached
 import com.pechuro.bsuirschedule.local.entity.education.EducationFormCached
 import com.pechuro.bsuirschedule.local.entity.education.FacultyCached
 import com.pechuro.bsuirschedule.local.entity.education.SpecialityCached
-import com.pechuro.bsuirschedule.local.entity.schedule.*
+import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeClassesScheduleCached
+import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeExamScheduleCached
+import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeItemClassesCached
+import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeItemExamCached
+import com.pechuro.bsuirschedule.local.entity.schedule.GroupClassesScheduleCached
+import com.pechuro.bsuirschedule.local.entity.schedule.GroupExamScheduleCached
+import com.pechuro.bsuirschedule.local.entity.schedule.GroupItemClassesCached
+import com.pechuro.bsuirschedule.local.entity.schedule.GroupItemExamCached
 import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeClassesItemComplex
 import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeExamItemComplex
 import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupClassesItemComplex

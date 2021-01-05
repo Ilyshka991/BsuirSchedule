@@ -4,7 +4,16 @@ import android.content.res.Resources
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import com.bsuir.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.entity.AppTheme
+import com.pechuro.bsuirschedule.domain.entity.Auditory
+import com.pechuro.bsuirschedule.domain.entity.LessonPriority
+import com.pechuro.bsuirschedule.domain.entity.LocalDate
+import com.pechuro.bsuirschedule.domain.entity.LocalTime
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.ScheduleWidgetInfo
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
+import com.pechuro.bsuirschedule.domain.entity.WeekDay
+import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 import java.util.*
 
 @get:ColorRes

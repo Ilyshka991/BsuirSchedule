@@ -1,6 +1,11 @@
 package com.pechuro.bsuirschedule.local.dao
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
 import com.pechuro.bsuirschedule.local.entity.building.AuditoryCached
 import com.pechuro.bsuirschedule.local.entity.building.AuditoryTypeCached
 import com.pechuro.bsuirschedule.local.entity.building.BuildingCached

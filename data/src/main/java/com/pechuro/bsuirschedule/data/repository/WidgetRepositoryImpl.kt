@@ -8,7 +8,10 @@ import com.pechuro.bsuirschedule.domain.exception.DataSourceException
 import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
 import com.pechuro.bsuirschedule.domain.repository.IWidgetRepository
 import com.pechuro.bsuirschedule.local.sharedprefs.LocalScheduleInfo
-import com.pechuro.bsuirschedule.local.sharedprefs.LocalScheduleInfo.ScheduleType.*
+import com.pechuro.bsuirschedule.local.sharedprefs.LocalScheduleInfo.ScheduleType.EMPLOYEE_CLASSES
+import com.pechuro.bsuirschedule.local.sharedprefs.LocalScheduleInfo.ScheduleType.EMPLOYEE_EXAMS
+import com.pechuro.bsuirschedule.local.sharedprefs.LocalScheduleInfo.ScheduleType.GROUP_CLASSES
+import com.pechuro.bsuirschedule.local.sharedprefs.LocalScheduleInfo.ScheduleType.GROUP_EXAMS
 import com.pechuro.bsuirschedule.local.sharedprefs.LocalScheduleWidgetInfo
 import com.pechuro.bsuirschedule.local.sharedprefs.SharedPreferencesManager
 import kotlinx.coroutines.runBlocking

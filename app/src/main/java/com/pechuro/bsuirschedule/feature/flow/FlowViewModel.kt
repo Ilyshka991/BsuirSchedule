@@ -6,10 +6,20 @@ import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
-import com.pechuro.bsuirschedule.domain.interactor.*
+import com.pechuro.bsuirschedule.domain.interactor.CheckInfo
+import com.pechuro.bsuirschedule.domain.interactor.GetAvailableForUpdateSchedules
 import com.pechuro.bsuirschedule.domain.interactor.GetAvailableForUpdateSchedules.Params
+import com.pechuro.bsuirschedule.domain.interactor.GetLastOpenedSchedule
+import com.pechuro.bsuirschedule.domain.interactor.GetScheduleDisplayType
+import com.pechuro.bsuirschedule.domain.interactor.SetLastOpenedSchedule
+import com.pechuro.bsuirschedule.domain.interactor.ShouldAskRateApp
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 

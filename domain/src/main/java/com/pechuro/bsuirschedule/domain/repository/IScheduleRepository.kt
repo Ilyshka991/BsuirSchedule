@@ -1,6 +1,12 @@
 package com.pechuro.bsuirschedule.domain.repository
 
-import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.entity.Employee
+import com.pechuro.bsuirschedule.domain.entity.Group
+import com.pechuro.bsuirschedule.domain.entity.Lesson
+import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.ScheduleType
+import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 import kotlinx.coroutines.flow.Flow
 
 interface IScheduleRepository {
@@ -34,7 +40,6 @@ interface IScheduleRepository {
     suspend fun updateScheduleItem(scheduleItem: ScheduleItem)
 
     suspend fun setNotRemindForUpdates(schedule: Schedule, notRemind: Boolean)
-
 
 
     suspend fun deleteSchedule(schedule: Schedule)

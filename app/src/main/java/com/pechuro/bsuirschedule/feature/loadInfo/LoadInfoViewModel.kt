@@ -5,7 +5,9 @@ import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.fold
 import com.pechuro.bsuirschedule.domain.interactor.LoadInfo
-import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoViewModel.Status.*
+import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoViewModel.Status.Complete
+import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoViewModel.Status.Error
+import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoViewModel.Status.Loading
 import javax.inject.Inject
 
 open class LoadInfoViewModel @Inject constructor(

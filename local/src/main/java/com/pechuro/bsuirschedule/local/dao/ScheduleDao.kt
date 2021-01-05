@@ -1,12 +1,31 @@
 package com.pechuro.bsuirschedule.local.dao
 
-import androidx.room.*
-import com.pechuro.bsuirschedule.local.entity.schedule.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
+import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeClassesScheduleCached
+import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeExamScheduleCached
+import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeItemClassesCached
+import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeItemExamCached
+import com.pechuro.bsuirschedule.local.entity.schedule.GroupClassesScheduleCached
+import com.pechuro.bsuirschedule.local.entity.schedule.GroupExamScheduleCached
+import com.pechuro.bsuirschedule.local.entity.schedule.GroupItemClassesCached
+import com.pechuro.bsuirschedule.local.entity.schedule.GroupItemExamCached
 import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeClassesItemComplex
 import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeExamItemComplex
 import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupClassesItemComplex
 import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupExamItemComplex
-import com.pechuro.bsuirschedule.local.entity.schedule.crossref.*
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.EmployeeExamAuditoryCrossRef
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.EmployeeExamGroupCrossRef
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.EmployeeLessonAuditoryCrossRef
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.EmployeeLessonGroupCrossRef
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.GroupExamAuditoryCrossRef
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.GroupExamEmployeeCrossRef
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.GroupLessonAuditoryCrossRef
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.GroupLessonEmployeeCrossRef
 import kotlinx.coroutines.flow.Flow
 import java.util.*
 

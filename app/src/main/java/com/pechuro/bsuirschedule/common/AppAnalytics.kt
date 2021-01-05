@@ -1,6 +1,13 @@
 package com.pechuro.bsuirschedule.common
 
-import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.entity.AppTheme
+import com.pechuro.bsuirschedule.domain.entity.Building
+import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.ScheduleType
+import com.pechuro.bsuirschedule.domain.entity.ScheduleWidgetInfo
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 
 object AppAnalytics {
 
