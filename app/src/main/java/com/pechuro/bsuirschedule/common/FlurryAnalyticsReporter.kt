@@ -24,12 +24,12 @@ class FlurryAnalyticsReporter : AppAnalytics.Reporter {
     }
 
     private fun buildEvent(event: AppAnalyticsEvent): String? {
-        val eventName = getEventName(event) ?: return null
-        val path = getEventPath(event)?.run { "${this}_" } ?: ""
-        return "$path$eventName"
+        val path = getEventPath(event)
+        val eventName = getEventName(event)
+        return "$path $eventName"
     }
 
-    private fun getEventPath(event: AppAnalyticsEvent): String? = when (event) {
+    private fun getEventPath(event: AppAnalyticsEvent): String = when (event) {
         is Navigation -> "navigation"
         is Settings -> "settings"
         is AddSchedule -> "add_schedule"
@@ -42,7 +42,7 @@ class FlurryAnalyticsReporter : AppAnalytics.Reporter {
         is Widget -> "widget"
     }
 
-    private fun getEventName(event: AppAnalyticsEvent): String? = when (event) {
+    private fun getEventName(event: AppAnalyticsEvent): String = when (event) {
         is Navigation.ScheduleOpened -> "open"
         is Navigation.ScheduleUpdateSuccess -> "update_success"
         is Navigation.ScheduleUpdateFail -> "update_fail"
