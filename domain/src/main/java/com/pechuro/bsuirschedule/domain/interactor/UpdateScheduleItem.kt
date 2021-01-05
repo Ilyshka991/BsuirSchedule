@@ -7,13 +7,13 @@ import javax.inject.Inject
 
 class UpdateScheduleItem @Inject constructor(
         private val scheduleRepository: IScheduleRepository
-): BaseInteractor<Unit, UpdateScheduleItem.Params>() {
+) : BaseInteractor<Unit, UpdateScheduleItem.Params>() {
 
     override suspend fun run(params: Params) {
         scheduleRepository.updateScheduleItem(params.scheduleItem)
     }
 
-    data class Params (
-        val scheduleItem: ScheduleItem
+    data class Params(
+            val scheduleItem: ScheduleItem
     )
 }

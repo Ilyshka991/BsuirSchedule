@@ -1,6 +1,6 @@
 name: Build
 
-on: 
+on:
   push:
     branches:
       - master
@@ -14,7 +14,7 @@ on:
 jobs:
   build:
     name: Generate APK
-    
+
     runs-on: ubuntu-latest
 
     steps:

@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class GetLessonWeeks @Inject constructor(
         private val scheduleRepository: IScheduleRepository
-): BaseInteractor<List<WeekNumber>, GetLessonWeeks.Params>() {
+) : BaseInteractor<List<WeekNumber>, GetLessonWeeks.Params>() {
 
     override suspend fun run(params: Params): List<WeekNumber> {
         return scheduleRepository.getLessonWeeks(params.lesson)

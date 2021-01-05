@@ -49,7 +49,7 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
         updateScheduleErrorRetryButton.setSafeClickListener(onClick = onUpdateClickAction)
 
         val onCancelClickAction: (View) -> Unit = {
-            val notRemind=updateScheduleSheetNotRemindCheckbox.isChecked
+            val notRemind = updateScheduleSheetNotRemindCheckbox.isChecked
             viewModel.cancelUpdate(notRemind)
             AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Dismissed(notRemind))
         }

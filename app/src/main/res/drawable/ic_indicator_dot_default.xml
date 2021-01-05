@@ -4,5 +4,5 @@
     android:thickness="4dp"
     android:useLevel="false"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="?attr/indicatorDefaultColor"/>
+    <solid android:color="?attr/indicatorDefaultColor" />
 </shape>

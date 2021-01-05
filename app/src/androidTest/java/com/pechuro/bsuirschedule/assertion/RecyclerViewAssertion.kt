@@ -14,11 +14,12 @@ object RecyclerViewAssertion {
         }
         check(view is RecyclerView) { "The asserted view is not RecyclerView" }
         val adapter =
-            view.adapter ?: throw IllegalStateException("No adapter is assigned to RecyclerView")
+                view.adapter
+                        ?: throw IllegalStateException("No adapter is assigned to RecyclerView")
         assertThat(
-            "RecyclerView item count",
-            adapter.itemCount,
-            greaterThanOrEqualTo(atLeastSize)
+                "RecyclerView item count",
+                adapter.itemCount,
+                greaterThanOrEqualTo(atLeastSize)
         )
     }
 
@@ -27,11 +28,12 @@ object RecyclerViewAssertion {
             throw noViewFoundException
         }
         check(view is RecyclerView) { "The asserted view is not RecyclerView" }
-        val adapter = view.adapter ?: throw IllegalStateException("No adapter is assigned to RecyclerView")
+        val adapter = view.adapter
+                ?: throw IllegalStateException("No adapter is assigned to RecyclerView")
         assertThat(
-            "RecyclerView item count",
-            adapter.itemCount,
-            equalTo(expected)
+                "RecyclerView item count",
+                adapter.itemCount,
+                equalTo(expected)
         )
     }
 }
