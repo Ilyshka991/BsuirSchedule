@@ -19,22 +19,24 @@ open class LoadInfoViewModel @Inject constructor(
     }
 
     fun loadInfo() {
-        if (status.value == LOADING) return
+        if (status.value == Loading) return
         launchCoroutine {
-            status.value = LOADING
+            status.value = Loading
             loadInfo.execute(BaseInteractor.NoParams).fold(
                     onSuccess = {
-                        status.value = COMPLETE
+                        status.value = Complete
                     },
                     onFailure = {
-                        status.value = ERROR
+                        status.value = Error(it)
                     }
             )
         }
     }
 
-    enum class Status {
-        LOADING, COMPLETE, ERROR
+    sealed class Status {
+        object Loading : Status()
+        object Complete : Status()
+        data class Error(val exception: Throwable) : Status()
     }
 }
 

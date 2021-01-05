@@ -40,7 +40,9 @@ sealed class AppAnalyticsEvent {
 
         data class ThemeChanged(val theme: AppTheme) : Settings()
 
-        object InformationUpdated : Settings()
+        object InformationUpdateSuccess : Settings()
+
+        data class InformationUpdateFail(val exception: Throwable) : Settings()
 
         object PrivacyPoliceOpened : Settings()
 
@@ -55,7 +57,7 @@ sealed class AppAnalyticsEvent {
 
         data class ScheduleLoaded(val schedule: Schedule, val types: List<ScheduleType>) : AddSchedule()
 
-        object ScheduleLoadFailed : AddSchedule()
+        data class ScheduleLoadFailed(val exception: Throwable) : AddSchedule()
     }
 
     sealed class DisplaySchedule : AppAnalyticsEvent() {
@@ -108,7 +110,7 @@ sealed class AppAnalyticsEvent {
 
         object Loaded : InfoLoad()
 
-        object Failed : InfoLoad()
+        data class Failed(val exception: Throwable) : InfoLoad()
     }
 
     sealed class RateApp : AppAnalyticsEvent() {

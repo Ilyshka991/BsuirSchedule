@@ -85,7 +85,7 @@ class AddScheduleFragmentContainer : BaseFragment() {
                 is State.Complete -> onComplete(state.schedules)
                 is State.Loading -> setActionsEnabled(false)
                 is State.Idle -> setActionsEnabled(true)
-                is State.Error -> onError()
+                is State.Error -> onError(state.exception)
             }
         }
     }
@@ -94,8 +94,8 @@ class AddScheduleFragmentContainer : BaseFragment() {
         actionCallback?.onAddScheduleCompleted(schedules)
     }
 
-    private fun onError() {
-        AppAnalytics.report(AppAnalyticsEvent.AddSchedule.ScheduleLoadFailed)
+    private fun onError(exception: Throwable) {
+        AppAnalytics.report(AppAnalyticsEvent.AddSchedule.ScheduleLoadFailed(exception))
         setActionsEnabled(false)
     }
 

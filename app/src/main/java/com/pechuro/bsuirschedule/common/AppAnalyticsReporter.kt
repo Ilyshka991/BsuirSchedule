@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.common
 
 import android.os.Bundle
+import android.util.Log
 import androidx.core.os.bundleOf
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.*
@@ -54,7 +55,8 @@ class AppAnalyticsReporter(
         is Settings.Opened -> "open"
         is Settings.ThemesOpened -> "theme_edit_open"
         is Settings.ThemeChanged -> "theme_change"
-        is Settings.InformationUpdated -> "info_update"
+        is Settings.InformationUpdateSuccess -> "info_update_success"
+        is Settings.InformationUpdateFail -> "info_update_fail"
         is Settings.PrivacyPoliceOpened -> "privacy_police_open"
         is Settings.SendFeedbackOpened -> "send_feedback_open"
         is Settings.RateAppOpened -> "rate_app_open"
@@ -103,10 +105,18 @@ class AppAnalyticsReporter(
         is Navigation.ScheduleDeleted -> event.schedule.getInfo()
 
         is Settings.ThemeChanged -> bundleOf("theme" to event.theme.name.toLowerCase(Locale.ENGLISH))
+        is Settings.InformationUpdateFail -> bundleOf(
+                "exception" to (event.exception::class.simpleName?.take(PARAM_MAX_SYMBOLS) ?: "").also {
+                    Log.e("AAAAAAA","AAAAA",event.exception)
+                }
+        )
 
         is AddSchedule.ScheduleLoaded -> bundleOf(
                 "name" to event.schedule.name.take(PARAM_MAX_SYMBOLS),
                 "types" to event.types.joinToString { it.name.toLowerCase(Locale.ENGLISH) }.take(PARAM_MAX_SYMBOLS)
+        )
+        is AddSchedule.ScheduleLoadFailed -> bundleOf(
+                "exception" to (event.exception::class.simpleName?.take(PARAM_MAX_SYMBOLS) ?: "")
         )
 
         is DisplaySchedule.ItemOptionOpened -> event.scheduleItem.getInfo()
@@ -121,6 +131,10 @@ class AppAnalyticsReporter(
         is Details.LocationClicked -> bundleOf("building" to event.building.name)
 
         is UpdateSchedule.Dismissed -> bundleOf("not_remind" to event.notRemind)
+
+        is InfoLoad.Failed -> bundleOf(
+                "exception" to (event.exception::class.simpleName?.take(PARAM_MAX_SYMBOLS) ?: "")
+        )
 
         is Widget.ConfigurationOpened -> bundleOf("new_widget" to !event.widgetExist)
         is Widget.ConfigurationApplied -> bundleOf(

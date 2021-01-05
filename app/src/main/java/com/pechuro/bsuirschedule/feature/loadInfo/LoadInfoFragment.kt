@@ -61,9 +61,9 @@ class LoadInfoFragment : BaseFragment() {
     private fun observeData() {
         viewModel.status.nonNull().observe(this) { status ->
             when (status) {
-                Status.COMPLETE -> handleComplete()
-                Status.ERROR -> handleError()
-                Status.LOADING -> handleLoading()
+                is Status.Complete -> handleComplete()
+                is Status.Error -> handleError(status.exception)
+                is Status.Loading -> handleLoading()
             }
         }
     }
@@ -73,8 +73,8 @@ class LoadInfoFragment : BaseFragment() {
         actionCallback?.onLoadInfoCompleted()
     }
 
-    private fun handleError() {
-        AppAnalytics.report(AppAnalyticsEvent.InfoLoad.Failed)
+    private fun handleError(exception: Throwable) {
+        AppAnalytics.report(AppAnalyticsEvent.InfoLoad.Failed(exception))
         infoLoadLoaderView.setVisibleWithAlpha(false)
         infoLoadErrorParentView.setVisibleWithAlpha(true)
     }

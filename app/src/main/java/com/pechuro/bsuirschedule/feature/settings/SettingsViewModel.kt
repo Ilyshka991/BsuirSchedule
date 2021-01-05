@@ -2,6 +2,8 @@ package com.pechuro.bsuirschedule.feature.settings
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.LiveEvent
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.common.provider.AppUriProvider
@@ -35,9 +37,13 @@ class SettingsViewModel @Inject constructor(
         launchCoroutine {
             _stateData.value = State.Loading
             loadInfo.execute(BaseInteractor.NoParams).fold(
-                    onSuccess = { _stateData.value = State.Idle },
+                    onSuccess = {
+                        AppAnalytics.report(AppAnalyticsEvent.Settings.InformationUpdateSuccess)
+                        _stateData.value = State.Idle
+                    },
                     onFailure = { exception ->
                         if (exception is DataSourceException.CancellationException) return@fold
+                        AppAnalytics.report(AppAnalyticsEvent.Settings.InformationUpdateFail(exception))
                         _stateData.value = State.Error
                     }
             )
