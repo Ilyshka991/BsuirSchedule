@@ -104,7 +104,7 @@
     <string name="staff_list_hint_enter_employee_name">Введите имя сотрудника</string>
     <string name="staff_list_hint_enter_auditory">Введите номер аудитории</string>
 
-    <string name="staff_list_msg_group_course">Курс: %1$d</string>
+    <string name="staff_list_msg_group_course">%1$d курс</string>
     <string name="staff_list_msg_employee_department">Кафедра: %1$s</string>
     <string name="staff_list_msg_auditory_capacity">Вместимость: %1$d</string>
     <string name="staff_list_msg_empty">Ничего не найдено</string>
