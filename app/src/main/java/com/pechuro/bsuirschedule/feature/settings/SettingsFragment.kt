@@ -103,11 +103,9 @@ class SettingsFragment : BaseFragment() {
             selectTheme()
         }
         settingsUpdateInfoButton.setSafeClickListener {
-            AppAnalytics.report(AppAnalyticsEvent.Settings.InformationUpdated)
             viewModel.updateInfo()
         }
         settingsInfoLoadErrorButton.setSafeClickListener {
-            AppAnalytics.report(AppAnalyticsEvent.Settings.InformationUpdated)
             viewModel.updateInfo()
         }
         settingsRateAppButton.setSafeClickListener {

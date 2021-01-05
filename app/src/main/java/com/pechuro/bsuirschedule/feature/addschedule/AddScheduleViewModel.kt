@@ -34,7 +34,7 @@ class AddScheduleViewModel @Inject constructor(
                         state.value = State.Complete(it)
                     },
                     onFailure = {
-                        state.value = State.Error
+                        state.value = State.Error(it)
                     }
             )
         }
@@ -55,7 +55,7 @@ class AddScheduleViewModel @Inject constructor(
                         state.value = State.Complete(it)
                     },
                     onFailure = {
-                        state.value = State.Error
+                        state.value = State.Error(it)
                     }
             )
         }
@@ -79,7 +79,7 @@ class AddScheduleViewModel @Inject constructor(
     sealed class State {
         object Idle : State()
         object Loading : State()
-        object Error : State()
+        data class Error(val exception: Throwable) : State()
         data class Complete(val schedules: List<Schedule>) : State()
     }
 }
