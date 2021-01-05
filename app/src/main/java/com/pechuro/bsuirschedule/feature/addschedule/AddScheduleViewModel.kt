@@ -9,10 +9,9 @@ import com.pechuro.bsuirschedule.domain.entity.Employee
 import com.pechuro.bsuirschedule.domain.entity.Group
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
-import com.pechuro.bsuirschedule.domain.entity.availableScheduleTypes
+import com.pechuro.bsuirschedule.domain.entity.correlateScheduleTypes
 import com.pechuro.bsuirschedule.domain.interactor.LoadEmployeeSchedule
 import com.pechuro.bsuirschedule.domain.interactor.LoadGroupSchedule
-import com.pechuro.bsuirschedule.ext.addIfEmpty
 import javax.inject.Inject
 
 class AddScheduleViewModel @Inject constructor(
@@ -23,7 +22,7 @@ class AddScheduleViewModel @Inject constructor(
     val state = MutableLiveData<State>(State.Idle)
 
     fun loadSchedule(group: Group, types: List<ScheduleType>) {
-        val resultTypes = correlateScheduleTypes(group, types)
+        val resultTypes = group.correlateScheduleTypes(types)
         if (resultTypes.isEmpty()) return
         state.value = State.Loading
         launchCoroutine {
@@ -67,17 +66,6 @@ class AddScheduleViewModel @Inject constructor(
 
     fun cancel() {
         state.value = State.Idle
-    }
-
-    private fun correlateScheduleTypes(group: Group, typesToDownload: List<ScheduleType>): List<ScheduleType> {
-        val availableTypes = group.availableScheduleTypes
-        return typesToDownload
-                .intersect(availableTypes)
-                .addIfEmpty {
-                    availableTypes.firstOrNull()
-                }
-                .filterNotNull()
-                .toList()
     }
 
     sealed class State {

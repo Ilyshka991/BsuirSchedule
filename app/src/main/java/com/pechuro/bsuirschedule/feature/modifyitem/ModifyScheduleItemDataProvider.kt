@@ -15,8 +15,8 @@ import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 import com.pechuro.bsuirschedule.domain.entity.WeekDay
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
+import com.pechuro.bsuirschedule.domain.ext.addIfEmpty
 import com.pechuro.bsuirschedule.domain.ext.getWeekDay
-import com.pechuro.bsuirschedule.ext.addIfEmpty
 import com.pechuro.bsuirschedule.ext.requireValue
 import java.util.*
 
