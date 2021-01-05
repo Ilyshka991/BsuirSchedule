@@ -12,7 +12,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 import java.util.*
-import kotlin.coroutines.coroutineContext
 import kotlin.reflect.KClass
 
 class ScheduleRepositoryImpl(
@@ -211,12 +210,6 @@ class ScheduleRepositoryImpl(
         )
     }
 
-    override suspend fun updateAll() {
-        getAllSchedules().first().forEach {
-            update(it)
-        }
-    }
-
     override suspend fun update(schedule: Schedule) {
         when (schedule) {
             is Schedule.GroupClasses -> loadGroupScheduleInternal(
@@ -295,17 +288,6 @@ class ScheduleRepositoryImpl(
                     deleteScheduleItem(scheduleItem)
                 }
             }.awaitAll()
-        }
-    }
-
-    override suspend fun deleteAllSchedules() {
-        withContext(coroutineContext) {
-            listOf(
-                    async { performDaoCall { dao.deleteAllGroupClassesSchedules() } },
-                    async { performDaoCall { dao.deleteAllGroupExamSchedules() } },
-                    async { performDaoCall { dao.deleteAllEmployeeClassesSchedules() } },
-                    async { performDaoCall { dao.deleteAllEmployeeExamSchedules() } }
-            ).awaitAll()
         }
     }
 

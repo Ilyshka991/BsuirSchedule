@@ -59,11 +59,10 @@ internal fun EmployeeDTO.toDomainEntity(department: Department?) = run {
     )
 }
 
-internal fun GroupDTO.toDomainEntity(faculty: Faculty, speciality: Speciality) = run {
+internal fun GroupDTO.toDomainEntity(speciality: Speciality) = run {
     Group(
             id = id,
             number = number,
-            faculty = faculty,
             course = course ?: -1,
             speciality = speciality
     )

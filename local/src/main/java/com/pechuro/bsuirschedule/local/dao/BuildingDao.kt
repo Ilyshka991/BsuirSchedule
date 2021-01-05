@@ -47,32 +47,8 @@ interface BuildingDao {
         if (id == -1L) update(building)
     }
 
-
-    @Transaction
-    suspend fun deleteAll() {
-        deleteAllBuildings()
-        deleteAllAuditoriesTypes()
-        deleteAllAuditories()
-    }
-
-
-    @Query("DELETE FROM auditory")
-    suspend fun deleteAllAuditories()
-
-    @Query("DELETE FROM building")
-    suspend fun deleteAllBuildings()
-
-    @Query("DELETE FROM auditory_type")
-    suspend fun deleteAllAuditoriesTypes()
-
     @Query("SELECT * FROM auditory")
     fun getAllAuditories(): Flow<List<AuditoryCached>>
-
-    @Query("SELECT * FROM building")
-    fun getAllBuildings(): Flow<List<BuildingCached>>
-
-    @Query("SELECT * FROM auditory_type")
-    fun getAllAuditoryTypes(): Flow<List<AuditoryTypeCached>>
 
     @Query("SELECT * FROM building WHERE id = :id")
     suspend fun getBuildingById(id: Long): BuildingCached

@@ -27,16 +27,10 @@ class GroupRepositoryImpl(
         return getGroupsFromDao()
     }
 
-    override suspend fun getAllNumbers(): Flow<List<String>> {
-        return dao.getAllNumbers().flowOn(Dispatchers.IO)
-    }
-
     override suspend fun getById(id: Long): Group {
         val groupCached = performDaoCall { dao.getById(id) }
-        val faculty = specialityRepository.getFacultyById(groupCached.facultyId)
         val speciality = specialityRepository.getSpecialityById(groupCached.specialityId)
         return groupCached.toDomainEntity(
-                faculty = faculty,
                 speciality = speciality
         )
     }
@@ -46,34 +40,24 @@ class GroupRepositoryImpl(
         storeGroups(loadedGroups)
     }
 
-    override suspend fun deleteAll() {
-        performDaoCall { dao.deleteAll() }
-    }
-
     override suspend fun isCached(): Boolean = dao.isNotEmpty()
 
     private suspend fun loadGroupsFromApi(): List<Group> =
             performApiCall { api.getAllGroups() }
                     .map { dto ->
-                        val faculty = specialityRepository.getFacultyById(dto.facultyId)
                         val speciality = specialityRepository.getSpecialityById(dto.specialityId)
                         dto.toDomainEntity(
-                                faculty = faculty,
                                 speciality = speciality
                         )
                     }
 
     private suspend fun getGroupsFromDao() = dao.getAll()
             .map { cachedList ->
-                val allFaculties = specialityRepository.getAllFaculties().first()
                 val allSpecialities = specialityRepository.getAllSpecialities().first()
                 cachedList.mapNotNull { groupCached ->
-                    val faculty = allFaculties.find { it.id == groupCached.facultyId }
-                            ?: return@mapNotNull null
                     val speciality = allSpecialities.find { it.id == groupCached.specialityId }
                             ?: return@mapNotNull null
                     groupCached.toDomainEntity(
-                            faculty = faculty,
                             speciality = speciality
                     )
                 }

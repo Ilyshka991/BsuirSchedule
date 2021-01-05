@@ -7,11 +7,7 @@ interface IEmployeeRepository {
 
     suspend fun getAll(): Flow<List<Employee>>
 
-    suspend fun getAllNames(): Flow<List<String>>
-
     suspend fun getById(id: Long): Employee
-
-    suspend fun deleteAll()
 
     suspend fun isCached(): Boolean
 

@@ -8,9 +8,6 @@ import kotlinx.coroutines.flow.Flow
 interface GroupDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(group: GroupCached): Long
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(groups: List<GroupCached>): List<Long>
 
 
@@ -20,12 +17,6 @@ interface GroupDao {
     @Update
     suspend fun update(groups: List<GroupCached>)
 
-
-    @Transaction
-    suspend fun insertOrUpdate(group: GroupCached) {
-        val id = insert(group)
-        if (id == -1L) update(group)
-    }
 
     @Transaction
     suspend fun insertOrUpdate(groups: List<GroupCached>) {
@@ -38,14 +29,8 @@ interface GroupDao {
     }
 
 
-    @Query("DELETE FROM `group`")
-    suspend fun deleteAll()
-
     @Query("SELECT * FROM `group`")
     fun getAll(): Flow<List<GroupCached>>
-
-    @Query("SELECT number FROM `group`")
-    fun getAllNumbers(): Flow<List<String>>
 
     @Query("SELECT * FROM `group` WHERE id = :id")
     suspend fun getById(id: Long): GroupCached

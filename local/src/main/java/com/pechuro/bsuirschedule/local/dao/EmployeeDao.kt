@@ -22,12 +22,6 @@ interface EmployeeDao {
 
 
     @Transaction
-    suspend fun insertOrUpdate(employee: EmployeeCached) {
-        val id = insert(employee)
-        if (id == -1L) update(employee)
-    }
-
-    @Transaction
     suspend fun insertOrUpdate(employees: List<EmployeeCached>) {
         val insertResult = insert(employees)
         val updateList = mutableListOf<EmployeeCached>()
@@ -38,17 +32,11 @@ interface EmployeeDao {
     }
 
 
-    @Query("DELETE FROM employee")
-    suspend fun deleteAll()
-
     @Query("SELECT * FROM employee")
     fun getAll(): Flow<List<EmployeeCached>>
 
     @Query("SELECT * FROM employee WHERE id = :id")
     suspend fun getById(id: Long): EmployeeCached
-
-    @Query("SELECT abbreviation FROM employee")
-    fun getAllNames(): Flow<List<String>>
 
     @Query("SELECT EXISTS(SELECT 1 FROM employee)")
     suspend fun isNotEmpty(): Boolean
