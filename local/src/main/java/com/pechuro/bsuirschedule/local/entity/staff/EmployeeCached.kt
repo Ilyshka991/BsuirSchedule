@@ -8,11 +8,11 @@ import com.pechuro.bsuirschedule.local.entity.education.DepartmentCached
 
 @Entity(tableName = "employee",
         foreignKeys = [
-                ForeignKey(
-                        entity = DepartmentCached::class,
-                        parentColumns = ["id"],
-                        childColumns = ["department_id"],
-                        onDelete = ForeignKey.CASCADE)
+            ForeignKey(
+                    entity = DepartmentCached::class,
+                    parentColumns = ["id"],
+                    childColumns = ["department_id"],
+                    onDelete = ForeignKey.CASCADE)
         ])
 data class EmployeeCached(
         @PrimaryKey

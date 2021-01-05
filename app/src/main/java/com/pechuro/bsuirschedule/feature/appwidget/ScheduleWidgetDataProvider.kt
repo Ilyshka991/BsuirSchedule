@@ -2,10 +2,10 @@ package com.pechuro.bsuirschedule.feature.appwidget
 
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.domain.interactor.GetScheduleItems
-import com.pechuro.bsuirschedule.domain.repository.IWidgetRepository
 import com.pechuro.bsuirschedule.domain.ext.addDays
 import com.pechuro.bsuirschedule.domain.ext.getWeekDay
+import com.pechuro.bsuirschedule.domain.interactor.GetScheduleItems
+import com.pechuro.bsuirschedule.domain.repository.IWidgetRepository
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking

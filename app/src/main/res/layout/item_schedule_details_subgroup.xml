@@ -8,4 +8,4 @@
     android:paddingHorizontal="20dp"
     android:paddingVertical="4dp"
     android:textStyle="normal"
-    tools:text="@string/item_details_msg_subgroup"/>
+    tools:text="@string/item_details_msg_subgroup" />

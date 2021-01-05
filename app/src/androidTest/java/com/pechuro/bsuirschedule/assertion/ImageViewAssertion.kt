@@ -14,9 +14,9 @@ object ImageViewAssertion {
         }
         check(view is ImageView) { "The asserted view is not ImageView" }
         assertThat(
-            "ImageView drawable",
-            view.drawable,
-            if (isExist) notNullValue() else nullValue()
+                "ImageView drawable",
+                view.drawable,
+                if (isExist) notNullValue() else nullValue()
         )
     }
 }
