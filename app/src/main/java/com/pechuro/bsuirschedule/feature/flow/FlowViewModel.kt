@@ -12,6 +12,7 @@ import com.pechuro.bsuirschedule.domain.interactor.GetAvailableForUpdateSchedule
 import com.pechuro.bsuirschedule.domain.interactor.GetLastOpenedSchedule
 import com.pechuro.bsuirschedule.domain.interactor.GetScheduleDisplayType
 import com.pechuro.bsuirschedule.domain.interactor.SetLastOpenedSchedule
+import com.pechuro.bsuirschedule.domain.interactor.SetRateAppInitialInfo
 import com.pechuro.bsuirschedule.domain.interactor.ShouldAskRateApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -30,7 +31,8 @@ class FlowViewModel @Inject constructor(
         private val getLastOpenedSchedule: GetLastOpenedSchedule,
         private val getScheduleDisplayType: GetScheduleDisplayType,
         private val setLastOpenedSchedule: SetLastOpenedSchedule,
-        private val shouldAskRateApp: ShouldAskRateApp
+        private val shouldAskRateApp: ShouldAskRateApp,
+        private val setRateAppInitialInfo: SetRateAppInitialInfo
 ) : BaseViewModel() {
 
     private var lastOpenedSchedule: Schedule? = runBlocking {
@@ -50,6 +52,9 @@ class FlowViewModel @Inject constructor(
             getScheduleDisplayType.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow()).collect {
                 scheduleDisplayType = it
             }
+        }
+        launchCoroutine {
+            setRateAppInitialInfo.execute(BaseInteractor.NoParams)
         }
     }
 

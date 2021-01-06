@@ -101,6 +101,11 @@ class SessionRepositoryImpl(
                 )
             }
 
+    override suspend fun isRateAppAskInfoSet(): Boolean {
+        val localInfo = sharedPreferencesManager.getRateAppAskInfo()
+        return localInfo != null
+    }
+
     override suspend fun setScheduleHintDisplayState(state: HintDisplayState) {
         val localState = LocalHintDisplayState(
                 scheduleHintShown = state.lessonHintShown,
