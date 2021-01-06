@@ -43,6 +43,7 @@ class LoadInfoFragment : BaseFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         actionCallback = getCallbackOrNull()
+        AppAnalytics.report(AppAnalyticsEvent.InfoLoad.Opened)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

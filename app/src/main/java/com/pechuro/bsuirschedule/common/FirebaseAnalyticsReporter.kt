@@ -106,6 +106,7 @@ class FirebaseAnalyticsReporter(
         is Widget.ConfigurationApplied -> "config_apply"
         is Widget.ConfigurationCanceled -> "config_cancel"
         is Widget.Deleted -> "delete"
+        else -> null
     }
 
     private fun getParams(event: AppAnalyticsEvent): Bundle = when (event) {

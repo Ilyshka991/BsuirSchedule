@@ -110,12 +110,16 @@ sealed class AppAnalyticsEvent {
 
     sealed class UpdateSchedule : AppAnalyticsEvent() {
 
-        object Updated : UpdateSchedule()
+        data class Opened(val schedule: Schedule) : UpdateSchedule()
 
-        data class Dismissed(val notRemind: Boolean) : UpdateSchedule()
+        data class Updated(val schedule: Schedule) : UpdateSchedule()
+
+        data class Dismissed(val schedule: Schedule, val notRemind: Boolean) : UpdateSchedule()
     }
 
     sealed class InfoLoad : AppAnalyticsEvent() {
+
+        object Opened : InfoLoad()
 
         object Loaded : InfoLoad()
 
@@ -123,6 +127,8 @@ sealed class AppAnalyticsEvent {
     }
 
     sealed class RateApp : AppAnalyticsEvent() {
+
+        object Opened : RateApp()
 
         object RateClicked : RateApp()
 

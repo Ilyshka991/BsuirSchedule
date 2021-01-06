@@ -16,6 +16,7 @@ import com.pechuro.bsuirschedule.domain.entity.Exam
 import com.pechuro.bsuirschedule.domain.entity.Lesson
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.isPartTime
 import java.util.*
 
 class FlurryAnalyticsReporter : AppAnalytics.Reporter {
@@ -35,7 +36,7 @@ class FlurryAnalyticsReporter : AppAnalytics.Reporter {
     private fun buildEvent(event: AppAnalyticsEvent): String? {
         val path = getEventPath(event)
         val eventName = getEventName(event)
-        return "$path $eventName"
+        return "$path:$eventName"
     }
 
     private fun getEventPath(event: AppAnalyticsEvent): String = when (event) {
@@ -88,12 +89,15 @@ class FlurryAnalyticsReporter : AppAnalytics.Reporter {
         is Details.PriorityOpened -> "priority_change"
         is Details.NoteChanged -> "note_change"
 
+        is UpdateSchedule.Opened -> "open"
         is UpdateSchedule.Updated -> "success"
         is UpdateSchedule.Dismissed -> "cancel"
 
+        is InfoLoad.Opened -> "open"
         is InfoLoad.Loaded -> "success"
         is InfoLoad.Failed -> "fail"
 
+        is RateApp.Opened -> "open"
         is RateApp.RateClicked -> "rate"
         is RateApp.LaterClicked -> "later"
         is RateApp.NotRemindClicked -> "not_remind"
@@ -130,7 +134,9 @@ class FlurryAnalyticsReporter : AppAnalytics.Reporter {
         is Details.Opened -> event.scheduleItem.getInfo()
         is Details.LocationClicked -> mapOf("building" to event.building.name)
 
-        is UpdateSchedule.Dismissed -> mapOf("not_remind" to event.notRemind.toString())
+        is UpdateSchedule.Opened -> event.schedule.getInfo()
+        is UpdateSchedule.Updated -> event.schedule.getInfo()
+        is UpdateSchedule.Dismissed -> mapOf("not_remind" to event.notRemind.toString()) + event.schedule.getInfo()
 
         is InfoLoad.Failed -> event.exception.getInfo()
 
@@ -151,9 +157,11 @@ class FlurryAnalyticsReporter : AppAnalytics.Reporter {
 
     private fun Schedule.getInfo() = mapOf(
             "name" to name.take(PARAM_MAX_SYMBOLS),
-            "type" to when (this) {
-                is Schedule.GroupClasses, is Schedule.EmployeeClasses -> "classes"
-                is Schedule.GroupExams, is Schedule.EmployeeExams -> "exams"
+            "type" to when {
+                this is Schedule.GroupClasses || this is Schedule.EmployeeClasses -> "classes"
+                this is Schedule.GroupExams && this.group.speciality.educationForm.isPartTime -> "part-time"
+                this is Schedule.GroupExams || this is Schedule.EmployeeExams -> "exams"
+                else -> "unknown"
             }
     )
 

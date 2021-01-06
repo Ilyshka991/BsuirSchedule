@@ -402,6 +402,17 @@ interface ScheduleDao {
             employeeIds: List<Long>
     ): List<Int>
 
+    @Query("SELECT week_number FROM group_item_classes WHERE schedule_name = :scheduleName AND subject = :subject AND subgroup_number = :subgroupNumber AND lesson_type = :lessonType AND start_time = :startTime AND end_time = :endTime AND week_day = :weekDay")
+    suspend fun getGroupClassesWeeks(
+            scheduleName: String,
+            subject: String,
+            subgroupNumber: Int,
+            lessonType: String,
+            startTime: Date,
+            endTime: Date,
+            weekDay: Int,
+    ): List<Int>
+
     @Query("SELECT week_number FROM employee_item_classes INNER JOIN join_employee_lesson_group ON employee_item_classes.id = join_employee_lesson_group.schedule_item_id WHERE join_employee_lesson_group.group_id IN (:groupIds) AND schedule_name = :scheduleName AND subject = :subject AND subgroup_number = :subgroupNumber AND lesson_type = :lessonType AND start_time = :startTime AND end_time = :endTime AND week_day = :weekDay")
     suspend fun getEmployeeClassesWeeks(
             scheduleName: String,
@@ -414,6 +425,16 @@ interface ScheduleDao {
             groupIds: List<Long>
     ): List<Int>
 
+    @Query("SELECT week_number FROM employee_item_classes WHERE schedule_name = :scheduleName AND subject = :subject AND subgroup_number = :subgroupNumber AND lesson_type = :lessonType AND start_time = :startTime AND end_time = :endTime AND week_day = :weekDay")
+    suspend fun getEmployeeClassesWeeks(
+            scheduleName: String,
+            subject: String,
+            subgroupNumber: Int,
+            lessonType: String,
+            startTime: Date,
+            endTime: Date,
+            weekDay: Int,
+    ): List<Int>
 
     @Query("SELECT * FROM group_item_classes WHERE id = :id")
     suspend fun getGroupClassesById(id: Long): GroupItemClassesCached
@@ -439,16 +460,30 @@ interface ScheduleDao {
             weekDay: Int
     ): List<Int> {
         val scheduleItem = getGroupClassesItemById(id)
-        return getGroupClassesWeeks(
-                scheduleName = scheduleItem.scheduleItem.scheduleName,
-                subject = subject,
-                subgroupNumber = subgroupNumber,
-                lessonType = lessonType,
-                startTime = startTime,
-                endTime = endTime,
-                weekDay = weekDay,
-                employeeIds = scheduleItem.employees.map { it.id }
-        )
+        val employeeIds = scheduleItem.employees.map { it.id }
+        val scheduleName = scheduleItem.scheduleItem.scheduleName
+        return if (employeeIds.isNotEmpty()) {
+            getGroupClassesWeeks(
+                    scheduleName = scheduleName,
+                    subject = subject,
+                    subgroupNumber = subgroupNumber,
+                    lessonType = lessonType,
+                    startTime = startTime,
+                    endTime = endTime,
+                    weekDay = weekDay,
+                    employeeIds = employeeIds
+            )
+        } else {
+            getGroupClassesWeeks(
+                    scheduleName = scheduleName,
+                    subject = subject,
+                    subgroupNumber = subgroupNumber,
+                    lessonType = lessonType,
+                    startTime = startTime,
+                    endTime = endTime,
+                    weekDay = weekDay
+            )
+        }
     }
 
     @Transaction
@@ -462,15 +497,30 @@ interface ScheduleDao {
             weekDay: Int
     ): List<Int> {
         val scheduleItem = getEmployeeClassesItemById(id)
-        return getEmployeeClassesWeeks(
-                scheduleName = scheduleItem.scheduleItem.scheduleName,
-                subject = subject,
-                subgroupNumber = subgroupNumber,
-                lessonType = lessonType,
-                startTime = startTime,
-                endTime = endTime,
-                weekDay = weekDay,
-                groupIds = scheduleItem.groups.map { it.id }
-        )
+        val groupIds = scheduleItem.groups.map { it.id }
+        val scheduleName = scheduleItem.scheduleItem.scheduleName
+        return if (groupIds.isNotEmpty()) {
+            getEmployeeClassesWeeks(
+                    scheduleName = scheduleName,
+                    subject = subject,
+                    subgroupNumber = subgroupNumber,
+                    lessonType = lessonType,
+                    startTime = startTime,
+                    endTime = endTime,
+                    weekDay = weekDay,
+                    groupIds = groupIds
+            )
+        } else {
+            getEmployeeClassesWeeks(
+                    scheduleName = scheduleName,
+                    subject = subject,
+                    subgroupNumber = subgroupNumber,
+                    lessonType = lessonType,
+                    startTime = startTime,
+                    endTime = endTime,
+                    weekDay = weekDay
+            )
+        }
+
     }
 }

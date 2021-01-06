@@ -1,5 +1,6 @@
 package com.pechuro.bsuirschedule.feature.update
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
@@ -38,6 +39,13 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
 
     private val args: UpdateScheduleSheetArgs by args(BUNDLE_ARGS)
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        args.schedules.forEach {
+            AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Opened(it))
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setSchedules(args.schedules)
@@ -47,16 +55,24 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
 
     private fun initView() {
         val onUpdateClickAction: (View) -> Unit = {
+            val currentSchedule = viewModel.currentScheduleData.value
+            currentSchedule?.let {
+                AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Updated(currentSchedule))
+            }
             viewModel.updateNextSchedule()
-            AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Updated)
         }
         updateScheduleSheetUpdateButton.setSafeClickListener(onClick = onUpdateClickAction)
         updateScheduleErrorRetryButton.setSafeClickListener(onClick = onUpdateClickAction)
 
         val onCancelClickAction: (View) -> Unit = {
             val notRemind = updateScheduleSheetNotRemindCheckbox.isChecked
+            val currentSchedule = viewModel.currentScheduleData.value
+            currentSchedule?.let {
+                AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Dismissed(
+                        schedule = currentSchedule,
+                        notRemind = notRemind))
+            }
             viewModel.cancelUpdate(notRemind)
-            AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Dismissed(notRemind))
         }
         updateScheduleSheetCancelButton.setSafeClickListener(onClick = onCancelClickAction)
         updateScheduleErrorCancelButton.setSafeClickListener(onClick = onCancelClickAction)
