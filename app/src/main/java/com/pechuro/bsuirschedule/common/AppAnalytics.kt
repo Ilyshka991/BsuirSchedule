@@ -114,6 +114,8 @@ sealed class AppAnalyticsEvent {
 
         data class Updated(val schedule: Schedule) : UpdateSchedule()
 
+        data class UpdateFailed(val schedule: Schedule, val exception: Throwable) : UpdateSchedule()
+
         data class Dismissed(val schedule: Schedule, val notRemind: Boolean) : UpdateSchedule()
     }
 

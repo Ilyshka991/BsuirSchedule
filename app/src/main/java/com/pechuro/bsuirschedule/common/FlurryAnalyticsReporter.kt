@@ -91,6 +91,7 @@ class FlurryAnalyticsReporter : AppAnalytics.Reporter {
 
         is UpdateSchedule.Opened -> "open"
         is UpdateSchedule.Updated -> "success"
+        is UpdateSchedule.UpdateFailed -> "fail"
         is UpdateSchedule.Dismissed -> "cancel"
 
         is InfoLoad.Opened -> "open"
@@ -136,6 +137,7 @@ class FlurryAnalyticsReporter : AppAnalytics.Reporter {
 
         is UpdateSchedule.Opened -> event.schedule.getInfo()
         is UpdateSchedule.Updated -> event.schedule.getInfo()
+        is UpdateSchedule.UpdateFailed -> event.schedule.getInfo() + event.exception.getInfo()
         is UpdateSchedule.Dismissed -> mapOf("not_remind" to event.notRemind.toString()) + event.schedule.getInfo()
 
         is InfoLoad.Failed -> event.exception.getInfo()
