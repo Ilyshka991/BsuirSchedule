@@ -46,6 +46,10 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
         }
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?) = super.onCreateDialog(savedInstanceState).apply {
+        isCancelable = false
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setSchedules(args.schedules)
@@ -55,10 +59,6 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
 
     private fun initView() {
         val onUpdateClickAction: (View) -> Unit = {
-            val currentSchedule = viewModel.currentScheduleData.value
-            currentSchedule?.let {
-                AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Updated(currentSchedule))
-            }
             viewModel.updateNextSchedule()
         }
         updateScheduleSheetUpdateButton.setSafeClickListener(onClick = onUpdateClickAction)

@@ -1,6 +1,8 @@
 package com.pechuro.bsuirschedule.feature.update
 
 import androidx.lifecycle.MutableLiveData
+import com.pechuro.bsuirschedule.common.AppAnalytics
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.fold
 import com.pechuro.bsuirschedule.domain.entity.Schedule
@@ -32,9 +34,14 @@ class UpdateScheduleSheetViewModel @Inject constructor(
             state.value = State.Loading
             updateSchedule.execute(UpdateSchedule.Params(scheduleForUpdate)).fold(
                     onSuccess = {
+                        AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Updated(scheduleForUpdate))
                         takeNextSchedule()
                     },
                     onFailure = {
+                        AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.UpdateFailed(
+                                schedule = scheduleForUpdate,
+                                exception = it
+                        ))
                         state.value = State.Error
                     }
             )
