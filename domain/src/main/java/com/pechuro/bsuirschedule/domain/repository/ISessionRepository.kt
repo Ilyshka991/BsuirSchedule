@@ -34,6 +34,8 @@ interface ISessionRepository {
 
     suspend fun setScheduleHintDisplayState(state: HintDisplayState)
 
+    suspend fun isRateAppAskInfoSet(): Boolean
+
     suspend fun getRateAppAskInfo(): RateAppAskInfo
 
     suspend fun setRateAppAskInfo(info: RateAppAskInfo)
