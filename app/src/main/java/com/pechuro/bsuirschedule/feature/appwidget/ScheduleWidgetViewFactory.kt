@@ -84,7 +84,7 @@ class ScheduleWidgetRemoteViewFactory(
 
     override fun getCount() = scheduleItems.size
 
-    override fun getViewTypeCount() = 4
+    override fun getViewTypeCount() = 5
 
     override fun onDestroy() {}
 
