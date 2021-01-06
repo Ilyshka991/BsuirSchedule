@@ -66,9 +66,10 @@ class ScheduleWidgetRemoteViewFactory(
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        val row = when (val scheduleItem = scheduleItems[position]) {
+        val row = when (val scheduleItem = scheduleItems.getOrNull(position)) {
             is Lesson -> getLessonRow(scheduleItem)
             is Exam -> getExamRow(scheduleItem)
+            null -> getEmptyRow()
             else -> throw IllegalArgumentException("Not supported type: ${scheduleItem::class.java.name}")
         }
         row.setOnClickFillInIntent(R.id.scheduleWidgetItemParentView, Intent())
@@ -167,5 +168,9 @@ class ScheduleWidgetRemoteViewFactory(
         row.setViewVisibility(R.id.widgetExamNote, noteTextVisibility)
 
         return row
+    }
+
+    private fun getEmptyRow(): RemoteViews {
+        return RemoteViews(context.packageName, R.layout.item_widget_schedule_empty)
     }
 }
