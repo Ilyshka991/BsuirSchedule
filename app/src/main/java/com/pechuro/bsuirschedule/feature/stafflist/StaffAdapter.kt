@@ -86,7 +86,7 @@ class StaffAdapter(
                 staffGroupNumber.text = number
                 staffGroupFacultyAbbreviation.text = speciality.faculty?.abbreviation ?: ""
                 staffGroupSpecialityAbbreviation.text = speciality.abbreviation
-                staffGroupEducationForm.text = speciality.educationForm.name + ","
+                staffGroupEducationForm.text = speciality.educationForm.name + if (course != -1) "," else ""
                 staffGroupCourse.isVisible = course != -1
                 staffGroupCourse.text = itemView.context.getString(
                         R.string.staff_list_msg_group_course,
