@@ -32,7 +32,7 @@ class TestAllSchedules @Inject constructor(
         loadAllGroupSchedules()
         loadAllEmployeesSchedules()
         checkScheduleCount()
-        // checkEmptySchedules()
+        checkEmptySchedules()
         updateInfo()
         checkScheduleCount()
         // checkEmptySchedules()
