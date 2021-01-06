@@ -43,11 +43,13 @@ class TestAllSchedules @Inject constructor(
         Logger.d("CHECK GROUPS SCHEDULES")
         val groups = groupRepository.getAll().first()
         val errorGroups = mutableListOf<Pair<Throwable, Group>>()
-        var totalLoaded = 0
         val allTypes = listOf(ScheduleType.EXAMS, ScheduleType.CLASSES)
+        var totalCount = groups.size * allTypes.size
+        var totalLoaded = 0
         groups.forEach { group ->
             runCatching {
                 val resultTypes = group.correlateScheduleTypes(allTypes)
+                totalCount -= allTypes.size - resultTypes.size
                 val loaded = scheduleRepository.loadGroupSchedule(
                         group,
                         resultTypes
@@ -57,7 +59,7 @@ class TestAllSchedules @Inject constructor(
                 errorGroups += it to group
             }
         }
-        Logger.d("GROUPS LOAD FINISHED: $totalLoaded SCHEDULES OF ${groups.size} GROUPS. NOT LOADED: ${groups.size * allTypes.size - totalLoaded}")
+        Logger.d("GROUPS LOAD FINISHED: $totalLoaded SCHEDULES OF ${groups.size} GROUPS. NOT LOADED: ${totalCount - totalLoaded}")
         errorGroups
                 .groupBy { it.first::class.java }
                 .mapValues { it.value.map { it.second } }
