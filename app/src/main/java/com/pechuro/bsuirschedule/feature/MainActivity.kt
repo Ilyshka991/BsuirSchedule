@@ -30,7 +30,7 @@ class MainActivity : BaseActivity(), FlowFragment.ActionCallback {
         super.onCreate(savedInstanceState)
         if (intent.hasExtra(EXTRA_SCHEDULE)) {
             val schedule = intent.getParcelableExtra<Schedule>(EXTRA_SCHEDULE)
-            viewModel.setLastOpenedSchedule(schedule)
+            schedule?.let { viewModel.setLastOpenedSchedule(it) }
         }
         if (savedInstanceState == null) {
             showFlowFragment()
