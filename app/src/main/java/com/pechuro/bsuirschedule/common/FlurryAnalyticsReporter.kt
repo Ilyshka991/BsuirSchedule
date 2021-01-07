@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.common
 
 import com.flurry.android.FlurryAgent
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.AddSchedule
 import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.Details
 import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.DisplaySchedule
@@ -19,7 +20,9 @@ import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.domain.entity.isPartTime
 import java.util.*
 
-class FlurryAnalyticsReporter : AppAnalytics.Reporter {
+class FlurryAnalyticsReporter(
+        private val crashlytics: FirebaseCrashlytics
+) : AppAnalytics.Reporter {
 
     companion object {
         private const val EVENT_MAX_SYMBOLS = 255
@@ -28,9 +31,12 @@ class FlurryAnalyticsReporter : AppAnalytics.Reporter {
 
     override fun report(event: AppAnalyticsEvent) {
         val eventName = buildEvent(event)?.take(EVENT_MAX_SYMBOLS) ?: return
-        val params = getParams(event)
+        val params = getEventParams(event)
         Logger.tag("AnalyticsReporter").i("$eventName - params: $params")
         FlurryAgent.logEvent(eventName, params)
+        getCrashFromEvent(event)?.let {
+            crashlytics.recordException(it)
+        }
     }
 
     private fun buildEvent(event: AppAnalyticsEvent): String? {
@@ -109,7 +115,7 @@ class FlurryAnalyticsReporter : AppAnalytics.Reporter {
         is Widget.Deleted -> "delete"
     }
 
-    private fun getParams(event: AppAnalyticsEvent): Map<String, String> = when (event) {
+    private fun getEventParams(event: AppAnalyticsEvent): Map<String, String> = when (event) {
         is Navigation.ScheduleOpened -> event.schedule.getInfo()
         is Navigation.ScheduleUpdateSuccess -> event.schedule.getInfo()
         is Navigation.ScheduleUpdateFail -> event.exception.getInfo()
@@ -155,6 +161,15 @@ class FlurryAnalyticsReporter : AppAnalytics.Reporter {
         is Widget.ConfigurationCanceled -> mapOf("new_widget" to (!event.widgetExist).toString())
         is Widget.Deleted -> event.schedule.getInfo()
         else -> emptyMap()
+    }
+
+    private fun getCrashFromEvent(event: AppAnalyticsEvent): Throwable? = when (event) {
+        is Navigation.ScheduleUpdateFail -> event.exception
+        is Settings.InformationUpdateFail -> event.exception
+        is AddSchedule.ScheduleLoadFailed -> event.exception
+        is UpdateSchedule.UpdateFailed -> event.exception
+        is InfoLoad.Failed -> event.exception
+        else -> null
     }
 
     private fun Schedule.getInfo() = mapOf(
