@@ -9,6 +9,7 @@ import com.pechuro.bsuirschedule.domain.entity.Employee
 import com.pechuro.bsuirschedule.domain.entity.Group
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleType
+import com.pechuro.bsuirschedule.domain.entity.correlateScheduleTypes
 import com.pechuro.bsuirschedule.domain.interactor.LoadEmployeeSchedule
 import com.pechuro.bsuirschedule.domain.interactor.LoadGroupSchedule
 import javax.inject.Inject
@@ -21,21 +22,22 @@ class AddScheduleViewModel @Inject constructor(
     val state = MutableLiveData<State>(State.Idle)
 
     fun loadSchedule(group: Group, types: List<ScheduleType>) {
-        if (types.isEmpty()) return
+        val resultTypes = group.correlateScheduleTypes(types)
+        if (resultTypes.isEmpty()) return
         state.value = State.Loading
         launchCoroutine {
-            loadGroupSchedule.execute(LoadGroupSchedule.Params(group, types)).fold(
+            loadGroupSchedule.execute(LoadGroupSchedule.Params(group, resultTypes)).fold(
                     onSuccess = {
                         it.firstOrNull()?.let { schedule ->
                             AppAnalytics.report(AppAnalyticsEvent.AddSchedule.ScheduleLoaded(
                                     schedule = schedule,
-                                    types = types
+                                    types = resultTypes
                             ))
                         }
                         state.value = State.Complete(it)
                     },
                     onFailure = {
-                        state.value = State.Error
+                        state.value = State.Error(it)
                     }
             )
         }
@@ -56,7 +58,7 @@ class AddScheduleViewModel @Inject constructor(
                         state.value = State.Complete(it)
                     },
                     onFailure = {
-                        state.value = State.Error
+                        state.value = State.Error(it)
                     }
             )
         }
@@ -69,7 +71,7 @@ class AddScheduleViewModel @Inject constructor(
     sealed class State {
         object Idle : State()
         object Loading : State()
-        object Error : State()
+        data class Error(val exception: Throwable) : State()
         data class Complete(val schedules: List<Schedule>) : State()
     }
 }

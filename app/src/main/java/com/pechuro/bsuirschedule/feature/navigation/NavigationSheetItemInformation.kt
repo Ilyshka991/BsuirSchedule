@@ -1,7 +1,6 @@
 package com.pechuro.bsuirschedule.feature.navigation
 
 import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.domain.entity.ScheduleType
 
 sealed class NavigationSheetItemInformation(val id: Int) {
 
@@ -17,7 +16,12 @@ sealed class NavigationSheetItemInformation(val id: Int) {
 
     object Empty : NavigationSheetItemInformation(ID_EMPTY)
 
-    data class Title(val scheduleType: ScheduleType) : NavigationSheetItemInformation(ID_TITLE)
+    data class Title(val scheduleType: Type) : NavigationSheetItemInformation(ID_TITLE) {
+
+        enum class Type {
+            CLASSES, EXAMS, PART_TIME
+        }
+    }
 
     data class Content(
             val schedule: Schedule,

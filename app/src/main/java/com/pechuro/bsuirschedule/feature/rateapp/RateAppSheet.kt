@@ -27,6 +27,11 @@ class RateAppSheet : BaseBottomSheetDialog() {
         initViewModel(RateAppViewModel::class)
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        AppAnalytics.report(AppAnalyticsEvent.RateApp.Opened)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()

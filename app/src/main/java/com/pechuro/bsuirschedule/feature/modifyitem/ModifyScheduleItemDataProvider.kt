@@ -2,8 +2,20 @@ package com.pechuro.bsuirschedule.feature.modifyitem
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.ext.addIfEmpty
+import com.pechuro.bsuirschedule.domain.entity.Auditory
+import com.pechuro.bsuirschedule.domain.entity.Employee
+import com.pechuro.bsuirschedule.domain.entity.Exam
+import com.pechuro.bsuirschedule.domain.entity.Group
+import com.pechuro.bsuirschedule.domain.entity.Lesson
+import com.pechuro.bsuirschedule.domain.entity.LessonPriority
+import com.pechuro.bsuirschedule.domain.entity.LocalDate
+import com.pechuro.bsuirschedule.domain.entity.LocalTime
+import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
+import com.pechuro.bsuirschedule.domain.entity.WeekDay
+import com.pechuro.bsuirschedule.domain.entity.WeekNumber
+import com.pechuro.bsuirschedule.domain.ext.addIfEmpty
 import com.pechuro.bsuirschedule.domain.ext.getWeekDay
 import com.pechuro.bsuirschedule.ext.requireValue
 import java.util.*
@@ -11,7 +23,7 @@ import java.util.*
 class ModifyScheduleItemDataProvider(
         val initialSchedule: Schedule,
         val initialItems: List<ScheduleItem>,
-        private val lessonTypes: Array<String>
+        private val lessonTypes: List<String>
 ) {
 
     private val _subjectData = MutableLiveData<String>()

@@ -1,6 +1,23 @@
 package com.pechuro.bsuirschedule.data.mappers
 
-import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.entity.Auditory
+import com.pechuro.bsuirschedule.domain.entity.AuditoryType
+import com.pechuro.bsuirschedule.domain.entity.Building
+import com.pechuro.bsuirschedule.domain.entity.Department
+import com.pechuro.bsuirschedule.domain.entity.EducationForm
+import com.pechuro.bsuirschedule.domain.entity.Employee
+import com.pechuro.bsuirschedule.domain.entity.Exam
+import com.pechuro.bsuirschedule.domain.entity.Faculty
+import com.pechuro.bsuirschedule.domain.entity.Group
+import com.pechuro.bsuirschedule.domain.entity.Lesson
+import com.pechuro.bsuirschedule.domain.entity.LessonPriority
+import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.Speciality
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
+import com.pechuro.bsuirschedule.domain.entity.WeekDay
+import com.pechuro.bsuirschedule.domain.entity.WeekNumber
+import com.pechuro.bsuirschedule.domain.entity.getLocalDate
+import com.pechuro.bsuirschedule.domain.entity.getLocalTime
 import com.pechuro.bsuirschedule.local.entity.building.AuditoryCached
 import com.pechuro.bsuirschedule.local.entity.building.AuditoryTypeCached
 import com.pechuro.bsuirschedule.local.entity.building.BuildingCached
@@ -82,13 +99,11 @@ internal fun BuildingCached.toDomainEntity() = run {
 }
 
 internal fun GroupCached.toDomainEntity(
-        faculty: Faculty,
         speciality: Speciality
 ) = run {
     Group(
             id = id,
             number = number,
-            faculty = faculty,
             course = course,
             speciality = speciality
     )

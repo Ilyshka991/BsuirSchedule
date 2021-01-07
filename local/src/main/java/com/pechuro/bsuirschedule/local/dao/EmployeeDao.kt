@@ -1,6 +1,11 @@
 package com.pechuro.bsuirschedule.local.dao
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
 import com.pechuro.bsuirschedule.local.entity.staff.EmployeeCached
 import kotlinx.coroutines.flow.Flow
 
@@ -22,12 +27,6 @@ interface EmployeeDao {
 
 
     @Transaction
-    suspend fun insertOrUpdate(employee: EmployeeCached) {
-        val id = insert(employee)
-        if (id == -1L) update(employee)
-    }
-
-    @Transaction
     suspend fun insertOrUpdate(employees: List<EmployeeCached>) {
         val insertResult = insert(employees)
         val updateList = mutableListOf<EmployeeCached>()
@@ -38,17 +37,11 @@ interface EmployeeDao {
     }
 
 
-    @Query("DELETE FROM employee")
-    suspend fun deleteAll()
-
     @Query("SELECT * FROM employee")
     fun getAll(): Flow<List<EmployeeCached>>
 
     @Query("SELECT * FROM employee WHERE id = :id")
     suspend fun getById(id: Long): EmployeeCached
-
-    @Query("SELECT abbreviation FROM employee")
-    fun getAllNames(): Flow<List<String>>
 
     @Query("SELECT EXISTS(SELECT 1 FROM employee)")
     suspend fun isNotEmpty(): Boolean

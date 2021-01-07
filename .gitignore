@@ -3,6 +3,7 @@
 *.aar
 *.ap_
 *.aab
+output-metadata.json
 
 # Files for the ART/Dalvik VM
 *.dex
@@ -60,7 +61,6 @@ captures/
 .cxx/
 
 # Google Services (e.g. APIs or Firebase)
-# google-services.json
 
 # Freeline
 freeline.py
@@ -87,3 +87,6 @@ lint/tmp/
 # Signing files
 keystore.jks
 keystore.properties
+
+# API Keys
+apikey.properties

@@ -9,28 +9,28 @@
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/staffAuditoryName"
         style="@style/DefaultText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="10dp"
-        android:paddingBottom="8dp"
+        android:layout_marginTop="6dp"
+        android:gravity="start"
+        android:paddingBottom="6dp"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintEnd_toEndOf="@id/staffAuditoryRightGuideline"
+        app:layout_constraintStart_toStartOf="@id/staffAuditoryLeftGuideline"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="112-4" />
+        tools:text="112-4sd fs dfdfs df" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/staffAuditoryCapacity"
         style="@style/DefaultText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
         android:gravity="start"
-        android:maxLines="1"
-        android:paddingBottom="8dp"
+        android:paddingBottom="6dp"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/staffAuditoryDepartment"
+        app:layout_constraintEnd_toEndOf="@id/staffAuditoryRightGuideline"
+        app:layout_constraintStart_toStartOf="@id/staffAuditoryLeftGuideline"
         app:layout_constraintTop_toBottomOf="@+id/staffAuditoryDepartment"
         tools:text="capacity:5" />
 
@@ -39,32 +39,29 @@
         style="@style/DefaultText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:ellipsize="end"
         android:gravity="start"
         android:maxLines="1"
+        android:paddingBottom="6dp"
         android:textSize="20sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/staffAuditoryName"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/staffAuditoryName"
-        tools:text="type: lk" />
+        app:layout_constraintEnd_toEndOf="@id/staffAuditoryRightGuideline"
+        app:layout_constraintStart_toStartOf="@id/staffAuditoryLeftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/staffAuditoryName"
+        tools:text="type: lkdsf ds f sdf fs fsdfds f dsfds  dsfs fd sdf" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/staffAuditoryDepartment"
         style="@style/DefaultText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
         android:gravity="start"
-        android:maxLines="1"
-        android:paddingBottom="8dp"
+        android:paddingBottom="6dp"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/staffAuditoryName"
-        app:layout_constraintTop_toBottomOf="@+id/staffAuditoryName"
+        app:layout_constraintEnd_toEndOf="@id/staffAuditoryRightGuideline"
+        app:layout_constraintStart_toStartOf="@id/staffAuditoryLeftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/staffAuditoryType"
         tools:text="Department" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -73,12 +70,33 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="start"
-        android:paddingBottom="10dp"
+        android:paddingBottom="6dp"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/staffAuditoryDepartment"
+        app:layout_constraintEnd_toEndOf="@id/staffAuditoryRightGuideline"
+        app:layout_constraintStart_toStartOf="@id/staffAuditoryLeftGuideline"
         app:layout_constraintTop_toBottomOf="@+id/staffAuditoryCapacity"
         tools:text="note" />
+
+    <View
+        android:id="@+id/staffAuditoryDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/dividerColor"
+        app:layout_constraintTop_toBottomOf="@+id/staffAuditoryNote" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/staffAuditoryLeftGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/staffAuditoryRightGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,10 @@
 package com.pechuro.bsuirschedule.local.entity.schedule
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity(

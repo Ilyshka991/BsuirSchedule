@@ -1,11 +1,19 @@
 package com.pechuro.bsuirschedule.feature.appwidget
 
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
-import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.domain.interactor.GetScheduleItems
-import com.pechuro.bsuirschedule.domain.repository.IWidgetRepository
+import com.pechuro.bsuirschedule.domain.entity.Exam
+import com.pechuro.bsuirschedule.domain.entity.Lesson
+import com.pechuro.bsuirschedule.domain.entity.LocalDate
+import com.pechuro.bsuirschedule.domain.entity.LocalTime
+import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
+import com.pechuro.bsuirschedule.domain.entity.WeekDay
+import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 import com.pechuro.bsuirschedule.domain.ext.addDays
 import com.pechuro.bsuirschedule.domain.ext.getWeekDay
+import com.pechuro.bsuirschedule.domain.interactor.GetScheduleItems
+import com.pechuro.bsuirschedule.domain.repository.IWidgetRepository
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking

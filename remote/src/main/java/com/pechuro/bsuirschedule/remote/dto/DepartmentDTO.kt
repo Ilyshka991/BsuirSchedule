@@ -10,7 +10,5 @@ data class DepartmentDTO(
         @Json(name = "name")
         val name: String,
         @Json(name = "abbrev")
-        val abbreviation: String,
-        @Json(name = "nameAndAbbrev")
-        val nameWithAbbreviation: String
+        val abbreviation: String
 )

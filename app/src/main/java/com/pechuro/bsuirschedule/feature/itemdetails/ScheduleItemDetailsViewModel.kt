@@ -27,17 +27,18 @@ class ScheduleItemDetailsViewModel @Inject constructor(
 
     lateinit var detailsData: LiveData<DetailsData>
 
+    private var isOpenEventSent = false
+
     fun init(schedule: Schedule, itemId: Long) {
         if (this::detailsData.isInitialized) return
-        var isEventSent = false
         detailsData = flowLiveData {
             getScheduleItem
                     .execute(GetScheduleItem.Params(schedule, itemId))
                     .getOrDefault(emptyFlow())
                     .distinctUntilChanged()
                     .map { scheduleItem ->
-                        if (!isEventSent) {
-                            isEventSent = true
+                        if (!isOpenEventSent) {
+                            isOpenEventSent = true
                             AppAnalytics.report(AppAnalyticsEvent.Details.Opened(scheduleItem))
                         }
                         val details = getDetails(scheduleItem)

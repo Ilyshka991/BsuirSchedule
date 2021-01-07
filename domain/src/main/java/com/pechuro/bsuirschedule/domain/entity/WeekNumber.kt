@@ -1,7 +1,14 @@
 package com.pechuro.bsuirschedule.domain.entity
 
 import java.util.*
-import java.util.Calendar.*
+import java.util.Calendar.AUGUST
+import java.util.Calendar.DAY_OF_WEEK
+import java.util.Calendar.HOUR_OF_DAY
+import java.util.Calendar.MILLISECOND
+import java.util.Calendar.MINUTE
+import java.util.Calendar.MONTH
+import java.util.Calendar.SEPTEMBER
+import java.util.Calendar.YEAR
 
 enum class WeekNumber(val index: Int) {
     FIRST(0),

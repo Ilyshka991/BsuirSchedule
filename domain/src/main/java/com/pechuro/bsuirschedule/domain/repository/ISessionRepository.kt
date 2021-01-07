@@ -1,6 +1,11 @@
 package com.pechuro.bsuirschedule.domain.repository
 
-import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.entity.AppTheme
+import com.pechuro.bsuirschedule.domain.entity.HintDisplayState
+import com.pechuro.bsuirschedule.domain.entity.RateAppAskInfo
+import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 import kotlinx.coroutines.flow.Flow
 
 interface ISessionRepository {
@@ -25,9 +30,11 @@ interface ISessionRepository {
 
     suspend fun setNavigationHintDisplayState(shown: Boolean)
 
-    suspend fun getScheduleHintDisplayState(): Flow<Boolean>
+    suspend fun getScheduleHintDisplayState(): Flow<HintDisplayState>
 
-    suspend fun setScheduleHintDisplayState(shown: Boolean)
+    suspend fun setScheduleHintDisplayState(state: HintDisplayState)
+
+    suspend fun isRateAppAskInfoSet(): Boolean
 
     suspend fun getRateAppAskInfo(): RateAppAskInfo
 

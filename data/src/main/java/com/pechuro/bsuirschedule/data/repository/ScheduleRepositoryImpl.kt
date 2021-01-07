@@ -1,18 +1,40 @@
 package com.pechuro.bsuirschedule.data.repository
 
 import com.pechuro.bsuirschedule.data.common.BaseRepository
-import com.pechuro.bsuirschedule.data.mappers.*
-import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.domain.repository.*
+import com.pechuro.bsuirschedule.data.mappers.toDatabaseEntity
+import com.pechuro.bsuirschedule.data.mappers.toDomainEntity
+import com.pechuro.bsuirschedule.data.mappers.toEmployeeExams
+import com.pechuro.bsuirschedule.data.mappers.toEmployeeLessons
+import com.pechuro.bsuirschedule.data.mappers.toGroupExams
+import com.pechuro.bsuirschedule.data.mappers.toGroupLessons
+import com.pechuro.bsuirschedule.domain.entity.Employee
+import com.pechuro.bsuirschedule.domain.entity.Exam
+import com.pechuro.bsuirschedule.domain.entity.Group
+import com.pechuro.bsuirschedule.domain.entity.Lesson
+import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.ScheduleType
+import com.pechuro.bsuirschedule.domain.entity.WeekNumber
+import com.pechuro.bsuirschedule.domain.entity.toDate
+import com.pechuro.bsuirschedule.domain.repository.IBuildingRepository
+import com.pechuro.bsuirschedule.domain.repository.IEmployeeRepository
+import com.pechuro.bsuirschedule.domain.repository.IGroupRepository
+import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
+import com.pechuro.bsuirschedule.domain.repository.ISpecialityRepository
 import com.pechuro.bsuirschedule.local.dao.ScheduleDao
 import com.pechuro.bsuirschedule.remote.api.ScheduleApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flattenMerge
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.withContext
 import java.util.*
-import kotlin.coroutines.coroutineContext
 import kotlin.reflect.KClass
 
 class ScheduleRepositoryImpl(
@@ -96,7 +118,7 @@ class ScheduleRepositoryImpl(
 
     override suspend fun getScheduleItem(schedule: Schedule, itemId: Long): Flow<ScheduleItem> {
         return when (schedule) {
-            is Schedule.GroupClasses -> dao.getGroupClassesItemById(itemId).map { item ->
+            is Schedule.GroupClasses -> dao.getGroupClassesItemByIdFlow(itemId).map { item ->
                 val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
                 val employees = item.employees.map { employeeRepository.getById(it.id) }
                 item.toDomainEntity(
@@ -112,7 +134,7 @@ class ScheduleRepositoryImpl(
                         employees = employees
                 )
             }
-            is Schedule.EmployeeClasses -> dao.getEmployeeClassesItemById(itemId).map { item ->
+            is Schedule.EmployeeClasses -> dao.getEmployeeClassesItemByIdFlow(itemId).map { item ->
                 val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
                 val groups = item.groups.map { groupRepository.getById(it.id) }
                 item.toDomainEntity(
@@ -211,12 +233,6 @@ class ScheduleRepositoryImpl(
         )
     }
 
-    override suspend fun updateAll() {
-        getAllSchedules().first().forEach {
-            update(it)
-        }
-    }
-
     override suspend fun update(schedule: Schedule) {
         when (schedule) {
             is Schedule.GroupClasses -> loadGroupScheduleInternal(
@@ -298,17 +314,6 @@ class ScheduleRepositoryImpl(
         }
     }
 
-    override suspend fun deleteAllSchedules() {
-        withContext(coroutineContext) {
-            listOf(
-                    async { performDaoCall { dao.deleteAllGroupClassesSchedules() } },
-                    async { performDaoCall { dao.deleteAllGroupExamSchedules() } },
-                    async { performDaoCall { dao.deleteAllEmployeeClassesSchedules() } },
-                    async { performDaoCall { dao.deleteAllEmployeeExamSchedules() } }
-            ).awaitAll()
-        }
-    }
-
     override suspend fun addScheduleItems(schedule: Schedule, scheduleItems: List<ScheduleItem>) {
         withContext(Dispatchers.IO) {
             scheduleItems.map { scheduleItem ->
@@ -363,8 +368,16 @@ class ScheduleRepositoryImpl(
         dao.insertGroupClassesItems(cached)
     }
 
-    private suspend fun getEmployeeLessonWeeks(lesson: Lesson.EmployeeLesson): List<WeekNumber> {
-        TODO("Not yet implemented")
+    private suspend fun getEmployeeLessonWeeks(lesson: Lesson.EmployeeLesson): List<WeekNumber> = performDaoCall {
+        dao.getEmployeeClassesWeeks(
+                id = lesson.id,
+                subject = lesson.subject,
+                subgroupNumber = lesson.subgroupNumber.value,
+                lessonType = lesson.lessonType,
+                startTime = lesson.startTime.toDate(),
+                endTime = lesson.endTime.toDate(),
+                weekDay = lesson.weekDay.index
+        ).map { WeekNumber.getForIndex(it) }
     }
 
     private suspend fun getGroupLessonWeeks(lesson: Lesson.GroupLesson): List<WeekNumber> = performDaoCall {

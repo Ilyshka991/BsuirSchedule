@@ -7,7 +7,6 @@ import com.pechuro.bsuirschedule.domain.entity.Department
 import com.pechuro.bsuirschedule.domain.entity.EducationForm
 import com.pechuro.bsuirschedule.domain.entity.Faculty
 import com.pechuro.bsuirschedule.domain.entity.Speciality
-import com.pechuro.bsuirschedule.domain.exception.DataSourceException
 import com.pechuro.bsuirschedule.domain.repository.ISpecialityRepository
 import com.pechuro.bsuirschedule.local.dao.SpecialityDao
 import com.pechuro.bsuirschedule.remote.api.SpecialityApi
@@ -78,13 +77,9 @@ class SpecialityRepositoryImpl(
         dao.getDepartmentById(id)
     }.toDomainEntity()
 
-    override suspend fun getFacultyById(id: Long): Faculty = performDaoCall {
+    override suspend fun getFacultyById(id: Long): Faculty? = performDaoCall {
         dao.getFacultyById(id)
-    }?.toDomainEntity() ?: throw DataSourceException.InvalidData
-
-    override suspend fun getEducationFormById(id: Long): EducationForm = performDaoCall {
-        dao.getEducationFormById(id)
-    }.toDomainEntity()
+    }?.toDomainEntity()
 
     override suspend fun getSpecialityById(id: Long): Speciality {
         val specialityCached = performDaoCall { dao.getSpecialityById(id) }

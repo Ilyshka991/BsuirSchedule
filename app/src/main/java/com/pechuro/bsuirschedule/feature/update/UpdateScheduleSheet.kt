@@ -1,5 +1,6 @@
 package com.pechuro.bsuirschedule.feature.update
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
@@ -8,7 +9,12 @@ import com.pechuro.bsuirschedule.common.AppAnalytics
 import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.ext.args
+import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.observe
+import com.pechuro.bsuirschedule.ext.setSafeClickListener
+import com.pechuro.bsuirschedule.ext.setVisibleOrInvisibleWithAlpha
+import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
 import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheetViewModel.State
 import kotlinx.android.synthetic.main.sheet_update_schedule.*
 
@@ -33,6 +39,17 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
 
     private val args: UpdateScheduleSheetArgs by args(BUNDLE_ARGS)
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        args.schedules.forEach {
+            AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Opened(it))
+        }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?) = super.onCreateDialog(savedInstanceState).apply {
+        isCancelable = false
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setSchedules(args.schedules)
@@ -43,15 +60,19 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
     private fun initView() {
         val onUpdateClickAction: (View) -> Unit = {
             viewModel.updateNextSchedule()
-            AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Updated)
         }
         updateScheduleSheetUpdateButton.setSafeClickListener(onClick = onUpdateClickAction)
         updateScheduleErrorRetryButton.setSafeClickListener(onClick = onUpdateClickAction)
 
         val onCancelClickAction: (View) -> Unit = {
-            val notRemind=updateScheduleSheetNotRemindCheckbox.isChecked
+            val notRemind = updateScheduleSheetNotRemindCheckbox.isChecked
+            val currentSchedule = viewModel.currentScheduleData.value
+            currentSchedule?.let {
+                AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Dismissed(
+                        schedule = currentSchedule,
+                        notRemind = notRemind))
+            }
             viewModel.cancelUpdate(notRemind)
-            AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Dismissed(notRemind))
         }
         updateScheduleSheetCancelButton.setSafeClickListener(onClick = onCancelClickAction)
         updateScheduleErrorCancelButton.setSafeClickListener(onClick = onCancelClickAction)

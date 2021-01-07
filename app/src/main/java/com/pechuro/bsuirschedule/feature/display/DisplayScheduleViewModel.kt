@@ -8,8 +8,8 @@ import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
 import com.pechuro.bsuirschedule.domain.entity.*
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber.Companion.calculateCurrentWeekNumber
+import com.pechuro.bsuirschedule.domain.ext.addIfEmpty
 import com.pechuro.bsuirschedule.domain.interactor.*
-import com.pechuro.bsuirschedule.ext.addIfEmpty
 import com.pechuro.bsuirschedule.ext.flowLiveData
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItemInfo
@@ -78,9 +78,32 @@ class DisplayScheduleViewModel @Inject constructor(
         addSource(displaySubgroupNumber) { transformFunction() }
     }
 
-    fun dismissHint() {
+    fun dismissLessonHint() {
         launchCoroutine {
-            setScheduleHintDisplayState.execute(SetScheduleHintDisplayState.Params(shown = true))
+            val currentState = hintDisplayState.value
+            val newState = HintDisplayState(
+                    lessonHintShown = true,
+                    examHintShown = currentState?.examHintShown ?: false
+            )
+            setScheduleHintDisplayState.execute(SetScheduleHintDisplayState.Params(newState))
+        }
+    }
+
+    fun dismissExamHint() {
+        launchCoroutine {
+            val currentState = hintDisplayState.value
+            val newState = HintDisplayState(
+                    lessonHintShown = currentState?.lessonHintShown ?: false,
+                    examHintShown = true
+            )
+            setScheduleHintDisplayState.execute(SetScheduleHintDisplayState.Params(newState))
+        }
+    }
+
+    fun calculateFirstVisibleItem(items: List<DisplayScheduleItem>): Int {
+        val currentDate = LocalDate.current()
+        return items.indexOfFirst {
+            it is DisplayScheduleItem.Exams && it.scheduleItem.date >= currentDate
         }
     }
 

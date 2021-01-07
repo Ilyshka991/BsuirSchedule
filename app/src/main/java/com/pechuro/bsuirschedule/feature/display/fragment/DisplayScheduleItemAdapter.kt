@@ -14,8 +14,22 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
-import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.domain.entity.Auditory
+import com.pechuro.bsuirschedule.domain.entity.Employee
+import com.pechuro.bsuirschedule.domain.entity.Exam
+import com.pechuro.bsuirschedule.domain.entity.Group
+import com.pechuro.bsuirschedule.domain.entity.Lesson
+import com.pechuro.bsuirschedule.domain.entity.LocalDate
+import com.pechuro.bsuirschedule.domain.entity.LocalTime
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
+import com.pechuro.bsuirschedule.domain.entity.WeekNumber
+import com.pechuro.bsuirschedule.domain.entity.toDate
+import com.pechuro.bsuirschedule.ext.color
+import com.pechuro.bsuirschedule.ext.dimenPx
+import com.pechuro.bsuirschedule.ext.formattedColorRes
+import com.pechuro.bsuirschedule.ext.formattedName
+import com.pechuro.bsuirschedule.ext.formattedString
+import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import kotlinx.android.synthetic.main.item_display_schedule_classes.*
 import kotlinx.android.synthetic.main.item_display_schedule_exam.*
@@ -57,6 +71,19 @@ class DisplayScheduleItemAdapter(
             onLongClickCallback(data)
             return true
         }
+    }
+
+    var dataUpdatesCount = 0
+        private set
+
+    override fun submitList(list: List<DisplayScheduleItem>?) {
+        dataUpdatesCount++
+        super.submitList(list)
+    }
+
+    override fun submitList(list: List<DisplayScheduleItem>?, commitCallback: Runnable?) {
+        dataUpdatesCount++
+        super.submitList(list, commitCallback)
     }
 
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
@@ -186,11 +213,11 @@ class DisplayScheduleItemAdapter(
     }
 }
 
-fun List<WeekNumber>.formatWeekNumbers() = joinToString(separator = ",") { it.formattedString }
+fun List<WeekNumber>.formatWeekNumbers() = joinToString(separator = ", ") { it.formattedString }
 
-fun List<Auditory>.formatAuditories() = joinToString(separator = ",") { it.formattedName }
+fun List<Auditory>.formatAuditories() = joinToString(separator = ", ") { it.formattedName }
 
-fun List<Employee>.formatEmployees() = joinToString(separator = ",") { it.abbreviation }
+fun List<Employee>.formatEmployees() = joinToString(separator = ", ") { it.abbreviation }
 
 fun List<Group>.formatGroupNumbers() = asSequence()
         .map { it.number }
@@ -204,4 +231,4 @@ fun List<Group>.formatGroupNumbers() = asSequence()
                 groupNumbers.firstOrNull() ?: ""
             }
         }
-        .joinToString(separator = ",") { it }
+        .joinToString(separator = ", ") { it }

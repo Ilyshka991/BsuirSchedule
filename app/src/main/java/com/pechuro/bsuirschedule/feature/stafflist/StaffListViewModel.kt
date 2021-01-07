@@ -12,7 +12,10 @@ import com.pechuro.bsuirschedule.domain.interactor.GetAuditories
 import com.pechuro.bsuirschedule.domain.interactor.GetEmployees
 import com.pechuro.bsuirschedule.domain.interactor.GetGroups
 import com.pechuro.bsuirschedule.ext.flowLiveData
-import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.*
+import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.AuditoryInfo
+import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.EmployeeInfo
+import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.Empty
+import com.pechuro.bsuirschedule.feature.stafflist.StaffItemInformation.GroupInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
@@ -28,15 +31,18 @@ class StaffListViewModel @Inject constructor(
 
     private val allGroupsListData = flowLiveData {
         getGroups.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
-                .map { list -> list.sortedWith(compareBy<Group> { it.faculty.abbreviation }.thenBy { it.number }) }
+                .map { list -> list.sortedWith(compareBy<Group> { it.speciality.faculty?.abbreviation }.thenBy { it.number }) }
+                .map { it.map { GroupInfo(it) } }
     }
     private val allAuditoriesListData = flowLiveData {
         getAuditories.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
                 .map { list -> list.sortedWith(compareBy<Auditory> { it.building.name }.thenBy { it.name }) }
+                .map { it.map { AuditoryInfo(it) } }
     }
     private val allEmployeesListData = flowLiveData {
         getEmployees.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
                 .map { list -> list.sortedBy { it.abbreviation } }
+                .map { it.map { EmployeeInfo(it) } }
     }
 
     private val _listData = MediatorLiveData<List<StaffItemInformation>>()
@@ -79,21 +85,21 @@ class StaffListViewModel @Inject constructor(
             StaffType.AUDITORY -> {
                 val currentList = allAuditoriesListData.value ?: emptyList()
                 currentList.filter {
-                    it.name.startsWith(filter)
-                }.map { AuditoryInfo(it) }
+                    it.auditory.name.startsWith(filter)
+                }
             }
             StaffType.GROUP -> {
                 val currentList = allGroupsListData.value ?: emptyList()
                 currentList.filter {
-                    it.number.startsWith(filter)
-                }.map { GroupInfo(it) }
+                    it.group.number.startsWith(filter)
+                }
             }
             StaffType.EMPLOYEE -> {
                 val currentList = allEmployeesListData.value ?: emptyList()
                 currentList.filter {
-                    it.firstName.startsWith(filter, ignoreCase = true)
-                            || it.lastName.startsWith(filter, ignoreCase = true)
-                }.map { EmployeeInfo(it) }
+                    it.employee.firstName.startsWith(filter, ignoreCase = true)
+                            || it.employee.lastName.startsWith(filter, ignoreCase = true)
+                }
             }
         }
         return if (filteredList.isEmpty() && filter.isNotEmpty()) {

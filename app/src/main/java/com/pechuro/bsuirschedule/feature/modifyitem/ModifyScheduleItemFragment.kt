@@ -10,13 +10,35 @@ import android.os.Parcelable
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import com.google.android.material.chip.Chip
 import com.bsuir.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.common.AppAnalytics
-import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
+import com.google.android.material.chip.Chip
 import com.pechuro.bsuirschedule.common.base.BaseFragment
-import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.domain.entity.Auditory
+import com.pechuro.bsuirschedule.domain.entity.Employee
+import com.pechuro.bsuirschedule.domain.entity.Group
+import com.pechuro.bsuirschedule.domain.entity.LessonPriority
+import com.pechuro.bsuirschedule.domain.entity.LessonTypes
+import com.pechuro.bsuirschedule.domain.entity.LocalDate
+import com.pechuro.bsuirschedule.domain.entity.LocalTime
+import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
+import com.pechuro.bsuirschedule.domain.entity.WeekDay
+import com.pechuro.bsuirschedule.domain.entity.WeekNumber
+import com.pechuro.bsuirschedule.domain.entity.isPartTime
+import com.pechuro.bsuirschedule.ext.addTextListener
+import com.pechuro.bsuirschedule.ext.args
+import com.pechuro.bsuirschedule.ext.color
+import com.pechuro.bsuirschedule.ext.formattedColorRes
+import com.pechuro.bsuirschedule.ext.formattedString
+import com.pechuro.bsuirschedule.ext.formattedStringRes
+import com.pechuro.bsuirschedule.ext.getCallbackOrNull
+import com.pechuro.bsuirschedule.ext.getFormattedString
+import com.pechuro.bsuirschedule.ext.hideKeyboard
+import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.observe
+import com.pechuro.bsuirschedule.ext.requireValue
+import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.confirmationdialog.ConfirmationDialog
 import com.pechuro.bsuirschedule.feature.confirmationdialog.ConfirmationDialogButtonData
 import com.pechuro.bsuirschedule.feature.modifyitem.ModifyScheduleItemViewModel.State.Complete
@@ -315,11 +337,13 @@ class ModifyScheduleItemFragment : BaseFragment() {
         return chip
     }
 
-    private fun getAvailableLessonTypes(): Array<String> {
+    private fun getAvailableLessonTypes(): List<String> {
         val schedule = args.schedule
-        val isClassesSchedule = schedule is Schedule.GroupClasses || schedule is Schedule.EmployeeClasses
-        val arrayResId = if (isClassesSchedule) R.array.lesson_types else R.array.exam_types
-        return requireContext().resources.getStringArray(arrayResId)
+        return when {
+            schedule is Schedule.GroupClasses || schedule is Schedule.EmployeeClasses -> LessonTypes.CLASSES.values
+            schedule is Schedule.GroupExams && schedule.group.speciality.educationForm.isPartTime -> LessonTypes.CLASSES.values + LessonTypes.EXAMS.values
+            else -> LessonTypes.EXAMS.values
+        }
     }
 
     private fun selectLessonType() {

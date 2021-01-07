@@ -5,7 +5,14 @@ import com.pechuro.bsuirschedule.common.base.BaseActivity
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.di.annotations.AppScope
-import com.pechuro.bsuirschedule.di.module.*
+import com.pechuro.bsuirschedule.di.module.ApplicationModule
+import com.pechuro.bsuirschedule.di.module.DataModule
+import com.pechuro.bsuirschedule.di.module.DatabaseModule
+import com.pechuro.bsuirschedule.di.module.NetworkModule
+import com.pechuro.bsuirschedule.di.module.RecyclerViewModule
+import com.pechuro.bsuirschedule.di.module.RepositoryModule
+import com.pechuro.bsuirschedule.di.module.ViewModelModule
+import com.pechuro.bsuirschedule.di.module.WorkerModule
 import com.pechuro.bsuirschedule.feature.appwidget.ScheduleWidgetProvider
 import com.pechuro.bsuirschedule.feature.appwidget.ScheduleWidgetViewService
 import com.pechuro.bsuirschedule.feature.display.fragment.DisplayScheduleFragment

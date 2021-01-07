@@ -30,10 +30,6 @@ class EmployeeRepositoryImpl(
         return getEmployeesFromDao()
     }
 
-    override suspend fun getAllNames(): Flow<List<String>> {
-        return dao.getAllNames().flowOn(Dispatchers.IO)
-    }
-
     override suspend fun getById(id: Long): Employee {
         val employeeCached = performDaoCall { dao.getById(id) }
         val department = employeeCached.departmentId?.let { specialityRepository.getDepartmentById(it) }
@@ -43,10 +39,6 @@ class EmployeeRepositoryImpl(
     override suspend fun updateCache() {
         val loadedEmployees = loadEmployeesFromApi()
         storeEmployees(loadedEmployees)
-    }
-
-    override suspend fun deleteAll() {
-        performDaoCall { dao.deleteAll() }
     }
 
     override suspend fun isCached(): Boolean = performDaoCall { dao.isNotEmpty() }

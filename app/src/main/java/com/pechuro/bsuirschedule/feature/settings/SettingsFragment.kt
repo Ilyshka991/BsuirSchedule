@@ -10,7 +10,12 @@ import com.pechuro.bsuirschedule.common.AppAnalytics
 import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.AppTheme
-import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.ext.formattedStringRes
+import com.pechuro.bsuirschedule.ext.getCallbackOrNull
+import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.observe
+import com.pechuro.bsuirschedule.ext.setSafeClickListener
+import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialog
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogButtonData
 import kotlinx.android.synthetic.main.fragment_settings.*
@@ -103,11 +108,9 @@ class SettingsFragment : BaseFragment() {
             selectTheme()
         }
         settingsUpdateInfoButton.setSafeClickListener {
-            AppAnalytics.report(AppAnalyticsEvent.Settings.InformationUpdated)
             viewModel.updateInfo()
         }
         settingsInfoLoadErrorButton.setSafeClickListener {
-            AppAnalytics.report(AppAnalyticsEvent.Settings.InformationUpdated)
             viewModel.updateInfo()
         }
         settingsRateAppButton.setSafeClickListener {

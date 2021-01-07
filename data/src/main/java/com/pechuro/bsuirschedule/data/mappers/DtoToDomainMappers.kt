@@ -1,10 +1,36 @@
 package com.pechuro.bsuirschedule.data.mappers
 
 import android.annotation.SuppressLint
-import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.domain.exception.DataSourceException
+import com.pechuro.bsuirschedule.domain.entity.Auditory
+import com.pechuro.bsuirschedule.domain.entity.AuditoryType
+import com.pechuro.bsuirschedule.domain.entity.Building
+import com.pechuro.bsuirschedule.domain.entity.Department
+import com.pechuro.bsuirschedule.domain.entity.EducationForm
+import com.pechuro.bsuirschedule.domain.entity.Employee
+import com.pechuro.bsuirschedule.domain.entity.Exam
+import com.pechuro.bsuirschedule.domain.entity.Faculty
+import com.pechuro.bsuirschedule.domain.entity.Group
+import com.pechuro.bsuirschedule.domain.entity.Lesson
+import com.pechuro.bsuirschedule.domain.entity.LessonPriority
+import com.pechuro.bsuirschedule.domain.entity.LocalTime
+import com.pechuro.bsuirschedule.domain.entity.Speciality
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
+import com.pechuro.bsuirschedule.domain.entity.WeekDay
+import com.pechuro.bsuirschedule.domain.entity.WeekNumber
+import com.pechuro.bsuirschedule.domain.entity.getLocalDate
+import com.pechuro.bsuirschedule.domain.entity.getLocalTime
 import com.pechuro.bsuirschedule.domain.ext.parseOrDefault
-import com.pechuro.bsuirschedule.remote.dto.*
+import com.pechuro.bsuirschedule.remote.dto.AuditoryDTO
+import com.pechuro.bsuirschedule.remote.dto.AuditoryTypeDTO
+import com.pechuro.bsuirschedule.remote.dto.BuildingDTO
+import com.pechuro.bsuirschedule.remote.dto.DepartmentDTO
+import com.pechuro.bsuirschedule.remote.dto.EducationFormDTO
+import com.pechuro.bsuirschedule.remote.dto.EmployeeDTO
+import com.pechuro.bsuirschedule.remote.dto.FacultyDTO
+import com.pechuro.bsuirschedule.remote.dto.GroupDTO
+import com.pechuro.bsuirschedule.remote.dto.LastUpdateDTO
+import com.pechuro.bsuirschedule.remote.dto.ScheduleItemDTO
+import com.pechuro.bsuirschedule.remote.dto.SpecialityDTO
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -60,11 +86,10 @@ internal fun EmployeeDTO.toDomainEntity(department: Department?) = run {
     )
 }
 
-internal fun GroupDTO.toDomainEntity(faculty: Faculty, speciality: Speciality) = run {
+internal fun GroupDTO.toDomainEntity(speciality: Speciality) = run {
     Group(
             id = id,
             number = number,
-            faculty = faculty,
             course = course ?: -1,
             speciality = speciality
     )
@@ -156,7 +181,7 @@ internal fun List<ScheduleItemDTO>.toGroupExams(
             val lessonEmployees = lesson.employees?.map { employeeDto ->
                 val department = departments.find {
                     it.abbreviation == employeeDto.departmentAbbreviation.firstOrNull()
-                } ?: throw DataSourceException.InvalidData
+                }
                 employeeDto.toDomainEntity(department)
             }
             val mappedScheduleItem = Exam.GroupExam(

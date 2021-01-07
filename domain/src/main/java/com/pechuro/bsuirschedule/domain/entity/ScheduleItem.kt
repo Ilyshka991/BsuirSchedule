@@ -13,3 +13,8 @@ interface ScheduleItem : Parcelable {
     val auditories: List<Auditory>
     val isAddedByUser: Boolean
 }
+
+enum class LessonTypes(val values: List<String>) {
+    CLASSES(listOf("ЛК", "ПЗ", "ЛР")),
+    EXAMS(listOf("Экзамен", "Консультация"))
+}

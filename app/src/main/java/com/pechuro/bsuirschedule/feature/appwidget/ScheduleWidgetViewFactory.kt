@@ -10,8 +10,16 @@ import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import androidx.core.graphics.drawable.toBitmap
 import com.bsuir.pechuro.bsuirschedule.R
-import com.pechuro.bsuirschedule.domain.entity.*
-import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.domain.entity.Exam
+import com.pechuro.bsuirschedule.domain.entity.Lesson
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.ScheduleWidgetInfo
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
+import com.pechuro.bsuirschedule.ext.app
+import com.pechuro.bsuirschedule.ext.color
+import com.pechuro.bsuirschedule.ext.dimenPx
+import com.pechuro.bsuirschedule.ext.formattedColorRes
+import com.pechuro.bsuirschedule.ext.formattedString
 import com.pechuro.bsuirschedule.feature.display.fragment.formatAuditories
 import javax.inject.Inject
 
@@ -58,9 +66,10 @@ class ScheduleWidgetRemoteViewFactory(
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        val row = when (val scheduleItem = scheduleItems[position]) {
+        val row = when (val scheduleItem = scheduleItems.getOrNull(position)) {
             is Lesson -> getLessonRow(scheduleItem)
             is Exam -> getExamRow(scheduleItem)
+            null -> getEmptyRow()
             else -> throw IllegalArgumentException("Not supported type: ${scheduleItem::class.java.name}")
         }
         row.setOnClickFillInIntent(R.id.scheduleWidgetItemParentView, Intent())
@@ -75,7 +84,7 @@ class ScheduleWidgetRemoteViewFactory(
 
     override fun getCount() = scheduleItems.size
 
-    override fun getViewTypeCount() = 4
+    override fun getViewTypeCount() = 5
 
     override fun onDestroy() {}
 
@@ -159,5 +168,9 @@ class ScheduleWidgetRemoteViewFactory(
         row.setViewVisibility(R.id.widgetExamNote, noteTextVisibility)
 
         return row
+    }
+
+    private fun getEmptyRow(): RemoteViews {
+        return RemoteViews(context.packageName, R.layout.item_widget_schedule_empty)
     }
 }

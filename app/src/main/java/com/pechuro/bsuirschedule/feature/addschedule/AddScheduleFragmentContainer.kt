@@ -4,13 +4,17 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.tabs.TabLayout
 import com.bsuir.pechuro.bsuirschedule.R
+import com.google.android.material.tabs.TabLayout
 import com.pechuro.bsuirschedule.common.AppAnalytics
 import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.ext.addOnTabSelectedListener
+import com.pechuro.bsuirschedule.ext.getCallbackOrNull
+import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.observe
+import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel.State
 import kotlinx.android.synthetic.main.fragment_add_schedule_container.*
 
@@ -85,7 +89,7 @@ class AddScheduleFragmentContainer : BaseFragment() {
                 is State.Complete -> onComplete(state.schedules)
                 is State.Loading -> setActionsEnabled(false)
                 is State.Idle -> setActionsEnabled(true)
-                is State.Error -> onError()
+                is State.Error -> onError(state.exception)
             }
         }
     }
@@ -94,8 +98,8 @@ class AddScheduleFragmentContainer : BaseFragment() {
         actionCallback?.onAddScheduleCompleted(schedules)
     }
 
-    private fun onError() {
-        AppAnalytics.report(AppAnalyticsEvent.AddSchedule.ScheduleLoadFailed)
+    private fun onError(exception: Throwable) {
+        AppAnalytics.report(AppAnalyticsEvent.AddSchedule.ScheduleLoadFailed(exception))
         setActionsEnabled(false)
     }
 

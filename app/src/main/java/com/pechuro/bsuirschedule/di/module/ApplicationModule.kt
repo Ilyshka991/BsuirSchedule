@@ -3,10 +3,11 @@ package com.pechuro.bsuirschedule.di.module
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.pechuro.bsuirschedule.App
 import com.pechuro.bsuirschedule.common.AndroidLoggerTree
 import com.pechuro.bsuirschedule.common.AppAnalytics
-import com.pechuro.bsuirschedule.common.AppAnalyticsReporter
+import com.pechuro.bsuirschedule.common.FlurryAnalyticsReporter
 import com.pechuro.bsuirschedule.common.NetworkAvailabilityCheckerImpl
 import com.pechuro.bsuirschedule.di.annotations.AppScope
 import com.pechuro.bsuirschedule.domain.common.Logger
@@ -32,11 +33,15 @@ class ApplicationModule {
 
     @Provides
     @AppScope
-    fun provideAnalyticsReporter(firebaseAnalytics: FirebaseAnalytics): AppAnalytics.Reporter = AppAnalyticsReporter(firebaseAnalytics)
+    fun provideAnalyticsReporter(crashlytics: FirebaseCrashlytics): AppAnalytics.Reporter = FlurryAnalyticsReporter(crashlytics)
 
     @Provides
     fun provideWidgetManager(context: Context): AppWidgetManager = AppWidgetManager.getInstance(context)
 
     @Provides
     fun provideFirebaseAnalytics(context: Context) = FirebaseAnalytics.getInstance(context)
+
+    @Provides
+    fun provideFirebaseCrashlytics() = FirebaseCrashlytics.getInstance()
+
 }

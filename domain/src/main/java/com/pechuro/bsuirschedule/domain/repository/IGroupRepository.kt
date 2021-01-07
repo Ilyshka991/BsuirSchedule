@@ -7,11 +7,7 @@ interface IGroupRepository {
 
     suspend fun getAll(): Flow<List<Group>>
 
-    suspend fun getAllNumbers(): Flow<List<String>>
-
     suspend fun getById(id: Long): Group
-
-    suspend fun deleteAll()
 
     suspend fun isCached(): Boolean
 

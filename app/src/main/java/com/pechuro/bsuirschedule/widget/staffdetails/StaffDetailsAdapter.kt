@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bsuir.pechuro.bsuirschedule.R
@@ -74,8 +75,8 @@ class StaffDetailsAdapter : ListAdapter<StaffDetailsInfo, BaseViewHolder<StaffDe
                     .load(url)
                     .override(SIZE_ORIGINAL)
                     .format(DecodeFormat.PREFER_ARGB_8888)
-                    .placeholder(R.drawable.employee_placeholder)
-                    .error(R.drawable.employee_placeholder)
+                    .placeholder(R.drawable.ic_employee_placeholder)
+                    .error(R.drawable.ic_employee_placeholder)
                     .circleCrop()
                     .into(this)
         }
@@ -86,13 +87,16 @@ class StaffDetailsAdapter : ListAdapter<StaffDetailsInfo, BaseViewHolder<StaffDe
         override fun onBind(data: GroupInfo) {
             val group = data.group
             groupDetailsNumber.text = group.number
+            groupDetailsCourse.isVisible = group.course != -1
             groupDetailsCourse.text = itemView.context.getString(
                     R.string.staff_list_msg_group_course,
                     group.course
             )
             groupDetailsSpecialityName.text = group.speciality.name
             groupDetailsEducationForm.text = group.speciality.educationForm.name
-            groupDetailsFacultyName.text = group.faculty.name.capitalize()
+            val faculty = group.speciality.faculty
+            groupDetailsFacultyName.isVisible = faculty != null
+            groupDetailsFacultyName.text = faculty?.name?.capitalize()
         }
     }
 }

@@ -1,6 +1,13 @@
 package com.pechuro.bsuirschedule.common
 
-import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.entity.AppTheme
+import com.pechuro.bsuirschedule.domain.entity.Building
+import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.ScheduleType
+import com.pechuro.bsuirschedule.domain.entity.ScheduleWidgetInfo
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 
 object AppAnalytics {
 
@@ -27,7 +34,9 @@ sealed class AppAnalyticsEvent {
 
         data class ScheduleOpened(val schedule: Schedule) : Navigation()
 
-        data class ScheduleUpdated(val schedule: Schedule) : Navigation()
+        data class ScheduleUpdateSuccess(val schedule: Schedule) : Navigation()
+
+        data class ScheduleUpdateFail(val exception: Throwable) : Navigation()
 
         data class ScheduleDeleted(val schedule: Schedule) : Navigation()
     }
@@ -40,7 +49,9 @@ sealed class AppAnalyticsEvent {
 
         data class ThemeChanged(val theme: AppTheme) : Settings()
 
-        object InformationUpdated : Settings()
+        object InformationUpdateSuccess : Settings()
+
+        data class InformationUpdateFail(val exception: Throwable) : Settings()
 
         object PrivacyPoliceOpened : Settings()
 
@@ -53,9 +64,9 @@ sealed class AppAnalyticsEvent {
 
         object Opened : AddSchedule()
 
-        data class ScheduleLoaded(val schedule: Schedule,val types: List<ScheduleType>) : AddSchedule()
+        data class ScheduleLoaded(val schedule: Schedule, val types: List<ScheduleType>) : AddSchedule()
 
-        object ScheduleLoadFailed : AddSchedule()
+        data class ScheduleLoadFailed(val exception: Throwable) : AddSchedule()
     }
 
     sealed class DisplaySchedule : AppAnalyticsEvent() {
@@ -99,19 +110,27 @@ sealed class AppAnalyticsEvent {
 
     sealed class UpdateSchedule : AppAnalyticsEvent() {
 
-        object Updated : UpdateSchedule()
+        data class Opened(val schedule: Schedule) : UpdateSchedule()
 
-        data class Dismissed(val notRemind: Boolean) : UpdateSchedule()
+        data class Updated(val schedule: Schedule) : UpdateSchedule()
+
+        data class UpdateFailed(val schedule: Schedule, val exception: Throwable) : UpdateSchedule()
+
+        data class Dismissed(val schedule: Schedule, val notRemind: Boolean) : UpdateSchedule()
     }
 
     sealed class InfoLoad : AppAnalyticsEvent() {
 
+        object Opened : InfoLoad()
+
         object Loaded : InfoLoad()
 
-        object Failed : InfoLoad()
+        data class Failed(val exception: Throwable) : InfoLoad()
     }
 
     sealed class RateApp : AppAnalyticsEvent() {
+
+        object Opened : RateApp()
 
         object RateClicked : RateApp()
 

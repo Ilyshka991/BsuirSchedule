@@ -1,11 +1,30 @@
 package com.pechuro.bsuirschedule.di.module
 
-import com.pechuro.bsuirschedule.data.repository.*
+import com.pechuro.bsuirschedule.data.repository.BuildingRepositoryImpl
+import com.pechuro.bsuirschedule.data.repository.EmployeeRepositoryImpl
+import com.pechuro.bsuirschedule.data.repository.GroupRepositoryImpl
+import com.pechuro.bsuirschedule.data.repository.ScheduleRepositoryImpl
+import com.pechuro.bsuirschedule.data.repository.SessionRepositoryImpl
+import com.pechuro.bsuirschedule.data.repository.SpecialityRepositoryImpl
+import com.pechuro.bsuirschedule.data.repository.WidgetRepositoryImpl
 import com.pechuro.bsuirschedule.di.annotations.AppScope
-import com.pechuro.bsuirschedule.domain.repository.*
-import com.pechuro.bsuirschedule.local.dao.*
+import com.pechuro.bsuirschedule.domain.repository.IBuildingRepository
+import com.pechuro.bsuirschedule.domain.repository.IEmployeeRepository
+import com.pechuro.bsuirschedule.domain.repository.IGroupRepository
+import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
+import com.pechuro.bsuirschedule.domain.repository.ISessionRepository
+import com.pechuro.bsuirschedule.domain.repository.ISpecialityRepository
+import com.pechuro.bsuirschedule.domain.repository.IWidgetRepository
+import com.pechuro.bsuirschedule.local.dao.BuildingDao
+import com.pechuro.bsuirschedule.local.dao.EmployeeDao
+import com.pechuro.bsuirschedule.local.dao.GroupDao
+import com.pechuro.bsuirschedule.local.dao.ScheduleDao
+import com.pechuro.bsuirschedule.local.dao.SpecialityDao
 import com.pechuro.bsuirschedule.local.sharedprefs.SharedPreferencesManager
-import com.pechuro.bsuirschedule.remote.api.*
+import com.pechuro.bsuirschedule.remote.api.BuildingApi
+import com.pechuro.bsuirschedule.remote.api.ScheduleApi
+import com.pechuro.bsuirschedule.remote.api.SpecialityApi
+import com.pechuro.bsuirschedule.remote.api.StaffApi
 import dagger.Module
 import dagger.Provides
 
@@ -75,11 +94,6 @@ class RepositoryModule {
             dao = dao,
             specialityRepository = specialityRepository
     )
-
-    @Provides
-    @AppScope
-    fun provideAnnouncementRepository(api: AnnouncementApi): IAnnouncementRepository =
-            AnnouncementRepositoryImpl(api)
 
     @Provides
     @AppScope

@@ -3,7 +3,16 @@ package com.pechuro.bsuirschedule.common
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.*
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.AddSchedule
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.Details
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.DisplaySchedule
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.Edit
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.InfoLoad
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.Navigation
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.RateApp
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.Settings
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.UpdateSchedule
+import com.pechuro.bsuirschedule.common.AppAnalyticsEvent.Widget
 import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.entity.Exam
 import com.pechuro.bsuirschedule.domain.entity.Lesson
@@ -11,7 +20,7 @@ import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import java.util.*
 
-class AppAnalyticsReporter(
+class FirebaseAnalyticsReporter(
         private val firebaseAnalytics: FirebaseAnalytics
 ) : AppAnalytics.Reporter {
 
@@ -48,13 +57,15 @@ class AppAnalyticsReporter(
 
     private fun getEventName(event: AppAnalyticsEvent): String? = when (event) {
         is Navigation.ScheduleOpened -> "open"
-        is Navigation.ScheduleUpdated -> "update"
+        is Navigation.ScheduleUpdateSuccess -> "update_success"
+        is Navigation.ScheduleUpdateFail -> "update_fail"
         is Navigation.ScheduleDeleted -> "delete"
 
         is Settings.Opened -> "open"
         is Settings.ThemesOpened -> "theme_edit_open"
         is Settings.ThemeChanged -> "theme_change"
-        is Settings.InformationUpdated -> "info_update"
+        is Settings.InformationUpdateSuccess -> "info_update_success"
+        is Settings.InformationUpdateFail -> "info_update_fail"
         is Settings.PrivacyPoliceOpened -> "privacy_police_open"
         is Settings.SendFeedbackOpened -> "send_feedback_open"
         is Settings.RateAppOpened -> "rate_app_open"
@@ -95,19 +106,23 @@ class AppAnalyticsReporter(
         is Widget.ConfigurationApplied -> "config_apply"
         is Widget.ConfigurationCanceled -> "config_cancel"
         is Widget.Deleted -> "delete"
+        else -> null
     }
 
     private fun getParams(event: AppAnalyticsEvent): Bundle = when (event) {
         is Navigation.ScheduleOpened -> event.schedule.getInfo()
-        is Navigation.ScheduleUpdated -> event.schedule.getInfo()
+        is Navigation.ScheduleUpdateSuccess -> event.schedule.getInfo()
+        is Navigation.ScheduleUpdateFail -> event.exception.getInfo()
         is Navigation.ScheduleDeleted -> event.schedule.getInfo()
 
         is Settings.ThemeChanged -> bundleOf("theme" to event.theme.name.toLowerCase(Locale.ENGLISH))
+        is Settings.InformationUpdateFail -> event.exception.getInfo()
 
         is AddSchedule.ScheduleLoaded -> bundleOf(
                 "name" to event.schedule.name.take(PARAM_MAX_SYMBOLS),
                 "types" to event.types.joinToString { it.name.toLowerCase(Locale.ENGLISH) }.take(PARAM_MAX_SYMBOLS)
         )
+        is AddSchedule.ScheduleLoadFailed -> event.exception.getInfo()
 
         is DisplaySchedule.ItemOptionOpened -> event.scheduleItem.getInfo()
         is DisplaySchedule.ItemDeleted -> event.scheduleItem.getInfo()
@@ -121,6 +136,8 @@ class AppAnalyticsReporter(
         is Details.LocationClicked -> bundleOf("building" to event.building.name)
 
         is UpdateSchedule.Dismissed -> bundleOf("not_remind" to event.notRemind)
+
+        is InfoLoad.Failed -> event.exception.getInfo()
 
         is Widget.ConfigurationOpened -> bundleOf("new_widget" to !event.widgetExist)
         is Widget.ConfigurationApplied -> bundleOf(
@@ -154,5 +171,9 @@ class AppAnalyticsReporter(
                 is Exam.EmployeeExam -> "employee_exam"
                 else -> "none"
             }
+    )
+
+    private fun Throwable.getInfo() = bundleOf(
+            "exception" to (this::class.simpleName?.take(PARAM_MAX_SYMBOLS) ?: "")
     )
 }

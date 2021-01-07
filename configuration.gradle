@@ -3,10 +3,19 @@ ext.configuration = [
 
         androidJUnitRunner: 'com.pechuro.bsuirschedule.runner.EspressoTestRunner',
 
-        compileSdkVersion : 29,
+        compileSdkVersion : 30,
         minSdkVersion     : 21,
-        targetSdkVersion  : 29,
+        targetSdkVersion  : 30,
 
-        versionCode       : 18,
-        versionName       : '3.1.0'
+        versionCode       : 19,
+        versionName       : '3.2.0',
+
+        flurryApiKey      : ""
 ]
+
+def apiKeyPropsFile = rootProject.file('apikey.properties')
+if (apiKeyPropsFile.exists()) {
+    def props = new Properties()
+    props.load(new FileInputStream(apiKeyPropsFile))
+    configuration.flurryApiKey = props['flurry']
+}

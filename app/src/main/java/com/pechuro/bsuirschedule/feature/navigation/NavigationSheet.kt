@@ -13,12 +13,13 @@ import android.view.Window
 import androidx.core.view.children
 import androidx.core.view.marginBottom
 import androidx.core.view.marginTop
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.bsuir.pechuro.bsuirschedule.R
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.pechuro.bsuirschedule.common.AppAnalytics
 import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
@@ -197,7 +198,9 @@ class NavigationSheet : BaseBottomSheetDialog() {
     private fun observeData() {
         viewModel.navigationInfoData.nonNull().observe(viewLifecycleOwner) {
             adapter.submitList(it) {
-                navigationSheetItemRecyclerView?.scrollToPosition(0)
+                whenStateAtLeast(Lifecycle.State.CREATED) {
+                    navigationSheetItemRecyclerView?.scrollToPosition(0)
+                }
             }
         }
     }
@@ -234,7 +237,6 @@ class NavigationSheet : BaseBottomSheetDialog() {
         resetSwipedItems()
         val scheduleInfo = adapter.getItemAt(position) as? NavigationSheetItemInformation.Content
         if (scheduleInfo != null) {
-            AppAnalytics.report(AppAnalyticsEvent.Navigation.ScheduleUpdated(scheduleInfo.schedule))
             viewModel.updateSchedule(scheduleInfo.schedule)
         } else {
             Logger.w("Try to update item, which is not a subtype of NavigationSheetItemInformation.Content")

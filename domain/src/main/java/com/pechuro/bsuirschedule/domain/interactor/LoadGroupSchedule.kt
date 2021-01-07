@@ -12,7 +12,7 @@ class LoadGroupSchedule @Inject constructor(
 ) : BaseInteractor<List<Schedule>, LoadGroupSchedule.Params>() {
 
     override suspend fun run(params: Params): List<Schedule> {
-       return scheduleRepository.loadGroupSchedule(params.group, params.types)
+        return scheduleRepository.loadGroupSchedule(params.group, params.types)
     }
 
     data class Params(

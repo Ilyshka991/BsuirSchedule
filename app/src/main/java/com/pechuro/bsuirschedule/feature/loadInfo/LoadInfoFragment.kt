@@ -7,7 +7,11 @@ import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.AppAnalytics
 import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseFragment
-import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.ext.getCallbackOrNull
+import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.observe
+import com.pechuro.bsuirschedule.ext.setSafeClickListener
+import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
 import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoViewModel.Status
 import kotlinx.android.synthetic.main.fragment_info_load.*
 
@@ -39,6 +43,7 @@ class LoadInfoFragment : BaseFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         actionCallback = getCallbackOrNull()
+        AppAnalytics.report(AppAnalyticsEvent.InfoLoad.Opened)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,9 +66,9 @@ class LoadInfoFragment : BaseFragment() {
     private fun observeData() {
         viewModel.status.nonNull().observe(this) { status ->
             when (status) {
-                Status.COMPLETE -> handleComplete()
-                Status.ERROR -> handleError()
-                Status.LOADING -> handleLoading()
+                is Status.Complete -> handleComplete()
+                is Status.Error -> handleError(status.exception)
+                is Status.Loading -> handleLoading()
             }
         }
     }
@@ -73,8 +78,8 @@ class LoadInfoFragment : BaseFragment() {
         actionCallback?.onLoadInfoCompleted()
     }
 
-    private fun handleError() {
-        AppAnalytics.report(AppAnalyticsEvent.InfoLoad.Failed)
+    private fun handleError(exception: Throwable) {
+        AppAnalytics.report(AppAnalyticsEvent.InfoLoad.Failed(exception))
         infoLoadLoaderView.setVisibleWithAlpha(false)
         infoLoadErrorParentView.setVisibleWithAlpha(true)
     }

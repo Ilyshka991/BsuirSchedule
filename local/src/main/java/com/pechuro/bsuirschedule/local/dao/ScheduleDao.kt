@@ -1,31 +1,36 @@
 package com.pechuro.bsuirschedule.local.dao
 
-import androidx.room.*
-import com.pechuro.bsuirschedule.local.entity.schedule.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
+import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeClassesScheduleCached
+import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeExamScheduleCached
+import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeItemClassesCached
+import com.pechuro.bsuirschedule.local.entity.schedule.EmployeeItemExamCached
+import com.pechuro.bsuirschedule.local.entity.schedule.GroupClassesScheduleCached
+import com.pechuro.bsuirschedule.local.entity.schedule.GroupExamScheduleCached
+import com.pechuro.bsuirschedule.local.entity.schedule.GroupItemClassesCached
+import com.pechuro.bsuirschedule.local.entity.schedule.GroupItemExamCached
 import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeClassesItemComplex
 import com.pechuro.bsuirschedule.local.entity.schedule.complex.EmployeeExamItemComplex
 import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupClassesItemComplex
 import com.pechuro.bsuirschedule.local.entity.schedule.complex.GroupExamItemComplex
-import com.pechuro.bsuirschedule.local.entity.schedule.crossref.*
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.EmployeeExamAuditoryCrossRef
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.EmployeeExamGroupCrossRef
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.EmployeeLessonAuditoryCrossRef
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.EmployeeLessonGroupCrossRef
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.GroupExamAuditoryCrossRef
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.GroupExamEmployeeCrossRef
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.GroupLessonAuditoryCrossRef
+import com.pechuro.bsuirschedule.local.entity.schedule.crossref.GroupLessonEmployeeCrossRef
 import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 @Dao
 interface ScheduleDao {
-
-    @Transaction
-    suspend fun getGroupClassesWeeks(
-            id: Long,
-            subject: String,
-            subgroupNumber: Int,
-            lessonType: String,
-            startTime: Date,
-            endTime: Date,
-            weekDay: Int
-    ): List<Int> {
-        val scheduleName = getGroupClassesById(id).scheduleName
-        return getGroupClassesWeeks(scheduleName, subject, subgroupNumber, lessonType, startTime, endTime, weekDay)
-    }
 
     @Transaction
     suspend fun insertGroupClassesSchedule(
@@ -318,19 +323,6 @@ interface ScheduleDao {
     suspend fun deleteEmployeeExamSchedule(name: String)
 
 
-    @Query("DELETE FROM group_schedule_classes")
-    suspend fun deleteAllGroupClassesSchedules()
-
-    @Query("DELETE FROM group_schedule_exam")
-    suspend fun deleteAllGroupExamSchedules()
-
-    @Query("DELETE FROM employee_schedule_classes")
-    suspend fun deleteAllEmployeeClassesSchedules()
-
-    @Query("DELETE FROM employee_schedule_exam")
-    suspend fun deleteAllEmployeeExamSchedules()
-
-
     @Transaction
     @Query("SELECT * FROM group_item_classes WHERE schedule_name = :scheduleName")
     fun getGroupClassesItems(scheduleName: String): Flow<List<GroupClassesItemComplex>>
@@ -350,7 +342,11 @@ interface ScheduleDao {
 
     @Transaction
     @Query("SELECT * FROM group_item_classes WHERE id = :id")
-    fun getGroupClassesItemById(id: Long): Flow<GroupClassesItemComplex>
+    fun getGroupClassesItemByIdFlow(id: Long): Flow<GroupClassesItemComplex>
+
+    @Transaction
+    @Query("SELECT * FROM group_item_classes WHERE id = :id")
+    fun getGroupClassesItemById(id: Long): GroupClassesItemComplex
 
     @Transaction
     @Query("SELECT * FROM group_item_exam WHERE id = :id")
@@ -358,7 +354,11 @@ interface ScheduleDao {
 
     @Transaction
     @Query("SELECT * FROM employee_item_classes WHERE id = :id")
-    fun getEmployeeClassesItemById(id: Long): Flow<EmployeeClassesItemComplex>
+    fun getEmployeeClassesItemByIdFlow(id: Long): Flow<EmployeeClassesItemComplex>
+
+    @Transaction
+    @Query("SELECT * FROM employee_item_classes WHERE id = :id")
+    fun getEmployeeClassesItemById(id: Long): EmployeeClassesItemComplex
 
     @Transaction
     @Query("SELECT * FROM employee_item_exam WHERE id = :id")
@@ -390,6 +390,18 @@ interface ScheduleDao {
     suspend fun deleteNotUserEmployeeExamItems(scheduleName: String)
 
 
+    @Query("SELECT week_number FROM group_item_classes INNER JOIN join_group_lesson_employee ON group_item_classes.id = join_group_lesson_employee.schedule_item_id WHERE join_group_lesson_employee.employee_id IN (:employeeIds) AND schedule_name = :scheduleName AND subject = :subject AND subgroup_number = :subgroupNumber AND lesson_type = :lessonType AND start_time = :startTime AND end_time = :endTime AND week_day = :weekDay")
+    suspend fun getGroupClassesWeeks(
+            scheduleName: String,
+            subject: String,
+            subgroupNumber: Int,
+            lessonType: String,
+            startTime: Date,
+            endTime: Date,
+            weekDay: Int,
+            employeeIds: List<Long>
+    ): List<Int>
+
     @Query("SELECT week_number FROM group_item_classes WHERE schedule_name = :scheduleName AND subject = :subject AND subgroup_number = :subgroupNumber AND lesson_type = :lessonType AND start_time = :startTime AND end_time = :endTime AND week_day = :weekDay")
     suspend fun getGroupClassesWeeks(
             scheduleName: String,
@@ -398,9 +410,31 @@ interface ScheduleDao {
             lessonType: String,
             startTime: Date,
             endTime: Date,
-            weekDay: Int
+            weekDay: Int,
     ): List<Int>
 
+    @Query("SELECT week_number FROM employee_item_classes INNER JOIN join_employee_lesson_group ON employee_item_classes.id = join_employee_lesson_group.schedule_item_id WHERE join_employee_lesson_group.group_id IN (:groupIds) AND schedule_name = :scheduleName AND subject = :subject AND subgroup_number = :subgroupNumber AND lesson_type = :lessonType AND start_time = :startTime AND end_time = :endTime AND week_day = :weekDay")
+    suspend fun getEmployeeClassesWeeks(
+            scheduleName: String,
+            subject: String,
+            subgroupNumber: Int,
+            lessonType: String,
+            startTime: Date,
+            endTime: Date,
+            weekDay: Int,
+            groupIds: List<Long>
+    ): List<Int>
+
+    @Query("SELECT week_number FROM employee_item_classes WHERE schedule_name = :scheduleName AND subject = :subject AND subgroup_number = :subgroupNumber AND lesson_type = :lessonType AND start_time = :startTime AND end_time = :endTime AND week_day = :weekDay")
+    suspend fun getEmployeeClassesWeeks(
+            scheduleName: String,
+            subject: String,
+            subgroupNumber: Int,
+            lessonType: String,
+            startTime: Date,
+            endTime: Date,
+            weekDay: Int,
+    ): List<Int>
 
     @Query("SELECT * FROM group_item_classes WHERE id = :id")
     suspend fun getGroupClassesById(id: Long): GroupItemClassesCached
@@ -413,4 +447,80 @@ interface ScheduleDao {
 
     @Query("SELECT * FROM employee_item_exam WHERE id = :id")
     suspend fun getEmployeeExamById(id: Long): EmployeeItemExamCached
+
+
+    @Transaction
+    suspend fun getGroupClassesWeeks(
+            id: Long,
+            subject: String,
+            subgroupNumber: Int,
+            lessonType: String,
+            startTime: Date,
+            endTime: Date,
+            weekDay: Int
+    ): List<Int> {
+        val scheduleItem = getGroupClassesItemById(id)
+        val employeeIds = scheduleItem.employees.map { it.id }
+        val scheduleName = scheduleItem.scheduleItem.scheduleName
+        return if (employeeIds.isNotEmpty()) {
+            getGroupClassesWeeks(
+                    scheduleName = scheduleName,
+                    subject = subject,
+                    subgroupNumber = subgroupNumber,
+                    lessonType = lessonType,
+                    startTime = startTime,
+                    endTime = endTime,
+                    weekDay = weekDay,
+                    employeeIds = employeeIds
+            )
+        } else {
+            getGroupClassesWeeks(
+                    scheduleName = scheduleName,
+                    subject = subject,
+                    subgroupNumber = subgroupNumber,
+                    lessonType = lessonType,
+                    startTime = startTime,
+                    endTime = endTime,
+                    weekDay = weekDay
+            )
+        }
+    }
+
+    @Transaction
+    suspend fun getEmployeeClassesWeeks(
+            id: Long,
+            subject: String,
+            subgroupNumber: Int,
+            lessonType: String,
+            startTime: Date,
+            endTime: Date,
+            weekDay: Int
+    ): List<Int> {
+        val scheduleItem = getEmployeeClassesItemById(id)
+        val groupIds = scheduleItem.groups.map { it.id }
+        val scheduleName = scheduleItem.scheduleItem.scheduleName
+        return if (groupIds.isNotEmpty()) {
+            getEmployeeClassesWeeks(
+                    scheduleName = scheduleName,
+                    subject = subject,
+                    subgroupNumber = subgroupNumber,
+                    lessonType = lessonType,
+                    startTime = startTime,
+                    endTime = endTime,
+                    weekDay = weekDay,
+                    groupIds = groupIds
+            )
+        } else {
+            getEmployeeClassesWeeks(
+                    scheduleName = scheduleName,
+                    subject = subject,
+                    subgroupNumber = subgroupNumber,
+                    lessonType = lessonType,
+                    startTime = startTime,
+                    endTime = endTime,
+                    weekDay = weekDay
+            )
+        }
+
+    }
 }
