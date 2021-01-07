@@ -29,10 +29,10 @@ def libraryVersions = [
         glide             : '4.11.0',
         lottie            : '3.3.1',
 
-        retrofit          : '2.7.1',
-        okHttp            : '3.14.6',
-        moshiAdapter      : '2.5.0',
-        moshi             : '1.9.2',
+        retrofit          : '2.9.0',
+        okHttp            : '4.9.0',
+        moshiAdapter      : '2.9.0',
+        moshi             : '1.11.0',
 
         crashlytics       : '17.2.1',
         analytics         : '17.5.0',
