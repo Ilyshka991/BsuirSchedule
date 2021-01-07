@@ -17,6 +17,7 @@ import com.pechuro.bsuirschedule.domain.entity.Auditory
 import com.pechuro.bsuirschedule.domain.entity.Employee
 import com.pechuro.bsuirschedule.domain.entity.Group
 import com.pechuro.bsuirschedule.domain.entity.LessonPriority
+import com.pechuro.bsuirschedule.domain.entity.LessonTypes
 import com.pechuro.bsuirschedule.domain.entity.LocalDate
 import com.pechuro.bsuirschedule.domain.entity.LocalTime
 import com.pechuro.bsuirschedule.domain.entity.Schedule
@@ -24,6 +25,7 @@ import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 import com.pechuro.bsuirschedule.domain.entity.WeekDay
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
+import com.pechuro.bsuirschedule.domain.entity.isPartTime
 import com.pechuro.bsuirschedule.ext.addTextListener
 import com.pechuro.bsuirschedule.ext.args
 import com.pechuro.bsuirschedule.ext.color
@@ -335,11 +337,13 @@ class ModifyScheduleItemFragment : BaseFragment() {
         return chip
     }
 
-    private fun getAvailableLessonTypes(): Array<String> {
+    private fun getAvailableLessonTypes(): List<String> {
         val schedule = args.schedule
-        val isClassesSchedule = schedule is Schedule.GroupClasses || schedule is Schedule.EmployeeClasses
-        val arrayResId = if (isClassesSchedule) R.array.lesson_types else R.array.exam_types
-        return requireContext().resources.getStringArray(arrayResId)
+        return when {
+            schedule is Schedule.GroupClasses || schedule is Schedule.EmployeeClasses -> LessonTypes.CLASSES.values
+            schedule is Schedule.GroupExams && schedule.group.speciality.educationForm.isPartTime -> LessonTypes.CLASSES.values + LessonTypes.EXAMS.values
+            else -> LessonTypes.EXAMS.values
+        }
     }
 
     private fun selectLessonType() {

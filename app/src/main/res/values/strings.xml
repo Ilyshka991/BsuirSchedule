@@ -166,17 +166,6 @@
     <string name="rate_app_action_no">No, thanks</string>
     <string name="rate_app_action_later">Later</string>
 
-    <string-array name="lesson_types">
-        <item>ЛК</item>
-        <item>ПЗ</item>
-        <item>ЛР</item>
-    </string-array>
-
-    <string-array name="exam_types">
-        <item>Экзамен</item>
-        <item>Консультация</item>
-    </string-array>
-
     <string-array name="weekdays">
         <item>Monday</item>
         <item>Tuesday</item>

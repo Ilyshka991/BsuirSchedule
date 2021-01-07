@@ -29,7 +29,7 @@ class FlurryAnalyticsReporter : AppAnalytics.Reporter {
     override fun report(event: AppAnalyticsEvent) {
         val eventName = buildEvent(event)?.take(EVENT_MAX_SYMBOLS) ?: return
         val params = getParams(event)
-        Logger.tag("AnalyticsReporter").i("$eventName${if (params.isNotEmpty()) ", $params" else ""}")
+        Logger.tag("AnalyticsReporter").i("$eventName - params: $params")
         FlurryAgent.logEvent(eventName, params)
     }
 

@@ -21,7 +21,7 @@ class ModifyScheduleItemViewModel @Inject constructor(
     fun init(
             schedule: Schedule,
             items: List<ScheduleItem>,
-            lessonTypes: Array<String>
+            lessonTypes: List<String>
     ) {
         if (this::dataProvider.isInitialized) return
         AppAnalytics.report(AppAnalyticsEvent.Edit.Opened(items.firstOrNull()))

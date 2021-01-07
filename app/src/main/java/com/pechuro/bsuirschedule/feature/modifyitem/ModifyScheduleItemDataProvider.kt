@@ -23,7 +23,7 @@ import java.util.*
 class ModifyScheduleItemDataProvider(
         val initialSchedule: Schedule,
         val initialItems: List<ScheduleItem>,
-        private val lessonTypes: Array<String>
+        private val lessonTypes: List<String>
 ) {
 
     private val _subjectData = MutableLiveData<String>()
