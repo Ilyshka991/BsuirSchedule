@@ -105,8 +105,8 @@ internal fun EducationFormDTO.toDomainEntity() = run {
 internal fun FacultyDTO.toDomainEntity() = run {
     Faculty(
             id = id,
-            name = name,
-            abbreviation = abbreviation
+            name = name ?: "",
+            abbreviation = abbreviation ?: ""
     )
 }
 

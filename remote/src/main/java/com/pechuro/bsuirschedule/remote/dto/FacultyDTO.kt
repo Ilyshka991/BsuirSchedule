@@ -8,7 +8,7 @@ data class FacultyDTO(
         @Json(name = "id")
         val id: Long,
         @Json(name = "name")
-        val name: String,
+        val name: String?,
         @Json(name = "abbrev")
-        val abbreviation: String
+        val abbreviation: String?
 )
