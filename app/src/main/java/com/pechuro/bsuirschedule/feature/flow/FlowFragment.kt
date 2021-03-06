@@ -42,8 +42,6 @@ import com.pechuro.bsuirschedule.feature.start.StartFragment
 import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheet
 import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheetArgs
 import kotlinx.android.synthetic.main.fragment_flow.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.*
 
 class FlowFragment : BaseFragment(),
@@ -91,18 +89,24 @@ class FlowFragment : BaseFragment(),
         super.onViewCreated(view, savedInstanceState)
         initNavigation()
         if (savedInstanceState == null) setStartFragment()
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launchWhenResumed {
             if (savedInstanceState == null && !viewModel.isInfoLoaded()) {
-                openLoadInfo()
-                return@launch
+                whenStateAtLeast(Lifecycle.State.RESUMED) {
+                    openLoadInfo()
+                }
+                return@launchWhenResumed
             }
             val availableForUpdateSchedules = checkScheduleUpdates()
             if (availableForUpdateSchedules.isNotEmpty()) {
-                openUpdateSchedules(availableForUpdateSchedules)
-                return@launch
+                whenStateAtLeast(Lifecycle.State.RESUMED) {
+                    openUpdateSchedules(availableForUpdateSchedules)
+                }
+                return@launchWhenResumed
             }
             if (viewModel.shouldShowRateApp()) {
-                openRateApp()
+                whenStateAtLeast(Lifecycle.State.RESUMED) {
+                    openRateApp()
+                }
             }
         }
         initViews()
@@ -290,8 +294,7 @@ class FlowFragment : BaseFragment(),
     private fun openLoadInfo() {
         openFragment(
                 LoadInfoFragment.newInstance(),
-                LoadInfoFragment.TAG,
-                allowStateLoss = true // FIXME: Can not perform this action after onSaveInstanceState
+                LoadInfoFragment.TAG
         )
     }
 

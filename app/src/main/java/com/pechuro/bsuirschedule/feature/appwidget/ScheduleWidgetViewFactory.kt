@@ -78,7 +78,7 @@ class ScheduleWidgetRemoteViewFactory(
 
     override fun getLoadingView() = null
 
-    override fun getItemId(position: Int) = scheduleItems[position].id
+    override fun getItemId(position: Int) = scheduleItems.getOrNull(position)?.id ?: 0
 
     override fun hasStableIds() = false
 
