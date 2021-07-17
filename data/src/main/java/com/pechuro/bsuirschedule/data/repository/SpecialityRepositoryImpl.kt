@@ -62,7 +62,6 @@ class SpecialityRepositoryImpl(
     override suspend fun isCached() = withContext(Dispatchers.IO) {
         listOf(
                 async { performDaoCall { dao.isDepartmentsNotEmpty() } },
-                async { performDaoCall { dao.isFacultiesNotEmpty() } },
                 async { performDaoCall { dao.isSpecialitiesNotEmpty() } }
         ).awaitAll().foldRight(true) { isNotEmpty, acc ->
             isNotEmpty and acc
@@ -103,7 +102,7 @@ class SpecialityRepositoryImpl(
                     }
 
     private suspend fun loadFacultiesFromApi(): List<Faculty> =
-            performApiCall { api.getAllFaculties() }
+        performApiCallCatching(emptyList()) { api.getAllFaculties() }
                     .map { dto ->
                         dto.toDomainEntity()
                     }
