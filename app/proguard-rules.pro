@@ -1,0 +1,4 @@
+-repackageclasses
+-allowaccessmodification
+-optimizationpasses 10
+-keepattributes SourceFile, LineNumberTable

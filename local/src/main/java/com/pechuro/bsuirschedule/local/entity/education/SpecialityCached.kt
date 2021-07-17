@@ -29,7 +29,7 @@ data class SpecialityCached(
         @ColumnInfo(name = "education_form_id", index = true)
         val educationFormId: Long,
         @ColumnInfo(name = "name")
-        var name: String,
+        val name: String,
         @ColumnInfo(name = "abbreviation")
         val abbreviation: String,
         @ColumnInfo(name = "code")

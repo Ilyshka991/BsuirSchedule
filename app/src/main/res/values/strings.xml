@@ -106,7 +106,7 @@
     <string name="staff_list_hint_enter_employee_name">Enter employee name</string>
     <string name="staff_list_hint_enter_auditory">Enter auditory</string>
     <string name="staff_list_msg_group_course">%1$d course</string>
-    <string name="staff_list_msg_employee_department">Department: %1$s</string>
+    <string name="staff_list_msg_employee_department">%1$s</string>
     <string name="staff_list_msg_auditory_capacity">Capacity: %1$d</string>
     <string name="staff_list_msg_empty">Not found</string>
 
