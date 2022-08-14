@@ -19,7 +19,13 @@ import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
-import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.ext.currentFragment
+import com.pechuro.bsuirschedule.ext.displayScheduleFragment
+import com.pechuro.bsuirschedule.ext.getCallbackOrNull
+import com.pechuro.bsuirschedule.ext.modifyItemFragment
+import com.pechuro.bsuirschedule.ext.removeAllFragments
+import com.pechuro.bsuirschedule.ext.setSafeClickListener
+import com.pechuro.bsuirschedule.ext.whenStateAtLeast
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleFragmentContainer
 import com.pechuro.bsuirschedule.feature.datepicker.DisplayScheduleDatePickerSheet
 import com.pechuro.bsuirschedule.feature.datepicker.DisplayScheduleDatePickerSheetArgs
@@ -42,18 +48,18 @@ import com.pechuro.bsuirschedule.feature.start.StartFragment
 import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheet
 import com.pechuro.bsuirschedule.feature.update.UpdateScheduleSheetArgs
 import kotlinx.android.synthetic.main.fragment_flow.*
-import java.util.*
+import java.util.Date
 
 class FlowFragment : BaseFragment(),
-        LoadInfoFragment.ActionCallback,
-        AddScheduleFragmentContainer.ActionCallback,
-        NavigationSheet.ActionCallback,
-        DisplayScheduleFragmentContainer.ActionCallback,
-        DisplayScheduleDatePickerSheet.ActionCallback,
-        ScheduleItemOptionsSheet.ActionCallback,
-        ModifyScheduleItemFragment.ActionCallback,
-        StaffListFragment.ActionCallback,
-        SettingsFragment.ActionCallback {
+    LoadInfoFragment.ActionCallback,
+    AddScheduleFragmentContainer.ActionCallback,
+    NavigationSheet.ActionCallback,
+    DisplayScheduleFragmentContainer.ActionCallback,
+    DisplayScheduleDatePickerSheet.ActionCallback,
+    ScheduleItemOptionsSheet.ActionCallback,
+    ModifyScheduleItemFragment.ActionCallback,
+    StaffListFragment.ActionCallback,
+    SettingsFragment.ActionCallback {
 
     interface ActionCallback {
 
@@ -74,10 +80,10 @@ class FlowFragment : BaseFragment(),
     private var actionCallback: ActionCallback? = null
 
     private val defaultFragmentAnimations = FragmentAnimationsResHolder(
-            enter = R.animator.fragment_open_enter,
-            exit = R.animator.fragment_open_exit,
-            popEnter = R.animator.fragment_close_enter,
-            popExit = R.animator.fragment_close_exit
+        enter = R.animator.fragment_open_enter,
+        exit = R.animator.fragment_open_exit,
+        popEnter = R.animator.fragment_close_enter,
+        popExit = R.animator.fragment_close_exit
     )
 
     override fun onAttach(context: Context) {
@@ -179,11 +185,15 @@ class FlowFragment : BaseFragment(),
         bottomBarParentView.performShow()
     }
 
-    override fun onDisplayScheduleOpenDatePicker(startDate: Date, endDate: Date, currentDate: Date) {
+    override fun onDisplayScheduleOpenDatePicker(
+        startDate: Date,
+        endDate: Date,
+        currentDate: Date
+    ) {
         openDatePicker(
-                startDate = startDate,
-                endDate = endDate,
-                currentDate = currentDate
+            startDate = startDate,
+            endDate = endDate,
+            currentDate = currentDate
         )
     }
 
@@ -248,36 +258,45 @@ class FlowFragment : BaseFragment(),
 
     private fun openAddScheduleItem(schedule: Schedule) {
         val arguments = ModifyScheduleItemFragmentArgs(
-                schedule = schedule,
-                items = emptyList()
+            schedule = schedule,
+            items = emptyList()
         )
-        openFragment(ModifyScheduleItemFragment.newInstance(arguments), ModifyScheduleItemFragment.TAG)
+        openFragment(
+            ModifyScheduleItemFragment.newInstance(arguments),
+            ModifyScheduleItemFragment.TAG
+        )
     }
 
     private fun openEditScheduleItem(schedule: Schedule, scheduleItems: List<ScheduleItem>) {
         val arguments = ModifyScheduleItemFragmentArgs(
-                schedule = schedule,
-                items = scheduleItems
+            schedule = schedule,
+            items = scheduleItems
         )
-        openFragment(ModifyScheduleItemFragment.newInstance(arguments), ModifyScheduleItemFragment.TAG)
+        openFragment(
+            ModifyScheduleItemFragment.newInstance(arguments),
+            ModifyScheduleItemFragment.TAG
+        )
     }
 
     private fun openScheduleItemDetails(schedule: Schedule, scheduleItem: ScheduleItem) {
         val args = ScheduleItemDetailsArgs(
-                schedule = schedule,
-                itemId = scheduleItem.id
+            schedule = schedule,
+            itemId = scheduleItem.id
         )
         val fragment = ScheduleItemDetailsFragment.newInstance(args)
         openFragment(fragment, ScheduleItemDetailsFragment.TAG)
     }
 
     private fun openDatePicker(
-            startDate: Date,
-            endDate: Date,
-            currentDate: Date
+        startDate: Date,
+        endDate: Date,
+        currentDate: Date
     ) {
         val arguments = DisplayScheduleDatePickerSheetArgs(startDate, endDate, currentDate)
-        showDialog(DisplayScheduleDatePickerSheet.newInstance(arguments), DisplayScheduleDatePickerSheet.TAG)
+        showDialog(
+            DisplayScheduleDatePickerSheet.newInstance(arguments),
+            DisplayScheduleDatePickerSheet.TAG
+        )
     }
 
     private fun openRateApp() {
@@ -293,8 +312,8 @@ class FlowFragment : BaseFragment(),
 
     private fun openLoadInfo() {
         openFragment(
-                LoadInfoFragment.newInstance(),
-                LoadInfoFragment.TAG
+            LoadInfoFragment.newInstance(),
+            LoadInfoFragment.TAG
         )
     }
 
@@ -317,7 +336,10 @@ class FlowFragment : BaseFragment(),
     }
 
     private fun openDisplayScheduleOptions(schedule: Schedule) {
-        showDialog(DisplayScheduleOptionsSheet.newInstance(schedule), DisplayScheduleOptionsSheet.TAG)
+        showDialog(
+            DisplayScheduleOptionsSheet.newInstance(schedule),
+            DisplayScheduleOptionsSheet.TAG
+        )
     }
 
     private fun openViewSchedule(schedule: Schedule, skipIfOpened: Boolean = true) {
@@ -328,8 +350,8 @@ class FlowFragment : BaseFragment(),
 
     private fun openStaffList(type: StaffType) {
         openFragment(
-                StaffListFragment.newInstance(type),
-                StaffListFragment.TAG
+            StaffListFragment.newInstance(type),
+            StaffListFragment.TAG
         )
     }
 
@@ -351,8 +373,8 @@ class FlowFragment : BaseFragment(),
 
     private fun setViewScheduleStartFragment(schedule: Schedule) {
         openPrimaryFragment(
-                DisplayScheduleFragmentContainer.newInstance(schedule),
-                DisplayScheduleFragmentContainer.TAG
+            DisplayScheduleFragmentContainer.newInstance(schedule),
+            DisplayScheduleFragmentContainer.TAG
         )
         postUpdateLayoutState()
     }
@@ -393,7 +415,12 @@ class FlowFragment : BaseFragment(),
             else -> null
         }
         if (fabState != null) {
-            bottomBarFab.setImageDrawable(ContextCompat.getDrawable(requireContext(), fabState.iconRes))
+            bottomBarFab.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    fabState.iconRes
+                )
+            )
             bottomBarFab.setSafeClickListener {
                 when (fabState) {
                     FabActionState.DISPLAY_SCHEDULE_BACK -> {
@@ -418,7 +445,8 @@ class FlowFragment : BaseFragment(),
         when (viewModel.getLastOpenedSchedule()) {
             is Schedule.EmployeeClasses, is Schedule.GroupClasses -> {
                 bottomBarDisplayOptionsButton.isVisible = true
-                bottomBarGoToDateButton.isVisible = viewModel.getScheduleDisplayType() == ScheduleDisplayType.DAYS
+                bottomBarGoToDateButton.isVisible =
+                    viewModel.getScheduleDisplayType() == ScheduleDisplayType.DAYS
                 bottomBarAddScheduleItemButton.isVisible = true
             }
             is Schedule.EmployeeExams, is Schedule.GroupExams -> {
@@ -455,22 +483,17 @@ class FlowFragment : BaseFragment(),
     private fun addStaffItemToModifySchedule(data: StaffItemInformation) {
         val fragment = childFragmentManager.modifyItemFragment ?: return
         when (data) {
-            is StaffItemInformation.GroupInfo -> {
-                fragment.addGroup(data.group)
-            }
-            is StaffItemInformation.EmployeeInfo -> {
-                fragment.addEmployee(data.employee)
-            }
-            is StaffItemInformation.AuditoryInfo -> {
-                fragment.addAuditory(data.auditory)
-            }
+            is StaffItemInformation.GroupInfo -> fragment.addGroup(data.group)
+            is StaffItemInformation.EmployeeInfo -> fragment.addEmployee(data.employee)
+            is StaffItemInformation.AuditoryInfo -> fragment.addAuditory(data.auditory)
+            else -> Unit
         }
     }
 
     private fun openPrimaryFragment(
-            fragment: Fragment,
-            tag: String,
-            animations: FragmentAnimationsResHolder = defaultFragmentAnimations
+        fragment: Fragment,
+        tag: String,
+        animations: FragmentAnimationsResHolder = defaultFragmentAnimations
     ) {
         childFragmentManager.removeAllFragments()
         childFragmentManager.commit {
@@ -483,11 +506,11 @@ class FlowFragment : BaseFragment(),
     }
 
     private fun openFragment(
-            fragment: Fragment,
-            tag: String,
-            addToBackStack: Boolean = true,
-            animations: FragmentAnimationsResHolder = defaultFragmentAnimations,
-            allowStateLoss: Boolean = false
+        fragment: Fragment,
+        tag: String,
+        addToBackStack: Boolean = true,
+        animations: FragmentAnimationsResHolder = defaultFragmentAnimations,
+        allowStateLoss: Boolean = false
     ) {
         childFragmentManager.commit(allowStateLoss = allowStateLoss) {
             animations.run {
@@ -501,8 +524,8 @@ class FlowFragment : BaseFragment(),
     private fun popFragment() = childFragmentManager.popBackStack()
 
     private fun showDialog(
-            fragment: DialogFragment,
-            tag: String
+        fragment: DialogFragment,
+        tag: String
     ) {
         val transaction = childFragmentManager.beginTransaction().addToBackStack(tag)
         fragment.show(transaction, tag)

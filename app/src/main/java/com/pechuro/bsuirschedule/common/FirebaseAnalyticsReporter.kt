@@ -18,7 +18,7 @@ import com.pechuro.bsuirschedule.domain.entity.Exam
 import com.pechuro.bsuirschedule.domain.entity.Lesson
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
-import java.util.*
+import java.util.Locale
 
 class FirebaseAnalyticsReporter(
         private val firebaseAnalytics: FirebaseAnalytics
@@ -115,19 +115,24 @@ class FirebaseAnalyticsReporter(
         is Navigation.ScheduleUpdateFail -> event.exception.getInfo()
         is Navigation.ScheduleDeleted -> event.schedule.getInfo()
 
-        is Settings.ThemeChanged -> bundleOf("theme" to event.theme.name.toLowerCase(Locale.ENGLISH))
+        is Settings.ThemeChanged -> bundleOf("theme" to event.theme.name.lowercase(Locale.ENGLISH))
         is Settings.InformationUpdateFail -> event.exception.getInfo()
 
         is AddSchedule.ScheduleLoaded -> bundleOf(
-                "name" to event.schedule.name.take(PARAM_MAX_SYMBOLS),
-                "types" to event.types.joinToString { it.name.toLowerCase(Locale.ENGLISH) }.take(PARAM_MAX_SYMBOLS)
+            "name" to event.schedule.name.take(PARAM_MAX_SYMBOLS),
+            "types" to event.types.joinToString { it.name.lowercase(Locale.ENGLISH) }
+                .take(PARAM_MAX_SYMBOLS)
         )
         is AddSchedule.ScheduleLoadFailed -> event.exception.getInfo()
 
         is DisplaySchedule.ItemOptionOpened -> event.scheduleItem.getInfo()
         is DisplaySchedule.ItemDeleted -> event.scheduleItem.getInfo()
-        is DisplaySchedule.ViewTypeChanged -> bundleOf("type" to event.type.name.toLowerCase(Locale.ENGLISH))
-        is DisplaySchedule.SubgroupChanged -> bundleOf("subgroup_number" to event.subgroupNumber.name.toLowerCase(Locale.ENGLISH))
+        is DisplaySchedule.ViewTypeChanged -> bundleOf("type" to event.type.name.lowercase(Locale.ENGLISH))
+        is DisplaySchedule.SubgroupChanged -> bundleOf(
+            "subgroup_number" to event.subgroupNumber.name.lowercase(
+                Locale.ENGLISH
+            )
+        )
         is DisplaySchedule.CalendarDateSelected -> bundleOf("day_difference" to event.dayDiff)
 
         is Edit.Opened -> event.scheduleItem?.getInfo() ?: bundleOf()
@@ -141,13 +146,13 @@ class FirebaseAnalyticsReporter(
 
         is Widget.ConfigurationOpened -> bundleOf("new_widget" to !event.widgetExist)
         is Widget.ConfigurationApplied -> bundleOf(
-                "name" to event.schedule.name.take(PARAM_MAX_SYMBOLS),
-                "type" to when (event.schedule) {
-                    is Schedule.GroupClasses, is Schedule.EmployeeClasses -> "classes"
-                    is Schedule.GroupExams, is Schedule.EmployeeExams -> "exams"
-                },
-                "subgroup_number" to event.subgroupNumber.name.toLowerCase(Locale.ENGLISH),
-                "theme" to event.theme.name.toLowerCase(Locale.ENGLISH)
+            "name" to event.schedule.name.take(PARAM_MAX_SYMBOLS),
+            "type" to when (event.schedule) {
+                is Schedule.GroupClasses, is Schedule.EmployeeClasses -> "classes"
+                is Schedule.GroupExams, is Schedule.EmployeeExams -> "exams"
+            },
+            "subgroup_number" to event.subgroupNumber.name.lowercase(Locale.ENGLISH),
+            "theme" to event.theme.name.lowercase(Locale.ENGLISH)
         )
         is Widget.ConfigurationCanceled -> bundleOf("new_widget" to !event.widgetExist)
         is Widget.Deleted -> event.schedule.getInfo()

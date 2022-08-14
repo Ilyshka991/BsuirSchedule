@@ -13,7 +13,7 @@ import com.pechuro.bsuirschedule.domain.entity.ScheduleWidgetInfo.WidgetTheme
 import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 import com.pechuro.bsuirschedule.ext.formattedStringRes
 import com.pechuro.bsuirschedule.ext.nonNull
-import com.pechuro.bsuirschedule.ext.observe
+
 import com.pechuro.bsuirschedule.ext.requireValue
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.MainActivity

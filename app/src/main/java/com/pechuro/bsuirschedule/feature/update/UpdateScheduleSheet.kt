@@ -11,7 +11,7 @@ import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.ext.args
 import com.pechuro.bsuirschedule.ext.nonNull
-import com.pechuro.bsuirschedule.ext.observe
+
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.ext.setVisibleOrInvisibleWithAlpha
 import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha

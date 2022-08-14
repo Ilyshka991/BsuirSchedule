@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
-import com.pechuro.bsuirschedule.ext.*
-import com.pechuro.bsuirschedule.ext.observe
+import com.pechuro.bsuirschedule.ext.app
+import com.pechuro.bsuirschedule.ext.clearAdapter
+import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.whenStateAtLeast
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel.Event.OnScheduleItemClicked
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel.Event.OnScheduleItemLongClicked

@@ -33,7 +33,7 @@ import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import kotlinx.android.synthetic.main.item_display_schedule_classes.*
 import kotlinx.android.synthetic.main.item_display_schedule_exam.*
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
@@ -170,7 +170,7 @@ class DisplayScheduleItemAdapter(
                 displayExamType.text = lessonType
                 displayExamsNote.isVisible = note.isNotEmpty() && note.isNotBlank()
                 displayExamsNote.text = note
-                val isExam = lessonType.toLowerCase(Locale.getDefault()) == "экзамен"
+                val isExam = lessonType.lowercase(Locale.getDefault()) == "экзамен"
                 displayExamLeftDaysIndicator.isVisible = isExam
                 if (isExam) {
                     val leftDaysIndicatorColor = itemView.context.color(getLeftDaysIndicatorColorRes(date, startTime))

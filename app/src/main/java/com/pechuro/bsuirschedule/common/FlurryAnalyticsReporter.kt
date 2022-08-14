@@ -18,7 +18,7 @@ import com.pechuro.bsuirschedule.domain.entity.Lesson
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import com.pechuro.bsuirschedule.domain.entity.isPartTime
-import java.util.*
+import java.util.Locale
 
 class FlurryAnalyticsReporter(
         private val crashlytics: FirebaseCrashlytics
@@ -121,19 +121,24 @@ class FlurryAnalyticsReporter(
         is Navigation.ScheduleUpdateFail -> event.exception.getInfo()
         is Navigation.ScheduleDeleted -> event.schedule.getInfo()
 
-        is Settings.ThemeChanged -> mapOf("theme" to event.theme.name.toLowerCase(Locale.ENGLISH))
+        is Settings.ThemeChanged -> mapOf("theme" to event.theme.name.lowercase(Locale.ENGLISH))
         is Settings.InformationUpdateFail -> event.exception.getInfo()
 
         is AddSchedule.ScheduleLoaded -> mapOf(
-                "name" to event.schedule.name.take(PARAM_MAX_SYMBOLS),
-                "types" to event.types.joinToString { it.name.toLowerCase(Locale.ENGLISH) }.take(PARAM_MAX_SYMBOLS)
+            "name" to event.schedule.name.take(PARAM_MAX_SYMBOLS),
+            "types" to event.types.joinToString { it.name.lowercase(Locale.ENGLISH) }
+                .take(PARAM_MAX_SYMBOLS)
         )
         is AddSchedule.ScheduleLoadFailed -> event.exception.getInfo()
 
         is DisplaySchedule.ItemOptionOpened -> event.scheduleItem.getInfo()
         is DisplaySchedule.ItemDeleted -> event.scheduleItem.getInfo()
-        is DisplaySchedule.ViewTypeChanged -> mapOf("type" to event.type.name.toLowerCase(Locale.ENGLISH))
-        is DisplaySchedule.SubgroupChanged -> mapOf("subgroup_number" to event.subgroupNumber.name.toLowerCase(Locale.ENGLISH))
+        is DisplaySchedule.ViewTypeChanged -> mapOf("type" to event.type.name.lowercase(Locale.ENGLISH))
+        is DisplaySchedule.SubgroupChanged -> mapOf(
+            "subgroup_number" to event.subgroupNumber.name.lowercase(
+                Locale.ENGLISH
+            )
+        )
         is DisplaySchedule.CalendarDateSelected -> mapOf("day_difference" to event.dayDiff.toString())
 
         is Edit.Opened -> event.scheduleItem?.getInfo() ?: emptyMap()
@@ -150,13 +155,13 @@ class FlurryAnalyticsReporter(
 
         is Widget.ConfigurationOpened -> mapOf("new_widget" to (!event.widgetExist).toString())
         is Widget.ConfigurationApplied -> mapOf(
-                "name" to event.schedule.name.take(PARAM_MAX_SYMBOLS),
-                "type" to when (event.schedule) {
-                    is Schedule.GroupClasses, is Schedule.EmployeeClasses -> "classes"
-                    is Schedule.GroupExams, is Schedule.EmployeeExams -> "exams"
-                },
-                "subgroup_number" to event.subgroupNumber.name.toLowerCase(Locale.ENGLISH),
-                "theme" to event.theme.name.toLowerCase(Locale.ENGLISH)
+            "name" to event.schedule.name.take(PARAM_MAX_SYMBOLS),
+            "type" to when (event.schedule) {
+                is Schedule.GroupClasses, is Schedule.EmployeeClasses -> "classes"
+                is Schedule.GroupExams, is Schedule.EmployeeExams -> "exams"
+            },
+            "subgroup_number" to event.subgroupNumber.name.lowercase(Locale.ENGLISH),
+            "theme" to event.theme.name.lowercase(Locale.ENGLISH)
         )
         is Widget.ConfigurationCanceled -> mapOf("new_widget" to (!event.widgetExist).toString())
         is Widget.Deleted -> event.schedule.getInfo()

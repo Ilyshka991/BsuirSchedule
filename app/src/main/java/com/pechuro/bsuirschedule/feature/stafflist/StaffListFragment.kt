@@ -16,7 +16,7 @@ import com.pechuro.bsuirschedule.ext.clearAdapter
 import com.pechuro.bsuirschedule.ext.getCallbackOrNull
 import com.pechuro.bsuirschedule.ext.hideKeyboard
 import com.pechuro.bsuirschedule.ext.nonNull
-import com.pechuro.bsuirschedule.ext.observe
+
 import com.pechuro.bsuirschedule.ext.showKeyboard
 import kotlinx.android.synthetic.main.fragment_staff_list.*
 

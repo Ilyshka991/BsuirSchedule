@@ -19,6 +19,7 @@
 
         <activity
             android:name="com.pechuro.bsuirschedule.feature.MainActivity"
+            android:exported="true"
             android:theme="@style/AppTheme.SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +28,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.pechuro.bsuirschedule.feature.appwidgetconfiguration.AppWidgetConfigurationActivity">
+        <activity
+            android:name="com.pechuro.bsuirschedule.feature.appwidgetconfiguration.AppWidgetConfigurationActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -38,7 +41,9 @@
             android:authorities="${applicationId}.workmanager-init"
             tools:node="remove" />
 
-        <receiver android:name="com.pechuro.bsuirschedule.feature.appwidget.ScheduleWidgetProvider">
+        <receiver
+            android:name="com.pechuro.bsuirschedule.feature.appwidget.ScheduleWidgetProvider"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

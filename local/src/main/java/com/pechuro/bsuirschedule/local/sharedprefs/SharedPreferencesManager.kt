@@ -119,7 +119,7 @@ class SharedPreferencesManager @Inject constructor(
     private fun <T : Any> getFlow(key: String, defaultValue: () -> T): Flow<T> = callbackFlow {
         val sendNewValueCallback = {
             val value = get(key, defaultValue())
-            if (!isClosedForSend) offer(value)
+            if (!isClosedForSend) trySend(value)
         }
         sendNewValueCallback()
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, changedKey ->
