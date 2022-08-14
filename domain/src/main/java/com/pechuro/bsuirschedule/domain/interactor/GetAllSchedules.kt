@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetAllSchedules @Inject constructor(
-        private val scheduleRepository: IScheduleRepository
+    private val scheduleRepository: IScheduleRepository
 ) : BaseInteractor<Flow<List<Schedule>>, BaseInteractor.NoParams>() {
 
     override suspend fun run(params: NoParams) = scheduleRepository.getAllSchedules()

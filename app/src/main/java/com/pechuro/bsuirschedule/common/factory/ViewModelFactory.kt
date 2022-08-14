@@ -9,9 +9,9 @@ import javax.inject.Provider
 @Suppress("UNCHECKED_CAST")
 @AppScope
 class ViewModelFactory @Inject constructor(
-        private val viewModels: MutableMap<Class<out ViewModel>, Provider<ViewModel>>
+    private val viewModels: MutableMap<Class<out ViewModel>, Provider<ViewModel>>
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
-            requireNotNull(viewModels[modelClass]?.get()) as T
+        requireNotNull(viewModels[modelClass]?.get()) as T
 }

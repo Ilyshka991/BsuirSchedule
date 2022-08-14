@@ -20,16 +20,18 @@ import dagger.BindsInstance
 import dagger.Component
 
 @AppScope
-@Component(modules = [
-    ApplicationModule::class,
-    ViewModelModule::class,
-    NetworkModule::class,
-    DatabaseModule::class,
-    RepositoryModule::class,
-    WorkerModule::class,
-    RecyclerViewModule::class,
-    DataModule::class
-])
+@Component(
+    modules = [
+        ApplicationModule::class,
+        ViewModelModule::class,
+        NetworkModule::class,
+        DatabaseModule::class,
+        RepositoryModule::class,
+        WorkerModule::class,
+        RecyclerViewModule::class,
+        DataModule::class
+    ]
+)
 interface AppComponent {
 
     fun inject(app: App)

@@ -12,7 +12,8 @@ abstract class RecyclerViewMatcher {
 
         fun withRecyclerView(view: RecyclerView): RecyclerViewMatcher = RecyclerViewImpl(view)
 
-        fun withRecyclerView(@IdRes recyclerViewId: Int): RecyclerViewMatcher = RecyclerViewIdImpl(recyclerViewId)
+        fun withRecyclerView(@IdRes recyclerViewId: Int): RecyclerViewMatcher =
+            RecyclerViewIdImpl(recyclerViewId)
     }
 
     protected abstract fun match(view: View, position: Int): Boolean
@@ -29,17 +30,18 @@ abstract class RecyclerViewMatcher {
     private class RecyclerViewImpl(private val recyclerView: RecyclerView) : RecyclerViewMatcher() {
         override fun match(view: View, position: Int): Boolean {
             val childView = recyclerView.findViewHolderForAdapterPosition(position)?.itemView
-                    ?: throw IllegalStateException("No item at position: $position found")
+                ?: throw IllegalStateException("No item at position: $position found")
             return view === childView
         }
     }
 
-    private class RecyclerViewIdImpl(@IdRes private val recyclerViewId: Int) : RecyclerViewMatcher() {
+    private class RecyclerViewIdImpl(@IdRes private val recyclerViewId: Int) :
+        RecyclerViewMatcher() {
         override fun match(view: View, position: Int): Boolean {
             val recyclerView = view.rootView.findViewById<View>(recyclerViewId) as? RecyclerView
-                    ?: return false
+                ?: return false
             val childView = recyclerView.findViewHolderForAdapterPosition(position)?.itemView
-                    ?: throw IllegalStateException("No item at position: $position found")
+                ?: throw IllegalStateException("No item at position: $position found")
             return view === childView
         }
     }

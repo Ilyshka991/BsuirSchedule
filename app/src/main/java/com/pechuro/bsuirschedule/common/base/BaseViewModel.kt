@@ -12,15 +12,15 @@ import kotlin.coroutines.EmptyCoroutineContext
 abstract class BaseViewModel : ViewModel() {
 
     protected inline fun launchCoroutine(
-            context: CoroutineContext = EmptyCoroutineContext,
-            crossinline body: suspend CoroutineScope.() -> Unit
+        context: CoroutineContext = EmptyCoroutineContext,
+        crossinline body: suspend CoroutineScope.() -> Unit
     ) = viewModelScope.launch(context) {
         body()
     }
 
     protected inline fun <T> async(
-            context: CoroutineContext = EmptyCoroutineContext,
-            crossinline body: suspend CoroutineScope.() -> T
+        context: CoroutineContext = EmptyCoroutineContext,
+        crossinline body: suspend CoroutineScope.() -> T
     ) = viewModelScope.async(context) {
         body()
     }

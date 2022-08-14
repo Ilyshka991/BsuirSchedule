@@ -6,9 +6,9 @@ import android.view.View
 import com.google.android.material.textview.MaterialTextView
 
 open class DotAnimatedTextView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = android.R.attr.textViewStyle
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = android.R.attr.textViewStyle
 ) : MaterialTextView(context, attrs, defStyleAttr) {
 
     var maxDotCount = 5

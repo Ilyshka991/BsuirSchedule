@@ -8,9 +8,9 @@ import com.google.android.material.tabs.TabLayout
 
 
 class ClickControlTabLayout @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = R.attr.tabStyle
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = R.attr.tabStyle
 ) : TabLayout(context, attrs, defStyleAttr) {
 
     fun setClickEnabled(isEnabled: Boolean) {

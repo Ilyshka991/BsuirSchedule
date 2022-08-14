@@ -22,27 +22,27 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class StaffListViewModel @Inject constructor(
-        private val getGroups: GetGroups,
-        private val getEmployees: GetEmployees,
-        private val getAuditories: GetAuditories
+    private val getGroups: GetGroups,
+    private val getEmployees: GetEmployees,
+    private val getAuditories: GetAuditories
 ) : BaseViewModel() {
 
     private val filterData = MutableLiveData("")
 
     private val allGroupsListData = flowLiveData {
         getGroups.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
-                .map { list -> list.sortedWith(compareBy<Group> { it.speciality.faculty?.abbreviation }.thenBy { it.number }) }
-                .map { it.map { GroupInfo(it) } }
+            .map { list -> list.sortedWith(compareBy<Group> { it.speciality.faculty?.abbreviation }.thenBy { it.number }) }
+            .map { it.map { GroupInfo(it) } }
     }
     private val allAuditoriesListData = flowLiveData {
         getAuditories.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
-                .map { list -> list.sortedWith(compareBy<Auditory> { it.building.name }.thenBy { it.name }) }
-                .map { it.map { AuditoryInfo(it) } }
+            .map { list -> list.sortedWith(compareBy<Auditory> { it.building.name }.thenBy { it.name }) }
+            .map { it.map { AuditoryInfo(it) } }
     }
     private val allEmployeesListData = flowLiveData {
         getEmployees.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
-                .map { list -> list.sortedBy { it.abbreviation } }
-                .map { it.map { EmployeeInfo(it) } }
+            .map { list -> list.sortedBy { it.abbreviation } }
+            .map { it.map { EmployeeInfo(it) } }
     }
 
     private val _listData = MediatorLiveData<List<StaffItemInformation>>()

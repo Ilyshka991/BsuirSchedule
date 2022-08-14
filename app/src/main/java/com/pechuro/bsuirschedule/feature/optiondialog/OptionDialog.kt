@@ -45,8 +45,8 @@ class OptionDialog : BaseDialogFragment() {
         }
 
         fun setCheckableActions(
-                items: List<OptionDialogCheckableButtonData>,
-                listener: OptionCheckableButtonClickListener
+            items: List<OptionDialogCheckableButtonData>,
+            listener: OptionCheckableButtonClickListener
         ) = apply {
             multipleSelectionButtons = items
             multipleSelectionlistener = listener
@@ -55,8 +55,8 @@ class OptionDialog : BaseDialogFragment() {
         }
 
         fun setActions(
-                items: List<OptionDialogButtonData>,
-                listener: OptionButtonClickListener
+            items: List<OptionDialogButtonData>,
+            listener: OptionButtonClickListener
         ) = apply {
             multipleSelectionButtons = emptyList()
             multipleSelectionlistener = null
@@ -67,23 +67,23 @@ class OptionDialog : BaseDialogFragment() {
 
         fun build() = OptionDialog().apply {
             params = Params(
-                    singleSelectionButtons = singleSelectionButtons,
-                    singleSelectionlistener = singleSelectionlistener,
-                    multipleSelectionButtons = multipleSelectionButtons,
-                    multipleSelectionlistener = multipleSelectionlistener,
-                    title = title,
-                    onDismissListener = onDismissListener
+                singleSelectionButtons = singleSelectionButtons,
+                singleSelectionlistener = singleSelectionlistener,
+                multipleSelectionButtons = multipleSelectionButtons,
+                multipleSelectionlistener = multipleSelectionlistener,
+                title = title,
+                onDismissListener = onDismissListener
             )
         }
     }
 
     private data class Params(
-            val singleSelectionButtons: List<OptionDialogButtonData>,
-            val singleSelectionlistener: OptionButtonClickListener?,
-            val multipleSelectionButtons: List<OptionDialogCheckableButtonData>,
-            val multipleSelectionlistener: OptionCheckableButtonClickListener?,
-            val title: String,
-            val onDismissListener: (() -> Unit)?
+        val singleSelectionButtons: List<OptionDialogButtonData>,
+        val singleSelectionlistener: OptionButtonClickListener?,
+        val multipleSelectionButtons: List<OptionDialogCheckableButtonData>,
+        val multipleSelectionlistener: OptionCheckableButtonClickListener?,
+        val title: String,
+        val onDismissListener: (() -> Unit)?
     )
 
     private lateinit var params: Params
@@ -120,9 +120,9 @@ class OptionDialog : BaseDialogFragment() {
     private fun addActionButtons() {
         params.singleSelectionButtons.forEachIndexed { index, data ->
             val view = layoutInflater.inflate(
-                    R.layout.item_option_dialog_button,
-                    optionsDialogActionButtonContainer,
-                    false
+                R.layout.item_option_dialog_button,
+                optionsDialogActionButtonContainer,
+                false
             ) as MaterialButton
             view.text = data.text
             view.icon = data.icon
@@ -138,9 +138,9 @@ class OptionDialog : BaseDialogFragment() {
     private fun addCheckableActionButtons() {
         params.multipleSelectionButtons.forEachIndexed { index, data ->
             val view = layoutInflater.inflate(
-                    R.layout.item_option_dialog_checkable_button,
-                    optionsDialogActionButtonContainer,
-                    false
+                R.layout.item_option_dialog_checkable_button,
+                optionsDialogActionButtonContainer,
+                false
             ) as MaterialCheckBox
             view.text = data.text
             view.isChecked = data.checked

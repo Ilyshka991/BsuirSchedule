@@ -5,8 +5,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class ScheduleItemDTO(
-        @Json(name = "weekDay")
-        val weekDay: String,
-        @Json(name = "schedule")
-        val classes: List<LessonDTO>
+    @Json(name = "weekDay")
+    val weekDay: String,
+    @Json(name = "schedule")
+    val classes: List<LessonDTO>
 )

@@ -21,7 +21,7 @@ import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import java.util.Locale
 
 class FirebaseAnalyticsReporter(
-        private val firebaseAnalytics: FirebaseAnalytics
+    private val firebaseAnalytics: FirebaseAnalytics
 ) : AppAnalytics.Reporter {
 
     companion object {
@@ -160,25 +160,25 @@ class FirebaseAnalyticsReporter(
     }
 
     private fun Schedule.getInfo() = bundleOf(
-            "name" to name.take(PARAM_MAX_SYMBOLS),
-            "type" to when (this) {
-                is Schedule.GroupClasses, is Schedule.EmployeeClasses -> "classes"
-                is Schedule.GroupExams, is Schedule.EmployeeExams -> "exams"
-            }
+        "name" to name.take(PARAM_MAX_SYMBOLS),
+        "type" to when (this) {
+            is Schedule.GroupClasses, is Schedule.EmployeeClasses -> "classes"
+            is Schedule.GroupExams, is Schedule.EmployeeExams -> "exams"
+        }
     )
 
     private fun ScheduleItem.getInfo() = bundleOf(
-            "subject" to subject.take(PARAM_MAX_SYMBOLS),
-            "type" to when (this) {
-                is Lesson.GroupLesson -> "group_lesson"
-                is Lesson.EmployeeLesson -> "employee_lesson"
-                is Exam.GroupExam -> "group_exam"
-                is Exam.EmployeeExam -> "employee_exam"
-                else -> "none"
-            }
+        "subject" to subject.take(PARAM_MAX_SYMBOLS),
+        "type" to when (this) {
+            is Lesson.GroupLesson -> "group_lesson"
+            is Lesson.EmployeeLesson -> "employee_lesson"
+            is Exam.GroupExam -> "group_exam"
+            is Exam.EmployeeExam -> "employee_exam"
+            else -> "none"
+        }
     )
 
     private fun Throwable.getInfo() = bundleOf(
-            "exception" to (this::class.simpleName?.take(PARAM_MAX_SYMBOLS) ?: "")
+        "exception" to (this::class.simpleName?.take(PARAM_MAX_SYMBOLS) ?: "")
     )
 }

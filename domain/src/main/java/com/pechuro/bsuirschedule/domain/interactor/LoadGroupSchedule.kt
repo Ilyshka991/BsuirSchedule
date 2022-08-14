@@ -8,7 +8,7 @@ import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
 import javax.inject.Inject
 
 class LoadGroupSchedule @Inject constructor(
-        private val scheduleRepository: IScheduleRepository
+    private val scheduleRepository: IScheduleRepository
 ) : BaseInteractor<List<Schedule>, LoadGroupSchedule.Params>() {
 
     override suspend fun run(params: Params): List<Schedule> {
@@ -16,7 +16,7 @@ class LoadGroupSchedule @Inject constructor(
     }
 
     data class Params(
-            val group: Group,
-            val types: List<ScheduleType>
+        val group: Group,
+        val types: List<ScheduleType>
     )
 }

@@ -11,8 +11,16 @@ import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseViewHolder
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
-import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.*
-import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState.*
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState.AVAILABLE
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState.ERROR
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState.IN_PROGRESS
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState.NOT_AVAILABLE
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Content.UpdateState.SUCCESS
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Divider
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Empty
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Hint
+import com.pechuro.bsuirschedule.feature.navigation.NavigationSheetItemInformation.Title
 import kotlinx.android.synthetic.main.item_navigation_sheet_content.*
 import kotlinx.android.synthetic.main.item_navigation_sheet_empty.*
 import kotlinx.android.synthetic.main.item_navigation_sheet_hint.*
@@ -20,17 +28,20 @@ import kotlinx.android.synthetic.main.item_navigation_sheet_hint.*
 private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NavigationSheetItemInformation>() {
 
     override fun areItemsTheSame(
-            oldItem: NavigationSheetItemInformation,
-            newItem: NavigationSheetItemInformation
+        oldItem: NavigationSheetItemInformation,
+        newItem: NavigationSheetItemInformation
     ) = oldItem == newItem
 
     override fun areContentsTheSame(
-            oldItem: NavigationSheetItemInformation,
-            newItem: NavigationSheetItemInformation
+        oldItem: NavigationSheetItemInformation,
+        newItem: NavigationSheetItemInformation
     ) = oldItem == newItem
 }
 
-class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, BaseViewHolder<NavigationSheetItemInformation>>(DIFF_CALLBACK) {
+class NavigationDrawerAdapter :
+    ListAdapter<NavigationSheetItemInformation, BaseViewHolder<NavigationSheetItemInformation>>(
+        DIFF_CALLBACK
+    ) {
 
     interface ActionCallback {
 
@@ -51,27 +62,35 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
         actionCallback?.onScheduleClicked(schedule)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<NavigationSheetItemInformation> {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): BaseViewHolder<NavigationSheetItemInformation> {
         val layoutInflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             NavigationSheetItemInformation.ID_DIVIDER -> {
-                val view = layoutInflater.inflate(R.layout.item_navigation_sheet_divider, parent, false)
+                val view =
+                    layoutInflater.inflate(R.layout.item_navigation_sheet_divider, parent, false)
                 DividerViewHolder(view)
             }
             NavigationSheetItemInformation.ID_TITLE -> {
-                val view = layoutInflater.inflate(R.layout.item_navigation_sheet_title, parent, false)
+                val view =
+                    layoutInflater.inflate(R.layout.item_navigation_sheet_title, parent, false)
                 TitleViewHolder(view)
             }
             NavigationSheetItemInformation.ID_CONTENT -> {
-                val view = layoutInflater.inflate(R.layout.item_navigation_sheet_content, parent, false)
+                val view =
+                    layoutInflater.inflate(R.layout.item_navigation_sheet_content, parent, false)
                 ContentViewHolder(view)
             }
             NavigationSheetItemInformation.ID_EMPTY -> {
-                val view = layoutInflater.inflate(R.layout.item_navigation_sheet_empty, parent, false)
+                val view =
+                    layoutInflater.inflate(R.layout.item_navigation_sheet_empty, parent, false)
                 EmptyViewHolder(view)
             }
             NavigationSheetItemInformation.ID_HINT -> {
-                val view = layoutInflater.inflate(R.layout.item_navigation_sheet_hint, parent, false)
+                val view =
+                    layoutInflater.inflate(R.layout.item_navigation_sheet_hint, parent, false)
                 HintViewHolder(view)
             }
             else -> throw IllegalStateException("Not supported type: $viewType")
@@ -81,8 +100,8 @@ class NavigationDrawerAdapter : ListAdapter<NavigationSheetItemInformation, Base
     override fun getItemViewType(position: Int) = getItem(position).id
 
     override fun onBindViewHolder(
-            holder: BaseViewHolder<NavigationSheetItemInformation>,
-            position: Int
+        holder: BaseViewHolder<NavigationSheetItemInformation>,
+        position: Int
     ) = holder.onBind(getItem(position))
 
     override fun getItemId(position: Int) = getItem(position).hashCode().toLong()

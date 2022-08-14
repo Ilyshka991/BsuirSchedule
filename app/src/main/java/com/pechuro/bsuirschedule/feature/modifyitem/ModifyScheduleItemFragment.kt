@@ -51,8 +51,8 @@ import java.util.Locale
 
 @Parcelize
 data class ModifyScheduleItemFragmentArgs(
-        val schedule: Schedule,
-        val items: List<ScheduleItem>
+    val schedule: Schedule,
+    val items: List<ScheduleItem>
 ) : Parcelable
 
 class ModifyScheduleItemFragment : BaseFragment() {
@@ -137,7 +137,8 @@ class ModifyScheduleItemFragment : BaseFragment() {
     }
 
     private fun setParamsVisibility(schedule: Schedule) {
-        val isClassesSchedule = schedule is Schedule.GroupClasses || schedule is Schedule.EmployeeClasses
+        val isClassesSchedule =
+            schedule is Schedule.GroupClasses || schedule is Schedule.EmployeeClasses
         modifyScheduleItemPriority.isVisible = isClassesSchedule
         modifyScheduleItemWeekday.isVisible = isClassesSchedule
         modifyScheduleItemWeekNumbers.isVisible = isClassesSchedule
@@ -279,48 +280,48 @@ class ModifyScheduleItemFragment : BaseFragment() {
     private fun fillEmployees(employees: Iterable<Employee>) {
         modifyScheduleItemEmployeesChips.removeAllViews()
         employees
-                .map { employee ->
-                    createChip(employee.abbreviation) { viewModel.dataProvider.removeEmployee(employee) }
-                }
-                .plus(createAddChip { actionCallback?.onModifyItemRequestEmployees() })
-                .forEach {
-                    modifyScheduleItemEmployeesChips.addView(it)
-                }
+            .map { employee ->
+                createChip(employee.abbreviation) { viewModel.dataProvider.removeEmployee(employee) }
+            }
+            .plus(createAddChip { actionCallback?.onModifyItemRequestEmployees() })
+            .forEach {
+                modifyScheduleItemEmployeesChips.addView(it)
+            }
 
     }
 
     private fun fillStudentGroups(groups: Iterable<Group>) {
         modifyScheduleItemGroupsChips.removeAllViews()
         groups
-                .map { group ->
-                    createChip(group.number) { viewModel.dataProvider.removeGroup(group) }
-                }
-                .plus(createAddChip { actionCallback?.onModifyItemRequestGroups() })
-                .forEach {
-                    modifyScheduleItemGroupsChips.addView(it)
-                }
+            .map { group ->
+                createChip(group.number) { viewModel.dataProvider.removeGroup(group) }
+            }
+            .plus(createAddChip { actionCallback?.onModifyItemRequestGroups() })
+            .forEach {
+                modifyScheduleItemGroupsChips.addView(it)
+            }
 
     }
 
     private fun fillAuditories(auditories: Iterable<Auditory>) {
         modifyScheduleItemAuditoriesChips.removeAllViews()
         auditories
-                .map { auditory ->
-                    val text = "${auditory.name}-${auditory.building.name}"
-                    createChip(text) { viewModel.dataProvider.removeAuditory(auditory) }
-                }
-                .plus(createAddChip { actionCallback?.onModifyItemRequestAuditories() })
-                .forEach {
-                    modifyScheduleItemAuditoriesChips.addView(it)
-                }
+            .map { auditory ->
+                val text = "${auditory.name}-${auditory.building.name}"
+                createChip(text) { viewModel.dataProvider.removeAuditory(auditory) }
+            }
+            .plus(createAddChip { actionCallback?.onModifyItemRequestAuditories() })
+            .forEach {
+                modifyScheduleItemAuditoriesChips.addView(it)
+            }
 
     }
 
     private inline fun createChip(text: CharSequence, crossinline onDelete: () -> Unit): Chip {
         val chip = layoutInflater.inflate(
-                R.layout.item_modify_schedule_chip,
-                modifyScheduleItemEmployeesChips,
-                false
+            R.layout.item_modify_schedule_chip,
+            modifyScheduleItemEmployeesChips,
+            false
         ) as Chip
         chip.text = text
         chip.setOnCloseIconClickListener {
@@ -331,9 +332,9 @@ class ModifyScheduleItemFragment : BaseFragment() {
 
     private inline fun createAddChip(crossinline onClick: () -> Unit): Chip {
         val chip = layoutInflater.inflate(
-                R.layout.item_modify_schedule_add_chip,
-                modifyScheduleItemEmployeesChips,
-                false
+            R.layout.item_modify_schedule_add_chip,
+            modifyScheduleItemEmployeesChips,
+            false
         ) as Chip
         chip.setSafeClickListener {
             onClick()
@@ -355,8 +356,8 @@ class ModifyScheduleItemFragment : BaseFragment() {
         val selectedType = viewModel.dataProvider.lessonTypeData.requireValue
         val options = availableTypes.map { type ->
             OptionDialogButtonData(
-                    text = type,
-                    selected = type == selectedType
+                text = type,
+                selected = type == selectedType
             )
         }
         val listener = object : OptionDialog.OptionButtonClickListener {
@@ -366,10 +367,10 @@ class ModifyScheduleItemFragment : BaseFragment() {
         }
         val title = getString(R.string.modify_schedule_item_title_select_type)
         OptionDialog.Builder()
-                .setTitle(title)
-                .setActions(options, listener)
-                .build()
-                .show(childFragmentManager, OptionDialog.TAG)
+            .setTitle(title)
+            .setActions(options, listener)
+            .build()
+            .show(childFragmentManager, OptionDialog.TAG)
     }
 
     private fun selectPriority() {
@@ -380,9 +381,9 @@ class ModifyScheduleItemFragment : BaseFragment() {
                 paint.color = requireContext().color(prioriry.formattedColorRes)
             }
             OptionDialogButtonData(
-                    text = getString(prioriry.formattedStringRes),
-                    icon = drawable,
-                    selected = prioriry == selectedPriority
+                text = getString(prioriry.formattedStringRes),
+                icon = drawable,
+                selected = prioriry == selectedPriority
             )
         }
         val listener = object : OptionDialog.OptionButtonClickListener {
@@ -392,10 +393,10 @@ class ModifyScheduleItemFragment : BaseFragment() {
         }
         val title = getString(R.string.modify_schedule_item_title_select_priority)
         OptionDialog.Builder()
-                .setTitle(title)
-                .setActions(options, listener)
-                .build()
-                .show(childFragmentManager, OptionDialog.TAG)
+            .setTitle(title)
+            .setActions(options, listener)
+            .build()
+            .show(childFragmentManager, OptionDialog.TAG)
     }
 
     private fun selectSubgroupNumber() {
@@ -403,8 +404,8 @@ class ModifyScheduleItemFragment : BaseFragment() {
         val selectedSubgroupNumber = viewModel.dataProvider.subgroupNumberData.requireValue
         val options = availableNumbers.map { number ->
             OptionDialogButtonData(
-                    text = getString(number.formattedStringRes),
-                    selected = number == selectedSubgroupNumber
+                text = getString(number.formattedStringRes),
+                selected = number == selectedSubgroupNumber
             )
         }
         val listener = object : OptionDialog.OptionButtonClickListener {
@@ -414,10 +415,10 @@ class ModifyScheduleItemFragment : BaseFragment() {
         }
         val title = getString(R.string.modify_schedule_item_title_select_subgroup)
         OptionDialog.Builder()
-                .setTitle(title)
-                .setActions(options, listener)
-                .build()
-                .show(childFragmentManager, OptionDialog.TAG)
+            .setTitle(title)
+            .setActions(options, listener)
+            .build()
+            .show(childFragmentManager, OptionDialog.TAG)
     }
 
     private fun selectWeekDay() {
@@ -425,8 +426,8 @@ class ModifyScheduleItemFragment : BaseFragment() {
         val selectedWeekDay = viewModel.dataProvider.weekDayData.requireValue
         val options = availableWeekDays.map { day ->
             OptionDialogButtonData(
-                    text = day.getFormattedString(resources),
-                    selected = day == selectedWeekDay
+                text = day.getFormattedString(resources),
+                selected = day == selectedWeekDay
             )
         }
         val listener = object : OptionDialog.OptionButtonClickListener {
@@ -436,10 +437,10 @@ class ModifyScheduleItemFragment : BaseFragment() {
         }
         val title = getString(R.string.modify_schedule_item_title_select_weekday)
         OptionDialog.Builder()
-                .setTitle(title)
-                .setActions(options, listener)
-                .build()
-                .show(childFragmentManager, OptionDialog.TAG)
+            .setTitle(title)
+            .setActions(options, listener)
+            .build()
+            .show(childFragmentManager, OptionDialog.TAG)
     }
 
     private fun selectWeekNumber() {
@@ -447,8 +448,8 @@ class ModifyScheduleItemFragment : BaseFragment() {
         val selectedWeeks = viewModel.dataProvider.weekNumberData.requireValue
         val options = availableWeekNumbers.map { number ->
             OptionDialogCheckableButtonData(
-                    text = number.formattedString,
-                    checked = number in selectedWeeks
+                text = number.formattedString,
+                checked = number in selectedWeeks
             )
         }
         val listener = object : OptionDialog.OptionCheckableButtonClickListener {
@@ -463,55 +464,58 @@ class ModifyScheduleItemFragment : BaseFragment() {
         }
         val title = getString(R.string.modify_schedule_item_title_select_weeknumber)
         OptionDialog.Builder()
-                .setTitle(title)
-                .setCheckableActions(options, listener)
-                .setOnDismissListener {
-                    viewModel.dataProvider.checkWeekNumbers()
-                }
-                .build()
-                .show(childFragmentManager, OptionDialog.TAG)
+            .setTitle(title)
+            .setCheckableActions(options, listener)
+            .setOnDismissListener {
+                viewModel.dataProvider.checkWeekNumbers()
+            }
+            .build()
+            .show(childFragmentManager, OptionDialog.TAG)
 
     }
 
     private fun showExitDialog() {
         ConfirmationDialog
-                .Builder()
-                .setTitle(getString(R.string.modify_schedule_item_title_discard_changes))
-                .setPositiveAction(ConfirmationDialogButtonData(
-                        text = getString(R.string.action_discard),
-                        onClick = {
-                            viewModel.close()
-                        }
-                ))
-                .setNegativeAction(ConfirmationDialogButtonData(
-                        text = getString(R.string.action_cancel)))
-                .build()
-                .show(childFragmentManager, ConfirmationDialog.TAG)
+            .Builder()
+            .setTitle(getString(R.string.modify_schedule_item_title_discard_changes))
+            .setPositiveAction(ConfirmationDialogButtonData(
+                text = getString(R.string.action_discard),
+                onClick = {
+                    viewModel.close()
+                }
+            ))
+            .setNegativeAction(
+                ConfirmationDialogButtonData(
+                    text = getString(R.string.action_cancel)
+                )
+            )
+            .build()
+            .show(childFragmentManager, ConfirmationDialog.TAG)
     }
 
     private fun pickTime(currentTime: LocalTime, onPicked: (LocalTime) -> Unit) {
         TimePickerDialog(
-                requireContext(),
-                TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-                    val time = LocalTime.of(hourOfDay, minute)
-                    onPicked(time)
-                },
-                currentTime.hour,
-                currentTime.minute,
-                true
+            requireContext(),
+            TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+                val time = LocalTime.of(hourOfDay, minute)
+                onPicked(time)
+            },
+            currentTime.hour,
+            currentTime.minute,
+            true
         ).show()
     }
 
     private fun pickDate(currentDate: LocalDate, onPicked: (LocalDate) -> Unit) {
         DatePickerDialog(
-                requireContext(),
-                DatePickerDialog.OnDateSetListener { _, year, month, day ->
-                    val selectedDate = LocalDate(year, month, day)
-                    onPicked(selectedDate)
-                },
-                currentDate.year,
-                currentDate.month,
-                currentDate.day
+            requireContext(),
+            DatePickerDialog.OnDateSetListener { _, year, month, day ->
+                val selectedDate = LocalDate(year, month, day)
+                onPicked(selectedDate)
+            },
+            currentDate.year,
+            currentDate.month,
+            currentDate.day
         ).show()
     }
 }

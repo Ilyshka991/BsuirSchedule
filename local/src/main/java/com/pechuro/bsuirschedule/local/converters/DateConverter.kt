@@ -1,7 +1,7 @@
 package com.pechuro.bsuirschedule.local.converters
 
 import androidx.room.TypeConverter
-import java.util.*
+import java.util.Date
 
 class DateConverter {
 

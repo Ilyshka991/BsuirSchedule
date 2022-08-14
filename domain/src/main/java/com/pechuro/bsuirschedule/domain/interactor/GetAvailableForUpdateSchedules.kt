@@ -14,39 +14,39 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class GetAvailableForUpdateSchedules @Inject constructor(
-        private val scheduleRepository: IScheduleRepository
+    private val scheduleRepository: IScheduleRepository
 ) : BaseInteractor<Flow<List<Schedule>>, GetAvailableForUpdateSchedules.Params>() {
 
     override suspend fun run(params: Params): Flow<List<Schedule>> {
         return scheduleRepository.getAllSchedules()
-                .mapLatest { allSchedules ->
-                    allSchedules
-                            .filter { schedule ->
-                                when (schedule) {
-                                    is Schedule.GroupClasses -> !schedule.notRemindForUpdates || params.includeAll
-                                    is Schedule.GroupExams -> !schedule.notRemindForUpdates || params.includeAll
-                                    else -> false
-                                }
+            .mapLatest { allSchedules ->
+                allSchedules
+                    .filter { schedule ->
+                        when (schedule) {
+                            is Schedule.GroupClasses -> !schedule.notRemindForUpdates || params.includeAll
+                            is Schedule.GroupExams -> !schedule.notRemindForUpdates || params.includeAll
+                            else -> false
+                        }
+                    }
+                    .map { schedule ->
+                        withContext(Dispatchers.Default) {
+                            async {
+                                schedule to runCatching {
+                                    scheduleRepository.isUpdateAvailable(schedule)
+                                }.getOrDefault(false)
                             }
-                            .map { schedule ->
-                                withContext(Dispatchers.Default) {
-                                    async {
-                                        schedule to runCatching {
-                                            scheduleRepository.isUpdateAvailable(schedule)
-                                        }.getOrDefault(false)
-                                    }
-                                }
-                            }
-                            .awaitAll()
-                            .filter { it.second }
-                            .map { it.first }
-                }
-                .catch {
-                    Logger.e(it)
-                }
+                        }
+                    }
+                    .awaitAll()
+                    .filter { it.second }
+                    .map { it.first }
+            }
+            .catch {
+                Logger.e(it)
+            }
     }
 
     data class Params(
-            val includeAll: Boolean
+        val includeAll: Boolean
     )
 }

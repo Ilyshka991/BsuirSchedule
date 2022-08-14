@@ -21,10 +21,10 @@ import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
 class AppWidgetConfigurationViewModel @Inject constructor(
-        private val widgetRepository: IWidgetRepository,
-        private val context: Context,
-        private val getAllSchedules: GetAllSchedules,
-        private val widgetDataProvider: ScheduleWidgetDataProvider
+    private val widgetRepository: IWidgetRepository,
+    private val context: Context,
+    private val getAllSchedules: GetAllSchedules,
+    private val widgetDataProvider: ScheduleWidgetDataProvider
 ) : BaseViewModel() {
 
     private val allScheduleListData = flowLiveData {
@@ -35,14 +35,14 @@ class AppWidgetConfigurationViewModel @Inject constructor(
         MediatorLiveData<List<AppWidgetConfigurationScheduleDisplayData>>().apply {
             addSource(allScheduleListData) {
                 value = transformScheduleListToDisplayData(
-                        scheduleList = it,
-                        checkedSchedule = dataProvider.selectedScheduleData.value
+                    scheduleList = it,
+                    checkedSchedule = dataProvider.selectedScheduleData.value
                 )
             }
             addSource(dataProvider.selectedScheduleData) {
                 value = transformScheduleListToDisplayData(
-                        scheduleList = allScheduleListData.value ?: emptyList(),
-                        checkedSchedule = it
+                    scheduleList = allScheduleListData.value ?: emptyList(),
+                    checkedSchedule = it
                 )
             }
         }
@@ -55,8 +55,8 @@ class AppWidgetConfigurationViewModel @Inject constructor(
         val widgetInfo = widgetRepository.getScheduleWidget(widgetId)
         AppAnalytics.report(AppAnalyticsEvent.Widget.ConfigurationOpened(widgetInfo != null))
         dataProvider = AppWidgetConfigurationDataProvider(
-                widgetId = widgetId,
-                initialInfo = widgetInfo
+            widgetId = widgetId,
+            initialInfo = widgetInfo
         )
     }
 
@@ -64,17 +64,19 @@ class AppWidgetConfigurationViewModel @Inject constructor(
         val resultWidgetInfo = dataProvider.getResultWidgetInfo()
         widgetRepository.updateScheduleWidget(resultWidgetInfo)
         ScheduleWidgetProvider.updateWidget(
-                context = context,
-                appWidgetManager = AppWidgetManager.getInstance(context),
-                widgetId = resultWidgetInfo.widgetId,
-                widgetInfo = resultWidgetInfo,
-                widgetData = widgetDataProvider.getScheduleItemsList(resultWidgetInfo.widgetId)
+            context = context,
+            appWidgetManager = AppWidgetManager.getInstance(context),
+            widgetId = resultWidgetInfo.widgetId,
+            widgetInfo = resultWidgetInfo,
+            widgetData = widgetDataProvider.getScheduleItemsList(resultWidgetInfo.widgetId)
         )
-        AppAnalytics.report(AppAnalyticsEvent.Widget.ConfigurationApplied(
+        AppAnalytics.report(
+            AppAnalyticsEvent.Widget.ConfigurationApplied(
                 schedule = resultWidgetInfo.schedule,
                 subgroupNumber = resultWidgetInfo.subgroupNumber,
                 theme = resultWidgetInfo.theme
-        ))
+            )
+        )
     }
 
     fun onCancelled() {
@@ -82,35 +84,35 @@ class AppWidgetConfigurationViewModel @Inject constructor(
     }
 
     private fun transformScheduleListToDisplayData(
-            scheduleList: List<Schedule>,
-            checkedSchedule: Schedule?
+        scheduleList: List<Schedule>,
+        checkedSchedule: Schedule?
     ): List<AppWidgetConfigurationScheduleDisplayData> {
         if (scheduleList.isEmpty()) return emptyList()
 
         val resultList = mutableListOf<AppWidgetConfigurationScheduleDisplayData>()
 
         val allClasses = scheduleList
-                .filter { it is Schedule.GroupClasses || it is Schedule.EmployeeClasses }
+            .filter { it is Schedule.GroupClasses || it is Schedule.EmployeeClasses }
         if (allClasses.isNotEmpty()) {
             resultList += Title(ScheduleType.CLASSES)
             resultList += allClasses
-                    .sortedBy { it.name }
-                    .map {
-                        val checked = it == checkedSchedule
-                        Content(it, checked)
-                    }
+                .sortedBy { it.name }
+                .map {
+                    val checked = it == checkedSchedule
+                    Content(it, checked)
+                }
         }
 
         val allExams = scheduleList
-                .filter { it is Schedule.GroupExams || it is Schedule.EmployeeExams }
+            .filter { it is Schedule.GroupExams || it is Schedule.EmployeeExams }
         if (allExams.isNotEmpty()) {
             resultList += Title(ScheduleType.EXAMS)
             resultList += allExams
-                    .sortedBy { it.name }
-                    .map {
-                        val checked = it == checkedSchedule
-                        Content(it, checked)
-                    }
+                .sortedBy { it.name }
+                .map {
+                    val checked = it == checkedSchedule
+                    Content(it, checked)
+                }
         }
 
         return resultList.toList()

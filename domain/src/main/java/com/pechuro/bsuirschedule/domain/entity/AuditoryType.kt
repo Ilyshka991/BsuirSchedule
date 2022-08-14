@@ -5,7 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class AuditoryType(
-        val id: Long,
-        val name: String,
-        val abbreviation: String
+    val id: Long,
+    val name: String,
+    val abbreviation: String
 ) : Parcelable

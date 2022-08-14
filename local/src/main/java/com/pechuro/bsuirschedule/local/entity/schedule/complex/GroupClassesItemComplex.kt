@@ -10,26 +10,26 @@ import com.pechuro.bsuirschedule.local.entity.schedule.crossref.GroupLessonEmplo
 import com.pechuro.bsuirschedule.local.entity.staff.EmployeeCached
 
 data class GroupClassesItemComplex(
-        @Embedded
-        val scheduleItem: GroupItemClassesCached,
-        @Relation(
-                parentColumn = "id",
-                entityColumn = "id",
-                associateBy = Junction(
-                        value = GroupLessonEmployeeCrossRef::class,
-                        parentColumn = "schedule_item_id",
-                        entityColumn = "employee_id"
-                )
+    @Embedded
+    val scheduleItem: GroupItemClassesCached,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "id",
+        associateBy = Junction(
+            value = GroupLessonEmployeeCrossRef::class,
+            parentColumn = "schedule_item_id",
+            entityColumn = "employee_id"
         )
-        val employees: List<EmployeeCached>,
-        @Relation(
-                parentColumn = "id",
-                entityColumn = "id",
-                associateBy = Junction(
-                        value = GroupLessonAuditoryCrossRef::class,
-                        parentColumn = "schedule_item_id",
-                        entityColumn = "auditory_id"
-                )
+    )
+    val employees: List<EmployeeCached>,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "id",
+        associateBy = Junction(
+            value = GroupLessonAuditoryCrossRef::class,
+            parentColumn = "schedule_item_id",
+            entityColumn = "auditory_id"
         )
-        val auditories: List<AuditoryCached>
+    )
+    val auditories: List<AuditoryCached>
 )

@@ -2,20 +2,20 @@ package com.pechuro.bsuirschedule.domain.entity
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import java.util.*
+import java.util.Date
 
 sealed class Schedule(
-        open val name: String
+    open val name: String
 ) : Parcelable {
 
     @Parcelize
     data class GroupClasses(
-            override val name: String,
-            val lastUpdatedDate: Date,
-            val group: Group,
-            val notRemindForUpdates: Boolean
+        override val name: String,
+        val lastUpdatedDate: Date,
+        val group: Group,
+        val notRemindForUpdates: Boolean
     ) : Schedule(
-            name = name
+        name = name
     ) {
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
@@ -42,12 +42,12 @@ sealed class Schedule(
 
     @Parcelize
     data class GroupExams(
-            override val name: String,
-            val lastUpdatedDate: Date,
-            val group: Group,
-            val notRemindForUpdates: Boolean
+        override val name: String,
+        val lastUpdatedDate: Date,
+        val group: Group,
+        val notRemindForUpdates: Boolean
     ) : Schedule(
-            name = name
+        name = name
     ) {
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
@@ -74,10 +74,10 @@ sealed class Schedule(
 
     @Parcelize
     data class EmployeeClasses(
-            override val name: String,
-            val employee: Employee
+        override val name: String,
+        val employee: Employee
     ) : Schedule(
-            name = name
+        name = name
     ) {
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
@@ -100,10 +100,10 @@ sealed class Schedule(
 
     @Parcelize
     data class EmployeeExams(
-            override val name: String,
-            val employee: Employee
+        override val name: String,
+        val employee: Employee
     ) : Schedule(
-            name = name
+        name = name
     ) {
         override fun equals(other: Any?): Boolean {
             if (this === other) return true

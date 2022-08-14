@@ -15,9 +15,9 @@ import kotlinx.android.synthetic.main.view_loader.view.*
 
 
 class LoaderView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     init {
@@ -26,15 +26,15 @@ class LoaderView @JvmOverloads constructor(
         val foregroundColor = context.colorFromAttr(R.attr.textDefaultColor)
         val foregroundColorFilter = PorterDuffColorFilter(foregroundColor, PorterDuff.Mode.SRC_ATOP)
         loaderAnimationView.addValueCallback(
-                KeyPath("foreground", "**"),
-                LottieProperty.COLOR_FILTER
+            KeyPath("foreground", "**"),
+            LottieProperty.COLOR_FILTER
         ) { foregroundColorFilter }
 
         val backgroundColor = context.colorFromAttr(R.attr.rippleColor)
         val backgroundColorFilter = PorterDuffColorFilter(backgroundColor, PorterDuff.Mode.SRC_ATOP)
         loaderAnimationView.addValueCallback(
-                KeyPath("background", "**"),
-                LottieProperty.COLOR_FILTER
+            KeyPath("background", "**"),
+            LottieProperty.COLOR_FILTER
         ) { backgroundColorFilter }
 
         context.obtainStyledAttributes(attrs, R.styleable.LoaderView).use {

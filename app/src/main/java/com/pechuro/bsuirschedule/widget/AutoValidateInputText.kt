@@ -12,9 +12,9 @@ import kotlinx.android.synthetic.main.view_auto_validate_input_text.view.*
 import com.google.android.material.R as materialR
 
 class AutoValidateInputText @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = materialR.attr.textInputStyle
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = materialR.attr.textInputStyle
 ) : TextInputLayout(context, attrs, defStyleAttr) {
 
     companion object {
@@ -29,7 +29,8 @@ class AutoValidateInputText @JvmOverloads constructor(
         background = null
 
         val styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.AutoValidateInputText)
-        val validationPattern = styledAttrs.getString(R.styleable.AutoValidateInputText_validation_expr)
+        val validationPattern =
+            styledAttrs.getString(R.styleable.AutoValidateInputText_validation_expr)
                 ?: DEFAULT_REGEX_PATTERN
         validationRegex = validationPattern.toRegex()
         errorText = styledAttrs.getString(R.styleable.AutoValidateInputText_error_text) ?: ""

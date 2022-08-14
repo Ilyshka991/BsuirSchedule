@@ -15,9 +15,9 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
 class GroupRepositoryImpl(
-        private val dao: GroupDao,
-        private val api: StaffApi,
-        private val specialityRepository: ISpecialityRepository
+    private val dao: GroupDao,
+    private val api: StaffApi,
+    private val specialityRepository: ISpecialityRepository
 ) : BaseRepository(), IGroupRepository {
 
     override suspend fun getAll(): Flow<List<Group>> {
@@ -31,7 +31,7 @@ class GroupRepositoryImpl(
         val groupCached = performDaoCall { dao.getById(id) }
         val speciality = specialityRepository.getSpecialityById(groupCached.specialityId)
         return groupCached.toDomainEntity(
-                speciality = speciality
+            speciality = speciality
         )
     }
 
@@ -43,26 +43,26 @@ class GroupRepositoryImpl(
     override suspend fun isCached(): Boolean = dao.isNotEmpty()
 
     private suspend fun loadGroupsFromApi(): List<Group> =
-            performApiCall { api.getAllGroups() }
-                    .map { dto ->
-                        val speciality = specialityRepository.getSpecialityById(dto.specialityId)
-                        dto.toDomainEntity(
-                                speciality = speciality
-                        )
-                    }
+        performApiCall { api.getAllGroups() }
+            .map { dto ->
+                val speciality = specialityRepository.getSpecialityById(dto.specialityId)
+                dto.toDomainEntity(
+                    speciality = speciality
+                )
+            }
 
     private suspend fun getGroupsFromDao() = dao.getAll()
-            .map { cachedList ->
-                val allSpecialities = specialityRepository.getAllSpecialities().first()
-                cachedList.mapNotNull { groupCached ->
-                    val speciality = allSpecialities.find { it.id == groupCached.specialityId }
-                            ?: return@mapNotNull null
-                    groupCached.toDomainEntity(
-                            speciality = speciality
-                    )
-                }
+        .map { cachedList ->
+            val allSpecialities = specialityRepository.getAllSpecialities().first()
+            cachedList.mapNotNull { groupCached ->
+                val speciality = allSpecialities.find { it.id == groupCached.specialityId }
+                    ?: return@mapNotNull null
+                groupCached.toDomainEntity(
+                    speciality = speciality
+                )
             }
-            .flowOn(Dispatchers.IO)
+        }
+        .flowOn(Dispatchers.IO)
 
     private suspend fun storeGroups(groups: List<Group>) {
         groups.map {

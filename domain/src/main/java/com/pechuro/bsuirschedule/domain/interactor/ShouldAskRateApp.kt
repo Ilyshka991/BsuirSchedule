@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ShouldAskRateApp @Inject constructor(
-        private val sessionRepository: ISessionRepository
+    private val sessionRepository: ISessionRepository
 ) : BaseInteractor<Boolean, BaseInteractor.NoParams>() {
 
     override suspend fun run(params: NoParams): Boolean {

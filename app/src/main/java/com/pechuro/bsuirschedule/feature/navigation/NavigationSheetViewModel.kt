@@ -29,13 +29,13 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class NavigationSheetViewModel @Inject constructor(
-        private val getAllSchedules: GetAllSchedules,
-        private val deleteSchedule: DeleteSchedule,
-        private val updateSchedule: UpdateSchedule,
-        private val getAvailableForUpdateSchedules: GetAvailableForUpdateSchedules,
-        private val getLastOpenedSchedule: GetLastOpenedSchedule,
-        private val getNavigationHintDisplayState: GetNavigationHintDisplayState,
-        private val setNavigationHintDisplayState: SetNavigationHintDisplayState
+    private val getAllSchedules: GetAllSchedules,
+    private val deleteSchedule: DeleteSchedule,
+    private val updateSchedule: UpdateSchedule,
+    private val getAvailableForUpdateSchedules: GetAvailableForUpdateSchedules,
+    private val getLastOpenedSchedule: GetLastOpenedSchedule,
+    private val getNavigationHintDisplayState: GetNavigationHintDisplayState,
+    private val setNavigationHintDisplayState: SetNavigationHintDisplayState
 ) : BaseViewModel() {
 
     companion object {
@@ -71,19 +71,19 @@ class NavigationSheetViewModel @Inject constructor(
             setUpdateState(schedule, UpdateState.IN_PROGRESS)
             val result = updateSchedule.execute(UpdateSchedule.Params(schedule))
             val resultState = result.fold(
-                    onSuccess = {
-                        AppAnalytics.report(AppAnalyticsEvent.Navigation.ScheduleUpdateSuccess(schedule))
-                        UpdateState.SUCCESS
-                    },
-                    onFailure = {
-                        AppAnalytics.report(AppAnalyticsEvent.Navigation.ScheduleUpdateFail(it))
-                        UpdateState.ERROR
-                    }
+                onSuccess = {
+                    AppAnalytics.report(AppAnalyticsEvent.Navigation.ScheduleUpdateSuccess(schedule))
+                    UpdateState.SUCCESS
+                },
+                onFailure = {
+                    AppAnalytics.report(AppAnalyticsEvent.Navigation.ScheduleUpdateFail(it))
+                    UpdateState.ERROR
+                }
             )
             setUpdateState(schedule, resultState)
             delay(DELAY_AFTER_UPDATE_DURATION_MS)
             val availableForUpdateSchedules = availableForUpdateScheduleListData.value
-                    ?: emptyList()
+                ?: emptyList()
             val defaultUpdateState = if (schedule in availableForUpdateSchedules) {
                 UpdateState.AVAILABLE
             } else {
@@ -110,17 +110,17 @@ class NavigationSheetViewModel @Inject constructor(
         updateInfoJob = launchCoroutine {
             val scheduleList = allScheduleListData.value ?: emptyList()
             val availableForUpdateScheduleList = availableForUpdateScheduleListData.value
-                    ?: emptyList()
+                ?: emptyList()
             val schedulesUpdateState = schedulesUpdateState.value ?: emptyMap()
             val selectedSchedule = selectedScheduleData.value
             val hintShown = hintDisplayState.value ?: false
             val newInfo = withContext(Dispatchers.IO) {
                 transformScheduleListToNavInfoList(
-                        scheduleList = scheduleList,
-                        availableForUpdateScheduleList = availableForUpdateScheduleList,
-                        updateStates = schedulesUpdateState,
-                        selectedSchedule = selectedSchedule,
-                        hintShown = hintShown
+                    scheduleList = scheduleList,
+                    availableForUpdateScheduleList = availableForUpdateScheduleList,
+                    updateStates = schedulesUpdateState,
+                    selectedSchedule = selectedSchedule,
+                    hintShown = hintShown
                 )
             }
             navigationInfoData.value = newInfo
@@ -128,11 +128,11 @@ class NavigationSheetViewModel @Inject constructor(
     }
 
     private fun transformScheduleListToNavInfoList(
-            scheduleList: List<Schedule>,
-            availableForUpdateScheduleList: List<Schedule>,
-            updateStates: Map<Schedule, UpdateState>,
-            selectedSchedule: Schedule?,
-            hintShown: Boolean
+        scheduleList: List<Schedule>,
+        availableForUpdateScheduleList: List<Schedule>,
+        updateStates: Map<Schedule, UpdateState>,
+        selectedSchedule: Schedule?,
+        hintShown: Boolean
     ): List<NavigationSheetItemInformation> {
         val resultList = mutableListOf<NavigationSheetItemInformation>()
 
@@ -150,9 +150,9 @@ class NavigationSheetViewModel @Inject constructor(
         if (allClasses.isNotEmpty()) {
             resultList += Title(Title.Type.CLASSES)
             resultList += allClasses.mapToNavInfo(
-                    availableForUpdateScheduleList = availableForUpdateScheduleList,
-                    updateStates = updateStates,
-                    selectedSchedule = selectedSchedule
+                availableForUpdateScheduleList = availableForUpdateScheduleList,
+                updateStates = updateStates,
+                selectedSchedule = selectedSchedule
             )
         }
 
@@ -163,9 +163,9 @@ class NavigationSheetViewModel @Inject constructor(
         if (allExams.isNotEmpty()) {
             resultList += Title(Title.Type.EXAMS)
             resultList += allExams.mapToNavInfo(
-                    availableForUpdateScheduleList = availableForUpdateScheduleList,
-                    updateStates = updateStates,
-                    selectedSchedule = selectedSchedule
+                availableForUpdateScheduleList = availableForUpdateScheduleList,
+                updateStates = updateStates,
+                selectedSchedule = selectedSchedule
             )
         }
 
@@ -175,9 +175,9 @@ class NavigationSheetViewModel @Inject constructor(
         if (allPartTime.isNotEmpty()) {
             resultList += Title(Title.Type.PART_TIME)
             resultList += allPartTime.mapToNavInfo(
-                    availableForUpdateScheduleList = availableForUpdateScheduleList,
-                    updateStates = updateStates,
-                    selectedSchedule = selectedSchedule
+                availableForUpdateScheduleList = availableForUpdateScheduleList,
+                updateStates = updateStates,
+                selectedSchedule = selectedSchedule
             )
         }
 
@@ -185,9 +185,9 @@ class NavigationSheetViewModel @Inject constructor(
     }
 
     private fun List<Schedule>.mapToNavInfo(
-            availableForUpdateScheduleList: List<Schedule>,
-            updateStates: Map<Schedule, UpdateState>,
-            selectedSchedule: Schedule?
+        availableForUpdateScheduleList: List<Schedule>,
+        updateStates: Map<Schedule, UpdateState>,
+        selectedSchedule: Schedule?
     ) = sortedBy { it.name }.map {
         val updateState = when {
             updateStates.containsKey(it) -> updateStates.getValue(it)

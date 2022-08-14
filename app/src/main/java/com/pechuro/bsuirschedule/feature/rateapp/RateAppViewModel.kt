@@ -9,9 +9,9 @@ import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 class RateAppViewModel @Inject constructor(
-        val appUriProvider: AppUriProvider,
-        private val setRateAppAskLater: SetRateAppAskLater,
-        private val setRateAppAskNever: SetRateAppAskNever
+    val appUriProvider: AppUriProvider,
+    private val setRateAppAskLater: SetRateAppAskLater,
+    private val setRateAppAskNever: SetRateAppAskNever
 ) : BaseViewModel() {
 
     fun onRateAppAskLater() {

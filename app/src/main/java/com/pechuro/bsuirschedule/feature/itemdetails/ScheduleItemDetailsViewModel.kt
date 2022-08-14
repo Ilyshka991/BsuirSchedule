@@ -6,7 +6,13 @@ import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.common.provider.AppUriProvider
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
-import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.entity.Auditory
+import com.pechuro.bsuirschedule.domain.entity.Exam
+import com.pechuro.bsuirschedule.domain.entity.Lesson
+import com.pechuro.bsuirschedule.domain.entity.LessonPriority
+import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 import com.pechuro.bsuirschedule.domain.interactor.GetLessonWeeks
 import com.pechuro.bsuirschedule.domain.interactor.GetScheduleItem
 import com.pechuro.bsuirschedule.domain.interactor.UpdateScheduleItem
@@ -19,10 +25,10 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ScheduleItemDetailsViewModel @Inject constructor(
-        val appUriProvider: AppUriProvider,
-        private val getScheduleItem: GetScheduleItem,
-        private val getLessonWeeks: GetLessonWeeks,
-        private val updateScheduleItem: UpdateScheduleItem
+    val appUriProvider: AppUriProvider,
+    private val getScheduleItem: GetScheduleItem,
+    private val getLessonWeeks: GetLessonWeeks,
+    private val updateScheduleItem: UpdateScheduleItem
 ) : BaseViewModel() {
 
     lateinit var detailsData: LiveData<DetailsData>
@@ -33,17 +39,17 @@ class ScheduleItemDetailsViewModel @Inject constructor(
         if (this::detailsData.isInitialized) return
         detailsData = flowLiveData {
             getScheduleItem
-                    .execute(GetScheduleItem.Params(schedule, itemId))
-                    .getOrDefault(emptyFlow())
-                    .distinctUntilChanged()
-                    .map { scheduleItem ->
-                        if (!isOpenEventSent) {
-                            isOpenEventSent = true
-                            AppAnalytics.report(AppAnalyticsEvent.Details.Opened(scheduleItem))
-                        }
-                        val details = getDetails(scheduleItem)
-                        DetailsData(scheduleItem, details)
+                .execute(GetScheduleItem.Params(schedule, itemId))
+                .getOrDefault(emptyFlow())
+                .distinctUntilChanged()
+                .map { scheduleItem ->
+                    if (!isOpenEventSent) {
+                        isOpenEventSent = true
+                        AppAnalytics.report(AppAnalyticsEvent.Details.Opened(scheduleItem))
                     }
+                    val details = getDetails(scheduleItem)
+                    DetailsData(scheduleItem, details)
+                }
         }
     }
 
@@ -79,7 +85,8 @@ class ScheduleItemDetailsViewModel @Inject constructor(
         resultList += ScheduleItemDetailsInfo.Time(scheduleItem.startTime, scheduleItem.endTime)
         resultList += getDateInfo(scheduleItem)
         if (!scheduleItem.isConsultation
-                && !(scheduleItem.isExam && scheduleItem.subgroupNumber == SubgroupNumber.ALL)) {
+            && !(scheduleItem.isExam && scheduleItem.subgroupNumber == SubgroupNumber.ALL)
+        ) {
             resultList += ScheduleItemDetailsInfo.Subgroup(scheduleItem.subgroupNumber)
         }
         if (scheduleItem is Lesson) {
@@ -100,10 +107,11 @@ class ScheduleItemDetailsViewModel @Inject constructor(
 
     private suspend fun getDateInfo(scheduleItem: ScheduleItem) = when (scheduleItem) {
         is Lesson -> {
-            val weeks = getLessonWeeks.execute(GetLessonWeeks.Params(scheduleItem)).getOrDefault(emptyList())
+            val weeks = getLessonWeeks.execute(GetLessonWeeks.Params(scheduleItem))
+                .getOrDefault(emptyList())
             ScheduleItemDetailsInfo.LessonDate(
-                    weekDay = scheduleItem.weekDay,
-                    weeks = weeks
+                weekDay = scheduleItem.weekDay,
+                weeks = weeks
             )
         }
         is Exam -> ScheduleItemDetailsInfo.ExamDate(scheduleItem.date)
@@ -122,7 +130,7 @@ class ScheduleItemDetailsViewModel @Inject constructor(
     }
 
     data class DetailsData(
-            val scheduleItem: ScheduleItem,
-            val details: List<ScheduleItemDetailsInfo>
+        val scheduleItem: ScheduleItem,
+        val details: List<ScheduleItemDetailsInfo>
     )
 }

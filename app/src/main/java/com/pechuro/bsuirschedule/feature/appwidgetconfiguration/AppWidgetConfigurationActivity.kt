@@ -27,7 +27,8 @@ class AppWidgetConfigurationActivity : BaseActivity() {
 
     companion object {
 
-        fun newIntent(context: Context) = Intent(context, AppWidgetConfigurationActivity::class.java)
+        fun newIntent(context: Context) =
+            Intent(context, AppWidgetConfigurationActivity::class.java)
     }
 
     override val layoutId: Int = R.layout.activity_configure_schedule_widget
@@ -38,15 +39,15 @@ class AppWidgetConfigurationActivity : BaseActivity() {
 
     private val widgetId: Int by lazy(LazyThreadSafetyMode.NONE) {
         intent.extras?.getInt(
-                AppWidgetManager.EXTRA_APPWIDGET_ID,
-                AppWidgetManager.INVALID_APPWIDGET_ID
+            AppWidgetManager.EXTRA_APPWIDGET_ID,
+            AppWidgetManager.INVALID_APPWIDGET_ID
         ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
     }
 
     private val scheduleListAdapter = AppWidgetConfigurationAdapter(
-            onScheduleClicked = {
-                viewModel.dataProvider.setSelectedSchedule(it)
-            }
+        onScheduleClicked = {
+            viewModel.dataProvider.setSelectedSchedule(it)
+        }
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,7 +84,8 @@ class AppWidgetConfigurationActivity : BaseActivity() {
             startMainApp()
         }
         configureScheduleWidgetRecyclerView.adapter = scheduleListAdapter
-        val recyclerItemAnimator = configureScheduleWidgetRecyclerView.itemAnimator as? SimpleItemAnimator
+        val recyclerItemAnimator =
+            configureScheduleWidgetRecyclerView.itemAnimator as? SimpleItemAnimator
         recyclerItemAnimator?.supportsChangeAnimations = false
     }
 
@@ -116,19 +118,22 @@ class AppWidgetConfigurationActivity : BaseActivity() {
 
     private fun showExitDialog() {
         ConfirmationDialog
-                .Builder()
-                .setTitle(getString(R.string.configure_schedule_widget_msg_exit))
-                .setPositiveAction(ConfirmationDialogButtonData(
-                        text = getString(R.string.action_discard),
-                        onClick = {
-                            viewModel.onCancelled()
-                            finish()
-                        }
-                ))
-                .setNegativeAction(ConfirmationDialogButtonData(
-                        text = getString(R.string.action_cancel)))
-                .build()
-                .show(supportFragmentManager, ConfirmationDialog.TAG)
+            .Builder()
+            .setTitle(getString(R.string.configure_schedule_widget_msg_exit))
+            .setPositiveAction(ConfirmationDialogButtonData(
+                text = getString(R.string.action_discard),
+                onClick = {
+                    viewModel.onCancelled()
+                    finish()
+                }
+            ))
+            .setNegativeAction(
+                ConfirmationDialogButtonData(
+                    text = getString(R.string.action_cancel)
+                )
+            )
+            .build()
+            .show(supportFragmentManager, ConfirmationDialog.TAG)
     }
 
     private fun selectSubgroupNumber() {
@@ -136,8 +141,8 @@ class AppWidgetConfigurationActivity : BaseActivity() {
         val selectedSubgroupNumber = viewModel.dataProvider.subgroupNumberData.requireValue
         val options = availableNumbers.map { number ->
             OptionDialogButtonData(
-                    text = getString(number.formattedStringRes),
-                    selected = number == selectedSubgroupNumber
+                text = getString(number.formattedStringRes),
+                selected = number == selectedSubgroupNumber
             )
         }
         val listener = object : OptionDialog.OptionButtonClickListener {
@@ -147,10 +152,10 @@ class AppWidgetConfigurationActivity : BaseActivity() {
         }
         val title = getString(R.string.modify_schedule_item_title_select_subgroup)
         OptionDialog.Builder()
-                .setTitle(title)
-                .setActions(options, listener)
-                .build()
-                .show(supportFragmentManager, OptionDialog.TAG)
+            .setTitle(title)
+            .setActions(options, listener)
+            .build()
+            .show(supportFragmentManager, OptionDialog.TAG)
     }
 
     private fun selectWidgetTheme() {
@@ -158,8 +163,8 @@ class AppWidgetConfigurationActivity : BaseActivity() {
         val selectedTheme = viewModel.dataProvider.widgetTheme.requireValue
         val options = availableThemes.map { theme ->
             OptionDialogButtonData(
-                    text = getString(theme.formattedStringRes),
-                    selected = theme == selectedTheme
+                text = getString(theme.formattedStringRes),
+                selected = theme == selectedTheme
             )
         }
         val listener = object : OptionDialog.OptionButtonClickListener {
@@ -172,10 +177,10 @@ class AppWidgetConfigurationActivity : BaseActivity() {
         }
         val title = getString(R.string.settings_title_select_theme)
         OptionDialog.Builder()
-                .setTitle(title)
-                .setActions(options, listener)
-                .build()
-                .show(supportFragmentManager, OptionDialog.TAG)
+            .setTitle(title)
+            .setActions(options, listener)
+            .build()
+            .show(supportFragmentManager, OptionDialog.TAG)
     }
 
     private fun startMainApp() {

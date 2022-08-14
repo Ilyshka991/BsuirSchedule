@@ -70,7 +70,11 @@ class AddScheduleFragmentContainer : BaseFragment() {
         addScheduleContainerViewPager.apply {
             adapter = pagerAdapter
             layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-            addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(addScheduleContainerTabLayout))
+            addOnPageChangeListener(
+                TabLayout.TabLayoutOnPageChangeListener(
+                    addScheduleContainerTabLayout
+                )
+            )
         }
         addScheduleContainerTabLayout.apply {
             AddScheduleContainerPagerAdapter.FragmentType.values().forEach {

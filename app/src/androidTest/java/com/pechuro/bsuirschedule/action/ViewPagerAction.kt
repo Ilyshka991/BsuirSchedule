@@ -12,7 +12,8 @@ object ViewPagerAction {
 
     fun checkPosition(position: Int) = object : ViewAction {
 
-        override fun getConstraints() = allOf(isAssignableFrom(ViewPager::class.java), isDisplayed())
+        override fun getConstraints() =
+            allOf(isAssignableFrom(ViewPager::class.java), isDisplayed())
 
         override fun getDescription() = "Check ViewPager position: $position"
 

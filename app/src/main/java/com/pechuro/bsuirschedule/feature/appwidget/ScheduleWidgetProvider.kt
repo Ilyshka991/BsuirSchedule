@@ -26,11 +26,11 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
     companion object {
 
         fun updateWidget(
-                context: Context,
-                appWidgetManager: AppWidgetManager,
-                widgetId: Int,
-                widgetInfo: ScheduleWidgetInfo?,
-                widgetData: ScheduleWidgetData
+            context: Context,
+            appWidgetManager: AppWidgetManager,
+            widgetId: Int,
+            widgetInfo: ScheduleWidgetInfo?,
+            widgetData: ScheduleWidgetData
         ) {
             val layoutRes = when (widgetInfo?.theme) {
                 WidgetTheme.LIGHT -> R.layout.layout_schedule_widget_light
@@ -53,13 +53,20 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
                 else -> R.string.schedule_widget_msg_today
             }
             views.setTextViewText(R.id.scheduleWidgetDayText, context.getString(dayStringRes))
-            views.setTextViewText(R.id.scheduleWidgetScheduleNameText, widgetInfo?.schedule?.name
-                    ?: "")
+            views.setTextViewText(
+                R.id.scheduleWidgetScheduleNameText, widgetInfo?.schedule?.name
+                    ?: ""
+            )
 
             val editWidgetInfoIntent = AppWidgetConfigurationActivity.newIntent(context).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
             }.run {
-                PendingIntent.getActivity(context, widgetId, this, PendingIntent.FLAG_UPDATE_CURRENT)
+                PendingIntent.getActivity(
+                    context,
+                    widgetId,
+                    this,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
             }
             views.setOnClickPendingIntent(R.id.scheduleWidgetTitleParentView, editWidgetInfoIntent)
 
@@ -73,7 +80,12 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
             val openMainAppIntent = MainActivity.newIntent(context).apply {
                 putExtra(MainActivity.EXTRA_SCHEDULE, widgetInfo?.schedule)
             }.run {
-                PendingIntent.getActivity(context, widgetId, this, PendingIntent.FLAG_UPDATE_CURRENT)
+                PendingIntent.getActivity(
+                    context,
+                    widgetId,
+                    this,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
             }
             views.setPendingIntentTemplate(R.id.scheduleWidgetListView, openMainAppIntent)
 
@@ -83,7 +95,10 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
 
             //TODO: Figure out why it works
             Handler().postDelayed({
-                appWidgetManager.notifyAppWidgetViewDataChanged(widgetId, R.id.scheduleWidgetListView)
+                appWidgetManager.notifyAppWidgetViewDataChanged(
+                    widgetId,
+                    R.id.scheduleWidgetListView
+                )
                 appWidgetManager.updateAppWidget(widgetId, views)
             }, 50)
         }
@@ -95,15 +110,19 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
     @Inject
     protected lateinit var dataProvider: ScheduleWidgetDataProvider
 
-    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray
+    ) {
         injectDependencies(context)
         appWidgetIds.forEach { id ->
             updateWidget(
-                    context = context,
-                    appWidgetManager = appWidgetManager,
-                    widgetId = id,
-                    widgetInfo = widgetRepository.getScheduleWidget(id),
-                    widgetData = dataProvider.getScheduleItemsList(id)
+                context = context,
+                appWidgetManager = appWidgetManager,
+                widgetId = id,
+                widgetInfo = widgetRepository.getScheduleWidget(id),
+                widgetData = dataProvider.getScheduleItemsList(id)
             )
             appWidgetManager.notifyAppWidgetViewDataChanged(id, R.id.scheduleWidgetListView)
         }

@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.catch
 import javax.inject.Inject
 
 class GetAuditories @Inject constructor(
-        private val buildingRepository: IBuildingRepository
+    private val buildingRepository: IBuildingRepository
 ) : BaseInteractor<Flow<List<Auditory>>, BaseInteractor.NoParams>() {
 
     override suspend fun run(params: NoParams) = buildingRepository.getAllAuditories()
-            .catch {
-                Logger.e(it)
-            }
+        .catch {
+            Logger.e(it)
+        }
 }

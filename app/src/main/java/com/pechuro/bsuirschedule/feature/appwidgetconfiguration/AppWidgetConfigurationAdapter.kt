@@ -15,43 +15,51 @@ import com.pechuro.bsuirschedule.feature.appwidgetconfiguration.AppWidgetConfigu
 import com.pechuro.bsuirschedule.feature.appwidgetconfiguration.AppWidgetConfigurationScheduleDisplayData.Title
 import kotlinx.android.synthetic.main.item_navigation_sheet_content.*
 
-private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<AppWidgetConfigurationScheduleDisplayData>() {
+private val DIFF_CALLBACK =
+    object : DiffUtil.ItemCallback<AppWidgetConfigurationScheduleDisplayData>() {
 
-    override fun areItemsTheSame(
+        override fun areItemsTheSame(
             oldItem: AppWidgetConfigurationScheduleDisplayData,
             newItem: AppWidgetConfigurationScheduleDisplayData
-    ) = when {
-        oldItem is Content && newItem is Content -> oldItem.schedule == newItem.schedule
-        else -> oldItem == newItem
+        ) = when {
+            oldItem is Content && newItem is Content -> oldItem.schedule == newItem.schedule
+            else -> oldItem == newItem
+        }
+
+        override fun areContentsTheSame(
+            oldItem: AppWidgetConfigurationScheduleDisplayData,
+            newItem: AppWidgetConfigurationScheduleDisplayData
+        ) = oldItem == newItem
     }
-
-    override fun areContentsTheSame(
-            oldItem: AppWidgetConfigurationScheduleDisplayData,
-            newItem: AppWidgetConfigurationScheduleDisplayData
-    ) = oldItem == newItem
-}
 
 private const val VIEW_TYPE_CONTENT = 101
 private const val VIEW_TYPE_TITLE = 102
 
 class AppWidgetConfigurationAdapter(
-        private val onScheduleClicked: (Schedule) -> Unit
-) : ListAdapter<AppWidgetConfigurationScheduleDisplayData, BaseViewHolder<AppWidgetConfigurationScheduleDisplayData>>(DIFF_CALLBACK) {
+    private val onScheduleClicked: (Schedule) -> Unit
+) : ListAdapter<AppWidgetConfigurationScheduleDisplayData, BaseViewHolder<AppWidgetConfigurationScheduleDisplayData>>(
+    DIFF_CALLBACK
+) {
 
     private val scheduleClickListener = View.OnClickListener {
         val schedule = it.tag as? Schedule ?: return@OnClickListener
         onScheduleClicked(schedule)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<AppWidgetConfigurationScheduleDisplayData> {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): BaseViewHolder<AppWidgetConfigurationScheduleDisplayData> {
         val layoutInflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             VIEW_TYPE_CONTENT -> {
-                val view = layoutInflater.inflate(R.layout.item_navigation_sheet_content, parent, false)
+                val view =
+                    layoutInflater.inflate(R.layout.item_navigation_sheet_content, parent, false)
                 ContentViewHolder(view)
             }
             VIEW_TYPE_TITLE -> {
-                val view = layoutInflater.inflate(R.layout.item_navigation_sheet_title, parent, false)
+                val view =
+                    layoutInflater.inflate(R.layout.item_navigation_sheet_title, parent, false)
                 TitleViewHolder(view)
             }
             else -> throw IllegalStateException("Not supported type: $viewType")
@@ -64,8 +72,8 @@ class AppWidgetConfigurationAdapter(
     }
 
     override fun onBindViewHolder(
-            holder: BaseViewHolder<AppWidgetConfigurationScheduleDisplayData>,
-            position: Int
+        holder: BaseViewHolder<AppWidgetConfigurationScheduleDisplayData>,
+        position: Int
     ) = holder.onBind(getItem(position))
 
     override fun getItemId(position: Int) = getItem(position).hashCode().toLong()

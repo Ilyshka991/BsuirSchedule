@@ -16,15 +16,15 @@ import com.pechuro.bsuirschedule.ext.app
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
-import java.util.*
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class CheckScheduleUpdatesWorker(
-        context: Context,
-        params: WorkerParameters,
-        private val getAvailableForUpdateSchedules: GetAvailableForUpdateSchedules,
-        private val notificationManager: NotificationManager
+    context: Context,
+    params: WorkerParameters,
+    private val getAvailableForUpdateSchedules: GetAvailableForUpdateSchedules,
+    private val notificationManager: NotificationManager
 ) : CoroutineWorker(context, params) {
 
     companion object {
@@ -36,9 +36,9 @@ class CheckScheduleUpdatesWorker(
         fun scheduleNextWork(context: Context) {
             val workRequest = createOneTimeRequestRequest()
             WorkManager.getInstance(context).enqueueUniqueWork(
-                    TAG,
-                    ExistingWorkPolicy.REPLACE,
-                    workRequest
+                TAG,
+                ExistingWorkPolicy.REPLACE,
+                workRequest
             )
         }
 
@@ -56,37 +56,38 @@ class CheckScheduleUpdatesWorker(
             val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
 
             return OneTimeWorkRequestBuilder<CheckScheduleUpdatesWorker>()
-                    .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
-                    .addTag(TAG)
-                    .build()
+                .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
+                .addTag(TAG)
+                .build()
         }
     }
 
     override suspend fun doWork(): Result {
         getAvailableForUpdateSchedules.execute(Params(includeAll = false))
-                .getOrDefault(emptyFlow())
-                .debounce(5000)
-                .first()
-                .distinctBy { it.name }
-                .forEach {
-                    if (!applicationContext.app.isInForeground) {
-                        notificationManager.showUpdateAvailable(it)
-                    }
+            .getOrDefault(emptyFlow())
+            .debounce(5000)
+            .first()
+            .distinctBy { it.name }
+            .forEach {
+                if (!applicationContext.app.isInForeground) {
+                    notificationManager.showUpdateAvailable(it)
                 }
+            }
         scheduleNextWork(applicationContext)
         return Result.success()
     }
 
     class Factory @Inject constructor(
-            private val getAvailableForUpdateSchedules: GetAvailableForUpdateSchedules,
-            private val notificationManager: NotificationManager
+        private val getAvailableForUpdateSchedules: GetAvailableForUpdateSchedules,
+        private val notificationManager: NotificationManager
     ) : ChildWorkerFactory {
 
-        override fun create(context: Context, params: WorkerParameters) = CheckScheduleUpdatesWorker(
+        override fun create(context: Context, params: WorkerParameters) =
+            CheckScheduleUpdatesWorker(
                 context = context,
                 params = params,
                 getAvailableForUpdateSchedules = getAvailableForUpdateSchedules,
                 notificationManager = notificationManager
-        )
+            )
     }
 }

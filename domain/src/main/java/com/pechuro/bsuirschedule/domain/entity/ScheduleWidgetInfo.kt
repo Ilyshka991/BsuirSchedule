@@ -5,10 +5,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ScheduleWidgetInfo(
-        val widgetId: Int,
-        val schedule: Schedule,
-        val subgroupNumber: SubgroupNumber,
-        val theme: WidgetTheme
+    val widgetId: Int,
+    val schedule: Schedule,
+    val subgroupNumber: SubgroupNumber,
+    val theme: WidgetTheme
 ) : Parcelable {
 
     enum class WidgetTheme {

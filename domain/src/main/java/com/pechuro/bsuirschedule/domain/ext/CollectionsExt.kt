@@ -1,6 +1,7 @@
 package com.pechuro.bsuirschedule.domain.ext
 
-import java.util.*
+import java.util.ArrayDeque
+import java.util.Queue
 
 fun <T> emptyQueue(): Queue<T> = ArrayDeque()
 

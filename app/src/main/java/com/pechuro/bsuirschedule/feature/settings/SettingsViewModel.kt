@@ -21,11 +21,11 @@ import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
-        val appUriProvider: AppUriProvider,
-        private val loadInfo: LoadInfo,
-        private val getAppTheme: GetAppTheme,
-        private val setAppTheme: SetAppTheme,
-        private val setRateAppAskNever: SetRateAppAskNever
+    val appUriProvider: AppUriProvider,
+    private val loadInfo: LoadInfo,
+    private val getAppTheme: GetAppTheme,
+    private val setAppTheme: SetAppTheme,
+    private val setRateAppAskNever: SetRateAppAskNever
 ) : BaseViewModel() {
 
     private val _stateData = MutableLiveData<State>(State.Idle)
@@ -37,15 +37,15 @@ class SettingsViewModel @Inject constructor(
         launchCoroutine {
             _stateData.value = State.Loading
             loadInfo.execute(BaseInteractor.NoParams).fold(
-                    onSuccess = {
-                        AppAnalytics.report(AppAnalyticsEvent.Settings.InformationUpdateSuccess)
-                        _stateData.value = State.Idle
-                    },
-                    onFailure = { exception ->
-                        if (exception is DataSourceException.CancellationException) return@fold
-                        AppAnalytics.report(AppAnalyticsEvent.Settings.InformationUpdateFail(exception))
-                        _stateData.value = State.Error
-                    }
+                onSuccess = {
+                    AppAnalytics.report(AppAnalyticsEvent.Settings.InformationUpdateSuccess)
+                    _stateData.value = State.Idle
+                },
+                onFailure = { exception ->
+                    if (exception is DataSourceException.CancellationException) return@fold
+                    AppAnalytics.report(AppAnalyticsEvent.Settings.InformationUpdateFail(exception))
+                    _stateData.value = State.Error
+                }
             )
         }
     }

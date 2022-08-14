@@ -61,7 +61,8 @@ class DisplayScheduleOptionsSheet : BaseBottomSheetDialog() {
                 ScheduleDisplayType.WEEKS -> R.string.display_options_sheet_msg_type_weeks
             }
             val displayTypeString = getString(displayTypeIdRes)
-            displayOptionsSheetTypeButton.text = getString(R.string.display_options_sheet_title_type, displayTypeString)
+            displayOptionsSheetTypeButton.text =
+                getString(R.string.display_options_sheet_title_type, displayTypeString)
         }
         viewModel.subgroupNumberData.nonNull().observe(viewLifecycleOwner) {
             val text = when (it) {

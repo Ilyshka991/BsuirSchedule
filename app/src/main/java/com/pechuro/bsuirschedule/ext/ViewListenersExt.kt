@@ -8,17 +8,18 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 
 fun TextView.addTextListener(listener: (text: String) -> Unit) {
-    val onTextChanged: (text: CharSequence?, start: Int, count: Int, after: Int) -> Unit = { text, _, _, _ ->
-        listener(text?.toString() ?: "")
-    }
+    val onTextChanged: (text: CharSequence?, start: Int, count: Int, after: Int) -> Unit =
+        { text, _, _, _ ->
+            listener(text?.toString() ?: "")
+        }
     addTextChangedListener(onTextChanged = onTextChanged)
 }
 
 fun DrawerLayout.addDrawerListener(
-        onDrawerStateChanged: (newState: Int) -> Unit = {},
-        onDrawerSlide: (drawerView: View, slideOffset: Float) -> Unit = { _, _ -> },
-        onDrawerClosed: (drawerView: View) -> Unit = {},
-        onDrawerOpened: (drawerView: View) -> Unit = {}
+    onDrawerStateChanged: (newState: Int) -> Unit = {},
+    onDrawerSlide: (drawerView: View, slideOffset: Float) -> Unit = { _, _ -> },
+    onDrawerClosed: (drawerView: View) -> Unit = {},
+    onDrawerOpened: (drawerView: View) -> Unit = {}
 ): DrawerLayout.DrawerListener {
     val listener = object : DrawerLayout.DrawerListener {
 
@@ -43,9 +44,9 @@ fun DrawerLayout.addDrawerListener(
 }
 
 fun TabLayout.addOnTabSelectedListener(
-        onTabReselected: (tab: TabLayout.Tab) -> Unit = {},
-        onTabUnselected: (tab: TabLayout.Tab) -> Unit = { },
-        onTabSelected: (tab: TabLayout.Tab) -> Unit = {}
+    onTabReselected: (tab: TabLayout.Tab) -> Unit = {},
+    onTabUnselected: (tab: TabLayout.Tab) -> Unit = { },
+    onTabSelected: (tab: TabLayout.Tab) -> Unit = {}
 ) {
     val listener = object : TabLayout.OnTabSelectedListener {
 
@@ -65,9 +66,9 @@ fun TabLayout.addOnTabSelectedListener(
 }
 
 fun ViewPager.addOnTabSelectedListener(
-        onPageScrollStateChanged: (state: Int) -> Unit = {},
-        onPageScrolled: (position: Int, positionOffset: Float, positionOffsetPixels: Int) -> Unit = { _, _, _ -> },
-        onPageSelected: (position: Int) -> Unit = {}
+    onPageScrollStateChanged: (state: Int) -> Unit = {},
+    onPageScrolled: (position: Int, positionOffset: Float, positionOffsetPixels: Int) -> Unit = { _, _, _ -> },
+    onPageSelected: (position: Int) -> Unit = {}
 ) {
     val listener = object : ViewPager.OnPageChangeListener {
 
@@ -75,7 +76,11 @@ fun ViewPager.addOnTabSelectedListener(
             onPageScrollStateChanged.invoke(state)
         }
 
-        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+        override fun onPageScrolled(
+            position: Int,
+            positionOffset: Float,
+            positionOffsetPixels: Int
+        ) {
             onPageScrolled.invoke(position, positionOffset, positionOffsetPixels)
         }
 

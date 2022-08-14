@@ -9,16 +9,17 @@ import com.google.android.material.R
 import com.google.android.material.chip.ChipGroup
 
 class MultipleSelectionChipGroup @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = R.attr.chipGroupStyle
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = R.attr.chipGroupStyle
 ) : ChipGroup(context, attrs, defStyleAttr) {
 
-    private val checkedChangeInternalListener = CompoundButton.OnCheckedChangeListener { view, isChecked ->
-        if (!isChecked && !isAnyChipChecked()) {
-            view.isChecked = true
+    private val checkedChangeInternalListener =
+        CompoundButton.OnCheckedChangeListener { view, isChecked ->
+            if (!isChecked && !isAnyChipChecked()) {
+                view.isChecked = true
+            }
         }
-    }
 
     override fun onViewAdded(child: View?) {
         super.onViewAdded(child)

@@ -36,41 +36,42 @@ import com.pechuro.bsuirschedule.local.entity.staff.EmployeeCached
 import com.pechuro.bsuirschedule.local.entity.staff.GroupCached
 
 @Database(
-        entities = [
-            AuditoryCached::class,
-            AuditoryTypeCached::class,
-            BuildingCached::class,
+    entities = [
+        AuditoryCached::class,
+        AuditoryTypeCached::class,
+        BuildingCached::class,
 
-            DepartmentCached::class,
-            EducationFormCached::class,
-            FacultyCached::class,
-            SpecialityCached::class,
+        DepartmentCached::class,
+        EducationFormCached::class,
+        FacultyCached::class,
+        SpecialityCached::class,
 
-            GroupCached::class,
-            EmployeeCached::class,
+        GroupCached::class,
+        EmployeeCached::class,
 
-            EmployeeExamScheduleCached::class,
-            EmployeeItemExamCached::class,
-            EmployeeClassesScheduleCached::class,
-            EmployeeItemClassesCached::class,
+        EmployeeExamScheduleCached::class,
+        EmployeeItemExamCached::class,
+        EmployeeClassesScheduleCached::class,
+        EmployeeItemClassesCached::class,
 
-            GroupClassesScheduleCached::class,
-            GroupItemClassesCached::class,
-            GroupExamScheduleCached::class,
-            GroupItemExamCached::class,
+        GroupClassesScheduleCached::class,
+        GroupItemClassesCached::class,
+        GroupExamScheduleCached::class,
+        GroupItemExamCached::class,
 
-            EmployeeExamAuditoryCrossRef::class,
-            EmployeeExamGroupCrossRef::class,
-            EmployeeLessonAuditoryCrossRef::class,
-            EmployeeLessonGroupCrossRef::class,
+        EmployeeExamAuditoryCrossRef::class,
+        EmployeeExamGroupCrossRef::class,
+        EmployeeLessonAuditoryCrossRef::class,
+        EmployeeLessonGroupCrossRef::class,
 
-            GroupExamAuditoryCrossRef::class,
-            GroupExamEmployeeCrossRef::class,
-            GroupLessonAuditoryCrossRef::class,
-            GroupLessonEmployeeCrossRef::class
-        ],
-        exportSchema = false,
-        version = BuildConfig.DATABASE_VERSION)
+        GroupExamAuditoryCrossRef::class,
+        GroupExamEmployeeCrossRef::class,
+        GroupLessonAuditoryCrossRef::class,
+        GroupLessonEmployeeCrossRef::class
+    ],
+    exportSchema = false,
+    version = BuildConfig.DATABASE_VERSION
+)
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 

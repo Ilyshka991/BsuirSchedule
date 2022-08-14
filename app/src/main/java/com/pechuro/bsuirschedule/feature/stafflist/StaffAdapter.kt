@@ -24,18 +24,18 @@ import kotlinx.android.synthetic.main.item_staff_group.*
 val DIFF_CALLBACK = object : DiffUtil.ItemCallback<StaffItemInformation>() {
 
     override fun areItemsTheSame(
-            oldItem: StaffItemInformation,
-            newItem: StaffItemInformation
+        oldItem: StaffItemInformation,
+        newItem: StaffItemInformation
     ) = oldItem == newItem
 
     override fun areContentsTheSame(
-            oldItem: StaffItemInformation,
-            newItem: StaffItemInformation
+        oldItem: StaffItemInformation,
+        newItem: StaffItemInformation
     ) = oldItem == newItem
 }
 
 class StaffAdapter(
-        private val onItemClicked: (StaffItemInformation) -> Unit
+    private val onItemClicked: (StaffItemInformation) -> Unit
 ) : ListAdapter<StaffItemInformation, BaseViewHolder<StaffItemInformation>>(DIFF_CALLBACK) {
 
     private val onClickListener: (View) -> Unit = {
@@ -43,7 +43,10 @@ class StaffAdapter(
         info?.let { onItemClicked(info) }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<StaffItemInformation> {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): BaseViewHolder<StaffItemInformation> {
         val layoutInflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             TYPE_GROUP -> {
@@ -79,18 +82,20 @@ class StaffAdapter(
         else -> -100
     }
 
-    private inner class GroupViewHolder(view: View) : BaseViewHolder<StaffItemInformation.GroupInfo>(view) {
+    private inner class GroupViewHolder(view: View) :
+        BaseViewHolder<StaffItemInformation.GroupInfo>(view) {
 
         override fun onBind(data: StaffItemInformation.GroupInfo) {
             with(data.group) {
                 staffGroupNumber.text = number
                 staffGroupFacultyAbbreviation.text = speciality.faculty?.abbreviation ?: ""
                 staffGroupSpecialityAbbreviation.text = speciality.abbreviation
-                staffGroupEducationForm.text = speciality.educationForm.name + if (course != -1) "," else ""
+                staffGroupEducationForm.text =
+                    speciality.educationForm.name + if (course != -1) "," else ""
                 staffGroupCourse.isVisible = course != -1
                 staffGroupCourse.text = itemView.context.getString(
-                        R.string.staff_list_msg_group_course,
-                        course
+                    R.string.staff_list_msg_group_course,
+                    course
                 )
             }
 
@@ -99,7 +104,8 @@ class StaffAdapter(
         }
     }
 
-    private inner class EmployeeViewHolder(view: View) : BaseViewHolder<StaffItemInformation.EmployeeInfo>(view) {
+    private inner class EmployeeViewHolder(view: View) :
+        BaseViewHolder<StaffItemInformation.EmployeeInfo>(view) {
 
         override fun onBind(data: StaffItemInformation.EmployeeInfo) {
             with(data.employee) {
@@ -109,8 +115,8 @@ class StaffAdapter(
                 staffEmployeeLastName.text = lastName
                 staffEmployeeDepartmentAbbreviation.text = if (department != null) {
                     itemView.context.getString(
-                            R.string.staff_list_msg_employee_department,
-                            department?.abbreviation ?: ""
+                        R.string.staff_list_msg_employee_department,
+                        department?.abbreviation ?: ""
                     ) + if (rank.isNotEmpty()) "," else ""
                 } else {
                     ""
@@ -129,13 +135,14 @@ class StaffAdapter(
                 circleCrop()
             }
             Glide.with(this)
-                    .load(url)
-                    .apply(glideOptions)
-                    .into(this)
+                .load(url)
+                .apply(glideOptions)
+                .into(this)
         }
     }
 
-    private inner class AuditoryViewHolder(view: View) : BaseViewHolder<StaffItemInformation.AuditoryInfo>(view) {
+    private inner class AuditoryViewHolder(view: View) :
+        BaseViewHolder<StaffItemInformation.AuditoryInfo>(view) {
 
         override fun onBind(data: StaffItemInformation.AuditoryInfo) {
             with(data.auditory) {
@@ -144,13 +151,13 @@ class StaffAdapter(
                 staffAuditoryType.isVisible = auditoryType.name.isNotEmpty()
                 staffAuditoryCapacity.isVisible = capacity != 0 && capacity != -1
                 staffAuditoryCapacity.text = itemView.context.getString(
-                        R.string.staff_list_msg_auditory_capacity,
-                        capacity
+                    R.string.staff_list_msg_auditory_capacity,
+                    capacity
                 )
                 staffAuditoryDepartment.isVisible = department != null
                 staffAuditoryDepartment.text = itemView.context.getString(
-                        R.string.staff_list_msg_employee_department,
-                        department?.abbreviation ?: ""
+                    R.string.staff_list_msg_employee_department,
+                    department?.abbreviation ?: ""
                 )
                 staffAuditoryNote.isVisible = note.isNotEmpty()
                 staffAuditoryNote.text = note

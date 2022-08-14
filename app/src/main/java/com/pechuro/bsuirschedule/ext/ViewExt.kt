@@ -17,8 +17,8 @@ import com.pechuro.bsuirschedule.common.ClickInterval
 import com.pechuro.bsuirschedule.common.OneFirePerIntervalClickListener
 
 inline fun View.setSafeClickListener(
-        interval: ClickInterval = ClickInterval.NORMAL,
-        crossinline onClick: (View) -> Unit
+    interval: ClickInterval = ClickInterval.NORMAL,
+    crossinline onClick: (View) -> Unit
 ) {
     val safeClickListener = OneFirePerIntervalClickListener(interval.milliseconds) {
         onClick(it)
@@ -27,10 +27,11 @@ inline fun View.setSafeClickListener(
 }
 
 inline fun View.setSafeClickListener(
-        interval: ClickInterval = ClickInterval.NORMAL,
-        onClickListener: View.OnClickListener
+    interval: ClickInterval = ClickInterval.NORMAL,
+    onClickListener: View.OnClickListener
 ) {
-    val safeClickListener = OneFirePerIntervalClickListener(interval.milliseconds, onClickListener::onClick)
+    val safeClickListener =
+        OneFirePerIntervalClickListener(interval.milliseconds, onClickListener::onClick)
     setOnClickListener(safeClickListener)
 }
 
@@ -79,10 +80,10 @@ fun View.setHeight(@Px height: Int) = apply {
 }
 
 fun View.updateMargin(
-        @Px left: Int = marginLeft,
-        @Px top: Int = marginTop,
-        @Px right: Int = marginRight,
-        @Px bottom: Int = marginBottom
+    @Px left: Int = marginLeft,
+    @Px top: Int = marginTop,
+    @Px right: Int = marginRight,
+    @Px bottom: Int = marginBottom
 ) {
     if (layoutParams is ViewGroup.MarginLayoutParams) {
         updateLayoutParams<ViewGroup.MarginLayoutParams> {

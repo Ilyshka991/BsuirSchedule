@@ -9,13 +9,13 @@ sealed class DisplayScheduleItemInfo : Parcelable {
 
     @Parcelize
     data class DayClasses(
-            val weekDay: WeekDay,
-            val weekNumber: WeekNumber
+        val weekDay: WeekDay,
+        val weekNumber: WeekNumber
     ) : DisplayScheduleItemInfo()
 
     @Parcelize
     data class WeekClasses(
-            val weekDay: WeekDay
+        val weekDay: WeekDay
     ) : DisplayScheduleItemInfo()
 
     @Parcelize

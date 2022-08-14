@@ -21,7 +21,7 @@ import com.pechuro.bsuirschedule.domain.entity.isPartTime
 import java.util.Locale
 
 class FlurryAnalyticsReporter(
-        private val crashlytics: FirebaseCrashlytics
+    private val crashlytics: FirebaseCrashlytics
 ) : AppAnalytics.Reporter {
 
     companion object {
@@ -178,27 +178,27 @@ class FlurryAnalyticsReporter(
     }
 
     private fun Schedule.getInfo() = mapOf(
-            "name" to name.take(PARAM_MAX_SYMBOLS),
-            "type" to when {
-                this is Schedule.GroupClasses || this is Schedule.EmployeeClasses -> "classes"
-                this is Schedule.GroupExams && this.group.speciality.educationForm.isPartTime -> "part-time"
-                this is Schedule.GroupExams || this is Schedule.EmployeeExams -> "exams"
-                else -> "unknown"
-            }
+        "name" to name.take(PARAM_MAX_SYMBOLS),
+        "type" to when {
+            this is Schedule.GroupClasses || this is Schedule.EmployeeClasses -> "classes"
+            this is Schedule.GroupExams && this.group.speciality.educationForm.isPartTime -> "part-time"
+            this is Schedule.GroupExams || this is Schedule.EmployeeExams -> "exams"
+            else -> "unknown"
+        }
     )
 
     private fun ScheduleItem.getInfo() = mapOf(
-            "subject" to subject.take(PARAM_MAX_SYMBOLS),
-            "type" to when (this) {
-                is Lesson.GroupLesson -> "group_lesson"
-                is Lesson.EmployeeLesson -> "employee_lesson"
-                is Exam.GroupExam -> "group_exam"
-                is Exam.EmployeeExam -> "employee_exam"
-                else -> "none"
-            }
+        "subject" to subject.take(PARAM_MAX_SYMBOLS),
+        "type" to when (this) {
+            is Lesson.GroupLesson -> "group_lesson"
+            is Lesson.EmployeeLesson -> "employee_lesson"
+            is Exam.GroupExam -> "group_exam"
+            is Exam.EmployeeExam -> "employee_exam"
+            else -> "none"
+        }
     )
 
     private fun Throwable.getInfo() = mapOf(
-            "exception" to (this::class.simpleName?.take(PARAM_MAX_SYMBOLS) ?: "")
+        "exception" to (this::class.simpleName?.take(PARAM_MAX_SYMBOLS) ?: "")
     )
 }

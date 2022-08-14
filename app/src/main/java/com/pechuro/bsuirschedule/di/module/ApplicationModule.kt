@@ -25,7 +25,7 @@ class ApplicationModule {
     @Provides
     @AppScope
     fun provideNetworkAvailabilityChecker(context: Context): NetworkAvailabilityChecker =
-            NetworkAvailabilityCheckerImpl(context)
+        NetworkAvailabilityCheckerImpl(context)
 
     @Provides
     @AppScope
@@ -33,10 +33,12 @@ class ApplicationModule {
 
     @Provides
     @AppScope
-    fun provideAnalyticsReporter(crashlytics: FirebaseCrashlytics): AppAnalytics.Reporter = FlurryAnalyticsReporter(crashlytics)
+    fun provideAnalyticsReporter(crashlytics: FirebaseCrashlytics): AppAnalytics.Reporter =
+        FlurryAnalyticsReporter(crashlytics)
 
     @Provides
-    fun provideWidgetManager(context: Context): AppWidgetManager = AppWidgetManager.getInstance(context)
+    fun provideWidgetManager(context: Context): AppWidgetManager =
+        AppWidgetManager.getInstance(context)
 
     @Provides
     fun provideFirebaseAnalytics(context: Context) = FirebaseAnalytics.getInstance(context)

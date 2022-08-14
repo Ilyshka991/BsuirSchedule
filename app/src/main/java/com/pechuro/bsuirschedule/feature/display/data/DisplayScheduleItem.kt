@@ -7,23 +7,23 @@ import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
 import kotlinx.android.parcel.Parcelize
 
 sealed class DisplayScheduleItem(
-        open val scheduleItem: ScheduleItem?
+    open val scheduleItem: ScheduleItem?
 ) : Parcelable {
 
     @Parcelize
     data class DayClasses(
-            override val scheduleItem: Lesson
+        override val scheduleItem: Lesson
     ) : DisplayScheduleItem(scheduleItem)
 
     @Parcelize
     data class WeekClasses(
-            override val scheduleItem: Lesson,
-            val allScheduleItems: List<Lesson>
+        override val scheduleItem: Lesson,
+        val allScheduleItems: List<Lesson>
     ) : DisplayScheduleItem(scheduleItem)
 
     @Parcelize
     data class Exams(
-            override val scheduleItem: Exam
+        override val scheduleItem: Exam
     ) : DisplayScheduleItem(scheduleItem)
 
     @Parcelize

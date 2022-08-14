@@ -10,12 +10,12 @@ import com.pechuro.bsuirschedule.domain.ext.emptyQueue
 import com.pechuro.bsuirschedule.domain.interactor.SetScheduleNotRemindForUpdatesStatus
 import com.pechuro.bsuirschedule.domain.interactor.SetScheduleNotRemindForUpdatesStatus.Params
 import com.pechuro.bsuirschedule.domain.interactor.UpdateSchedule
-import java.util.*
+import java.util.Queue
 import javax.inject.Inject
 
 class UpdateScheduleSheetViewModel @Inject constructor(
-        private val updateSchedule: UpdateSchedule,
-        private val setNotRemindStatus: SetScheduleNotRemindForUpdatesStatus
+    private val updateSchedule: UpdateSchedule,
+    private val setNotRemindStatus: SetScheduleNotRemindForUpdatesStatus
 ) : BaseViewModel() {
 
     val state = MutableLiveData<State>(State.Idle)
@@ -33,17 +33,19 @@ class UpdateScheduleSheetViewModel @Inject constructor(
             val scheduleForUpdate = currentScheduleData.value ?: return@launchCoroutine
             state.value = State.Loading
             updateSchedule.execute(UpdateSchedule.Params(scheduleForUpdate)).fold(
-                    onSuccess = {
-                        AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Updated(scheduleForUpdate))
-                        takeNextSchedule()
-                    },
-                    onFailure = {
-                        AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.UpdateFailed(
-                                schedule = scheduleForUpdate,
-                                exception = it
-                        ))
-                        state.value = State.Error
-                    }
+                onSuccess = {
+                    AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Updated(scheduleForUpdate))
+                    takeNextSchedule()
+                },
+                onFailure = {
+                    AppAnalytics.report(
+                        AppAnalyticsEvent.UpdateSchedule.UpdateFailed(
+                            schedule = scheduleForUpdate,
+                            exception = it
+                        )
+                    )
+                    state.value = State.Error
+                }
             )
         }
     }
@@ -53,10 +55,12 @@ class UpdateScheduleSheetViewModel @Inject constructor(
             if (notRemind) {
                 val currentSchedule = currentScheduleData.value
                 if (currentSchedule != null) {
-                    setNotRemindStatus.execute(Params(
+                    setNotRemindStatus.execute(
+                        Params(
                             schedule = currentSchedule,
                             notRemind = notRemind
-                    ))
+                        )
+                    )
                 }
             }
             takeNextSchedule()

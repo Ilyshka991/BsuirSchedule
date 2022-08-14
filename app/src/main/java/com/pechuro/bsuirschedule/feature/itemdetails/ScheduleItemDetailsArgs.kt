@@ -6,6 +6,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ScheduleItemDetailsArgs(
-        val schedule: Schedule,
-        val itemId: Long
+    val schedule: Schedule,
+    val itemId: Long
 ) : Parcelable
