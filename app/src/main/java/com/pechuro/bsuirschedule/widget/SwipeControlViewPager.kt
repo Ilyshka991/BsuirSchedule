@@ -6,16 +6,16 @@ import android.view.MotionEvent
 import androidx.viewpager.widget.ViewPager
 
 class SwipeControlViewPager @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null
+    context: Context,
+    attrs: AttributeSet? = null
 ) : ViewPager(context, attrs) {
 
     var isSwipeEnabled = true
 
     override fun onTouchEvent(event: MotionEvent) =
-            if (isSwipeEnabled) super.onTouchEvent(event) else false
+        if (isSwipeEnabled) super.onTouchEvent(event) else false
 
     override fun onInterceptTouchEvent(event: MotionEvent) =
-            if (isSwipeEnabled) super.onInterceptTouchEvent(event) else false
+        if (isSwipeEnabled) super.onInterceptTouchEvent(event) else false
 
 }

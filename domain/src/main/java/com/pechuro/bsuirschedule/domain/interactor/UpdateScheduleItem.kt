@@ -6,7 +6,7 @@ import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
 import javax.inject.Inject
 
 class UpdateScheduleItem @Inject constructor(
-        private val scheduleRepository: IScheduleRepository
+    private val scheduleRepository: IScheduleRepository
 ) : BaseInteractor<Unit, UpdateScheduleItem.Params>() {
 
     override suspend fun run(params: Params) {
@@ -14,6 +14,6 @@ class UpdateScheduleItem @Inject constructor(
     }
 
     data class Params(
-            val scheduleItem: ScheduleItem
+        val scheduleItem: ScheduleItem
     )
 }

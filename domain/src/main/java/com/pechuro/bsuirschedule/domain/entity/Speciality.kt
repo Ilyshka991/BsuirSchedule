@@ -5,10 +5,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Speciality(
-        val id: Long,
-        val faculty: Faculty?,
-        val educationForm: EducationForm,
-        var name: String,
-        val abbreviation: String,
-        val code: String
+    val id: Long,
+    val faculty: Faculty?,
+    val educationForm: EducationForm,
+    var name: String,
+    val abbreviation: String,
+    val code: String
 ) : Parcelable

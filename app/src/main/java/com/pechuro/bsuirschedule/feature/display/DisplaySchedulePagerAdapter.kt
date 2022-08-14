@@ -9,13 +9,14 @@ import com.pechuro.bsuirschedule.domain.ext.getWeekDay
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItemInfo
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleViewType
 import com.pechuro.bsuirschedule.feature.display.fragment.DisplayScheduleFragment
-import java.util.*
+import java.util.Calendar
+import java.util.Date
 import kotlin.math.floor
 
 class DisplaySchedulePagerAdapter(
-        hostFragment: Fragment,
-        val viewType: DisplayScheduleViewType,
-        private val startWeekNumber: WeekNumber
+    hostFragment: Fragment,
+    val viewType: DisplayScheduleViewType,
+    private val startWeekNumber: WeekNumber
 ) : FragmentStateAdapter(hostFragment) {
 
     companion object {
@@ -33,11 +34,11 @@ class DisplaySchedulePagerAdapter(
         val itemInfo = when (viewType) {
             DisplayScheduleViewType.EXAMS -> DisplayScheduleItemInfo.Exams
             DisplayScheduleViewType.WEEK_CLASSES -> DisplayScheduleItemInfo.WeekClasses(
-                    weekDay = getWeekdayAt(position)
+                weekDay = getWeekdayAt(position)
             )
             DisplayScheduleViewType.DAY_CLASSES -> DisplayScheduleItemInfo.DayClasses(
-                    weekDay = getWeekdayAt(position),
-                    weekNumber = getWeekNumberAt(position)
+                weekDay = getWeekdayAt(position),
+                weekNumber = getWeekNumberAt(position)
             )
         }
         return DisplayScheduleFragment.newInstance(itemInfo)
@@ -61,7 +62,8 @@ class DisplaySchedulePagerAdapter(
 
     fun getWeekNumberAt(position: Int): WeekNumber {
         val startWeekPosition = getStartPosition() - getWeekdayAt(getStartPosition()).index
-        val weeksCount = floor((position.toFloat() - startWeekPosition) / WeekDay.TOTAL_COUNT).toInt()
+        val weeksCount =
+            floor((position.toFloat() - startWeekPosition) / WeekDay.TOTAL_COUNT).toInt()
         val startWeekNumber = when (viewType) {
             DisplayScheduleViewType.DAY_CLASSES -> startWeekNumber
             else -> throw UnsupportedOperationException()

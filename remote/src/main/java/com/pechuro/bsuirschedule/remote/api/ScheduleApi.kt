@@ -9,16 +9,16 @@ interface ScheduleApi {
 
     @GET("studentGroup/schedule")
     suspend fun getStudentSchedule(
-            @Query(value = "id") id: Long
+        @Query(value = "id") id: Long
     ): ScheduleDTO
 
     @GET("portal/employeeSchedule")
     suspend fun getEmployeeSchedule(
-            @Query(value = "employeeId") employeeId: Long
+        @Query(value = "employeeId") employeeId: Long
     ): ScheduleDTO
 
     @GET("studentGroup/lastUpdateDate")
     suspend fun getLastUpdateDate(
-            @Query(value = "studentGroup") studentGroup: String
+        @Query(value = "studentGroup") studentGroup: String
     ): LastUpdateDTO
 }

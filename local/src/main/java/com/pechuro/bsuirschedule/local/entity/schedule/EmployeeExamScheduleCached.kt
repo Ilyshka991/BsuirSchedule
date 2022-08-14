@@ -7,19 +7,20 @@ import androidx.room.PrimaryKey
 import com.pechuro.bsuirschedule.local.entity.staff.EmployeeCached
 
 @Entity(
-        tableName = "employee_schedule_exam",
-        foreignKeys = [
-            ForeignKey(
-                    entity = EmployeeCached::class,
-                    parentColumns = ["id"],
-                    childColumns = ["employee_id"],
-                    onDelete = ForeignKey.CASCADE)
-        ]
+    tableName = "employee_schedule_exam",
+    foreignKeys = [
+        ForeignKey(
+            entity = EmployeeCached::class,
+            parentColumns = ["id"],
+            childColumns = ["employee_id"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
 )
 data class EmployeeExamScheduleCached(
-        @PrimaryKey
-        @ColumnInfo(name = "name")
-        val name: String,
-        @ColumnInfo(name = "employee_id", index = true)
-        val employeeId: Long
+    @PrimaryKey
+    @ColumnInfo(name = "name")
+    val name: String,
+    @ColumnInfo(name = "employee_id", index = true)
+    val employeeId: Long
 )

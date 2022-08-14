@@ -14,9 +14,9 @@ private val accelerateInterpolator = AccelerateInterpolator()
 private val linearInterpolator = LinearInterpolator()
 
 fun View.animateAlpha(fromAlpha: Float, toAlpha: Float): ValueAnimator = ObjectAnimator
-        .ofFloat(this, "alpha", fromAlpha, toAlpha)
-        .apply {
-            setTag(R.id.tagCurrentAnimator, this)
-            duration = DEFAULT_ANIMATION_DURATION_MS
-            interpolator = accelerateInterpolator
-        }
+    .ofFloat(this, "alpha", fromAlpha, toAlpha)
+    .apply {
+        setTag(R.id.tagCurrentAnimator, this)
+        duration = DEFAULT_ANIMATION_DURATION_MS
+        interpolator = accelerateInterpolator
+    }

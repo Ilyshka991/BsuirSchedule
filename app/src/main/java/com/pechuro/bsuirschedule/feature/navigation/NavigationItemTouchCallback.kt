@@ -14,20 +14,20 @@ import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
 class NavigationItemTouchCallback(
-        private val onDelete: (position: Int) -> Unit,
-        private val onUpdate: (position: Int) -> Unit,
-        private val onActionReadyToPerform: () -> Unit
+    private val onDelete: (position: Int) -> Unit,
+    private val onUpdate: (position: Int) -> Unit,
+    private val onActionReadyToPerform: () -> Unit
 ) : ItemTouchHelper.SimpleCallback(
-        0,
-        ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+    0,
+    ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
 ) {
 
     private var isActionReadyToPerformHandled = false
 
     override fun onMove(
-            recyclerView: RecyclerView,
-            viewHolder: RecyclerView.ViewHolder,
-            target: RecyclerView.ViewHolder
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
     ) = false
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -39,27 +39,30 @@ class NavigationItemTouchCallback(
     }
 
     override fun getMovementFlags(
-            recyclerView: RecyclerView,
-            viewHolder: RecyclerView.ViewHolder
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder
     ): Int {
         val baseViewHolder = viewHolder as? BaseViewHolder<*> ?: return 0
-        return if (baseViewHolder.isSwipeAllowed) super.getMovementFlags(recyclerView, viewHolder) else 0
+        return if (baseViewHolder.isSwipeAllowed) super.getMovementFlags(
+            recyclerView,
+            viewHolder
+        ) else 0
     }
 
     override fun onChildDraw(
-            canvas: Canvas,
-            recyclerView: RecyclerView,
-            viewHolder: RecyclerView.ViewHolder,
-            dX: Float,
-            dY: Float,
-            actionState: Int,
-            isCurrentlyActive: Boolean
+        canvas: Canvas,
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        dX: Float,
+        dY: Float,
+        actionState: Int,
+        isCurrentlyActive: Boolean
     ) {
         val context = recyclerView.context
         val itemView = viewHolder.itemView
 
         val backgroundColorDrawable: Drawable = ColorDrawable(
-                context.colorFromAttr(R.attr.backgroundNavigationSwipeActionColor)
+            context.colorFromAttr(R.attr.backgroundNavigationSwipeActionColor)
         )
         val iconDrawable: Drawable?
         val drawingDx: Float
@@ -112,7 +115,12 @@ class NavigationItemTouchCallback(
         }
 
         iconDrawable?.setBounds(iconLeft, iconTop, iconRight, iconBottom)
-        backgroundColorDrawable.setBounds(backgroundLeft, backgroundTop, backgroundRight, backgroundBottom)
+        backgroundColorDrawable.setBounds(
+            backgroundLeft,
+            backgroundTop,
+            backgroundRight,
+            backgroundBottom
+        )
 
         backgroundColorDrawable.draw(canvas)
         iconDrawable?.draw(canvas)
@@ -126,13 +134,13 @@ class NavigationItemTouchCallback(
         }
 
         super.onChildDraw(
-                canvas,
-                recyclerView,
-                viewHolder,
-                drawingDx,
-                dY,
-                actionState,
-                isCurrentlyActive
+            canvas,
+            recyclerView,
+            viewHolder,
+            drawingDx,
+            dY,
+            actionState,
+            isCurrentlyActive
         )
     }
 }

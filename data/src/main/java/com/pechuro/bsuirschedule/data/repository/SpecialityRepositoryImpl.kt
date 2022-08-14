@@ -19,8 +19,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 class SpecialityRepositoryImpl(
-        private val api: SpecialityApi,
-        private val dao: SpecialityDao
+    private val api: SpecialityApi,
+    private val dao: SpecialityDao
 ) : BaseRepository(), ISpecialityRepository {
 
     override suspend fun getAllFaculties(forceUpdate: Boolean): Flow<List<Faculty>> {
@@ -61,8 +61,8 @@ class SpecialityRepositoryImpl(
 
     override suspend fun isCached() = withContext(Dispatchers.IO) {
         listOf(
-                async { performDaoCall { dao.isDepartmentsNotEmpty() } },
-                async { performDaoCall { dao.isSpecialitiesNotEmpty() } }
+            async { performDaoCall { dao.isDepartmentsNotEmpty() } },
+            async { performDaoCall { dao.isSpecialitiesNotEmpty() } }
         ).awaitAll().foldRight(true) { isNotEmpty, acc ->
             isNotEmpty and acc
         }
@@ -83,76 +83,77 @@ class SpecialityRepositoryImpl(
     override suspend fun getSpecialityById(id: Long): Speciality {
         val specialityCached = performDaoCall { dao.getSpecialityById(id) }
         val faculty = specialityCached.facultyId?.let { performDaoCall { dao.getFacultyById(it) } }
-        val educationForm = performDaoCall { dao.getEducationFormById(specialityCached.educationFormId) }
+        val educationForm =
+            performDaoCall { dao.getEducationFormById(specialityCached.educationFormId) }
         return specialityCached.toDomainEntity(
-                faculty = faculty?.toDomainEntity(),
-                educationForm = educationForm.toDomainEntity()
+            faculty = faculty?.toDomainEntity(),
+            educationForm = educationForm.toDomainEntity()
         )
     }
 
     private suspend fun loadSpecialitiesFromApi(): List<Speciality> =
-            performApiCall { api.getAllSpecialities() }
-                    .map { dto ->
-                        val faculty = performDaoCall { dao.getFacultyById(dto.facultyId) }
-                        val educationForm = dto.educationForm.toDomainEntity()
-                        storeEducationForm(educationForm)
-                        dto.toDomainEntity(
-                                faculty = faculty?.toDomainEntity()
-                        )
-                    }
+        performApiCall { api.getAllSpecialities() }
+            .map { dto ->
+                val faculty = performDaoCall { dao.getFacultyById(dto.facultyId) }
+                val educationForm = dto.educationForm.toDomainEntity()
+                storeEducationForm(educationForm)
+                dto.toDomainEntity(
+                    faculty = faculty?.toDomainEntity()
+                )
+            }
 
     private suspend fun loadFacultiesFromApi(): List<Faculty> =
         performApiCallCatching(emptyList()) { api.getAllFaculties() }
-                    .map { dto ->
-                        dto.toDomainEntity()
-                    }
+            .map { dto ->
+                dto.toDomainEntity()
+            }
 
     private suspend fun loadDepartmentsFromApi(): List<Department> =
-            performApiCall { api.getAllDepartments() }
-                    .map { dto ->
-                        dto.toDomainEntity()
-                    }
+        performApiCall { api.getAllDepartments() }
+            .map { dto ->
+                dto.toDomainEntity()
+            }
 
     private suspend fun getSpecialitiesFromDao() = dao.getAllSpecialities()
-            .map { list ->
-                withContext(Dispatchers.IO) {
-                    list.map { specialityCached ->
-                        async {
-                            val faculty = specialityCached.facultyId?.let {
-                                performDaoCall { dao.getFacultyById(it) }
-                            }
-                            val educationForm = performDaoCall {
-                                dao.getEducationFormById(specialityCached.educationFormId)
-                            }
-                            specialityCached.toDomainEntity(
-                                    faculty = faculty?.toDomainEntity(),
-                                    educationForm = educationForm.toDomainEntity()
-                            )
+        .map { list ->
+            withContext(Dispatchers.IO) {
+                list.map { specialityCached ->
+                    async {
+                        val faculty = specialityCached.facultyId?.let {
+                            performDaoCall { dao.getFacultyById(it) }
                         }
+                        val educationForm = performDaoCall {
+                            dao.getEducationFormById(specialityCached.educationFormId)
+                        }
+                        specialityCached.toDomainEntity(
+                            faculty = faculty?.toDomainEntity(),
+                            educationForm = educationForm.toDomainEntity()
+                        )
                     }
-                }.awaitAll()
-            }
-            .flowOn(Dispatchers.IO)
+                }
+            }.awaitAll()
+        }
+        .flowOn(Dispatchers.IO)
 
     private suspend fun getFacultiesFromDao() = dao.getAllFaculties()
-            .map { list ->
-                withContext(Dispatchers.IO) {
-                    list.map { facultyCached ->
-                        async {
-                            facultyCached.toDomainEntity()
-                        }
+        .map { list ->
+            withContext(Dispatchers.IO) {
+                list.map { facultyCached ->
+                    async {
+                        facultyCached.toDomainEntity()
                     }
-                }.awaitAll()
-            }
-            .flowOn(Dispatchers.IO)
+                }
+            }.awaitAll()
+        }
+        .flowOn(Dispatchers.IO)
 
     private suspend fun getDepartmentsFromDao() = dao.getAllDepartments()
-            .map { list ->
-                list.map { departmentCached ->
-                    departmentCached.toDomainEntity()
-                }
+        .map { list ->
+            list.map { departmentCached ->
+                departmentCached.toDomainEntity()
             }
-            .flowOn(Dispatchers.IO)
+        }
+        .flowOn(Dispatchers.IO)
 
     private suspend fun storeFaculties(groups: List<Faculty>) {
         groups.map {

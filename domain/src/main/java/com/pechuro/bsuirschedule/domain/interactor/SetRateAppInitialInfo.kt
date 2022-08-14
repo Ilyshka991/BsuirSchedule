@@ -6,7 +6,7 @@ import com.pechuro.bsuirschedule.domain.repository.ISessionRepository
 import javax.inject.Inject
 
 class SetRateAppInitialInfo @Inject constructor(
-        private val sessionRepository: ISessionRepository
+    private val sessionRepository: ISessionRepository
 ) : BaseInteractor<Unit, BaseInteractor.NoParams>() {
 
     override suspend fun run(params: NoParams) {

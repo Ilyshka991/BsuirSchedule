@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 
 abstract class BaseViewHolder<out T>(
-        override val containerView: View
+    override val containerView: View
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     var isSwipeAllowed: Boolean = false

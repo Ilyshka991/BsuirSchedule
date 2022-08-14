@@ -6,7 +6,7 @@ import com.pechuro.bsuirschedule.domain.repository.ISessionRepository
 import javax.inject.Inject
 
 class SetScheduleDisplayType @Inject constructor(
-        private val sessionRepository: ISessionRepository
+    private val sessionRepository: ISessionRepository
 ) : BaseInteractor<Unit, SetScheduleDisplayType.Params>() {
 
     override suspend fun run(params: Params) {
@@ -14,6 +14,6 @@ class SetScheduleDisplayType @Inject constructor(
     }
 
     data class Params(
-            val type: ScheduleDisplayType
+        val type: ScheduleDisplayType
     )
 }

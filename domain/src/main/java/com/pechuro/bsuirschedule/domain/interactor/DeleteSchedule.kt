@@ -7,8 +7,8 @@ import com.pechuro.bsuirschedule.domain.repository.IWidgetRepository
 import javax.inject.Inject
 
 class DeleteSchedule @Inject constructor(
-        private val scheduleRepository: IScheduleRepository,
-        private val widgetRepository: IWidgetRepository
+    private val scheduleRepository: IScheduleRepository,
+    private val widgetRepository: IWidgetRepository
 ) : BaseInteractor<Unit, DeleteSchedule.Params>() {
 
     override suspend fun run(params: Params) {

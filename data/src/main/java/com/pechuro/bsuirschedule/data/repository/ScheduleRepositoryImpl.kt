@@ -38,59 +38,59 @@ import java.util.Date
 import kotlin.reflect.KClass
 
 class ScheduleRepositoryImpl(
-        private val dao: ScheduleDao,
-        private val api: ScheduleApi,
-        private val groupRepository: IGroupRepository,
-        private val employeeRepository: IEmployeeRepository,
-        private val buildingRepository: IBuildingRepository,
-        private val specialityRepository: ISpecialityRepository
+    private val dao: ScheduleDao,
+    private val api: ScheduleApi,
+    private val groupRepository: IGroupRepository,
+    private val employeeRepository: IEmployeeRepository,
+    private val buildingRepository: IBuildingRepository,
+    private val specialityRepository: ISpecialityRepository
 ) : BaseRepository(), IScheduleRepository {
 
     override suspend fun getAllSchedules(): Flow<List<Schedule>> = flowOf(
-            performDaoCall {
-                dao.getAllGroupClassesSchedules().map { list ->
-                    Schedule.GroupClasses::class to list.map { item ->
-                        val group = groupRepository.getById(item.groupId)
-                        item.toDomainEntity(group)
-                    }
-                }
-            },
-            performDaoCall {
-                dao.getAllGroupExamSchedules().map { list ->
-                    Schedule.GroupExams::class to list.map { item ->
-                        val group = groupRepository.getById(item.groupId)
-                        item.toDomainEntity(group)
-                    }
-                }
-            },
-            performDaoCall {
-                dao.getAllEmployeeClassesSchedules().map { list ->
-                    Schedule.EmployeeClasses::class to list.map { item ->
-                        val employee = employeeRepository.getById(item.employeeId)
-                        item.toDomainEntity(employee)
-                    }
-                }
-            },
-            performDaoCall {
-                dao.getAllEmployeeExamSchedules().map { list ->
-                    Schedule.EmployeeExams::class to list.map { item ->
-                        val employee = employeeRepository.getById(item.employeeId)
-                        item.toDomainEntity(employee)
-                    }
+        performDaoCall {
+            dao.getAllGroupClassesSchedules().map { list ->
+                Schedule.GroupClasses::class to list.map { item ->
+                    val group = groupRepository.getById(item.groupId)
+                    item.toDomainEntity(group)
                 }
             }
+        },
+        performDaoCall {
+            dao.getAllGroupExamSchedules().map { list ->
+                Schedule.GroupExams::class to list.map { item ->
+                    val group = groupRepository.getById(item.groupId)
+                    item.toDomainEntity(group)
+                }
+            }
+        },
+        performDaoCall {
+            dao.getAllEmployeeClassesSchedules().map { list ->
+                Schedule.EmployeeClasses::class to list.map { item ->
+                    val employee = employeeRepository.getById(item.employeeId)
+                    item.toDomainEntity(employee)
+                }
+            }
+        },
+        performDaoCall {
+            dao.getAllEmployeeExamSchedules().map { list ->
+                Schedule.EmployeeExams::class to list.map { item ->
+                    val employee = employeeRepository.getById(item.employeeId)
+                    item.toDomainEntity(employee)
+                }
+            }
+        }
     )
-            .flattenMerge(4)
-            .scan(emptyMap<KClass<out Schedule>, List<Schedule>>()) { acc, value ->
-                val resultMap = acc.toMutableMap()
-                resultMap[value.first] = value.second
-                resultMap
-            }
-            .map { map -> map.flatMap { it.value } }
-            .map {
-                it.asReversed()
-            }
-            .flowOn(Dispatchers.IO)
+        .flattenMerge(4)
+        .scan(emptyMap<KClass<out Schedule>, List<Schedule>>()) { acc, value ->
+            val resultMap = acc.toMutableMap()
+            resultMap[value.first] = value.second
+            resultMap
+        }
+        .map { map -> map.flatMap { it.value } }
+        .map {
+            it.asReversed()
+        }
+        .flowOn(Dispatchers.IO)
 
     override suspend fun getGroupClassesByName(name: String): Schedule.GroupClasses {
         val schedule = performDaoCall { dao.getGroupClassesByName(name) }
@@ -122,32 +122,32 @@ class ScheduleRepositoryImpl(
                 val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
                 val employees = item.employees.map { employeeRepository.getById(it.id) }
                 item.toDomainEntity(
-                        auditories = auditories,
-                        employees = employees
+                    auditories = auditories,
+                    employees = employees
                 )
             }
             is Schedule.GroupExams -> dao.getGroupExamItemById(itemId).map { item ->
                 val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
                 val employees = item.employees.map { employeeRepository.getById(it.id) }
                 item.toDomainEntity(
-                        auditories = auditories,
-                        employees = employees
+                    auditories = auditories,
+                    employees = employees
                 )
             }
             is Schedule.EmployeeClasses -> dao.getEmployeeClassesItemByIdFlow(itemId).map { item ->
                 val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
                 val groups = item.groups.map { groupRepository.getById(it.id) }
                 item.toDomainEntity(
-                        auditories = auditories,
-                        groups = groups
+                    auditories = auditories,
+                    groups = groups
                 )
             }
             is Schedule.EmployeeExams -> dao.getEmployeeExamItemById(itemId).map { item ->
                 val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
                 val groups = item.groups.map { groupRepository.getById(it.id) }
                 item.toDomainEntity(
-                        auditories = auditories,
-                        groups = groups
+                    auditories = auditories,
+                    groups = groups
                 )
             }
         }
@@ -159,11 +159,12 @@ class ScheduleRepositoryImpl(
                 withContext(Dispatchers.IO) {
                     list.map { item ->
                         async {
-                            val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
+                            val auditories =
+                                item.auditories.map { buildingRepository.getAuditoryById(it.id) }
                             val employees = item.employees.map { employeeRepository.getById(it.id) }
                             item.toDomainEntity(
-                                    auditories = auditories,
-                                    employees = employees
+                                auditories = auditories,
+                                employees = employees
                             )
                         }
                     }
@@ -173,11 +174,12 @@ class ScheduleRepositoryImpl(
                 withContext(Dispatchers.IO) {
                     list.map { item ->
                         async {
-                            val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
+                            val auditories =
+                                item.auditories.map { buildingRepository.getAuditoryById(it.id) }
                             val employees = item.employees.map { employeeRepository.getById(it.id) }
                             item.toDomainEntity(
-                                    auditories = auditories,
-                                    employees = employees
+                                auditories = auditories,
+                                employees = employees
                             )
                         }
                     }.awaitAll()
@@ -187,11 +189,12 @@ class ScheduleRepositoryImpl(
                 withContext(Dispatchers.IO) {
                     list.map { item ->
                         async {
-                            val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
+                            val auditories =
+                                item.auditories.map { buildingRepository.getAuditoryById(it.id) }
                             val groups = item.groups.map { groupRepository.getById(it.id) }
                             item.toDomainEntity(
-                                    auditories = auditories,
-                                    groups = groups
+                                auditories = auditories,
+                                groups = groups
                             )
                         }
                     }
@@ -201,11 +204,12 @@ class ScheduleRepositoryImpl(
                 withContext(Dispatchers.IO) {
                     list.map { item ->
                         async {
-                            val auditories = item.auditories.map { buildingRepository.getAuditoryById(it.id) }
+                            val auditories =
+                                item.auditories.map { buildingRepository.getAuditoryById(it.id) }
                             val groups = item.groups.map { groupRepository.getById(it.id) }
                             item.toDomainEntity(
-                                    auditories = auditories,
-                                    groups = groups
+                                auditories = auditories,
+                                groups = groups
                             )
                         }
                     }
@@ -214,46 +218,49 @@ class ScheduleRepositoryImpl(
         }
     }
 
-    override suspend fun loadGroupSchedule(group: Group, types: List<ScheduleType>): List<Schedule> {
+    override suspend fun loadGroupSchedule(
+        group: Group,
+        types: List<ScheduleType>
+    ): List<Schedule> {
         return loadGroupScheduleInternal(
-                group = group,
-                types = types,
-                update = false
+            group = group,
+            types = types,
+            update = false
         )
     }
 
     override suspend fun loadEmployeeSchedule(
-            employee: Employee,
-            types: List<ScheduleType>
+        employee: Employee,
+        types: List<ScheduleType>
     ): List<Schedule> {
         return loadEmployeeScheduleInternal(
-                employee = employee,
-                types = types,
-                update = false
+            employee = employee,
+            types = types,
+            update = false
         )
     }
 
     override suspend fun update(schedule: Schedule) {
         when (schedule) {
             is Schedule.GroupClasses -> loadGroupScheduleInternal(
-                    group = schedule.group,
-                    types = listOf(ScheduleType.CLASSES),
-                    update = true
+                group = schedule.group,
+                types = listOf(ScheduleType.CLASSES),
+                update = true
             )
             is Schedule.GroupExams -> loadGroupScheduleInternal(
-                    group = schedule.group,
-                    types = listOf(ScheduleType.EXAMS),
-                    update = true
+                group = schedule.group,
+                types = listOf(ScheduleType.EXAMS),
+                update = true
             )
             is Schedule.EmployeeClasses -> loadEmployeeScheduleInternal(
-                    employee = schedule.employee,
-                    types = listOf(ScheduleType.CLASSES),
-                    update = true
+                employee = schedule.employee,
+                types = listOf(ScheduleType.CLASSES),
+                update = true
             )
             is Schedule.EmployeeExams -> loadEmployeeScheduleInternal(
-                    employee = schedule.employee,
-                    types = listOf(ScheduleType.EXAMS),
-                    update = true
+                employee = schedule.employee,
+                types = listOf(ScheduleType.EXAMS),
+                update = true
             )
         }
     }
@@ -262,10 +269,10 @@ class ScheduleRepositoryImpl(
         when (schedule) {
             is Schedule.GroupClasses -> {
                 val newSchedule = Schedule.GroupClasses(
-                        name = schedule.name,
-                        group = schedule.group,
-                        lastUpdatedDate = schedule.lastUpdatedDate,
-                        notRemindForUpdates = notRemind
+                    name = schedule.name,
+                    group = schedule.group,
+                    lastUpdatedDate = schedule.lastUpdatedDate,
+                    notRemindForUpdates = notRemind
                 ).toDatabaseEntity()
                 performDaoCall { dao.update(newSchedule) }
             }
@@ -284,11 +291,13 @@ class ScheduleRepositoryImpl(
 
     override suspend fun isUpdateAvailable(schedule: Schedule) = when (schedule) {
         is Schedule.GroupClasses -> {
-            val newLastUpdateDate = performApiCall { api.getLastUpdateDate(schedule.group.number) }.toDomainEntity()
+            val newLastUpdateDate =
+                performApiCall { api.getLastUpdateDate(schedule.group.number) }.toDomainEntity()
             schedule.lastUpdatedDate < newLastUpdateDate
         }
         is Schedule.GroupExams -> {
-            val newLastUpdate = performApiCall { api.getLastUpdateDate(schedule.group.number) }.toDomainEntity()
+            val newLastUpdate =
+                performApiCall { api.getLastUpdateDate(schedule.group.number) }.toDomainEntity()
             schedule.lastUpdatedDate < newLastUpdate
         }
         else -> false
@@ -326,10 +335,10 @@ class ScheduleRepositoryImpl(
     }
 
     override suspend fun getLessonWeeks(lesson: Lesson): List<WeekNumber> =
-            when (lesson) {
-                is Lesson.GroupLesson -> getGroupLessonWeeks(lesson)
-                is Lesson.EmployeeLesson -> getEmployeeLessonWeeks(lesson)
-            }
+        when (lesson) {
+            is Lesson.GroupLesson -> getGroupLessonWeeks(lesson)
+            is Lesson.EmployeeLesson -> getEmployeeLessonWeeks(lesson)
+        }
 
     override suspend fun updateScheduleItem(scheduleItem: ScheduleItem) {
         return when (scheduleItem) {
@@ -369,8 +378,9 @@ class ScheduleRepositoryImpl(
         dao.insertGroupClassesItems(cached)
     }
 
-    private suspend fun getEmployeeLessonWeeks(lesson: Lesson.EmployeeLesson): List<WeekNumber> = performDaoCall {
-        dao.getEmployeeClassesWeeks(
+    private suspend fun getEmployeeLessonWeeks(lesson: Lesson.EmployeeLesson): List<WeekNumber> =
+        performDaoCall {
+            dao.getEmployeeClassesWeeks(
                 id = lesson.id,
                 subject = lesson.subject,
                 subgroupNumber = lesson.subgroupNumber.value,
@@ -378,11 +388,12 @@ class ScheduleRepositoryImpl(
                 startTime = lesson.startTime.toDate(),
                 endTime = lesson.endTime.toDate(),
                 weekDay = lesson.weekDay.index
-        ).map { WeekNumber.getForIndex(it) }
-    }
+            ).map { WeekNumber.getForIndex(it) }
+        }
 
-    private suspend fun getGroupLessonWeeks(lesson: Lesson.GroupLesson): List<WeekNumber> = performDaoCall {
-        dao.getGroupClassesWeeks(
+    private suspend fun getGroupLessonWeeks(lesson: Lesson.GroupLesson): List<WeekNumber> =
+        performDaoCall {
+            dao.getGroupClassesWeeks(
                 id = lesson.id,
                 subject = lesson.subject,
                 subgroupNumber = lesson.subgroupNumber.value,
@@ -390,8 +401,8 @@ class ScheduleRepositoryImpl(
                 startTime = lesson.startTime.toDate(),
                 endTime = lesson.endTime.toDate(),
                 weekDay = lesson.weekDay.index
-        ).map { WeekNumber.getForIndex(it) }
-    }
+            ).map { WeekNumber.getForIndex(it) }
+        }
 
     private suspend fun addScheduleItem(schedule: Schedule, scheduleItem: ScheduleItem) {
         performDaoCall {
@@ -433,9 +444,9 @@ class ScheduleRepositoryImpl(
     }
 
     private suspend fun loadGroupScheduleInternal(
-            group: Group,
-            types: List<ScheduleType>,
-            update: Boolean
+        group: Group,
+        types: List<ScheduleType>,
+        update: Boolean
     ): List<Schedule> {
         val auditories = buildingRepository.getAllAuditories().first()
         val departments = specialityRepository.getAllDepartments().first()
@@ -450,10 +461,10 @@ class ScheduleRepositoryImpl(
                 ScheduleType.CLASSES -> {
                     val itemsDTOList = scheduleDTO.schedule ?: emptyList()
                     val schedule = Schedule.GroupClasses(
-                            name = group.number,
-                            lastUpdatedDate = lastUpdatedDate,
-                            group = group,
-                            notRemindForUpdates = false
+                        name = group.number,
+                        lastUpdatedDate = lastUpdatedDate,
+                        group = group,
+                        notRemindForUpdates = false
                     )
                     val items = itemsDTOList.toGroupLessons(auditories, departments)
 
@@ -463,10 +474,10 @@ class ScheduleRepositoryImpl(
                 ScheduleType.EXAMS -> {
                     val itemsDTOList = scheduleDTO.exam ?: emptyList()
                     val schedule = Schedule.GroupExams(
-                            name = group.number,
-                            lastUpdatedDate = lastUpdatedDate,
-                            group = group,
-                            notRemindForUpdates = false
+                        name = group.number,
+                        lastUpdatedDate = lastUpdatedDate,
+                        group = group,
+                        notRemindForUpdates = false
                     )
                     val items = itemsDTOList.toGroupExams(auditories, departments)
 
@@ -478,9 +489,9 @@ class ScheduleRepositoryImpl(
     }
 
     private suspend fun loadEmployeeScheduleInternal(
-            employee: Employee,
-            types: List<ScheduleType>,
-            update: Boolean
+        employee: Employee,
+        types: List<ScheduleType>,
+        update: Boolean
     ): List<Schedule> {
         val groups = groupRepository.getAll().first()
         val auditories = buildingRepository.getAllAuditories().first()
@@ -492,8 +503,8 @@ class ScheduleRepositoryImpl(
                 ScheduleType.CLASSES -> {
                     val itemsDTOList = scheduleDTO.schedule ?: emptyList()
                     val schedule = Schedule.EmployeeClasses(
-                            name = employee.abbreviation,
-                            employee = employee
+                        name = employee.abbreviation,
+                        employee = employee
                     )
                     val items = itemsDTOList.toEmployeeLessons(groups, auditories)
 
@@ -503,8 +514,8 @@ class ScheduleRepositoryImpl(
                 ScheduleType.EXAMS -> {
                     val itemsDTOList = scheduleDTO.exam ?: emptyList()
                     val schedule = Schedule.EmployeeExams(
-                            name = employee.abbreviation,
-                            employee = employee
+                        name = employee.abbreviation,
+                        employee = employee
                     )
                     val items = itemsDTOList.toEmployeeExams(groups, auditories)
 
@@ -516,9 +527,9 @@ class ScheduleRepositoryImpl(
     }
 
     private suspend fun storeSchedule(
-            schedule: Schedule.GroupClasses,
-            items: List<Lesson.GroupLesson>,
-            update: Boolean
+        schedule: Schedule.GroupClasses,
+        items: List<Lesson.GroupLesson>,
+        update: Boolean
     ) {
         val cachedSchedule = schedule.toDatabaseEntity()
         val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }
@@ -532,9 +543,9 @@ class ScheduleRepositoryImpl(
     }
 
     private suspend fun storeSchedule(
-            schedule: Schedule.GroupExams,
-            items: List<Exam.GroupExam>,
-            update: Boolean
+        schedule: Schedule.GroupExams,
+        items: List<Exam.GroupExam>,
+        update: Boolean
     ) {
         val cachedSchedule = schedule.toDatabaseEntity()
         val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }
@@ -548,9 +559,9 @@ class ScheduleRepositoryImpl(
     }
 
     private suspend fun storeSchedule(
-            schedule: Schedule.EmployeeClasses,
-            items: List<Lesson.EmployeeLesson>,
-            update: Boolean
+        schedule: Schedule.EmployeeClasses,
+        items: List<Lesson.EmployeeLesson>,
+        update: Boolean
     ) {
         val cachedSchedule = schedule.toDatabaseEntity()
         val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }
@@ -564,9 +575,9 @@ class ScheduleRepositoryImpl(
     }
 
     private suspend fun storeSchedule(
-            schedule: Schedule.EmployeeExams,
-            items: List<Exam.EmployeeExam>,
-            update: Boolean
+        schedule: Schedule.EmployeeExams,
+        items: List<Exam.EmployeeExam>,
+        update: Boolean
     ) {
         val cachedSchedule = schedule.toDatabaseEntity()
         val cachedItems = items.map { it.toDatabaseEntity(cachedSchedule) }

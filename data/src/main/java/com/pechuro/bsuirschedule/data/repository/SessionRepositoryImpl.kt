@@ -22,25 +22,25 @@ import com.pechuro.bsuirschedule.local.sharedprefs.SharedPreferencesManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import java.util.*
+import java.util.Date
 
 class SessionRepositoryImpl(
-        private val sharedPreferencesManager: SharedPreferencesManager,
-        private val scheduleRepository: IScheduleRepository
+    private val sharedPreferencesManager: SharedPreferencesManager,
+    private val scheduleRepository: IScheduleRepository
 ) : BaseRepository(), ISessionRepository {
 
     override suspend fun getLastOpenedSchedule(): Flow<Schedule?> =
-            sharedPreferencesManager.getLastOpenedSchedule().map {
-                when (it?.type) {
-                    GROUP_CLASSES -> scheduleRepository.getGroupClassesByName(it.name)
-                    GROUP_EXAMS -> scheduleRepository.getGroupExamsByName(it.name)
-                    EMPLOYEE_CLASSES -> scheduleRepository.getEmployeeClassesByName(it.name)
-                    EMPLOYEE_EXAMS -> scheduleRepository.getEmployeeExamsByName(it.name)
-                    else -> null
-                }
-            }.catch {
-                emit(null)
+        sharedPreferencesManager.getLastOpenedSchedule().map {
+            when (it?.type) {
+                GROUP_CLASSES -> scheduleRepository.getGroupClassesByName(it.name)
+                GROUP_EXAMS -> scheduleRepository.getGroupExamsByName(it.name)
+                EMPLOYEE_CLASSES -> scheduleRepository.getEmployeeClassesByName(it.name)
+                EMPLOYEE_EXAMS -> scheduleRepository.getEmployeeExamsByName(it.name)
+                else -> null
             }
+        }.catch {
+            emit(null)
+        }
 
     override suspend fun setLastOpenedSchedule(schedule: Schedule?) {
         val prefsValue = schedule?.run {
@@ -55,7 +55,8 @@ class SessionRepositoryImpl(
         sharedPreferencesManager.setLastOpenedSchedule(prefsValue)
     }
 
-    override suspend fun getScheduleDisplayType(): Flow<ScheduleDisplayType> = sharedPreferencesManager
+    override suspend fun getScheduleDisplayType(): Flow<ScheduleDisplayType> =
+        sharedPreferencesManager
             .getDisplayType(ScheduleDisplayType.DEFAULT.value)
             .map {
                 ScheduleDisplayType.getForValue(it)
@@ -65,7 +66,8 @@ class SessionRepositoryImpl(
         sharedPreferencesManager.setDisplayType(type.value)
     }
 
-    override suspend fun getScheduleDisplaySubgroupNumber(): Flow<SubgroupNumber> = sharedPreferencesManager
+    override suspend fun getScheduleDisplaySubgroupNumber(): Flow<SubgroupNumber> =
+        sharedPreferencesManager
             .getSubgroupNumber(SubgroupNumber.ALL.value)
             .map {
                 SubgroupNumber.getForValue(it)
@@ -86,18 +88,19 @@ class SessionRepositoryImpl(
     }
 
     override suspend fun getNavigationHintDisplayState(): Flow<Boolean> = sharedPreferencesManager
-            .getNavigationHintDisplayState(false)
+        .getNavigationHintDisplayState(false)
 
     override suspend fun setNavigationHintDisplayState(shown: Boolean) {
         sharedPreferencesManager.setNavigationHintDisplayState(shown)
     }
 
-    override suspend fun getScheduleHintDisplayState(): Flow<HintDisplayState> = sharedPreferencesManager
+    override suspend fun getScheduleHintDisplayState(): Flow<HintDisplayState> =
+        sharedPreferencesManager
             .getScheduleHintDisplayState()
             .map {
                 HintDisplayState(
-                        lessonHintShown = it?.scheduleHintShown ?: false,
-                        examHintShown = it?.examHintShown ?: false
+                    lessonHintShown = it?.scheduleHintShown ?: false,
+                    examHintShown = it?.examHintShown ?: false
                 )
             }
 
@@ -108,8 +111,8 @@ class SessionRepositoryImpl(
 
     override suspend fun setScheduleHintDisplayState(state: HintDisplayState) {
         val localState = LocalHintDisplayState(
-                scheduleHintShown = state.lessonHintShown,
-                examHintShown = state.examHintShown
+            scheduleHintShown = state.lessonHintShown,
+            examHintShown = state.examHintShown
         )
         sharedPreferencesManager.setScheduleHintDisplayState(localState)
     }
@@ -118,18 +121,18 @@ class SessionRepositoryImpl(
         val localInfo = sharedPreferencesManager.getRateAppAskInfo()
         return localInfo?.run {
             RateAppAskInfo(
-                    installDate = Date(installDate).getLocalDate(),
-                    shouldAsk = shouldAsk,
-                    askLaterDate = askLaterDate?.let { Date(it).getLocalDate() }
+                installDate = Date(installDate).getLocalDate(),
+                shouldAsk = shouldAsk,
+                askLaterDate = askLaterDate?.let { Date(it).getLocalDate() }
             )
         } ?: RateAppAskInfo()
     }
 
     override suspend fun setRateAppAskInfo(info: RateAppAskInfo) {
         val localInfo = LocalRateAppAskInfo(
-                installDate = info.installDate.toDate().time,
-                shouldAsk = info.shouldAsk,
-                askLaterDate = info.askLaterDate?.toDate()?.time
+            installDate = info.installDate.toDate().time,
+            shouldAsk = info.shouldAsk,
+            askLaterDate = info.askLaterDate?.toDate()?.time
         )
         sharedPreferencesManager.setRateAppAskInfo(localInfo)
     }

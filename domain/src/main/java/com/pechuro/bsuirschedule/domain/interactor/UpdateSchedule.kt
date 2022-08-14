@@ -6,7 +6,7 @@ import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
 import javax.inject.Inject
 
 class UpdateSchedule @Inject constructor(
-        private val scheduleRepository: IScheduleRepository
+    private val scheduleRepository: IScheduleRepository
 ) : BaseInteractor<Unit, UpdateSchedule.Params>() {
 
     override suspend fun run(params: Params) = scheduleRepository.update(params.schedule)

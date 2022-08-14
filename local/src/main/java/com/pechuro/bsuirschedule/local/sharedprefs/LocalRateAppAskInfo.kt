@@ -4,7 +4,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class LocalRateAppAskInfo(
-        val installDate: Long,
-        val shouldAsk: Boolean,
-        val askLaterDate: Long?
+    val installDate: Long,
+    val shouldAsk: Boolean,
+    val askLaterDate: Long?
 )

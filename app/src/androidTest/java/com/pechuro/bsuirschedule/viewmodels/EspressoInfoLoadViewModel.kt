@@ -7,8 +7,8 @@ import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoViewModel
 import javax.inject.Inject
 
 class EspressoInfoLoadViewModel @Inject constructor(
-        loadInfo: LoadInfo,
-        private val espressoIdlingResource: IEspressoIdlingResource
+    loadInfo: LoadInfo,
+    private val espressoIdlingResource: IEspressoIdlingResource
 ) : LoadInfoViewModel(loadInfo) {
 
     private val espressoIdlingResourceObserver = Observer<Status> {

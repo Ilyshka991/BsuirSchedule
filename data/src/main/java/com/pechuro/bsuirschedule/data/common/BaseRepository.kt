@@ -15,8 +15,8 @@ import java.net.UnknownHostException
 abstract class BaseRepository {
 
     protected suspend inline fun <T> performApiCallCatching(
-            defaultValue: T,
-            crossinline call: suspend () -> T
+        defaultValue: T,
+        crossinline call: suspend () -> T
     ) = try {
         performApiCall(call)
     } catch (e: DataSourceException) {

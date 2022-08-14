@@ -33,9 +33,9 @@ open class App : Application(), Configuration.Provider, LifecycleObserver {
 
     val isInForeground: Boolean
         get() = ProcessLifecycleOwner.get()
-                .lifecycle
-                .currentState
-                .isAtLeast(Lifecycle.State.STARTED)
+            .lifecycle
+            .currentState
+            .isAtLeast(Lifecycle.State.STARTED)
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
@@ -51,18 +51,18 @@ open class App : Application(), Configuration.Provider, LifecycleObserver {
     }
 
     override fun getWorkManagerConfiguration() = Configuration.Builder()
-            .setMinimumLoggingLevel(Log.INFO)
-            .setWorkerFactory(workerFactory)
-            .build()
+        .setMinimumLoggingLevel(Log.INFO)
+        .setWorkerFactory(workerFactory)
+        .build()
 
     protected open fun initDI() {
         appComponent = DaggerAppComponent
-                .builder()
-                .application(this)
-                .build()
-                .also {
-                    it.inject(this)
-                }
+            .builder()
+            .application(this)
+            .build()
+            .also {
+                it.inject(this)
+            }
     }
 
     private fun initLogger() {
@@ -73,9 +73,9 @@ open class App : Application(), Configuration.Provider, LifecycleObserver {
 
     private fun initAnalytics() {
         FlurryAgent.Builder()
-                .withLogEnabled(true)
-                .withCaptureUncaughtExceptions(true)
-                .build(this, BuildConfig.FLURRY_API_KEY)
+            .withLogEnabled(true)
+            .withCaptureUncaughtExceptions(true)
+            .build(this, BuildConfig.FLURRY_API_KEY)
         AppAnalytics.set(analyticsReporter)
     }
 

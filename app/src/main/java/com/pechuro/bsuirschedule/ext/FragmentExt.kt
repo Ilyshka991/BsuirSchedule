@@ -16,7 +16,8 @@ internal val FragmentManager.currentFragment: Fragment?
         findFragmentByTag(topFragmentTag)
     } else primaryNavigationFragment
 
-inline fun <reified T : Fragment> FragmentManager.fragmentByTag(tag: String) = findFragmentBy(tag, T::class.java)
+inline fun <reified T : Fragment> FragmentManager.fragmentByTag(tag: String) =
+    findFragmentBy(tag, T::class.java)
 
 fun <T : Fragment> FragmentManager.findFragmentBy(tag: String, clazz: Class<T>): T? {
     val fragment = findFragmentByTag(tag)
@@ -41,7 +42,10 @@ inline fun <reified T> Fragment.args(key: String): Lazy<T> = lazy(LazyThreadSafe
 }
 
 val FragmentManager.displayScheduleFragment: DisplayScheduleFragmentContainer?
-    get() = findFragmentBy(DisplayScheduleFragmentContainer.TAG, DisplayScheduleFragmentContainer::class.java)
+    get() = findFragmentBy(
+        DisplayScheduleFragmentContainer.TAG,
+        DisplayScheduleFragmentContainer::class.java
+    )
 
 val FragmentManager.modifyItemFragment: ModifyScheduleItemFragment?
     get() = findFragmentBy(ModifyScheduleItemFragment.TAG, ModifyScheduleItemFragment::class.java)

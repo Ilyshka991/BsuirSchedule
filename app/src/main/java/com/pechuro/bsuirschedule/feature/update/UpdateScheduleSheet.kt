@@ -46,9 +46,10 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
         }
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?) = super.onCreateDialog(savedInstanceState).apply {
-        isCancelable = false
-    }
+    override fun onCreateDialog(savedInstanceState: Bundle?) =
+        super.onCreateDialog(savedInstanceState).apply {
+            isCancelable = false
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,9 +69,12 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
             val notRemind = updateScheduleSheetNotRemindCheckbox.isChecked
             val currentSchedule = viewModel.currentScheduleData.value
             currentSchedule?.let {
-                AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Dismissed(
+                AppAnalytics.report(
+                    AppAnalyticsEvent.UpdateSchedule.Dismissed(
                         schedule = currentSchedule,
-                        notRemind = notRemind))
+                        notRemind = notRemind
+                    )
+                )
             }
             viewModel.cancelUpdate(notRemind)
         }

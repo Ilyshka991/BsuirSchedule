@@ -1,6 +1,6 @@
 package com.pechuro.bsuirschedule.domain.entity
 
-import java.util.*
+import java.util.Calendar
 import java.util.Calendar.AUGUST
 import java.util.Calendar.DAY_OF_WEEK
 import java.util.Calendar.HOUR_OF_DAY
@@ -38,7 +38,8 @@ enum class WeekNumber(val index: Int) {
             if (currentCalendar < firstDayCalendar) {
                 currentCalendar[YEAR] = firstDayYear + 1
             }
-            val difference = (currentCalendar.timeInMillis - firstDayCalendar.timeInMillis) / 1000 / 60 / 60 / 24
+            val difference =
+                (currentCalendar.timeInMillis - firstDayCalendar.timeInMillis) / 1000 / 60 / 60 / 24
             val day = firstDayCalendar.get(DAY_OF_WEEK).minus(2).run {
                 if (this == -1) 6 else this
             }

@@ -2,12 +2,13 @@ package com.pechuro.bsuirschedule.domain.entity
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import java.util.*
+import java.util.Calendar
+import java.util.Date
 
 fun Calendar.getLocalDate() = LocalDate(
-        year = get(Calendar.YEAR),
-        month = get(Calendar.MONTH),
-        day = get(Calendar.DAY_OF_MONTH)
+    year = get(Calendar.YEAR),
+    month = get(Calendar.MONTH),
+    day = get(Calendar.DAY_OF_MONTH)
 )
 
 fun LocalDate.toDate() = Calendar.getInstance().apply {
@@ -20,9 +21,9 @@ fun Date.getLocalDate() = Calendar.getInstance().apply {
 
 @Parcelize
 data class LocalDate(
-        val year: Int,
-        val month: Int,
-        val day: Int
+    val year: Int,
+    val month: Int,
+    val day: Int
 ) : Parcelable, Comparable<LocalDate> {
 
     companion object {

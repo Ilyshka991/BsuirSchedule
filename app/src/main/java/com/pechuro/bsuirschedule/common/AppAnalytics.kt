@@ -64,7 +64,8 @@ sealed class AppAnalyticsEvent {
 
         object Opened : AddSchedule()
 
-        data class ScheduleLoaded(val schedule: Schedule, val types: List<ScheduleType>) : AddSchedule()
+        data class ScheduleLoaded(val schedule: Schedule, val types: List<ScheduleType>) :
+            AddSchedule()
 
         data class ScheduleLoadFailed(val exception: Throwable) : AddSchedule()
     }
@@ -146,9 +147,9 @@ sealed class AppAnalyticsEvent {
         data class ConfigurationCanceled(val widgetExist: Boolean) : Widget()
 
         data class ConfigurationApplied(
-                val schedule: Schedule,
-                val subgroupNumber: SubgroupNumber,
-                val theme: ScheduleWidgetInfo.WidgetTheme
+            val schedule: Schedule,
+            val subgroupNumber: SubgroupNumber,
+            val theme: ScheduleWidgetInfo.WidgetTheme
         ) : Widget()
 
         data class Deleted(val schedule: Schedule) : Widget()

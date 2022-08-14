@@ -11,7 +11,7 @@ import com.pechuro.bsuirschedule.feature.loadInfo.LoadInfoViewModel.Status.Loadi
 import javax.inject.Inject
 
 open class LoadInfoViewModel @Inject constructor(
-        private val loadInfo: LoadInfo
+    private val loadInfo: LoadInfo
 ) : BaseViewModel() {
 
     val status = MutableLiveData<Status>()
@@ -25,12 +25,12 @@ open class LoadInfoViewModel @Inject constructor(
         launchCoroutine {
             status.value = Loading
             loadInfo.execute(BaseInteractor.NoParams).fold(
-                    onSuccess = {
-                        status.value = Complete
-                    },
-                    onFailure = {
-                        status.value = Error(it)
-                    }
+                onSuccess = {
+                    status.value = Complete
+                },
+                onFailure = {
+                    status.value = Error(it)
+                }
             )
         }
     }

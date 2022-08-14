@@ -11,9 +11,9 @@ import com.pechuro.bsuirschedule.ext.dimenPx
 import kotlinx.android.synthetic.main.view_labeled_text.view.*
 
 class LabeledTextView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = android.R.attr.textViewStyle
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = android.R.attr.textViewStyle
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     init {
@@ -26,7 +26,8 @@ class LabeledTextView @JvmOverloads constructor(
             setMessage(message)
 
             val defaultTextSize = context.dimenPx(R.dimen.labeled_text_default_size)
-            val textSize = it.getDimensionPixelSize(R.styleable.LabeledTextView_text_size, defaultTextSize)
+            val textSize =
+                it.getDimensionPixelSize(R.styleable.LabeledTextView_text_size, defaultTextSize)
             labeledTextViewLabel.setTextSize(COMPLEX_UNIT_PX, textSize.toFloat())
             labeledTextViewMessage.setTextSize(COMPLEX_UNIT_PX, textSize.toFloat())
         }

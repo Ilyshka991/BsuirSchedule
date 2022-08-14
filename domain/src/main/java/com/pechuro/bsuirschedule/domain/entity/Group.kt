@@ -6,10 +6,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Group(
-        val id: Long,
-        val number: String,
-        val speciality: Speciality,
-        val course: Int
+    val id: Long,
+    val number: String,
+    val speciality: Speciality,
+    val course: Int
 ) : Parcelable
 
 val Group.availableScheduleTypes: Iterable<ScheduleType>
@@ -21,10 +21,10 @@ val Group.availableScheduleTypes: Iterable<ScheduleType>
 fun Group.correlateScheduleTypes(typesToDownload: List<ScheduleType>): List<ScheduleType> {
     val availableTypes = availableScheduleTypes
     return typesToDownload
-            .intersect(availableTypes)
-            .addIfEmpty {
-                availableTypes.firstOrNull()
-            }
-            .filterNotNull()
-            .toList()
+        .intersect(availableTypes)
+        .addIfEmpty {
+            availableTypes.firstOrNull()
+        }
+        .filterNotNull()
+        .toList()
 }

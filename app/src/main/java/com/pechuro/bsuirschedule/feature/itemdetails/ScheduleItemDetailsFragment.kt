@@ -44,9 +44,9 @@ class ScheduleItemDetailsFragment : BaseFragment() {
 
     private val adapter by lazy(LazyThreadSafetyMode.NONE) {
         ScheduleItemDetailsAdapter(
-                onPrioritySelected = ::selectPriority,
-                onNoteChanged = { viewModel.updateNote(it) },
-                onAuditoryClicked = ::openMap
+            onPrioritySelected = ::selectPriority,
+            onNoteChanged = { viewModel.updateNote(it) },
+            onAuditoryClicked = ::openMap
         )
     }
 
@@ -74,7 +74,11 @@ class ScheduleItemDetailsFragment : BaseFragment() {
 
     private fun observeData() {
         viewModel.detailsData.nonNull().observe(viewLifecycleOwner) { (scheduleItem, details) ->
-            val title = getString(R.string.item_details_title, scheduleItem.subject, scheduleItem.lessonType)
+            val title = getString(
+                R.string.item_details_title,
+                scheduleItem.subject,
+                scheduleItem.lessonType
+            )
             scheduleItemDetailsTitle.text = title
             adapter.submitList(details)
         }
@@ -88,9 +92,9 @@ class ScheduleItemDetailsFragment : BaseFragment() {
                 paint.color = requireContext().color(prioriry.formattedColorRes)
             }
             OptionDialogButtonData(
-                    text = getString(prioriry.formattedStringRes),
-                    icon = drawable,
-                    selected = prioriry == selectedPriority
+                text = getString(prioriry.formattedStringRes),
+                icon = drawable,
+                selected = prioriry == selectedPriority
             )
         }
         val listener = object : OptionDialog.OptionButtonClickListener {
@@ -100,10 +104,10 @@ class ScheduleItemDetailsFragment : BaseFragment() {
         }
         val title = getString(R.string.modify_schedule_item_title_select_priority)
         OptionDialog.Builder()
-                .setTitle(title)
-                .setActions(options, listener)
-                .build()
-                .show(childFragmentManager, OptionDialog.TAG)
+            .setTitle(title)
+            .setActions(options, listener)
+            .build()
+            .show(childFragmentManager, OptionDialog.TAG)
     }
 
     private fun openMap(building: Building) {

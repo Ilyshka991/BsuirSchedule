@@ -5,10 +5,10 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class DepartmentDTO(
-        @Json(name = "idDepartment")
-        val id: Long,
-        @Json(name = "name")
-        val name: String,
-        @Json(name = "abbrev")
-        val abbreviation: String
+    @Json(name = "idDepartment")
+    val id: Long,
+    @Json(name = "name")
+    val name: String,
+    @Json(name = "abbrev")
+    val abbreviation: String
 )

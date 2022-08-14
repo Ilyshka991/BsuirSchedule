@@ -20,11 +20,11 @@ import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 
 class TestAllSchedules @Inject constructor(
-        private val scheduleRepository: IScheduleRepository,
-        private val groupRepository: IGroupRepository,
-        private val employeeRepository: IEmployeeRepository,
-        private val specialityRepository: ISpecialityRepository,
-        private val buildingRepository: IBuildingRepository
+    private val scheduleRepository: IScheduleRepository,
+    private val groupRepository: IGroupRepository,
+    private val employeeRepository: IEmployeeRepository,
+    private val specialityRepository: ISpecialityRepository,
+    private val buildingRepository: IBuildingRepository
 ) : BaseInteractor<Unit, BaseInteractor.NoParams>() {
 
     override suspend fun run(params: NoParams) {
@@ -51,8 +51,8 @@ class TestAllSchedules @Inject constructor(
                 val resultTypes = group.correlateScheduleTypes(allTypes)
                 totalCount -= allTypes.size - resultTypes.size
                 val loaded = scheduleRepository.loadGroupSchedule(
-                        group,
-                        resultTypes
+                    group,
+                    resultTypes
                 )
                 totalLoaded += loaded.size
             }.onFailure {
@@ -61,12 +61,12 @@ class TestAllSchedules @Inject constructor(
         }
         Logger.d("GROUPS LOAD FINISHED: $totalLoaded SCHEDULES OF ${groups.size} GROUPS. NOT LOADED: ${totalCount - totalLoaded}")
         errorGroups
-                .groupBy { it.first::class.java }
-                .mapValues { it.value.map { it.second } }
-                .mapValues { it.value.map { it.number } }
-                .forEach {
-                    Logger.d("ERROR GROUPS: ${it.key} - ${it.value.joinToString()}")
-                }
+            .groupBy { it.first::class.java }
+            .mapValues { it.value.map { it.second } }
+            .mapValues { it.value.map { it.number } }
+            .forEach {
+                Logger.d("ERROR GROUPS: ${it.key} - ${it.value.joinToString()}")
+            }
     }
 
     private suspend fun loadAllEmployeesSchedules() {
@@ -78,8 +78,8 @@ class TestAllSchedules @Inject constructor(
         employees.forEach { employee ->
             runCatching {
                 val loaded = scheduleRepository.loadEmployeeSchedule(
-                        employee,
-                        allTypes
+                    employee,
+                    allTypes
                 )
                 totalLoaded += loaded.size
             }.onFailure {
@@ -88,12 +88,12 @@ class TestAllSchedules @Inject constructor(
         }
         Logger.d("EMPLOYEES LOAD FINISHED: $totalLoaded SCHEDULES OF ${employees.size} EMPLOYEES. NOT LOADED: ${employees.size * allTypes.size - totalLoaded}")
         errorEmployees
-                .groupBy { it.first::class.java }
-                .mapValues { it.value.map { it.second } }
-                .mapValues { it.value.map { it.abbreviation } }
-                .forEach {
-                    Logger.d("ERROR EMPLOYEES: ${it.key} - ${it.value.joinToString()}")
-                }
+            .groupBy { it.first::class.java }
+            .mapValues { it.value.map { it.second } }
+            .mapValues { it.value.map { it.abbreviation } }
+            .forEach {
+                Logger.d("ERROR EMPLOYEES: ${it.key} - ${it.value.joinToString()}")
+            }
     }
 
     private suspend fun updateInfo() = withContext(coroutineContext) {
@@ -101,24 +101,26 @@ class TestAllSchedules @Inject constructor(
         runCatching {
             specialityRepository.updateCache()
             listOf(
-                    async { employeeRepository.updateCache() },
-                    async { groupRepository.updateCache() },
-                    async { buildingRepository.updateCache() }
+                async { employeeRepository.updateCache() },
+                async { groupRepository.updateCache() },
+                async { buildingRepository.updateCache() }
             ).awaitAll()
         }.fold(
-                onSuccess = {
-                    Logger.d("UPDATE INFO SUCCESS")
-                },
-                onFailure = {
-                    Logger.d("UPDATE INFO ERROR", it)
-                }
+            onSuccess = {
+                Logger.d("UPDATE INFO SUCCESS")
+            },
+            onFailure = {
+                Logger.d("UPDATE INFO ERROR", it)
+            }
         )
     }
 
     private suspend fun checkScheduleCount() {
         val allSchedules = scheduleRepository.getAllSchedules().first()
-        val groupSchedulesSize = allSchedules.filter { it is Schedule.GroupExams || it is Schedule.GroupClasses }.size
-        val employeeSchedulesSize = allSchedules.filter { it is Schedule.EmployeeExams || it is Schedule.EmployeeClasses }.size
+        val groupSchedulesSize =
+            allSchedules.filter { it is Schedule.GroupExams || it is Schedule.GroupClasses }.size
+        val employeeSchedulesSize =
+            allSchedules.filter { it is Schedule.EmployeeExams || it is Schedule.EmployeeClasses }.size
         Logger.d("GROUP SCHEDULES COUNT: $groupSchedulesSize")
         Logger.d("EMPLOYEE SCHEDULES COUNT: $employeeSchedulesSize")
     }
@@ -126,27 +128,27 @@ class TestAllSchedules @Inject constructor(
     private suspend fun checkEmptySchedules() {
         Logger.d("CHECK EMPTY SCHEDULES")
         val emptySchedules = scheduleRepository.getAllSchedules().first()
-                .filter {
-                    scheduleRepository.getScheduleItems(it).first().isEmpty()
-                }
+            .filter {
+                scheduleRepository.getScheduleItems(it).first().isEmpty()
+            }
         val repeated = emptySchedules
-                .groupingBy { it.name }
-                .eachCount()
-                .filter { it.value > 1 }
-                .keys
+            .groupingBy { it.name }
+            .eachCount()
+            .filter { it.value > 1 }
+            .keys
         emptySchedules
-                .groupBy {
-                    when {
-                        it.name in repeated -> "All"
-                        it is Schedule.GroupClasses -> {
-                            "${it::class.java.simpleName} ${it.group.speciality.educationForm.name}"
-                        }
-                        else -> it::class.java.simpleName
+            .groupBy {
+                when {
+                    it.name in repeated -> "All"
+                    it is Schedule.GroupClasses -> {
+                        "${it::class.java.simpleName} ${it.group.speciality.educationForm.name}"
                     }
+                    else -> it::class.java.simpleName
                 }
-                .mapValues { it.value.map { it.name } }
-                .forEach {
-                    Logger.d("EMPTY SCHEDULES: ${it.key} - ${it.value.joinToString()}")
-                }
+            }
+            .mapValues { it.value.map { it.name } }
+            .forEach {
+                Logger.d("EMPTY SCHEDULES: ${it.key} - ${it.value.joinToString()}")
+            }
     }
 }

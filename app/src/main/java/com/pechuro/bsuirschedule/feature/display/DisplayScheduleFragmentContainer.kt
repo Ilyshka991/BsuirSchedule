@@ -12,7 +12,11 @@ import com.pechuro.bsuirschedule.common.base.BaseFragment
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
 import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
-import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.ext.args
+import com.pechuro.bsuirschedule.ext.clearAdapter
+import com.pechuro.bsuirschedule.ext.getCallbackOrNull
+import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel.Event.OnScheduleItemClicked
 import com.pechuro.bsuirschedule.feature.display.DisplayScheduleViewModel.Event.OnScheduleItemLongClicked
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
@@ -20,7 +24,8 @@ import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleViewType
 import kotlinx.android.synthetic.main.fragment_display_schedule_container.*
 import kotlinx.android.synthetic.main.item_schedule_actions_hint.*
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class DisplayScheduleFragmentContainer : BaseFragment() {
 
@@ -33,9 +38,9 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
         fun onDisplaySchedulePositionChanged(position: Int)
 
         fun onDisplayScheduleOpenDatePicker(
-                startDate: Date,
-                endDate: Date,
-                currentDate: Date
+            startDate: Date,
+            endDate: Date,
+            currentDate: Date
         )
     }
 
@@ -116,9 +121,9 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
     fun openDatePicker() {
         val pagerAdapter = pagerAdapter ?: return
         actionCallback?.onDisplayScheduleOpenDatePicker(
-                startDate = pagerAdapter.getCalendarAt(0).time,
-                endDate = pagerAdapter.getCalendarAt(pagerAdapter.itemCount - 1).time,
-                currentDate = pagerAdapter.getCalendarAt(displayScheduleContainerViewPager.currentItem).time
+            startDate = pagerAdapter.getCalendarAt(0).time,
+            endDate = pagerAdapter.getCalendarAt(pagerAdapter.itemCount - 1).time,
+            currentDate = pagerAdapter.getCalendarAt(displayScheduleContainerViewPager.currentItem).time
         )
     }
 
@@ -131,7 +136,10 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
         }
         viewModel.eventsData.nonNull().observe(viewLifecycleOwner) { event ->
             when (event) {
-                is OnScheduleItemClicked -> actionCallback?.onDisplayScheduleOpenDetails(schedule, event.data)
+                is OnScheduleItemClicked -> actionCallback?.onDisplayScheduleOpenDetails(
+                    schedule,
+                    event.data
+                )
                 is OnScheduleItemLongClicked -> actionCallback?.onDisplayScheduleOpenOptions(event.data)
             }
         }
@@ -150,9 +158,9 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
 
         displayScheduleContainerViewPager.registerOnPageChangeCallback(pageChangeCallback)
         val pagerAdapter = DisplaySchedulePagerAdapter(
-                hostFragment = this,
-                viewType = viewType,
-                startWeekNumber = viewModel.currentWeekNumber
+            hostFragment = this,
+            viewType = viewType,
+            startWeekNumber = viewModel.currentWeekNumber
         )
         this.pagerAdapter = pagerAdapter
         displayScheduleContainerViewPager.adapter = pagerAdapter
@@ -160,8 +168,8 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
         if (pagerAdapter.itemCount > 1) {
             initTabLayoutMediator(viewType)
             displayScheduleContainerViewPager.setCurrentItem(
-                    pagerAdapter.getStartPosition(),
-                    false
+                pagerAdapter.getStartPosition(),
+                false
             )
         } else {
             displayScheduleContainerTabLayout.isVisible = false
@@ -181,9 +189,9 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
             tab.text = getTabTitle(viewType, position)
         }
         return TabLayoutMediator(
-                displayScheduleContainerTabLayout,
-                displayScheduleContainerViewPager,
-                tabConfigurationStrategy
+            displayScheduleContainerTabLayout,
+            displayScheduleContainerViewPager,
+            tabConfigurationStrategy
         ).also {
             it.attach()
         }
@@ -211,7 +219,8 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
     private fun onPositionChanged() {
         if (schedule is Schedule.GroupExams || schedule is Schedule.EmployeeExams) return
         val pagerAdapter = pagerAdapter ?: return
-        val relativePosition = displayScheduleContainerViewPager.currentItem - pagerAdapter.getStartPosition()
+        val relativePosition =
+            displayScheduleContainerViewPager.currentItem - pagerAdapter.getStartPosition()
         actionCallback?.onDisplaySchedulePositionChanged(relativePosition)
     }
 
@@ -219,7 +228,8 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
         val pagerAdapter = pagerAdapter ?: return ""
         return when (viewType) {
             DisplayScheduleViewType.DAY_CLASSES -> {
-                val formattedDate = tabDayDateFormatter.format(pagerAdapter.getCalendarAt(position).time)
+                val formattedDate =
+                    tabDayDateFormatter.format(pagerAdapter.getCalendarAt(position).time)
                 val weekNumber = pagerAdapter.getWeekNumberAt(position).index + 1
                 getString(R.string.display_schedule_tab_title, formattedDate, weekNumber)
             }
@@ -232,8 +242,8 @@ class DisplayScheduleFragmentContainer : BaseFragment() {
 
     private fun setPosition(position: Int) {
         displayScheduleContainerViewPager.setCurrentItem(
-                position,
-                true
+            position,
+            true
         )
         onPositionChanged()
         val startTab = displayScheduleContainerTabLayout.getTabAt(position)

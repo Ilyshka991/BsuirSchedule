@@ -40,17 +40,17 @@ class ScheduleWidgetViewService : RemoteViewsService() {
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
         val widgetInfoId = intent.getIntExtra(EXTRA_WIDGET_ID, 0)
         return ScheduleWidgetRemoteViewFactory(
-                context = applicationContext,
-                widgetId = widgetInfoId,
-                dataProvider = dataProvider
+            context = applicationContext,
+            widgetId = widgetInfoId,
+            dataProvider = dataProvider
         )
     }
 }
 
 class ScheduleWidgetRemoteViewFactory(
-        private val context: Context,
-        private val widgetId: Int,
-        private val dataProvider: ScheduleWidgetDataProvider
+    private val context: Context,
+    private val widgetId: Int,
+    private val dataProvider: ScheduleWidgetDataProvider
 ) : RemoteViewsService.RemoteViewsFactory {
 
     private var scheduleItems: List<ScheduleItem> = emptyList()
@@ -116,9 +116,13 @@ class ScheduleWidgetRemoteViewFactory(
 
         row.setTextViewText(R.id.widgetLessonSubject, lesson.subject)
 
-        val subgroupNumber = context.getString(R.string.display_schedule_item_msg_subgroup, lesson.subgroupNumber.value)
+        val subgroupNumber = context.getString(
+            R.string.display_schedule_item_msg_subgroup,
+            lesson.subgroupNumber.value
+        )
         row.setTextViewText(R.id.widgetLessonSubgroupNumber, subgroupNumber)
-        val subgroupNumberTextVisibility = if (lesson.subgroupNumber != SubgroupNumber.ALL) View.VISIBLE else View.GONE
+        val subgroupNumberTextVisibility =
+            if (lesson.subgroupNumber != SubgroupNumber.ALL) View.VISIBLE else View.GONE
         row.setViewVisibility(R.id.widgetLessonSubgroupNumber, subgroupNumberTextVisibility)
 
         row.setTextViewText(R.id.widgetLessonStartTime, lesson.startTime.formattedString)
@@ -150,9 +154,13 @@ class ScheduleWidgetRemoteViewFactory(
 
         row.setTextViewText(R.id.widgetExamSubject, exam.subject)
 
-        val subgroupNumber = context.getString(R.string.display_schedule_item_msg_subgroup, exam.subgroupNumber.value)
+        val subgroupNumber = context.getString(
+            R.string.display_schedule_item_msg_subgroup,
+            exam.subgroupNumber.value
+        )
         row.setTextViewText(R.id.widgetExamSubgroup, subgroupNumber)
-        val subgroupNumberTextVisibility = if (exam.subgroupNumber != SubgroupNumber.ALL) View.VISIBLE else View.GONE
+        val subgroupNumberTextVisibility =
+            if (exam.subgroupNumber != SubgroupNumber.ALL) View.VISIBLE else View.GONE
         row.setViewVisibility(R.id.widgetExamSubgroup, subgroupNumberTextVisibility)
 
         row.setTextViewText(R.id.widgetExamTime, exam.startTime.formattedString)

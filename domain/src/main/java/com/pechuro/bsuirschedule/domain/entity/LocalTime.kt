@@ -2,11 +2,12 @@ package com.pechuro.bsuirschedule.domain.entity
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import java.util.*
+import java.util.Calendar
+import java.util.Date
 
 fun Calendar.getLocalTime() = LocalTime(
-        hour = get(Calendar.HOUR_OF_DAY),
-        minute = get(Calendar.MINUTE)
+    hour = get(Calendar.HOUR_OF_DAY),
+    minute = get(Calendar.MINUTE)
 )
 
 fun LocalTime.toDate() = Calendar.getInstance().apply {
@@ -21,8 +22,8 @@ fun Date.getLocalTime() = Calendar.getInstance().apply {
 
 @Parcelize
 data class LocalTime(
-        val hour: Int,
-        val minute: Int
+    val hour: Int,
+    val minute: Int
 ) : Parcelable, Comparable<LocalTime> {
 
     companion object {
@@ -33,8 +34,8 @@ data class LocalTime(
         }
 
         fun of(hour: Int, minute: Int) = LocalTime(
-                hour = hour,
-                minute = minute
+            hour = hour,
+            minute = minute
         )
     }
 

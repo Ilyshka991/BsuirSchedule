@@ -63,8 +63,8 @@ class ScheduleItemOptionsSheet : BaseBottomSheetDialog() {
 
     private fun initView() {
         scheduleItemOptionsTitle.text = getString(
-                R.string.schedule_item_options_sheet_title,
-                displayItem.scheduleItem?.subject
+            R.string.schedule_item_options_sheet_title,
+            displayItem.scheduleItem?.subject
         )
         scheduleItemOptionsEditButton.setSafeClickListener {
             actionCallback?.onScheduleItemOptionsEditClicked(getScheduleItems())

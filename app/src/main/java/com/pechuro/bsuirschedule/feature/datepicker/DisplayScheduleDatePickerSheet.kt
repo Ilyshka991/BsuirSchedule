@@ -12,7 +12,8 @@ import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.ext.args
 import com.pechuro.bsuirschedule.ext.getCallbackOrNull
 import kotlinx.android.synthetic.main.sheet_display_schedule_date_picker.*
-import java.util.*
+import java.util.Calendar
+import java.util.Date
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit.DAYS
 
@@ -29,16 +30,19 @@ class DisplayScheduleDatePickerSheet : BaseBottomSheetDialog() {
 
         private const val BUNDLE_ARGS = "BUNDLE_ARGS"
 
-        fun newInstance(args: DisplayScheduleDatePickerSheetArgs) = DisplayScheduleDatePickerSheet().apply {
-            arguments = bundleOf(BUNDLE_ARGS to args)
-        }
+        fun newInstance(args: DisplayScheduleDatePickerSheetArgs) =
+            DisplayScheduleDatePickerSheet().apply {
+                arguments = bundleOf(BUNDLE_ARGS to args)
+            }
     }
 
     private var actionCallback: ActionCallback? = null
 
     override val layoutId = R.layout.sheet_display_schedule_date_picker
 
-    private val args: DisplayScheduleDatePickerSheetArgs by args<DisplayScheduleDatePickerSheetArgs>(BUNDLE_ARGS)
+    private val args: DisplayScheduleDatePickerSheetArgs by args<DisplayScheduleDatePickerSheetArgs>(
+        BUNDLE_ARGS
+    )
 
     private val onDateChangedListener = CalendarView.OnDateChangeListener { _, year, month, day ->
         val selectedDate = Calendar.getInstance().apply {

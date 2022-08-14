@@ -15,7 +15,7 @@ import com.pechuro.bsuirschedule.feature.MainActivity
 import javax.inject.Inject
 
 class NotificationManager @Inject constructor(
-        private val context: Context
+    private val context: Context
 ) {
 
     companion object {
@@ -37,14 +37,14 @@ class NotificationManager @Inject constructor(
         val description = context.getString(R.string.notification_update_description)
         val intent = PendingIntent.getActivity(context, 0, MainActivity.newIntent(context), 0)
         val notification = NotificationCompat.Builder(context, CHANNEL_ID_UPDATE_SCHEDULE)
-                .setContentTitle(title)
-                .setSmallIcon(R.drawable.app_icon_foreground)
-                .setContentText(description)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setAutoCancel(true)
-                .setGroup(GROUP_KEY_ACTIONS)
-                .setContentIntent(intent)
-                .build()
+            .setContentTitle(title)
+            .setSmallIcon(R.drawable.app_icon_foreground)
+            .setContentText(description)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .setGroup(GROUP_KEY_ACTIONS)
+            .setContentIntent(intent)
+            .build()
         notificationManager.notify(notificationId, notification)
     }
 

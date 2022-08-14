@@ -36,9 +36,9 @@ class AddScheduleFragment : BaseFragment() {
         private const val ARG_SCHEDULE_TYPE = "ARG_SCHEDULE_TYPE"
 
         fun newInstance(scheduleType: FragmentType) =
-                AddScheduleFragment().apply {
-                    arguments = bundleOf(ARG_SCHEDULE_TYPE to scheduleType)
-                }
+            AddScheduleFragment().apply {
+                arguments = bundleOf(ARG_SCHEDULE_TYPE to scheduleType)
+            }
     }
 
     override val layoutId: Int = R.layout.fragment_add_schedule
@@ -162,18 +162,18 @@ class AddScheduleFragment : BaseFragment() {
                 addScheduleProgressBar.setVisibleWithAlpha(false)
                 addScheduleErrorParentView.setVisibleWithAlpha(false)
                 addScheduleParamsParentView.setVisibleWithAlpha(true)
-                        .doOnEnd {
-                            context?.showKeyboard(addScheduleNameInput)
-                        }
+                    .doOnEnd {
+                        context?.showKeyboard(addScheduleNameInput)
+                    }
                 addScheduleNameInput.requestFocus()
             }
             is State.Loading -> {
                 context?.hideKeyboard(addScheduleNameInput.windowToken)
                 addScheduleErrorParentView.setVisibleWithAlpha(false)
                 addScheduleParamsParentView.setVisibleWithAlpha(false)
-                        .doOnEnd {
-                            addScheduleProgressBar.setVisibleWithAlpha(true)
-                        }
+                    .doOnEnd {
+                        addScheduleProgressBar.setVisibleWithAlpha(true)
+                    }
             }
             is State.Error -> {
                 addScheduleProgressBar.setVisibleWithAlpha(false)

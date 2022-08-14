@@ -15,16 +15,18 @@ import dagger.BindsInstance
 import dagger.Component
 
 @AppScope
-@Component(modules = [
-    ApplicationModule::class,
-    AppViewModelsEspressoModule::class,
-    NetworkModule::class,
-    DatabaseModule::class,
-    RepositoryModule::class,
-    IdlingResourceModule::class,
-    WorkerModule::class,
-    RecyclerViewModule::class
-])
+@Component(
+    modules = [
+        ApplicationModule::class,
+        AppViewModelsEspressoModule::class,
+        NetworkModule::class,
+        DatabaseModule::class,
+        RepositoryModule::class,
+        IdlingResourceModule::class,
+        WorkerModule::class,
+        RecyclerViewModule::class
+    ]
+)
 interface EspressoAppComponent : AppComponent {
 
     fun inject(app: EspressoTestApp)

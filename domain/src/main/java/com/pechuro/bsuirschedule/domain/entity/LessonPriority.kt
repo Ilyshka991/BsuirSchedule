@@ -1,6 +1,6 @@
 package com.pechuro.bsuirschedule.domain.entity
 
-import java.util.*
+import java.util.Locale
 
 enum class LessonPriority(val value: Int) {
     LOWEST(0),
@@ -11,13 +11,14 @@ enum class LessonPriority(val value: Int) {
     companion object {
 
         fun getForValue(value: Int) = values().find { it.value == value }
-                ?: throw IllegalArgumentException("No priority for $value found")
+            ?: throw IllegalArgumentException("No priority for $value found")
 
-        fun getDefaultForLessonType(lessonType: String) = when (lessonType.toUpperCase(Locale.getDefault())) {
-            "ЛК" -> LOW
-            "ПЗ" -> MEDIUM
-            "ЛР" -> HIGH
-            else -> MEDIUM
-        }
+        fun getDefaultForLessonType(lessonType: String) =
+            when (lessonType.uppercase(Locale.getDefault())) {
+                "ЛК" -> LOW
+                "ПЗ" -> MEDIUM
+                "ЛР" -> HIGH
+                else -> MEDIUM
+            }
     }
 }

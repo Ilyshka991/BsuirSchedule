@@ -35,17 +35,17 @@ class ConfirmationDialog : BaseDialogFragment() {
 
         fun build() = ConfirmationDialog().apply {
             params = Params(
-                    positionActionButton = positionActionButton,
-                    negativeActionButton = negativeActionButton,
-                    title = title
+                positionActionButton = positionActionButton,
+                negativeActionButton = negativeActionButton,
+                title = title
             )
         }
     }
 
     private data class Params(
-            val positionActionButton: ConfirmationDialogButtonData?,
-            val negativeActionButton: ConfirmationDialogButtonData?,
-            val title: String
+        val positionActionButton: ConfirmationDialogButtonData?,
+        val negativeActionButton: ConfirmationDialogButtonData?,
+        val title: String
     )
 
     private lateinit var params: Params

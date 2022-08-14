@@ -15,7 +15,6 @@ import com.pechuro.bsuirschedule.domain.interactor.SetLastOpenedSchedule
 import com.pechuro.bsuirschedule.domain.interactor.SetRateAppInitialInfo
 import com.pechuro.bsuirschedule.domain.interactor.ShouldAskRateApp
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
@@ -25,14 +24,14 @@ import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class FlowViewModel @Inject constructor(
-        private val checkInfo: CheckInfo,
-        private val getAvailableForUpdateSchedules: GetAvailableForUpdateSchedules,
-        private val notificationManager: NotificationManager,
-        private val getLastOpenedSchedule: GetLastOpenedSchedule,
-        private val getScheduleDisplayType: GetScheduleDisplayType,
-        private val setLastOpenedSchedule: SetLastOpenedSchedule,
-        private val shouldAskRateApp: ShouldAskRateApp,
-        private val setRateAppInitialInfo: SetRateAppInitialInfo
+    private val checkInfo: CheckInfo,
+    private val getAvailableForUpdateSchedules: GetAvailableForUpdateSchedules,
+    private val notificationManager: NotificationManager,
+    private val getLastOpenedSchedule: GetLastOpenedSchedule,
+    private val getScheduleDisplayType: GetScheduleDisplayType,
+    private val setLastOpenedSchedule: SetLastOpenedSchedule,
+    private val shouldAskRateApp: ShouldAskRateApp,
+    private val setRateAppInitialInfo: SetRateAppInitialInfo
 ) : BaseViewModel() {
 
     private var lastOpenedSchedule: Schedule? = runBlocking {
@@ -44,14 +43,16 @@ class FlowViewModel @Inject constructor(
 
     init {
         launchCoroutine {
-            getLastOpenedSchedule.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow()).collect {
-                lastOpenedSchedule = it
-            }
+            getLastOpenedSchedule.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
+                .collect {
+                    lastOpenedSchedule = it
+                }
         }
         launchCoroutine {
-            getScheduleDisplayType.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow()).collect {
-                scheduleDisplayType = it
-            }
+            getScheduleDisplayType.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
+                .collect {
+                    scheduleDisplayType = it
+                }
         }
         launchCoroutine {
             setRateAppInitialInfo.execute(BaseInteractor.NoParams)
@@ -71,23 +72,24 @@ class FlowViewModel @Inject constructor(
 
     fun getScheduleDisplayType(): ScheduleDisplayType = scheduleDisplayType
 
-    suspend fun shouldShowRateApp() = shouldAskRateApp.execute(BaseInteractor.NoParams).getOrDefault(false)
+    suspend fun shouldShowRateApp() =
+        shouldAskRateApp.execute(BaseInteractor.NoParams).getOrDefault(false)
 
     suspend fun getAvailableForUpdateSchedules() =
-            getAvailableForUpdateSchedules.execute(Params(includeAll = false))
-                    .getOrDefault(flowOf(emptyList()))
-                    .debounce(1000)
-                    .flowOn(Dispatchers.IO)
-                    .first()
-                    .also {
-                        clearUpdateNotifications(it)
-                    }
+        getAvailableForUpdateSchedules.execute(Params(includeAll = false))
+            .getOrDefault(flowOf(emptyList()))
+            .debounce(1000)
+            .flowOn(Dispatchers.IO)
+            .first()
+            .also {
+                clearUpdateNotifications(it)
+            }
 
     private fun clearUpdateNotifications(schedules: List<Schedule>) {
         schedules
-                .distinctBy { it.name }
-                .forEach {
-                    notificationManager.dismissUpdateAvailable(it)
-                }
+            .distinctBy { it.name }
+            .forEach {
+                notificationManager.dismissUpdateAvailable(it)
+            }
     }
 }

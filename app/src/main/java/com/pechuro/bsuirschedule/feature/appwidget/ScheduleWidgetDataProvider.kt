@@ -17,34 +17,35 @@ import com.pechuro.bsuirschedule.domain.repository.IWidgetRepository
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import java.util.*
+import java.util.Calendar
 import javax.inject.Inject
 
 data class ScheduleWidgetData(
-        val isForTomorrow: Boolean,
-        val scheduleItems: List<ScheduleItem>
+    val isForTomorrow: Boolean,
+    val scheduleItems: List<ScheduleItem>
 )
 
 class ScheduleWidgetDataProvider @Inject constructor(
-        private val getScheduleItems: GetScheduleItems,
-        private val widgetRepository: IWidgetRepository
+    private val getScheduleItems: GetScheduleItems,
+    private val widgetRepository: IWidgetRepository
 ) {
 
     fun getWidgetInfo(widgetId: Int) = widgetRepository.getScheduleWidget(widgetId)
 
     fun getScheduleItemsList(widgetId: Int): ScheduleWidgetData {
         val widgetInfo = widgetRepository.getScheduleWidget(widgetId) ?: return ScheduleWidgetData(
-                isForTomorrow = false,
-                scheduleItems = emptyList()
+            isForTomorrow = false,
+            scheduleItems = emptyList()
         )
         val allScheduleItems = runBlocking {
-            getScheduleItems.execute(GetScheduleItems.Params(widgetInfo.schedule)).getOrDefault(emptyFlow()).first()
+            getScheduleItems.execute(GetScheduleItems.Params(widgetInfo.schedule))
+                .getOrDefault(emptyFlow()).first()
         }
         val (scheduleItems, isForTomorrow) = when (widgetInfo.schedule) {
             is Schedule.GroupExams, is Schedule.EmployeeExams -> {
                 allScheduleItems.filterExams(
-                        subgroupNumber = widgetInfo.subgroupNumber,
-                        currentDate = LocalDate.current()
+                    subgroupNumber = widgetInfo.subgroupNumber,
+                    currentDate = LocalDate.current()
                 ) to false
             }
             is Schedule.GroupClasses, is Schedule.EmployeeClasses -> {
@@ -53,9 +54,9 @@ class ScheduleWidgetDataProvider @Inject constructor(
                 val currentWeekDay = currentDayCalendar.getWeekDay()
                 val currentWeekNumber = WeekNumber.calculateCurrentWeekNumber()
                 val currentDayItems = allScheduleItems.filterLessons(
-                        subgroupNumber = widgetInfo.subgroupNumber,
-                        weekNumber = currentWeekNumber,
-                        weekDay = currentWeekDay
+                    subgroupNumber = widgetInfo.subgroupNumber,
+                    weekNumber = currentWeekNumber,
+                    weekDay = currentWeekDay
                 )
                 val resultList: List<ScheduleItem>
                 if (currentDayItems.isEmpty() || currentDayItems.last().endTime < LocalTime.current()) {
@@ -67,9 +68,9 @@ class ScheduleWidgetDataProvider @Inject constructor(
                         currentWeekNumber
                     }
                     resultList = allScheduleItems.filterLessons(
-                            subgroupNumber = widgetInfo.subgroupNumber,
-                            weekNumber = nextWeekNumber,
-                            weekDay = nextWeekDay
+                        subgroupNumber = widgetInfo.subgroupNumber,
+                        weekNumber = nextWeekNumber,
+                        weekDay = nextWeekDay
                     )
                 } else {
                     resultList = currentDayItems
@@ -78,49 +79,49 @@ class ScheduleWidgetDataProvider @Inject constructor(
             }
         }
         return ScheduleWidgetData(
-                isForTomorrow = isForTomorrow,
-                scheduleItems = scheduleItems
+            isForTomorrow = isForTomorrow,
+            scheduleItems = scheduleItems
         )
     }
 
     private fun List<ScheduleItem>.filterExams(
-            subgroupNumber: SubgroupNumber,
-            currentDate: LocalDate
+        subgroupNumber: SubgroupNumber,
+        currentDate: LocalDate
     ) = this
-            .asSequence()
-            .filterIsInstance<Exam>()
-            .filter {
-                it.date >= currentDate
+        .asSequence()
+        .filterIsInstance<Exam>()
+        .filter {
+            it.date >= currentDate
+        }
+        .filter {
+            when {
+                it is Exam.EmployeeExam -> true
+                subgroupNumber == SubgroupNumber.ALL -> true
+                it.subgroupNumber == SubgroupNumber.ALL -> true
+                else -> it.subgroupNumber == subgroupNumber
             }
-            .filter {
-                when {
-                    it is Exam.EmployeeExam -> true
-                    subgroupNumber == SubgroupNumber.ALL -> true
-                    it.subgroupNumber == SubgroupNumber.ALL -> true
-                    else -> it.subgroupNumber == subgroupNumber
-                }
-            }
-            .sortedWith(compareBy<Exam> { it.date }.thenBy { it.startTime })
-            .toList()
+        }
+        .sortedWith(compareBy<Exam> { it.date }.thenBy { it.startTime })
+        .toList()
 
     private fun List<ScheduleItem>.filterLessons(
-            subgroupNumber: SubgroupNumber,
-            weekDay: WeekDay,
-            weekNumber: WeekNumber
+        subgroupNumber: SubgroupNumber,
+        weekDay: WeekDay,
+        weekNumber: WeekNumber
     ) = this
-            .asSequence()
-            .filterIsInstance<Lesson>()
-            .filter {
-                it.weekDay == weekDay && it.weekNumber == weekNumber
+        .asSequence()
+        .filterIsInstance<Lesson>()
+        .filter {
+            it.weekDay == weekDay && it.weekNumber == weekNumber
+        }
+        .filter {
+            when {
+                it is Lesson.EmployeeLesson -> true
+                subgroupNumber == SubgroupNumber.ALL -> true
+                it.subgroupNumber == SubgroupNumber.ALL -> true
+                else -> it.subgroupNumber == subgroupNumber
             }
-            .filter {
-                when {
-                    it is Lesson.EmployeeLesson -> true
-                    subgroupNumber == SubgroupNumber.ALL -> true
-                    it.subgroupNumber == SubgroupNumber.ALL -> true
-                    else -> it.subgroupNumber == subgroupNumber
-                }
-            }
-            .sortedBy { it.startTime }
-            .toList()
+        }
+        .sortedBy { it.startTime }
+        .toList()
 }

@@ -17,14 +17,14 @@ import com.pechuro.bsuirschedule.local.sharedprefs.SharedPreferencesManager
 import kotlinx.coroutines.runBlocking
 
 class WidgetRepositoryImpl(
-        private val sharedPreferencesManager: SharedPreferencesManager,
-        private val scheduleRepository: IScheduleRepository
+    private val sharedPreferencesManager: SharedPreferencesManager,
+    private val scheduleRepository: IScheduleRepository
 ) : BaseRepository(), IWidgetRepository {
 
     override fun getScheduleWidget(widgetId: Int): ScheduleWidgetInfo? = sharedPreferencesManager
-            .getScheduleWidgetInfo(widgetId)
-            ?.runCatching { mapToDomainInfo() }
-            ?.getOrNull()
+        .getScheduleWidgetInfo(widgetId)
+        ?.runCatching { mapToDomainInfo() }
+        ?.getOrNull()
 
     override fun updateScheduleWidget(info: ScheduleWidgetInfo) {
         removeScheduleWidget(info.widgetId)
@@ -37,8 +37,8 @@ class WidgetRepositoryImpl(
 
     override fun removeScheduleWidget(schedule: Schedule) {
         val allWidgets = sharedPreferencesManager
-                .getAllScheduleWidgetInfoList()
-                .map { it.mapToDomainInfo() }
+            .getAllScheduleWidgetInfoList()
+            .map { it.mapToDomainInfo() }
         val widgetToRemoveId = allWidgets.find { it.schedule == schedule }?.widgetId ?: 0
         removeScheduleWidget(widgetToRemoveId)
     }
@@ -59,25 +59,25 @@ class WidgetRepositoryImpl(
             }
         } ?: throw DataSourceException.InvalidData
         return ScheduleWidgetInfo(
-                widgetId = widgetId,
-                schedule = schedule,
-                subgroupNumber = SubgroupNumber.getForValue(subgroupNumber),
-                theme = ScheduleWidgetInfo.WidgetTheme.getForName(theme)
+            widgetId = widgetId,
+            schedule = schedule,
+            subgroupNumber = SubgroupNumber.getForValue(subgroupNumber),
+            theme = ScheduleWidgetInfo.WidgetTheme.getForName(theme)
         )
     }
 
     private fun ScheduleWidgetInfo.mapToLocalInfo() = LocalScheduleWidgetInfo(
-            widgetId = widgetId,
-            schedule = LocalScheduleInfo(
-                    name = schedule.name,
-                    type = when (schedule) {
-                        is Schedule.GroupClasses -> GROUP_CLASSES
-                        is Schedule.GroupExams -> GROUP_EXAMS
-                        is Schedule.EmployeeClasses -> EMPLOYEE_CLASSES
-                        is Schedule.EmployeeExams -> EMPLOYEE_EXAMS
-                    }
-            ),
-            subgroupNumber = subgroupNumber.value,
-            theme = theme.name
+        widgetId = widgetId,
+        schedule = LocalScheduleInfo(
+            name = schedule.name,
+            type = when (schedule) {
+                is Schedule.GroupClasses -> GROUP_CLASSES
+                is Schedule.GroupExams -> GROUP_EXAMS
+                is Schedule.EmployeeClasses -> EMPLOYEE_CLASSES
+                is Schedule.EmployeeExams -> EMPLOYEE_EXAMS
+            }
+        ),
+        subgroupNumber = subgroupNumber.value,
+        theme = theme.name
     )
 }
