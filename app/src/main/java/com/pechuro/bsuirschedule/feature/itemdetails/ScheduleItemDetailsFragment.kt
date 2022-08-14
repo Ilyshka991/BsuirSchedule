@@ -6,7 +6,6 @@ import android.graphics.drawable.shapes.OvalShape
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.AppAnalytics

@@ -3,22 +3,28 @@ package com.pechuro.bsuirschedule.remote.api
 import com.pechuro.bsuirschedule.remote.dto.LastUpdateDTO
 import com.pechuro.bsuirschedule.remote.dto.ScheduleDTO
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ScheduleApi {
 
-    @GET("studentGroup/schedule")
+    @GET("schedule")
     suspend fun getStudentSchedule(
-        @Query(value = "id") id: Long
+        @Query(value = "studentGroup") groupNumber: String
     ): ScheduleDTO
 
-    @GET("portal/employeeSchedule")
+    @GET("employees/schedule/{urlId}")
     suspend fun getEmployeeSchedule(
-        @Query(value = "employeeId") employeeId: Long
+        @Path(value = "urlId") urlId: String
     ): ScheduleDTO
 
-    @GET("studentGroup/lastUpdateDate")
-    suspend fun getLastUpdateDate(
-        @Query(value = "studentGroup") studentGroup: String
+    @GET("last-update-date/student-group")
+    suspend fun getLastUpdateDateStudent(
+        @Query(value = "groupNumber") groupNumber: String
+    ): LastUpdateDTO
+
+    @GET("last-update-date/employee")
+    suspend fun getLastUpdateDateEmployee(
+        @Query(value = "url-id") urlId: String
     ): LastUpdateDTO
 }

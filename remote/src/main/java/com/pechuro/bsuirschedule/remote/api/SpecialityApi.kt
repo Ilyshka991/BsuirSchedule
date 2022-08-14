@@ -10,7 +10,7 @@ interface SpecialityApi {
     @GET("faculties")
     suspend fun getAllFaculties(): List<FacultyDTO>
 
-    @GET("department")
+    @GET("departments")
     suspend fun getAllDepartments(): List<DepartmentDTO>
 
     @GET("specialities")

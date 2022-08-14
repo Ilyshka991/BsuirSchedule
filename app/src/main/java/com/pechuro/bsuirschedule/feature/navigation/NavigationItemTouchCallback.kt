@@ -31,7 +31,7 @@ class NavigationItemTouchCallback(
     ) = false
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        val position = viewHolder.adapterPosition
+        val position = viewHolder.bindingAdapterPosition
         when (direction) {
             ItemTouchHelper.LEFT -> onDelete(position)
             ItemTouchHelper.RIGHT -> onUpdate(position)

@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.pechuro.bsuirschedule.local.entity.staff.EmployeeCached
+import java.util.Date
 
 @Entity(
     tableName = "employee_schedule_classes",
@@ -22,5 +23,9 @@ data class EmployeeClassesScheduleCached(
     @ColumnInfo(name = "name")
     val name: String,
     @ColumnInfo(name = "employee_id", index = true)
-    val employeeId: Long
+    val employeeId: Long,
+    @ColumnInfo(name = "last_update")
+    val lastUpdate: Date,
+    @ColumnInfo(name = "not_remind_for_updates")
+    val notRemindForUpdates: Boolean
 )

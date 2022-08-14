@@ -95,7 +95,7 @@ dependencies {
 
     implementation flurryDependencies.values()
 
-    debugImplementation leekcanary
+    // debugImplementation leekcanary
 
     api project(path: ':data')
     implementation project(path: ':domain')

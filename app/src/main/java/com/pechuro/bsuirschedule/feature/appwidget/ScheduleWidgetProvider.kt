@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Handler
+import android.os.Looper
 import android.widget.RemoteViews
 import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.AppAnalytics
@@ -94,7 +95,7 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
             appWidgetManager.updateAppWidget(widgetId, views)
 
             //TODO: Figure out why it works
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 appWidgetManager.notifyAppWidgetViewDataChanged(
                     widgetId,
                     R.id.scheduleWidgetListView

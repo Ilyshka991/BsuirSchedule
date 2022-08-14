@@ -49,6 +49,7 @@ internal fun EmployeeCached.toDomainEntity(
 ) = run {
     Employee(
         id = id,
+        urlId = urlId,
         firstName = firstName,
         middleName = middleName,
         lastName = lastName,
@@ -151,14 +152,18 @@ internal fun GroupExamScheduleCached.toDomainEntity(group: Group) = run {
 internal fun EmployeeClassesScheduleCached.toDomainEntity(employee: Employee) = run {
     Schedule.EmployeeClasses(
         name = name,
-        employee = employee
+        employee = employee,
+        lastUpdatedDate = lastUpdate,
+        notRemindForUpdates = notRemindForUpdates
     )
 }
 
 internal fun EmployeeExamScheduleCached.toDomainEntity(employee: Employee) = run {
     Schedule.EmployeeExams(
         name = name,
-        employee = employee
+        employee = employee,
+        lastUpdatedDate = lastUpdate,
+        notRemindForUpdates = notRemindForUpdates
     )
 }
 
