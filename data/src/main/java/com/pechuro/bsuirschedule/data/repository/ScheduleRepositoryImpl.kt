@@ -268,39 +268,49 @@ class ScheduleRepositoryImpl(
     override suspend fun setNotRemindForUpdates(schedule: Schedule, notRemind: Boolean) {
         when (schedule) {
             is Schedule.GroupClasses -> {
-                val newSchedule = Schedule.GroupClasses(
-                    name = schedule.name,
-                    group = schedule.group,
-                    lastUpdatedDate = schedule.lastUpdatedDate,
-                    notRemindForUpdates = notRemind
-                ).toDatabaseEntity()
+                val newSchedule = schedule.copy(notRemindForUpdates = notRemind).toDatabaseEntity()
                 performDaoCall { dao.update(newSchedule) }
             }
             is Schedule.GroupExams -> {
-                val newSchedule = Schedule.GroupExams(
-                    name = schedule.name,
-                    group = schedule.group,
-                    lastUpdatedDate = schedule.lastUpdatedDate,
-                    notRemindForUpdates = notRemind
-                ).toDatabaseEntity()
+                val newSchedule = schedule.copy(notRemindForUpdates = notRemind).toDatabaseEntity()
                 performDaoCall { dao.update(newSchedule) }
             }
-            else -> Unit
+            is Schedule.EmployeeClasses -> {
+                val newSchedule = schedule.copy(notRemindForUpdates = notRemind).toDatabaseEntity()
+                performDaoCall { dao.update(newSchedule) }
+            }
+            is Schedule.EmployeeExams -> {
+                val newSchedule = schedule.copy(notRemindForUpdates = notRemind).toDatabaseEntity()
+                performDaoCall { dao.update(newSchedule) }
+            }
         }
     }
 
     override suspend fun isUpdateAvailable(schedule: Schedule) = when (schedule) {
         is Schedule.GroupClasses -> {
-            val newLastUpdateDate =
-                performApiCall { api.getLastUpdateDate(schedule.group.number) }.toDomainEntity()
+            val newLastUpdateDate = performApiCall {
+                api.getLastUpdateDateStudent(schedule.group.number)
+            }.toDomainEntity()
             schedule.lastUpdatedDate < newLastUpdateDate
         }
         is Schedule.GroupExams -> {
-            val newLastUpdate =
-                performApiCall { api.getLastUpdateDate(schedule.group.number) }.toDomainEntity()
+            val newLastUpdate = performApiCall {
+                api.getLastUpdateDateStudent(schedule.group.number)
+            }.toDomainEntity()
             schedule.lastUpdatedDate < newLastUpdate
         }
-        else -> false
+        is Schedule.EmployeeClasses -> {
+            val newLastUpdate = performApiCall {
+                api.getLastUpdateDateEmployee(schedule.employee.urlId)
+            }.toDomainEntity()
+            schedule.lastUpdatedDate < newLastUpdate
+        }
+        is Schedule.EmployeeExams -> {
+            val newLastUpdate = performApiCall {
+                api.getLastUpdateDateEmployee(schedule.employee.urlId)
+            }.toDomainEntity()
+            schedule.lastUpdatedDate < newLastUpdate
+        }
     }
 
     override suspend fun deleteSchedule(schedule: Schedule) {
@@ -449,24 +459,24 @@ class ScheduleRepositoryImpl(
         update: Boolean
     ): List<Schedule> {
         val auditories = buildingRepository.getAllAuditories().first()
-        val departments = specialityRepository.getAllDepartments().first()
+        val employees = employeeRepository.getAll().first()
 
-        val scheduleDTO = performApiCall { api.getStudentSchedule(group.id) }
+        val scheduleDTO = performApiCall { api.getStudentSchedule(group.number) }
         val lastUpdatedDate: Date = performApiCallCatching(Date(0)) {
-            api.getLastUpdateDate(group.number).toDomainEntity()
+            api.getLastUpdateDateStudent(group.number).toDomainEntity()
         }
 
         return types.map { type ->
             when (type) {
                 ScheduleType.CLASSES -> {
-                    val itemsDTOList = scheduleDTO.schedule ?: emptyList()
+                    val itemsDTOList = scheduleDTO.schedule ?: emptyMap()
                     val schedule = Schedule.GroupClasses(
                         name = group.number,
                         lastUpdatedDate = lastUpdatedDate,
                         group = group,
                         notRemindForUpdates = false
                     )
-                    val items = itemsDTOList.toGroupLessons(auditories, departments)
+                    val items = itemsDTOList.toGroupLessons(auditories, employees)
 
                     storeSchedule(schedule, items, update)
                     schedule
@@ -479,7 +489,7 @@ class ScheduleRepositoryImpl(
                         group = group,
                         notRemindForUpdates = false
                     )
-                    val items = itemsDTOList.toGroupExams(auditories, departments)
+                    val items = itemsDTOList.toGroupExams(auditories, employees)
 
                     storeSchedule(schedule, items, update)
                     schedule
@@ -496,15 +506,19 @@ class ScheduleRepositoryImpl(
         val groups = groupRepository.getAll().first()
         val auditories = buildingRepository.getAllAuditories().first()
 
-        val scheduleDTO = performApiCall { api.getEmployeeSchedule(employee.id) }
-
+        val scheduleDTO = performApiCall { api.getEmployeeSchedule(employee.urlId) }
+        val lastUpdatedDate: Date = performApiCallCatching(Date(0)) {
+            api.getLastUpdateDateEmployee(employee.urlId).toDomainEntity()
+        }
         return types.map { type ->
             when (type) {
                 ScheduleType.CLASSES -> {
-                    val itemsDTOList = scheduleDTO.schedule ?: emptyList()
+                    val itemsDTOList = scheduleDTO.schedule ?: emptyMap()
                     val schedule = Schedule.EmployeeClasses(
                         name = employee.abbreviation,
-                        employee = employee
+                        employee = employee,
+                        lastUpdatedDate = lastUpdatedDate,
+                        notRemindForUpdates = false
                     )
                     val items = itemsDTOList.toEmployeeLessons(groups, auditories)
 
@@ -515,7 +529,9 @@ class ScheduleRepositoryImpl(
                     val itemsDTOList = scheduleDTO.exam ?: emptyList()
                     val schedule = Schedule.EmployeeExams(
                         name = employee.abbreviation,
-                        employee = employee
+                        employee = employee,
+                        lastUpdatedDate = lastUpdatedDate,
+                        notRemindForUpdates = false
                     )
                     val items = itemsDTOList.toEmployeeExams(groups, auditories)
 

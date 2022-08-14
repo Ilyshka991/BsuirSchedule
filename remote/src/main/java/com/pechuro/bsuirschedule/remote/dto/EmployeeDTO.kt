@@ -7,6 +7,8 @@ import com.squareup.moshi.JsonClass
 data class EmployeeDTO(
     @Json(name = "id")
     val id: Long,
+    @Json(name = "urlId")
+    val urlId: String,
     @Json(name = "firstName")
     val firstName: String,
     @Json(name = "lastName")

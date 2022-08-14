@@ -21,6 +21,8 @@ data class EmployeeCached(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: Long,
+    @ColumnInfo(name = "url_id")
+    val urlId: String,
     @ColumnInfo(name = "first_name")
     val firstName: String,
     @ColumnInfo(name = "last_name")

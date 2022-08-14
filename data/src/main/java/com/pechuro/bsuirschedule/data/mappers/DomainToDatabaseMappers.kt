@@ -88,6 +88,7 @@ internal fun List<Auditory>.toDatabaseEntity() = map {
 internal fun Employee.toDatabaseEntity() = run {
     EmployeeCached(
         id = id,
+        urlId = urlId,
         firstName = firstName,
         middleName = middleName,
         lastName = lastName,
@@ -206,14 +207,18 @@ internal fun Exam.GroupExam.toDatabaseEntity(scheduleName: String) = run {
 internal fun Schedule.EmployeeClasses.toDatabaseEntity() = run {
     EmployeeClassesScheduleCached(
         name = name,
-        employeeId = employee.id
+        employeeId = employee.id,
+        lastUpdate = lastUpdatedDate,
+        notRemindForUpdates = notRemindForUpdates
     )
 }
 
 internal fun Schedule.EmployeeExams.toDatabaseEntity() = run {
     EmployeeExamScheduleCached(
         name = name,
-        employeeId = employee.id
+        employeeId = employee.id,
+        lastUpdate = lastUpdatedDate,
+        notRemindForUpdates = notRemindForUpdates
     )
 }
 

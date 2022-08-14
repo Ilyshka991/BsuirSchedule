@@ -21,13 +21,7 @@ class GetAvailableForUpdateSchedules @Inject constructor(
         return scheduleRepository.getAllSchedules()
             .mapLatest { allSchedules ->
                 allSchedules
-                    .filter { schedule ->
-                        when (schedule) {
-                            is Schedule.GroupClasses -> !schedule.notRemindForUpdates || params.includeAll
-                            is Schedule.GroupExams -> !schedule.notRemindForUpdates || params.includeAll
-                            else -> false
-                        }
-                    }
+                    .filter { schedule -> !schedule.notRemindForUpdates || params.includeAll }
                     .map { schedule ->
                         withContext(Dispatchers.Default) {
                             async {

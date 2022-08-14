@@ -26,7 +26,7 @@ inline fun View.setSafeClickListener(
     setOnClickListener(safeClickListener)
 }
 
-inline fun View.setSafeClickListener(
+fun View.setSafeClickListener(
     interval: ClickInterval = ClickInterval.NORMAL,
     onClickListener: View.OnClickListener
 ) {

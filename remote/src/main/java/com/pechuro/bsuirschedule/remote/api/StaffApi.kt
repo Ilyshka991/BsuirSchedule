@@ -6,9 +6,9 @@ import retrofit2.http.GET
 
 interface StaffApi {
 
-    @GET("groups")
+    @GET("student-groups")
     suspend fun getAllGroups(): List<GroupDTO>
 
-    @GET("employees")
+    @GET("employees/all")
     suspend fun getAllEmployees(): List<EmployeeDTO>
 }
