@@ -13,7 +13,7 @@ import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.ext.addOnTabSelectedListener
 import com.pechuro.bsuirschedule.ext.getCallbackOrNull
 import com.pechuro.bsuirschedule.ext.nonNull
-import com.pechuro.bsuirschedule.ext.observe
+
 import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel.State
 import kotlinx.android.synthetic.main.fragment_add_schedule_container.*

@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.Date
 import kotlin.reflect.KClass
 
 class ScheduleRepositoryImpl(
@@ -271,13 +271,14 @@ class ScheduleRepositoryImpl(
             }
             is Schedule.GroupExams -> {
                 val newSchedule = Schedule.GroupExams(
-                        name = schedule.name,
-                        group = schedule.group,
-                        lastUpdatedDate = schedule.lastUpdatedDate,
-                        notRemindForUpdates = notRemind
+                    name = schedule.name,
+                    group = schedule.group,
+                    lastUpdatedDate = schedule.lastUpdatedDate,
+                    notRemindForUpdates = notRemind
                 ).toDatabaseEntity()
                 performDaoCall { dao.update(newSchedule) }
             }
+            else -> Unit
         }
     }
 

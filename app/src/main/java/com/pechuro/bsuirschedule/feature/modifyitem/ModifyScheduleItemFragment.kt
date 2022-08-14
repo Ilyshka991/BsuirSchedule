@@ -36,7 +36,7 @@ import com.pechuro.bsuirschedule.ext.getCallbackOrNull
 import com.pechuro.bsuirschedule.ext.getFormattedString
 import com.pechuro.bsuirschedule.ext.hideKeyboard
 import com.pechuro.bsuirschedule.ext.nonNull
-import com.pechuro.bsuirschedule.ext.observe
+
 import com.pechuro.bsuirschedule.ext.requireValue
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.confirmationdialog.ConfirmationDialog
@@ -47,6 +47,7 @@ import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogButtonData
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogCheckableButtonData
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_modify_schedule_item.*
+import java.util.Locale
 
 @Parcelize
 data class ModifyScheduleItemFragmentArgs(
@@ -206,6 +207,7 @@ class ModifyScheduleItemFragment : BaseFragment() {
                 is Complete -> {
                     activity?.onBackPressed()
                 }
+                else -> Unit
             }
         }
         with(viewModel.dataProvider) {
@@ -223,7 +225,8 @@ class ModifyScheduleItemFragment : BaseFragment() {
                 modifyScheduleItemType.setMessage(lessonType)
             }
             subgroupNumberData.nonNull().observe(viewLifecycleOwner) { subgroupNumber ->
-                val formatted = getString(subgroupNumber.formattedStringRes).toLowerCase()
+                val formatted =
+                    getString(subgroupNumber.formattedStringRes).lowercase(Locale.getDefault())
                 modifyScheduleItemSubgroupNumber.setMessage(formatted)
             }
             startTimeData.nonNull().observe(viewLifecycleOwner) { startTime ->
@@ -233,7 +236,8 @@ class ModifyScheduleItemFragment : BaseFragment() {
                 modifyScheduleItemEndTime.setMessage(endTime.formattedString)
             }
             priorityData.nonNull().observe(viewLifecycleOwner) { priority ->
-                val formatted = getString(priority.formattedStringRes).toLowerCase()
+                val formatted =
+                    getString(priority.formattedStringRes).lowercase(Locale.getDefault())
                 modifyScheduleItemPriority.setMessage(formatted)
             }
             weekDayData.nonNull().observe(viewLifecycleOwner) { weekDay ->

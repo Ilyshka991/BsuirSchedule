@@ -11,7 +11,7 @@ import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
 import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 import com.pechuro.bsuirschedule.ext.args
 import com.pechuro.bsuirschedule.ext.nonNull
-import com.pechuro.bsuirschedule.ext.observe
+
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import kotlinx.android.synthetic.main.sheet_display_schedule_options.*
 
@@ -43,12 +43,9 @@ class DisplayScheduleOptionsSheet : BaseBottomSheetDialog() {
     }
 
     private fun initView() {
-        when (schedule) {
-            is Schedule.EmployeeClasses -> {
-                displayOptionsSheetSubgroupButton.isVisible = false
-            }
+        if (schedule is Schedule.EmployeeClasses) {
+            displayOptionsSheetSubgroupButton.isVisible = false
         }
-
         displayOptionsSheetTypeButton.setSafeClickListener {
             viewModel.setNextDisplayType()
         }

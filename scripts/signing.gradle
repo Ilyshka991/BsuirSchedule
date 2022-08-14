@@ -1,4 +1,4 @@
-project.afterEvaluate { project ->
+project.beforeEvaluate { project ->
     def propsFile = rootProject.file('keystore.properties')
     def configName = 'release'
 
