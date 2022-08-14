@@ -7,8 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetScheduleHintDisplayState @Inject constructor(
-        private val sessionRepository: ISessionRepository
+    private val sessionRepository: ISessionRepository
 ) : BaseInteractor<Flow<HintDisplayState>, BaseInteractor.NoParams>() {
 
-    override suspend fun run(params: NoParams): Flow<HintDisplayState> = sessionRepository.getScheduleHintDisplayState()
+    override suspend fun run(params: NoParams): Flow<HintDisplayState> =
+        sessionRepository.getScheduleHintDisplayState()
 }

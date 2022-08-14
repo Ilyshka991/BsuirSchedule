@@ -6,7 +6,7 @@ import com.pechuro.bsuirschedule.domain.repository.ISessionRepository
 import javax.inject.Inject
 
 class SetLastOpenedSchedule @Inject constructor(
-        private val sessionRepository: ISessionRepository
+    private val sessionRepository: ISessionRepository
 ) : BaseInteractor<Unit, SetLastOpenedSchedule.Params>() {
 
     override suspend fun run(params: Params) {
@@ -14,6 +14,6 @@ class SetLastOpenedSchedule @Inject constructor(
     }
 
     data class Params(
-            val schedule: Schedule?
+        val schedule: Schedule?
     )
 }

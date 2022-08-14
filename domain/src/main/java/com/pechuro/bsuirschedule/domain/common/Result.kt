@@ -10,16 +10,16 @@ class Result<out T> private constructor(val value: Any?) {
         get() = value is Failure
 
     fun getOrNull(): T? =
-            when {
-                isFailure -> null
-                else -> value as T
-            }
+        when {
+            isFailure -> null
+            else -> value as T
+        }
 
     fun exceptionOrNull(): Throwable? =
-            when (value) {
-                is Failure -> value.exception
-                else -> null
-            }
+        when (value) {
+            is Failure -> value.exception
+            else -> null
+        }
 
     companion object {
 
@@ -60,8 +60,8 @@ fun <R, T : R> Result<T>.getOrDefault(defaultValue: R): R {
 }
 
 inline fun <R, T> Result<T>.fold(
-        onSuccess: (value: T) -> R,
-        onFailure: (exception: Throwable) -> R
+    onSuccess: (value: T) -> R,
+    onFailure: (exception: Throwable) -> R
 ): R {
     return when (val exception = exceptionOrNull()) {
         null -> onSuccess(value as T)
@@ -80,4 +80,4 @@ inline fun <T> Result<T>.onSuccess(action: (value: T) -> Unit): Result<T> {
 }
 
 private fun createFailure(exception: Throwable): Any =
-        Result.Failure(exception)
+    Result.Failure(exception)

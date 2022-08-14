@@ -27,34 +27,34 @@ class NetworkModule {
     @Provides
     @AppScope
     fun provideRetrofit(
-            httpClient: OkHttpClient,
-            converterFactory: Converter.Factory
+        httpClient: OkHttpClient,
+        converterFactory: Converter.Factory
     ): Retrofit =
-            Retrofit.Builder()
-                    .client(httpClient)
-                    .addConverterFactory(converterFactory)
-                    .baseUrl(BASE_URL)
-                    .build()
+        Retrofit.Builder()
+            .client(httpClient)
+            .addConverterFactory(converterFactory)
+            .baseUrl(BASE_URL)
+            .build()
 
     @Provides
     @AppScope
     fun provideOkHttpClient(
-            loggingInterceptor: HttpLoggingInterceptor,
-            networkAvailabilityInterceptor: NetworkAvailabilityInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
+        networkAvailabilityInterceptor: NetworkAvailabilityInterceptor
     ): OkHttpClient =
-            OkHttpClient.Builder()
-                    .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
-                    .writeTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
-                    .readTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
-                    .addInterceptor(loggingInterceptor)
-                    .addInterceptor(networkAvailabilityInterceptor)
-                    .build()
+        OkHttpClient.Builder()
+            .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+            .writeTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(networkAvailabilityInterceptor)
+            .build()
 
     @Provides
     @AppScope
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         val interceptor = HttpLoggingInterceptor(
-                HttpLoggingInterceptor.Logger { Logger.tag("Retrofit").i(it) })
+            HttpLoggingInterceptor.Logger { Logger.tag("Retrofit").i(it) })
         interceptor.level = BASIC
         return interceptor
     }
@@ -62,7 +62,7 @@ class NetworkModule {
     @Provides
     @AppScope
     fun provideNetworkAvailabilityInterceptor(networkChecker: NetworkAvailabilityChecker): NetworkAvailabilityInterceptor =
-            NetworkAvailabilityInterceptor(networkChecker)
+        NetworkAvailabilityInterceptor(networkChecker)
 
     @Provides
     @AppScope
@@ -71,25 +71,25 @@ class NetworkModule {
     @Provides
     @AppScope
     fun provideConverterFactory(moshi: Moshi): Converter.Factory =
-            MoshiConverterFactory.create(moshi)
+        MoshiConverterFactory.create(moshi)
 
     @Provides
     @AppScope
     fun provideBuildingApi(retrofit: Retrofit): BuildingApi =
-            retrofit.create(BuildingApi::class.java)
+        retrofit.create(BuildingApi::class.java)
 
     @Provides
     @AppScope
     fun provideScheduleApi(retrofit: Retrofit): ScheduleApi =
-            retrofit.create(ScheduleApi::class.java)
+        retrofit.create(ScheduleApi::class.java)
 
     @Provides
     @AppScope
     fun provideSpecialityApi(retrofit: Retrofit): SpecialityApi =
-            retrofit.create(SpecialityApi::class.java)
+        retrofit.create(SpecialityApi::class.java)
 
     @Provides
     @AppScope
     fun provideStaffApi(retrofit: Retrofit): StaffApi =
-            retrofit.create(StaffApi::class.java)
+        retrofit.create(StaffApi::class.java)
 }

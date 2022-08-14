@@ -14,7 +14,7 @@ class DataModule {
     @Provides
     @AppScope
     fun provideSharedPrefs(context: Context): SharedPreferences =
-            context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
+        context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
 
     @Provides
     @AppScope

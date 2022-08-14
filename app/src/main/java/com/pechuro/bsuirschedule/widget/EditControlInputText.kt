@@ -11,9 +11,9 @@ import com.pechuro.bsuirschedule.ext.textString
 import kotlinx.android.synthetic.main.view_edit_control_text_input.view.*
 
 class EditControlInputText @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = android.R.attr.textViewStyle
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = android.R.attr.textViewStyle
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     var onNewTextSubmitted: (text: String) -> Unit = {}

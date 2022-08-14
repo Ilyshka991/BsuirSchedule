@@ -7,8 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetLastOpenedSchedule @Inject constructor(
-        private val sessionRepository: ISessionRepository
+    private val sessionRepository: ISessionRepository
 ) : BaseInteractor<Flow<Schedule?>, BaseInteractor.NoParams>() {
 
-    override suspend fun run(params: NoParams): Flow<Schedule?> = sessionRepository.getLastOpenedSchedule()
+    override suspend fun run(params: NoParams): Flow<Schedule?> =
+        sessionRepository.getLastOpenedSchedule()
 }

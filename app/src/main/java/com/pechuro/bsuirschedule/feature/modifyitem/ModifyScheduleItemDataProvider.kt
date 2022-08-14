@@ -18,12 +18,13 @@ import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 import com.pechuro.bsuirschedule.domain.ext.addIfEmpty
 import com.pechuro.bsuirschedule.domain.ext.getWeekDay
 import com.pechuro.bsuirschedule.ext.requireValue
-import java.util.*
+import java.util.Calendar
+import java.util.SortedSet
 
 class ModifyScheduleItemDataProvider(
-        val initialSchedule: Schedule,
-        val initialItems: List<ScheduleItem>,
-        private val lessonTypes: List<String>
+    val initialSchedule: Schedule,
+    val initialItems: List<ScheduleItem>,
+    private val lessonTypes: List<String>
 ) {
 
     private val _subjectData = MutableLiveData<String>()
@@ -84,7 +85,8 @@ class ModifyScheduleItemDataProvider(
 
     fun hasChanges(): Boolean {
         val resultItems = getResultScheduleItems()
-        val isItemsTheSame = resultItems.containsAll(initialItems) && initialItems.containsAll(resultItems)
+        val isItemsTheSame =
+            resultItems.containsAll(initialItems) && initialItems.containsAll(resultItems)
         return !isItemsTheSame
     }
 
@@ -198,7 +200,8 @@ class ModifyScheduleItemDataProvider(
             is Lesson -> {
                 priority = scheduleItem.priority
                 weekDay = scheduleItem.weekDay
-                val resultWeekNumbers = initialItems.filterIsInstance<Lesson>().map { it.weekNumber }
+                val resultWeekNumbers =
+                    initialItems.filterIsInstance<Lesson>().map { it.weekNumber }
                 if (resultWeekNumbers.isNotEmpty()) {
                     weekNumbers = resultWeekNumbers
                 }
@@ -254,50 +257,54 @@ class ModifyScheduleItemDataProvider(
         val auditories = auditoriesData.requireValue.toList()
         val employees = employeesData.requireValue.toList()
         val studentGroups = studentGroupsData.requireValue.toList()
-        val weekNumbers = weekNumberData.requireValue.addIfEmpty { WeekNumber.calculateCurrentWeekNumber() }
+        val weekNumbers =
+            weekNumberData.requireValue.addIfEmpty { WeekNumber.calculateCurrentWeekNumber() }
         val priority = priorityData.requireValue
         val weekDay = weekDayData.requireValue
         val date = _dateData.requireValue
         return when (initialSchedule) {
             is Schedule.GroupClasses -> weekNumbers.map { weekNumber ->
-                val initialItem = initialItems.find { (it as? Lesson.GroupLesson)?.weekNumber == weekNumber }
+                val initialItem =
+                    initialItems.find { (it as? Lesson.GroupLesson)?.weekNumber == weekNumber }
                 Lesson.GroupLesson(
-                        id = initialItem?.id ?: 0,
-                        subject = subject,
-                        subgroupNumber = subgroupNumber,
-                        lessonType = lessonType,
-                        note = note,
-                        startTime = startTime,
-                        endTime = endTime,
-                        auditories = auditories,
-                        isAddedByUser = initialItem?.isAddedByUser ?: true,
-                        priority = priority,
-                        weekDay = weekDay,
-                        weekNumber = weekNumber,
-                        employees = employees
+                    id = initialItem?.id ?: 0,
+                    subject = subject,
+                    subgroupNumber = subgroupNumber,
+                    lessonType = lessonType,
+                    note = note,
+                    startTime = startTime,
+                    endTime = endTime,
+                    auditories = auditories,
+                    isAddedByUser = initialItem?.isAddedByUser ?: true,
+                    priority = priority,
+                    weekDay = weekDay,
+                    weekNumber = weekNumber,
+                    employees = employees
                 )
             }
             is Schedule.EmployeeClasses -> weekNumbers.map { weekNumber ->
-                val initialItem = initialItems.find { (it as? Lesson.GroupLesson)?.weekNumber == weekNumber }
+                val initialItem =
+                    initialItems.find { (it as? Lesson.GroupLesson)?.weekNumber == weekNumber }
                 Lesson.EmployeeLesson(
-                        id = initialItem?.id ?: 0,
-                        subject = subject,
-                        subgroupNumber = subgroupNumber,
-                        lessonType = lessonType,
-                        note = note,
-                        startTime = startTime,
-                        endTime = endTime,
-                        auditories = auditories,
-                        isAddedByUser = initialItem?.isAddedByUser ?: true,
-                        priority = priority,
-                        weekDay = weekDay,
-                        weekNumber = weekNumber,
-                        studentGroups = studentGroups
+                    id = initialItem?.id ?: 0,
+                    subject = subject,
+                    subgroupNumber = subgroupNumber,
+                    lessonType = lessonType,
+                    note = note,
+                    startTime = startTime,
+                    endTime = endTime,
+                    auditories = auditories,
+                    isAddedByUser = initialItem?.isAddedByUser ?: true,
+                    priority = priority,
+                    weekDay = weekDay,
+                    weekNumber = weekNumber,
+                    studentGroups = studentGroups
                 )
             }
             is Schedule.GroupExams -> {
                 val initialItem = initialItems.getOrNull(0)
-                listOf(Exam.GroupExam(
+                listOf(
+                    Exam.GroupExam(
                         id = initialItem?.id ?: 0,
                         subject = subject,
                         subgroupNumber = subgroupNumber,
@@ -309,12 +316,13 @@ class ModifyScheduleItemDataProvider(
                         isAddedByUser = initialItem == null,
                         date = date,
                         employees = employees
-                )
+                    )
                 )
             }
             is Schedule.EmployeeExams -> {
                 val initialItem = initialItems.getOrNull(0)
-                listOf(Exam.EmployeeExam(
+                listOf(
+                    Exam.EmployeeExam(
                         id = initialItem?.id ?: 0,
                         subject = subject,
                         subgroupNumber = subgroupNumber,
@@ -326,7 +334,8 @@ class ModifyScheduleItemDataProvider(
                         isAddedByUser = initialItem == null,
                         date = date,
                         studentGroups = studentGroups
-                ))
+                    )
+                )
             }
         }
     }

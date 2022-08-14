@@ -14,9 +14,9 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
 class BuildingRepositoryImpl(
-        private val dao: BuildingDao,
-        private val api: BuildingApi,
-        private val specialityRepository: ISpecialityRepository
+    private val dao: BuildingDao,
+    private val api: BuildingApi,
+    private val specialityRepository: ISpecialityRepository
 ) : BaseRepository(), IBuildingRepository {
 
     override suspend fun getAllAuditories(forceUpdate: Boolean): Flow<List<Auditory>> {
@@ -34,9 +34,9 @@ class BuildingRepositoryImpl(
             specialityRepository.getDepartmentById(departmentId)
         }
         return auditoryCached.toDomainEntity(
-                building = building.toDomainEntity(),
-                auditoryType = auditoryType.toDomainEntity(),
-                department = department
+            building = building.toDomainEntity(),
+            auditoryType = auditoryType.toDomainEntity(),
+            department = department
         )
     }
 
@@ -46,31 +46,32 @@ class BuildingRepositoryImpl(
     }
 
     override suspend fun isCached(): Boolean =
-            performDaoCall { dao.isAuditoriesNotEmpty() }
+        performDaoCall { dao.isAuditoriesNotEmpty() }
 
     private suspend fun loadAuditoriesFromApi(): List<Auditory> =
-            performApiCall { api.getAllAuditories() }
-                    .map { dto ->
-                        dto.toDomainEntity()
-                    }
+        performApiCall { api.getAllAuditories() }
+            .map { dto ->
+                dto.toDomainEntity()
+            }
 
     private suspend fun getAllAuditoriesFromDao(): Flow<List<Auditory>> =
-            dao.getAllAuditories()
-                    .map {
-                        it.map { auditoryCached ->
-                            val auditoryType = performDaoCall { dao.getAuditoryTypeById(auditoryCached.auditoryTypeId) }
-                            val building = performDaoCall { dao.getBuildingById(auditoryCached.buildingId) }
-                            val department = auditoryCached.departmentId?.let { departmentId ->
-                                specialityRepository.getDepartmentById(departmentId)
-                            }
-                            auditoryCached.toDomainEntity(
-                                    building = building.toDomainEntity(),
-                                    auditoryType = auditoryType.toDomainEntity(),
-                                    department = department
-                            )
-                        }
+        dao.getAllAuditories()
+            .map {
+                it.map { auditoryCached ->
+                    val auditoryType =
+                        performDaoCall { dao.getAuditoryTypeById(auditoryCached.auditoryTypeId) }
+                    val building = performDaoCall { dao.getBuildingById(auditoryCached.buildingId) }
+                    val department = auditoryCached.departmentId?.let { departmentId ->
+                        specialityRepository.getDepartmentById(departmentId)
                     }
-                    .flowOn(Dispatchers.IO)
+                    auditoryCached.toDomainEntity(
+                        building = building.toDomainEntity(),
+                        auditoryType = auditoryType.toDomainEntity(),
+                        department = department
+                    )
+                }
+            }
+            .flowOn(Dispatchers.IO)
 
     private suspend fun storeAuditories(auditories: List<Auditory>) {
         auditories.forEach {
@@ -81,9 +82,9 @@ class BuildingRepositoryImpl(
             val departmentCached = it.department?.toDatabaseEntity()
             val buildingCached = it.building.toDatabaseEntity()
             val auditoryCached = it.toDatabaseEntity(
-                    auditoryType = auditoryTypeCached,
-                    building = buildingCached,
-                    department = departmentCached
+                auditoryType = auditoryTypeCached,
+                building = buildingCached,
+                department = departmentCached
             )
             performDaoCall {
                 dao.insertOrUpdate(auditoryTypeCached)

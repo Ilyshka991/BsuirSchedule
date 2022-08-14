@@ -14,7 +14,7 @@ import com.pechuro.bsuirschedule.domain.entity.ScheduleWidgetInfo
 import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 import com.pechuro.bsuirschedule.domain.entity.WeekDay
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber
-import java.util.*
+import java.util.Locale
 
 @get:ColorRes
 val LessonPriority.formattedColorRes: Int
@@ -87,7 +87,7 @@ val ScheduleWidgetInfo.WidgetTheme.formattedStringRes: Int
     }
 
 val ScheduleItem.isExam: Boolean
-    get() = lessonType.toLowerCase(Locale.getDefault()) == "экзамен"
+    get() = lessonType.lowercase(Locale.getDefault()) == "экзамен"
 
 val ScheduleItem.isConsultation: Boolean
-    get() = lessonType.toLowerCase(Locale.getDefault()) == "консультация"
+    get() = lessonType.lowercase(Locale.getDefault()) == "консультация"

@@ -11,7 +11,7 @@ import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.ext.args
 import com.pechuro.bsuirschedule.ext.nonNull
-import com.pechuro.bsuirschedule.ext.observe
+
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.ext.setVisibleOrInvisibleWithAlpha
 import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
@@ -46,9 +46,10 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
         }
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?) = super.onCreateDialog(savedInstanceState).apply {
-        isCancelable = false
-    }
+    override fun onCreateDialog(savedInstanceState: Bundle?) =
+        super.onCreateDialog(savedInstanceState).apply {
+            isCancelable = false
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,9 +69,12 @@ class UpdateScheduleSheet : BaseBottomSheetDialog() {
             val notRemind = updateScheduleSheetNotRemindCheckbox.isChecked
             val currentSchedule = viewModel.currentScheduleData.value
             currentSchedule?.let {
-                AppAnalytics.report(AppAnalyticsEvent.UpdateSchedule.Dismissed(
+                AppAnalytics.report(
+                    AppAnalyticsEvent.UpdateSchedule.Dismissed(
                         schedule = currentSchedule,
-                        notRemind = notRemind))
+                        notRemind = notRemind
+                    )
+                )
             }
             viewModel.cancelUpdate(notRemind)
         }

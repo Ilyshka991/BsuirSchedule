@@ -13,8 +13,8 @@ import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class AppThemeManager @Inject constructor(
-        private val getAppTheme: GetAppTheme,
-        private val context: Context
+    private val getAppTheme: GetAppTheme,
+    private val context: Context
 ) {
 
     fun applyToCurrentTheme(theme: Resources.Theme) {

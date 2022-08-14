@@ -34,84 +34,84 @@ class RepositoryModule {
     @Provides
     @AppScope
     fun provideEmployeeRepository(
-            api: StaffApi,
-            dao: EmployeeDao,
-            specialityRepository: ISpecialityRepository
+        api: StaffApi,
+        dao: EmployeeDao,
+        specialityRepository: ISpecialityRepository
     ): IEmployeeRepository = EmployeeRepositoryImpl(
-            api = api,
-            dao = dao,
-            specialityRepository = specialityRepository
+        api = api,
+        dao = dao,
+        specialityRepository = specialityRepository
     )
 
     @Provides
     @AppScope
     fun provideGroupRepository(
-            api: StaffApi,
-            dao: GroupDao,
-            specialityRepository: ISpecialityRepository
+        api: StaffApi,
+        dao: GroupDao,
+        specialityRepository: ISpecialityRepository
     ): IGroupRepository = GroupRepositoryImpl(
-            api = api,
-            dao = dao,
-            specialityRepository = specialityRepository
+        api = api,
+        dao = dao,
+        specialityRepository = specialityRepository
     )
 
     @Provides
     @AppScope
     fun provideScheduleRepository(
-            api: ScheduleApi,
-            dao: ScheduleDao,
-            groupRepository: IGroupRepository,
-            buildingRepository: IBuildingRepository,
-            specialityRepository: ISpecialityRepository,
-            employeeRepository: IEmployeeRepository
+        api: ScheduleApi,
+        dao: ScheduleDao,
+        groupRepository: IGroupRepository,
+        buildingRepository: IBuildingRepository,
+        specialityRepository: ISpecialityRepository,
+        employeeRepository: IEmployeeRepository
     ): IScheduleRepository = ScheduleRepositoryImpl(
-            api = api,
-            dao = dao,
-            groupRepository = groupRepository,
-            specialityRepository = specialityRepository,
-            employeeRepository = employeeRepository,
-            buildingRepository = buildingRepository
+        api = api,
+        dao = dao,
+        groupRepository = groupRepository,
+        specialityRepository = specialityRepository,
+        employeeRepository = employeeRepository,
+        buildingRepository = buildingRepository
     )
 
     @Provides
     @AppScope
     fun provideSpecialityRepository(
-            api: SpecialityApi,
-            dao: SpecialityDao
+        api: SpecialityApi,
+        dao: SpecialityDao
     ): ISpecialityRepository = SpecialityRepositoryImpl(
-            api = api,
-            dao = dao
+        api = api,
+        dao = dao
     )
 
     @Provides
     @AppScope
     fun provideBuildingRepository(
-            api: BuildingApi,
-            dao: BuildingDao,
-            specialityRepository: ISpecialityRepository
+        api: BuildingApi,
+        dao: BuildingDao,
+        specialityRepository: ISpecialityRepository
     ): IBuildingRepository = BuildingRepositoryImpl(
-            api = api,
-            dao = dao,
-            specialityRepository = specialityRepository
+        api = api,
+        dao = dao,
+        specialityRepository = specialityRepository
     )
 
     @Provides
     @AppScope
     fun provideSessionRepository(
-            sharedPreferencesManager: SharedPreferencesManager,
-            scheduleRepository: IScheduleRepository
+        sharedPreferencesManager: SharedPreferencesManager,
+        scheduleRepository: IScheduleRepository
     ): ISessionRepository = SessionRepositoryImpl(
-            sharedPreferencesManager = sharedPreferencesManager,
-            scheduleRepository = scheduleRepository
+        sharedPreferencesManager = sharedPreferencesManager,
+        scheduleRepository = scheduleRepository
     )
 
     @Provides
     @AppScope
     fun provideWidgetRepository(
-            sharedPreferencesManager: SharedPreferencesManager,
-            scheduleRepository: IScheduleRepository
+        sharedPreferencesManager: SharedPreferencesManager,
+        scheduleRepository: IScheduleRepository
     ): IWidgetRepository = WidgetRepositoryImpl(
-            sharedPreferencesManager = sharedPreferencesManager,
-            scheduleRepository = scheduleRepository
+        sharedPreferencesManager = sharedPreferencesManager,
+        scheduleRepository = scheduleRepository
     )
 }

@@ -6,10 +6,23 @@ import com.pechuro.bsuirschedule.common.LiveEvent
 import com.pechuro.bsuirschedule.common.base.BaseViewModel
 import com.pechuro.bsuirschedule.domain.common.BaseInteractor
 import com.pechuro.bsuirschedule.domain.common.getOrDefault
-import com.pechuro.bsuirschedule.domain.entity.*
+import com.pechuro.bsuirschedule.domain.entity.Exam
+import com.pechuro.bsuirschedule.domain.entity.HintDisplayState
+import com.pechuro.bsuirschedule.domain.entity.Lesson
+import com.pechuro.bsuirschedule.domain.entity.LocalDate
+import com.pechuro.bsuirschedule.domain.entity.Schedule
+import com.pechuro.bsuirschedule.domain.entity.ScheduleDisplayType
+import com.pechuro.bsuirschedule.domain.entity.ScheduleItem
+import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
+import com.pechuro.bsuirschedule.domain.entity.WeekDay
+import com.pechuro.bsuirschedule.domain.entity.WeekNumber
 import com.pechuro.bsuirschedule.domain.entity.WeekNumber.Companion.calculateCurrentWeekNumber
 import com.pechuro.bsuirschedule.domain.ext.addIfEmpty
-import com.pechuro.bsuirschedule.domain.interactor.*
+import com.pechuro.bsuirschedule.domain.interactor.GetScheduleDisplaySubgroupNumber
+import com.pechuro.bsuirschedule.domain.interactor.GetScheduleDisplayType
+import com.pechuro.bsuirschedule.domain.interactor.GetScheduleHintDisplayState
+import com.pechuro.bsuirschedule.domain.interactor.GetScheduleItems
+import com.pechuro.bsuirschedule.domain.interactor.SetScheduleHintDisplayState
 import com.pechuro.bsuirschedule.ext.flowLiveData
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItemInfo
@@ -24,11 +37,11 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DisplayScheduleViewModel @Inject constructor(
-        private val getScheduleItems: GetScheduleItems,
-        private val getScheduleDisplayType: GetScheduleDisplayType,
-        private val getScheduleDisplaySubgroupNumber: GetScheduleDisplaySubgroupNumber,
-        private val getScheduleHintDisplayState: GetScheduleHintDisplayState,
-        private val setScheduleHintDisplayState: SetScheduleHintDisplayState
+    private val getScheduleItems: GetScheduleItems,
+    private val getScheduleDisplayType: GetScheduleDisplayType,
+    private val getScheduleDisplaySubgroupNumber: GetScheduleDisplaySubgroupNumber,
+    private val getScheduleHintDisplayState: GetScheduleHintDisplayState,
+    private val setScheduleHintDisplayState: SetScheduleHintDisplayState
 ) : BaseViewModel() {
 
     lateinit var schedule: Schedule
@@ -39,7 +52,8 @@ class DisplayScheduleViewModel @Inject constructor(
 
     val displayTypeData = MediatorLiveData<ScheduleDisplayType>().apply {
         value = runBlocking {
-            getScheduleDisplayType.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow()).first()
+            getScheduleDisplayType.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
+                .first()
         }
         val displayTypeFlowData = flowLiveData {
             getScheduleDisplayType.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
@@ -60,30 +74,31 @@ class DisplayScheduleViewModel @Inject constructor(
         getScheduleDisplaySubgroupNumber.execute(BaseInteractor.NoParams).getOrDefault(emptyFlow())
     }
 
-    fun getItems(info: DisplayScheduleItemInfo) = MediatorLiveData<List<DisplayScheduleItem>>().apply {
-        val transformFunction: () -> Unit = {
-            launchCoroutine {
-                val scheduleItems = scheduleItemList.value ?: return@launchCoroutine
-                val resultList = withContext(Dispatchers.IO) {
-                    mapToDisplayScheduleItems(
+    fun getItems(info: DisplayScheduleItemInfo) =
+        MediatorLiveData<List<DisplayScheduleItem>>().apply {
+            val transformFunction: () -> Unit = {
+                launchCoroutine {
+                    val scheduleItems = scheduleItemList.value ?: return@launchCoroutine
+                    val resultList = withContext(Dispatchers.IO) {
+                        mapToDisplayScheduleItems(
                             scheduleItems = scheduleItems,
                             info = info,
                             subgroupNumber = displaySubgroupNumber.value ?: SubgroupNumber.ALL
-                    )
+                        )
+                    }
+                    value = resultList
                 }
-                value = resultList
             }
+            addSource(scheduleItemList) { transformFunction() }
+            addSource(displaySubgroupNumber) { transformFunction() }
         }
-        addSource(scheduleItemList) { transformFunction() }
-        addSource(displaySubgroupNumber) { transformFunction() }
-    }
 
     fun dismissLessonHint() {
         launchCoroutine {
             val currentState = hintDisplayState.value
             val newState = HintDisplayState(
-                    lessonHintShown = true,
-                    examHintShown = currentState?.examHintShown ?: false
+                lessonHintShown = true,
+                examHintShown = currentState?.examHintShown ?: false
             )
             setScheduleHintDisplayState.execute(SetScheduleHintDisplayState.Params(newState))
         }
@@ -93,8 +108,8 @@ class DisplayScheduleViewModel @Inject constructor(
         launchCoroutine {
             val currentState = hintDisplayState.value
             val newState = HintDisplayState(
-                    lessonHintShown = currentState?.lessonHintShown ?: false,
-                    examHintShown = true
+                lessonHintShown = currentState?.lessonHintShown ?: false,
+                examHintShown = true
             )
             setScheduleHintDisplayState.execute(SetScheduleHintDisplayState.Params(newState))
         }
@@ -108,68 +123,72 @@ class DisplayScheduleViewModel @Inject constructor(
     }
 
     private fun mapToDisplayScheduleItems(
-            scheduleItems: List<ScheduleItem>,
-            info: DisplayScheduleItemInfo,
-            subgroupNumber: SubgroupNumber
+        scheduleItems: List<ScheduleItem>,
+        info: DisplayScheduleItemInfo,
+        subgroupNumber: SubgroupNumber
     ): List<DisplayScheduleItem> = when (info) {
-        is DayClasses -> scheduleItems.mapToDayClasses(info.weekDay, info.weekNumber, subgroupNumber)
+        is DayClasses -> scheduleItems.mapToDayClasses(
+            info.weekDay,
+            info.weekNumber,
+            subgroupNumber
+        )
         is WeekClasses -> scheduleItems.mapToWeekClasses(info.weekDay, subgroupNumber)
         is DisplayScheduleItemInfo.Exams -> scheduleItems.mapToExams()
     }.addIfEmpty(DisplayScheduleItem.Empty)
 
     private fun List<ScheduleItem>.mapToDayClasses(
-            weekDay: WeekDay,
-            weekNumber: WeekNumber,
-            subgroupNumber: SubgroupNumber
+        weekDay: WeekDay,
+        weekNumber: WeekNumber,
+        subgroupNumber: SubgroupNumber
     ): List<DisplayScheduleItem.DayClasses> = this
-            .asSequence()
-            .filterIsInstance<Lesson>()
-            .filter {
-                it.weekDay == weekDay && it.weekNumber == weekNumber
+        .asSequence()
+        .filterIsInstance<Lesson>()
+        .filter {
+            it.weekDay == weekDay && it.weekNumber == weekNumber
+        }
+        .filter {
+            when {
+                it is Lesson.EmployeeLesson -> true
+                subgroupNumber == SubgroupNumber.ALL -> true
+                it.subgroupNumber == SubgroupNumber.ALL -> true
+                else -> it.subgroupNumber == subgroupNumber
             }
-            .filter {
-                when {
-                    it is Lesson.EmployeeLesson -> true
-                    subgroupNumber == SubgroupNumber.ALL -> true
-                    it.subgroupNumber == SubgroupNumber.ALL -> true
-                    else -> it.subgroupNumber == subgroupNumber
-                }
-            }
-            .sortedBy { it.startTime }
-            .map(DisplayScheduleItem::DayClasses)
-            .toList()
+        }
+        .sortedBy { it.startTime }
+        .map(DisplayScheduleItem::DayClasses)
+        .toList()
 
     private fun List<ScheduleItem>.mapToWeekClasses(
-            weekDay: WeekDay,
-            subgroupNumber: SubgroupNumber
+        weekDay: WeekDay,
+        subgroupNumber: SubgroupNumber
     ): List<DisplayScheduleItem.WeekClasses> = this
-            .asSequence()
-            .filterIsInstance<Lesson>()
-            .filter { it.weekDay == weekDay }
-            .filter {
-                when {
-                    it is Lesson.EmployeeLesson -> true
-                    subgroupNumber == SubgroupNumber.ALL -> true
-                    it.subgroupNumber == SubgroupNumber.ALL -> true
-                    else -> it.subgroupNumber == subgroupNumber
-                }
+        .asSequence()
+        .filterIsInstance<Lesson>()
+        .filter { it.weekDay == weekDay }
+        .filter {
+            when {
+                it is Lesson.EmployeeLesson -> true
+                subgroupNumber == SubgroupNumber.ALL -> true
+                it.subgroupNumber == SubgroupNumber.ALL -> true
+                else -> it.subgroupNumber == subgroupNumber
             }
-            .groupBy { it.toGroupKey() }
-            .values
-            .map { lessons ->
-                val lesson = lessons.first()
-                DisplayScheduleItem.WeekClasses(
-                        scheduleItem = lesson,
-                        allScheduleItems = lessons
-                )
-            }
-            .toList()
-            .sortedBy { it.scheduleItem.startTime }
+        }
+        .groupBy { it.toGroupKey() }
+        .values
+        .map { lessons ->
+            val lesson = lessons.first()
+            DisplayScheduleItem.WeekClasses(
+                scheduleItem = lesson,
+                allScheduleItems = lessons
+            )
+        }
+        .toList()
+        .sortedBy { it.scheduleItem.startTime }
 
     private fun List<ScheduleItem>.mapToExams(): List<DisplayScheduleItem.Exams> = this
-            .filterIsInstance<Exam>()
-            .sortedWith(compareBy<Exam> { it.date }.thenBy { it.startTime })
-            .map(DisplayScheduleItem::Exams)
+        .filterIsInstance<Exam>()
+        .sortedWith(compareBy<Exam> { it.date }.thenBy { it.startTime })
+        .map(DisplayScheduleItem::Exams)
 
     sealed class Event {
         data class OnScheduleItemClicked(val data: ScheduleItem) : Event()

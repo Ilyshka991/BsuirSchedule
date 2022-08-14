@@ -6,7 +6,7 @@ import com.pechuro.bsuirschedule.domain.repository.ISessionRepository
 import javax.inject.Inject
 
 class SetScheduleHintDisplayState @Inject constructor(
-        private val sessionRepository: ISessionRepository
+    private val sessionRepository: ISessionRepository
 ) : BaseInteractor<Unit, SetScheduleHintDisplayState.Params>() {
 
     override suspend fun run(params: Params) {
@@ -14,6 +14,6 @@ class SetScheduleHintDisplayState @Inject constructor(
     }
 
     data class Params(
-            val newState: HintDisplayState
+        val newState: HintDisplayState
     )
 }

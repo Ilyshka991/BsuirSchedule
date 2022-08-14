@@ -33,20 +33,20 @@ import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.feature.display.data.DisplayScheduleItem
 import kotlinx.android.synthetic.main.item_display_schedule_classes.*
 import kotlinx.android.synthetic.main.item_display_schedule_exam.*
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DisplayScheduleItem>() {
 
     override fun areItemsTheSame(
-            oldItem: DisplayScheduleItem,
-            newItem: DisplayScheduleItem
+        oldItem: DisplayScheduleItem,
+        newItem: DisplayScheduleItem
     ) = oldItem.scheduleItem?.id == newItem.scheduleItem?.id
 
     @SuppressLint("DiffUtilEquals")
     override fun areContentsTheSame(
-            oldItem: DisplayScheduleItem,
-            newItem: DisplayScheduleItem
+        oldItem: DisplayScheduleItem,
+        newItem: DisplayScheduleItem
     ) = oldItem == newItem
 }
 
@@ -55,8 +55,8 @@ private const val EXAMS_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_exa
 private const val EMPTY_VIEW_TYPE_LAYOUT_ID = R.layout.item_display_schedule_empty
 
 class DisplayScheduleItemAdapter(
-        onClickCallback: (data: DisplayScheduleItem) -> Unit,
-        onLongClickCallback: (data: DisplayScheduleItem) -> Unit
+    onClickCallback: (data: DisplayScheduleItem) -> Unit,
+    onLongClickCallback: (data: DisplayScheduleItem) -> Unit
 ) : ListAdapter<DisplayScheduleItem, BaseViewHolder<DisplayScheduleItem>>(DIFF_CALLBACK) {
 
     private val clickListener = object : View.OnClickListener, View.OnLongClickListener {
@@ -92,7 +92,10 @@ class DisplayScheduleItemAdapter(
         is DisplayScheduleItem.Empty -> EMPTY_VIEW_TYPE_LAYOUT_ID
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<DisplayScheduleItem> {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): BaseViewHolder<DisplayScheduleItem> {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(viewType, parent, false)
         return when (viewType) {
@@ -118,18 +121,25 @@ class DisplayScheduleItemAdapter(
         override fun onBind(data: DisplayScheduleItem) {
             val scheduleItem = data.scheduleItem
             if (scheduleItem !is Lesson) return
-            val defaultItemPadding = itemView.context.dimenPx(R.dimen.display_schedule_item_default_padding)
+            val defaultItemPadding =
+                itemView.context.dimenPx(R.dimen.display_schedule_item_default_padding)
             scheduleItem.run {
                 displayClassesLessonType.text = lessonType
                 val lessonTypeColor = itemView.context.color(priority.formattedColorRes)
-                ViewCompat.setBackgroundTintList(displayClassesLessonType, ColorStateList.valueOf(lessonTypeColor))
+                ViewCompat.setBackgroundTintList(
+                    displayClassesLessonType,
+                    ColorStateList.valueOf(lessonTypeColor)
+                )
                 displayClassesTitle.text = subject
                 displayClassesTitle.updatePadding(right = if (subject.isNotEmpty()) defaultItemPadding else 0)
                 val formattedAuditories = auditories.formatAuditories()
                 displayClassesAuditories.text = formattedAuditories
                 displayClassesAuditories.updatePadding(right = if (formattedAuditories.isNotEmpty()) defaultItemPadding else 0)
                 displayClassesSubgroup.isVisible = subgroupNumber != SubgroupNumber.ALL
-                displayClassesSubgroup.text = itemView.context.getString(R.string.display_schedule_item_msg_subgroup, subgroupNumber.value)
+                displayClassesSubgroup.text = itemView.context.getString(
+                    R.string.display_schedule_item_msg_subgroup,
+                    subgroupNumber.value
+                )
                 displayClassesStartTime.text = startTime.formattedString
                 displayClassesEndTime.text = endTime.formattedString
                 displayClassesNote.isVisible = note.isNotEmpty() && note.isNotBlank()
@@ -138,8 +148,8 @@ class DisplayScheduleItemAdapter(
                     val weekNumbers = data.allScheduleItems.map { it.weekNumber }.sorted()
                     displayClassesWeeks.isVisible = weekNumbers.size != WeekNumber.TOTAL_COUNT
                     displayClassesWeeks.text = itemView.context.getString(
-                            R.string.display_schedule_item_msg_week_numbers,
-                            weekNumbers.formatWeekNumbers()
+                        R.string.display_schedule_item_msg_week_numbers,
+                        weekNumbers.formatWeekNumbers()
                     )
                 }
                 val info = when (scheduleItem) {
@@ -164,16 +174,17 @@ class DisplayScheduleItemAdapter(
                 displayExamDate.text = date.formattedString
                 displayExamSubgroup.isVisible = subgroupNumber != SubgroupNumber.ALL
                 displayExamSubgroup.text = itemView.context.getString(
-                        R.string.display_schedule_item_msg_subgroup,
-                        subgroupNumber.value
+                    R.string.display_schedule_item_msg_subgroup,
+                    subgroupNumber.value
                 )
                 displayExamType.text = lessonType
                 displayExamsNote.isVisible = note.isNotEmpty() && note.isNotBlank()
                 displayExamsNote.text = note
-                val isExam = lessonType.toLowerCase(Locale.getDefault()) == "экзамен"
+                val isExam = lessonType.lowercase(Locale.getDefault()) == "экзамен"
                 displayExamLeftDaysIndicator.isVisible = isExam
                 if (isExam) {
-                    val leftDaysIndicatorColor = itemView.context.color(getLeftDaysIndicatorColorRes(date, startTime))
+                    val leftDaysIndicatorColor =
+                        itemView.context.color(getLeftDaysIndicatorColorRes(date, startTime))
                     displayExamLeftDaysIndicator.setBackgroundColor(leftDaysIndicatorColor)
                 }
                 val info = when (scheduleItem) {
@@ -220,15 +231,15 @@ fun List<Auditory>.formatAuditories() = joinToString(separator = ", ") { it.form
 fun List<Employee>.formatEmployees() = joinToString(separator = ", ") { it.abbreviation }
 
 fun List<Group>.formatGroupNumbers() = asSequence()
-        .map { it.number }
-        .filter { it.isNotEmpty() }
-        .map { it.take(it.lastIndex) to it }
-        .groupBy(keySelector = { it.first }, valueTransform = { it.second })
-        .map { (commonPart, groupNumbers) ->
-            if (groupNumbers.size > 1) {
-                "${commonPart}X"
-            } else {
-                groupNumbers.firstOrNull() ?: ""
-            }
+    .map { it.number }
+    .filter { it.isNotEmpty() }
+    .map { it.take(it.lastIndex) to it }
+    .groupBy(keySelector = { it.first }, valueTransform = { it.second })
+    .map { (commonPart, groupNumbers) ->
+        if (groupNumbers.size > 1) {
+            "${commonPart}X"
+        } else {
+            groupNumbers.firstOrNull() ?: ""
         }
-        .joinToString(separator = ", ") { it }
+    }
+    .joinToString(separator = ", ") { it }

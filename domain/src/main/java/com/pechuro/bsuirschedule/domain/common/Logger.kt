@@ -216,7 +216,12 @@ object Logger {
 
         internal val explicitTag = ThreadLocal<String>()
 
-        protected abstract fun log(priority: LogPriority, tag: String?, message: String, t: Throwable?)
+        protected abstract fun log(
+            priority: LogPriority,
+            tag: String?,
+            message: String,
+            t: Throwable?
+        )
 
         open fun v(message: String?, vararg args: Any) {
             prepareLog(LogPriority.VERBOSE, null, message, args)
@@ -302,7 +307,12 @@ object Logger {
             return String.format(message, *args)
         }
 
-        private fun prepareLog(priority: LogPriority, t: Throwable?, message: String?, vararg args: Any) {
+        private fun prepareLog(
+            priority: LogPriority,
+            t: Throwable?,
+            message: String?,
+            vararg args: Any
+        ) {
             var resultMessage = message
             val tag = getTag()
             if (resultMessage != null && resultMessage.isEmpty()) {

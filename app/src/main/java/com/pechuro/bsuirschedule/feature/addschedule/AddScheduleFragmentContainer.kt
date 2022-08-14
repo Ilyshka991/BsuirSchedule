@@ -13,7 +13,7 @@ import com.pechuro.bsuirschedule.domain.entity.Schedule
 import com.pechuro.bsuirschedule.ext.addOnTabSelectedListener
 import com.pechuro.bsuirschedule.ext.getCallbackOrNull
 import com.pechuro.bsuirschedule.ext.nonNull
-import com.pechuro.bsuirschedule.ext.observe
+
 import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
 import com.pechuro.bsuirschedule.feature.addschedule.AddScheduleViewModel.State
 import kotlinx.android.synthetic.main.fragment_add_schedule_container.*
@@ -70,7 +70,11 @@ class AddScheduleFragmentContainer : BaseFragment() {
         addScheduleContainerViewPager.apply {
             adapter = pagerAdapter
             layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-            addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(addScheduleContainerTabLayout))
+            addOnPageChangeListener(
+                TabLayout.TabLayoutOnPageChangeListener(
+                    addScheduleContainerTabLayout
+                )
+            )
         }
         addScheduleContainerTabLayout.apply {
             AddScheduleContainerPagerAdapter.FragmentType.values().forEach {

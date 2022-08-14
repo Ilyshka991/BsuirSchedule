@@ -41,9 +41,9 @@ abstract class BaseFragment : Fragment(), BackPressedHandler {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View = inflater.inflate(layoutId, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,7 +60,10 @@ abstract class BaseFragment : Fragment(), BackPressedHandler {
         return initViewModel(clazz, this)
     }
 
-    protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>, owner: ViewModelStoreOwner): T {
+    protected fun <T : BaseViewModel> initViewModel(
+        clazz: KClass<T>,
+        owner: ViewModelStoreOwner
+    ): T {
         return ViewModelProvider(owner, viewModelFactory).get(clazz.java)
     }
 }

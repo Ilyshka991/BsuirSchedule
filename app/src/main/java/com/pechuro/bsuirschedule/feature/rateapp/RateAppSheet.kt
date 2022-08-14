@@ -62,13 +62,13 @@ class RateAppSheet : BaseBottomSheetDialog() {
 
     private fun rateApp(context: Context) {
         val playStoreIntent = Intent(
-                Intent.ACTION_VIEW,
-                viewModel.appUriProvider.playStoreAppUri
+            Intent.ACTION_VIEW,
+            viewModel.appUriProvider.playStoreAppUri
         )
         playStoreIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         val webIntent = Intent(
-                Intent.ACTION_VIEW,
-                viewModel.appUriProvider.playStoreWebUri
+            Intent.ACTION_VIEW,
+            viewModel.appUriProvider.playStoreWebUri
         )
         val resultIntent = when {
             playStoreIntent.resolveActivity(context.packageManager) != null -> playStoreIntent

@@ -6,7 +6,7 @@ import com.pechuro.bsuirschedule.domain.repository.ISessionRepository
 import javax.inject.Inject
 
 class SetAppTheme @Inject constructor(
-        private val sessionRepository: ISessionRepository
+    private val sessionRepository: ISessionRepository
 ) : BaseInteractor<Unit, SetAppTheme.Params>() {
 
     override suspend fun run(params: Params) {
@@ -14,6 +14,6 @@ class SetAppTheme @Inject constructor(
     }
 
     data class Params(
-            val theme: AppTheme
+        val theme: AppTheme
     )
 }

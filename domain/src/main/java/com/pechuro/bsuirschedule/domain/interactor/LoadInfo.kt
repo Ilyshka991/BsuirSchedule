@@ -12,20 +12,20 @@ import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 
 class LoadInfo @Inject constructor(
-        private val employeeRepository: IEmployeeRepository,
-        private val groupRepository: IGroupRepository,
-        private val specialityRepository: ISpecialityRepository,
-        private val buildingRepository: IBuildingRepository
+    private val employeeRepository: IEmployeeRepository,
+    private val groupRepository: IGroupRepository,
+    private val specialityRepository: ISpecialityRepository,
+    private val buildingRepository: IBuildingRepository
 ) : BaseInteractor<Unit, BaseInteractor.NoParams>() {
 
     override suspend fun run(params: NoParams) = withContext(coroutineContext) {
         specialityRepository.updateCache()
         listOf(
-                async { employeeRepository.updateCache() },
-                async { groupRepository.updateCache() },
-                async { buildingRepository.updateCache() }
+            async { employeeRepository.updateCache() },
+            async { groupRepository.updateCache() },
+            async { buildingRepository.updateCache() }
         )
-                .awaitAll()
-                .first()
+            .awaitAll()
+            .first()
     }
 }

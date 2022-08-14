@@ -32,7 +32,10 @@ abstract class BaseActivity : AppCompatActivity() {
         return initViewModel(clazz, this)
     }
 
-    protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>, owner: ViewModelStoreOwner): T {
+    protected fun <T : BaseViewModel> initViewModel(
+        clazz: KClass<T>,
+        owner: ViewModelStoreOwner
+    ): T {
         return ViewModelProvider(owner, viewModelFactory).get(clazz.java)
     }
 }

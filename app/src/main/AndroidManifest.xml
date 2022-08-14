@@ -7,6 +7,17 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="*" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="*" />
+        </intent>
+    </queries>
+
     <application
         android:name="com.pechuro.bsuirschedule.App"
         android:allowBackup="true"
@@ -19,6 +30,7 @@
 
         <activity
             android:name="com.pechuro.bsuirschedule.feature.MainActivity"
+            android:exported="true"
             android:theme="@style/AppTheme.SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,18 +39,22 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.pechuro.bsuirschedule.feature.appwidgetconfiguration.AppWidgetConfigurationActivity">
+        <activity
+            android:name="com.pechuro.bsuirschedule.feature.appwidgetconfiguration.AppWidgetConfigurationActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
 
         <provider
-            android:name="androidx.work.impl.WorkManagerInitializer"
-            android:authorities="${applicationId}.workmanager-init"
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
             tools:node="remove" />
 
-        <receiver android:name="com.pechuro.bsuirschedule.feature.appwidget.ScheduleWidgetProvider">
+        <receiver
+            android:name="com.pechuro.bsuirschedule.feature.appwidget.ScheduleWidgetProvider"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

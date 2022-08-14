@@ -11,7 +11,6 @@ apply from: '../dependencies.gradle'
 apply from: '../configuration.gradle'
 
 apply from: "../scripts/icons.gradle"
-apply from: "../scripts/signing.gradle"
 
 androidExtensions {
     experimental = true
@@ -32,10 +31,6 @@ android {
         buildConfigField "String", "FLURRY_API_KEY", "\"${configuration.flurryApiKey}\""
     }
 
-    signingConfigs {
-        release {}
-    }
-
     buildTypes {
         debug {
             applicationIdSuffix ".dev"
@@ -51,6 +46,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
+            def propsFile = rootProject.file('keystore.properties')
+            def props = new Properties()
+            props.load(new FileInputStream(propsFile))
+            signingConfigs {
+                release {
+                    storeFile = file(props['storeFile'])
+                    storePassword = props['storePassword']
+                    keyAlias = props['keyAlias']
+                    keyPassword = props['keyPassword']
+                }
+            }
+
             signingConfig signingConfigs.release
             minifyEnabled true
             debuggable false
@@ -95,7 +102,7 @@ dependencies {
 
     implementation flurryDependencies.values()
 
-    debugImplementation leekcanary
+    // debugImplementation leekcanary
 
     api project(path: ':data')
     implementation project(path: ':domain')

@@ -6,8 +6,9 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetNavigationHintDisplayState @Inject constructor(
-        private val sessionRepository: ISessionRepository
+    private val sessionRepository: ISessionRepository
 ) : BaseInteractor<Flow<Boolean>, BaseInteractor.NoParams>() {
 
-    override suspend fun run(params: NoParams): Flow<Boolean> = sessionRepository.getNavigationHintDisplayState()
+    override suspend fun run(params: NoParams): Flow<Boolean> =
+        sessionRepository.getNavigationHintDisplayState()
 }

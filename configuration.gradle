@@ -3,12 +3,12 @@ ext.configuration = [
 
         androidJUnitRunner: 'com.pechuro.bsuirschedule.runner.EspressoTestRunner',
 
-        compileSdkVersion : 30,
+        compileSdkVersion : 32,
         minSdkVersion     : 21,
-        targetSdkVersion  : 30,
+        targetSdkVersion  : 31,
 
-        versionCode       : 21,
-        versionName       : '3.3.1',
+        versionCode       : 22,
+        versionName       : '3.3.2',
 
         flurryApiKey      : ""
 ]

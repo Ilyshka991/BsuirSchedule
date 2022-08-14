@@ -21,6 +21,7 @@ import com.pechuro.bsuirschedule.domain.entity.getLocalDate
 import com.pechuro.bsuirschedule.domain.entity.getLocalTime
 import com.pechuro.bsuirschedule.domain.ext.parseOrDefault
 import com.pechuro.bsuirschedule.remote.dto.AuditoryDTO
+import com.pechuro.bsuirschedule.remote.dto.AuditoryDepartmentDTO
 import com.pechuro.bsuirschedule.remote.dto.AuditoryTypeDTO
 import com.pechuro.bsuirschedule.remote.dto.BuildingDTO
 import com.pechuro.bsuirschedule.remote.dto.DepartmentDTO
@@ -29,32 +30,41 @@ import com.pechuro.bsuirschedule.remote.dto.EmployeeDTO
 import com.pechuro.bsuirschedule.remote.dto.FacultyDTO
 import com.pechuro.bsuirschedule.remote.dto.GroupDTO
 import com.pechuro.bsuirschedule.remote.dto.LastUpdateDTO
-import com.pechuro.bsuirschedule.remote.dto.ScheduleItemDTO
+import com.pechuro.bsuirschedule.remote.dto.LessonDTO
 import com.pechuro.bsuirschedule.remote.dto.SpecialityDTO
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 internal fun BuildingDTO.toDomainEntity() = run {
     Building(
-            id = id,
-            name = name
+        id = id,
+        name = name
     )
 }
 
 internal fun AuditoryTypeDTO.toDomainEntity() = run {
     AuditoryType(
-            id = id,
-            name = name,
-            abbreviation = abbreviation
+        id = id,
+        name = name,
+        abbreviation = abbreviation
     )
 }
 
 internal fun DepartmentDTO.toDomainEntity() = run {
     Department(
-            id = id,
-            name = name,
-            abbreviation = abbreviation
+        id = id,
+        name = name,
+        abbreviation = abbreviation
+    )
+}
+
+internal fun AuditoryDepartmentDTO.toDomainEntity() = run {
+    Department(
+        id = id,
+        name = name,
+        abbreviation = abbreviation
     )
 }
 
@@ -63,61 +73,62 @@ internal fun AuditoryDTO.toDomainEntity() = run {
     val auditoryType = auditoryType.toDomainEntity()
     val department = department?.toDomainEntity()
     Auditory(
-            id = id,
-            name = name,
-            note = note ?: "",
-            capacity = capacity ?: -1,
-            building = building,
-            auditoryType = auditoryType,
-            department = department
+        id = id,
+        name = name,
+        note = note ?: "",
+        capacity = capacity ?: -1,
+        building = building,
+        auditoryType = auditoryType,
+        department = department
     )
 }
 
 internal fun EmployeeDTO.toDomainEntity(department: Department?) = run {
     Employee(
-            id = id,
-            firstName = firstName,
-            middleName = middleName ?: "",
-            lastName = lastName,
-            abbreviation = abbreviation,
-            photoLink = photoLink ?: "",
-            rank = rank ?: "",
-            department = department
+        id = id,
+        urlId = urlId,
+        firstName = firstName,
+        middleName = middleName ?: "",
+        lastName = lastName,
+        abbreviation = abbreviation,
+        photoLink = photoLink ?: "",
+        rank = rank ?: "",
+        department = department
     )
 }
 
 internal fun GroupDTO.toDomainEntity(speciality: Speciality) = run {
     Group(
-            id = id,
-            number = number,
-            course = course ?: -1,
-            speciality = speciality
+        id = id,
+        number = number,
+        course = course ?: -1,
+        speciality = speciality
     )
 }
 
 internal fun EducationFormDTO.toDomainEntity() = run {
     EducationForm(
-            id = id,
-            name = name
+        id = id,
+        name = name
     )
 }
 
 internal fun FacultyDTO.toDomainEntity() = run {
     Faculty(
-            id = id,
-            name = name ?: "",
-            abbreviation = abbreviation ?: ""
+        id = id,
+        name = name ?: "",
+        abbreviation = abbreviation ?: ""
     )
 }
 
 internal fun SpecialityDTO.toDomainEntity(faculty: Faculty?) = run {
     Speciality(
-            id = id,
-            name = name,
-            abbreviation = abbreviation,
-            faculty = faculty,
-            educationForm = educationForm.toDomainEntity(),
-            code = code
+        id = id,
+        name = name,
+        abbreviation = abbreviation,
+        faculty = faculty,
+        educationForm = educationForm.toDomainEntity(),
+        code = code
     )
 }
 
@@ -125,66 +136,23 @@ internal fun LastUpdateDTO.toDomainEntity() = run {
     dateFormatter.parseOrDefault(lastUpdateDate, Date(0))
 }
 
-internal fun List<ScheduleItemDTO>.toGroupLessons(
-        auditories: List<Auditory>,
-        departments: List<Department>
+internal fun Map<String, List<LessonDTO>>.toGroupLessons(
+    auditories: List<Auditory>,
+    employees: List<Employee>
 ): List<Lesson.GroupLesson> {
     val resultList = mutableListOf<Lesson.GroupLesson>()
     forEach { scheduleItem ->
-        scheduleItem.classes.map { lesson ->
+        val weekDay = scheduleItem.key
+        scheduleItem.value.map { lesson ->
             val lessonAuditories = lesson.auditories?.let { lessonAuditories ->
                 auditories.filter { "${it.name}-${it.building.name}" in lessonAuditories }
             }
-            val lessonEmployees = lesson.employees?.map { employeeDto ->
-                val department = departments.find {
-                    it.abbreviation == employeeDto.departmentAbbreviation.firstOrNull()
-                }
-                employeeDto.toDomainEntity(department)
+            val lessonEmployees = lesson.employees?.map { it.id }?.let { ids ->
+                employees.filter { it.id in ids }
             }
             getResultWeekNumbers(lesson.weekNumber).forEach { weekNumber ->
-                val lessonType = lesson.lessonType?.toUpperCase(Locale.getDefault()) ?: ""
+                val lessonType = lesson.lessonType?.uppercase(Locale.getDefault()) ?: ""
                 val mappedScheduleItem = Lesson.GroupLesson(
-                        //This ID will be generated later
-                        id = 0,
-                        subject = lesson.subject ?: "",
-                        subgroupNumber = SubgroupNumber.getForValue(lesson.subgroupNumber),
-                        lessonType = lesson.lessonType ?: "",
-                        auditories = lessonAuditories ?: emptyList(),
-                        note = lesson.note ?: "",
-                        startTime = lesson.startTime?.run { timeFormatter.parse(this) }?.getLocalTime()
-                                ?: LocalTime.of(0, 0),
-                        endTime = lesson.endTime?.run { timeFormatter.parse(this) }?.getLocalTime()
-                                ?: LocalTime.of(0, 0),
-                        employees = lessonEmployees ?: emptyList(),
-                        weekDay = getWeekDayFor(scheduleItem.weekDay),
-                        weekNumber = weekNumber,
-                        priority = LessonPriority.getDefaultForLessonType(lessonType),
-                        isAddedByUser = false
-                )
-                resultList.add(mappedScheduleItem)
-            }
-        }
-    }
-    return resultList
-}
-
-internal fun List<ScheduleItemDTO>.toGroupExams(
-        auditories: List<Auditory>,
-        departments: List<Department>
-): List<Exam.GroupExam> {
-    val resultList = mutableListOf<Exam.GroupExam>()
-    forEach { scheduleItem ->
-        scheduleItem.classes.map { lesson ->
-            val lessonAuditories = lesson.auditories?.let { lessonAuditories ->
-                auditories.filter { "${it.name}-${it.building.name}" in lessonAuditories }
-            }
-            val lessonEmployees = lesson.employees?.map { employeeDto ->
-                val department = departments.find {
-                    it.abbreviation == employeeDto.departmentAbbreviation.firstOrNull()
-                }
-                employeeDto.toDomainEntity(department)
-            }
-            val mappedScheduleItem = Exam.GroupExam(
                     //This ID will be generated later
                     id = 0,
                     subject = lesson.subject ?: "",
@@ -193,51 +161,83 @@ internal fun List<ScheduleItemDTO>.toGroupExams(
                     auditories = lessonAuditories ?: emptyList(),
                     note = lesson.note ?: "",
                     startTime = lesson.startTime?.run { timeFormatter.parse(this) }?.getLocalTime()
-                            ?: LocalTime.of(0, 0),
+                        ?: LocalTime.of(0, 0),
                     endTime = lesson.endTime?.run { timeFormatter.parse(this) }?.getLocalTime()
-                            ?: LocalTime.of(0, 0),
+                        ?: LocalTime.of(0, 0),
                     employees = lessonEmployees ?: emptyList(),
-                    date = dateFormatter.parseOrDefault(scheduleItem.weekDay, Date(0)).getLocalDate(),
+                    weekDay = getWeekDayFor(weekDay),
+                    weekNumber = weekNumber,
+                    priority = LessonPriority.getDefaultForLessonType(lessonType),
                     isAddedByUser = false
-            )
-            resultList.add(mappedScheduleItem)
+                )
+                resultList.add(mappedScheduleItem)
+            }
         }
     }
     return resultList
 }
 
-internal fun List<ScheduleItemDTO>.toEmployeeLessons(
-        groups: List<Group>,
-        auditories: List<Auditory>
+internal fun List<LessonDTO>.toGroupExams(
+    auditories: List<Auditory>,
+    employees: List<Employee>
+): List<Exam.GroupExam> = map { lesson ->
+    val lessonAuditories = lesson.auditories?.let { lessonAuditories ->
+        auditories.filter { "${it.name}-${it.building.name}" in lessonAuditories }
+    }
+    val lessonEmployees = lesson.employees?.map { it.id }?.let { ids ->
+        employees.filter { it.id in ids }
+    }
+    Exam.GroupExam(
+        //This ID will be generated later
+        id = 0,
+        subject = lesson.subject ?: "",
+        subgroupNumber = SubgroupNumber.getForValue(lesson.subgroupNumber),
+        lessonType = lesson.lessonType ?: "",
+        auditories = lessonAuditories ?: emptyList(),
+        note = lesson.note ?: "",
+        startTime = lesson.startTime?.run { timeFormatter.parse(this) }?.getLocalTime()
+            ?: LocalTime.of(0, 0),
+        endTime = lesson.endTime?.run { timeFormatter.parse(this) }?.getLocalTime()
+            ?: LocalTime.of(0, 0),
+        employees = lessonEmployees ?: emptyList(),
+        date = dateFormatter.parseOrDefault(lesson.date ?: "", Date(0)).getLocalDate(),
+        isAddedByUser = false
+    )
+}
+
+internal fun Map<String, List<LessonDTO>>.toEmployeeLessons(
+    groups: List<Group>,
+    auditories: List<Auditory>
 ): List<Lesson.EmployeeLesson> {
     val resultList = mutableListOf<Lesson.EmployeeLesson>()
     forEach { scheduleItem ->
-        scheduleItem.classes.map { lesson ->
+        val weekDay = scheduleItem.key
+        scheduleItem.value.map { lesson ->
             val lessonAuditories = lesson.auditories?.let { lessonAuditories ->
                 auditories.filter { "${it.name}-${it.building.name}" in lessonAuditories }
             }
-            val lessonGroups = lesson.studentGroups?.let { lessonGroups ->
+            val lessonGroups = lesson.studentGroups?.map { it.number }?.let { lessonGroups ->
                 groups.filter { it.number in lessonGroups }
             }
             getResultWeekNumbers(lesson.weekNumber).forEach { weekNumber ->
-                val lessonType = lesson.lessonType?.toUpperCase(Locale.getDefault()) ?: ""
+                val lessonType = lesson.lessonType?.uppercase(Locale.getDefault()) ?: ""
                 val mappedScheduleItem = Lesson.EmployeeLesson(
-                        //This ID will be generated later
-                        id = 0,
-                        subject = lesson.subject ?: "",
-                        weekNumber = weekNumber,
-                        subgroupNumber = SubgroupNumber.getForValue(lesson.subgroupNumber),
-                        lessonType = lessonType,
-                        auditories = lessonAuditories ?: emptyList(),
-                        note = lesson.note ?: "",
-                        startTime = lesson.startTime?.run { timeFormatter.parse(this) }?.getLocalTime()
-                                ?: LocalTime.of(0, 0),
-                        endTime = lesson.endTime?.run { timeFormatter.parse(this) }?.getLocalTime()
-                                ?: LocalTime.of(0, 0),
-                        weekDay = getWeekDayFor(scheduleItem.weekDay),
-                        studentGroups = lessonGroups ?: emptyList(),
-                        priority = LessonPriority.getDefaultForLessonType(lessonType),
-                        isAddedByUser = false
+                    //This ID will be generated later
+                    id = 0,
+                    subject = lesson.subject ?: "",
+                    weekNumber = weekNumber,
+                    subgroupNumber = SubgroupNumber.getForValue(lesson.subgroupNumber),
+                    lessonType = lessonType,
+                    auditories = lessonAuditories ?: emptyList(),
+                    note = lesson.note ?: "",
+                    startTime = lesson.startTime?.run { timeFormatter.parse(this) }?.getLocalTime()
+                        ?: LocalTime.of(0, 0),
+                    endTime = lesson.endTime?.run { timeFormatter.parse(this) }?.getLocalTime()
+                        ?: LocalTime.of(0, 0),
+                    weekDay = getWeekDayFor(weekDay),
+                    studentGroups = lessonGroups ?: emptyList(),
+                    priority = LessonPriority.getDefaultForLessonType(lessonType),
+                    isAddedByUser = false
                 )
                 resultList.add(mappedScheduleItem)
             }
@@ -246,44 +246,37 @@ internal fun List<ScheduleItemDTO>.toEmployeeLessons(
     return resultList
 }
 
-internal fun List<ScheduleItemDTO>.toEmployeeExams(
-        groups: List<Group>,
-        auditories: List<Auditory>
-): List<Exam.EmployeeExam> {
-    val resultList = mutableListOf<Exam.EmployeeExam>()
-    forEach { scheduleItem ->
-        scheduleItem.classes.map { lesson ->
-            val lessonAuditories = lesson.auditories?.let { lessonAuditories ->
-                auditories.filter { "${it.name}-${it.building.name}" in lessonAuditories }
-            }
-            val lessonGroups = lesson.studentGroups?.let { lessonGroups ->
-                groups.filter { it.number in lessonGroups }
-            }
-            val mappedScheduleItem = Exam.EmployeeExam(
-                    //This ID will be generated later
-                    id = 0,
-                    subject = lesson.subject ?: "",
-                    subgroupNumber = SubgroupNumber.getForValue(lesson.subgroupNumber),
-                    lessonType = lesson.lessonType ?: "",
-                    auditories = lessonAuditories ?: emptyList(),
-                    note = lesson.note ?: "",
-                    startTime = lesson.startTime?.run { timeFormatter.parse(this) }?.getLocalTime()
-                            ?: LocalTime.of(0, 0),
-                    endTime = lesson.endTime?.run { timeFormatter.parse(this) }?.getLocalTime()
-                            ?: LocalTime.of(0, 0),
-                    studentGroups = lessonGroups ?: emptyList(),
-                    date = dateFormatter.parseOrDefault(scheduleItem.weekDay, Date(0)).getLocalDate(),
-                    isAddedByUser = false
-            )
-            resultList.add(mappedScheduleItem)
-        }
+internal fun List<LessonDTO>.toEmployeeExams(
+    groups: List<Group>,
+    auditories: List<Auditory>
+): List<Exam.EmployeeExam> = map { lesson ->
+    val lessonAuditories = lesson.auditories?.let { lessonAuditories ->
+        auditories.filter { "${it.name}-${it.building.name}" in lessonAuditories }
     }
-    return resultList
+    val lessonGroups = lesson.studentGroups?.map { it.number }?.let { lessonGroups ->
+        groups.filter { it.number in lessonGroups }
+    }
+    Exam.EmployeeExam(
+        //This ID will be generated later
+        id = 0,
+        subject = lesson.subject ?: "",
+        subgroupNumber = SubgroupNumber.getForValue(lesson.subgroupNumber),
+        lessonType = lesson.lessonType ?: "",
+        auditories = lessonAuditories ?: emptyList(),
+        note = lesson.note ?: "",
+        startTime = lesson.startTime?.run { timeFormatter.parse(this) }?.getLocalTime()
+            ?: LocalTime.of(0, 0),
+        endTime = lesson.endTime?.run { timeFormatter.parse(this) }?.getLocalTime()
+            ?: LocalTime.of(0, 0),
+        studentGroups = lessonGroups ?: emptyList(),
+        date = dateFormatter.parseOrDefault(lesson.date ?: "", Date(0)).getLocalDate(),
+        isAddedByUser = false
+    )
 }
 
 
 @SuppressLint("DefaultLocale")
-private fun getWeekDayFor(value: String) = when (value.toLowerCase()) {
+private fun getWeekDayFor(value: String) = when (value.lowercase(Locale.getDefault())) {
     "понедельник" -> WeekDay.MONDAY
     "вторник" -> WeekDay.TUESDAY
     "среда" -> WeekDay.WEDNESDAY

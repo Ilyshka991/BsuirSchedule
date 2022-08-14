@@ -12,7 +12,8 @@ object RecyclerViewAction {
 
     fun scrollToPosition(position: Int) = object : ViewAction {
 
-        override fun getConstraints() = allOf(isAssignableFrom(RecyclerView::class.java), isDisplayed())
+        override fun getConstraints() =
+            allOf(isAssignableFrom(RecyclerView::class.java), isDisplayed())
 
         override fun getDescription() = "Scroll RecyclerView to position: $position"
 

@@ -6,7 +6,7 @@ import com.pechuro.bsuirschedule.domain.interactor.DeleteScheduleItems
 import javax.inject.Inject
 
 class ScheduleItemOptionsViewModel @Inject constructor(
-        private val deleteScheduleItems: DeleteScheduleItems
+    private val deleteScheduleItems: DeleteScheduleItems
 ) : BaseViewModel() {
 
     fun deleteScheduleItem(scheduleItems: List<ScheduleItem>) {

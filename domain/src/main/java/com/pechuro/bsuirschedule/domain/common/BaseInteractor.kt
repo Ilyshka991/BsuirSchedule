@@ -19,15 +19,15 @@ abstract class BaseInteractor<out Type, in Params> {
     }
 
     suspend fun executeAsync(params: Params, context: CoroutineContext): Deferred<Result<Type>> =
-            withContext(context) {
-                async {
-                    runCatching {
-                        run(params)
-                    }.onFailure {
-                        Logger.e(it)
-                    }
+        withContext(context) {
+            async {
+                runCatching {
+                    run(params)
+                }.onFailure {
+                    Logger.e(it)
                 }
             }
+        }
 
     object NoParams
 }

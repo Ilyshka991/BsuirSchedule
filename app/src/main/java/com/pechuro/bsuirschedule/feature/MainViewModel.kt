@@ -7,7 +7,7 @@ import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
-        private val setLastOpenedSchedule: SetLastOpenedSchedule
+    private val setLastOpenedSchedule: SetLastOpenedSchedule
 ) : BaseViewModel() {
 
     fun setLastOpenedSchedule(schedule: Schedule) {

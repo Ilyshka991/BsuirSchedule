@@ -4,11 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class AuditoryTypeDTO(
+data class LessonEmployeeDTO(
     @Json(name = "id")
-    val id: Long,
-    @Json(name = "name")
-    val name: String,
-    @Json(name = "abbrev")
-    val abbreviation: String
+    val id: Long
 )

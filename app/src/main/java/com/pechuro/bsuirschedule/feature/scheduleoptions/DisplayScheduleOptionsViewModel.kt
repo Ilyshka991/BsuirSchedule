@@ -16,10 +16,10 @@ import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
 class DisplayScheduleOptionsViewModel @Inject constructor(
-        private val getScheduleDisplayType: GetScheduleDisplayType,
-        private val setScheduleDisplayType: SetScheduleDisplayType,
-        private val getScheduleDisplaySubgroupNumber: GetScheduleDisplaySubgroupNumber,
-        private val setScheduleDisplaySubgroupNumber: SetScheduleDisplaySubgroupNumber
+    private val getScheduleDisplayType: GetScheduleDisplayType,
+    private val setScheduleDisplayType: SetScheduleDisplayType,
+    private val getScheduleDisplaySubgroupNumber: GetScheduleDisplaySubgroupNumber,
+    private val setScheduleDisplaySubgroupNumber: SetScheduleDisplaySubgroupNumber
 ) : BaseViewModel() {
 
     val displayTypeData = flowLiveData {
@@ -43,7 +43,11 @@ class DisplayScheduleOptionsViewModel @Inject constructor(
             val currentNumber = subgroupNumberData.value ?: SubgroupNumber.ALL
             val nextNumber = currentNumber.getNextNumber()
             AppAnalytics.report(AppAnalyticsEvent.DisplaySchedule.SubgroupChanged(nextNumber))
-            setScheduleDisplaySubgroupNumber.execute(SetScheduleDisplaySubgroupNumber.Params(nextNumber))
+            setScheduleDisplaySubgroupNumber.execute(
+                SetScheduleDisplaySubgroupNumber.Params(
+                    nextNumber
+                )
+            )
         }
     }
 }

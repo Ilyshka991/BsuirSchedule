@@ -12,9 +12,9 @@ import com.pechuro.bsuirschedule.domain.entity.Group
 import kotlinx.android.synthetic.main.view_staff_details.view.*
 
 class StaffDetailsView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     private val pagerAdapter = StaffDetailsAdapter()
@@ -23,7 +23,8 @@ class StaffDetailsView @JvmOverloads constructor(
         inflate(context, R.layout.view_staff_details, this)
         orientation = VERTICAL
         staffDetailsViewPager.adapter = pagerAdapter
-        staffDetailsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        staffDetailsViewPager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 pagerAdapter.notifyDataSetChanged()
             }

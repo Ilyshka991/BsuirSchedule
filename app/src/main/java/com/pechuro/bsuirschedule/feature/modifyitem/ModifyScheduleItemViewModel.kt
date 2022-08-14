@@ -11,24 +11,24 @@ import com.pechuro.bsuirschedule.domain.interactor.DeleteScheduleItems
 import javax.inject.Inject
 
 class ModifyScheduleItemViewModel @Inject constructor(
-        private val addScheduleItems: AddScheduleItems,
-        private val deleteScheduleItems: DeleteScheduleItems
+    private val addScheduleItems: AddScheduleItems,
+    private val deleteScheduleItems: DeleteScheduleItems
 ) : BaseViewModel() {
 
     lateinit var dataProvider: ModifyScheduleItemDataProvider
     val state = MutableLiveData<State>(State.Idle)
 
     fun init(
-            schedule: Schedule,
-            items: List<ScheduleItem>,
-            lessonTypes: List<String>
+        schedule: Schedule,
+        items: List<ScheduleItem>,
+        lessonTypes: List<String>
     ) {
         if (this::dataProvider.isInitialized) return
         AppAnalytics.report(AppAnalyticsEvent.Edit.Opened(items.firstOrNull()))
         dataProvider = ModifyScheduleItemDataProvider(
-                lessonTypes = lessonTypes,
-                initialSchedule = schedule,
-                initialItems = items
+            lessonTypes = lessonTypes,
+            initialSchedule = schedule,
+            initialItems = items
         )
     }
 
@@ -36,13 +36,17 @@ class ModifyScheduleItemViewModel @Inject constructor(
         AppAnalytics.report(AppAnalyticsEvent.Edit.Saved)
         launchCoroutine {
             state.value = State.Saving
-            deleteScheduleItems.execute(DeleteScheduleItems.Params(
+            deleteScheduleItems.execute(
+                DeleteScheduleItems.Params(
                     scheduleItems = dataProvider.initialItems.toList()
-            ))
-            addScheduleItems.execute(AddScheduleItems.Params(
+                )
+            )
+            addScheduleItems.execute(
+                AddScheduleItems.Params(
                     schedule = dataProvider.initialSchedule,
                     scheduleItems = dataProvider.getResultScheduleItems()
-            ))
+                )
+            )
             state.value = State.Complete
         }
     }

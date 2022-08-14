@@ -16,7 +16,6 @@ import com.pechuro.bsuirschedule.ext.addTextListener
 import com.pechuro.bsuirschedule.ext.clearAdapter
 import com.pechuro.bsuirschedule.ext.hideKeyboard
 import com.pechuro.bsuirschedule.ext.nonNull
-import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
 import com.pechuro.bsuirschedule.ext.showKeyboard
@@ -37,9 +36,9 @@ class AddScheduleFragment : BaseFragment() {
         private const val ARG_SCHEDULE_TYPE = "ARG_SCHEDULE_TYPE"
 
         fun newInstance(scheduleType: FragmentType) =
-                AddScheduleFragment().apply {
-                    arguments = bundleOf(ARG_SCHEDULE_TYPE to scheduleType)
-                }
+            AddScheduleFragment().apply {
+                arguments = bundleOf(ARG_SCHEDULE_TYPE to scheduleType)
+            }
     }
 
     override val layoutId: Int = R.layout.fragment_add_schedule
@@ -150,12 +149,9 @@ class AddScheduleFragment : BaseFragment() {
             if (addScheduleChipExams.isChecked) yield(ScheduleType.EXAMS)
         }.toList()
         when (info) {
-            is GroupInfo -> {
-                addScheduleViewModel.loadSchedule(info.group, scheduleTypes)
-            }
-            is EmployeeInfo -> {
-                addScheduleViewModel.loadSchedule(info.employee, scheduleTypes)
-            }
+            is GroupInfo -> addScheduleViewModel.loadSchedule(info.group, scheduleTypes)
+            is EmployeeInfo -> addScheduleViewModel.loadSchedule(info.employee, scheduleTypes)
+            else -> Unit
         }
     }
 
@@ -166,24 +162,25 @@ class AddScheduleFragment : BaseFragment() {
                 addScheduleProgressBar.setVisibleWithAlpha(false)
                 addScheduleErrorParentView.setVisibleWithAlpha(false)
                 addScheduleParamsParentView.setVisibleWithAlpha(true)
-                        .doOnEnd {
-                            context?.showKeyboard(addScheduleNameInput)
-                        }
+                    .doOnEnd {
+                        context?.showKeyboard(addScheduleNameInput)
+                    }
                 addScheduleNameInput.requestFocus()
             }
             is State.Loading -> {
                 context?.hideKeyboard(addScheduleNameInput.windowToken)
                 addScheduleErrorParentView.setVisibleWithAlpha(false)
                 addScheduleParamsParentView.setVisibleWithAlpha(false)
-                        .doOnEnd {
-                            addScheduleProgressBar.setVisibleWithAlpha(true)
-                        }
+                    .doOnEnd {
+                        addScheduleProgressBar.setVisibleWithAlpha(true)
+                    }
             }
             is State.Error -> {
                 addScheduleProgressBar.setVisibleWithAlpha(false)
                 addScheduleErrorParentView.setVisibleWithAlpha(true)
                 addScheduleParamsParentView.setVisibleWithAlpha(false)
             }
+            else -> Unit
         }
     }
 }

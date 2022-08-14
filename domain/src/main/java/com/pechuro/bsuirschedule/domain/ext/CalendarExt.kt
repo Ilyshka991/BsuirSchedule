@@ -1,7 +1,7 @@
 package com.pechuro.bsuirschedule.domain.ext
 
 import com.pechuro.bsuirschedule.domain.entity.WeekDay
-import java.util.*
+import java.util.Calendar
 
 fun Calendar.addDays(days: Int) = apply {
     add(Calendar.DATE, days)

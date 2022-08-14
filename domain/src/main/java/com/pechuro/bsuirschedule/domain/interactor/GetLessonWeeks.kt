@@ -7,7 +7,7 @@ import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
 import javax.inject.Inject
 
 class GetLessonWeeks @Inject constructor(
-        private val scheduleRepository: IScheduleRepository
+    private val scheduleRepository: IScheduleRepository
 ) : BaseInteractor<List<WeekNumber>, GetLessonWeeks.Params>() {
 
     override suspend fun run(params: Params): List<WeekNumber> {
@@ -15,6 +15,6 @@ class GetLessonWeeks @Inject constructor(
     }
 
     data class Params(
-            val lesson: Lesson
+        val lesson: Lesson
     )
 }

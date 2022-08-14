@@ -5,12 +5,13 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Employee(
-        val id: Long,
-        val firstName: String,
-        val lastName: String,
-        val middleName: String,
-        val abbreviation: String,
-        val photoLink: String,
-        val rank: String,
-        val department: Department?
+    val id: Long,
+    val urlId: String,
+    val firstName: String,
+    val lastName: String,
+    val middleName: String,
+    val abbreviation: String,
+    val photoLink: String,
+    val rank: String,
+    val department: Department?
 ) : Parcelable

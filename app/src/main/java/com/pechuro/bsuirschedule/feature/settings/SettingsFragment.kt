@@ -13,13 +13,12 @@ import com.pechuro.bsuirschedule.domain.entity.AppTheme
 import com.pechuro.bsuirschedule.ext.formattedStringRes
 import com.pechuro.bsuirschedule.ext.getCallbackOrNull
 import com.pechuro.bsuirschedule.ext.nonNull
-import com.pechuro.bsuirschedule.ext.observe
 import com.pechuro.bsuirschedule.ext.setSafeClickListener
 import com.pechuro.bsuirschedule.ext.setVisibleWithAlpha
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialog
 import com.pechuro.bsuirschedule.feature.optiondialog.OptionDialogButtonData
 import kotlinx.android.synthetic.main.fragment_settings.*
-import java.util.*
+import java.util.Locale
 
 class SettingsFragment : BaseFragment() {
 
@@ -69,7 +68,8 @@ class SettingsFragment : BaseFragment() {
                 activity?.onBackPressed()
             }
         }
-        val currentTheme = getString(viewModel.getCurrentAppTheme().formattedStringRes).toLowerCase(Locale.getDefault())
+        val currentTheme =
+            getString(viewModel.getCurrentAppTheme().formattedStringRes).lowercase(Locale.getDefault())
         settingsThemeButton.text = getString(R.string.settings_action_change_theme, currentTheme)
         settingsVersionText.setMessage(BuildConfig.VERSION_NAME)
     }
@@ -130,14 +130,14 @@ class SettingsFragment : BaseFragment() {
 
     private fun rateApp(context: Context) {
         val playStoreIntent = Intent(
-                Intent.ACTION_VIEW,
-                viewModel.appUriProvider.playStoreAppUri
+            Intent.ACTION_VIEW,
+            viewModel.appUriProvider.playStoreAppUri
         )
         playStoreIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
 
         val webIntent = Intent(
-                Intent.ACTION_VIEW,
-                viewModel.appUriProvider.playStoreWebUri
+            Intent.ACTION_VIEW,
+            viewModel.appUriProvider.playStoreWebUri
         )
 
         val resultIntent = when {
@@ -176,8 +176,8 @@ class SettingsFragment : BaseFragment() {
         val selectedTheme = viewModel.getCurrentAppTheme()
         val options = availableThemes.map { theme ->
             OptionDialogButtonData(
-                    text = getString(theme.formattedStringRes),
-                    selected = theme == selectedTheme
+                text = getString(theme.formattedStringRes),
+                selected = theme == selectedTheme
             )
         }
         val listener = object : OptionDialog.OptionButtonClickListener {
@@ -191,9 +191,9 @@ class SettingsFragment : BaseFragment() {
         }
         val title = getString(R.string.settings_title_select_theme)
         OptionDialog.Builder()
-                .setTitle(title)
-                .setActions(options, listener)
-                .build()
-                .show(childFragmentManager, OptionDialog.TAG)
+            .setTitle(title)
+            .setActions(options, listener)
+            .build()
+            .show(childFragmentManager, OptionDialog.TAG)
     }
 }

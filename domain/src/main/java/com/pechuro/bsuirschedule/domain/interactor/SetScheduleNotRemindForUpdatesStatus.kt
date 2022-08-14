@@ -6,16 +6,16 @@ import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
 import javax.inject.Inject
 
 class SetScheduleNotRemindForUpdatesStatus @Inject constructor(
-        private val scheduleRepository: IScheduleRepository
+    private val scheduleRepository: IScheduleRepository
 ) : BaseInteractor<Unit, SetScheduleNotRemindForUpdatesStatus.Params>() {
 
     override suspend fun run(params: Params) = scheduleRepository.setNotRemindForUpdates(
-            params.schedule,
-            params.notRemind
+        params.schedule,
+        params.notRemind
     )
 
     data class Params(
-            val schedule: Schedule,
-            val notRemind: Boolean
+        val schedule: Schedule,
+        val notRemind: Boolean
     )
 }

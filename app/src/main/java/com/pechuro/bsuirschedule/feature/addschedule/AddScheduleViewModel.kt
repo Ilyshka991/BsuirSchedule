@@ -15,8 +15,8 @@ import com.pechuro.bsuirschedule.domain.interactor.LoadGroupSchedule
 import javax.inject.Inject
 
 class AddScheduleViewModel @Inject constructor(
-        private val loadEmployeeSchedule: LoadEmployeeSchedule,
-        private val loadGroupSchedule: LoadGroupSchedule
+    private val loadEmployeeSchedule: LoadEmployeeSchedule,
+    private val loadGroupSchedule: LoadGroupSchedule
 ) : BaseViewModel() {
 
     val state = MutableLiveData<State>(State.Idle)
@@ -27,18 +27,20 @@ class AddScheduleViewModel @Inject constructor(
         state.value = State.Loading
         launchCoroutine {
             loadGroupSchedule.execute(LoadGroupSchedule.Params(group, resultTypes)).fold(
-                    onSuccess = {
-                        it.firstOrNull()?.let { schedule ->
-                            AppAnalytics.report(AppAnalyticsEvent.AddSchedule.ScheduleLoaded(
-                                    schedule = schedule,
-                                    types = resultTypes
-                            ))
-                        }
-                        state.value = State.Complete(it)
-                    },
-                    onFailure = {
-                        state.value = State.Error(it)
+                onSuccess = {
+                    it.firstOrNull()?.let { schedule ->
+                        AppAnalytics.report(
+                            AppAnalyticsEvent.AddSchedule.ScheduleLoaded(
+                                schedule = schedule,
+                                types = resultTypes
+                            )
+                        )
                     }
+                    state.value = State.Complete(it)
+                },
+                onFailure = {
+                    state.value = State.Error(it)
+                }
             )
         }
     }
@@ -48,18 +50,20 @@ class AddScheduleViewModel @Inject constructor(
         state.value = State.Loading
         launchCoroutine {
             loadEmployeeSchedule.execute(LoadEmployeeSchedule.Params(employee, types)).fold(
-                    onSuccess = {
-                        it.firstOrNull()?.let { schedule ->
-                            AppAnalytics.report(AppAnalyticsEvent.AddSchedule.ScheduleLoaded(
-                                    schedule = schedule,
-                                    types = types
-                            ))
-                        }
-                        state.value = State.Complete(it)
-                    },
-                    onFailure = {
-                        state.value = State.Error(it)
+                onSuccess = {
+                    it.firstOrNull()?.let { schedule ->
+                        AppAnalytics.report(
+                            AppAnalyticsEvent.AddSchedule.ScheduleLoaded(
+                                schedule = schedule,
+                                types = types
+                            )
+                        )
                     }
+                    state.value = State.Complete(it)
+                },
+                onFailure = {
+                    state.value = State.Error(it)
+                }
             )
         }
     }

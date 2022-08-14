@@ -10,8 +10,8 @@ enum class ClickInterval(val milliseconds: Long) {
 }
 
 class OneFirePerIntervalClickListener(
-        private var interval: Long,
-        private val onSafeCLick: (View) -> Unit
+    private var interval: Long,
+    private val onSafeCLick: (View) -> Unit
 ) : View.OnClickListener {
 
     private var lastTimeClicked: Long = 0

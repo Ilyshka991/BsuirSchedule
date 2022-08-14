@@ -7,8 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetScheduleDisplaySubgroupNumber @Inject constructor(
-        private val sessionRepository: ISessionRepository
+    private val sessionRepository: ISessionRepository
 ) : BaseInteractor<Flow<SubgroupNumber>, BaseInteractor.NoParams>() {
 
-    override suspend fun run(params: NoParams) = sessionRepository.getScheduleDisplaySubgroupNumber()
+    override suspend fun run(params: NoParams) =
+        sessionRepository.getScheduleDisplaySubgroupNumber()
 }

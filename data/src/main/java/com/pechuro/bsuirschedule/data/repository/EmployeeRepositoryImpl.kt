@@ -18,9 +18,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 class EmployeeRepositoryImpl(
-        private val dao: EmployeeDao,
-        private val api: StaffApi,
-        private val specialityRepository: ISpecialityRepository
+    private val dao: EmployeeDao,
+    private val api: StaffApi,
+    private val specialityRepository: ISpecialityRepository
 ) : BaseRepository(), IEmployeeRepository {
 
     override suspend fun getAll(): Flow<List<Employee>> {
@@ -32,7 +32,8 @@ class EmployeeRepositoryImpl(
 
     override suspend fun getById(id: Long): Employee {
         val employeeCached = performDaoCall { dao.getById(id) }
-        val department = employeeCached.departmentId?.let { specialityRepository.getDepartmentById(it) }
+        val department =
+            employeeCached.departmentId?.let { specialityRepository.getDepartmentById(it) }
         return employeeCached.toDomainEntity(department)
     }
 
@@ -46,30 +47,31 @@ class EmployeeRepositoryImpl(
     private suspend fun loadEmployeesFromApi(): List<Employee> {
         val allDepartments = specialityRepository.getAllDepartments().first()
         return performApiCall { api.getAllEmployees() }
-                .map { dto ->
-                    val department = allDepartments.find {
-                        it.abbreviation == dto.departmentAbbreviation.firstOrNull()
-                    }
-                    dto.toDomainEntity(
-                            department = department
-                    )
+            .map { dto ->
+                val department = allDepartments.find {
+                    it.abbreviation == dto.departmentAbbreviation.firstOrNull()
                 }
+                dto.toDomainEntity(
+                    department = department
+                )
+            }
     }
 
     private suspend fun getEmployeesFromDao() = dao.getAll()
-            .map { cachedList ->
-                withContext(Dispatchers.IO) {
-                    val allDepartments = specialityRepository.getAllDepartments().first()
-                    cachedList.map { employeeCached ->
-                        async {
-                            val department = allDepartments.find { it.id == employeeCached.departmentId }
-                            employeeCached.toDomainEntity(department)
-                        }
+        .map { cachedList ->
+            withContext(Dispatchers.IO) {
+                val allDepartments = specialityRepository.getAllDepartments().first()
+                cachedList.map { employeeCached ->
+                    async {
+                        val department =
+                            allDepartments.find { it.id == employeeCached.departmentId }
+                        employeeCached.toDomainEntity(department)
                     }
                 }
-                        .awaitAll()
             }
-            .flowOn(Dispatchers.IO)
+                .awaitAll()
+        }
+        .flowOn(Dispatchers.IO)
 
     private suspend fun storeEmployees(employees: List<Employee>) {
         employees.map {

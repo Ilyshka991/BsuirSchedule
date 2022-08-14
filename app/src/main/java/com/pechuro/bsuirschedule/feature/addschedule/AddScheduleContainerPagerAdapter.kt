@@ -7,10 +7,10 @@ import com.bsuir.pechuro.bsuirschedule.R
 import com.pechuro.bsuirschedule.common.base.BaseFragment
 
 class AddScheduleContainerPagerAdapter(
-        fragmentManager: FragmentManager
+    fragmentManager: FragmentManager
 ) : FragmentStatePagerAdapter(
-        fragmentManager,
-        BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+    fragmentManager,
+    BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
 ) {
 
     enum class FragmentType(@StringRes val titleRes: Int) {

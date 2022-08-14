@@ -12,19 +12,19 @@ import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 
 class CheckInfo @Inject constructor(
-        private val employeeRepository: IEmployeeRepository,
-        private val groupRepository: IGroupRepository,
-        private val specialityRepository: ISpecialityRepository,
-        private val buildingRepository: IBuildingRepository
+    private val employeeRepository: IEmployeeRepository,
+    private val groupRepository: IGroupRepository,
+    private val specialityRepository: ISpecialityRepository,
+    private val buildingRepository: IBuildingRepository
 ) : BaseInteractor<Boolean, BaseInteractor.NoParams>() {
 
     override suspend fun run(params: NoParams): Boolean {
         return withContext(coroutineContext) {
             val results = listOf(
-                    async { employeeRepository.isCached() },
-                    async { groupRepository.isCached() },
-                    async { specialityRepository.isCached() },
-                    async { buildingRepository.isCached() }
+                async { employeeRepository.isCached() },
+                async { groupRepository.isCached() },
+                async { specialityRepository.isCached() },
+                async { buildingRepository.isCached() }
             )
             results.awaitAll().foldRight(true) { result, acc ->
                 result and acc

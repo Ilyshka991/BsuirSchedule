@@ -6,10 +6,11 @@ import com.pechuro.bsuirschedule.domain.repository.IScheduleRepository
 import javax.inject.Inject
 
 class DeleteScheduleItems @Inject constructor(
-        private val scheduleRepository: IScheduleRepository
+    private val scheduleRepository: IScheduleRepository
 ) : BaseInteractor<Unit, DeleteScheduleItems.Params>() {
 
-    override suspend fun run(params: Params) = scheduleRepository.deleteScheduleItems(params.scheduleItems)
+    override suspend fun run(params: Params) =
+        scheduleRepository.deleteScheduleItems(params.scheduleItems)
 
     data class Params(val scheduleItems: List<ScheduleItem>)
 }

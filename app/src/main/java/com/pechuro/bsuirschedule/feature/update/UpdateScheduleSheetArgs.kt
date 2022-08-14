@@ -6,5 +6,5 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class UpdateScheduleSheetArgs(
-        val schedules: List<Schedule>
+    val schedules: List<Schedule>
 ) : Parcelable

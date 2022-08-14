@@ -5,14 +5,14 @@ import com.pechuro.bsuirschedule.domain.repository.ISessionRepository
 import javax.inject.Inject
 
 class SetRateAppAskNever @Inject constructor(
-        private val sessionRepository: ISessionRepository
+    private val sessionRepository: ISessionRepository
 ) : BaseInteractor<Unit, BaseInteractor.NoParams>() {
 
     override suspend fun run(params: NoParams) {
         val previousInfo = sessionRepository.getRateAppAskInfo()
         val info = previousInfo.copy(
-                shouldAsk = false,
-                askLaterDate = null
+            shouldAsk = false,
+            askLaterDate = null
         )
         sessionRepository.setRateAppAskInfo(info)
     }

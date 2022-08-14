@@ -6,7 +6,7 @@ import com.pechuro.bsuirschedule.domain.repository.ISessionRepository
 import javax.inject.Inject
 
 class SetScheduleDisplaySubgroupNumber @Inject constructor(
-        private val sessionRepository: ISessionRepository
+    private val sessionRepository: ISessionRepository
 ) : BaseInteractor<Unit, SetScheduleDisplaySubgroupNumber.Params>() {
 
     override suspend fun run(params: Params) {
@@ -14,6 +14,6 @@ class SetScheduleDisplaySubgroupNumber @Inject constructor(
     }
 
     data class Params(
-            val subgroupNumber: SubgroupNumber
+        val subgroupNumber: SubgroupNumber
     )
 }

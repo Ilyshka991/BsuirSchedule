@@ -38,9 +38,9 @@ abstract class BaseBottomSheetDialog : BottomSheetDialogFragment(), BackPressedH
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(layoutId, container, false)
     }
@@ -49,7 +49,10 @@ abstract class BaseBottomSheetDialog : BottomSheetDialogFragment(), BackPressedH
         return initViewModel(clazz, this)
     }
 
-    protected fun <T : BaseViewModel> initViewModel(clazz: KClass<T>, owner: ViewModelStoreOwner): T {
+    protected fun <T : BaseViewModel> initViewModel(
+        clazz: KClass<T>,
+        owner: ViewModelStoreOwner
+    ): T {
         return ViewModelProvider(owner, viewModelFactory).get(clazz.java)
     }
 }

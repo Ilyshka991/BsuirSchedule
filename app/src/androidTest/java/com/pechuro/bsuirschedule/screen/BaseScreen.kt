@@ -23,12 +23,12 @@ abstract class BaseScreen {
 
     fun clickOnView(@IdRes id: Int) {
         onView(withId(id))
-                .perform(click())
+            .perform(click())
     }
 
     fun clickOnView(viewMatcher: Matcher<View>) {
         onView(viewMatcher)
-                .perform(click())
+            .perform(click())
     }
 
     fun checkVisibility(@IdRes viewId: Int, expected: Boolean) {
@@ -37,12 +37,12 @@ abstract class BaseScreen {
 
     fun checkVisibility(viewMatcher: Matcher<View>, expected: Boolean) {
         onView(viewMatcher)
-                .check(matches(if (expected) isDisplayed() else not(isDisplayed())))
+            .check(matches(if (expected) isDisplayed() else not(isDisplayed())))
     }
 
     fun checkImageViewDrawableExist(@IdRes id: Int, expected: Boolean) {
         onView(withId(id))
-                .check(isDrawableExistOrNot(expected))
+            .check(isDrawableExistOrNot(expected))
     }
 
     fun checkListNotEmpty(@IdRes id: Int) {

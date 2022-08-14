@@ -17,26 +17,31 @@ import com.pechuro.bsuirschedule.widget.staffdetails.StaffDetailsInfo.EmployeeIn
 import com.pechuro.bsuirschedule.widget.staffdetails.StaffDetailsInfo.GroupInfo
 import kotlinx.android.synthetic.main.item_employee_details.*
 import kotlinx.android.synthetic.main.item_group_details.*
+import java.util.Locale
 
 private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<StaffDetailsInfo>() {
 
     override fun areItemsTheSame(
-            oldItem: StaffDetailsInfo,
-            newItem: StaffDetailsInfo
+        oldItem: StaffDetailsInfo,
+        newItem: StaffDetailsInfo
     ) = oldItem == newItem
 
     override fun areContentsTheSame(
-            oldItem: StaffDetailsInfo,
-            newItem: StaffDetailsInfo
+        oldItem: StaffDetailsInfo,
+        newItem: StaffDetailsInfo
     ) = oldItem == newItem
 }
 
 private const val EMPLOYEE_TYPE_LAYOUT_RES = R.layout.item_employee_details
 private const val GROUP_TYPE_LAYOUT_RES = R.layout.item_group_details
 
-class StaffDetailsAdapter : ListAdapter<StaffDetailsInfo, BaseViewHolder<StaffDetailsInfo>>(DIFF_CALLBACK) {
+class StaffDetailsAdapter :
+    ListAdapter<StaffDetailsInfo, BaseViewHolder<StaffDetailsInfo>>(DIFF_CALLBACK) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewTypeLayoutRes: Int): BaseViewHolder<StaffDetailsInfo> {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewTypeLayoutRes: Int
+    ): BaseViewHolder<StaffDetailsInfo> {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(viewTypeLayoutRes, parent, false)
         return when (viewTypeLayoutRes) {
@@ -52,8 +57,8 @@ class StaffDetailsAdapter : ListAdapter<StaffDetailsInfo, BaseViewHolder<StaffDe
     }
 
     override fun onBindViewHolder(
-            holder: BaseViewHolder<StaffDetailsInfo>,
-            position: Int
+        holder: BaseViewHolder<StaffDetailsInfo>,
+        position: Int
     ) = holder.onBind(getItem(position))
 
     private class EmployeeViewHolder(view: View) : BaseViewHolder<EmployeeInfo>(view) {
@@ -68,17 +73,17 @@ class StaffDetailsAdapter : ListAdapter<StaffDetailsInfo, BaseViewHolder<StaffDe
         private fun Employee.getFullName() = "$firstName $middleName $lastName"
 
         private fun Employee.getAdditionalInfoText() =
-                "$rank${if (rank.isNotEmpty() && !department?.name.isNullOrEmpty()) ", " else ""}${department?.name ?: ""}"
+            "$rank${if (rank.isNotEmpty() && !department?.name.isNullOrEmpty()) ", " else ""}${department?.name ?: ""}"
 
         private fun ImageView.loadAvatar(url: String) {
             Glide.with(itemView)
-                    .load(url)
-                    .override(SIZE_ORIGINAL)
-                    .format(DecodeFormat.PREFER_ARGB_8888)
-                    .placeholder(R.drawable.ic_employee_placeholder)
-                    .error(R.drawable.ic_employee_placeholder)
-                    .circleCrop()
-                    .into(this)
+                .load(url)
+                .override(SIZE_ORIGINAL)
+                .format(DecodeFormat.PREFER_ARGB_8888)
+                .placeholder(R.drawable.ic_employee_placeholder)
+                .error(R.drawable.ic_employee_placeholder)
+                .circleCrop()
+                .into(this)
         }
     }
 
@@ -89,14 +94,18 @@ class StaffDetailsAdapter : ListAdapter<StaffDetailsInfo, BaseViewHolder<StaffDe
             groupDetailsNumber.text = group.number
             groupDetailsCourse.isVisible = group.course != -1
             groupDetailsCourse.text = itemView.context.getString(
-                    R.string.staff_list_msg_group_course,
-                    group.course
+                R.string.staff_list_msg_group_course,
+                group.course
             )
             groupDetailsSpecialityName.text = group.speciality.name
             groupDetailsEducationForm.text = group.speciality.educationForm.name
             val faculty = group.speciality.faculty
             groupDetailsFacultyName.isVisible = faculty != null
-            groupDetailsFacultyName.text = faculty?.name?.capitalize()
+            groupDetailsFacultyName.text = faculty?.name?.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(
+                    Locale.getDefault()
+                ) else it.toString()
+            }
         }
     }
 }

@@ -8,16 +8,16 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 class WorkerFactory @Inject constructor(
-        private val workerFactories: MutableMap<Class<out ListenableWorker>, Provider<ChildWorkerFactory>>
+    private val workerFactories: MutableMap<Class<out ListenableWorker>, Provider<ChildWorkerFactory>>
 ) : WorkerFactory() {
 
     override fun createWorker(
-            appContext: Context,
-            workerClassName: String,
-            workerParameters: WorkerParameters
+        appContext: Context,
+        workerClassName: String,
+        workerParameters: WorkerParameters
     ): ListenableWorker? =
-            workerFactories[Class.forName(workerClassName)]
-                    ?.get()
-                    ?.create(appContext, workerParameters)
-                    ?: throw IllegalArgumentException("No worker factory for $workerClassName found. Did you specify it in WorkerModule.kt?")
+        workerFactories[Class.forName(workerClassName)]
+            ?.get()
+            ?.create(appContext, workerParameters)
+            ?: throw IllegalArgumentException("No worker factory for $workerClassName found. Did you specify it in WorkerModule.kt?")
 }

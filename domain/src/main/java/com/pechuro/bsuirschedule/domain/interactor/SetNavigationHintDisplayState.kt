@@ -5,7 +5,7 @@ import com.pechuro.bsuirschedule.domain.repository.ISessionRepository
 import javax.inject.Inject
 
 class SetNavigationHintDisplayState @Inject constructor(
-        private val sessionRepository: ISessionRepository
+    private val sessionRepository: ISessionRepository
 ) : BaseInteractor<Unit, SetNavigationHintDisplayState.Params>() {
 
     override suspend fun run(params: Params) {
@@ -13,6 +13,6 @@ class SetNavigationHintDisplayState @Inject constructor(
     }
 
     data class Params(
-            val shown: Boolean
+        val shown: Boolean
     )
 }

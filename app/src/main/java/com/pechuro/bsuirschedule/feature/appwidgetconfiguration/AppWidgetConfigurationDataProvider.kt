@@ -8,8 +8,8 @@ import com.pechuro.bsuirschedule.domain.entity.SubgroupNumber
 import com.pechuro.bsuirschedule.ext.requireValue
 
 class AppWidgetConfigurationDataProvider(
-        val widgetId: Int,
-        val initialInfo: ScheduleWidgetInfo?
+    val widgetId: Int,
+    val initialInfo: ScheduleWidgetInfo?
 ) {
 
     private val _subgroupNumberData = MutableLiveData(SubgroupNumber.ALL)
@@ -46,10 +46,10 @@ class AppWidgetConfigurationDataProvider(
 
     fun getResultWidgetInfo(): ScheduleWidgetInfo {
         return ScheduleWidgetInfo(
-                widgetId = widgetId,
-                schedule = selectedScheduleData.requireValue,
-                subgroupNumber = subgroupNumberData.requireValue,
-                theme = widgetTheme.requireValue
+            widgetId = widgetId,
+            schedule = selectedScheduleData.requireValue,
+            subgroupNumber = subgroupNumberData.requireValue,
+            theme = widgetTheme.requireValue
         )
     }
 }

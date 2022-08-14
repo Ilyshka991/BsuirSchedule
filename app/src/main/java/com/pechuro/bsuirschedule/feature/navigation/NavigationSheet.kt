@@ -25,7 +25,12 @@ import com.pechuro.bsuirschedule.common.AppAnalyticsEvent
 import com.pechuro.bsuirschedule.common.base.BaseBottomSheetDialog
 import com.pechuro.bsuirschedule.domain.common.Logger
 import com.pechuro.bsuirschedule.domain.entity.Schedule
-import com.pechuro.bsuirschedule.ext.*
+import com.pechuro.bsuirschedule.ext.clearAdapter
+import com.pechuro.bsuirschedule.ext.getCallbackOrNull
+import com.pechuro.bsuirschedule.ext.nonNull
+import com.pechuro.bsuirschedule.ext.setHeight
+import com.pechuro.bsuirschedule.ext.setSafeClickListener
+import com.pechuro.bsuirschedule.ext.whenStateAtLeast
 import kotlinx.android.synthetic.main.sheet_navigation.*
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -76,12 +81,13 @@ class NavigationSheet : BaseBottomSheetDialog() {
 
     private val actionViewsHeight by lazy(LazyThreadSafetyMode.NONE) {
         navigationSheetParentView.children
-                .filter { view -> view != navigationSheetItemRecyclerView }
-                .sumBy { view -> view.height + view.marginTop + view.marginBottom }
+            .filter { view -> view != navigationSheetItemRecyclerView }
+            .sumOf { view -> view.height + view.marginTop + view.marginBottom }
     }
     private val initialRecyclerViewHeight by lazy(LazyThreadSafetyMode.NONE) {
         peekHeight = (maxHeight * PEEK_HEIGHT_PERCENT).roundToInt()
-        val minHeight = resources.getDimensionPixelOffset(R.dimen.navigation_sheet_min_recyclerview_height)
+        val minHeight =
+            resources.getDimensionPixelOffset(R.dimen.navigation_sheet_min_recyclerview_height)
         val otherViewsHeight = actionViewsHeight +
                 navigationSheetItemRecyclerView.marginTop +
                 navigationSheetItemRecyclerView.marginBottom
@@ -94,7 +100,8 @@ class NavigationSheet : BaseBottomSheetDialog() {
 
     private val topBackgroundGradientDrawable by lazy(LazyThreadSafetyMode.NONE) {
         val layerDrawable = navigationSheetParentView.background as? LayerDrawable
-        val topLayer = layerDrawable?.findDrawableByLayerId(R.id.backgroundNavigationSheetTopLayer) as? GradientDrawable
+        val topLayer =
+            layerDrawable?.findDrawableByLayerId(R.id.backgroundNavigationSheetTopLayer) as? GradientDrawable
         if (topLayer == null) Logger.w("Background top layer not found")
         topLayer
     }
@@ -119,11 +126,11 @@ class NavigationSheet : BaseBottomSheetDialog() {
     }
 
     private val itemTouchHelper = ItemTouchHelper(
-            NavigationItemTouchCallback(
-                    onDelete = ::deleteItemAt,
-                    onUpdate = ::updateItemAt,
-                    onActionReadyToPerform = ::makeActionVibration
-            )
+        NavigationItemTouchCallback(
+            onDelete = ::deleteItemAt,
+            onUpdate = ::updateItemAt,
+            onActionReadyToPerform = ::makeActionVibration
+        )
     )
 
     private val sheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
@@ -146,19 +153,20 @@ class NavigationSheet : BaseBottomSheetDialog() {
         actionCallback = getCallbackOrNull()
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?) = super.onCreateDialog(savedInstanceState).apply {
-        setOnShowListener {
-            findViewById<View>(R.id.design_bottom_sheet)?.let {
-                it.setHeight(maxHeight)
-                BottomSheetBehavior.from(it).apply {
-                    navigationSheetItemRecyclerView.setHeight(initialRecyclerViewHeight)
-                    peekHeight = this@NavigationSheet.peekHeight
-                    addBottomSheetCallback(sheetCallback)
-                    sheetCallback.onStateChanged(it, state)
+    override fun onCreateDialog(savedInstanceState: Bundle?) =
+        super.onCreateDialog(savedInstanceState).apply {
+            setOnShowListener {
+                findViewById<View>(R.id.design_bottom_sheet)?.let {
+                    it.setHeight(maxHeight)
+                    BottomSheetBehavior.from(it).apply {
+                        navigationSheetItemRecyclerView.setHeight(initialRecyclerViewHeight)
+                        peekHeight = this@NavigationSheet.peekHeight
+                        addBottomSheetCallback(sheetCallback)
+                        sheetCallback.onStateChanged(it, state)
+                    }
                 }
             }
         }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -214,10 +222,10 @@ class NavigationSheet : BaseBottomSheetDialog() {
         navigationSheetItemRecyclerView.setHeight(newRecyclerHeight)
 
         navigationSheetParentView.children
-                .filter { view -> view != navigationSheetItemRecyclerView }
-                .forEach {
-                    it.translationY = actionViewsHeight * slideOffset
-                }
+            .filter { view -> view != navigationSheetItemRecyclerView }
+            .forEach {
+                it.translationY = actionViewsHeight * slideOffset
+            }
 
         topBackgroundGradientDrawable?.cornerRadius = (1 - slideOffset) * initialTopCornersRadius
     }
@@ -250,7 +258,12 @@ class NavigationSheet : BaseBottomSheetDialog() {
 
     private fun makeActionVibration() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            vibrator.vibrate(VibrationEffect.createOneShot(ACTION_VIBRATION_DURATION_MS, VibrationEffect.EFFECT_TICK))
+            vibrator.vibrate(
+                VibrationEffect.createOneShot(
+                    ACTION_VIBRATION_DURATION_MS,
+                    VibrationEffect.EFFECT_TICK
+                )
+            )
         } else {
             vibrator.vibrate(ACTION_VIBRATION_DURATION_MS)
         }
