@@ -46,18 +46,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
-            def propsFile = rootProject.file('keystore.properties')
-            def props = new Properties()
-            props.load(new FileInputStream(propsFile))
             signingConfigs {
-                release {
-                    storeFile = file(props['storeFile'])
-                    storePassword = props['storePassword']
-                    keyAlias = props['keyAlias']
-                    keyPassword = props['keyPassword']
+                release {}
+            }
+            def propsFile = rootProject.file('keystore.properties')
+            if (propsFile.exists()) {
+                def props = new Properties()
+                props.load(new FileInputStream(propsFile))
+                signingConfigs {
+                    release {
+                        storeFile = file(props['storeFile'])
+                        storePassword = props['storePassword']
+                        keyAlias = props['keyAlias']
+                        keyPassword = props['keyPassword']
+                    }
                 }
             }
-
             signingConfig signingConfigs.release
             minifyEnabled true
             debuggable false
