@@ -5,7 +5,8 @@ import android.app.NotificationChannelGroup
 import android.app.NotificationManager.IMPORTANCE_DEFAULT
 import android.app.PendingIntent
 import android.content.Context
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.bsuir.pechuro.bsuirschedule.R
@@ -35,7 +36,13 @@ class NotificationManager @Inject constructor(
         val notificationId = getUpdateAvailableNotificationId(schedule)
         val title = context.getString(R.string.notification_update_title, schedule.name)
         val description = context.getString(R.string.notification_update_description)
-        val intent = PendingIntent.getActivity(context, 0, MainActivity.newIntent(context), 0)
+        val intentFlags = if (SDK_INT >= VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+        val intent = PendingIntent.getActivity(
+            context,
+            0,
+            MainActivity.newIntent(context),
+            intentFlags
+        )
         val notification = NotificationCompat.Builder(context, CHANNEL_ID_UPDATE_SCHEDULE)
             .setContentTitle(title)
             .setSmallIcon(R.drawable.app_icon_foreground)
@@ -56,7 +63,7 @@ class NotificationManager @Inject constructor(
     private fun getUpdateAvailableNotificationId(schedule: Schedule) = schedule.name.hashCode()
 
     private fun createNotificationActionGroup() {
-        doIfVersionGreaterThan(Build.VERSION_CODES.O) {
+        doIfVersionGreaterThan(VERSION_CODES.O) {
             val groupId = GROUP_KEY_ACTIONS
             val groupName = context.getString(R.string.notification_group_actions_label)
             val channelGroup = NotificationChannelGroup(groupId, groupName)
@@ -65,7 +72,7 @@ class NotificationManager @Inject constructor(
     }
 
     private fun createUpdateScheduleChannel() {
-        doIfVersionGreaterThan(Build.VERSION_CODES.O) {
+        doIfVersionGreaterThan(VERSION_CODES.O) {
             val name = context.getString(R.string.notification_channel_update_label)
             val importance = IMPORTANCE_DEFAULT
             val channel = NotificationChannel(CHANNEL_ID_UPDATE_SCHEDULE, name, importance).apply {

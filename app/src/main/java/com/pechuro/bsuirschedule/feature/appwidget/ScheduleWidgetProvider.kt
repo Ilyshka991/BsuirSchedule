@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.widget.RemoteViews
@@ -62,11 +63,16 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
             val editWidgetInfoIntent = AppWidgetConfigurationActivity.newIntent(context).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
             }.run {
+                val intentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                } else {
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                }
                 PendingIntent.getActivity(
                     context,
                     widgetId,
                     this,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    intentFlags
                 )
             }
             views.setOnClickPendingIntent(R.id.scheduleWidgetTitleParentView, editWidgetInfoIntent)
@@ -81,11 +87,16 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
             val openMainAppIntent = MainActivity.newIntent(context).apply {
                 putExtra(MainActivity.EXTRA_SCHEDULE, widgetInfo?.schedule)
             }.run {
+                val intentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                } else {
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                }
                 PendingIntent.getActivity(
                     context,
                     widgetId,
                     this,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    intentFlags
                 )
             }
             views.setPendingIntentTemplate(R.id.scheduleWidgetListView, openMainAppIntent)
