@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="colorPrimary">?attr/primaryColor</item>
@@ -19,7 +19,7 @@
     </style>
 
     <style name="BottomSheetDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="android:statusBarColor" tools:targetApi="21">@color/transparent</item>
+        <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:windowIsFloating">false</item>
         <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
     </style>

@@ -64,7 +64,7 @@ class LoadInfoFragment : BaseFragment() {
     }
 
     private fun observeData() {
-        viewModel.status.nonNull().observe(this) { status ->
+        viewModel.status.nonNull().observe(viewLifecycleOwner) { status ->
             when (status) {
                 is Status.Complete -> handleComplete()
                 is Status.Error -> handleError(status.exception)
